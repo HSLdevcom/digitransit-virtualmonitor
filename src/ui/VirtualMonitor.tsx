@@ -4,6 +4,7 @@ import AutoMoment from "src/ui/AutoMoment";
 import HslLogo from "src/ui/HslLogo";
 import { default as StopIncomingRetriever, StopId } from "src/ui/StopIncomingRetriever";
 import Titlebar from "src/ui/Titlebar";
+import StopName from "./StopName";
 
 export interface IVirtualMonitorProps {
   title?: string,
@@ -15,7 +16,9 @@ const VirtualMonitor = (props: IVirtualMonitorProps) => (
     <Titlebar>
       <HslLogo />
       <div style={{ alignSelf: 'center' }}>
-        {props.title ? props.title : `Pysäkki ${props.stops[0]}`}
+        {props.title
+          ? props.title
+          : <StopName stopIds={props.stops} />}
       </div>
       <div style={{ alignSelf: 'center' }}>
         <AutoMoment />

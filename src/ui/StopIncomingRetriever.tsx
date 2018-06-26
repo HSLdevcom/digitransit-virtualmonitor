@@ -87,10 +87,17 @@ const StopIncomingRetriever = (props: IStopIncomingRetrieverProps) => (
   >
     {(result: QueryResult<IStopResponse, IStopQuery>): React.ReactNode => {
       if (result.loading) {
-        return (<div>Loading</div>);
+        return (<div>Ladataan…</div>);
       }
       if (!result || !result.data) {
-        return (<div>Virhe</div>);
+        return (<div>
+          {`Virhe haettaessa pysäkkiä ${props.stopIds[0]}.`}
+        </div>);
+      }
+      if (result.data.stop === null) {
+        return (<div>
+          {`Haettua pysäkkiä ${props.stopIds[0]} ei löytynyt.`}
+        </div>);
       }
       return (
         <StopIncomingList

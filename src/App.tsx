@@ -2,9 +2,10 @@ import { ApolloClient, InMemoryCache } from 'apollo-boost'
 import { createHttpLink } from 'apollo-link-http';
 import * as React from 'react';
 import { ApolloProvider } from 'react-apollo'
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 
+import HslLogo from 'src/ui/HslLogo';
 import VirtualMonitor from 'src/ui/VirtualMonitor'
 
 const client = new ApolloClient({
@@ -26,10 +27,16 @@ class App extends React.Component {
     return (
       <ApolloProvider client={client}>
         <BrowserRouter>
-          <Route
-            path={'/stop/:stopId'}
-            component={RouteWrapper}
-          />
+          <Switch>
+            <Route
+              path={'/stop/:stopId'}
+              component={RouteWrapper}
+            />
+            <div>
+              <HslLogo />
+              Anna pysäkki parametrina.
+            </div>
+          </Switch>
         </BrowserRouter>
       </ApolloProvider>
     );

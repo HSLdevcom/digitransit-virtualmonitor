@@ -27,7 +27,7 @@ const StopIncomingList = (props: IStopIncomingListProps) => (
   <table className={'StopIncomingList'}>
     <thead>
       <tr>
-        <th className={'departureTime'}>Lähtoaika</th>
+        <th className={'departureTime'}>Lähtöaika</th>
         <th className={'lineId'}>Linja</th>
         <th className={'destination'}>Määränpää</th>
       </tr>

@@ -26,6 +26,10 @@ body {
   background-color: #002852;
 }
 
+.StopIncomingList thead th {
+  border-bottom: 0.15em solid white;
+}
+
 .StopIncomingList tbody {
   color: #FFFF00;
 }

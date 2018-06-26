@@ -68,18 +68,22 @@ interface IStopResponse {
   stop: IStop
 }
 
-type StopId = string
+export type StopId = string
 
 interface IStopQuery {
-  stopId: StopId
+  stopId: StopId,
 };
 
 class StopIncomingQuery extends Query<IStopResponse, IStopQuery> {}
 
-const StopIncomingRetriever = (props: any) => (
+export interface IStopIncomingRetrieverProps {
+  stopIds: StopId[],
+};
+
+const StopIncomingRetriever = (props: IStopIncomingRetrieverProps) => (
   <StopIncomingQuery
     query={STOP_INCOMING_QUERY}
-    variables={{ stopId: props.stopId}}
+    variables={{ stopId: props.stopIds[0]}}
   >
     {(result: QueryResult<IStopResponse, IStopQuery>): React.ReactNode => {
       if (result.loading) {

@@ -11,6 +11,7 @@
     "react-apollo": "^2.1.4",
     "react-dom": "^16.4.0",
     "react-moment": "^0.7.4",
+    "react-router-dom": "^4.3.1",
     "react-scripts-ts": "2.16.0"
   },
   "scripts": {
@@ -25,6 +26,7 @@
     "@types/prop-types": "^15.5.3",
     "@types/react": "^16.3.17",
     "@types/react-dom": "^16.0.6",
+    "@types/react-router-dom": "^4.2.7",
     "typescript": "^2.9.1"
   }
 }

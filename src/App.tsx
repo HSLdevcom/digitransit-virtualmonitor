@@ -7,6 +7,7 @@ import './App.css';
 
 import HslLogo from 'src/ui/HslLogo';
 import VirtualMonitor from 'src/ui/VirtualMonitor'
+import StopSelector from './ui/StopSelector';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -35,6 +36,7 @@ class App extends React.Component {
             <div>
               <HslLogo />
               Anna pysäkki parametrina.
+              <StopSelector />
             </div>
           </Switch>
         </BrowserRouter>

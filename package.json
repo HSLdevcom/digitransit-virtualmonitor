@@ -21,6 +21,7 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/history": "^4.6.2",
     "@types/jest": "^23.0.0",
     "@types/node": "10.1.4",
     "@types/prop-types": "^15.5.3",

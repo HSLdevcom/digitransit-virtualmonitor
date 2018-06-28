@@ -4,11 +4,10 @@ import { isString } from "util";
 import StopsByNameRetriever from "./StopsByNameRetriever";
 
 type IProps = RouteComponentProps<{
-  phrase: string,
+  phrase?: string,
 }>;
 
 interface IState {
-  inputChanged: boolean,
   searchPhrase: string,
 };
 
@@ -16,7 +15,6 @@ class StopSelector extends React.Component<IProps, IState> {
   constructor (props: IProps) {
     super(props)
     this.state = {
-      inputChanged: false,
       searchPhrase: props.match.params.phrase ? props.match.params.phrase : '',
     };
   }
@@ -42,11 +40,7 @@ class StopSelector extends React.Component<IProps, IState> {
           id={'stopSearchInput'}
           type={'text'}
           name={'searchPhrase'}
-          {...(!this.state.inputChanged
-            ? { value: this.props.match.params.phrase }
-            : {}
-          )}
-          onChange={this.searchFieldChanged}
+          defaultValue={this.props.match.params.phrase || ''}
         />
         <button
           type={'submit'}
@@ -72,8 +66,6 @@ class StopSelector extends React.Component<IProps, IState> {
     const data = new FormData(event.currentTarget);
     this.setState({ searchPhrase: isString(data.get('searchPhrase')) ? (data.get('searchPhrase') as string) : '' });
   }
-
-  private searchFieldChanged = () => this.setState({ inputChanged: true });
 }
 
 // const StopSelectorWithHistory = withRouter(StopSelector);

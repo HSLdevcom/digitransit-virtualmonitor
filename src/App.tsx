@@ -33,14 +33,21 @@ class App extends React.Component {
               path={'/stop/:stopId'}
               component={RouteWrapper}
             />
-            <div>
-              <HslLogo />
-              Anna pysäkki parametrina.
-              <Route
-                path={'/searchStop/:phrase?'}
-                component={StopSelector}
-              />
-            </div>
+            <Route>
+              <div>
+                <HslLogo />
+                Anna pysäkki parametrina.
+                <Switch>
+                  <Route
+                    path={'/searchStop/:phrase?'}
+                    component={StopSelector}
+                  />
+                  <Route
+                    component={StopSelector}
+                  />
+                </Switch>
+              </div>
+            </Route>
           </Switch>
         </BrowserRouter>
       </ApolloProvider>

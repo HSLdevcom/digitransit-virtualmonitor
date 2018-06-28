@@ -34,7 +34,10 @@ const StopIncomingList = (props: IStopIncomingListProps) => (
     </thead>
     <tbody>
       {props.stop.stoptimesWithoutPatterns.map(stoptime => (
-        <StopIncomingRow stoptime={stoptime} />
+        <StopIncomingRow
+          stoptime={stoptime}
+          key={stoptime.trip.gtfsId}
+        />
       ))}
     </tbody>
   </table>

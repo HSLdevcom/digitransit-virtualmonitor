@@ -10,7 +10,7 @@ export interface IProps {
 const StopList = ({ stops }: IProps) => (
   <ul>
     {stops.map((stop: IStop) => (
-      <li>
+      <li key={stop.gtfsId}>
         <Link
           to={`/stop/${stop.gtfsId}`}
         >

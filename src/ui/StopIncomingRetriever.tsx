@@ -12,6 +12,7 @@ const STOP_INCOMING_QUERY = gql`
 query GetStop($stopId: String!) {
   stop(id: $stopId) {
     name,
+    gtfsId,
     stoptimesWithoutPatterns {
       scheduledArrival
       realtimeArrival
@@ -28,6 +29,7 @@ query GetStop($stopId: String!) {
       stopHeadsign
       headsign,
       trip {
+        gtfsId,
         route {
           shortName,
         },
@@ -53,6 +55,7 @@ export interface IStopTime {
   stopHeadsign: string,
   headsign: string,
   trip: {
+    gtfsId: number,
     route: {
       shortName: string,
     },
@@ -61,6 +64,7 @@ export interface IStopTime {
 
 export interface IStop {
   name: string,
+  gtfsId: string,
   stoptimesWithoutPatterns: IStopTime[]
 };
 

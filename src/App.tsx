@@ -36,7 +36,10 @@ class App extends React.Component {
             <div>
               <HslLogo />
               Anna pysäkki parametrina.
-              <StopSelector />
+              <Route
+                path={'/searchStop/:phrase?'}
+                component={StopSelector}
+              />
             </div>
           </Switch>
         </BrowserRouter>

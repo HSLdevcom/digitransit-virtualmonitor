@@ -7,6 +7,10 @@ body {
   text-align: center;
 }
 
+a {
+  color: lightblue;
+}
+
 .App-header {
   background-color: #222;
   height: 150px;

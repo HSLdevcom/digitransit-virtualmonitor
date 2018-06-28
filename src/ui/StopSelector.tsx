@@ -1,6 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps, withRouter } from 'react-router';
 import { isString } from "util";
+import StopsByNameRetriever from "./StopsByNameRetriever";
 
 type IProps = RouteComponentProps<{}>;
 
@@ -46,6 +47,7 @@ class StopSelector extends React.Component<IProps, IState> {
         ? (
           <div>
             <span>{`Searching for ${this.state.searchPhrase}`}</span>
+            <StopsByNameRetriever phrase={this.state.searchPhrase} />
           </div>
         )
         : null

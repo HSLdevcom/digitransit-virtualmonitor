@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryResult } from "react-apollo";
 
-import StopList from 'src/ui/StopList';
+import StopList, { IStopRenderFunc } from 'src/ui/StopList';
 
 const STOPS_BY_NAME_QUERY = gql`
 	query GetStop($phrase: String!) {
@@ -30,9 +30,10 @@ class StopsByNameQuery extends Query<IStopsByNameResponse, IStopsByNameQuery> {}
 
 export interface IStopsByNameRetrieverProps {
   phrase: string,
+  stopRenderer?: IStopRenderFunc,
 };
 
-const StopsByNameRetriever = ({ phrase }: IStopsByNameRetrieverProps) => (
+const StopsByNameRetriever = ({ phrase, stopRenderer }: IStopsByNameRetrieverProps) => (
   <StopsByNameQuery
     query={STOPS_BY_NAME_QUERY}
     variables={{ phrase }}
@@ -54,6 +55,7 @@ const StopsByNameRetriever = ({ phrase }: IStopsByNameRetrieverProps) => (
       return (
 				<StopList
           stops={result.data.stops}
+          stopRenderer={stopRenderer}
         />
       );
     }}

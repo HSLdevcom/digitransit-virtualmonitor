@@ -3,11 +3,11 @@ import { createHttpLink } from 'apollo-link-http';
 import * as React from 'react';
 import { ApolloProvider } from 'react-apollo'
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import './App.css';
 
+import 'src/App.css';
 import HslLogo from 'src/ui/HslLogo';
+import StopSelector from 'src/ui/StopSelector';
 import VirtualMonitor from 'src/ui/VirtualMonitor'
-import StopSelector from './ui/StopSelector';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -19,6 +19,7 @@ const client = new ApolloClient({
 const RouteWrapper = ({ match }: any) => (
   <VirtualMonitor
     stops={[match.params.stopId]}
+    displayedRoutes={match.params.displayedRoutes}
     // title={'Jokupysäkki'}
   />
 );
@@ -30,7 +31,7 @@ class App extends React.Component {
         <BrowserRouter>
           <Switch>
             <Route
-              path={'/stop/:stopId'}
+              path={'/stop/:stopId/:displayedRoutes?'}
               component={RouteWrapper}
             />
             <Route>

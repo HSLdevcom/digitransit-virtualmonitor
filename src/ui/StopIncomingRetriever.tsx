@@ -9,11 +9,11 @@ import {
 import StopIncomingList from "src/ui/StopIncomingList";
 
 const STOP_INCOMING_QUERY = gql`
-query GetStop($stopId: String!) {
+query GetStop($stopId: String!, $numberOfDepartures: Int!) {
   stop(id: $stopId) {
     name,
     gtfsId,
-    stoptimesWithoutPatterns {
+    stoptimesWithoutPatterns(numberOfDepartures: $numberOfDepartures) {
       scheduledArrival
       realtimeArrival
       arrivalDelay
@@ -76,18 +76,20 @@ export type StopId = string
 
 interface IStopQuery {
   stopId: StopId,
+  numberOfDepartures: number,
 };
 
 class StopIncomingQuery extends Query<IStopResponse, IStopQuery> {}
 
 export interface IStopIncomingRetrieverProps {
   stopIds: StopId[],
+  displayedRoutes?: number,
 };
 
-const StopIncomingRetriever = (props: IStopIncomingRetrieverProps) => (
+const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProps> = (props: IStopIncomingRetrieverProps) => (
   <StopIncomingQuery
     query={STOP_INCOMING_QUERY}
-    variables={{ stopId: props.stopIds[0]}}
+    variables={{ stopId: props.stopIds[0], numberOfDepartures: props.displayedRoutes as number}}
     pollInterval={20000}
   >
     {(result: QueryResult<IStopResponse, IStopQuery>): React.ReactNode => {
@@ -112,5 +114,9 @@ const StopIncomingRetriever = (props: IStopIncomingRetrieverProps) => (
     }}
   </StopIncomingQuery>
 );
+
+StopIncomingRetriever.defaultProps = {
+  displayedRoutes: 12,
+};
 
 export default StopIncomingRetriever;

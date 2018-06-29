@@ -9,6 +9,7 @@ import StopName from "./StopName";
 export interface IVirtualMonitorProps {
   title?: string,
   stops: StopId[],
+  displayedRoutes?: number,
 };
 
 const VirtualMonitor = (props: IVirtualMonitorProps) => (
@@ -24,7 +25,7 @@ const VirtualMonitor = (props: IVirtualMonitorProps) => (
         <AutoMoment />
       </div>
     </Titlebar>
-    <StopIncomingRetriever stopIds={props.stops} />
+    <StopIncomingRetriever stopIds={props.stops} displayedRoutes={props.displayedRoutes} />
   </div>
 );
 

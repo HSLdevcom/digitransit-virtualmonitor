@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "apollo-boost": "^0.1.9",
+    "esm": "^3.0.61",
     "graphql": "^14.0.0-rc.1",
     "graphql-tag": "^2.9.2",
     "moment": "^2.22.2",
@@ -17,7 +18,7 @@
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
+    "test": "react-scripts-ts -r esm test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
@@ -29,5 +30,10 @@
     "@types/react-dom": "^16.0.6",
     "@types/react-router-dom": "^4.2.7",
     "typescript": "^2.9.1"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/src/$1"
+    }
   }
 }

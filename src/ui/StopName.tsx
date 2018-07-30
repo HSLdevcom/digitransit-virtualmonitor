@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryResult } from "react-apollo";
 
-const STOP_INFO_QUERY = gql`
+export const STOP_INFO_QUERY = gql`
 query GetStop($stopId: String!) {
   stop(id: $stopId) {
     name,
@@ -22,14 +22,14 @@ interface IStopQuery {
   stopId: string,
 };
 
-class StopIncomingQuery extends Query<IStopInfoResponse, IStopQuery> {}
+class StopInfoQuery extends Query<IStopInfoResponse, IStopQuery> {}
 
 export interface IStopInfoProps {
   stopIds: string[],
 };
 
 const StopName = (props: IStopInfoProps) => (
-  <StopIncomingQuery
+  <StopInfoQuery
     query={STOP_INFO_QUERY}
     variables={{ stopId: props.stopIds[0]}}
   >
@@ -54,7 +54,7 @@ const StopName = (props: IStopInfoProps) => (
         </div>
       );
     }}
-  </StopIncomingQuery>
+  </StopInfoQuery>
 );
 
 export default StopName;

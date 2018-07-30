@@ -13,10 +13,6 @@ const WrappedVirtualMonitor = (props: IVirtualMonitorProps) => (
   </MockedProvider>
 );
 
-(
-  <VirtualMonitor title='sadfasgqwg' />
-)
-
 it('renders without crashing', () => {
   const renderer = create(<WrappedVirtualMonitor stops={[]} />);
   renderer.unmount();

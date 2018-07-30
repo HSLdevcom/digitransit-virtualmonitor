@@ -6,14 +6,16 @@ import StopName, { IStopInfoProps, STOP_INFO_QUERY } from './StopName';
 
 const mocks = [
   {
+    data: {
+      result: {
+        name: 'TestStop',
+      },
+    },
     request: {
       query: STOP_INFO_QUERY,
       variables: {
         stopId: '',
       },
-    },
-    result: {
-      name: 'TestStop',
     },
   },
 ];

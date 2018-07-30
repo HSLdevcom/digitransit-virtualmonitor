@@ -3,20 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "apollo-boost": "^0.1.9",
-    "esm": "^3.0.62",
-    "graphql": "^14.0.0-rc.1",
+    "apollo-boost": "^0.1.12",
+    "esm": "^3.0.72",
+    "graphql": "^14.0.0-rc.2",
     "graphql-tag": "^2.9.2",
     "moment": "^2.22.2",
-    "react": "^16.4.0",
-    "react-apollo": "^2.1.4",
-    "react-dom": "^16.4.0",
-    "react-moment": "^0.7.4",
+    "patch-package": "^5.1.1",
+    "react": "^16.4.1",
+    "react-apollo": "^2.1.9",
+    "react-dom": "^16.4.1",
+    "react-moment": "^0.7.9",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "2.16.0",
     "save": "^2.3.2"
   },
   "scripts": {
+    "prepare": "patch-package",
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts -r esm test --env=jsdom",
@@ -24,15 +26,15 @@
   },
   "devDependencies": {
     "@types/history": "^4.6.2",
-    "@types/jest": "^23.0.0",
+    "@types/jest": "^23.3.1",
     "@types/node": "10.1.4",
-    "@types/prop-types": "^15.5.3",
-    "@types/react": "^16.3.17",
+    "@types/prop-types": "^15.5.4",
+    "@types/react": "^16.4.7",
     "@types/react-dom": "^16.0.6",
-    "@types/react-router-dom": "^4.2.7",
+    "@types/react-router-dom": "^4.3.0",
     "@types/react-test-renderer": "^16.0.1",
     "react-test-renderer": "^16.4.1",
-    "typescript": "^2.9.1"
+    "typescript": "^3.0.1"
   },
   "jest": {
     "moduleNameMapper": {

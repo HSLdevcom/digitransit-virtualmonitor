@@ -4,7 +4,7 @@ import { Query, QueryResult } from "react-apollo";
 
 import StopList, { IStopRenderFunc } from 'src/ui/StopList';
 
-const STOPS_BY_NAME_QUERY = gql`
+export const STOPS_BY_NAME_QUERY = gql`
 	query GetStop($phrase: String!) {
 		stops(name: $phrase) {
       name,
@@ -18,11 +18,11 @@ export interface IStop {
   gtfsId: string,
 };
 
-interface IStopsByNameResponse {
+export interface IStopsByNameResponse {
 	stops: IStop[],
 };
 
-interface IStopsByNameQuery {
+export interface IStopsByNameQuery {
   phrase: string,
 };
 

@@ -2,8 +2,6 @@ import * as React from 'react';
 import { MemoryRouter, MemoryRouterProps } from 'react-router';
 import { create } from 'react-test-renderer';
 
-// import StopsByNameRetriever from './StopsByNameRetriever';
-// import StopSelector from './StopSelector';
 import StopSelectorSwitch from './StopSelectorSwitch';
 
 jest.mock('src/ui/StopsByNameRetriever', () => {
@@ -11,8 +9,6 @@ jest.mock('src/ui/StopsByNameRetriever', () => {
     default: 'StopsByNameRetriever'
   };
 });
-// jest.mock('./Derp', () => 'hmm', { virtual: true });
-// jest.doMock('./StopsByNameRetriever', () => function StopsByNameRetriever () { return (<div />) });
 
 const WrappedStopSelector = ({ memoryRouterProps }: { memoryRouterProps?: MemoryRouterProps } = { memoryRouterProps: {} }) => (
   <MemoryRouter {...memoryRouterProps}>

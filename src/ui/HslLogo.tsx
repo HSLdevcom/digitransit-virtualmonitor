@@ -1,11 +1,12 @@
 import * as React from "react";
 
-export default () => (
+export default ({ style }: {style?: React.CSSProperties} = { style: {} }) => (
   <svg
+    id={"HSL-logo"}
     viewBox={"0 0 160 60"}
     version={"1.1"}
     preserveAspectRatio={"xMidYMid meet"}
-    style={{ color: 'gray', display: 'flex', flex: 1 }}
+    style={{ color: 'gray', ...style }}
   >
     <path
       fill={"#ffffff"}

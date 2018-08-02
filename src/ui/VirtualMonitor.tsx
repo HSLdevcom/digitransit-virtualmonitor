@@ -16,12 +16,12 @@ const VirtualMonitor = (props: IVirtualMonitorProps) => (
   <div style={{ color: 'white', display: 'flex', flexDirection:'column' }}>
     <Titlebar>
       <HslLogo />
-      <div style={{ alignSelf: 'center' }}>
+      <div id={"title-text"}>
         {props.title
           ? props.title
           : <StopName stopIds={props.stops} />}
       </div>
-      <div style={{ alignSelf: 'center' }}>
+      <div id={"title-time"}>
         <AutoMoment />
       </div>
     </Titlebar>

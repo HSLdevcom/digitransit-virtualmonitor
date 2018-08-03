@@ -12,7 +12,7 @@ export interface IStopIncomingListProps {
 const StopIncomingRow = ({ stoptime } : { stoptime: IStopTime }) => (
   <tr>
     <td>
-      {formatTime(parseDaySeconds(stoptime.scheduledArrival))}
+      <time>{formatTime(parseDaySeconds(stoptime.scheduledArrival))}</time>
     </td>
     <td>
       {stoptime.trip.route.shortName}

@@ -93,3 +93,35 @@ a {
 .StopIncomingList tbody {
   color: #FFFF00;
 }
+
+#stop-search {
+  display: flex;
+  flex-direction: column;
+}
+
+#stop-search #HSL-logo {
+  flex: 0 3 33%;
+  justify-self: flex-start;
+}
+
+#stop-search .stop-selector {
+  flex: 1 1 66%;
+  margin: 0.25em;
+}
+
+.stop-selector {
+  font-size: 2.5em;
+  font-weight: bold;
+}
+
+.stop-selector form {
+  display: block;
+}
+
+.stop-selector div:not(:last-child) {
+  margin-bottom: 0.35em;
+}
+
+.stop-selector form input,button {
+  font-size: 1em;
+}

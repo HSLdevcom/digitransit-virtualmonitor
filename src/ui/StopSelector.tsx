@@ -31,32 +31,39 @@ class StopSelector extends React.Component<IProps, IState> {
   }
 
   public render() { return(
-    <div>
+    <div className={'stop-selector'}>
       <form
         onSubmit={this.stopSearchSubmit}
         action={'searchStop'}
         method={'GET'}
       >
         <div>Pysäkkietsin</div>
-        <label htmlFor={'stopSearchInput'}>
-          Hakusana:&nbsp;
-        </label>
-        <input
-          id={'stopSearchInput'}
-          type={'text'}
-          name={'searchPhrase'}
-          defaultValue={this.props.match.params.phrase || ''}
-        />
-        <label htmlFor={'displayedRoutesInput'}>
-          Näytettävien reittien määrä:&nbsp;
-        </label>
-        <input
-          id={'displayedRoutesInput'}
-          type={'number'}
-          name={'searchPhrase'}
-          value={this.state.displayedRoutes}
-          onChange={this.onDisplayedRoutesChange}
-        />
+        <div>
+          <label htmlFor={'stopSearchInput'}>
+            Pysäkkihakusana:&nbsp;
+          </label>
+          <input
+            id={'stopSearchInput'}
+            type={'text'}
+            name={'searchPhrase'}
+            defaultValue={this.props.match.params.phrase || ''}
+          />
+        </div>
+        <div>
+          <label htmlFor={'displayedRoutesInput'}>
+            Näytettävien reittien määrä:&nbsp;
+          </label>
+          <input
+            id={'displayedRoutesInput'}
+            type={'number'}
+            name={'searchPhrase'}
+            value={this.state.displayedRoutes}
+            onChange={this.onDisplayedRoutesChange}
+            max={999}
+            maxLength={3}
+            style={{ width: '3em' }}
+          />
+        </div>
         <button
           type={'submit'}
         >

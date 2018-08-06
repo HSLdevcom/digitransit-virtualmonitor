@@ -1,4 +1,6 @@
 import * as React from "react";
+import { InjectedTranslateProps, translate } from 'react-i18next';
+
 import {
   formatTime,
   parseDaySeconds,
@@ -21,19 +23,19 @@ const StopIncomingRow = ({ stoptime } : { stoptime: IStopTime }) => (
       {stoptime.headsign}
     </td>
   </tr>
-)
+);
 
-const StopIncomingList = (props: IStopIncomingListProps) => (
+const StopIncomingList = ({ stop, t } : IStopIncomingListProps & InjectedTranslateProps) => (
   <table className={'StopIncomingList'}>
     <thead>
       <tr>
-        <th className={'departureTime'}>Lähtöaika</th>
-        <th className={'lineId'}>Linja</th>
-        <th className={'destination'}>Määränpää</th>
+        <th className={'departureTime'}>{t('departureTime')}</th>
+        <th className={'lineId'}>{t('lineId')}</th>
+        <th className={'destination'}>{t('destination')}</th>
       </tr>
     </thead>
     <tbody>
-      {props.stop.stoptimesWithoutPatterns.map(stoptime => (
+      {stop.stoptimesWithoutPatterns.map(stoptime => (
         <StopIncomingRow
           stoptime={stoptime}
           key={stoptime.trip.gtfsId}
@@ -43,4 +45,4 @@ const StopIncomingList = (props: IStopIncomingListProps) => (
   </table>
 );
 
-export default StopIncomingList;
+export default translate('translations')(StopIncomingList);

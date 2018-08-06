@@ -39,7 +39,7 @@ it('Displays stop number while loading from API', () => {
   const renderer = create(<WrappedStopName stopIds={['123']} />);
 
   const divs = renderer.root.findAllByType('div');
-  expect(divs[0].children).toContain('Pysäkki 123');
+  expect(divs[0].children).toContain('stop - {\"stop\":\"123\"}');
   renderer.unmount();
 });
 

@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryResult } from "react-apollo";
+import { InjectedTranslateProps, translate } from "react-i18next";
 
 import StationsList from "src/ui/StationList";
 
@@ -20,20 +21,18 @@ interface IData {
 	stations: IStation[],
 };
 
-// interface IVars {};
-// {(loading: boolean, error: ApolloError, data: IData | undefined): React.ReactNode => {
-
 class EmptyQuery extends Query<IData> {}
-const StationsRetriever = () => (
+const StationsRetriever = (props: InjectedTranslateProps) => (
 	<EmptyQuery
 		query={STATIONS_QUERY}
 	>
 		{(result: QueryResult<IData>): React.ReactNode => {
 			if (result.loading) {
-				return (<div>Loading</div>);
+				return (<div>{props.t('loading')}</div>);
 			}
 			if (!result || !result.data) {
-				return (<div>Wat</div>);
+				return (<div>{props.t('stopRetrieveError', { stopId: '' })}</div>);
+				// return (<div>{props.t('stopRetrieveError', { stopId: props.stop })}</div>);
 			}
 			return (
 				<StationsList stations={result.data.stations} />
@@ -41,7 +40,7 @@ const StationsRetriever = () => (
 		}}
 	</EmptyQuery>
 );
-export default StationsRetriever
+export default translate('translations')(StationsRetriever)
 
 // const stationsRetrieverQuery = graphql<Data, Variables>(STATIONS_QUERY, {
 // })

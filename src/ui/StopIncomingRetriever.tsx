@@ -1,6 +1,8 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryResult } from "react-apollo";
+import { InjectedTranslateProps, translate } from "react-i18next";
+
 import {
   DaySeconds,
   EpochSecondsLocal,
@@ -86,7 +88,7 @@ export interface IStopIncomingRetrieverProps {
   displayedRoutes?: number,
 };
 
-const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProps> = (props: IStopIncomingRetrieverProps) => (
+const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProps> = (props: IStopIncomingRetrieverProps & InjectedTranslateProps) => (
   <StopIncomingQuery
     query={STOP_INCOMING_QUERY}
     variables={{ stopId: props.stopIds[0], numberOfDepartures: props.displayedRoutes as number}}
@@ -94,18 +96,19 @@ const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProp
   >
     {(result: QueryResult<IStopResponse, IStopQuery>): React.ReactNode => {
       if (result.loading) {
-        return (<div>Ladataan…</div>);
+        return (<div>{props.t('loading')}</div>);
       }
       if (!result || !result.data) {
         return (<div>
-          {`Virhe haettaessa pysäkkiä ${props.stopIds[0]}.`}
+          {props.t('stopRetrieveError', { stopId: props.stopIds[0] })}
         </div>);
       }
       if (result.data.stop === null) {
         return (<div>
-          {`Haettua pysäkkiä ${props.stopIds[0]} ei löytynyt.`}
+          {props.t('stopRetrieveNotFound', { stopId: props.stopIds[0] })}
         </div>);
       }
+
       return (
         <StopIncomingList
           stop={result.data.stop}
@@ -119,4 +122,4 @@ StopIncomingRetriever.defaultProps = {
   displayedRoutes: 12,
 };
 
-export default StopIncomingRetriever;
+export default translate('translations')(StopIncomingRetriever);

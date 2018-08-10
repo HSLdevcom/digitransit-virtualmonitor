@@ -20,11 +20,29 @@ i18n
     },
 
     resources: {
+      en: {
+        translations: {
+          departureTime: 'Time',
+          destination: 'Destination',
+          lineId: 'Line',
+        },
+      },
       fi: {
         translations: {
           departureTime: 'Lähtöaika',
           destination: 'Määränpää',
           lineId: 'Linja',
+          loading: 'Ladataan…',
+          stop: 'Pysäkki {{stop}}',
+          stopRetrieveError: 'Virhe haettaessa pysäkkiä {{stopId}}',
+          stopRetrieveNotFound: 'Haettua pysäkkiä {{stopId}} ei löytynyt',
+          stopSearchError: 'Virhe haettaessa pysäkkiä stringillä {{searchPhrase}}',
+          stopSearchNotFound: 'Haettua pysäkkiä stringillä {{searchPhrase}} ei löytynyt.',
+          stopSearcher: 'Pysäkkietsin',
+          stopSearcherDisplayedResultCount: 'Näytettävien reittien määrä',
+          stopSearcherPhrase: 'Pysäkkihakusana',
+          stopSearcherSearch: 'Etsi',
+          stopSearcherSearching: 'Etsitään hakusanalla {{searchPhrase}}',
         },
       },
     },

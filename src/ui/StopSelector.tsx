@@ -1,4 +1,5 @@
 import * as React from "react";
+import { InjectedTranslateProps, translate } from "react-i18next";
 import { RouteComponentProps/* , withRouter */ } from 'react-router';
 import { Link } from "react-router-dom";
 import { isString } from "util";
@@ -8,7 +9,7 @@ import StopsByNameRetriever from "src/ui/StopsByNameRetriever";
 
 type IProps = RouteComponentProps<{
   phrase?: string,
-}>;
+}> & InjectedTranslateProps;
 
 interface IState {
   displayedRoutes: number,
@@ -37,10 +38,10 @@ class StopSelector extends React.Component<IProps, IState> {
         action={'searchStop'}
         method={'GET'}
       >
-        <div>Pysäkkietsin</div>
+        <div>{this.props.t('stopSearcher')}</div>
         <div>
           <label htmlFor={'stopSearchInput'}>
-            Pysäkkihakusana:&nbsp;
+            {this.props.t('stopSearcherPhrase')}:&nbsp;
           </label>
           <input
             id={'stopSearchInput'}
@@ -51,7 +52,7 @@ class StopSelector extends React.Component<IProps, IState> {
         </div>
         <div>
           <label htmlFor={'displayedRoutesInput'}>
-            Näytettävien reittien määrä:&nbsp;
+          {this.props.t('stopSearcherDisplayedResultCount')}:&nbsp;
           </label>
           <input
             id={'displayedRoutesInput'}
@@ -67,13 +68,13 @@ class StopSelector extends React.Component<IProps, IState> {
         <button
           type={'submit'}
         >
-          Etsi
+          {this.props.t('stopSearcherSearch')}
         </button>
       </form>
       {this.state.searchPhrase
         ? (
           <div>
-            <span>{`Searching for ${this.state.searchPhrase}`}</span>
+            <span>{this.props.t('stopSearcherSearching', { searchPhrase: this.state.searchPhrase })}</span>
             <StopsByNameRetriever
               phrase={this.state.searchPhrase}
               stopRenderer={this.stopRenderer}
@@ -105,7 +106,4 @@ class StopSelector extends React.Component<IProps, IState> {
   }
 }
 
-// const StopSelectorWithHistory = withRouter(StopSelector);
-
-// export default StopSelectorWithHistory;
-export default StopSelector;
+export default translate('translations')(StopSelector);

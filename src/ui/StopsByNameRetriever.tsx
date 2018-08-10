@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryResult } from "react-apollo";
+import { InjectedTranslateProps, translate } from "react-i18next";
 
 import StopList, { IStopRenderFunc } from 'src/ui/StopList';
 
@@ -33,23 +34,23 @@ export interface IStopsByNameRetrieverProps {
   stopRenderer?: IStopRenderFunc,
 };
 
-const StopsByNameRetriever = ({ phrase, stopRenderer }: IStopsByNameRetrieverProps) => (
+const StopsByNameRetriever = ({ phrase, stopRenderer, t }: IStopsByNameRetrieverProps & InjectedTranslateProps) => (
   <StopsByNameQuery
     query={STOPS_BY_NAME_QUERY}
     variables={{ phrase }}
   >
     {(result: QueryResult<IStopsByNameResponse, IStopsByNameQuery>): React.ReactNode => {
       if (result.loading) {
-        return (<div>Ladataan…</div>);
+        return (<div>{t('loading')}</div>);
       }
       if (!result || !result.data) {
         return (<div>
-          {`Virhe haettaessa pysäkkiä stringillä ${phrase}.`}
+          {t('stopSearchError', { searchPhrase: phrase })}
         </div>);
       }
       if (!result.data.stops || result.data.stops.length === 0) {
         return (<div>
-          {`Haettua pysäkkiä stringillä ${phrase} ei löytynyt.`}
+          {t('stopSearchNotFound', { searchPhrase: phrase })}
         </div>);
       }
       return (
@@ -62,4 +63,4 @@ const StopsByNameRetriever = ({ phrase, stopRenderer }: IStopsByNameRetrieverPro
   </StopsByNameQuery>
 );
 
-export default StopsByNameRetriever;
+export default translate('translations')(StopsByNameRetriever);

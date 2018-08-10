@@ -1,6 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryResult } from "react-apollo";
+import { InjectedTranslateProps, translate } from "react-i18next";
 
 export const STOP_INFO_QUERY = gql`
 query GetStop($stopId: String!) {
@@ -28,7 +29,7 @@ export interface IStopInfoProps {
   stopIds: string[],
 };
 
-const StopName = (props: IStopInfoProps) => (
+const StopName = (props: IStopInfoProps & InjectedTranslateProps) => (
   <StopInfoQuery
     query={STOP_INFO_QUERY}
     variables={{ stopId: props.stopIds[0]}}
@@ -36,7 +37,7 @@ const StopName = (props: IStopInfoProps) => (
     {(result: QueryResult<IStopInfoResponse, IStopQuery>): React.ReactNode => {
       const notLoaded = () => (
         <div>
-          {`Pysäkki ${props.stopIds[0]}`}
+          {props.t('stop', { stop: props.stopIds[0]})}
         </div>
       )
       if (result.loading) {
@@ -57,4 +58,4 @@ const StopName = (props: IStopInfoProps) => (
   </StopInfoQuery>
 );
 
-export default StopName;
+export default translate('translations')(StopName);

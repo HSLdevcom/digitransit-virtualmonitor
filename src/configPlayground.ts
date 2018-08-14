@@ -107,6 +107,36 @@ const configs: IConfigurations =
       lon: 30,
     },
   },
+  'koivukylä': {
+    displays: {
+      'etelä': {
+        position: {
+          lat: 7.5,
+          lon: 30,
+        },
+        stops: {
+          'HSL:4700210': {
+            gtfsId: 'HSL:4700210',
+          },
+          'HSL:4740217': {
+            gtfsId: 'HSL:4740217',
+          },
+        },
+        title: {
+          en: '',
+          fi: 'Koivukylä etelä',
+          jp: '',
+          ru: '',
+          se: '',
+        },
+      },
+    },
+    name: 'Koivukylän juna-asema',
+    position: {
+      lat: 7.5,
+      lon: 30,
+    },
+  },
 };
 
 export default configs;

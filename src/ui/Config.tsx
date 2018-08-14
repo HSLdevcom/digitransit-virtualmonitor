@@ -39,11 +39,16 @@ const Config = ({t, configuration}: IProps & InjectedTranslateProps ) => (
   <div>
     <h1>Konfiguraatio: {configuration.name}</h1>
     {Object.entries(configuration.displays).map(([key, d]) => (
-      <div>
-        {d.title && (Object.values(d.title).length > 0)
-          ? <h2>Display: {Object.values(d.title).filter(title => title)[0] || key}</h2>
-          : <h2>Display: {key}</h2>
-        }
+      <div key={key}>
+        <h2>
+          <Link to={`/configuration/${configuration.name}/display/${key}`}>
+            {'Display: '}
+            {d.title && (Object.values(d.title).length > 0)
+              ? Object.values(d.title).filter(title => title)[0] || key
+              : key
+            }
+          </Link>
+        </h2>
         {d.position
           ? (<div>
               Lon: {d.position.lon}&nbsp;
@@ -53,7 +58,7 @@ const Config = ({t, configuration}: IProps & InjectedTranslateProps ) => (
         }
         <ul>
           {Object.values(d.stops).map(s => (
-            <div>
+            <div key={s.gtfsId}>
               <Link
                 to={`/stop/${s.gtfsId}`}
               >

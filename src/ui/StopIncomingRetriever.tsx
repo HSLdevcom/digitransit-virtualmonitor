@@ -11,8 +11,8 @@ import {
 import IncomingList from "src/ui/IncomingList";
 
 const STOP_INCOMING_QUERY = gql`
-query GetStop($stopId: String!, $numberOfDepartures: Int!) {
-  stop(id: $stopId) {
+query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
+  stops(ids: $stopIds) {
     name,
     gtfsId,
     stoptimesWithoutPatterns(numberOfDepartures: $numberOfDepartures) {
@@ -71,13 +71,13 @@ export interface IStop {
 };
 
 interface IStopResponse {
-  stop: IStop
+  readonly stops: ReadonlyArray<IStop>
 }
 
 export type StopId = string
 
 interface IStopQuery {
-  stopId: StopId,
+  stopIds: ReadonlyArray<StopId>,
   numberOfDepartures: number,
 };
 
@@ -91,7 +91,7 @@ export interface IStopIncomingRetrieverProps {
 const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProps> = (props: IStopIncomingRetrieverProps & InjectedTranslateProps) => (
   <StopIncomingQuery
     query={STOP_INCOMING_QUERY}
-    variables={{ stopId: props.stopIds[0], numberOfDepartures: props.displayedRoutes as number}}
+    variables={{ stopIds: props.stopIds, numberOfDepartures: props.displayedRoutes as number}}
     pollInterval={20000}
   >
     {(result: QueryResult<IStopResponse, IStopQuery>): React.ReactNode => {
@@ -100,18 +100,22 @@ const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProp
       }
       if (!result || !result.data) {
         return (<div>
-          {props.t('stopRetrieveError', { stopId: props.stopIds[0] })}
+          {props.t('stopRetrieveError', { stopIds: props.stopIds })}
         </div>);
       }
-      if (result.data.stop === null) {
+      if (!result.data.stops || (result.data.stops.length <= 0)) {
         return (<div>
-          {props.t('stopRetrieveNotFound', { stopId: props.stopIds[0] })}
+          {props.t('stopRetrieveNotFound', { stopIds: props.stopIds })}
         </div>);
       }
 
+      // Merge the stoptimes.
+      // const mergedStopTimes = result.data.stops.reduce(({}) => ({}), {});
+      const mergedStopTimes = result.data.stops[0].stoptimesWithoutPatterns;
+
       return (
         <IncomingList
-        stop={result.data.stop}
+          stoptimesWithoutPatterns={mergedStopTimes}
         />
       );
     }}

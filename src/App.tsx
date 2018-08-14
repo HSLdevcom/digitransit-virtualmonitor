@@ -10,11 +10,20 @@ import VirtualMonitor from 'src/ui/VirtualMonitor'
 import Config from './ui/Config';
 
 import confs from './configPlayground';
+import VirtualMonitorAlter from './ui/VirtualMonitorAlter';
 
 const RouteWrapper = ({ match }: any) => (
   <VirtualMonitor
     stops={[match.params.stopId]}
     displayedRoutes={match.params.displayedRoutes}
+    // title={'Jokupysäkki'}
+  />
+);
+
+const RouteWrapperConfig = ({ match }: any) => (
+  <VirtualMonitorAlter
+    configuration={match.params.configuration}
+    display={match.params.display}
     // title={'Jokupysäkki'}
   />
 );
@@ -25,6 +34,10 @@ class App extends React.Component {
   public render() {
     return (
       <Switch>
+        <Route
+          path={'/configuration/:configuration/display/:display'}
+          component={RouteWrapperConfig}
+        />
         <Route
           path={'/stop/:stopId/:displayedRoutes?'}
           component={RouteWrapper}

@@ -109,9 +109,21 @@ const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProp
         </div>);
       }
 
-      // Merge the stoptimes.
-      // const mergedStopTimes = result.data.stops.reduce(({}) => ({}), {});
-      const mergedStopTimes = result.data.stops[0].stoptimesWithoutPatterns;
+      // Takes into account date too, only useful for comparing.
+      const calcAbsoluteDepartureTime = (stopTime: IStopTime) => (60*60*24) * stopTime.serviceDay + stopTime.scheduledDeparture;
+
+      // Merge the stoptimes. Show each route only once.
+      // Todo: Remove duplicates.
+      // Todo: Prioritize stops for route that are closest to display position.
+      const mergedStopTimes = result.data.stops
+        .reduce(
+          (acc, curr) => [...acc, ...curr.stoptimesWithoutPatterns],
+          []
+        )
+        // Sort by departure time.
+        .sort((stopTimeA, stopTimeB) => calcAbsoluteDepartureTime(stopTimeA) - calcAbsoluteDepartureTime(stopTimeB))
+        // Clip to max of props.displayedRoutes
+        .slice(0, props.displayedRoutes);
 
       return (
         <IncomingList

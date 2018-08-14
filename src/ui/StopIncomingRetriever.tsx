@@ -8,7 +8,7 @@ import {
   EpochSecondsLocal,
   Seconds
 } from "src/time";
-import StopIncomingList from "src/ui/StopIncomingList";
+import IncomingList from "src/ui/IncomingList";
 
 const STOP_INCOMING_QUERY = gql`
 query GetStop($stopId: String!, $numberOfDepartures: Int!) {
@@ -110,8 +110,8 @@ const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProp
       }
 
       return (
-        <StopIncomingList
-          stop={result.data.stop}
+        <IncomingList
+        stop={result.data.stop}
         />
       );
     }}

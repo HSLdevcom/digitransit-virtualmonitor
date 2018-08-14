@@ -5,13 +5,13 @@ import {
   formatTime,
   parseDaySeconds,
 } from "src/time";
-import { IStop, IStopTime } from 'src/ui/StopIncomingRetriever'
+import { IStopTime } from 'src/ui/StopIncomingRetriever'
 
 export interface IStopIncomingListProps {
-  stop: IStop,
-}
+  readonly stoptimesWithoutPatterns: ReadonlyArray<IStopTime>,
+};
 
-const StopIncomingRow = ({ stoptime } : { stoptime: IStopTime }) => (
+const IncomingRow = ({ stoptime } : { stoptime: IStopTime }) => (
   <tr>
     <td>
       <time>{formatTime(parseDaySeconds(stoptime.scheduledArrival))}</time>
@@ -25,8 +25,8 @@ const StopIncomingRow = ({ stoptime } : { stoptime: IStopTime }) => (
   </tr>
 );
 
-const StopIncomingList = ({ stop, t } : IStopIncomingListProps & InjectedTranslateProps) => (
-  <table className={'StopIncomingList'}>
+const IncomingList = ({ stoptimesWithoutPatterns, t } : IStopIncomingListProps & InjectedTranslateProps) => (
+  <table className={'IncomingList'}>
     <thead>
       <tr>
         <th className={'departureTime'}>{t('departureTime')}</th>
@@ -35,8 +35,8 @@ const StopIncomingList = ({ stop, t } : IStopIncomingListProps & InjectedTransla
       </tr>
     </thead>
     <tbody>
-      {stop.stoptimesWithoutPatterns.map(stoptime => (
-        <StopIncomingRow
+      {stoptimesWithoutPatterns.map(stoptime => (
+        <IncomingRow
           stoptime={stoptime}
           key={stoptime.trip.gtfsId}
         />
@@ -45,4 +45,4 @@ const StopIncomingList = ({ stop, t } : IStopIncomingListProps & InjectedTransla
   </table>
 );
 
-export default translate('translations')(StopIncomingList);
+export default translate('translations')(IncomingList);

@@ -7,7 +7,7 @@ import HslLogo from 'src/ui/HslLogo';
 import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
 import VirtualMonitor from 'src/ui/VirtualMonitor'
-import Config from './ui/Config';
+import ConfigurationList from './ui/ConfigurationList';
 
 import confs from './configPlayground';
 import VirtualMonitorAlter from './ui/VirtualMonitorAlter';
@@ -28,7 +28,7 @@ const RouteWrapperConfig = ({ match }: any) => (
   />
 );
 
-const Wrapper = () => (<Config configuration={confs.kamppi}/>);
+const Wrapper = () => (<ConfigurationList configurations={confs}/>);
 
 class App extends React.Component {
   public render() {
@@ -43,7 +43,7 @@ class App extends React.Component {
           component={RouteWrapper}
         />
         <Route
-          path={'/configs/:configName'}
+          path={'/configs/:configName?'}
           component={Wrapper}
         />
         <Route>

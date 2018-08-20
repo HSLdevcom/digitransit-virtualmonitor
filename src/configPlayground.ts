@@ -1,27 +1,4 @@
-import { IConfiguration, IDisplay } from 'src/ui/Config';
-
-interface IConfigurations {
-  [configurationName: string]: IConfiguration,
-};
-
-const def: IDisplay = {
-  position: {
-    lat: 7.5,
-    lon: 30,
-  },
-  stops: {
-    'a': {
-      gtfsId: 'a',
-    },
-  },
-  title: {
-    en: '',
-    fi: '',
-    jp: '',
-    ru: '',
-    se: '',
-  }
-};
+import { IConfigurations } from './ui/ConfigurationList';
 
 const configs: IConfigurations =
 {
@@ -78,7 +55,6 @@ const configs: IConfigurations =
           se: '',
         },
       },
-      'default': def,
       'metro-sisäänkäynti': {
         position: {
           lat: 7.5,

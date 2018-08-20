@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "apollo-boost": "^0.1.12",
+    "apollo-boost": "^0.1.13",
+    "copy-to-clipboard": "^3.0.8",
     "esm": "^3.0.72",
     "graphql": "^14.0.0-rc.2",
     "graphql-tag": "^2.9.2",

@@ -2,14 +2,10 @@ import * as React from "react";
 import { InjectedTranslateProps, translate } from "react-i18next";
 
 import ConfigEditor from "src/ui/ConfigEditor";
+import { ILatLon } from "src/ui/LatLonEditor";
 
 interface ITranslatedString {
   readonly [twoLetterLanguageCode: string]: string;
-};
-
-interface ILonLat {
-  readonly lon: number,
-  readonly lat: number,
 };
 
 interface IStop {
@@ -17,7 +13,7 @@ interface IStop {
 };
 
 export interface IDisplay {
-  readonly position?: ILonLat;
+  readonly position?: ILatLon;
   readonly title?: ITranslatedString;
   readonly stops: {
     readonly [gtfsId: string]: IStop,
@@ -29,7 +25,7 @@ export interface IConfiguration {
   readonly displays: {
     readonly [displayId: string]: IDisplay,
   },
-  readonly position?: ILonLat;
+  readonly position?: ILatLon;
 };
 
 export interface IConfigurations {

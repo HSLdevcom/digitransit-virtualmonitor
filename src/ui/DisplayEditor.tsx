@@ -2,7 +2,8 @@ import * as React from "react";
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { IConfiguration, IDisplay } from "./ConfigurationList";
+import { IConfiguration, IDisplay } from "src/ui/ConfigurationList";
+import LatLonEditor from "src/ui/LatLonEditor";
 
 interface IDisplayEditorProps {
   configuration: IConfiguration,
@@ -21,10 +22,7 @@ const DisplayEditor = ({configuration, display}: IDisplayEditorProps & InjectedT
       </Link>
     </h2>
     {display.position
-      ? (<div>
-          Lon: {display.position.lon}&nbsp;
-          Lat: {display.position.lat}
-        </div>)
+      ? (<LatLonEditor {...display.position} />)
       : null
     }
     <ul>

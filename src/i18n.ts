@@ -29,6 +29,7 @@ i18n
       },
       fi: {
         translations: {
+          configuration: 'Konfiguraatio',
           departureTime: 'Lähtöaika',
           destination: 'Määränpää',
           lineId: 'Linja',

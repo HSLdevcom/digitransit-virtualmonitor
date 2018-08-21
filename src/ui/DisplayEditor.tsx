@@ -1,9 +1,15 @@
 import * as React from "react";
+import { InjectedTranslateProps, translate } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { IConfiguration, IDisplay } from "./ConfigurationList";
 
-const DisplayEditor = ({configuration, display}: { configuration: IConfiguration, display: IDisplay }) => (
+interface IDisplayEditorProps {
+  configuration: IConfiguration,
+  display: IDisplay,
+};
+
+const DisplayEditor = ({configuration, display}: IDisplayEditorProps & InjectedTranslateProps) => (
   <div>
     <h2>
       <Link to={`/configuration/${configuration.name}/display/${display.title}`}>
@@ -35,4 +41,4 @@ const DisplayEditor = ({configuration, display}: { configuration: IConfiguration
   </div>
 );
 
-export default DisplayEditor;
+export default translate('translations')(DisplayEditor);

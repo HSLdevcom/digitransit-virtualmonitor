@@ -3,11 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@types/graphql": "^0.13.4",
     "apollo-boost": "^0.1.13",
     "copy-to-clipboard": "^3.0.8",
-    "esm": "^3.0.72",
-    "graphql": "^14.0.0-rc.2",
+    "esm": "^3.0.79",
+    "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
+    "graphql-yoga": "^1.16.1",
     "i18next": "^11.5.0",
     "moment": "^2.22.2",
     "patch-package": "^5.1.1",
@@ -39,11 +41,19 @@
     "@types/react-router-dom": "^4.3.0",
     "@types/react-test-renderer": "^16.0.1",
     "react-test-renderer": "^16.4.1",
+    "ts-node": "^7.0.1",
     "typescript": "^3.0.1"
   },
   "jest": {
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/src/$1"
     }
+  },
+  "esm": {
+    "await": true
+  },
+  "resolutions": {
+    "graphql": "^0.13.2",
+    "**/graphql": "^0.13.2"
   }
 }

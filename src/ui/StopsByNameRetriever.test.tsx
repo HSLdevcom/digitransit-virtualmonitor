@@ -1,4 +1,4 @@
-import { DocumentNode } from 'graphql';
+/* import { DocumentNode } from 'graphql';
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils'
 import { create } from 'react-test-renderer';
@@ -39,13 +39,14 @@ const mocks = [
   ),
 ];
 
-const WrappedStopsByNameRetriever = (props: IStopsByNameRetrieverProps) => (
-  <MockedProvider mocks={mocks} addTypename={false} >
-    <StopsByNameRetriever {...props} />
-  </MockedProvider>
-);
+// const WrappedStopsByNameRetriever = (props: IStopsByNameRetrieverProps) => (
+//   <MockedProvider mocks={mocks} addTypename={false} >
+//     <StopsByNameRetriever {...props} />
+//   </MockedProvider>
+// );
 
-it('renders without crashing', () => {
-  const renderer = create(<WrappedStopsByNameRetriever phrase={'Pasila'} />);
-  renderer.unmount();
-});
+// it('renders without crashing', () => {
+//   const renderer = create(<WrappedStopsByNameRetriever phrase={'Pasila'} />);
+//   renderer.unmount();
+// });
+ */

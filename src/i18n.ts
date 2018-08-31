@@ -29,9 +29,12 @@ i18n
       },
       fi: {
         translations: {
+          addDisplay: 'Lisää näyttö',
+          addStop: 'Lisää pysäkki',
           configuration: 'Konfiguraatio',
           departureTime: 'Lähtöaika',
           destination: 'Määränpää',
+          display: 'Näyttö',
           latitude: 'Latitude',
           lineId: 'Linja',
           loading: 'Ladataan…',

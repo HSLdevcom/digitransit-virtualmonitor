@@ -1,6 +1,7 @@
-import { GraphQLFloat, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
+import { GraphQLFloat, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString, GraphQLInputObjectType } from "graphql";
 
-import confs from '../configPlayground';
+import initialConfigurations from '../configPlayground';
+import { IConfigurations2 } from "../ui/ConfigurationList";
 
 const Position = new GraphQLObjectType({
   fields: {
@@ -44,13 +45,75 @@ const ConfigurationType = new GraphQLObjectType({
     position: { type: Position },
   },
   name: 'Configuration',
-})
+});
+
+const ConfigurationInputType = new GraphQLInputObjectType({
+  name: 'ConfigInput',
+  fields: {
+    name: { type: GraphQLString },
+  },
+});
+
+let currentConfigurations: IConfigurations2 = initialConfigurations;
+
+console.log(currentConfigurations)
+
+const defaultConfiguration = {
+  displays: [],
+};
 
 const schema = new GraphQLSchema({
+  mutation: new GraphQLObjectType({
+    fields: () => ({
+      addConfiguration: {
+        args: {
+          configuration: {
+            type: ConfigurationInputType,
+          }
+        },
+        description: 'Add a new Configuration, returns the newly created Configuration',
+        resolve: (_, { configuration }) => {
+          const newConfiguration = { ...defaultConfiguration, ...configuration };
+          currentConfigurations[configuration.name] = newConfiguration;
+          return newConfiguration;
+        },
+        type: ConfigurationType,
+      },
+      modifyConfiguration: {
+        args: {
+          configuration: {
+            type: ConfigurationInputType,
+          }
+        },
+        description: 'Modify a Configuration, returns the modified Configuration',
+        resolve: (_, { configuration }) => {
+          const newConfiguration = { ...defaultConfiguration, ...configuration };
+          currentConfigurations[configuration.name] = newConfiguration;
+          return newConfiguration;
+        },
+        type: ConfigurationType,
+      },
+      deleteConfiguration: {
+        args: {
+          configurationId: {
+            type: GraphQLString,
+          }
+        },
+        description: 'Delete a Configuration, returns the deleted Configuration',
+        resolve: (_, { configurationId }: { configurationId: string} ) => {
+          const { [configurationId]: deletedConf, ...restConf } = currentConfigurations;
+          currentConfigurations = restConf;
+          return deletedConf;
+        },
+        type: ConfigurationType,
+      },
+    }),
+    name: 'Mutation',
+  }),
   query: new GraphQLObjectType({
     fields: {
       configurations: {
-        resolve: (root, {}) => Object.values(confs),
+        resolve: (root, {}) => Object.values(currentConfigurations),
         type: new GraphQLList(ConfigurationType),
       },
     },
@@ -58,16 +121,4 @@ const schema = new GraphQLSchema({
   }),
 });
 
-// const TEST_QUERY2 = 'query { configurations { name } }';
-
 export default schema;
-
-// try {
-//   graphql(schema, TEST_QUERY.loc.source).then(res => { console.log(res); if (res && res.data) { console.log(res.data.configurations); } });
-// } catch (ex) {
-//   console.log(ex);
-// }
-
-// while (1);
-
-// export default schema;

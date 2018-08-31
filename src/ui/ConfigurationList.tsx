@@ -32,6 +32,10 @@ export interface IConfigurations {
   readonly [configurationName: string]: IConfiguration,
 };
 
+export interface IConfigurations2 {
+  [configurationName: string]: IConfiguration,
+};
+
 export interface IConfigurationListProps {
   readonly configurations: IConfigurations,
 };

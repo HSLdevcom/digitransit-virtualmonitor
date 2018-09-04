@@ -1,4 +1,4 @@
-import { GraphQLFloat, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString, GraphQLInputObjectType } from "graphql";
+import { GraphQLFloat, GraphQLInputObjectType,   GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
 
 import initialConfigurations from '../configPlayground';
 import { IConfigurations2 } from "../ui/ConfigurationList";
@@ -29,7 +29,10 @@ const Stop = new GraphQLObjectType({
 const Display = new GraphQLObjectType({
   fields: {
     position: { type: Position },
-    stops: { type: new GraphQLList(Stop) },
+    stops: {
+      resolve: (root, {}) => Object.values(root.stops),
+      type: new GraphQLList(Stop)
+    },
     title: { type: TranslatedString },
   },
   name: 'Display',
@@ -48,15 +51,13 @@ const ConfigurationType = new GraphQLObjectType({
 });
 
 const ConfigurationInputType = new GraphQLInputObjectType({
-  name: 'ConfigInput',
   fields: {
     name: { type: GraphQLString },
   },
+  name: 'ConfigInput',
 });
 
 let currentConfigurations: IConfigurations2 = initialConfigurations;
-
-console.log(currentConfigurations)
 
 const defaultConfiguration = {
   displays: [],
@@ -79,20 +80,6 @@ const schema = new GraphQLSchema({
         },
         type: ConfigurationType,
       },
-      modifyConfiguration: {
-        args: {
-          configuration: {
-            type: ConfigurationInputType,
-          }
-        },
-        description: 'Modify a Configuration, returns the modified Configuration',
-        resolve: (_, { configuration }) => {
-          const newConfiguration = { ...defaultConfiguration, ...configuration };
-          currentConfigurations[configuration.name] = newConfiguration;
-          return newConfiguration;
-        },
-        type: ConfigurationType,
-      },
       deleteConfiguration: {
         args: {
           configurationId: {
@@ -104,6 +91,20 @@ const schema = new GraphQLSchema({
           const { [configurationId]: deletedConf, ...restConf } = currentConfigurations;
           currentConfigurations = restConf;
           return deletedConf;
+        },
+        type: ConfigurationType,
+      },
+      modifyConfiguration: {
+        args: {
+          configuration: {
+            type: ConfigurationInputType,
+          }
+        },
+        description: 'Modify a Configuration, returns the modified Configuration',
+        resolve: (_, { configuration }) => {
+          const newConfiguration = { ...defaultConfiguration, ...configuration };
+          currentConfigurations[configuration.name] = newConfiguration;
+          return newConfiguration;
         },
         type: ConfigurationType,
       },

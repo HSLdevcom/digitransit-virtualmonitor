@@ -7,16 +7,14 @@ import HslLogo from 'src/ui/HslLogo';
 import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
 import VirtualMonitor from 'src/ui/VirtualMonitor'
-import ConfigurationList from './ui/ConfigurationList';
 
-import confs from './configPlayground';
+import ConfigurationRetriever from './ui/ConfigurationRetriever';
 import VirtualMonitorAlter from './ui/VirtualMonitorAlter';
 
 const RouteWrapper = ({ match }: any) => (
   <VirtualMonitor
     stops={[match.params.stopId]}
     displayedRoutes={match.params.displayedRoutes}
-    // title={'Jokupysäkki'}
   />
 );
 
@@ -24,11 +22,8 @@ const RouteWrapperConfig = ({ match }: any) => (
   <VirtualMonitorAlter
     configuration={match.params.configuration}
     display={match.params.display}
-    // title={'Jokupysäkki'}
   />
 );
-
-const Wrapper = () => (<ConfigurationList configurations={confs}/>);
 
 class App extends React.Component {
   public render() {
@@ -44,7 +39,7 @@ class App extends React.Component {
         />
         <Route
           path={'/configs/:configName?'}
-          component={Wrapper}
+          component={ConfigurationRetriever}
         />
         <Route>
           <div id={'stop-search'}>

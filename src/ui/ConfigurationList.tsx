@@ -3,6 +3,7 @@ import { InjectedTranslateProps, translate } from "react-i18next";
 
 import ConfigEditor from "src/ui/ConfigEditor";
 import { ILatLon } from "src/ui/LatLonEditor";
+import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 interface ITranslatedString {
   readonly [twoLetterLanguageCode: string]: string;
@@ -42,12 +43,26 @@ export interface IConfigurationListProps {
 
 const ConfigurationList = ({configurations, t}: IConfigurationListProps & InjectedTranslateProps ) => (
   <div>
-    {Object.values(configurations).map(configuration => (
+    {Object.values(configurations).map((configuration, i) => (
       <ConfigEditor
-        key={configuration.name}
+        key={`${configuration.name}${i}`}
         configuration={configuration}
       />
     ))}
+    <ApolloClientsContext.Consumer>
+      {({ virtualMonitor }) =>
+        (<Mutation
+          mutation={ADD_STOP}
+          client={virtualMonitor}
+        >
+          {addStop => (
+            <button onClick={() => addStop()}>
+              {t('addStop')}
+            </button>
+          )}
+        </Mutation>)
+      }
+    </ApolloClientsContext.Consumer>
   </div>
 );
 

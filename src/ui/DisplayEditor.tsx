@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 import { IConfiguration, IDisplay } from "src/ui/ConfigurationList";
 import LatLonEditor from "src/ui/LatLonEditor";
+import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 interface IDisplayEditorProps {
   configuration: IConfiguration,
@@ -59,13 +60,20 @@ const DisplayEditor = ({configuration, display, t}: IDisplayEditorProps & Inject
         </div>
       ))}
     </ul>
-    <Mutation mutation={ADD_STOP}>
-      {addStop => (
-        <button onClick={() => addStop()}>
-          {t('addStop')}
-        </button>
-      )}
-    </Mutation>
+    <ApolloClientsContext.Consumer>
+      {({ virtualMonitor }) =>
+        (<Mutation
+          mutation={ADD_STOP}
+          client={virtualMonitor}
+        >
+          {addStop => (
+            <button onClick={() => addStop()}>
+              {t('addStop')}
+            </button>
+          )}
+        </Mutation>)
+      }
+    </ApolloClientsContext.Consumer>
   </div>
 );
 

@@ -32,7 +32,10 @@ const ConfigEditor = ({ configuration, t }: IConfigEditorProps & InjectedTransla
       />
     ))}
     <label>JSON: </label>
-    <textarea value={JSON.stringify(configuration)} />
+    <textarea
+      value={JSON.stringify(configuration)}
+      onChange={id}
+    />
     <button onClick={copyConfigurationToClipboard(configuration)} value={'Copy JSON to clipboard'}>Copy JSON to clipboard</button>
   </div>
 );

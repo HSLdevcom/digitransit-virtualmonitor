@@ -8,6 +8,8 @@
     ]
   },
   "rules": {
-    "jsx-no-lambda": false
+    "jsx-no-lambda": false,
+    "no-unused-expression": false,
+    "no-unused-variable": false
   }
 }

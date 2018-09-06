@@ -1,4 +1,6 @@
+import gql from "graphql-tag";
 import * as React from "react";
+import { Mutation } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
 
 import ConfigEditor from "src/ui/ConfigEditor";
@@ -41,6 +43,12 @@ export interface IConfigurationListProps {
   readonly configurations: IConfigurations,
 };
 
+const createLocalConfiguration = gql`
+  mutation createLocalConfiguration($name: String!) {
+    createLocalConfiguration(name: $name) @client
+  }
+`;
+
 const ConfigurationList = ({configurations, t}: IConfigurationListProps & InjectedTranslateProps ) => (
   <div>
     {Object.values(configurations).map((configuration, i) => (
@@ -52,12 +60,12 @@ const ConfigurationList = ({configurations, t}: IConfigurationListProps & Inject
     <ApolloClientsContext.Consumer>
       {({ virtualMonitor }) =>
         (<Mutation
-          mutation={ADD_STOP}
+          mutation={createLocalConfiguration}
           client={virtualMonitor}
         >
-          {addStop => (
-            <button onClick={() => addStop()}>
-              {t('addStop')}
+          {createLocalConfiguration => (
+            <button onClick={() => createLocalConfiguration({ variables: { name: 'Derp'}}) }>
+              {t('prepareConfiguration')}
             </button>
           )}
         </Mutation>)

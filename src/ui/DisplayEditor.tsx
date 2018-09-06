@@ -68,7 +68,7 @@ const DisplayEditor = ({configuration, display, t}: IDisplayEditorProps & Inject
         >
           {addStop => (
             <button onClick={() => addStop()}>
-              {t('addStop')}
+              {t('prepareStop')}
             </button>
           )}
         </Mutation>)

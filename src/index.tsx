@@ -1,4 +1,5 @@
-import ApolloBoostClient, { InMemoryCache } from 'apollo-boost';
+import ApolloBoostClient, { gql, InMemoryCache } from 'apollo-boost';
+import { ApolloCache } from 'apollo-cache';
 import * as React from 'react';
 import { ApolloProvider } from 'react-apollo'
 import * as ReactDOM from 'react-dom';
@@ -16,9 +17,26 @@ const apolloCache = new InMemoryCache();
 
 const resolvers = {
   Mutation: {
-    addStop: (_: any, { configuration, display }: { configuration: string, display: string }, { cache, getCacheKey }: any) => {
-      cache.writeData();
-      return null;
+    // addStop: (_: any, { configuration, display }: { configuration: string, display: string }, { cache, getCacheKey }: any) => {
+    //   cache.writeData();
+    //   return null;
+    // },
+    createLocalConfiguration: (_: any, { name }: { name: string }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
+      const currentLocalConfigurations = cache.readQuery({ query: gql`query { localConfigurations @client { name } }` });
+
+      cache.writeData({
+        data: {
+          localConfigurations: [
+            ...((currentLocalConfigurations && (currentLocalConfigurations as any).configurations) || []),
+            {
+              __typename: 'LocalConfiguration',
+              displays: [],
+              name,
+            },
+          ],
+        },
+      });
+      // return null;
     },
   }
 };
@@ -31,15 +49,26 @@ const reittiOpasClient = new ApolloBoostClient({
 const virtualMonitorClient = new ApolloBoostClient({
   cache: new InMemoryCache(),
   clientState: {
-    defaults: {},
+    defaults: {
+      localConfigurations: [],
+    },
     resolvers,
+    typeDefs: `
+      type LocalConfiguration {
+        name: String!
+      }
+
+      type Mutation {
+        createLocalConfiguration(name: String!)
+      }
+    `,
   },
   uri: 'http://localhost:4000',
 });
 
 export const contextValue: IApolloClientContextType = {
   // default: reittiOpasClient,
-  default: virtualMonitorClient,
+  default: reittiOpasClient,
   reittiOpas: reittiOpasClient,
   virtualMonitor: virtualMonitorClient,
 };

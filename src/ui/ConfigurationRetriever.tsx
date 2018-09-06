@@ -8,7 +8,7 @@ import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
 const CONFIGURATION_QUERY = gql`
 query {
-  configurations{
+  configurations {
     displays {
       title {
         fi
@@ -24,12 +24,18 @@ query {
       lon
     }
   }
+  localConfigurations @client {
+    name
+  }
 }
 `;
 
 interface IConfigurationResponse {
   readonly configurations: ReadonlyArray<IConfiguration>
-}
+  readonly localConfigurations: ReadonlyArray<{
+    name: string,
+  }>,
+};
 
 // interface IConfigurationQuery {
 // };
@@ -64,9 +70,14 @@ const ConfigurationRetriever: React.StatelessComponent<IConfigurationRetrieverPr
             </div>);
           }
           return (
-            <ConfigurationList
-              configurations={Object.values(result.data.configurations).reduce((acc, o) => ({...acc, [o.name]:o}), {})}
-            />
+            <div>
+              <ConfigurationList
+                configurations={Object.values(result.data.configurations).reduce((acc, o) => ({...acc, [o.name]:o}), {})}
+              />
+              <ConfigurationList
+                configurations={Object.values(result.data.localConfigurations).reduce((acc, o) => ({...acc, [o.name]:{ ...o, displays: [] } }), {})}
+              />
+            </div>
           );
         }}
       </ConfigurationQuery>)

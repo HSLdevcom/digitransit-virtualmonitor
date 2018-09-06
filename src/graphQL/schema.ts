@@ -1,12 +1,12 @@
-import { GraphQLFloat, GraphQLInputObjectType,   GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
+import { GraphQLFloat, GraphQLInputObjectType, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString, GraphQLNonNull } from "graphql";
 
 import initialConfigurations from '../configPlayground';
 import { IConfigurations2 } from "../ui/ConfigurationList";
 
 const Position = new GraphQLObjectType({
   fields: {
-    lat: { type: GraphQLFloat },
-    lon: { type: GraphQLFloat },
+    lat: { type: new GraphQLNonNull(GraphQLFloat) },
+    lon: { type: new GraphQLNonNull(GraphQLFloat) },
   },
   name: 'Position',
 });
@@ -21,7 +21,7 @@ const TranslatedString = new GraphQLObjectType({
 
 const Stop = new GraphQLObjectType({
   fields: {
-    gtfsId: { type: GraphQLString },
+    gtfsId: { type: new GraphQLNonNull(GraphQLString) },
   },
   name: 'Stop',
 });
@@ -31,9 +31,9 @@ const Display = new GraphQLObjectType({
     position: { type: Position },
     stops: {
       resolve: (root, {}) => Object.values(root.stops),
-      type: new GraphQLList(Stop)
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(Stop)))
     },
-    title: { type: TranslatedString },
+    title: { type: new GraphQLNonNull(TranslatedString) },
   },
   name: 'Display',
 });
@@ -42,9 +42,9 @@ const ConfigurationType = new GraphQLObjectType({
   fields: {
     displays: {
       resolve: (root, {}) => Object.values(root.displays),
-      type: new GraphQLList(Display),
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(Display))),
     },
-    name: { type: GraphQLString },
+    name: { type: new GraphQLNonNull(GraphQLString) },
     position: { type: Position },
   },
   name: 'Configuration',
@@ -66,10 +66,10 @@ const defaultConfiguration = {
 const schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     fields: () => ({
-      addConfiguration: {
+      saveConfiguration: {
         args: {
           configuration: {
-            type: ConfigurationInputType,
+            type: new GraphQLNonNull(ConfigurationInputType),
           }
         },
         description: 'Add a new Configuration, returns the newly created Configuration',
@@ -83,7 +83,7 @@ const schema = new GraphQLSchema({
       deleteConfiguration: {
         args: {
           configurationId: {
-            type: GraphQLString,
+            type: new GraphQLNonNull(GraphQLString),
           }
         },
         description: 'Delete a Configuration, returns the deleted Configuration',
@@ -97,7 +97,7 @@ const schema = new GraphQLSchema({
       modifyConfiguration: {
         args: {
           configuration: {
-            type: ConfigurationInputType,
+            type: new GraphQLNonNull(ConfigurationInputType),
           }
         },
         description: 'Modify a Configuration, returns the modified Configuration',
@@ -115,8 +115,16 @@ const schema = new GraphQLSchema({
     fields: {
       configurations: {
         resolve: (root, {}) => Object.values(currentConfigurations),
-        type: new GraphQLList(ConfigurationType),
+        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ConfigurationType))),
       },
+      // displays: {
+      //   resolve: (root, {}) => Object.values(currentDisplays),
+      //   type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(DisplayType))),
+      // },
+      // view: {
+      //   resolve: (root, {}) => Object.values(currentViews),
+      //   type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ViewType))),
+      // },
     },
     name: 'Query',
   }),

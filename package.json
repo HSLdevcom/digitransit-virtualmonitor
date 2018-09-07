@@ -11,6 +11,7 @@
     "graphql-tag": "^2.9.2",
     "graphql-yoga": "^1.16.2",
     "i18next": "^11.5.0",
+    "module-alias": "^2.1.0",
     "moment": "^2.22.2",
     "patch-package": "^5.1.1",
     "react": "^16.4.1",
@@ -51,6 +52,9 @@
   },
   "esm": {
     "await": true
+  },
+  "_moduleAliases": {
+    "src": "build/dist"
   },
   "resolutions": {
     "graphql": "^0.13.2",

@@ -1,8 +1,9 @@
+import 'module-alias/register';
 // import { graphql } from "graphql";
 // import gql from "graphql-tag";
 import { GraphQLServer } from 'graphql-yoga';
 
-import virtualMonitorSchema from './schema';
+import virtualMonitorSchema from 'src/graphQL/schema';
 
 /* const TEST_QUERY = gql`
   query {

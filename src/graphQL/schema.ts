@@ -1,66 +1,25 @@
 import { GraphQLFloat, GraphQLInputObjectType, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString, GraphQLNonNull } from "graphql";
 
-import initialConfigurations from '../configPlayground';
-import { IConfigurations2 } from "../ui/ConfigurationList";
+import initialConfigurations from 'src/configPlayground';
+import { IConfigurations2, IConfiguration } from 'src/ui/ConfigurationList';
+import SConfiguration, { SConfigurationInput, defaultValue as defaultConfiguration } from "src/graphQL/SConfiguration";
+import SDisplay from 'src/graphQL/SDisplay';
+import SView from "src/graphQL/SView";
 
-const Position = new GraphQLObjectType({
-  fields: {
-    lat: { type: new GraphQLNonNull(GraphQLFloat) },
-    lon: { type: new GraphQLNonNull(GraphQLFloat) },
-  },
-  name: 'Position',
-});
+type Mutable<T> = {
+  -readonly [P in keyof T]: T[P];
+};
 
-const TranslatedString = new GraphQLObjectType({
-  fields: {
-    en: { type: GraphQLString },
-    fi: { type: GraphQLString },
-  },
-  name: 'TranslatedString',
-});
+interface IData {
+  configurations: ReadonlyArray<IConfiguration>,
+  displays: ReadonlyArray<IConfiguration>,
+  views: ReadonlyArray<IConfiguration>,
+};
 
-const Stop = new GraphQLObjectType({
-  fields: {
-    gtfsId: { type: new GraphQLNonNull(GraphQLString) },
-  },
-  name: 'Stop',
-});
-
-const Display = new GraphQLObjectType({
-  fields: {
-    position: { type: Position },
-    stops: {
-      resolve: (root, {}) => Object.values(root.stops),
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(Stop)))
-    },
-    title: { type: new GraphQLNonNull(TranslatedString) },
-  },
-  name: 'Display',
-});
-
-const ConfigurationType = new GraphQLObjectType({
-  fields: {
-    displays: {
-      resolve: (root, {}) => Object.values(root.displays),
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(Display))),
-    },
-    name: { type: new GraphQLNonNull(GraphQLString) },
-    position: { type: Position },
-  },
-  name: 'Configuration',
-});
-
-const ConfigurationInputType = new GraphQLInputObjectType({
-  fields: {
-    name: { type: GraphQLString },
-  },
-  name: 'ConfigInput',
-});
-
-let currentConfigurations: IConfigurations2 = initialConfigurations;
-
-const defaultConfiguration = {
+let current: IData = {
+  configurations: Object.values(initialConfigurations),
   displays: [],
+  views: [],
 };
 
 const schema = new GraphQLSchema({
@@ -69,16 +28,16 @@ const schema = new GraphQLSchema({
       saveConfiguration: {
         args: {
           configuration: {
-            type: new GraphQLNonNull(ConfigurationInputType),
+            type: new GraphQLNonNull(SConfigurationInput),
           }
         },
         description: 'Add a new Configuration, returns the newly created Configuration',
         resolve: (_, { configuration }) => {
           const newConfiguration = { ...defaultConfiguration, ...configuration };
-          currentConfigurations[configuration.name] = newConfiguration;
+          current = { ...current, configurations: [...current.configurations, newConfiguration]};
           return newConfiguration;
         },
-        type: ConfigurationType,
+        type: SConfiguration,
       },
       deleteConfiguration: {
         args: {
@@ -88,25 +47,27 @@ const schema = new GraphQLSchema({
         },
         description: 'Delete a Configuration, returns the deleted Configuration',
         resolve: (_, { configurationId }: { configurationId: string} ) => {
-          const { [configurationId]: deletedConf, ...restConf } = currentConfigurations;
-          currentConfigurations = restConf;
+          // const { [configurationId]: deletedConf, ...restConf } = currentConfigurations;
+          const deletedConf = current.configurations.find(conf => conf.name === configurationId);
+          current = { ...current, configurations: current.configurations.filter(conf => conf !== deletedConf) };
+          // currentConfigurations = restConf;
           return deletedConf;
         },
-        type: ConfigurationType,
+        type: SConfiguration,
       },
       modifyConfiguration: {
         args: {
           configuration: {
-            type: new GraphQLNonNull(ConfigurationInputType),
+            type: new GraphQLNonNull(SConfigurationInput),
           }
         },
         description: 'Modify a Configuration, returns the modified Configuration',
         resolve: (_, { configuration }) => {
           const newConfiguration = { ...defaultConfiguration, ...configuration };
-          currentConfigurations[configuration.name] = newConfiguration;
+          current = { ...current, configurations: [...current.configurations.filter(conf => conf.name != newConfiguration.name), newConfiguration] };
           return newConfiguration;
         },
-        type: ConfigurationType,
+        type: SConfiguration,
       },
     }),
     name: 'Mutation',
@@ -114,17 +75,17 @@ const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     fields: {
       configurations: {
-        resolve: (root, {}) => Object.values(currentConfigurations),
-        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ConfigurationType))),
+        resolve: (root, {}) => Object.values(current.configurations),
+        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SConfiguration))),
       },
-      // displays: {
-      //   resolve: (root, {}) => Object.values(currentDisplays),
-      //   type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(DisplayType))),
-      // },
-      // view: {
-      //   resolve: (root, {}) => Object.values(currentViews),
-      //   type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(ViewType))),
-      // },
+      displays: {
+        resolve: (root, {}) => Object.values(current.displays),
+        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
+      },
+      view: {
+        resolve: (root, {}) => Object.values(current.views),
+        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SView))),
+      },
     },
     name: 'Query',
   }),

@@ -1,4 +1,4 @@
-import { IConfigurations } from './ui/ConfigurationList';
+import { IConfigurations } from 'src/ui/ConfigurationList';
 
 const configs: IConfigurations =
 {

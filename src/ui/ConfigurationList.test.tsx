@@ -2,7 +2,7 @@ import * as React from 'react';
 import { MemoryRouter, MemoryRouterProps } from 'react-router';
 import { create } from 'react-test-renderer';
 
-import ConfigurationList, { IConfigurationListProps, IConfigurations } from './ConfigurationList';
+import ConfigurationList, { IConfigurationListProps, IConfigurations } from 'src/ui/ConfigurationList';
 
 const testConfigs: IConfigurations = {
   test: {

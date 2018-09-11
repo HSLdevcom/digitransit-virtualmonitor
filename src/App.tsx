@@ -8,8 +8,8 @@ import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
 import VirtualMonitor from 'src/ui/VirtualMonitor'
 
-import ConfigurationRetriever from './ui/ConfigurationRetriever';
-import VirtualMonitorAlter from './ui/VirtualMonitorAlter';
+import ConfigurationRetriever from 'src/ui/ConfigurationRetriever';
+import VirtualMonitorAlter from 'src/ui/VirtualMonitorAlter';
 
 const RouteWrapper = ({ match }: any) => (
   <VirtualMonitor

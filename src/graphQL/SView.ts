@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLNonNull, GraphQLList } from "graphql";
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType } from "graphql";
 
 import SStop from "src/graphQL/SStop";
 import STranslatedString from "src/graphQL/STranslatedString";

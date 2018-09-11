@@ -4,13 +4,13 @@ import { Mutation } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { IConfiguration, IDisplay } from "src/ui/ConfigurationList";
+import { IConfiguration, IDisplay, IView } from "src/ui/ConfigurationList";
 import LatLonEditor from "src/ui/LatLonEditor";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
-interface IDisplayEditorProps {
+interface IViewEditorProps {
   configuration: IConfiguration,
-  display: IDisplay,
+  view: IView,
 };
 
 const ADD_STOP = gql`
@@ -31,23 +31,19 @@ const ADD_STOP = gql`
 
 // };
 
-const DisplayEditor = ({configuration, display, t}: IDisplayEditorProps & InjectedTranslateProps) => (
+const ViewEditor = ({configuration, view, t}: IViewEditorProps & InjectedTranslateProps) => (
   <div>
     <h2>
-      <Link to={`/configuration/${configuration.name}/display/${display.name}`}>
+      <Link to={`/configuration/${configuration.name}/view/${view.title}`}>
         {`${t('display')} :`}
-        {display.name || configuration.name}
+        {view.title && (Object.values(view.title).length > 0)
+          ? Object.values(view.title).filter(title => title)[0] || view.title
+          : view.title
+        }
       </Link>
     </h2>
-    {display.position
-      ? (<LatLonEditor
-          {...display.position}
-          editable={true}
-        />)
-      : null
-    }
     <ul>
-      {Object.values(display.viewCarousel[0].view.stops).map(s => (
+      {Object.values(view.stops).map(s => (
         <div key={s.gtfsId}>
           <Link
             to={`/stop/${s.gtfsId}`}
@@ -74,4 +70,4 @@ const DisplayEditor = ({configuration, display, t}: IDisplayEditorProps & Inject
   </div>
 );
 
-export default translate('translations')(DisplayEditor);
+export default translate('translations')(ViewEditor);

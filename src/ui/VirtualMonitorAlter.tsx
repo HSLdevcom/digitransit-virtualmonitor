@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import conf from "src/configPlayground";
+import ViewCarousel from 'src/ui/ViewCarousel';
 import VirtualMonitor from "src/ui/VirtualMonitor";
 
 export interface IVirtualMonitorPropsAlter {
@@ -19,11 +20,14 @@ const VirtualMonitorAlter = (props: IVirtualMonitorPropsAlter) => {
     return null;
   }
   return (
-    <VirtualMonitor
-      stops={Object.keys(usedDisplay.stops)}
-
-      displayedRoutes={7}
+    <ViewCarousel
+      viewCarousel={usedDisplay.viewCarousel}
     />
+    // <VirtualMonitor
+    //   stops={Object.keys((usedDisplay.viewCarousel[0] || { view: { stops: [] } }).view.stops)}
+
+    //   displayedRoutes={7}
+    // />
   );
 };
 

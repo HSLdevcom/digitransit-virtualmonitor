@@ -6,16 +6,22 @@ import { InjectedTranslateProps, translate } from "react-i18next";
 import ConfigurationList, { IConfiguration } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
+/* title {
+  fi
+  en
+}
+ */
 const CONFIGURATION_QUERY = gql`
 query {
   configurations {
     displays {
-      title {
-        fi
-        en
-      }
-      stops {
-        gtfsId
+      name
+      viewCarousel {
+        view {
+          stops {
+            gtfsId
+          }
+        }
       }
     }
     name
@@ -24,11 +30,12 @@ query {
       lon
     }
   }
-  localConfigurations @client {
-    name
-  }
 }
 `;
+/*
+localConfigurations @client {
+  name
+}*/
 
 interface IConfigurationResponse {
   readonly configurations: ReadonlyArray<IConfiguration>
@@ -61,7 +68,7 @@ const ConfigurationRetriever: React.StatelessComponent<IConfigurationRetrieverPr
           }
           if (!result || !result.data) {
             return (<div>
-              {props.t('configurationRetrieveError')}
+              {props.t('configurationRetrieveError')} - {result.error}
             </div>);
           }
           if (!result.data.configurations || (result.data.configurations.length <= 0)) {
@@ -74,9 +81,9 @@ const ConfigurationRetriever: React.StatelessComponent<IConfigurationRetrieverPr
               <ConfigurationList
                 configurations={Object.values(result.data.configurations).reduce((acc, o) => ({...acc, [o.name]:o}), {})}
               />
-              <ConfigurationList
+              {/* <ConfigurationList
                 configurations={Object.values(result.data.localConfigurations).reduce((acc, o) => ({...acc, [o.name]:{ ...o, displays: [] } }), {})}
-              />
+              /> */}
             </div>
           );
         }}

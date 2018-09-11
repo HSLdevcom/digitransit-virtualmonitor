@@ -8,25 +8,33 @@ const testConfigs: IConfigurations = {
   test: {
     displays: {
       'Test display': {
+        name: 'test display',
         position: {
           lat: 7.5,
           lon: 30,
         },
-        stops: {
-          'HSL:4700210': {
-            gtfsId: 'HSL:4700210',
+        viewCarousel: [
+          {
+            displayTime: 4,
+            view: {
+              stops: {
+                'HSL:4700210': {
+                  gtfsId: 'HSL:4700210',
+                },
+                'HSL:4740217': {
+                  gtfsId: 'HSL:4740217',
+                },
+              },
+              title: {
+                en: '',
+                fi: 'Koivukylä etelä',
+                jp: '',
+                ru: '',
+                se: '',
+              },
+            },
           },
-          'HSL:4740217': {
-            gtfsId: 'HSL:4740217',
-          },
-        },
-        title: {
-          en: '',
-          fi: 'Koivukylä etelä',
-          jp: '',
-          ru: '',
-          se: '',
-        },
+        ],
       },
     },
     name: 'Test configuration',

@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLNonNull, GraphQLList, GraphQLString, GraphQLInputObjectType } from "graphql";
+import { GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
 import SDisplay from "src/graphQL/SDisplay";
 import SPosition from "src/graphQL/SPosition";

@@ -1,10 +1,10 @@
-import { GraphQLFloat, GraphQLInputObjectType, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString, GraphQLNonNull } from "graphql";
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
 
 import initialConfigurations from 'src/configPlayground';
-import { IConfigurations2, IConfiguration } from 'src/ui/ConfigurationList';
-import SConfiguration, { SConfigurationInput, defaultValue as defaultConfiguration } from "src/graphQL/SConfiguration";
+import SConfiguration, { defaultValue as defaultConfiguration, SConfigurationInput } from "src/graphQL/SConfiguration";
 import SDisplay from 'src/graphQL/SDisplay';
 import SView from "src/graphQL/SView";
+import { IConfiguration } from 'src/ui/ConfigurationList';
 
 type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
@@ -25,20 +25,6 @@ let current: IData = {
 const schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     fields: () => ({
-      saveConfiguration: {
-        args: {
-          configuration: {
-            type: new GraphQLNonNull(SConfigurationInput),
-          }
-        },
-        description: 'Add a new Configuration, returns the newly created Configuration',
-        resolve: (_, { configuration }) => {
-          const newConfiguration = { ...defaultConfiguration, ...configuration };
-          current = { ...current, configurations: [...current.configurations, newConfiguration]};
-          return newConfiguration;
-        },
-        type: SConfiguration,
-      },
       deleteConfiguration: {
         args: {
           configurationId: {
@@ -64,7 +50,21 @@ const schema = new GraphQLSchema({
         description: 'Modify a Configuration, returns the modified Configuration',
         resolve: (_, { configuration }) => {
           const newConfiguration = { ...defaultConfiguration, ...configuration };
-          current = { ...current, configurations: [...current.configurations.filter(conf => conf.name != newConfiguration.name), newConfiguration] };
+          current = { ...current, configurations: [...current.configurations.filter(conf => conf.name !== newConfiguration.name), newConfiguration] };
+          return newConfiguration;
+        },
+        type: SConfiguration,
+      },
+      saveConfiguration: {
+        args: {
+          configuration: {
+            type: new GraphQLNonNull(SConfigurationInput),
+          }
+        },
+        description: 'Add a new Configuration, returns the newly created Configuration',
+        resolve: (_, { configuration }) => {
+          const newConfiguration = { ...defaultConfiguration, ...configuration };
+          current = { ...current, configurations: [...current.configurations, newConfiguration]};
           return newConfiguration;
         },
         type: SConfiguration,

@@ -1,4 +1,5 @@
-import 'module-alias/register';
+import 'module-alias/register'; // Needs to be first
+
 // import { graphql } from "graphql";
 // import gql from "graphql-tag";
 import { GraphQLServer } from 'graphql-yoga';

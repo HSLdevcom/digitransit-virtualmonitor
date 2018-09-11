@@ -8,19 +8,34 @@ import { ILatLon } from "src/ui/LatLonEditor";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 interface ITranslatedString {
-  readonly [twoLetterLanguageCode: string]: string;
+  readonly [twoLetterLanguageCode: string]: string,
 };
 
 interface IStop {
-  readonly gtfsId: string;
+  readonly gtfsId: string,
 };
 
-export interface IDisplay {
-  readonly position?: ILatLon;
-  readonly title?: ITranslatedString;
+export interface IView {
+  readonly title?: ITranslatedString,
   readonly stops: {
     readonly [gtfsId: string]: IStop,
   },
+};
+
+export interface IViewCarouselElement {
+  view: IView,
+  displayTime: number,
+};
+
+export type IViewCarousel = ReadonlyArray<IViewCarouselElement>;
+
+export interface IDisplay {
+  readonly position?: ILatLon,
+  readonly name: string,
+  readonly viewCarousel: ReadonlyArray<{
+    view: IView,
+    displayTime: number,
+  }>,
 };
 
 export interface IConfiguration {
@@ -35,15 +50,11 @@ export interface IConfigurations {
   readonly [configurationName: string]: IConfiguration,
 };
 
-export interface IConfigurations2 {
-  [configurationName: string]: IConfiguration,
-};
-
 export interface IConfigurationListProps {
   readonly configurations: IConfigurations,
 };
 
-const createLocalConfiguration = gql`
+const createLocalConfigurationMutation = gql`
   mutation createLocalConfiguration($name: String!) {
     createLocalConfiguration(name: $name) @client
   }
@@ -57,10 +68,10 @@ const ConfigurationList = ({configurations, t}: IConfigurationListProps & Inject
         configuration={configuration}
       />
     ))}
-    <ApolloClientsContext.Consumer>
+    {<ApolloClientsContext.Consumer>
       {({ virtualMonitor }) =>
         (<Mutation
-          mutation={createLocalConfiguration}
+          mutation={createLocalConfigurationMutation}
           client={virtualMonitor}
         >
           {createLocalConfiguration => (
@@ -70,7 +81,7 @@ const ConfigurationList = ({configurations, t}: IConfigurationListProps & Inject
           )}
         </Mutation>)
       }
-    </ApolloClientsContext.Consumer>
+    </ApolloClientsContext.Consumer>}
   </div>
 );
 

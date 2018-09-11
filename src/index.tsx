@@ -50,6 +50,7 @@ const virtualMonitorClient = new ApolloBoostClient({
   cache: new InMemoryCache(),
   clientState: {
     defaults: {
+      // configurations: [],
       localConfigurations: [],
     },
     resolvers,

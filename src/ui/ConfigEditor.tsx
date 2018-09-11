@@ -2,23 +2,23 @@ import { RIEInput } from "@attently/riek";
 import * as copy from "copy-to-clipboard";
 import gql from "graphql-tag";
 import * as React from "react";
+import { Mutation } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
 
-import { IConfiguration } from "./ConfigurationList";
-import DisplayEditor from "./DisplayEditor";
+import { IConfiguration } from "src/ui/ConfigurationList";
+import DisplayEditor from "src/ui/DisplayEditor";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
-import { Mutation } from "react-apollo";
 
 const copyConfigurationToClipboard = (configuration: IConfiguration) => () => copy(JSON.stringify(configuration));
 
-const id = () => {};
+const emptyFunc = () => {};
 
 interface IConfigEditorProps {
   configuration: IConfiguration,
   readonly?: boolean,
 };
 
-const saveConfiguration = gql`
+const saveConfigurationMutation = gql`
   mutation saveConfiguration($name: String!) {
     saveConfiguration(name: $name)
   }
@@ -29,7 +29,7 @@ const ConfigEditor: React.StatelessComponent<IConfigEditorProps & InjectedTransl
     <h1>
       <label>{t('configuration')}: </label>
       <RIEInput
-        change={id}
+        change={emptyFunc}
         propName={'name'}
         value={configuration.name}
       />
@@ -44,13 +44,13 @@ const ConfigEditor: React.StatelessComponent<IConfigEditorProps & InjectedTransl
     <label>JSON: </label>
     <textarea
       value={JSON.stringify(configuration)}
-      onChange={id}
+      onChange={emptyFunc}
     />
     <button onClick={copyConfigurationToClipboard(configuration)} value={'Copy JSON to clipboard'}>Copy JSON to clipboard</button>
     <ApolloClientsContext.Consumer>
       {({ virtualMonitor }) =>
         (<Mutation
-          mutation={saveConfiguration}
+          mutation={saveConfigurationMutation}
           client={virtualMonitor}
         >
           {saveConfiguration => (

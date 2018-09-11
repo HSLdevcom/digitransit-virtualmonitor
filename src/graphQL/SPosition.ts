@@ -1,4 +1,4 @@
-import { GraphQLObjectType, GraphQLNonNull, GraphQLFloat } from "graphql";
+import { GraphQLFloat, GraphQLNonNull, GraphQLObjectType } from "graphql";
 
 const SPosition = new GraphQLObjectType({
   fields: {

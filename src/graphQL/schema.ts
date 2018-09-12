@@ -4,7 +4,8 @@ import initialConfigurations from 'src/configPlayground';
 import SConfiguration, { defaultValue as defaultConfiguration, SConfigurationInput } from "src/graphQL/SConfiguration";
 import SDisplay from 'src/graphQL/SDisplay';
 import SView from "src/graphQL/SView";
-import { IConfiguration } from 'src/ui/ConfigurationList';
+import { IConfiguration, IViewBase, IDisplay } from 'src/ui/ConfigurationList';
+import STimedRoutesView from 'src/graphQL/STimedRoutesView';
 
 type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
@@ -12,8 +13,8 @@ type Mutable<T> = {
 
 interface IData {
   configurations: ReadonlyArray<IConfiguration>,
-  displays: ReadonlyArray<IConfiguration>,
-  views: ReadonlyArray<IConfiguration>,
+  displays: ReadonlyArray<IDisplay>,
+  views: ReadonlyArray<IViewBase>,
 };
 
 let current: IData = {
@@ -23,6 +24,7 @@ let current: IData = {
 };
 
 const schema = new GraphQLSchema({
+  types: [STimedRoutesView],
   mutation: new GraphQLObjectType({
     fields: () => ({
       deleteConfiguration: {
@@ -82,7 +84,7 @@ const schema = new GraphQLSchema({
         resolve: (root, {}) => Object.values(current.displays),
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
       },
-      view: {
+      views: {
         resolve: (root, {}) => Object.values(current.views),
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SView))),
       },

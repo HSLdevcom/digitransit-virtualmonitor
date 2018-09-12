@@ -6,11 +6,6 @@ import { InjectedTranslateProps, translate } from "react-i18next";
 import ConfigurationList, { IConfiguration } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
-/* title {
-  fi
-  en
-}
- */
 const CONFIGURATION_QUERY = gql`
 query {
   configurations {
@@ -18,8 +13,15 @@ query {
       name
       viewCarousel {
         view {
-          stops {
-            gtfsId
+          title {
+            fi
+            en
+          }
+          type
+          ... on TimedRoutesView {
+        		stops {
+              gtfsId
+            } 
           }
         }
       }

@@ -15,8 +15,12 @@ interface IStop {
   readonly gtfsId: string,
 };
 
-export interface IView {
+export interface IViewBase {
   readonly title?: ITranslatedString,
+  readonly type: string,
+};
+
+export interface IView extends IViewBase {
   readonly stops: {
     readonly [gtfsId: string]: IStop,
   },

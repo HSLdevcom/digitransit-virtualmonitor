@@ -1,17 +1,21 @@
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType } from "graphql";
+import { GraphQLInterfaceType, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
-import SStop from "src/graphQL/SStop";
 import STranslatedString from "src/graphQL/STranslatedString";
+import STimedRoutesView from 'src/graphQL/STimedRoutesView';
 
-const SView = new GraphQLObjectType({
+const typeMap: { [typename: string]: GraphQLObjectType } = {
+  'timedRoutes': STimedRoutesView,
+};
+
+const SView = new GraphQLInterfaceType({
   fields: {
-    stops: {
-      resolve: (root, {}) => Object.values(root.stops),
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SStop)))
-    },
     title: { type: new GraphQLNonNull(STranslatedString) },
+    type: {
+      type: new GraphQLNonNull(GraphQLString),
+    },
   },
   name: 'View',
+  resolveType: (view) => typeMap[view.type],
 });
 
 export default SView;

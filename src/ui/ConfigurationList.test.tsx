@@ -32,6 +32,7 @@ const testConfigs: IConfigurations = {
                 ru: '',
                 se: '',
               },
+              type: 'timedRoutes',
             },
           },
         ],

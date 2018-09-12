@@ -6,13 +6,13 @@ import { default as StopIncomingRetriever, StopId } from "src/ui/StopIncomingRet
 import StopName from "src/ui/StopName";
 import Titlebar from "src/ui/Titlebar";
 
-export interface IVirtualMonitorProps {
+export interface ITimedRoutesViewProps {
   title?: string,
   stops: StopId[],
   displayedRoutes?: number,
 };
 
-const VirtualMonitor = (props: IVirtualMonitorProps) => (
+const TimedRoutesView = (props: ITimedRoutesViewProps) => (
   <div style={{ color: 'white', display: 'flex', flexDirection:'column' }}>
     <Titlebar>
       <HslLogo />
@@ -29,4 +29,4 @@ const VirtualMonitor = (props: IVirtualMonitorProps) => (
   </div>
 );
 
-export default VirtualMonitor;
+export default TimedRoutesView;

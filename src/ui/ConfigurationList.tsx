@@ -4,6 +4,7 @@ import { Mutation } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
 
 import ConfigEditor from "src/ui/ConfigEditor";
+import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/ConfigurationRetriever';
 import { ILatLon } from "src/ui/LatLonEditor";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
@@ -65,28 +66,58 @@ const createLocalConfigurationMutation = gql`
 `;
 
 const ConfigurationList = ({configurations, t}: IConfigurationListProps & InjectedTranslateProps ) => (
-  <div>
-    {Object.values(configurations).map((configuration, i) => (
-      <ConfigEditor
-        key={`${configuration.name}${i}`}
-        configuration={configuration}
-      />
-    ))}
-    {<ApolloClientsContext.Consumer>
-      {({ virtualMonitor }) =>
-        (<Mutation
-          mutation={createLocalConfigurationMutation}
-          client={virtualMonitor}
-        >
-          {createLocalConfiguration => (
-            <button onClick={() => createLocalConfiguration({ variables: { name: 'Derp'}}) }>
-              {t('prepareConfiguration')}
-            </button>
-          )}
-        </Mutation>)
+  <ConfigurationRetriever
+  >
+    {(result: ConfigurationRetrieverResult): React.ReactNode => {
+      if (result.loading) {
+        return (<div>{t('loading')}</div>);
       }
-    </ApolloClientsContext.Consumer>}
-  </div>
+      if (!result || !result.data) {
+        return (<div>
+          {t('configurationRetrieveError')} - {result.error}
+        </div>);
+      }
+      if (!result.data.configurations || (result.data.configurations.length <= 0)) {
+        return (<div>
+          {t('configurationRetrieveNotFound')}
+        </div>);
+      }
+      // return (
+      //   <div>
+      //     <ConfigurationList
+      //       configurations={Object.values(result.data.configurations).reduce((acc, o) => ({...acc, [o.name]:o}), {})}
+      //     />
+      //     <ConfigurationList
+      //       configurations={Object.values(result.data.localConfigurations).reduce((acc, o) => ({...acc, [o.name]:{ ...o, displays: [] } }), {})}
+      //     />
+      //   </div>
+      // );
+      return (
+        <div>
+          {Object.values(result.data.configurations).map((configuration, i) => (
+            <ConfigEditor
+              key={`${configuration.name}${i}`}
+              configuration={configuration}
+            />
+          ))}
+          {<ApolloClientsContext.Consumer>
+            {({ virtualMonitor }) =>
+              (<Mutation
+                mutation={createLocalConfigurationMutation}
+                client={virtualMonitor}
+              >
+                {createLocalConfiguration => (
+                  <button onClick={() => createLocalConfiguration({ variables: { name: 'Derp'}}) }>
+                    {t('prepareConfiguration')}
+                  </button>
+                )}
+              </Mutation>)
+            }
+          </ApolloClientsContext.Consumer>}
+        </div>
+      );
+    }}
+  </ConfigurationRetriever>
 );
 
 export default translate('translations')(ConfigurationList);

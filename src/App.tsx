@@ -8,7 +8,7 @@ import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
 import VirtualMonitor from 'src/ui/VirtualMonitor'
 
-import ConfigurationRetriever from 'src/ui/ConfigurationRetriever';
+import ConfigurationList from 'src/ui/ConfigurationList';
 import VirtualMonitorAlter from 'src/ui/VirtualMonitorAlter';
 
 const RouteWrapper = ({ match }: any) => (
@@ -39,7 +39,7 @@ class App extends React.Component {
         />
         <Route
           path={'/configs/:configName?'}
-          component={ConfigurationRetriever}
+          component={ConfigurationList}
         />
         <Route>
           <div id={'stop-search'}>

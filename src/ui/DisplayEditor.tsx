@@ -35,7 +35,7 @@ const DisplayEditor = ({configuration, display, t}: IDisplayEditorProps & Inject
   <div>
     <h2>
       <Link to={`/configuration/${configuration.name}/display/${display.name}`}>
-        {`${t('display')} :`}
+        {`${t('display')}: `}
         {display.name || configuration.name}
       </Link>
     </h2>

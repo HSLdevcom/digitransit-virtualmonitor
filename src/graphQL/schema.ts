@@ -1,11 +1,11 @@
 import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
 
 import initialConfigurations from 'src/configPlayground';
+import { IConfiguration, IDisplay, IViewBase } from 'src/ui/ConfigurationList';
 import SConfiguration, { defaultValue as defaultConfiguration, SConfigurationInput } from "src/graphQL/SConfiguration";
 import SDisplay from 'src/graphQL/SDisplay';
-import SView from "src/graphQL/SView";
-import { IConfiguration, IViewBase, IDisplay } from 'src/ui/ConfigurationList';
 import STimedRoutesView from 'src/graphQL/STimedRoutesView';
+import SView from "src/graphQL/SView";
 
 type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
@@ -24,7 +24,6 @@ let current: IData = {
 };
 
 const schema = new GraphQLSchema({
-  types: [STimedRoutesView],
   mutation: new GraphQLObjectType({
     fields: () => ({
       deleteConfiguration: {
@@ -91,6 +90,7 @@ const schema = new GraphQLSchema({
     },
     name: 'Query',
   }),
+  types: [STimedRoutesView],
 });
 
 export default schema;

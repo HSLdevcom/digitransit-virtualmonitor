@@ -1,4 +1,4 @@
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString, GraphQLID } from "graphql";
+import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
 import initialConfigurations from 'src/configPlayground';
 import SConfiguration, { defaultValue as defaultConfiguration, SConfigurationInput } from "src/graphQL/SConfiguration";
 import SDisplay from 'src/graphQL/SDisplay';
@@ -86,20 +86,26 @@ const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     fields: {
       configurations: {
-        resolve: configurationsResolve,
-        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SConfiguration))),
         args: {
-          ids: {
-            type: new  GraphQLList(GraphQLString),
-            defaultValue: null,
-          },
           name: {
-            type: GraphQLString,
             defaultValue: null,
+            type: GraphQLString,
+          },
+          ids: {
+            defaultValue: null,
+            type: new  GraphQLList(GraphQLString),
           },
         },
+        resolve: configurationsResolve,
+        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SConfiguration))),
       },
       displays: {
+        args: {
+          ids: {
+            defaultValue: null,
+            type: new GraphQLList(GraphQLID),
+          },
+        },
         resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
           if (ids) {
             return current.displays.filter(d => d.id && ids.includes(d.id)) 
@@ -107,12 +113,6 @@ const schema = new GraphQLSchema({
           return Object.values(current.displays);
         },
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
-        args: {
-          ids: {
-            type: new GraphQLList(GraphQLID),
-            defaultValue: null,
-          },
-        },
       },
       views: {
         resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
@@ -123,8 +123,8 @@ const schema = new GraphQLSchema({
         },
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SView))),
         ids: {
-          type: new GraphQLList(GraphQLID),
           defaultValue: null,
+          type: new GraphQLList(GraphQLID),
         },
       },
     },

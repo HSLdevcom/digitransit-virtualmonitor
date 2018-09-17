@@ -1,11 +1,10 @@
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
-
+import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString, GraphQLID } from "graphql";
 import initialConfigurations from 'src/configPlayground';
-import { IConfiguration, IDisplay, IViewBase } from 'src/ui/ConfigurationList';
 import SConfiguration, { defaultValue as defaultConfiguration, SConfigurationInput } from "src/graphQL/SConfiguration";
 import SDisplay from 'src/graphQL/SDisplay';
 import STimedRoutesView from 'src/graphQL/STimedRoutesView';
 import SView from "src/graphQL/SView";
+import { IConfiguration, IDisplay, IViewBase } from 'src/ui/ConfigurationList';
 
 type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
@@ -22,6 +21,17 @@ let current: IData = {
   displays: [],
   views: [],
 };
+
+const configurationsResolve = (_: any, { ids, name } : { ids?: ReadonlyArray<string>, name?: string }): ReadonlyArray<IConfiguration> => {
+  if (ids) {
+    return current.configurations.filter(c => c.id && ids.includes(c.id));
+  } else if (name) {
+    const foundConfiguration = current.configurations.find(c => c.name === name);
+    return foundConfiguration ? [foundConfiguration] : [];
+  } else  /* if (!ids && !name) Implied */ {
+    return Object.values(current.configurations);
+  }
+}
 
 const schema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
@@ -76,16 +86,46 @@ const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     fields: {
       configurations: {
-        resolve: (root, {}) => Object.values(current.configurations),
+        resolve: configurationsResolve,
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SConfiguration))),
+        args: {
+          ids: {
+            type: new  GraphQLList(GraphQLString),
+            defaultValue: null,
+          },
+          name: {
+            type: GraphQLString,
+            defaultValue: null,
+          },
+        },
       },
       displays: {
-        resolve: (root, {}) => Object.values(current.displays),
+        resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
+          if (ids) {
+            return current.displays.filter(d => d.id && ids.includes(d.id)) 
+          }
+          return Object.values(current.displays);
+        },
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
+        args: {
+          ids: {
+            type: new GraphQLList(GraphQLID),
+            defaultValue: null,
+          },
+        },
       },
       views: {
-        resolve: (root, {}) => Object.values(current.views),
+        resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
+          if (ids) {
+            return current.views.filter(v => v.id && ids.includes(v.id)) 
+          }
+          return Object.values(current.views);
+        },
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SView))),
+        ids: {
+          type: new GraphQLList(GraphQLID),
+          defaultValue: null,
+        },
       },
     },
     name: 'Query',

@@ -17,6 +17,7 @@ interface IStop {
 };
 
 export interface IViewBase {
+  readonly id?: string, // Remove ? at some point.
   readonly title?: ITranslatedString,
   readonly type: string,
 };
@@ -35,6 +36,7 @@ export interface IViewCarouselElement {
 export type IViewCarousel = ReadonlyArray<IViewCarouselElement>;
 
 export interface IDisplay {
+  readonly id?: string, // Remove ? at some point.
   readonly position?: ILatLon,
   readonly name: string,
   readonly viewCarousel: ReadonlyArray<{
@@ -44,6 +46,7 @@ export interface IDisplay {
 };
 
 export interface IConfiguration {
+  readonly id?: string, // Remove ? at some point.
   readonly name: string,
   readonly displays: {
     readonly [displayId: string]: IDisplay,
@@ -82,19 +85,9 @@ const ConfigurationList = ({configurations, t}: IConfigurationListProps & Inject
           {t('configurationRetrieveNotFound')}
         </div>);
       }
-      // return (
-      //   <div>
-      //     <ConfigurationList
-      //       configurations={Object.values(result.data.configurations).reduce((acc, o) => ({...acc, [o.name]:o}), {})}
-      //     />
-      //     <ConfigurationList
-      //       configurations={Object.values(result.data.localConfigurations).reduce((acc, o) => ({...acc, [o.name]:{ ...o, displays: [] } }), {})}
-      //     />
-      //   </div>
-      // );
       return (
         <div>
-          {Object.values(result.data.configurations).map((configuration, i) => (
+          {Object.values([...result.data.configurations, ...result.data.localConfigurations] ).map((configuration, i) => (
             <ConfigEditor
               key={`${configuration.name}${i}`}
               configuration={configuration}
@@ -107,7 +100,7 @@ const ConfigurationList = ({configurations, t}: IConfigurationListProps & Inject
                 client={virtualMonitor}
               >
                 {createLocalConfiguration => (
-                  <button onClick={() => createLocalConfiguration({ variables: { name: 'Derp'}}) }>
+                  <button onClick={() => createLocalConfiguration({ variables: {name: 'Derp'}}) }>
                     {t('prepareConfiguration')}
                   </button>
                 )}

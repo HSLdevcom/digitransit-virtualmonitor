@@ -6,9 +6,8 @@ import { IConfiguration } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
 const CONFIGURATION_QUERY = gql`
-query {
-  configurations {
-    displays {
+fragment configurationFields on Configuration {
+  displays {
       name
       viewCarousel {
         view {
@@ -30,18 +29,21 @@ query {
       lat
       lon
     }
+}
+
+query {
+  configurations {
+    ...configurationFields,
   }
   localConfigurations @client {
-    name
+    ...configurationFields,
   }
 }
 `;
 
 interface IConfigurationResponse {
   readonly configurations: ReadonlyArray<IConfiguration>
-  readonly localConfigurations: ReadonlyArray<{
-    name: string,
-  }>,
+  readonly localConfigurations: ReadonlyArray<IConfiguration>,
 };
 
 export type ConfigurationRetrieverResult = QueryResult<IConfigurationResponse>;

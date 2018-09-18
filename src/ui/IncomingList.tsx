@@ -5,7 +5,7 @@ import {
   formatTime,
   parseDaySeconds,
 } from "src/time";
-import { IStopTime } from 'src/ui/StopIncomingRetriever'
+import { IStop, IStopTime } from 'src/ui/StopIncomingRetriever'
 
 export interface IStopIncomingListProps {
   readonly stoptimesWithoutPatterns: ReadonlyArray<IStopTime>,
@@ -13,6 +13,7 @@ export interface IStopIncomingListProps {
 interface IIncomingHeadersProps {
   showPier: boolean,
 };
+
 const IncomingHeaders = ({ showPier, t }: IIncomingHeadersProps & InjectedTranslateProps) => (
   <thead>
     <tr>
@@ -40,7 +41,7 @@ const IncomingRow = ({ stoptime, showPier } : { stoptime: IStopTime, showPier: b
       {stoptime.headsign}
     </td>
     {showPier
-        ? (<td className={'pier'}>1</td>)
+        ? (<td className={'pier'}>{(stoptime.stop && stoptime.stop.platformCode) || ''}</td>)
         : null
       }
   </tr>

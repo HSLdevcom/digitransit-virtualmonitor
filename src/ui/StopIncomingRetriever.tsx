@@ -16,6 +16,9 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
     name,
     gtfsId,
     stoptimesWithoutPatterns(numberOfDepartures: $numberOfDepartures) {
+      stop {
+        platformCode
+      }
       scheduledArrival
       realtimeArrival
       arrivalDelay
@@ -42,6 +45,9 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
 `;
 
 export interface IStopTime {
+  stop?: {
+    platformCode?: string,
+  },
   scheduledArrival: DaySeconds,
   realtimeArrival: DaySeconds,
   arrivalDelay: Seconds,
@@ -67,7 +73,7 @@ export interface IStopTime {
 export interface IStop {
   name: string,
   gtfsId: string,
-  stoptimesWithoutPatterns: IStopTime[]
+  stoptimesWithoutPatterns?: IStopTime[]
 };
 
 interface IStopResponse {
@@ -117,7 +123,7 @@ const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProp
       // Todo: Prioritize stops for route that are closest to display position.
       const mergedStopTimes = result.data.stops
         .reduce(
-          (acc, curr) => [...acc, ...curr.stoptimesWithoutPatterns],
+          (acc, curr) => [...acc, ...curr.stoptimesWithoutPatterns || []],
           []
         )
         // Sort by departure time.

@@ -1,34 +1,58 @@
 import * as React from "react";
+import { InjectedTranslateProps, translate } from "react-i18next";
 
-import conf from "src/configPlayground";
+import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/ConfigurationRetriever';
 import ViewCarousel from 'src/ui/ViewCarousel';
-import VirtualMonitor from "src/ui/VirtualMonitor";
 
 export interface IVirtualMonitorPropsAlter {
   title?: string,
-  configuration: string,
-  display: string,
+  configurationName: string,
+  displayName: string,
 };
 
-const VirtualMonitorAlter = (props: IVirtualMonitorPropsAlter) => {
-  const usedConfiguration = conf[props.configuration];
-  if (!usedConfiguration) {
-    return null;
-  }
-  const usedDisplay = usedConfiguration.displays[props.display] || usedConfiguration.displays.default || usedConfiguration.displays[0];
-  if (!usedDisplay) {
-    return null;
-  }
+const VirtualMonitorAlter = ({ configurationName, displayName, t }: IVirtualMonitorPropsAlter & InjectedTranslateProps) => {
   return (
-    <ViewCarousel
-      viewCarousel={usedDisplay.viewCarousel}
-    />
-    // <VirtualMonitor
-    //   stops={Object.keys((usedDisplay.viewCarousel[0] || { view: { stops: [] } }).view.stops)}
+    <ConfigurationRetriever
+      name={configurationName}
+    >
+      {(result: ConfigurationRetrieverResult): React.ReactNode => {
+        if (result.loading) {
+          return (<div>{t('loading')}</div>);
+        }
+        if (!result || !result.data) {
+          return (<div>
+            {t('configurationRetrieveError')} - {result.error}
+          </div>);
+        }
+        if (!result.data.configurations || (result.data.configurations.length <= 0)) {
+          return (<div>
+            {t('configurationRetrieveNotFound')}
+          </div>);
+        }
 
-    //   displayedRoutes={7}
-    // />
+        if (result.data.configurations.length > 1) {
+          return (<div>
+            {`Wat? Expected one result, got ${result.data.configurations.length} results!`}
+          </div>);
+        }
+
+        const usedConfiguration = result.data.configurations.find(c => c.name === configurationName);
+        if (!usedConfiguration) {
+          return null;
+        }
+        const usedDisplay = usedConfiguration.displays[displayName] || usedConfiguration.displays.default || usedConfiguration.displays[0];
+        if (!usedDisplay) {
+          return null;
+        }
+        
+        return (
+          <ViewCarousel
+            viewCarousel={usedDisplay.viewCarousel}
+          />
+        );
+      }}
+    </ConfigurationRetriever>    
   );
 };
 
-export default VirtualMonitorAlter;
+export default translate('translations')(VirtualMonitorAlter);

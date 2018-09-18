@@ -20,8 +20,8 @@ const RouteWrapper = ({ match }: any) => (
 
 const RouteWrapperConfig = ({ match }: any) => (
   <VirtualMonitorAlter
-    configuration={match.params.configuration}
-    display={match.params.display}
+    configurationName={match.params.configuration}
+    displayName={match.params.display}
   />
 );
 

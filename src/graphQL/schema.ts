@@ -87,13 +87,13 @@ const schema = new GraphQLSchema({
     fields: {
       configurations: {
         args: {
-          name: {
-            defaultValue: null,
-            type: GraphQLString,
-          },
           ids: {
             defaultValue: null,
             type: new  GraphQLList(GraphQLString),
+          },
+          name: {
+            defaultValue: null,
+            type: GraphQLString,
           },
         },
         resolve: configurationsResolve,
@@ -115,6 +115,12 @@ const schema = new GraphQLSchema({
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
       },
       views: {
+        args: {
+          ids: {
+            defaultValue: null,
+            type: new GraphQLList(GraphQLID),
+          },
+        },
         resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
           if (ids) {
             return current.views.filter(v => v.id && ids.includes(v.id)) 
@@ -122,10 +128,6 @@ const schema = new GraphQLSchema({
           return Object.values(current.views);
         },
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SView))),
-        ids: {
-          defaultValue: null,
-          type: new GraphQLList(GraphQLID),
-        },
       },
     },
     name: 'Query',

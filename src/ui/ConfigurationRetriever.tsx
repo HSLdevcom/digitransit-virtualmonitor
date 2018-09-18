@@ -5,7 +5,7 @@ import { Query, QueryProps, QueryResult } from "react-apollo";
 import { IConfiguration } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
-const CONFIGURATION_QUERY = gql`
+const ConfigurationFieldsFragment = gql`
 fragment configurationFields on Configuration {
   displays {
       name
@@ -30,9 +30,13 @@ fragment configurationFields on Configuration {
       lon
     }
 }
+`;
 
-query {
-  configurations {
+const CONFIGURATION_QUERY = gql`
+${ConfigurationFieldsFragment}
+
+query getConfigurations($ids: [String], $name: String) {
+  configurations(ids: $ids, name: $name) {
     ...configurationFields,
   }
   localConfigurations @client {
@@ -48,28 +52,60 @@ interface IConfigurationResponse {
 
 export type ConfigurationRetrieverResult = QueryResult<IConfigurationResponse>;
 
-// interface IConfigurationQuery {
-// };
+type IConfigurationQuery = {
+  ids?: ReadonlyArray<string>,
+} | {
+  name?: string,
+};
 
-// class ConfigurationQuery extends Query<IConfigurationResponse, IConfigurationQuery> {}
-class ConfigurationQuery extends Query<IConfigurationResponse> {}
+class ConfigurationQuery extends Query<IConfigurationResponse, IConfigurationQuery> {}
 
-export interface IConfigurationRetrieverProps {
+// Props can be without both or with either ids or name. When no params given, retrieves all configurations.
+interface IConfigurationRetrieverCommonProps {
   children: QueryProps['children'],
 };
 
-const ConfigurationRetriever: React.StatelessComponent<IConfigurationRetrieverProps> = (props: IConfigurationRetrieverProps) => (
-  <ApolloClientsContext.Consumer>
-    {({ virtualMonitor }) =>
-      (<ConfigurationQuery
-        query={CONFIGURATION_QUERY}
-        variables={{}}
-        pollInterval={60000}
-        client={virtualMonitor}
-        children={props.children}
-      />)
-    }
-  </ApolloClientsContext.Consumer>
-);
+interface IConfigurationRetrieverPropsWithId extends IConfigurationRetrieverCommonProps {
+  ids: ReadonlyArray<string>,
+};
+
+interface IConfigurationRetrieverPropsWithName extends IConfigurationRetrieverCommonProps{
+  name: string,
+};
+
+function ConfigurationRetriever(props: IConfigurationRetrieverCommonProps | IConfigurationRetrieverPropsWithId | IConfigurationRetrieverPropsWithName): JSX.Element {
+  const ids = (props as IConfigurationRetrieverPropsWithId).ids;
+  const name = (props as IConfigurationRetrieverPropsWithName).name;
+
+  let vars: { ids?: IConfigurationRetrieverPropsWithId['ids'], name?: IConfigurationRetrieverPropsWithName['name']};
+  if (ids && name) {
+    throw new TypeError("Component of type can not have both 'ids' and 'name' props.");
+  } else if (ids) {
+    vars = {
+      ids,
+    };
+  } else if (name) {
+    vars = {
+      name,
+    };
+  } else {
+    // Show all results.
+    vars = {};
+  }
+
+  return (
+    <ApolloClientsContext.Consumer>
+      {({ virtualMonitor }) =>
+        (<ConfigurationQuery
+          query={CONFIGURATION_QUERY}
+          variables={vars}
+          pollInterval={60000}
+          client={virtualMonitor}
+          children={props.children}
+        />)
+      }
+    </ApolloClientsContext.Consumer>
+  );
+};
 
 export default ConfigurationRetriever;

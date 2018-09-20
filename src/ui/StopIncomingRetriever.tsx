@@ -17,6 +17,7 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
     gtfsId,
     stoptimesWithoutPatterns(numberOfDepartures: $numberOfDepartures) {
       stop {
+        gtfsId
         platformCode
       }
       scheduledArrival
@@ -46,6 +47,8 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
 
 export interface IStopTime {
   stop?: {
+    gtfsId: number,
+    overrideStopName?: string, // Added locally from configuration.
     platformCode?: string,
   },
   scheduledArrival: DaySeconds,
@@ -92,6 +95,9 @@ class StopIncomingQuery extends Query<IStopResponse, IStopQuery> {}
 export interface IStopIncomingRetrieverProps {
   stopIds: StopId[],
   displayedRoutes?: number,
+  overrideStopNames: {
+    [stopGtfsId: string]: string,
+  },
 };
 
 const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProps> = (props: IStopIncomingRetrieverProps & InjectedTranslateProps) => (
@@ -129,11 +135,25 @@ const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProp
         // Sort by departure time.
         .sort((stopTimeA, stopTimeB) => calcAbsoluteDepartureTime(stopTimeA) - calcAbsoluteDepartureTime(stopTimeB))
         // Clip to max of props.displayedRoutes
-        .slice(0, props.displayedRoutes);
+        .slice(0, props.displayedRoutes)
+        // Map renamed stops from configuration
+        .map(stopTime => (stopTime.stop && stopTime.stop.gtfsId && props.overrideStopNames[stopTime.stop.gtfsId])
+          ? {
+            ...stopTime,
+            stop: {
+              ...stopTime.stop,
+              // gtfs: stopTime.stop!.gtfsId,
+              overrideStopName: props.overrideStopNames[stopTime.stop!.gtfsId],
+              // platformCode: stopTime.stop!.gtfsId,
+            } as IStopTime['stop'],
+          }
+          : stopTime
+        );
 
       return (
         <IncomingList
           stoptimesWithoutPatterns={mergedStopTimes}
+          showPier={props.stopIds.length > 1}
         />
       );
     }}

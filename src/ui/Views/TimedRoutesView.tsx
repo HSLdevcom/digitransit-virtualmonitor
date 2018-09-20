@@ -10,6 +10,9 @@ export interface ITimedRoutesViewProps {
   title?: string,
   stops: StopId[],
   displayedRoutes?: number,
+  overrideStopNames: {
+    [stopGtfsId: string]: string,
+  },
 };
 
 const TimedRoutesView = (props: ITimedRoutesViewProps) => (
@@ -25,7 +28,11 @@ const TimedRoutesView = (props: ITimedRoutesViewProps) => (
         <AutoMoment />
       </div>
     </Titlebar>
-    <StopIncomingRetriever stopIds={props.stops} displayedRoutes={props.displayedRoutes} />
+    <StopIncomingRetriever
+      stopIds={props.stops}
+      displayedRoutes={props.displayedRoutes} 
+      overrideStopNames={props.overrideStopNames}
+    />
   </div>
 );
 

@@ -21,7 +21,7 @@ const VirtualMonitorAlter = ({ configurationName, displayName, t }: IVirtualMoni
         }
         if (!result || !result.data) {
           return (<div>
-            {t('configurationRetrieveError')} - {result.error}
+            {t('configurationRetrieveError')} - {result.error ? result.error.message : 'Unspecified error'}
           </div>);
         }
         if (!result.data.configurations || (result.data.configurations.length <= 0)) {

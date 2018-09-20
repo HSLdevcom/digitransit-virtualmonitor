@@ -10,6 +10,9 @@ export interface IVirtualMonitorProps {
   title?: string,
   stops: StopId[],
   displayedRoutes?: number,
+  overrideStopNames?: {
+    [stopGtfsId: string]: string,
+  },
 };
 
 const VirtualMonitor = (props: IVirtualMonitorProps) => (
@@ -25,7 +28,11 @@ const VirtualMonitor = (props: IVirtualMonitorProps) => (
         <AutoMoment />
       </div>
     </Titlebar>
-    <StopIncomingRetriever stopIds={props.stops} displayedRoutes={props.displayedRoutes} />
+    <StopIncomingRetriever 
+      stopIds={props.stops} 
+      displayedRoutes={props.displayedRoutes}
+      overrideStopNames={props.overrideStopNames || {}}
+    />
   </div>
 );
 

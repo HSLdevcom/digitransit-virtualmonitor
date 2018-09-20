@@ -57,7 +57,10 @@ class ViewCarousel extends React.Component<IProps, IState> {
     return(
       <VirtualMonitor
         stops={Object.values(currentView.stops).map(stop => stop.gtfsId)}
-
+        overrideStopNames={
+          Object.values(currentView.stops).filter(stop => stop.overrideStopName)
+          .reduce((acc, {gtfsId, overrideStopName}) => ({...acc, [gtfsId]: overrideStopName}), {})
+        }
         displayedRoutes={7}
         title={currentView.title!.fi}
       />

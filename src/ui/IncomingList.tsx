@@ -7,11 +7,18 @@ import {
 } from "src/time";
 import { IStop, IStopTime } from 'src/ui/StopIncomingRetriever'
 
+interface IOverrideStopName {
+  stop?: {
+    overrideStopName?: string,
+  },
+};
+
 export interface IStopIncomingListProps {
-  readonly stoptimesWithoutPatterns: ReadonlyArray<IStopTime>,
+  readonly stoptimesWithoutPatterns: ReadonlyArray<IStopTime & IOverrideStopName>,
+  showPier?: boolean,
 };
 interface IIncomingHeadersProps {
-  showPier: boolean,
+  showPier?: boolean,
 };
 
 const IncomingHeaders = ({ showPier, t }: IIncomingHeadersProps & InjectedTranslateProps) => (
@@ -29,7 +36,7 @@ const IncomingHeaders = ({ showPier, t }: IIncomingHeadersProps & InjectedTransl
 );
 const IncomingHeadersTranslated = translate('translations')(IncomingHeaders);
 
-const IncomingRow = ({ stoptime, showPier } : { stoptime: IStopTime, showPier: boolean }) => (
+const IncomingRow = ({ stoptime, showPier } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean }) => (
   <tr>
     <td>
       <time>{formatTime(parseDaySeconds(stoptime.scheduledArrival))}</time>
@@ -41,21 +48,21 @@ const IncomingRow = ({ stoptime, showPier } : { stoptime: IStopTime, showPier: b
       {stoptime.headsign}
     </td>
     {showPier
-        ? (<td className={'pier'}>{(stoptime.stop && stoptime.stop.platformCode) || ''}</td>)
+        ? (<td className={'pier'}>{(stoptime.stop && (stoptime.stop.overrideStopName || stoptime.stop.platformCode)) || ''}</td>)
         : null
       }
   </tr>
 );
 
-const IncomingList = ({ stoptimesWithoutPatterns, t } : IStopIncomingListProps & InjectedTranslateProps) => (
+const IncomingList = ({ showPier, stoptimesWithoutPatterns, t } : IStopIncomingListProps & InjectedTranslateProps) => (
   <table className={'IncomingList'}>
     <IncomingHeadersTranslated showPier={true} />
     <tbody>
       {stoptimesWithoutPatterns.map(stoptime => (
         <IncomingRow
           stoptime={stoptime}
-          key={stoptime.trip.gtfsId}
-          showPier={true}
+          key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}`}
+          showPier={showPier}
         />
       ))}
     </tbody>

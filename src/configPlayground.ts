@@ -16,7 +16,7 @@ const configs: IConfigurations =
             view: {
               stops: {
                 'HSL:1040271': {
-                  gtfsId: 'HSL:1040271'
+                  gtfsId: 'HSL:1040271',
                 },
                 'HSL:1040272': {
                     gtfsId: 'HSL:1040272'
@@ -107,9 +107,11 @@ const configs: IConfigurations =
               stops: {
                 'HSL:4700210': {
                   gtfsId: 'HSL:4700210',
+                  overrideStopName: 'LähiPysäkki',
                 },
                 'HSL:4740217': {
                   gtfsId: 'HSL:4740217',
+                  overrideStopName: 'KaukoPysäkki',
                 },
               },
               title: {

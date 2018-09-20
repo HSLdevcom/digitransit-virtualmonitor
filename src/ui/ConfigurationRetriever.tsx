@@ -19,6 +19,7 @@ fragment configurationFields on Configuration {
           ... on TimedRoutesView {
         		stops {
               gtfsId
+              overrideStopName
             }
           }
         }

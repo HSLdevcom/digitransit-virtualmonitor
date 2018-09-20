@@ -14,6 +14,7 @@ interface ITranslatedString {
 
 interface IStop {
   readonly gtfsId: string,
+  readonly overrideStopName?: string,
 };
 
 export interface IViewBase {

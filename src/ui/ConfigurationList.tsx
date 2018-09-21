@@ -23,14 +23,14 @@ export interface IViewBase {
   readonly type: string,
 };
 
-export interface IView extends IViewBase {
+export interface ITimedRoutesView extends IViewBase {
   readonly stops: {
     readonly [gtfsId: string]: IStop,
   },
 };
 
 export interface IViewCarouselElement {
-  view: IView,
+  view: IViewBase,
   displayTime: number,
 };
 
@@ -41,7 +41,7 @@ export interface IDisplay {
   readonly position?: ILatLon,
   readonly name: string,
   readonly viewCarousel: ReadonlyArray<{
-    view: IView,
+    view: ITimedRoutesView,
     displayTime: number,
   }>,
 };

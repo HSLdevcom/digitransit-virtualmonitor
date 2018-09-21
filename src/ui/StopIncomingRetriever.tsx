@@ -93,11 +93,12 @@ interface IStopQuery {
 class StopIncomingQuery extends Query<IStopResponse, IStopQuery> {}
 
 export interface IStopIncomingRetrieverProps {
-  stopIds: StopId[],
-  displayedRoutes?: number,
-  overrideStopNames: {
-    [stopGtfsId: string]: string,
+  readonly displayedRoutes?: number,
+  readonly overrideStopNames: {
+    readonly [stopGtfsId: string]: string,
   },
+  readonly pierColumnTitle?: string,
+  readonly stopIds: ReadonlyArray<StopId>,
 };
 
 const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProps> = (props: IStopIncomingRetrieverProps & InjectedTranslateProps) => (
@@ -152,6 +153,7 @@ const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProp
 
       return (
         <IncomingList
+          pierColumnTitle={props.pierColumnTitle}
           stoptimesWithoutPatterns={mergedStopTimes}
           showPier={props.stopIds.length > 1}
         />
@@ -162,6 +164,7 @@ const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProp
 
 StopIncomingRetriever.defaultProps = {
   displayedRoutes: 12,
+  overrideStopNames: {},
 };
 
 export default translate('translations')(StopIncomingRetriever);

@@ -37,6 +37,7 @@ i18n
           lineId: 'Linja',
           loading: 'Ladataan…',
           longitude: 'Longitude',
+          pier: 'Laituri',
           prepareConfiguration: 'Lisää konfiguraatio',
           prepareDisplay: 'Lisää näyttö',
           prepareStop: 'Lisää pysäkki',

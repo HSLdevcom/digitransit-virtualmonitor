@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { IView, IViewCarousel, IViewCarouselElement } from 'src/ui/ConfigurationList';
-import VirtualMonitor from 'src/ui/VirtualMonitor';
+import { IViewBase, IViewCarousel, IViewCarouselElement } from 'src/ui/ConfigurationList';
+import View from 'src/ui/Views/View';
 
 interface IProps {
   viewCarousel: IViewCarousel,
@@ -55,14 +55,8 @@ class ViewCarousel extends React.Component<IProps, IState> {
     const currentView = this.getCurrentView();
 
     return(
-      <VirtualMonitor
-        stops={Object.values(currentView.stops).map(stop => stop.gtfsId)}
-        overrideStopNames={
-          Object.values(currentView.stops).filter(stop => stop.overrideStopName)
-          .reduce((acc, {gtfsId, overrideStopName}) => ({...acc, [gtfsId]: overrideStopName}), {})
-        }
-        displayedRoutes={7}
-        title={currentView.title!.fi}
+      <View
+        view={currentView}
       />
     );
   };
@@ -93,7 +87,7 @@ class ViewCarousel extends React.Component<IProps, IState> {
     });
   }
 
-  protected getCurrentView(): IView {
+  protected getCurrentView(): IViewBase {
     const redFunc = ({ displayedViewCarouselElement, timeAcc }: { displayedViewCarouselElement?: IViewCarouselElement, timeAcc: number }, view: IViewCarouselElement) => ({
       displayedViewCarouselElement: timeAcc >= 0 ? view : displayedViewCarouselElement,
       timeAcc: timeAcc - view.displayTime,

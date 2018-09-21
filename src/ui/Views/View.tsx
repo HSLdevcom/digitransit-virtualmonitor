@@ -1,10 +1,11 @@
 import * as React from "react";
 
-import { IView, IViewBase } from 'src/ui/ConfigurationList';
+import { ITimedRoutesView, IViewBase } from 'src/ui/ConfigurationList';
+import { IStop, StopId } from 'src/ui/StopIncomingRetriever';
 import TimedRoutesView, { ITimedRoutesViewProps } from 'src/ui/Views/TimedRoutesView';
 
 export interface IViewProps {
-  view: IView,
+  view: ITimedRoutesView,
   [additionalProps: string]: any,
 };
 
@@ -19,7 +20,7 @@ type ViewComponent =
 //   }
 // };
 
-const View = ({ view, ...additionalProps }: { view: IView }) => {
+const View = ({ view, ...additionalProps }: { view: IViewBase }) => {
   // const ViewComponent = viewTypeMap[view.type];
   // return (
   //   <ViewComponent
@@ -27,13 +28,21 @@ const View = ({ view, ...additionalProps }: { view: IView }) => {
   //   />
   // );
 
-  switch (view.type) {
+  const { type, ...otherProps }: { type: string } = view;
+
+  switch (type) {
     case 'timedRoutes':
+      const { stops } = otherProps as { stops: ReadonlyArray<StopId | IStop> };
       return (
         <TimedRoutesView
-          {...additionalProps as ITimedRoutesViewProps}
+        // pierColumnTitle={(view as ITimedRoutesView)}
+          pierColumnTitle={'aaaa'}
+          displayedRoutes={(otherProps as ITimedRoutesViewProps).displayedRoutes}
+          stops={stops}
+          overrideStopNames={(otherProps as ITimedRoutesViewProps).overrideStopNames}
+          title={undefined}
         />
-      )
+      );
     default:
       return (
       <div>

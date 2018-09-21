@@ -14,21 +14,23 @@ interface IOverrideStopName {
 };
 
 export interface IStopIncomingListProps {
+  readonly pierColumnTitle?: string,
   readonly stoptimesWithoutPatterns: ReadonlyArray<IStopTime & IOverrideStopName>,
-  showPier?: boolean,
+  readonly showPier?: boolean,
 };
 interface IIncomingHeadersProps {
-  showPier?: boolean,
+  readonly pierColumnTitle?: string,
+  readonly showPier?: boolean,
 };
 
-const IncomingHeaders = ({ showPier, t }: IIncomingHeadersProps & InjectedTranslateProps) => (
+const IncomingHeaders = ({ pierColumnTitle, showPier, t }: IIncomingHeadersProps & InjectedTranslateProps) => (
   <thead>
     <tr>
       <th className={'departureTime'}>{t('departureTime')}</th>
       <th className={'lineId'}>{t('lineId')}</th>
       <th className={'destination'}>{t('destination')}</th>
       {showPier
-        ? (<th className={'pier'}>{t('pier')}</th>)
+        ? (<th className={'pier'}>{pierColumnTitle ? pierColumnTitle : t('pier')}</th>)
         : null
       }
     </tr>
@@ -54,9 +56,12 @@ const IncomingRow = ({ stoptime, showPier } : { stoptime: IStopTime & IOverrideS
   </tr>
 );
 
-const IncomingList = ({ showPier, stoptimesWithoutPatterns, t } : IStopIncomingListProps & InjectedTranslateProps) => (
+const IncomingList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t } : IStopIncomingListProps & InjectedTranslateProps) => (
   <table className={'IncomingList'}>
-    <IncomingHeadersTranslated showPier={true} />
+    <IncomingHeadersTranslated
+      pierColumnTitle={pierColumnTitle}
+      showPier={showPier}
+    />
     <tbody>
       {stoptimesWithoutPatterns.map(stoptime => (
         <IncomingRow

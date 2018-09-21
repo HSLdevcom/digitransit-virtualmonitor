@@ -4,13 +4,13 @@ import { InjectedTranslateProps, translate } from "react-i18next";
 import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/ConfigurationRetriever';
 import ViewCarousel from 'src/ui/ViewCarousel';
 
-export interface IVirtualMonitorPropsAlter {
+export interface IConfigurationDisplayProps {
   title?: string,
   configurationName: string,
   displayName: string,
 };
 
-const VirtualMonitorAlter = ({ configurationName, displayName, t }: IVirtualMonitorPropsAlter & InjectedTranslateProps) => {
+const ConfigurationDisplay = ({ configurationName, displayName, t }: IConfigurationDisplayProps & InjectedTranslateProps) => {
   return (
     <ConfigurationRetriever
       name={configurationName}
@@ -55,4 +55,4 @@ const VirtualMonitorAlter = ({ configurationName, displayName, t }: IVirtualMoni
   );
 };
 
-export default translate('translations')(VirtualMonitorAlter);
+export default translate('translations')(ConfigurationDisplay);

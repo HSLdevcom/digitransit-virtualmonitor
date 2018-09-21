@@ -7,6 +7,7 @@ import SView from 'src/graphQL/SView';
 const STimedRoutesView = new GraphQLObjectType({
   fields: () => ({
     // ...SView.getFields(),
+    pierColumnTitle: { type: GraphQLString },
     stops: {
       resolve: (root, {}) => Object.values(root.stops),
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SStop)))

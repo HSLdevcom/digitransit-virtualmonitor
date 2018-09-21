@@ -6,20 +6,21 @@ import AutoMoment from 'src/ui/AutoMoment';
 import HslLogo from 'src/ui/HslLogo';
 import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
-import VirtualMonitor from 'src/ui/VirtualMonitor'
 
+import ConfigurationDisplay from 'src/ui/ConfigurationDisplay';
 import ConfigurationList from 'src/ui/ConfigurationList';
-import VirtualMonitorAlter from 'src/ui/VirtualMonitorAlter';
+import TimedRoutesView from 'src/ui/Views/TimedRoutesView';
 
 const RouteWrapper = ({ match }: any) => (
-  <VirtualMonitor
+  <TimedRoutesView
     stops={[match.params.stopId]}
     displayedRoutes={match.params.displayedRoutes}
+    overrideStopNames={{}}
   />
 );
 
 const RouteWrapperConfig = ({ match }: any) => (
-  <VirtualMonitorAlter
+  <ConfigurationDisplay
     configurationName={match.params.configuration}
     displayName={match.params.display}
   />
@@ -61,6 +62,6 @@ class App extends React.Component {
       </Switch>
     );
   }
-}
+};
 
 export default App;

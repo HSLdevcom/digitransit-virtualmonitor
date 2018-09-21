@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { MockedProvider } from 'react-apollo/test-utils'
 import { MemoryRouter, MemoryRouterProps } from 'react-router';
 import { create } from 'react-test-renderer';
 
@@ -48,7 +49,9 @@ const testConfigs: IConfigurations = {
 
 const WrappedConfig = ({ memoryRouterProps, configProps }: { memoryRouterProps?: MemoryRouterProps, configProps: IConfigurationListProps } = { memoryRouterProps: {}, configProps: { configurations: testConfigs } }) => (
   <MemoryRouter {...memoryRouterProps}>
-    <ConfigurationList {...configProps} />
+    <MockedProvider>
+      <ConfigurationList {...configProps} />
+    </MockedProvider>>
   </MemoryRouter>
 );
 

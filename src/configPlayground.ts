@@ -14,6 +14,7 @@ const configs: IConfigurations =
           {
             displayTime: 5000,
             view: {
+              pierColumnTitle: 'FromConfig',
               stops: {
                 'HSL:1040271': {
                   gtfsId: 'HSL:1040271',

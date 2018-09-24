@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils'
-import { MemoryRouter, MemoryRouterProps } from 'react-router';
 import { create } from 'react-test-renderer';
 
 import ConfigurationList, { IConfigurationListProps, IConfigurations } from 'src/ui/ConfigurationList';
@@ -47,12 +46,10 @@ const testConfigs: IConfigurations = {
   },
 };
 
-const WrappedConfig = ({ memoryRouterProps, configProps }: { memoryRouterProps?: MemoryRouterProps, configProps: IConfigurationListProps } = { memoryRouterProps: {}, configProps: { configurations: testConfigs } }) => (
-  <MemoryRouter {...memoryRouterProps}>
-    <MockedProvider>
-      <ConfigurationList {...configProps} />
-    </MockedProvider>>
-  </MemoryRouter>
+const WrappedConfig = ({ configProps }: { configProps: IConfigurationListProps } = { configProps: { configurations: testConfigs } }) => (
+  <MockedProvider>
+    <ConfigurationList {...configProps} />
+  </MockedProvider>
 );
 
 it('renders a without crashing', () => {

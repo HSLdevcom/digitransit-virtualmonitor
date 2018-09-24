@@ -1,8 +1,8 @@
 import * as React from "react";
 
 import { ITimedRoutesView, IViewBase } from 'src/ui/ConfigurationList';
-import { IStop, StopId } from 'src/ui/StopIncomingRetriever';
-import TimedRoutesView, { ITimedRoutesViewProps } from 'src/ui/Views/TimedRoutesView';
+import { StopId } from 'src/ui/StopIncomingRetriever';
+import TimedRoutesView from 'src/ui/Views/TimedRoutesView';
 
 export interface IViewProps {
   view: ITimedRoutesView,
@@ -32,21 +32,20 @@ const View = ({ view, ...additionalProps }: { view: IViewBase }) => {
 
   switch (type) {
     case 'timedRoutes':
-      const { stops } = otherProps as { stops: ReadonlyArray<StopId | IStop> };
+      const { displayedRoutes, pierColumnTitle, stops } : ITimedRoutesView = view as ITimedRoutesView;
+      // const { stops } = otherProps as { stops: ReadonlyArray<StopId | IStop> };
       return (
         <TimedRoutesView
-        // pierColumnTitle={(view as ITimedRoutesView)}
-          pierColumnTitle={'aaaa'}
-          displayedRoutes={(otherProps as ITimedRoutesViewProps).displayedRoutes}
-          stops={stops}
-          overrideStopNames={(otherProps as ITimedRoutesViewProps).overrideStopNames}
-          title={undefined}
+          displayedRoutes={displayedRoutes}
+          pierColumnTitle={pierColumnTitle}
+          stops={Object.values(stops)}
+          title={view.title && view.title.fi}
         />
       );
     default:
       return (
       <div>
-        {`Unknown view '${view.title}' of type ${view.type}`}
+        {`Unknown view with title '${view.title}' of type ${view.type}`}
       </div>
       );
   }

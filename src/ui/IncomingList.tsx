@@ -5,7 +5,7 @@ import {
   formatTime,
   parseDaySeconds,
 } from "src/time";
-import { IStop, IStopTime } from 'src/ui/StopIncomingRetriever'
+import { IStopTime } from 'src/ui/StopIncomingRetriever'
 
 interface IOverrideStopName {
   stop?: {

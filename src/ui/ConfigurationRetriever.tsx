@@ -63,15 +63,15 @@ class ConfigurationQuery extends Query<IConfigurationResponse, IConfigurationQue
 
 // Props can be without both or with either ids or name. When no params given, retrieves all configurations.
 interface IConfigurationRetrieverCommonProps {
-  children: QueryProps['children'],
+  readonly children: QueryProps['children'],
 };
 
 interface IConfigurationRetrieverPropsWithId extends IConfigurationRetrieverCommonProps {
-  ids: ReadonlyArray<string>,
+  readonly ids: ReadonlyArray<string>,
 };
 
 interface IConfigurationRetrieverPropsWithName extends IConfigurationRetrieverCommonProps{
-  name: string,
+  readonly name: string,
 };
 
 function ConfigurationRetriever(props: IConfigurationRetrieverCommonProps | IConfigurationRetrieverPropsWithId | IConfigurationRetrieverPropsWithName): JSX.Element {

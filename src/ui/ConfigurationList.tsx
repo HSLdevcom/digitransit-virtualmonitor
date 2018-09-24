@@ -12,7 +12,7 @@ interface ITranslatedString {
   readonly [twoLetterLanguageCode: string]: string,
 };
 
-interface IStop {
+export interface IStop {
   readonly gtfsId: string,
   readonly overrideStopName?: string,
 };
@@ -24,6 +24,8 @@ export interface IViewBase {
 };
 
 export interface ITimedRoutesView extends IViewBase {
+  readonly displayedRoutes?: number,
+  readonly pierColumnTitle?: string,
   readonly stops: {
     readonly [gtfsId: string]: IStop,
   },

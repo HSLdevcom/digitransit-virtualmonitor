@@ -29,10 +29,18 @@ i18n
       },
       fi: {
         translations: {
+          configuration: 'Konfiguraatio',
           departureTime: 'Lähtöaika',
           destination: 'Määränpää',
+          display: 'Näyttö',
+          latitude: 'Latitude',
           lineId: 'Linja',
           loading: 'Ladataan…',
+          longitude: 'Longitude',
+          pier: 'Laituri',
+          prepareConfiguration: 'Lisää konfiguraatio',
+          prepareDisplay: 'Lisää näyttö',
+          prepareStop: 'Lisää pysäkki',
           stop: 'Pysäkki {{stop}}',
           stopRetrieveError: 'Virhe haettaessa pysäkkiä {{stopId}}',
           stopRetrieveNotFound: 'Haettua pysäkkiä {{stopId}} ei löytynyt',

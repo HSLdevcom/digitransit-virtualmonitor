@@ -5,7 +5,7 @@ import { create } from 'react-test-renderer';
 
 import App from 'src/App';
 import StopSelector from 'src/ui/StopSelector';
-import VirtualMonitor from 'src/ui/VirtualMonitor';
+import TimedRoutesView from 'src/ui/Views/TimedRoutesView';
 
 const WrappedApp = ({ location = '' }: { location?: string} ) => (
   <StaticRouter location={location} context={{}}>
@@ -20,18 +20,18 @@ it('renders without crashing', () => {
   renderer.unmount();
 });
 
-it('renders a VirtualMonitor when there\'s "/stop/623" in url', () => {
+it('renders a TimedRoutesView when there\'s "/stop/623" in url', () => {
   const renderer = create(<WrappedApp location={'/stop/623'} />);
 
-  expect(renderer.root.findByType(VirtualMonitor));
+  expect(renderer.root.findByType(TimedRoutesView));
   renderer.unmount();
 });
 
 it('Passes correct stop to StopIncomingRetriver', () => {
   const renderer = create(<WrappedApp location={'/stop/HSL:4160216/11'} />);
-  const virtualMonitor = renderer.root.findByType(VirtualMonitor);
-  expect(virtualMonitor);
-  expect(virtualMonitor.props).toMatchObject({
+  const timedRoutesView = renderer.root.findByType(TimedRoutesView);
+  expect(timedRoutesView);
+  expect(timedRoutesView.props).toMatchObject({
     displayedRoutes: '11',
     stops: ['HSL:4160216'],
   });

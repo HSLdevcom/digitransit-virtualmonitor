@@ -1,21 +1,24 @@
 import gql from "graphql-tag";
 import * as React from "react";
-import { Query, QueryResult } from "react-apollo";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { Query, QueryProps, QueryResult } from "react-apollo";
 
 import {
   DaySeconds,
   EpochSecondsLocal,
   Seconds
 } from "src/time";
-import StopIncomingList from "src/ui/StopIncomingList";
+import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
 const STOP_INCOMING_QUERY = gql`
-query GetStop($stopId: String!, $numberOfDepartures: Int!) {
-  stop(id: $stopId) {
+query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
+  stops(ids: $stopIds) {
     name,
     gtfsId,
     stoptimesWithoutPatterns(numberOfDepartures: $numberOfDepartures) {
+      stop {
+        gtfsId
+        platformCode
+      }
       scheduledArrival
       realtimeArrival
       arrivalDelay
@@ -42,6 +45,11 @@ query GetStop($stopId: String!, $numberOfDepartures: Int!) {
 `;
 
 export interface IStopTime {
+  stop?: {
+    gtfsId: number,
+    overrideStopName?: string, // Added locally from configuration.
+    platformCode?: string,
+  },
   scheduledArrival: DaySeconds,
   realtimeArrival: DaySeconds,
   arrivalDelay: Seconds,
@@ -64,62 +72,45 @@ export interface IStopTime {
   },
 };
 
-export interface IStop {
+interface IStop {
   name: string,
   gtfsId: string,
-  stoptimesWithoutPatterns: IStopTime[]
+  stoptimesWithoutPatterns?: IStopTime[]
 };
 
-interface IStopResponse {
-  stop: IStop
+export interface IStopResponse {
+  readonly stops: ReadonlyArray<IStop>
 }
 
 export type StopId = string
 
-interface IStopQuery {
-  stopId: StopId,
+export interface IStopQuery {
+  stopIds: ReadonlyArray<StopId>,
   numberOfDepartures: number,
 };
+
+export type StopIncomingRetrieverQueryResult = QueryResult<IStopResponse, IStopQuery>;
 
 class StopIncomingQuery extends Query<IStopResponse, IStopQuery> {}
 
 export interface IStopIncomingRetrieverProps {
-  stopIds: StopId[],
-  displayedRoutes?: number,
+  readonly children: QueryProps['children'],
+  readonly stopIds: ReadonlyArray<StopId>,
 };
 
-const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProps> = (props: IStopIncomingRetrieverProps & InjectedTranslateProps) => (
-  <StopIncomingQuery
-    query={STOP_INCOMING_QUERY}
-    variables={{ stopId: props.stopIds[0], numberOfDepartures: props.displayedRoutes as number}}
-    pollInterval={20000}
-  >
-    {(result: QueryResult<IStopResponse, IStopQuery>): React.ReactNode => {
-      if (result.loading) {
-        return (<div>{props.t('loading')}</div>);
-      }
-      if (!result || !result.data) {
-        return (<div>
-          {props.t('stopRetrieveError', { stopId: props.stopIds[0] })}
-        </div>);
-      }
-      if (result.data.stop === null) {
-        return (<div>
-          {props.t('stopRetrieveNotFound', { stopId: props.stopIds[0] })}
-        </div>);
-      }
-
-      return (
-        <StopIncomingList
-          stop={result.data.stop}
-        />
-      );
-    }}
-  </StopIncomingQuery>
+const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProps> = (props: IStopIncomingRetrieverProps) => (
+  <ApolloClientsContext.Consumer>
+    {({ reittiOpas }) =>
+      (<StopIncomingQuery
+          client={reittiOpas}
+          query={STOP_INCOMING_QUERY}
+          variables={{ stopIds: props.stopIds, numberOfDepartures: 10 /*props.displayedRoutes as number*/}}
+          pollInterval={20000}
+        >
+          {props.children}
+      </StopIncomingQuery>)
+    }
+  </ApolloClientsContext.Consumer>
 );
 
-StopIncomingRetriever.defaultProps = {
-  displayedRoutes: 12,
-};
-
-export default translate('translations')(StopIncomingRetriever);
+export default StopIncomingRetriever;

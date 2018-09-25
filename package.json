@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "apollo-boost": "^0.1.12",
-    "esm": "^3.0.72",
-    "graphql": "^14.0.0-rc.2",
+    "@types/graphql": "^0.13.4",
+    "apollo-boost": "^0.1.16",
+    "copy-to-clipboard": "^3.0.8",
+    "esm": "^3.0.84",
+    "graphql": "^14.0.0",
     "graphql-tag": "^2.9.2",
+    "graphql-yoga": "^1.16.2",
     "i18next": "^11.5.0",
+    "module-alias": "^2.1.0",
     "moment": "^2.22.2",
     "patch-package": "^5.1.1",
     "react": "^16.4.1",
@@ -27,6 +31,7 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@attently/riek": "^2.0.1",
     "@types/history": "^4.6.2",
     "@types/jest": "^23.3.1",
     "@types/node": "10.1.4",
@@ -37,11 +42,23 @@
     "@types/react-router-dom": "^4.3.0",
     "@types/react-test-renderer": "^16.0.1",
     "react-test-renderer": "^16.4.1",
+    "ts-node": "^7.0.1",
     "typescript": "^3.0.1"
   },
   "jest": {
     "moduleNameMapper": {
       "^src/(.*)$": "<rootDir>/src/$1"
     }
+  },
+  "esm": {
+    "await": true
+  },
+  "_moduleAliases": {
+    "src": "build/dist"
+  },
+  "resolutions": {
+    "graphql": "^0.13.2",
+    "**/graphql": "^0.13.2",
+    "@types/graphql": "^0.13.4"
   }
 }

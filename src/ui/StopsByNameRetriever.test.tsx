@@ -5,7 +5,7 @@ import { create } from 'react-test-renderer';
 
 // const delay = (milliSeconds = 0) => new Promise(resolve => setTimeout(resolve, milliSeconds));
 
-import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameRetrieverProps, STOPS_BY_NAME_QUERY } from './StopsByNameRetriever';
+import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameRetrieverProps, STOPS_BY_NAME_QUERY } from 'src/ui/StopsByNameRetriever';
 
 // This function exists mainly for better typesafety.
 const mocker = <Request, Result>(query: DocumentNode, requestVariables: Request, resultData: Result) => ({

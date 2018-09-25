@@ -2,7 +2,7 @@ import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils'
 import { create } from 'react-test-renderer';
 
-import StopName, { IStopInfoProps, STOP_INFO_QUERY } from './StopName';
+import StopName, { IStopInfoProps, STOP_INFO_QUERY } from 'src/ui/StopName';
 
 const delay = (milliSeconds = 0) => new Promise(resolve => setTimeout(resolve, milliSeconds));
 
@@ -39,7 +39,7 @@ it('Displays stop number while loading from API', () => {
   const renderer = create(<WrappedStopName stopIds={['123']} />);
 
   const divs = renderer.root.findAllByType('div');
-  expect(divs[0].children).toContain('Pysäkki 123');
+  expect(divs[0].children).toContain('stop - {\"stop\":\"123\"}');
   renderer.unmount();
 });
 

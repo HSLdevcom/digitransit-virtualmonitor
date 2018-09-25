@@ -17,7 +17,7 @@
     "react": "^16.4.1",
     "react-apollo": "^2.1.11",
     "react-dom": "^16.4.1",
-    "react-i18next": "^7.10.1",
+    "react-i18next": "^7.13.0",
     "react-moment": "^0.7.9",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "^2.17.0",
@@ -34,7 +34,7 @@
     "@attently/riek": "^2.0.1",
     "@types/history": "^4.6.2",
     "@types/jest": "^23.3.1",
-    "@types/node": "10.1.4",
+    "@types/node": "^10.11.0",
     "@types/prop-types": "^15.5.4",
     "@types/react": "^16.4.7",
     "@types/react-dom": "^16.0.6",
@@ -55,10 +55,5 @@
   },
   "_moduleAliases": {
     "src": "build/dist"
-  },
-  "resolutions": {
-    "graphql": "^0.13.2",
-    "**/graphql": "^0.13.2",
-    "@types/graphql": "^0.13.4"
   }
 }

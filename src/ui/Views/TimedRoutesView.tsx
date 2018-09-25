@@ -13,9 +13,6 @@ interface ITimerRoutesViewCommonProps extends InjectedTranslateProps {
   readonly title?: string,
   readonly stops: ReadonlyArray<StopId> | ReadonlyArray<IStop>,
   readonly displayedRoutes?: number,
-  readonly overrideStopNames?: {
-    readonly [stopGtfsId: string]: string,
-  },
   readonly pierColumnTitle?: string,
 };
 
@@ -80,19 +77,24 @@ const TimedRoutesView: React.StatelessComponent<ITimerRoutesViewPropsWithStopIds
             // Clip to max of props.displayedRoutes
             .slice(0, props.displayedRoutes)
             // Map renamed stops from configuration
-            .map(stopTime => (stopTime.stop && stopTime.stop.gtfsId && props.overrideStopNames && props.overrideStopNames[stopTime.stop.gtfsId])
-              ? {
-                ...stopTime,
-                stop: {
-                  ...stopTime.stop,
-                  // gtfs: stopTime.stop!.gtfsId,
-                  overrideStopName: props.overrideStopNames[stopTime.stop!.gtfsId],
-                  // platformCode: stopTime.stop!.gtfsId,
-                } as IStopTime['stop'],
+            .map(stopTime => {
+              if (props.stops && stopTime.stop && stopTime.stop.gtfsId) {
+                const foundIStop: (IStop | undefined) = (props as ITimerRoutesViewPropsWithIStops).stops .find(stop => stop.gtfsId === stopTime.stop!.gtfsId);
+                return ({
+                  ...stopTime,
+                  stop: {
+                    ...stopTime.stop,
+                    // gtfs: stopTime.stop!.gtfsId,
+                    overrideStopName: foundIStop ? foundIStop.overrideStopName : undefined,
+                    // platformCode: stopTime.stop!.gtfsId,
+                  } as IStopTime['stop'],
+                });
               }
-              : stopTime
-            );
-        
+              else {
+                return stopTime;
+              }
+            });
+          
           return (
             <StopTimesList
               pierColumnTitle={props.pierColumnTitle}
@@ -108,7 +110,6 @@ const TimedRoutesView: React.StatelessComponent<ITimerRoutesViewPropsWithStopIds
 
 TimedRoutesView.defaultProps = {
   displayedRoutes: 12,
-  overrideStopNames: {},
 };
 
 export default translate('translations')(TimedRoutesView);

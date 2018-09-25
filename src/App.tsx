@@ -15,7 +15,6 @@ const RouteWrapper = ({ match }: any) => (
   <TimedRoutesView
     stops={[match.params.stopId]}
     displayedRoutes={match.params.displayedRoutes}
-    overrideStopNames={{}}
   />
 );
 

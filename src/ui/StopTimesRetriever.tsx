@@ -46,7 +46,7 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
 
 export interface IStopTime {
   stop?: {
-    gtfsId: number,
+    gtfsId: string,
     overrideStopName?: string, // Added locally from configuration.
     platformCode?: string,
   },
@@ -65,7 +65,7 @@ export interface IStopTime {
   stopHeadsign: string,
   headsign: string,
   trip: {
-    gtfsId: number,
+    gtfsId: string,
     route: {
       shortName: string,
     },

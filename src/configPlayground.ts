@@ -105,6 +105,7 @@ const configs: IConfigurations =
           {
             displayTime: 2000,
             view: {
+              pierColumnTitle: 'Pysäkki',
               stops: {
                 'HSL:4700210': {
                   gtfsId: 'HSL:4700210',

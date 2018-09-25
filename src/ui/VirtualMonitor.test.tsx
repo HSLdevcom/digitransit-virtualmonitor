@@ -3,7 +3,7 @@ import { MockedProvider } from 'react-apollo/test-utils'
 import { create } from 'react-test-renderer';
 
 import AutoMoment from 'src/ui/AutoMoment';
-// import StopIncomingRetriever from 'src/ui/StopIncomingRetriever';
+// import StopTimesRetriever from 'src/ui/StopTimesRetriever';
 // import StopName from 'src/ui/StopName';
 import VirtualMonitor, { IVirtualMonitorProps } from 'src/ui/VirtualMonitor';
 
@@ -39,9 +39,9 @@ it('displays current time', () => {
   renderer.unmount();
 });
 
-/* it('renders a <StopIncomingRetriever />', () => {
+/* it('renders a <StopTimesRetriever />', () => {
   const renderer = create(<WrappedVirtualMonitor />);
-  expect(renderer.root.findByType(StopIncomingRetriever));
+  expect(renderer.root.findByType(StopTimesRetriever));
   renderer.unmount();
 });
  */

@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { ITimedRoutesView, IViewBase } from 'src/ui/ConfigurationList';
-import { StopId } from 'src/ui/StopIncomingRetriever';
+import { StopId } from 'src/ui/StopTimesRetriever';
 import TimedRoutesView from 'src/ui/Views/TimedRoutesView';
 
 export interface IViewProps {

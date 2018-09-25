@@ -66,31 +66,31 @@ a {
   font-size: large;
 }
 
-.IncomingList {
+.StopTimesList {
   border-spacing: 0;
 }
 
-.IncomingList thead {
+.StopTimesList thead {
   background-color: #002852;
 }
 
-.IncomingList th,td {
+.StopTimesList th,td {
   padding: 0.2em;
 }
 
-.IncomingList thead th {
+.StopTimesList thead th {
   font-weight: bold;
   font-size: 2.25em;
   text-align: start;
 }
 
-.IncomingList tbody td {
+.StopTimesList tbody td {
   border-bottom: 0.05em solid white;
   font-weight: bold;
   font-size: 2.5em;
 }
 
-.IncomingList tbody {
+.StopTimesList tbody {
   color: #FFFF00;
 }
 

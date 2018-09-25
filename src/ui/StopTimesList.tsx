@@ -5,7 +5,7 @@ import {
   formatTime,
   parseDaySeconds,
 } from "src/time";
-import { IStopTime } from 'src/ui/StopIncomingRetriever'
+import { IStopTime } from 'src/ui/StopTimesRetriever'
 
 interface IOverrideStopName {
   stop?: {
@@ -13,17 +13,18 @@ interface IOverrideStopName {
   },
 };
 
-export interface IStopIncomingListProps {
+export interface IStopTimesListProps {
   readonly pierColumnTitle?: string,
   readonly stoptimesWithoutPatterns: ReadonlyArray<IStopTime & IOverrideStopName>,
   readonly showPier?: boolean,
 };
-interface IIncomingHeadersProps {
+
+interface IStopTimesListHeadersProps {
   readonly pierColumnTitle?: string,
   readonly showPier?: boolean,
 };
 
-const IncomingHeaders = ({ pierColumnTitle, showPier, t }: IIncomingHeadersProps & InjectedTranslateProps) => (
+const StopTimesListHeaders = ({ pierColumnTitle, showPier, t }: IStopTimesListHeadersProps & InjectedTranslateProps) => (
   <thead>
     <tr>
       <th className={'departureTime'}>{t('departureTime')}</th>
@@ -36,9 +37,9 @@ const IncomingHeaders = ({ pierColumnTitle, showPier, t }: IIncomingHeadersProps
     </tr>
   </thead>
 );
-const IncomingHeadersTranslated = translate('translations')(IncomingHeaders);
+const StopTimesListHeadersTranslated = translate('translations')(StopTimesListHeaders);
 
-const IncomingRow = ({ stoptime, showPier } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean }) => (
+const StopTimeRow = ({ stoptime, showPier } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean }) => (
   <tr>
     <td>
       <time>{formatTime(parseDaySeconds(stoptime.scheduledArrival))}</time>
@@ -56,15 +57,15 @@ const IncomingRow = ({ stoptime, showPier } : { stoptime: IStopTime & IOverrideS
   </tr>
 );
 
-const IncomingList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t } : IStopIncomingListProps & InjectedTranslateProps) => (
-  <table className={'IncomingList'}>
-    <IncomingHeadersTranslated
+const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t } : IStopTimesListProps & InjectedTranslateProps) => (
+  <table className={'StopTimesList'}>
+    <StopTimesListHeadersTranslated
       pierColumnTitle={pierColumnTitle}
       showPier={showPier}
     />
     <tbody>
       {stoptimesWithoutPatterns.map(stoptime => (
-        <IncomingRow
+        <StopTimeRow
           stoptime={stoptime}
           key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}`}
           showPier={showPier}
@@ -74,4 +75,4 @@ const IncomingList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t }
   </table>
 );
 
-export default translate('translations')(IncomingList);
+export default translate('translations')(StopTimesList);

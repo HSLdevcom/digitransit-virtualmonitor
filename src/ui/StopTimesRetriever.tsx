@@ -9,7 +9,7 @@ import {
 } from "src/time";
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
-const STOP_INCOMING_QUERY = gql`
+const STOP_TIMES_QUERY = gql`
 query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
   stops(ids: $stopIds) {
     name,
@@ -78,39 +78,39 @@ interface IStop {
   stoptimesWithoutPatterns?: IStopTime[]
 };
 
-export interface IStopResponse {
+export interface IStopTimesResponse {
   readonly stops: ReadonlyArray<IStop>
 }
 
 export type StopId = string
 
-export interface IStopQuery {
+export interface IStopTimesQuery {
   stopIds: ReadonlyArray<StopId>,
   numberOfDepartures: number,
 };
 
-export type StopIncomingRetrieverQueryResult = QueryResult<IStopResponse, IStopQuery>;
+export type StopTimesRetrieverQueryResult = QueryResult<IStopTimesResponse, IStopTimesQuery>;
 
-class StopIncomingQuery extends Query<IStopResponse, IStopQuery> {}
+class StopTimesQuery extends Query<IStopTimesResponse, IStopTimesQuery> {}
 
-export interface IStopIncomingRetrieverProps {
+export interface IStopTimesRetrieverProps {
   readonly children: QueryProps['children'],
   readonly stopIds: ReadonlyArray<StopId>,
 };
 
-const StopIncomingRetriever: React.StatelessComponent<IStopIncomingRetrieverProps> = (props: IStopIncomingRetrieverProps) => (
+const StopTimesRetriever: React.StatelessComponent<IStopTimesRetrieverProps> = (props: IStopTimesRetrieverProps) => (
   <ApolloClientsContext.Consumer>
     {({ reittiOpas }) =>
-      (<StopIncomingQuery
+      (<StopTimesQuery
           client={reittiOpas}
-          query={STOP_INCOMING_QUERY}
+          query={STOP_TIMES_QUERY}
           variables={{ stopIds: props.stopIds, numberOfDepartures: 10 /*props.displayedRoutes as number*/}}
           pollInterval={20000}
         >
           {props.children}
-      </StopIncomingQuery>)
+      </StopTimesQuery>)
     }
   </ApolloClientsContext.Consumer>
 );
 
-export default StopIncomingRetriever;
+export default StopTimesRetriever;

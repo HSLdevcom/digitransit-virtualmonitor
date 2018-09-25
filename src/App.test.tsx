@@ -27,7 +27,7 @@ it('renders a TimedRoutesView when there\'s "/stop/623" in url', () => {
   renderer.unmount();
 });
 
-it('Passes correct stop to StopIncomingRetriver', () => {
+it('Passes correct stop to StopTimesRetriver', () => {
   const renderer = create(<WrappedApp location={'/stop/HSL:4160216/11'} />);
   const timedRoutesView = renderer.root.findByType(TimedRoutesView);
   expect(timedRoutesView);

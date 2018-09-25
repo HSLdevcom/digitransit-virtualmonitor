@@ -3,11 +3,11 @@ import { InjectedTranslateProps, translate } from "react-i18next";
 
 import AutoMoment from "src/ui/AutoMoment";
 import HslLogo from "src/ui/HslLogo";
-import { default as StopIncomingRetriever, StopId, StopIncomingRetrieverQueryResult, IStopTime } from "src/ui/StopIncomingRetriever";
+import { default as StopTimesRetriever, StopId, StopTimesRetrieverQueryResult, IStopTime } from "src/ui/StopTimesRetriever";
 import { IStop } from "src/ui/ConfigurationList";
 import StopName from "src/ui/StopName";
 import Titlebar from "src/ui/Titlebar";
-import IncomingList from 'src/ui/IncomingList';
+import StopTimesList from 'src/ui/StopTimesList';
 
 interface ITimerRoutesViewCommonProps extends InjectedTranslateProps {
   readonly title?: string,
@@ -46,10 +46,10 @@ const TimedRoutesView: React.StatelessComponent<ITimerRoutesViewPropsWithStopIds
         </div>
       </Titlebar>
 
-      <StopIncomingRetriever
+      <StopTimesRetriever
         stopIds={stopIds}
       >
-        {(result: StopIncomingRetrieverQueryResult): React.ReactNode => {
+        {(result: StopTimesRetrieverQueryResult): React.ReactNode => {
           if (result.loading) {
             return (<div>{props.t('loading')}</div>);
           }
@@ -94,14 +94,14 @@ const TimedRoutesView: React.StatelessComponent<ITimerRoutesViewPropsWithStopIds
             );
         
           return (
-            <IncomingList
+            <StopTimesList
               pierColumnTitle={props.pierColumnTitle}
               stoptimesWithoutPatterns={mergedStopTimes}
               showPier={stopIds.length > 1}
             />
           );
         }}
-      </StopIncomingRetriever>
+      </StopTimesRetriever>
     </div>
   );
 };

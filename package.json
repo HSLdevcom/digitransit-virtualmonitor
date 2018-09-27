@@ -1,6 +1,11 @@
 {
   "name": "otp-virtual-monitor",
   "version": "0.1.0",
+  "description": "Real-time, updating public transport info display that aggregates OpenTripPlanner schedules for multiple stops",
+  "license": "MIT",
+  "contributors": [
+    "Eero Tanskanen <eero@rnd.works>"
+  ],
   "private": true,
   "dependencies": {
     "@types/graphql": "^0.13.4",
@@ -20,8 +25,7 @@
     "react-i18next": "^7.13.0",
     "react-moment": "^0.7.9",
     "react-router-dom": "^4.3.1",
-    "react-scripts-ts": "^2.17.0",
-    "save": "^2.3.2"
+    "react-scripts-ts": "^2.17.0"
   },
   "scripts": {
     "prepare": "patch-package",

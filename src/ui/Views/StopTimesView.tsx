@@ -9,24 +9,24 @@ import StopName from "src/ui/StopName";
 import Titlebar from "src/ui/Titlebar";
 import StopTimesList from 'src/ui/StopTimesList';
 
-interface ITimerRoutesViewCommonProps extends InjectedTranslateProps {
+interface IStopTimesViewCommonProps extends InjectedTranslateProps {
   readonly title?: string,
   readonly stops: ReadonlyArray<StopId> | ReadonlyArray<IStop>,
   readonly displayedRoutes?: number,
   readonly pierColumnTitle?: string,
 };
 
-export interface ITimerRoutesViewPropsWithStopIds extends ITimerRoutesViewCommonProps {
+export interface IStopTimesViewPropsWithStopIds extends IStopTimesViewCommonProps {
   readonly stopIds: ReadonlyArray<StopId>,
 };
 
-export interface ITimerRoutesViewPropsWithIStops extends ITimerRoutesViewCommonProps {
+export interface IStopTimesViewPropsWithIStops extends IStopTimesViewCommonProps {
   readonly stops: ReadonlyArray<IStop>,
 };
 
-const TimedRoutesView: React.StatelessComponent<ITimerRoutesViewPropsWithStopIds | ITimerRoutesViewPropsWithIStops> = (props: ITimerRoutesViewPropsWithStopIds | ITimerRoutesViewPropsWithIStops) => {
-  let stopIds = (props as ITimerRoutesViewPropsWithStopIds).stopIds
-    || ((props as ITimerRoutesViewPropsWithIStops).stops.map(stop => stop.gtfsId))
+const StopTimesView: React.StatelessComponent<IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops> = (props: IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops) => {
+  let stopIds = (props as IStopTimesViewPropsWithStopIds).stopIds
+    || ((props as IStopTimesViewPropsWithIStops).stops.map(stop => stop.gtfsId))
     || [];
 
   return (
@@ -79,7 +79,7 @@ const TimedRoutesView: React.StatelessComponent<ITimerRoutesViewPropsWithStopIds
             // Map renamed stops from configuration
             .map(stopTime => {
               if (props.stops && stopTime.stop && stopTime.stop.gtfsId) {
-                const foundIStop: (IStop | undefined) = (props as ITimerRoutesViewPropsWithIStops).stops .find(stop => stop.gtfsId === stopTime.stop!.gtfsId);
+                const foundIStop: (IStop | undefined) = (props as IStopTimesViewPropsWithIStops).stops .find(stop => stop.gtfsId === stopTime.stop!.gtfsId);
                 return ({
                   ...stopTime,
                   stop: {
@@ -108,8 +108,8 @@ const TimedRoutesView: React.StatelessComponent<ITimerRoutesViewPropsWithStopIds
   );
 };
 
-TimedRoutesView.defaultProps = {
+StopTimesView.defaultProps = {
   displayedRoutes: 12,
 };
 
-export default translate('translations')(TimedRoutesView);
+export default translate('translations')(StopTimesView);

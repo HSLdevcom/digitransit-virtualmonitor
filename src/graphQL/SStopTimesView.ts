@@ -4,7 +4,7 @@ import SStop from 'src/graphQL/SStop';
 import STranslatedString from "src/graphQL/STranslatedString";
 import SView from 'src/graphQL/SView';
 
-const STimedRoutesView = new GraphQLObjectType({
+const SStopTimesView = new GraphQLObjectType({
   fields: () => ({
     // ...SView.getFields(),
     pierColumnTitle: { type: GraphQLString },
@@ -18,7 +18,7 @@ const STimedRoutesView = new GraphQLObjectType({
     },
   }),
   interfaces: () => [SView],
-  name: 'TimedRoutesView',
+  name: 'StopTimesView',
 });
 
-export default STimedRoutesView;
+export default SStopTimesView;

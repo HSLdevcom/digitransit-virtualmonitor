@@ -60,7 +60,7 @@ const configs: IConfigurations =
                 ru: '',
                 se: '',
               },
-              type: 'timedRoutes',
+              type: 'stopTimes',
             },
           },
           {
@@ -81,7 +81,7 @@ const configs: IConfigurations =
                 ru: '',
                 se: '',
               },
-              type: 'timedRoutes',
+              type: 'stopTimes',
             },
           },
         ]
@@ -123,7 +123,7 @@ const configs: IConfigurations =
                 ru: '',
                 se: '',
               },
-              type: 'timedRoutes',
+              type: 'stopTimes',
             },
           },
         ],

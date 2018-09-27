@@ -1,10 +1,10 @@
 import { GraphQLInterfaceType, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
-import STimedRoutesView from 'src/graphQL/STimedRoutesView';
+import SStopTimesView from 'src/graphQL/SStopTimesView';
 import STranslatedString from "src/graphQL/STranslatedString";
 
 const typeMap: { [typename: string]: GraphQLObjectType } = {
-  'timedRoutes': STimedRoutesView,
+  'stopTimes': SStopTimesView,
 };
 
 const SView = new GraphQLInterfaceType({

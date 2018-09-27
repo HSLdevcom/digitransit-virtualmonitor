@@ -9,10 +9,10 @@ import Titlebar from 'src/ui/Titlebar';
 
 import ConfigurationDisplay from 'src/ui/ConfigurationDisplay';
 import ConfigurationList from 'src/ui/ConfigurationList';
-import TimedRoutesView from 'src/ui/Views/TimedRoutesView';
+import StopTimesView from 'src/ui/Views/StopTimesView';
 
 const RouteWrapper = ({ match }: any) => (
-  <TimedRoutesView
+  <StopTimesView
     stops={[match.params.stopId]}
     displayedRoutes={match.params.displayedRoutes}
   />

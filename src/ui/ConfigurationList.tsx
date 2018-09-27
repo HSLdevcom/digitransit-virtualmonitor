@@ -23,7 +23,7 @@ export interface IViewBase {
   readonly type: string,
 };
 
-export interface ITimedRoutesView extends IViewBase {
+export interface IStopTimesView extends IViewBase {
   readonly displayedRoutes?: number,
   readonly pierColumnTitle?: string,
   readonly stops: {
@@ -43,7 +43,7 @@ export interface IDisplay {
   readonly position?: ILatLon,
   readonly name: string,
   readonly viewCarousel: ReadonlyArray<{
-    view: ITimedRoutesView,
+    view: IStopTimesView,
     displayTime: number,
   }>,
 };

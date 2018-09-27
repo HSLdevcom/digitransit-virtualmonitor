@@ -2,7 +2,7 @@ import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchem
 import initialConfigurations from 'src/configPlayground';
 import SConfiguration, { defaultValue as defaultConfiguration, SConfigurationInput } from "src/graphQL/SConfiguration";
 import SDisplay from 'src/graphQL/SDisplay';
-import STimedRoutesView from 'src/graphQL/STimedRoutesView';
+import SStopTimesView from 'src/graphQL/SStopTimesView';
 import SView from "src/graphQL/SView";
 import { IConfiguration, IDisplay, IViewBase } from 'src/ui/ConfigurationList';
 
@@ -132,7 +132,7 @@ const schema = new GraphQLSchema({
     },
     name: 'Query',
   }),
-  types: [STimedRoutesView],
+  types: [SStopTimesView],
 });
 
 export default schema;

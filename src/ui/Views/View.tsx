@@ -1,22 +1,22 @@
 import * as React from "react";
 
-import { ITimedRoutesView, IViewBase } from 'src/ui/ConfigurationList';
+import { IStopTimesView, IViewBase } from 'src/ui/ConfigurationList';
 import { StopId } from 'src/ui/StopTimesRetriever';
-import TimedRoutesView from 'src/ui/Views/TimedRoutesView';
+import StopTimesView from 'src/ui/Views/StopTimesView';
 
 export interface IViewProps {
-  view: ITimedRoutesView,
+  view: IStopTimesView,
   [additionalProps: string]: any,
 };
 
 type ViewComponent =
-  typeof TimedRoutesView
+  typeof StopTimesView
 ;
 
 // const viewTypeMap: { [typeName: string]: { component: ViewComponent } } = {
-//   'timedRoutes': {
-//     component: TimedRoutesView,
-//     foo: ITimedRoutesViewProps,
+//   'stopTimes': {
+//     component: StopTimesView,
+//     foo: IStopTimesViewProps,
 //   }
 // };
 
@@ -31,11 +31,11 @@ const View = ({ view, ...additionalProps }: { view: IViewBase }) => {
   const { type, ...otherProps }: { type: string } = view;
 
   switch (type) {
-    case 'timedRoutes':
-      const { displayedRoutes, pierColumnTitle, stops } : ITimedRoutesView = view as ITimedRoutesView;
+    case 'stopTimes':
+      const { displayedRoutes, pierColumnTitle, stops } : IStopTimesView = view as IStopTimesView;
       // const { stops } = otherProps as { stops: ReadonlyArray<StopId | IStop> };
       return (
-        <TimedRoutesView
+        <StopTimesView
           displayedRoutes={displayedRoutes}
           pierColumnTitle={pierColumnTitle}
           stops={Object.values(stops)}

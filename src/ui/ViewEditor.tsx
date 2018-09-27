@@ -4,12 +4,12 @@ import { Mutation } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { IConfiguration, ITimedRoutesView } from "src/ui/ConfigurationList";
+import { IConfiguration, IStopTimesView } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 interface IViewEditorProps {
   configuration: IConfiguration,
-  view: ITimedRoutesView,
+  view: IStopTimesView,
 };
 
 const ADD_STOP = gql`

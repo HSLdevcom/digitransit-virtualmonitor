@@ -9,6 +9,7 @@ import Titlebar from 'src/ui/Titlebar';
 
 import ConfigurationDisplay from 'src/ui/ConfigurationDisplay';
 import ConfigurationList from 'src/ui/ConfigurationList';
+import DisplayUrlCompression from 'src/DisplayUrlCompression';
 import StopTimesView from 'src/ui/Views/StopTimesView';
 
 const RouteWrapper = ({ match }: any) => (
@@ -30,6 +31,15 @@ class App extends React.Component {
     return (
       <Switch>
         <Route
+          path={'/urld/:version/:packedDisplay'}
+          component={({ match }: any) => (
+            <DisplayUrlCompression
+              version={decodeURIComponent(match.params.version)}
+              packedString={decodeURIComponent(match.params.packedDisplay)}
+            />
+          )}
+        />
+        <Route
           path={'/configuration/:configuration/display/:display'}
           component={RouteWrapperConfig}
         />
@@ -48,6 +58,21 @@ class App extends React.Component {
               <div id={"title-text"}>
                 {'Virtuaalimonitori'}
               </div>
+              {/* <div>
+                Jaajaa
+                <Packer
+                  packer={packDisplay('v1', Object.values(conf['kamppi'].displays)[0])}
+                >
+                    {(packed) => packed
+                      ? (
+                        <div>
+                            Packed string: {packed}
+                        </div>
+                      )
+                      : (<div>Still packing...</div>)
+                    }
+                </Packer>
+              </div> */}
               <div id={"title-time"}>
                 <AutoMoment />
               </div>

@@ -12,40 +12,36 @@ import ConfigurationList from 'src/ui/ConfigurationList';
 import DisplayUrlCompression from 'src/DisplayUrlCompression';
 import StopTimesView from 'src/ui/Views/StopTimesView';
 
-const RouteWrapper = ({ match }: any) => (
-  <StopTimesView
-    stops={[match.params.stopId]}
-    displayedRoutes={match.params.displayedRoutes}
-  />
-);
-
-const RouteWrapperConfig = ({ match }: any) => (
-  <ConfigurationDisplay
-    configurationName={match.params.configuration}
-    displayName={match.params.display}
-  />
-);
-
 class App extends React.Component {
   public render() {
     return (
       <Switch>
         <Route
           path={'/urld/:version/:packedDisplay'}
-          component={({ match }: any) => (
+          component={({ match: { params: { version, packedDisplay }} }: any) => (
             <DisplayUrlCompression
-              version={decodeURIComponent(match.params.version)}
-              packedString={decodeURIComponent(match.params.packedDisplay)}
+              version={decodeURIComponent(version)}
+              packedString={decodeURIComponent(packedDisplay)}
             />
           )}
         />
         <Route
           path={'/configuration/:configuration/display/:display'}
-          component={RouteWrapperConfig}
+          component={({ match: { params: { configuration, displayName }}}: any) => (
+            <ConfigurationDisplay
+              configurationName={configuration}
+              displayName={displayName}
+            />
+          )}
         />
         <Route
           path={'/stop/:stopId/:displayedRoutes?'}
-          component={RouteWrapper}
+          component={({ match: { params: { stopId, displayedRoutes }} }: any) => (
+            <StopTimesView
+              stops={[stopId]}
+              displayedRoutes={displayedRoutes}
+            />
+          )}
         />
         <Route
           path={'/configs/:configName?'}

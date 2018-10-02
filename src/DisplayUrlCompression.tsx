@@ -2,8 +2,8 @@ import * as React from 'react';
 import Async, { Props as AsyncProps } from 'react-promise';
 
 import { IDisplay } from 'src/ui/ConfigurationList';
-import createUrlCompression from 'src/urlCompression';
 import ViewCarousel from 'src/ui/ViewCarousel';
+import createUrlCompression from 'src/urlCompression';
 
 interface IDisplayUrlCompressionProps {
   version: string,

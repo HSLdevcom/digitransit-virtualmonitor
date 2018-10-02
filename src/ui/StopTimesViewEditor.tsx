@@ -8,7 +8,7 @@ import { IConfiguration, IStopTimesView } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 interface IViewEditorProps {
-  configuration: IConfiguration,
+  configuration?: IConfiguration,
   view: IStopTimesView,
 };
 
@@ -30,16 +30,19 @@ const ADD_STOP = gql`
 
 // };
 
-const ViewEditor = ({configuration, view, t}: IViewEditorProps & InjectedTranslateProps) => (
+const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps & InjectedTranslateProps) => (
   <div>
     <h2>
-      <Link to={`/configuration/${configuration.name}/view/${view.title}`}>
-        {`${t('display')} :`}
-        {view.title && (Object.values(view.title).length > 0)
-          ? Object.values(view.title).filter(title => title)[0] || view.title
-          : view.title
-        }
-      </Link>
+      {configuration
+        ? (<Link to={`/configuration/${configuration.name}/view/${view.title}`}>
+          {`${t('display')} :`}
+          {view.title && (Object.values(view.title).length > 0)
+            ? Object.values(view.title).filter(title => title)[0] || view.title
+            : view.title
+          }
+        </Link>)
+        : `${view.title ? view.title.fi : 'Tuntematon näkymä.'}`
+      }
     </h2>
     <ul>
       {Object.values(view.stops).map(s => (
@@ -69,4 +72,4 @@ const ViewEditor = ({configuration, view, t}: IViewEditorProps & InjectedTransla
   </div>
 );
 
-export default translate('translations')(ViewEditor);
+export default translate('translations')(StopTimesViewEditor);

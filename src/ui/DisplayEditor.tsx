@@ -7,10 +7,11 @@ import { Link } from "react-router-dom";
 import { IConfiguration, IDisplay } from "src/ui/ConfigurationList";
 import LatLonEditor from "src/ui/LatLonEditor";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
+import ViewCarouselElementEditor from 'src/ui/ViewCarouselElementEditor';
 
 interface IDisplayEditorProps {
-  configuration: IConfiguration,
-  display: IDisplay,
+  configuration?: IConfiguration,
+  display?: IDisplay,
 };
 
 const ADD_STOP = gql`
@@ -18,6 +19,10 @@ const ADD_STOP = gql`
     addStop @client
   }
 `;
+
+interface Foo extends IDisplayEditorProps {
+  display: IDisplay,
+};
 
 // {
 //   Mutation: {
@@ -31,32 +36,38 @@ const ADD_STOP = gql`
 
 // };
 
-const DisplayEditor = ({configuration, display, t}: IDisplayEditorProps & InjectedTranslateProps) => (
+const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = ({configuration, display, t}: Foo & InjectedTranslateProps) => (
   <div>
     <h2>
-      <Link to={`/configuration/${configuration.name}/display/${display.name}`}>
-        {`${t('display')}: `}
-        {display.name || configuration.name}
-      </Link>
+      {(configuration)
+        ? (<Link to={`/configuration/${configuration!.name}/display/${display.name}`}>
+          {`${t('display')}: `}
+          {display.name || configuration!.name}
+        </Link>)
+        : <span>{display.name}</span>
+      }
     </h2>
     {display.position
       ? (<LatLonEditor
-          {...display.position}
+          {...display.position!}
           editable={true}
         />)
-      : null
+      : (<button>
+          Määritä sijainti
+        </button>)
     }
     <ul>
-      {Object.values(display.viewCarousel[0].view.stops).map(s => (
-        <div key={s.gtfsId}>
-          <Link
-            to={`/stop/${s.gtfsId}`}
-          >
-            Stop {s.gtfsId}
-          </Link>
-        </div>
+      {display.viewCarousel.map(viewCarouselElement => (
+        <li>
+          <ViewCarouselElementEditor
+            viewCarouselElement={viewCarouselElement}
+          />
+        </li>
       ))}
     </ul>
+    <button>
+      Lisää uusi pysäkkinäkymä karuselliin.
+    </button>
     <ApolloClientsContext.Consumer>
       {({ virtualMonitor }) =>
         (<Mutation
@@ -73,5 +84,12 @@ const DisplayEditor = ({configuration, display, t}: IDisplayEditorProps & Inject
     </ApolloClientsContext.Consumer>
   </div>
 );
+
+DisplayEditor.defaultProps = {
+  display: {
+    name: 'Uusi näyttö',
+    viewCarousel: [],
+  },
+};
 
 export default translate('translations')(DisplayEditor);

@@ -9,9 +9,8 @@ import StopName from "src/ui/StopName";
 import Titlebar from "src/ui/Titlebar";
 import StopTimesList from 'src/ui/StopTimesList';
 
-interface IStopTimesViewCommonProps extends InjectedTranslateProps {
+interface IStopTimesViewCommonProps {
   readonly title?: string,
-  readonly stops: ReadonlyArray<StopId> | ReadonlyArray<IStop>,
   readonly displayedRoutes?: number,
   readonly pierColumnTitle?: string,
 };
@@ -24,7 +23,9 @@ export interface IStopTimesViewPropsWithIStops extends IStopTimesViewCommonProps
   readonly stops: ReadonlyArray<IStop>,
 };
 
-const StopTimesView: React.StatelessComponent<IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops> = (props: IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops) => {
+type ICombinedStopTimesViewProps = (IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops) & InjectedTranslateProps;
+
+const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedStopTimesViewProps) => {
   let stopIds = (props as IStopTimesViewPropsWithStopIds).stopIds
     || ((props as IStopTimesViewPropsWithIStops).stops.map(stop => stop.gtfsId))
     || [];
@@ -78,7 +79,7 @@ const StopTimesView: React.StatelessComponent<IStopTimesViewPropsWithStopIds | I
             .slice(0, props.displayedRoutes)
             // Map renamed stops from configuration
             .map(stopTime => {
-              if (props.stops && stopTime.stop && stopTime.stop.gtfsId) {
+              if ((props as IStopTimesViewPropsWithIStops).stops && stopTime.stop && stopTime.stop.gtfsId) {
                 const foundIStop: (IStop | undefined) = (props as IStopTimesViewPropsWithIStops).stops .find(stop => stop.gtfsId === stopTime.stop!.gtfsId);
                 return ({
                   ...stopTime,
@@ -90,9 +91,7 @@ const StopTimesView: React.StatelessComponent<IStopTimesViewPropsWithStopIds | I
                   } as IStopTime['stop'],
                 });
               }
-              else {
                 return stopTime;
-              }
             });
           
           return (
@@ -112,4 +111,5 @@ StopTimesView.defaultProps = {
   displayedRoutes: 12,
 };
 
-export default translate('translations')(StopTimesView);
+// Terrible hack until @types/react-i18next is fixed.
+export default translate('translations')(StopTimesView) as any as React.SFC<IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops>;

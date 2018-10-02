@@ -37,9 +37,9 @@ class App extends React.Component {
         />
         <Route
           path={'/stop/:stopId/:displayedRoutes?'}
-          component={({ match: { params: { stopId, displayedRoutes }} }: any) => (
+          component={({ match: { params: { stopId, displayedRoutes }} }: { match: { params: { stopId: string, displayedRoutes: number }}}) => (
             <StopTimesView
-              stops={[stopId]}
+              stopIds={[stopId]}
               displayedRoutes={displayedRoutes}
             />
           )}

@@ -62,6 +62,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
       {display.viewCarousel.map(viewCarouselElement => (
         <li>
           <ViewCarouselElementEditor
+            key={(viewCarouselElement.view.title && viewCarouselElement.view.title.fi) || JSON.stringify(viewCarouselElement)}
             viewCarouselElement={viewCarouselElement}
           />
         </li>

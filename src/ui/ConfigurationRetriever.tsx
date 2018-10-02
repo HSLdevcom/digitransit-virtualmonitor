@@ -74,7 +74,7 @@ interface IConfigurationRetrieverPropsWithName extends IConfigurationRetrieverCo
   readonly name: string,
 };
 
-function ConfigurationRetriever(props: IConfigurationRetrieverCommonProps | IConfigurationRetrieverPropsWithId | IConfigurationRetrieverPropsWithName): JSX.Element {
+const ConfigurationRetriever: React.SFC<IConfigurationRetrieverCommonProps | IConfigurationRetrieverPropsWithId | IConfigurationRetrieverPropsWithName> = (props: IConfigurationRetrieverCommonProps | IConfigurationRetrieverPropsWithId | IConfigurationRetrieverPropsWithName) => {
   const ids = (props as IConfigurationRetrieverPropsWithId).ids;
   const name = (props as IConfigurationRetrieverPropsWithName).name;
 

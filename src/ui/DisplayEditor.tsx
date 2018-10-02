@@ -8,6 +8,8 @@ import { IConfiguration, IDisplay } from "src/ui/ConfigurationList";
 import LatLonEditor from "src/ui/LatLonEditor";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 import ViewCarouselElementEditor from 'src/ui/ViewCarouselElementEditor';
+import Async from 'react-promise';
+import { pairs } from 'src/DisplayUrlCompression';
 
 interface IDisplayEditorProps {
   configuration?: IConfiguration,
@@ -65,6 +67,14 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
         </li>
       ))}
     </ul>
+    <Async
+      promise={pairs['v0'].pack(display)}
+      then={(packedUrl: string) => (
+        <Link to={`/urld/v0/${encodeURIComponent(packedUrl)}`}>
+          Staattinen linkki
+        </Link>
+      )}
+    />
     <button>
       Lisää uusi pysäkkinäkymä karuselliin.
     </button>

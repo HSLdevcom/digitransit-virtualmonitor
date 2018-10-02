@@ -43,7 +43,7 @@ Object.entries({ a: 'b'}).reduce((acc, [version, renderer]) => ({
 }),
 {})
 
-const pairs = Object.entries(renderers).reduce(
+export const pairs = Object.entries(renderers).reduce(
   (acc, [version, renderer]) => ({
     ...acc,
     [version]: {
@@ -63,5 +63,7 @@ const DisplayUrlCompression = ({version, packedString}: IDisplayUrlCompressionPr
     {pairs[version].renderer}
   </AsyncInflater>
 );
+
+// const displayUrlCompress = (version, ) => pairs[version].pack()
 
 export default DisplayUrlCompression;

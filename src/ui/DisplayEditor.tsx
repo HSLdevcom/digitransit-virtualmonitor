@@ -22,7 +22,7 @@ const ADD_STOP = gql`
   }
 `;
 
-interface Foo extends IDisplayEditorProps {
+interface IDisplayEditorPropsDefaulted extends IDisplayEditorProps {
   display: IDisplay,
 };
 
@@ -38,7 +38,7 @@ interface Foo extends IDisplayEditorProps {
 
 // };
 
-const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = ({configuration, display, t}: Foo & InjectedTranslateProps) => (
+const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = ({configuration, display, t}: IDisplayEditorPropsDefaulted & InjectedTranslateProps) => (
   <div>
     <h2>
       {(configuration)

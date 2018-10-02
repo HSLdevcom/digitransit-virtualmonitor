@@ -2,18 +2,18 @@ import gql from "graphql-tag";
 import * as React from "react";
 import { Mutation } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
+import Async from 'react-promise';
 import { Link } from "react-router-dom";
 
 import { IConfiguration, IDisplay } from "src/ui/ConfigurationList";
+import { pairs } from 'src/ui/DisplayUrlCompression';
 import LatLonEditor from "src/ui/LatLonEditor";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 import ViewCarouselElementEditor from 'src/ui/ViewCarouselElementEditor';
-import Async from 'react-promise';
-import { pairs } from 'src/DisplayUrlCompression';
 
 interface IDisplayEditorProps {
-  configuration?: IConfiguration,
-  display?: IDisplay,
+  readonly configuration?: IConfiguration,
+  readonly display?: IDisplay,
 };
 
 const ADD_STOP = gql`
@@ -23,7 +23,7 @@ const ADD_STOP = gql`
 `;
 
 interface IDisplayEditorPropsDefaulted extends IDisplayEditorProps {
-  display: IDisplay,
+  readonly display: IDisplay,
 };
 
 // {

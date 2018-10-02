@@ -4,12 +4,12 @@ import { IViewBase, IViewCarousel, IViewCarouselElement } from 'src/ui/Configura
 import View from 'src/ui/Views/View';
 
 interface IProps {
-  viewCarousel: IViewCarousel,
+  readonly viewCarousel: IViewCarousel,
 };
 
 interface IState {
-  carouselTimeout?: number,
-  carouselLoopTime: number,
+  readonly carouselTimeout?: number,
+  readonly carouselLoopTime: number,
 };
 
 class ViewCarousel extends React.Component<IProps, IState> {

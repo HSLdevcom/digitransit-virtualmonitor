@@ -4,8 +4,8 @@ import ReactMoment from 'react-moment';
 import { EpochMilliseconds, Milliseconds } from "src/time";
 
 export interface ITimeProps {
-  currentTime?: EpochMilliseconds,
-  updateInterval?: Milliseconds,
+  readonly currentTime?: EpochMilliseconds,
+  readonly updateInterval?: Milliseconds,
 };
 
 class AutoMoment extends React.Component<ITimeProps, any> {

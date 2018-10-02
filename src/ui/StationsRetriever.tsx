@@ -14,11 +14,11 @@ const STATIONS_QUERY = gql`
 `;
 
 interface IStation {
-	name: string,
+	readonly name: string,
 };
 
 interface IData {
-	stations: IStation[],
+	readonly stations: ReadonlyArray<IStation>,
 };
 
 class EmptyQuery extends Query<IData> {}

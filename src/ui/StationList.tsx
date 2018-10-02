@@ -1,11 +1,11 @@
 import * as React from "react";
 
 interface IStationProps {
-	name: string,
+	readonly name: string,
 };
 
 export interface IStationListProps {
-	stations: IStationProps[]
+	readonly stations: ReadonlyArray<IStationProps>
 };
 
 const StationList = (props: IStationListProps) => (

@@ -54,9 +54,9 @@ interface IConfigurationResponse {
 export type ConfigurationRetrieverResult = QueryResult<IConfigurationResponse>;
 
 type IConfigurationQuery = {
-  ids?: ReadonlyArray<string>,
+  readonly ids?: ReadonlyArray<string>,
 } | {
-  name?: string,
+  readonly name?: string,
 };
 
 class ConfigurationQuery extends Query<IConfigurationResponse, IConfigurationQuery> {}

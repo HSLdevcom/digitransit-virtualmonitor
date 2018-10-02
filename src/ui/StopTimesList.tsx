@@ -8,8 +8,8 @@ import {
 import { IStopTime } from 'src/ui/StopTimesRetriever'
 
 interface IOverrideStopName {
-  stop?: {
-    overrideStopName?: string,
+  readonly stop?: {
+    readonly overrideStopName?: string,
   },
 };
 

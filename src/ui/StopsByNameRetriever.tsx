@@ -15,23 +15,23 @@ export const STOPS_BY_NAME_QUERY = gql`
 `;
 
 export interface IStop {
-  name: string,
-  gtfsId: string,
+  readonly name: string,
+  readonly gtfsId: string,
 };
 
 export interface IStopsByNameResponse {
-	stops: IStop[],
+	readonly stops: ReadonlyArray<IStop>,
 };
 
 export interface IStopsByNameQuery {
-  phrase: string,
+  readonly phrase: string,
 };
 
 class StopsByNameQuery extends Query<IStopsByNameResponse, IStopsByNameQuery> {}
 
 export interface IStopsByNameRetrieverProps {
-  phrase: string,
-  stopRenderer?: IStopRenderFunc,
+  readonly phrase: string,
+  readonly stopRenderer?: IStopRenderFunc,
 };
 
 const StopsByNameRetriever = ({ phrase, stopRenderer, t }: IStopsByNameRetrieverProps & InjectedTranslateProps) => (

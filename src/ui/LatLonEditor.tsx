@@ -10,7 +10,7 @@ export interface ILatLon {
 };
 
 export interface ILatLonEditor {
-  editable?: boolean,
+  readonly editable?: boolean,
 };
 
 const dummy = () => null;

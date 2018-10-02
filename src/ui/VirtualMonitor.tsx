@@ -5,8 +5,8 @@ import HslLogo from "src/ui/HslLogo";
 import Titlebar from "src/ui/Titlebar";
 
 export interface IVirtualMonitorProps {
-  children?: React.ReactNode,
-  title?: React.ReactNode,
+  readonly children?: React.ReactNode,
+  readonly title?: React.ReactNode,
 };
 
 const VirtualMonitor = (props: IVirtualMonitorProps) => (

@@ -7,9 +7,9 @@ import HslLogo from 'src/ui/HslLogo';
 import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
 
-import DisplayUrlCompression from 'src/DisplayUrlCompression';
 import ConfigurationDisplay from 'src/ui/ConfigurationDisplay';
 import ConfigurationList from 'src/ui/ConfigurationList';
+import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
 import StopTimesView from 'src/ui/Views/StopTimesView';
 import DisplayEditor from 'src/ui/DisplayEditor';
 

@@ -12,21 +12,21 @@ query GetStop($stopId: String!) {
 `;
 
 export interface IStopInfo {
-  name: string,
+  readonly name: string,
 };
 
 interface IStopInfoResponse {
-  stop: IStopInfo,
+  readonly stop: IStopInfo,
 };
 
 interface IStopQuery {
-  stopId: string,
+  readonly stopId: string,
 };
 
 class StopInfoQuery extends Query<IStopInfoResponse, IStopQuery> {}
 
 export interface IStopInfoProps {
-  stopIds: string[],
+  readonly stopIds: ReadonlyArray<string>,
 };
 
 const StopName = (props: IStopInfoProps & InjectedTranslateProps) => (

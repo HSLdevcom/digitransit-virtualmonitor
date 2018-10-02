@@ -8,12 +8,12 @@ import { IStopRenderFunc } from "src/ui/StopList";
 import StopsByNameRetriever from "src/ui/StopsByNameRetriever";
 
 type IProps = RouteComponentProps<{
-  phrase?: string,
+  readonly phrase?: string,
 }> & InjectedTranslateProps;
 
 interface IState {
-  displayedRoutes: number,
-  searchPhrase: string,
+  readonly displayedRoutes: number,
+  readonly searchPhrase: string,
 };
 
 class StopSelector extends React.Component<IProps, IState> {

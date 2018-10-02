@@ -1,7 +1,7 @@
 import * as React from "react";
 
 export interface ITitlebarProps {
-  children: React.ReactNode;
+  readonly children: React.ReactNode;
 };
 
 export default (props: ITitlebarProps) => (

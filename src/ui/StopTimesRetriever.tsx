@@ -45,37 +45,37 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
 `;
 
 export interface IStopTime {
-  stop?: {
-    gtfsId: string,
-    overrideStopName?: string, // Added locally from configuration.
-    platformCode?: string,
+  readonly stop?: {
+    readonly gtfsId: string,
+    readonly overrideStopName?: string, // Added locally from configuration.
+    readonly platformCode?: string,
   },
-  scheduledArrival: DaySeconds,
-  realtimeArrival: DaySeconds,
-  arrivalDelay: Seconds,
-  scheduledDeparture: DaySeconds,
-  realtimeDeparture: DaySeconds,
-  departureDelay: Seconds,
-  timepoint: boolean,
-  realtime: boolean,
-  realtimeState: "SCHEDULED" | "UPDATED" | "CANCELED" | "ADDED" | "MODIFIED",
-  pickupType: "SCHEDULED" | "NONE" | "CALL_AGENCY" | "COORDINATE_WITH_DRIVER",
-  dropoffType: "SCHEDULED" | "NONE" | "CALL_AGENCY" | "COORDINATE_WITH_DRIVER",
-  serviceDay: EpochSecondsLocal,
-  stopHeadsign: string,
-  headsign: string,
-  trip: {
-    gtfsId: string,
-    route: {
-      shortName: string,
+  readonly scheduledArrival: DaySeconds,
+  readonly realtimeArrival: DaySeconds,
+  readonly arrivalDelay: Seconds,
+  readonly scheduledDeparture: DaySeconds,
+  readonly realtimeDeparture: DaySeconds,
+  readonly departureDelay: Seconds,
+  readonly timepoint: boolean,
+  readonly realtime: boolean,
+  readonly realtimeState: "SCHEDULED" | "UPDATED" | "CANCELED" | "ADDED" | "MODIFIED",
+  readonly pickupType: "SCHEDULED" | "NONE" | "CALL_AGENCY" | "COORDINATE_WITH_DRIVER",
+  readonly dropoffType: "SCHEDULED" | "NONE" | "CALL_AGENCY" | "COORDINATE_WITH_DRIVER",
+  readonly serviceDay: EpochSecondsLocal,
+  readonly stopHeadsign: string,
+  readonly headsign: string,
+  readonly trip: {
+    readonly gtfsId: string,
+    readonly route: {
+      readonly shortName: string,
     },
   },
 };
 
 interface IStop {
-  name: string,
-  gtfsId: string,
-  stoptimesWithoutPatterns?: IStopTime[]
+  readonly name: string,
+  readonly gtfsId: string,
+  readonly stoptimesWithoutPatterns?: ReadonlyArray<IStopTime>
 };
 
 export interface IStopTimesResponse {
@@ -85,8 +85,8 @@ export interface IStopTimesResponse {
 export type StopId = string
 
 export interface IStopTimesQuery {
-  stopIds: ReadonlyArray<StopId>,
-  numberOfDepartures: number,
+  readonly stopIds: ReadonlyArray<StopId>,
+  readonly numberOfDepartures: number,
 };
 
 export type StopTimesRetrieverQueryResult = QueryResult<IStopTimesResponse, IStopTimesQuery>;

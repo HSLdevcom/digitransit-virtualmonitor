@@ -8,8 +8,8 @@ import { IConfiguration, IStopTimesView } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 interface IViewEditorProps {
-  configuration?: IConfiguration,
-  view: IStopTimesView,
+  readonly configuration?: IConfiguration,
+  readonly view: IStopTimesView,
 };
 
 const ADD_STOP = gql`

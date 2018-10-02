@@ -4,7 +4,7 @@ import { IViewBase, IStopTimesView } from 'src/ui/ConfigurationList';
 import StopTimesViewEditor from 'src/ui/StopTimesViewEditor';
 
 export interface IViewEditorProps {
-  view: IViewBase,
+  readonly view: IViewBase,
 };
 
 const ViewEditor: React.SFC<IViewEditorProps> = ({ view }: IViewEditorProps) => {

@@ -14,8 +14,8 @@ const copyConfigurationToClipboard = (configuration: IConfiguration) => () => co
 const emptyFunc = () => {};
 
 interface IConfigEditorProps {
-  configuration: IConfiguration,
-  readonly?: boolean,
+  readonly configuration: IConfiguration,
+  readonly readonly?: boolean,
 };
 
 const saveConfigurationMutation = gql`

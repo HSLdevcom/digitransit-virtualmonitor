@@ -6,8 +6,8 @@ import ViewCarousel from 'src/ui/ViewCarousel';
 import createUrlCompression from 'src/urlCompression';
 
 interface IDisplayUrlCompressionProps {
-  version: string,
-  packedString: string,
+  readonly version: string,
+  readonly packedString: string,
 };
 
 const AsyncInflater = <T extends Object>({ children, promise }: { children: (unpacked: T) => React.ReactNode, promise: AsyncProps<T>['promise'] }) => (
@@ -53,8 +53,6 @@ export const pairs = Object.entries(renderers).reduce(
   }),
   {}
 );
-
-console.log(pairs);
 
 const DisplayUrlCompression = ({version, packedString}: IDisplayUrlCompressionProps) => (
   <AsyncInflater

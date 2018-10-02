@@ -5,9 +5,9 @@ import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/Con
 import ViewCarousel from 'src/ui/ViewCarousel';
 
 export interface IConfigurationDisplayProps {
-  title?: string,
-  configurationName: string,
-  displayName: string,
+  readonly title?: string,
+  readonly configurationName: string,
+  readonly displayName: string,
 };
 
 const ConfigurationDisplay = ({ configurationName, displayName, t }: IConfigurationDisplayProps & InjectedTranslateProps) => {

@@ -4,7 +4,7 @@ import { IViewCarouselElement, IStopTimesView } from 'src/ui/ConfigurationList';
 import ViewEditor from 'src/ui/ViewEditor';
 
 export interface ViewCarouselElementEditorProps {
-  viewCarouselElement: IViewCarouselElement,
+  readonly viewCarouselElement: IViewCarouselElement,
 };
 
 const ViewCarouselElementEditor: React.SFC<ViewCarouselElementEditorProps> = ({ viewCarouselElement }: ViewCarouselElementEditorProps) => (

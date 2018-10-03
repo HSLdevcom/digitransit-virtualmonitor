@@ -12,7 +12,7 @@ const configs: IConfigurations =
         },
         viewCarousel: [
           {
-            displayTime: 5000,
+            displaySeconds: 5,
             view: {
               pierColumnTitle: 'FromConfig',
               stops: {
@@ -64,7 +64,7 @@ const configs: IConfigurations =
             },
           },
           {
-            displayTime: 3000,
+            displaySeconds: 3,
             view: {
               stops: {
                 'HSL:1040601': {
@@ -103,7 +103,7 @@ const configs: IConfigurations =
         },
         viewCarousel: [
           {
-            displayTime: 2000,
+            displaySeconds: 2,
             view: {
               pierColumnTitle: 'Pysäkki',
               stops: {

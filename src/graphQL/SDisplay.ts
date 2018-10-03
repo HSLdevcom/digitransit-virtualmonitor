@@ -1,15 +1,18 @@
-import { GraphQLFloat, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLFloat, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString, GraphQLInt } from "graphql";
 
 import SPosition from "src/graphQL/SPosition";
 // import STranslatedString from "src/graphQL/STranslatedString";
 import SView from 'src/graphQL/SView';
 
-const SViewWithDisplayTime = new GraphQLObjectType({
+const SViewWithDisplaySeconds = new GraphQLObjectType({
   fields: {
-    displayTime: { type: GraphQLFloat },
-    view: { type: SView },
+    displaySeconds: {
+      description: 'How many seconds the view is displayed on carousel.',
+      type: new GraphQLNonNull(GraphQLInt),
+    },
+    view: { type: new GraphQLNonNull(SView) },
   },
-  name: 'ViewWithDisplayTime',
+  name: 'ViewWithDisplaySeconds',
 });
 
 const SDisplay = new GraphQLObjectType({
@@ -17,7 +20,7 @@ const SDisplay = new GraphQLObjectType({
     name: { type: GraphQLString },
     position: { type: SPosition },
     viewCarousel: {
-      type: new GraphQLNonNull(new GraphQLList(SViewWithDisplayTime)),
+      type: new GraphQLNonNull(new GraphQLList(SViewWithDisplaySeconds)),
     },
   },
   name: 'Display',

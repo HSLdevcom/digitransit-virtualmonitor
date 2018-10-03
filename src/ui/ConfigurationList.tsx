@@ -31,9 +31,11 @@ export interface IStopTimesView extends IViewBase {
   },
 };
 
+type AnyView = IStopTimesView;
+
 export interface IViewCarouselElement {
-  readonly view: IViewBase,
-  readonly displayTime: number,
+  readonly view: AnyView,
+  readonly displaySeconds: number,
 };
 
 export type IViewCarousel = ReadonlyArray<IViewCarouselElement>;
@@ -42,10 +44,7 @@ export interface IDisplay {
   readonly id?: string, // Remove ? at some point.
   readonly position?: ILatLon,
   readonly name: string,
-  readonly viewCarousel: ReadonlyArray<{
-    readonly view: IStopTimesView,
-    readonly displayTime: number,
-  }>,
+  readonly viewCarousel: IViewCarousel,
 };
 
 export interface IConfiguration {

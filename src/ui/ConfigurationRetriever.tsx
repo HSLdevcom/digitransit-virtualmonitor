@@ -10,6 +10,7 @@ fragment configurationFields on Configuration {
   displays {
       name
       viewCarousel {
+        displaySeconds
         view {
           title {
             fi

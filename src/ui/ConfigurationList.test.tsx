@@ -15,7 +15,7 @@ const testConfigs: IConfigurations = {
         },
         viewCarousel: [
           {
-            displayTime: 4,
+            displaySeconds: 4,
             view: {
               stops: {
                 'HSL:4700210': {

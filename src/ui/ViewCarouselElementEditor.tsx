@@ -9,7 +9,7 @@ export interface ViewCarouselElementEditorProps {
 
 const ViewCarouselElementEditor: React.SFC<ViewCarouselElementEditorProps> = ({ viewCarouselElement }: ViewCarouselElementEditorProps) => (
   <React.Fragment>
-    <div>Näytetty aika: {viewCarouselElement.displayTime} sekuntia</div>
+    <div>Näytetty aika: {viewCarouselElement.displaySeconds} sekuntia</div>
     <ViewEditor view={viewCarouselElement.view} />
   </React.Fragment>
 );

@@ -23,10 +23,10 @@ const AsyncInflater = <T extends Object>({ children, promise }: { children: (unp
 );
 
 // The strings are dictionaries to optimise the compression. The compression and decompression can use this string as a reference instead of
-// writing "displayTime", manually. This is especially effective for shorter data.
+// writing "displaySeconds", manually. This is especially effective for shorter data.
 // DO NOT MODIFY existing dictionaries as this would break all existing urls.
 const displayDictionaries = {
-  'v0': '{"displayTime":,"view":{"pierColumnTitle":","stops":[","},"title":{"fi","en"}}]}},"type":"stopTimes"HSL:10"]}',
+  'v0': '{"displaySeconds":,"view":{"pierColumnTitle":","stops":[","},"title":{"fi","en"}}]}},"type":"stopTimes"HSL:10"]}',
 };
 
 const renderers = {

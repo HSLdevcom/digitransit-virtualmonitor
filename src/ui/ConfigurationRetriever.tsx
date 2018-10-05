@@ -41,6 +41,7 @@ query getConfigurations($ids: [String], $name: String) {
   configurations(ids: $ids, name: $name) {
     ...configurationFields,
   }
+
   localConfigurations @client {
     ...configurationFields,
   }

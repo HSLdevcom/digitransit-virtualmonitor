@@ -10,7 +10,7 @@ interface IDisplayUrlCompressionProps {
   readonly packedString: string,
 };
 
-const AsyncInflater = <T extends Object>({ children, promise }: { children: (unpacked: T) => React.ReactNode, promise: AsyncProps<T>['promise'] }) => (
+const AsyncInflater = <T extends {}>({ children, promise }: { children: (unpacked: T) => React.ReactNode, promise: AsyncProps<T>['promise'] }) => (
   <Async
     promise={promise}
     then={(unpacked) => (

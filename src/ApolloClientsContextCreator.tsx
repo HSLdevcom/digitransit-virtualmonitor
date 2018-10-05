@@ -4,7 +4,7 @@ import * as React from "react";
 export interface IApolloClientContextType {
   // default: ReturnType<typeof ApolloBoostClient>,
   // [otherClients: string]: ReturnType<typeof ApolloBoostClient>,
-  readonly default: any,
+  readonly default?: any,
   readonly [otherClients: string]: any,
 };
 

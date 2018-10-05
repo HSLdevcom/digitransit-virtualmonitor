@@ -3,7 +3,8 @@
   "editor.tabSize": 2,
   "cSpell.words": [
     "Titlebar",
-    "gtfs"
+    "gtfs",
+    "loona"
   ],
   "typescript.tsdk": "node_modules/typescript/lib",
   "javascript.preferences.importModuleSpecifier": "non-relative",

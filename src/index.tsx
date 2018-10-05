@@ -1,5 +1,7 @@
-import ApolloBoostClient, { gql, InMemoryCache } from 'apollo-boost';
+import ApolloBoostClient, { gql, InMemoryCache, ApolloLink, HttpLink } from 'apollo-boost';
 import { ApolloCache } from 'apollo-cache';
+import { ApolloClient } from 'apollo-client';
+import { createLoona, LoonaProvider, state } from '@loona/react';
 import * as React from 'react';
 import { ApolloProvider } from 'react-apollo'
 import * as ReactDOM from 'react-dom';
@@ -12,8 +14,8 @@ import i18n from 'src/i18n';
 import 'src/index.css';
 import registerServiceWorker from 'src/registerServiceWorker';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
-
-const apolloCache = new InMemoryCache();
+import { IConfiguration } from 'src/ui/ConfigurationList';
+import schema from 'src/graphQL/schema';
 
 const resolvers = {
   Mutation: {
@@ -21,54 +23,86 @@ const resolvers = {
     //   cache.writeData();
     //   return null;
     // },
-    createLocalConfiguration: (_: any, { name }: { name: string }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
-      const currentLocalConfigurations = cache.readQuery({ query: gql`query { localConfigurations @client { name } }` });
+    modifyLocalConfigurations: (_: any, { name }: { name: string }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
 
-      cache.writeData({
-        data: {
-          localConfigurations: [
-            ...((currentLocalConfigurations && (currentLocalConfigurations as any).configurations) || []),
-            {
-              __typename: 'LocalConfiguration',
-              displays: [],
-              name,
-            },
-          ],
-        },
-      });
-      // return null;
+    },
+    createLocalConfiguration: (_: any, { name }: { name: string }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
+      return null;
+    },
+    createDisplay: (_: any, { configurationName, name }: { configurationName: string, name: string }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
+      return null;
     },
   }
 };
 
 const reittiOpasClient = new ApolloBoostClient({
-  cache: apolloCache,
+  cache: new InMemoryCache(),
   uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
 });
 
-const virtualMonitorClient = new ApolloBoostClient({
-  cache: new InMemoryCache(),
-  clientState: {
-    defaults: {
-      // configurations: [],
-      localConfigurations: [],
-    },
-    resolvers,
-    typeDefs: `
-      type LocalConfiguration {
-        name: String!
-      }
+const virtualMonitorCache = new InMemoryCache();
 
-      type Mutation {
-        createLocalConfiguration(name: String!)
-      }
-    `,
+@state({
+  defaults: {
+    derp: 10,
+    localConfigurations: [
+      {
+        name: 'blah',
+        displays: [
+          {
+            name: 'Blah',
+            viewCarousel: [
+              {
+                displaySeconds: 10,
+                view: {
+                  type: 'stopTimes',
+                  title: {
+                    fi: 'Arrr1',
+                    __typename: 'TranslatedString'
+                  },
+                  stops: [
+                    {
+                      gtfsId: 'HSL:4700210',
+                      __typename: 'Stop',
+                    },
+                  ],
+                  __typename: 'StopTimesView',
+                },
+                __typename: 'SViewWithDisplaySeconds',
+              },
+            ],
+            __typename: 'Display',
+          },
+        ],
+      __typename: 'LocalConfiguration',
+      },
+    ],
   },
-  uri: 'http://localhost:4000',
+  typeDefs: [
+    schema,
+    gql`
+      type Query {
+        localConfigurations: [Configuration!]!
+      }
+    `
+  ]
+})
+export class ViMoState {
+};
+
+const loona = createLoona(virtualMonitorCache);
+
+const virtualMonitorClient = new ApolloClient({
+  cache: virtualMonitorCache,
+  link: ApolloLink.from([
+    loona,
+    new HttpLink({
+      uri: 'http://localhost:4000',
+    })
+  ]),
 });
 
 export const contextValue: IApolloClientContextType = {
-  // default: reittiOpasClient,
   default: reittiOpasClient,
   reittiOpas: reittiOpasClient,
   virtualMonitor: virtualMonitorClient,
@@ -79,11 +113,13 @@ ReactDOM.render(
     <ApolloClientsContext.Consumer>
       {(apolloClientContexts) => (
         <ApolloProvider client={apolloClientContexts.default}>
-          <I18nextProvider i18n={i18n}>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </I18nextProvider>
+          <LoonaProvider loona={loona} states={[ViMoState]}>
+            <I18nextProvider i18n={i18n}>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </I18nextProvider>
+          </LoonaProvider>
         </ApolloProvider>
       )}
     </ApolloClientsContext.Consumer>

@@ -8,6 +8,7 @@
   ],
   "private": true,
   "dependencies": {
+    "@loona/react": "^1.0.0-beta.5",
     "@types/graphql": "^0.13.4",
     "apollo-boost": "^0.1.16",
     "copy-to-clipboard": "^3.0.8",

@@ -79,7 +79,7 @@ const ConfigurationList = ({configurations, t}: IConfigurationListProps & Inject
       }
       if (!result || !result.data) {
         return (<div>
-          {t('configurationRetrieveError')} - {result.error}
+          {t('configurationRetrieveError')} - {result.error ? result.error.message : 'Weird...'}
         </div>);
       }
       if (!result.data.configurations || (result.data.configurations.length <= 0)) {
@@ -89,7 +89,7 @@ const ConfigurationList = ({configurations, t}: IConfigurationListProps & Inject
       }
       return (
         <div>
-          {Object.values([...result.data.configurations, ...result.data.localConfigurations] ).map((configuration, i) => (
+          {Object.values([...result.data.configurations, ...(result.data.localConfigurations || [])] ).map((configuration, i) => (
             <ConfigEditor
               key={`${configuration.name}${i}`}
               configuration={configuration}

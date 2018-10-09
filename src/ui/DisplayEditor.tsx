@@ -99,6 +99,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
 
 DisplayEditor.defaultProps = {
   display: {
+    id: 'Temporary',
     name: 'Uusi näyttö',
     viewCarousel: [],
   },

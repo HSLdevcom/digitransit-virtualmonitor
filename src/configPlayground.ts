@@ -3,8 +3,10 @@ import { IConfigurations } from 'src/ui/ConfigurationList';
 const configs: IConfigurations =
 {
   'kamppi': {
+    id: 'Foobar',
     displays: {
       'kamppinäyttö': {
+        id: 'Foobar2',
         name: 'kamppinäyttö',
         position: {
           lat: 7.5,
@@ -12,45 +14,59 @@ const configs: IConfigurations =
         },
         viewCarousel: [
           {
+            id: 'Foobar3',
             displaySeconds: 5,
             view: {
+              id: 'Foobar4',
               pierColumnTitle: 'FromConfig',
               stops: {
                 'HSL:1040271': {
-                  gtfsId: 'HSL:1040271',
+                  id: 'Foobara1',
+                gtfsId: 'HSL:1040271',
                 },
                 'HSL:1040272': {
-                    gtfsId: 'HSL:1040272'
+                  id: 'Foobara2',
+                  gtfsId: 'HSL:1040272'
                 },
                 'HSL:1040273': {
-                    gtfsId: 'HSL:1040273'
+                  id: 'Foobara3',
+                  gtfsId: 'HSL:1040273'
                 },
                 'HSL:1040274': {
-                    gtfsId: 'HSL:1040274'
+                  id: 'Foobara4',
+                  gtfsId: 'HSL:1040274'
                 },
                 'HSL:1040275': {
-                    gtfsId: 'HSL:1040275'
+                  id: 'Foobara5',
+                  gtfsId: 'HSL:1040275'
                 },
                 'HSL:1040276': {
-                    gtfsId: 'HSL:1040276'
+                  id: 'Foobara6',
+                  gtfsId: 'HSL:1040276'
                 },
                 'HSL:1040277': {
-                    gtfsId: 'HSL:1040277'
+                  id: 'Foobara7',
+                  gtfsId: 'HSL:1040277'
                 },
                 'HSL:1040278': {
-                    gtfsId: 'HSL:1040278'
+                  id: 'Foobara8',
+                  gtfsId: 'HSL:1040278'
                 },
                 'HSL:1040279': {
-                    gtfsId: 'HSL:1040279'
+                  id: 'Foobara9',
+                  gtfsId: 'HSL:1040279'
                 },
                 'HSL:1040280': {
-                    gtfsId: 'HSL:1040280'
+                  id: 'Foobara10',
+                  gtfsId: 'HSL:1040280'
                 },
                 'HSL:1040281': {
+                  id: 'Foobara11',
                     gtfsId: 'HSL:1040281'
                 },
                 'HSL:1040282': {
-                    gtfsId: 'HSL:1040282'
+                  id: 'Foobara12',
+                  gtfsId: 'HSL:1040282'
                 },
               },
               title: {
@@ -64,13 +80,17 @@ const configs: IConfigurations =
             },
           },
           {
+            id: 'Foobarb',
             displaySeconds: 3,
             view: {
+              id: 'Foobarb2',
               stops: {
                 'HSL:1040601': {
+                  id: 'Foobarba1',
                   gtfsId: 'HSL:1040601',
                 },
                 'HSL:1040602': {
+                  id: 'Foobarba2',
                   gtfsId: 'HSL:1040602',
                 },
               },
@@ -94,8 +114,10 @@ const configs: IConfigurations =
     },
   },
   'koivukylä': {
+    id: 'Xyzzy',
     displays: {
       'eteläinenNäyttö': {
+        id: 'Xyzzyz',
         name: 'eteläinenNäyttö',
         position: {
           lat: 7.5,
@@ -103,15 +125,19 @@ const configs: IConfigurations =
         },
         viewCarousel: [
           {
+            id: 'Xyzzyx',
             displaySeconds: 2,
             view: {
+              id: 'Xyzza',
               pierColumnTitle: 'Pysäkki',
               stops: {
                 'HSL:4700210': {
+                  id: 'Xyzzb1',
                   gtfsId: 'HSL:4700210',
                   overrideStopName: 'LähiPysäkki',
                 },
                 'HSL:4740217': {
+                  id: 'Xyzzb2',
                   gtfsId: 'HSL:4740217',
                   overrideStopName: 'KaukoPysäkki',
                 },

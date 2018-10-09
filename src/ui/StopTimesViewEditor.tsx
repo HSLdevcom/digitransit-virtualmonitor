@@ -4,7 +4,7 @@ import { Mutation } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { IConfiguration, IStopTimesView } from "src/ui/ConfigurationList";
+import { IConfiguration, IStopTimesView, IStop } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 interface IViewEditorProps {
@@ -13,8 +13,8 @@ interface IViewEditorProps {
 };
 
 const ADD_STOP = gql`
-  mutation AddStop {
-    addStop @client
+  mutation AddStop($stop: Stop!) {
+    addStop(stop: $stop) @client
   }
 `;
 
@@ -61,8 +61,17 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps & Inject
           mutation={ADD_STOP}
           client={virtualMonitor}
         >
-          {addStop => (
-            <button onClick={() => addStop()}>
+            {(addStop) => (
+              <button onClick={() =>
+                addStop({
+                  variables: {
+                    stop: {
+                      gtfsId: 'HSL:4700212',
+                      __typename: 'Stop',
+                    },
+                  },
+                })
+              }>
               {t('prepareStop')}
             </button>
           )}

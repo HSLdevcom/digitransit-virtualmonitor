@@ -7,13 +7,15 @@ const typeMap: { [typename: string]: GraphQLObjectType } = {
   'stopTimes': SStopTimesView,
 };
 
-const SView = new GraphQLInterfaceType({
-  fields: {
-    title: { type: new GraphQLNonNull(STranslatedString) },
-    type: {
-      type: new GraphQLNonNull(GraphQLString),
-    },
+export const SViewFields = {
+  title: { type: new GraphQLNonNull(STranslatedString) },
+  type: {
+    type: new GraphQLNonNull(GraphQLString),
   },
+};
+
+const SView = new GraphQLInterfaceType({
+  fields: SViewFields,
   name: 'View',
   resolveType: (view) => typeMap[view.type],
 });

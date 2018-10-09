@@ -6,8 +6,10 @@ import ConfigurationList, { IConfigurationListProps, IConfigurations } from 'src
 
 const testConfigs: IConfigurations = {
   test: {
+    id: 'Testing c',
     displays: {
       'Test display': {
+        id: 'Testing 1',
         name: 'test display',
         position: {
           lat: 7.5,
@@ -15,13 +17,17 @@ const testConfigs: IConfigurations = {
         },
         viewCarousel: [
           {
+            id: 'Testing vc',
             displaySeconds: 4,
             view: {
+              id: 'Testing v',
               stops: {
                 'HSL:4700210': {
+                  id: 'Testing s1',
                   gtfsId: 'HSL:4700210',
                 },
                 'HSL:4740217': {
+                  id: 'Testing s2',
                   gtfsId: 'HSL:4740217',
                 },
               },

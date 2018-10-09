@@ -2,6 +2,7 @@ import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchem
 import initialConfigurations from 'src/configPlayground';
 import SConfiguration, { defaultValue as defaultConfiguration, SConfigurationInput } from "src/graphQL/SConfiguration";
 import SDisplay from 'src/graphQL/SDisplay';
+import SNode from 'src/graphQL/SNode';
 import SStopTimesView from 'src/graphQL/SStopTimesView';
 import SView from "src/graphQL/SView";
 import { IConfiguration, IDisplay, IViewBase } from 'src/ui/ConfigurationList';
@@ -114,6 +115,22 @@ const schema = new GraphQLSchema({
         },
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
       },
+      node: {
+        args: {
+          id: {
+            type: new GraphQLNonNull(GraphQLID),
+          },
+        },
+        resolve: (_, { id }: { id: string }) => {
+          if (id) {
+            if (current.configurations.find(c => c.id === id)) return (current.configurations.find(c => c.id === id));
+            if (current.views.find(v => v.id === id)) return (current.views.find(v => v.id === id));
+            if (current.displays.find(d => d.id === id)) return (current.displays.find(d => d.id === id));
+          }
+          return null;
+        },
+        type: SNode,
+      },
       views: {
         args: {
           ids: {
@@ -132,7 +149,7 @@ const schema = new GraphQLSchema({
     },
     name: 'Query',
   }),
-  types: [SStopTimesView],
+  types: [SNode, SStopTimesView],
 });
 
 export default schema;

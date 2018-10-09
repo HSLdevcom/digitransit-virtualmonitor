@@ -2,9 +2,11 @@ import { GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType,
 
 import SDisplay from "src/graphQL/SDisplay";
 import SPosition from "src/graphQL/SPosition";
+import SNode, { SNodeFields } from 'src/graphQL/SNode';
 
 const SConfiguration = new GraphQLObjectType({
   fields: {
+    ...SNodeFields,
     displays: {
       resolve: (root, {}) => Object.values(root.displays),
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
@@ -12,6 +14,7 @@ const SConfiguration = new GraphQLObjectType({
     name: { type: new GraphQLNonNull(GraphQLString) },
     position: { type: SPosition },
   },
+  interfaces: () => [SNode],
   name: 'Configuration',
 });
 

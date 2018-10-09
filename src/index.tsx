@@ -1,7 +1,7 @@
 import ApolloBoostClient, { gql, InMemoryCache, ApolloLink, HttpLink } from 'apollo-boost';
 import { ApolloCache } from 'apollo-cache';
 import { ApolloClient } from 'apollo-client';
-import { createLoona, LoonaProvider, state } from '@loona/react';
+import { createLoona, LoonaProvider, state, mutation, Context } from '@loona/react';
 import * as React from 'react';
 import { ApolloProvider } from 'react-apollo'
 import * as ReactDOM from 'react-dom';
@@ -14,7 +14,7 @@ import i18n from 'src/i18n';
 import 'src/index.css';
 import registerServiceWorker from 'src/registerServiceWorker';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
-import { IConfiguration } from 'src/ui/ConfigurationList';
+import { IConfiguration, IStop } from 'src/ui/ConfigurationList';
 import schema from 'src/graphQL/schema';
 
 const resolvers = {
@@ -39,6 +39,7 @@ const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),
   uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
 });
+(reittiOpasClient as any).name = 'reittiOpasClient';
 
 const virtualMonitorCache = new InMemoryCache();
 
@@ -74,7 +75,7 @@ const virtualMonitorCache = new InMemoryCache();
             __typename: 'Display',
           },
         ],
-      __typename: 'LocalConfiguration',
+      __typename: 'Configuration',
       },
     ],
   },
@@ -83,11 +84,62 @@ const virtualMonitorCache = new InMemoryCache();
     gql`
       type Query {
         localConfigurations: [Configuration!]!
+        derp: Int!
       }
     `
   ]
 })
 export class ViMoState {
+  @mutation('addStop')
+  addStop({ stop }: { stop: IStop }, context: Context) {
+    context.patchQuery(
+      gql`
+        {
+          localConfigurations @client {
+            # displays {
+            #   viewCarousel {
+            #     view {
+            #       stops
+            #     }
+            #   }
+            # }
+          }
+        }
+      `,
+      (wellThen: ReadonlyArray<IConfiguration>) => [
+        {
+          name: 'blog',
+          displays: [
+            {
+              name: 'BLOGOG',
+              viewCarousel: [
+                {
+                  displaySeconds: 10,
+                  view: {
+                    type: 'stopTimes',
+                    title: {
+                      fi: 'Arrr1',
+                      __typename: 'TranslatedString'
+                    },
+                    stops: [
+                      {
+                        gtfsId: 'HSL:4700210',
+                        __typename: 'Stop',
+                      },
+                    ],
+                    __typename: 'StopTimesView',
+                  },
+                  __typename: 'SViewWithDisplaySeconds',
+                },
+              ],
+              __typename: 'Display',
+            },
+          ],
+        __typename: 'Configuration',
+        },
+      ]
+    );
+  }
 };
 
 const loona = createLoona(virtualMonitorCache);
@@ -101,6 +153,7 @@ const virtualMonitorClient = new ApolloClient({
     })
   ]),
 });
+(virtualMonitorClient as any).name = 'VirtualMonitorClient';
 
 export const contextValue: IApolloClientContextType = {
   default: reittiOpasClient,
@@ -112,7 +165,7 @@ ReactDOM.render(
   (<ApolloClientsContext.Provider value={contextValue}>
     <ApolloClientsContext.Consumer>
       {(apolloClientContexts) => (
-        <ApolloProvider client={apolloClientContexts.default}>
+        <ApolloProvider client={apolloClientContexts.virtualMonitor}>
           <LoonaProvider loona={loona} states={[ViMoState]}>
             <I18nextProvider i18n={i18n}>
               <BrowserRouter>

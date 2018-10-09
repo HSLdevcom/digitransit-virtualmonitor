@@ -8,17 +8,20 @@ import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/Con
 import { ILatLon } from "src/ui/LatLonEditor";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
+interface INode {
+  readonly id: string,
+};
+
 interface ITranslatedString {
   readonly [twoLetterLanguageCode: string]: string,
 };
 
-export interface IStop {
+export interface IStop extends INode {
   readonly gtfsId: string,
   readonly overrideStopName?: string,
 };
 
-export interface IViewBase {
-  readonly id?: string, // Remove ? at some point.
+export interface IViewBase extends INode {
   readonly title?: ITranslatedString,
   readonly type: string,
 };
@@ -33,22 +36,20 @@ export interface IStopTimesView extends IViewBase {
 
 type AnyView = IStopTimesView;
 
-export interface IViewCarouselElement {
+export interface IViewCarouselElement extends INode {
   readonly view: AnyView,
   readonly displaySeconds: number,
 };
 
 export type IViewCarousel = ReadonlyArray<IViewCarouselElement>;
 
-export interface IDisplay {
-  readonly id?: string, // Remove ? at some point.
+export interface IDisplay extends INode {
   readonly position?: ILatLon,
   readonly name: string,
   readonly viewCarousel: IViewCarousel,
 };
 
-export interface IConfiguration {
-  readonly id?: string, // Remove ? at some point.
+export interface IConfiguration extends INode {
   readonly name: string,
   readonly displays: {
     readonly [displayId: string]: IDisplay,

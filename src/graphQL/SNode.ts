@@ -16,7 +16,7 @@ export const SNodeFields = {
 const SNode = new GraphQLInterfaceType({
   fields: SNodeFields,
   name: 'Node',
-  resolveType: node => typeMap[node.id],
+  resolveType: node => node.__ownTypeName, // The type is best resolved when at Root resolver. See schema.ts where we set __ownTypeName.
 });
 
 export default SNode;

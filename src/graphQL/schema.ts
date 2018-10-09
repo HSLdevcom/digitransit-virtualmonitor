@@ -123,9 +123,9 @@ const schema = new GraphQLSchema({
         },
         resolve: (_, { id }: { id: string }) => {
           if (id) {
-            if (current.configurations.find(c => c.id === id)) return (current.configurations.find(c => c.id === id));
-            if (current.views.find(v => v.id === id)) return (current.views.find(v => v.id === id));
-            if (current.displays.find(d => d.id === id)) return (current.displays.find(d => d.id === id));
+            if (current.configurations.find(c => c.id === id)) return ({ ...(current.configurations.find(c => c.id === id)), __ownTypeName: 'Configuration' });
+            if (current.views.find(v => v.id === id)) return ({ ...(current.views.find(v => v.id === id)), __ownTypeName: 'Configuration' });;
+            if (current.displays.find(d => d.id === id)) return ({ ...(current.displays.find(d => d.id === id)), __ownTypeName: 'Configuration' });;
           }
           return null;
         },

@@ -100,21 +100,21 @@ const schema = new GraphQLSchema({
         resolve: configurationsResolve,
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SConfiguration))),
       },
-      displays: {
-        args: {
-          ids: {
-            defaultValue: null,
-            type: new GraphQLList(GraphQLID),
-          },
-        },
-        resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
-          if (ids) {
-            return current.displays.filter(d => d.id && ids.includes(d.id)) 
-          }
-          return Object.values(current.displays);
-        },
-        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
-      },
+      // displays: {
+      //   args: {
+      //     ids: {
+      //       defaultValue: null,
+      //       type: new GraphQLList(GraphQLID),
+      //     },
+      //   },
+      //   resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
+      //     if (ids) {
+      //       return current.displays.filter(d => d.id && ids.includes(d.id)) 
+      //     }
+      //     return Object.values(current.displays);
+      //   },
+      //   type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
+      // },
       node: {
         args: {
           id: {
@@ -131,21 +131,21 @@ const schema = new GraphQLSchema({
         },
         type: SNode,
       },
-      views: {
-        args: {
-          ids: {
-            defaultValue: null,
-            type: new GraphQLList(GraphQLID),
-          },
-        },
-        resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
-          if (ids) {
-            return current.views.filter(v => v.id && ids.includes(v.id)) 
-          }
-          return Object.values(current.views);
-        },
-        type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SView))),
-      },
+      // views: {
+      //   args: {
+      //     ids: {
+      //       defaultValue: null,
+      //       type: new GraphQLList(GraphQLID),
+      //     },
+      //   },
+      //   resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
+      //     if (ids) {
+      //       return current.views.filter(v => v.id && ids.includes(v.id)) 
+      //     }
+      //     return Object.values(current.views);
+      //   },
+      //   type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SView))),
+      // },
     },
     name: 'Query',
   }),

@@ -49,45 +49,6 @@ const virtualMonitorCache = new InMemoryCache();
 @state({
   defaults: {
     localConfigurations: [
-/*       {
-        id: uuidv4(),
-        name: 'blah',
-        position: null,
-        displays: [
-          {
-            id: uuidv4(),
-            name: 'Blah',
-            position: null,
-            viewCarousel: [
-              {
-                id: uuidv4(),
-                displaySeconds: 10,
-                view: {
-                  id: uuidv4(),
-                  type: 'stopTimes',
-                  title: {
-                    en: 'Arrr1',
-                    fi: 'Arrr1',
-                    __typename: 'TranslatedString'
-                  },
-                  stops: [
-                    {
-                      id: uuidv4(),
-                      gtfsId: 'HSL:4700210',
-                      overrideStopName: null,
-                      __typename: 'Stop',
-                    },
-                  ],
-                  __typename: 'StopTimesView',
-                },
-                __typename: 'SViewWithDisplaySeconds',
-              },
-            ],
-            __typename: 'Display',
-          },
-        ],
-        __typename: 'Configuration',
-      }, */
     ],
   },
   typeDefs: [
@@ -117,8 +78,8 @@ export class ViMoState {
                 id: uuidv4(),
                 type: 'stopTimes',
                 title: {
-                  en: 'derp',
-                  fi: 'derp',
+                  en: '',
+                  fi: '',
                   __typename: 'TranslatedString',
                 },
                 stops: [],

@@ -47,77 +47,56 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps & Inject
           stops={Object.values(view.stops).map(stop => stop.gtfsId)}
         >
           {(result: QueryResult<IStopInfoResponse>): React.ReactNode => {
-            if (result.loading || result.error) {
-              return (
-                <>
-                  {result.loading
-                    ? <div>{t('loadingInfo')}</div>
-                    : null}
-                  {result.error
-                    ? <div>{t('error')} {result.error.message}</div>
-                    : null}
-                  <ul>
-                    {Object.values(view.stops).map(s => (
-                      <li key={s.gtfsId}>
-                        <Link
-                          to={`/stop/${s.gtfsId}`}
-                        >
-                          {/* {s.name} pysäkkinumero {s.code || ''} */}
-                          {s.gtfsId}
-                        </Link>
-                        <Mutation
-                          mutation={REMOVE_STOP}
-                          client={virtualMonitor}
-                        >
-                          {(removeStopFromStopTimesView) => (
-                            <button onClick={() => removeStopFromStopTimesView({
-                              variables: {
-                                stopId: s.id,
-                              },
-                            })}>
-                              {t('removeStop')}
-                            </button>
-                          )}
-                        </Mutation>
-                      </li>
-                    ))}
-                  </ul>
-                </>
-              );
-            }
             return (
               <>
+                {result.loading
+                  ? <div>{t('loadingInfo')}</div>
+                  : null}
+                {result.error
+                  ? <div>{t('error')} {result.error.message}</div>
+                  : null}
                 <ul>
                   {Object.values(view.stops).map(s => {
-                    const stopInfo = result.data!.stopInfos.find(stopInfo => stopInfo.gtfsId === s.gtfsId)
-                    if (!stopInfo) {
+                    const stopInfo = (!result.loading && !result.error)
+                      ? result.data!.stopInfos.find(stopInfo => stopInfo.gtfsId === s.gtfsId)
+                      : undefined;
+                    const removeStopButton = (
+                      <Mutation
+                        mutation={REMOVE_STOP}
+                        client={virtualMonitor}
+                      >
+                        {(removeStopFromStopTimesView) => (
+                          <button onClick={() => removeStopFromStopTimesView({
+                            variables: {
+                              stopId: s.id,
+                            },
+                          })}>
+                            {t('removeStop')}
+                          </button>
+                        )}
+                      </Mutation>
+                    );
+
+                    if (!result.loading && !result.error && !stopInfo) {
                       return (
-                        <li key={s.gtfsId}>
-                          Pysäkkiä Id:llä {s.gtfsId} ei löytynyt.
-                        </li>
-                      );
-                    }
+                          <li key={s.gtfsId}>
+                            Pysäkkiä Id:llä {s.gtfsId} ei löytynyt.
+                            {removeStopButton}
+                          </li>
+                        );
+                      }
+
                     return (
                       <li key={s.gtfsId}>
                         <Link
                           to={`/stop/${s.gtfsId}`}
                         >
-                          {stopInfo.name} (pysäkkinumero {stopInfo.code || ''})
+                          {stopInfo
+                            ? (<span>{stopInfo.name} (pysäkkinumero {stopInfo.code || ''})</span>)
+                            : (<span>{s.gtfsId}</span>)
+                          }
                         </Link>
-                        <Mutation
-                          mutation={REMOVE_STOP}
-                          client={virtualMonitor}
-                        >
-                          {(removeStopFromStopTimesView) => (
-                            <button onClick={() => removeStopFromStopTimesView({
-                              variables: {
-                                stopId: s.id,
-                              },
-                            })}>
-                              {t('removeStop')}
-                            </button>
-                          )}
-                        </Mutation>
+                        {removeStopButton}
                       </li>
                     );
                   })}
@@ -130,36 +109,25 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps & Inject
           mutation={ADD_STOP}
           client={virtualMonitor}
         >
-            {(addStopToStopTimesView) => (
-              <>
-                <UnroutedStopSelector stopRenderer={(stop: StopsByNameRetrieverIStop) => (
-                  <>
-                    <span>{stop.name}</span>
-                    <button onClick={() => addStopToStopTimesView({
-                      variables: {
-                        stopTimesViewId: view.id,
-                        stop: {
-                          gtfsId: stop.gtfsId,
-                          __typename: 'Stop',
-                        },
+          {(addStopToStopTimesView) => (
+            <UnroutedStopSelector
+              stopRenderer={(stop: StopsByNameRetrieverIStop) => (
+                <>
+                  <span>{stop.name}</span>
+                  <button onClick={() => addStopToStopTimesView({
+                    variables: {
+                      stopTimesViewId: view.id,
+                      stop: {
+                        gtfsId: stop.gtfsId,
+                        __typename: 'Stop',
                       },
-                    })}>
-                      {t('prepareStop')}
-                    </button>
-                  </>
-                )} />
-                <button onClick={() => addStopToStopTimesView({
-                  variables: {
-                    stopTimesViewId: view.id,
-                    stop: {
-                      gtfsId: 'HSL:4700212',
-                      __typename: 'Stop',
                     },
-                  },
-                })}>
-                {t('prepareStop')}
-              </button>
-            </>
+                  })}>
+                    {t('prepareStop')}
+                  </button>
+                </>
+              )}
+            />
           )}
         </Mutation>
       </div>

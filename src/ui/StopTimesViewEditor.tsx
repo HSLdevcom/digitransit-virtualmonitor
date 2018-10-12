@@ -4,8 +4,10 @@ import { Mutation } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { Link } from "react-router-dom";
 
+import { IStop as StopsByNameRetrieverIStop } from "src/ui/StopsByNameRetriever";
 import { IConfiguration, IStopTimesView, IStop } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
+import UnroutedStopSelector from 'src/ui/UnroutedStopSelector';
 
 interface IViewEditorProps {
   readonly configuration?: IConfiguration,
@@ -82,17 +84,35 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps & Inject
           client={virtualMonitor}
         >
             {(addStopToStopTimesView) => (
-              <button onClick={() => addStopToStopTimesView({
-                variables: {
-                  stopTimesViewId: view.id,
-                  stop: {
-                    gtfsId: 'HSL:4700212',
-                    __typename: 'Stop',
+              <>
+                <UnroutedStopSelector stopRenderer={(stop: StopsByNameRetrieverIStop) => (
+                  <>
+                    <span>{stop.name}</span>
+                    <button onClick={() => addStopToStopTimesView({
+                      variables: {
+                        stopTimesViewId: view.id,
+                        stop: {
+                          gtfsId: stop.gtfsId,
+                          __typename: 'Stop',
+                        },
+                      },
+                    })}>
+                      {t('prepareStop')}
+                    </button>
+                  </>
+                )} />
+                <button onClick={() => addStopToStopTimesView({
+                  variables: {
+                    stopTimesViewId: view.id,
+                    stop: {
+                      gtfsId: 'HSL:4700212',
+                      __typename: 'Stop',
+                    },
                   },
-                },
-              })}>
-              {t('prepareStop')}
-            </button>
+                })}>
+                {t('prepareStop')}
+              </button>
+            </>
           )}
         </Mutation>
       </div>

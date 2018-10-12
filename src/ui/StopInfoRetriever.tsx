@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import * as React from "react";
-import { Query, QueryResult, QueryProps } from "react-apollo";
+import { Query, QueryProps } from "react-apollo";
 
 import { StopId } from 'src/ui/StopTimesRetriever';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
@@ -22,7 +22,7 @@ export interface IStopInfoResponse {
     name: string,
     code?: string,
     desc?: string,
-    gtfsId: string,
+    gtfsId: StopId,
     platformCode: string,
   }>
 };
@@ -32,7 +32,7 @@ interface IStopInfoVariables {
 };
 
 interface IStopInfoRetrieverProps {
-  readonly children: QueryProps['children'],
+  readonly children: QueryProps<IStopInfoResponse, IStopInfoVariables>['children'],
   readonly stops: ReadonlyArray<StopId>,
 };
 
@@ -42,10 +42,10 @@ const StopInfoRetriver = ({ children, stops }: IStopInfoRetrieverProps) => (
     {({ reittiOpas }) => (
       <StopInfoQuery
         client={reittiOpas}
+        query={STOP_INFO_QUERY}
         variables={{
           stopIds: stops
         }}
-        query={STOP_INFO_QUERY}
       >
         {children}
       </StopInfoQuery>

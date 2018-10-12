@@ -1,36 +1,25 @@
 import * as React from "react";
 import { InjectedTranslateProps, translate } from "react-i18next";
-import { RouteComponentProps/* , withRouter */ } from 'react-router';
-import { Link } from "react-router-dom";
 import { isString } from "util";
 
-import { IStopRenderFunc } from "src/ui/StopList";
-import StopsByNameRetriever, { IStopsByNameResponse, IStopsByNameQuery } from "src/ui/StopsByNameRetriever";
+import StopsByNameRetriever, { IStopsByNameResponse, IStopsByNameQuery, IStopWithName } from "src/ui/StopsByNameRetriever";
 import { QueryResult } from 'react-apollo';
 
 type IProps = {
+  readonly children?: (stops: ReadonlyArray<IStopWithName>) => React.ReactNode,
   readonly phrase?: string,
-  readonly stopRenderer: IStopRenderFunc,
 } & InjectedTranslateProps;
 
 interface IState {
-  readonly displayedRoutes: number,
   readonly searchPhrase: string,
 };
 
-class UnroutedStopSelector extends React.Component<IProps, IState> {
+class StopSearch extends React.Component<IProps, IState> {
   constructor (props: IProps) {
     super(props)
     this.state = {
-      displayedRoutes: 7,
-      searchPhrase: props.phrase ? props.phrase : '',
+      searchPhrase: props.phrase || '',
     };
-  }
-
-  public componentDidUpdate(prevProps: IProps, prevState: IState) {
-    if (this.state.searchPhrase !== prevState.searchPhrase) {
-      // this.props.history.push(`/searchStop/${this.state.searchPhrase}`);
-    }
   }
 
   public render() { return(
@@ -50,21 +39,6 @@ class UnroutedStopSelector extends React.Component<IProps, IState> {
             type={'text'}
             name={'searchPhrase'}
             defaultValue={this.props.phrase || ''}
-          />
-        </div>children
-        <div>
-          <label htmlFor={'displayedRoutesInput'}>
-          {this.props.t('stopSearcherDisplayedResultCount')}:&nbsp;
-          </label>
-          <input
-            id={'displayedRoutesInput'}
-            type={'number'}
-            name={'searchPhrase'}
-            value={this.state.displayedRoutes}
-            onChange={this.onDisplayedRoutesChange}
-            max={999}
-            maxLength={3}
-            style={{ width: '3em' }}
           />
         </div>
         <button
@@ -94,14 +68,17 @@ class UnroutedStopSelector extends React.Component<IProps, IState> {
                     {this.props.t('stopSearchNotFound', { searchPhrase: this.state.searchPhrase })}
                   </div>);
                 }
-                return (
-                  <ul>
-                    {result.data.stops.map((stop) => (
-                      <li key={stop.gtfsId}>
-                        {this.props.stopRenderer(stop)}
-                      </li>
-                    ))}
-                  </ul>
+                return (this.props.children
+                  ? this.props.children(result.data.stops)
+                  : (
+                    <ul>
+                      {result.data.stops.map((stop) => (
+                        <li key={stop.gtfsId}>
+                          {stop.name} - {stop.gtfsId}
+                        </li>
+                      ))}
+                    </ul>
+                  )
                 );
               }}
             </StopsByNameRetriever>
@@ -118,10 +95,6 @@ class UnroutedStopSelector extends React.Component<IProps, IState> {
     const data = new FormData(event.currentTarget);
     this.setState({ searchPhrase: isString(data.get('searchPhrase')) ? (data.get('searchPhrase') as string) : '' });
   }
-
-  private onDisplayedRoutesChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
-    this.setState({ displayedRoutes: parseFloat(event.currentTarget.value) });
-  }
 }
 
-export default translate('translations')(UnroutedStopSelector);
+export default translate('translations')(StopSearch);

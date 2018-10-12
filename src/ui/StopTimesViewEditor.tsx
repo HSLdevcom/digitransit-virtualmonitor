@@ -7,8 +7,8 @@ import { Link } from "react-router-dom";
 import { IStopWithName as StopsByNameRetrieverIStop } from "src/ui/StopsByNameRetriever";
 import { IConfiguration, IStopTimesView, IStop } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
-import UnroutedStopSelector from 'src/ui/UnroutedStopSelector';
 import StopInfoRetriver, { IStopInfoResponse } from 'src/ui/StopInfoRetriever';
+import StopSearch from 'src/ui/StopSearch';
 
 interface IViewEditorProps {
   readonly configuration?: IConfiguration,
@@ -110,24 +110,32 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps & Inject
           client={virtualMonitor}
         >
           {(addStopToStopTimesView) => (
-            <UnroutedStopSelector
-              stopRenderer={(stop: StopsByNameRetrieverIStop) => (
-                <>
-                  <span>{stop.name}</span>
-                  <button onClick={() => addStopToStopTimesView({
-                    variables: {
-                      stopTimesViewId: view.id,
-                      stop: {
-                        gtfsId: stop.gtfsId,
-                        __typename: 'Stop',
-                      },
-                    },
-                  })}>
-                    {t('prepareStop')}
-                  </button>
-                </>
+            <StopSearch>
+              {(stops: ReadonlyArray<StopsByNameRetrieverIStop>) => (
+                <ul>
+                  {stops.map((stop) => (
+                    <li key={stop.gtfsId}>
+                      <Link
+                        to={`/stop/${stop.gtfsId}`}
+                      >
+                      {stop.name} - {stop.gtfsId}
+                      </Link>
+                      <button onClick={() => addStopToStopTimesView({
+                        variables: {
+                          stopTimesViewId: view.id,
+                          stop: {
+                            gtfsId: stop.gtfsId,
+                            __typename: 'Stop',
+                          },
+                        },
+                      })}>
+                        {t('prepareStop')}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               )}
-            />
+            </StopSearch>
           )}
         </Mutation>
       </div>

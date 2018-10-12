@@ -1,9 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
-import { Query, QueryResult } from "react-apollo";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { Query, QueryProps } from "react-apollo";
 
-import StopList, { IStopRenderFunc } from 'src/ui/StopList';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
 export const STOPS_BY_NAME_QUERY = gql`
@@ -15,27 +13,27 @@ export const STOPS_BY_NAME_QUERY = gql`
 	}
 `;
 
-export interface IStop {
+export interface IStopWithName {
   readonly name: string,
   readonly gtfsId: string,
 };
 
 export interface IStopsByNameResponse {
-	readonly stops: ReadonlyArray<IStop>,
+	readonly stops: ReadonlyArray<IStopWithName>,
 };
 
 export interface IStopsByNameQuery {
   readonly phrase: string,
 };
 
-class StopsByNameQuery extends Query<IStopsByNameResponse, IStopsByNameQuery> {}
 
 export interface IStopsByNameRetrieverProps {
+  readonly children: QueryProps<IStopsByNameResponse, IStopsByNameQuery>['children'],
   readonly phrase: string,
-  readonly stopRenderer?: IStopRenderFunc,
 };
 
-const StopsByNameRetriever = ({ phrase, stopRenderer, t }: IStopsByNameRetrieverProps & InjectedTranslateProps) => (
+class StopsByNameQuery extends Query<IStopsByNameResponse, IStopsByNameQuery> {}
+const StopsByNameRetriever = ({ phrase, children }: IStopsByNameRetrieverProps) => (
   <ApolloClientsContext.Consumer>
     {({ reittiOpas }) => (
       <StopsByNameQuery
@@ -43,30 +41,10 @@ const StopsByNameRetriever = ({ phrase, stopRenderer, t }: IStopsByNameRetriever
         query={STOPS_BY_NAME_QUERY}
         variables={{ phrase }}
       >
-        {(result: QueryResult<IStopsByNameResponse, IStopsByNameQuery>): React.ReactNode => {
-          if (result.loading) {
-            return (<div>{t('loading')}</div>);
-          }
-          if (!result || !result.data) {
-            return (<div>
-              {t('stopSearchError', { searchPhrase: phrase })}
-            </div>);
-          }
-          if (!result.data.stops || result.data.stops.length === 0) {
-            return (<div>
-              {t('stopSearchNotFound', { searchPhrase: phrase })}
-            </div>);
-          }
-          return (
-            <StopList
-              stops={result.data.stops}
-              stopRenderer={stopRenderer}
-            />
-          );
-        }}
+        {children}
       </StopsByNameQuery>
     )}
   </ApolloClientsContext.Consumer>
 );
 
-export default translate('translations')(StopsByNameRetriever);
+export default StopsByNameRetriever;

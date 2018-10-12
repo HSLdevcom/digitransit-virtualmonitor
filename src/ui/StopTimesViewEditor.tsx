@@ -4,7 +4,7 @@ import { Mutation, QueryResult } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { IStop as StopsByNameRetrieverIStop } from "src/ui/StopsByNameRetriever";
+import { IStopWithName as StopsByNameRetrieverIStop } from "src/ui/StopsByNameRetriever";
 import { IConfiguration, IStopTimesView, IStop } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 import UnroutedStopSelector from 'src/ui/UnroutedStopSelector';

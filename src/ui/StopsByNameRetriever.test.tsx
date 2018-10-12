@@ -41,11 +41,15 @@ const mocks = [
 
 const WrappedStopsByNameRetriever = (props: IStopsByNameRetrieverProps) => (
   <MockedProvider mocks={mocks} addTypename={false} >
-    <StopsByNameRetriever {...props} />
+    <StopsByNameRetriever {...props}>
+      {props.children}
+    </StopsByNameRetriever>
   </MockedProvider>
 );
 
 it('renders without crashing', () => {
-  const renderer = create(<WrappedStopsByNameRetriever phrase={'Pasila'} />);
+  const renderer = create(<WrappedStopsByNameRetriever phrase={'Pasila'}>
+    {(stop) => <></>}
+  </WrappedStopsByNameRetriever>);
   renderer.unmount();
 });

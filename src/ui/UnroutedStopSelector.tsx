@@ -5,11 +5,12 @@ import { Link } from "react-router-dom";
 import { isString } from "util";
 
 import { IStopRenderFunc } from "src/ui/StopList";
-import StopsByNameRetriever from "src/ui/StopsByNameRetriever";
+import StopsByNameRetriever, { IStopsByNameResponse, IStopsByNameQuery } from "src/ui/StopsByNameRetriever";
+import { QueryResult } from 'react-apollo';
 
 type IProps = {
   readonly phrase?: string,
-  readonly stopRenderer?: IStopRenderFunc,
+  readonly stopRenderer: IStopRenderFunc,
 } & InjectedTranslateProps;
 
 interface IState {
@@ -78,8 +79,32 @@ class UnroutedStopSelector extends React.Component<IProps, IState> {
             <span>{this.props.t('stopSearcherSearching', { searchPhrase: this.state.searchPhrase })}</span>
             <StopsByNameRetriever
               phrase={this.state.searchPhrase}
-              stopRenderer={this.props.stopRenderer}
-            />
+            >
+              {(result: QueryResult<IStopsByNameResponse, IStopsByNameQuery>): React.ReactNode => {
+                if (result.loading) {
+                  return (<div>{this.props.t('loading')}</div>);
+                }
+                if (!result || !result.data) {
+                  return (<div>
+                    {this.props.t('stopSearchError', { searchPhrase: this.state.searchPhrase })}
+                  </div>);
+                }
+                if (!result.data.stops || result.data.stops.length === 0) {
+                  return (<div>
+                    {this.props.t('stopSearchNotFound', { searchPhrase: this.state.searchPhrase })}
+                  </div>);
+                }
+                return (
+                  <ul>
+                    {result.data.stops.map((stop) => (
+                      <li key={stop.gtfsId}>
+                        {this.props.stopRenderer(stop)}
+                      </li>
+                    ))}
+                  </ul>
+                );
+              }}
+            </StopsByNameRetriever>
           </div>
         )
         : null

@@ -27,7 +27,8 @@
     "react-moment": "^0.7.9",
     "react-promise": "^2.0.3",
     "react-router-dom": "^4.3.1",
-    "react-scripts-ts": "^2.17.0"
+    "react-scripts-ts": "^2.17.0",
+    "uuid": "^3.3.2"
   },
   "scripts": {
     "prepare": "patch-package",
@@ -47,6 +48,7 @@
     "@types/react-i18next": "^7.8.1",
     "@types/react-router-dom": "^4.3.0",
     "@types/react-test-renderer": "^16.0.1",
+    "@types/uuid": "^3.4.4",
     "react-test-renderer": "^16.4.1",
     "ts-node": "^7.0.1",
     "typescript": "^3.1.1"

@@ -16,11 +16,11 @@ interface IDisplayEditorProps {
   readonly display?: IDisplay,
 };
 
-const ADD_STOP = gql`
-  mutation AddStop {
-    addStop @client
-  }
-`;
+// const ADD_STOP = gql`
+//   mutation AddStop {
+//     addStop @client
+//   }
+// `;
 
 interface IDisplayEditorPropsDefaulted extends IDisplayEditorProps {
   readonly display: IDisplay,
@@ -80,7 +80,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
     <button>
       Lisää uusi pysäkkinäkymä karuselliin.
     </button>
-    <ApolloClientsContext.Consumer>
+    {/* <ApolloClientsContext.Consumer>
       {({ virtualMonitor }) =>
         (<Mutation
           mutation={ADD_STOP}
@@ -93,7 +93,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
           )}
         </Mutation>)
       }
-    </ApolloClientsContext.Consumer>
+    </ApolloClientsContext.Consumer> */}
   </div>
 );
 

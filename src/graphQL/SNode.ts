@@ -13,6 +13,13 @@ export const SNodeFields = {
   },
 };
 
+export const SNodeInputFields = {
+  id: {
+    type: GraphQLString,
+    description: 'The unique ID of an object',
+  },
+};
+
 const SNode = new GraphQLInterfaceType({
   fields: SNodeFields,
   name: 'Node',

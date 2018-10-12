@@ -11,17 +11,27 @@ type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
 };
 
+export type OptionalId<T> = {
+  id: string;
+};
+
 interface IData {
   configurations: ReadonlyArray<IConfiguration>,
   displays: ReadonlyArray<IDisplay>,
   views: ReadonlyArray<IViewBase>,
 };
 
-let current: IData = {
-  configurations: Object.values(initialConfigurations),
-  displays: [],
-  views: [],
-};
+let current: IData = (() => {
+  const configurations = Object.values(initialConfigurations);
+  const displays = configurations.map(c => Object.values(c.displays)).reduce((acc: IDisplay[], current) => [...acc, ...current], []);
+  const views = displays.map(d => d.viewCarousel).reduce((acc, current) => [...acc, ...current], []).map(vc => vc.view);
+
+  return ({
+    configurations,
+    displays,
+    views,
+  });
+})();
 
 const configurationsResolve = (_: any, { ids, name } : { ids?: ReadonlyArray<string>, name?: string }): ReadonlyArray<IConfiguration> => {
   if (ids) {
@@ -40,7 +50,7 @@ const schema = new GraphQLSchema({
       deleteConfiguration: {
         args: {
           configurationId: {
-            type: new GraphQLNonNull(GraphQLString),
+            type: new GraphQLNonNull(GraphQLID),
           }
         },
         description: 'Delete a Configuration, returns the deleted Configuration',
@@ -59,7 +69,7 @@ const schema = new GraphQLSchema({
             type: new GraphQLNonNull(SConfigurationInput),
           }
         },
-        description: 'Modify a Configuration, returns the modified Configuration',
+        description: 'Modify or create a Configuration, returns the modified/created Configuration',
         resolve: (_, { configuration }) => {
           const newConfiguration = { ...defaultConfiguration, ...configuration };
           current = { ...current, configurations: [...current.configurations.filter(conf => conf.name !== newConfiguration.name), newConfiguration] };
@@ -100,21 +110,6 @@ const schema = new GraphQLSchema({
         resolve: configurationsResolve,
         type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SConfiguration))),
       },
-      // displays: {
-      //   args: {
-      //     ids: {
-      //       defaultValue: null,
-      //       type: new GraphQLList(GraphQLID),
-      //     },
-      //   },
-      //   resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
-      //     if (ids) {
-      //       return current.displays.filter(d => d.id && ids.includes(d.id)) 
-      //     }
-      //     return Object.values(current.displays);
-      //   },
-      //   type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
-      // },
       node: {
         args: {
           id: {
@@ -124,28 +119,19 @@ const schema = new GraphQLSchema({
         resolve: (_, { id }: { id: string }) => {
           if (id) {
             if (current.configurations.find(c => c.id === id)) return ({ ...(current.configurations.find(c => c.id === id)), __ownTypeName: 'Configuration' });
-            if (current.views.find(v => v.id === id)) return ({ ...(current.views.find(v => v.id === id)), __ownTypeName: 'Configuration' });;
-            if (current.displays.find(d => d.id === id)) return ({ ...(current.displays.find(d => d.id === id)), __ownTypeName: 'Configuration' });;
+            if (current.views.find(v => v.id === id)) {
+              const foundView = current.views.find(v => v.id === id);
+              const viewTypeMap = {
+                'stopTimes': 'StopTimesView',
+              };
+              return ({ ...foundView, __ownTypeName: viewTypeMap[(foundView as IViewBase).type] });
+            }
+            if (current.displays.find(d => d.id === id)) return ({ ...(current.displays.find(d => d.id === id)), __ownTypeName: 'Display' });
           }
           return null;
         },
         type: SNode,
       },
-      // views: {
-      //   args: {
-      //     ids: {
-      //       defaultValue: null,
-      //       type: new GraphQLList(GraphQLID),
-      //     },
-      //   },
-      //   resolve: (_, { ids }: { ids: ReadonlyArray<string> }) => {
-      //     if (ids) {
-      //       return current.views.filter(v => v.id && ids.includes(v.id)) 
-      //     }
-      //     return Object.values(current.views);
-      //   },
-      //   type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SView))),
-      // },
     },
     name: 'Query',
   }),

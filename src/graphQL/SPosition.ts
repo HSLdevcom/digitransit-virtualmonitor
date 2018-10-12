@@ -1,4 +1,4 @@
-import { GraphQLFloat, GraphQLNonNull, GraphQLObjectType } from "graphql";
+import { GraphQLFloat, GraphQLNonNull, GraphQLObjectType, GraphQLInputObjectType } from "graphql";
 
 const SPosition = new GraphQLObjectType({
   fields: {
@@ -6,6 +6,14 @@ const SPosition = new GraphQLObjectType({
     lon: { type: new GraphQLNonNull(GraphQLFloat) },
   },
   name: 'Position',
+});
+
+export const SPositionInput = new GraphQLInputObjectType({
+  fields: {
+    lat: { type: new GraphQLNonNull(GraphQLFloat) },
+    lon: { type: new GraphQLNonNull(GraphQLFloat) },
+  },
+  name: 'PositionInput',
 });
 
 export default SPosition;

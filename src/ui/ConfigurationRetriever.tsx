@@ -5,13 +5,17 @@ import { Query, QueryProps, QueryResult } from "react-apollo";
 import { IConfiguration } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
-const ConfigurationFieldsFragment = gql`
+export const ConfigurationFieldsFragment = gql`
 fragment configurationFields on Configuration {
+  id
   displays {
+      id
       name
       viewCarousel {
+        id
         displaySeconds
         view {
+          id
           title {
             fi
             en
@@ -19,6 +23,7 @@ fragment configurationFields on Configuration {
           type
           ... on StopTimesView {
         		stops {
+              id
               gtfsId
               overrideStopName
             }
@@ -38,9 +43,9 @@ const CONFIGURATION_QUERY = gql`
 ${ConfigurationFieldsFragment}
 
 query getConfigurations($ids: [String], $name: String) {
-  configurations(ids: $ids, name: $name) {
-    ...configurationFields,
-  }
+  # configurations(ids: $ids, name: $name) {
+  #   ...configurationFields,
+  # }
 
   localConfigurations @client {
     ...configurationFields,

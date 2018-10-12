@@ -13,8 +13,14 @@ interface IViewEditorProps {
 };
 
 const ADD_STOP = gql`
-  mutation AddStop($stop: Stop!) {
-    addStop(stop: $stop) @client
+  mutation AddStopToStopTimesView($stopTimesViewId: ID!, $stop: Stop!) {
+    addStopToStopTimesView(stopTimesViewId: $stopTimesViewId, stop: $stop) @client
+  }
+`;
+
+const REMOVE_STOP = gql`
+  mutation RemoveStopFromStopTimesView($stopId: ID!) {
+    removeStopFromStopTimesView(stopId: $stopId) @client
   }
 `;
 
@@ -31,54 +37,67 @@ const ADD_STOP = gql`
 // };
 
 const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps & InjectedTranslateProps) => (
-  <div>
-    <h2>
-      {configuration
-        ? (<Link to={`/configuration/${configuration.name}/view/${view.title}`}>
-          {`${t('display')} :`}
-          {view.title && (Object.values(view.title).length > 0)
-            ? Object.values(view.title).filter(title => title)[0] || view.title
-            : view.title
+  <ApolloClientsContext.Consumer>
+    {({ virtualMonitor }) => (
+      <div>
+        <h2>
+          {configuration
+            ? (<Link to={`/configuration/${configuration.name}/view/${view.title}`}>
+              {`${t('display')} :`}
+              {view.title && (Object.values(view.title).length > 0)
+                ? Object.values(view.title).filter(title => title)[0] || view.title
+                : view.title
+              }
+            </Link>)
+            : `${view.title ? view.title.fi : 'Tuntematon näkymä.'}`
           }
-        </Link>)
-        : `${view.title ? view.title.fi : 'Tuntematon näkymä.'}`
-      }
-    </h2>
-    <ul>
-      {Object.values(view.stops).map(s => (
-        <div key={s.gtfsId}>
-          <Link
-            to={`/stop/${s.gtfsId}`}
-          >
-            Stop {s.gtfsId}
-          </Link>
-        </div>
-      ))}
-    </ul>
-    <ApolloClientsContext.Consumer>
-      {({ virtualMonitor }) =>
-        (<Mutation
+        </h2>
+        <ul>
+          {Object.values(view.stops).map(s => (
+            <div key={s.gtfsId}>
+              <Link
+                to={`/stop/${s.gtfsId}`}
+              >
+                Stop ({s.id}) {s.gtfsId}
+              </Link>
+              <Mutation
+                mutation={REMOVE_STOP}
+                client={virtualMonitor}
+              >
+                {(removeStopFromStopTimesView) => (
+                  <button onClick={() => removeStopFromStopTimesView({
+                    variables: {
+                      stopId: s.id,
+                    },
+                  })}>
+                    {t('removeStop')}
+                  </button>
+                )}
+              </Mutation>
+            </div>
+          ))}
+        </ul>
+        <Mutation
           mutation={ADD_STOP}
           client={virtualMonitor}
         >
-            {(addStop) => (
-              <button onClick={() =>
-                addStop({
-                  variables: {
-                    stop: {
-                      gtfsId: 'HSL:4700212',
-                      __typename: 'Stop',
-                    },
+            {(addStopToStopTimesView) => (
+              <button onClick={() => addStopToStopTimesView({
+                variables: {
+                  stopTimesViewId: view.id,
+                  stop: {
+                    gtfsId: 'HSL:4700212',
+                    __typename: 'Stop',
                   },
-                })
-              }>
+                },
+              })}>
               {t('prepareStop')}
             </button>
           )}
-        </Mutation>)
-      }
-    </ApolloClientsContext.Consumer>
-  </div>
+        </Mutation>
+      </div>
+    )}
+  </ApolloClientsContext.Consumer>
 );
 
 export default translate('translations')(StopTimesViewEditor);

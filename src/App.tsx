@@ -12,11 +12,18 @@ import ConfigurationList from 'src/ui/ConfigurationList';
 import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
 import StopTimesView from 'src/ui/Views/StopTimesView';
 import DisplayEditor from 'src/ui/DisplayEditor';
+import QuickDisplay from 'src/ui/QuickDisplay';
 
 class App extends React.Component {
   public render() {
     return (
       <Switch>
+        <Route
+          path={'/quickDisplay/'}
+          component={() => (
+            <QuickDisplay />
+          )}
+        />
         <Route
           path={'/urld/:version/:packedDisplay'}
           component={({ match: { params: { version, packedDisplay }} }: any) => (
@@ -59,21 +66,6 @@ class App extends React.Component {
               <div id={"title-text"}>
                 {'Virtuaalimonitori'}
               </div>
-              {/* <div>
-                Jaajaa
-                <Packer
-                  packer={packDisplay('v1', Object.values(conf['kamppi'].displays)[0])}
-                >
-                    {(packed) => packed
-                      ? (
-                        <div>
-                            Packed string: {packed}
-                        </div>
-                      )
-                      : (<div>Still packing...</div>)
-                    }
-                </Packer>
-              </div> */}
               <div id={"title-time"}>
                 <AutoMoment />
               </div>

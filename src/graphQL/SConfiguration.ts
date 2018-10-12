@@ -1,8 +1,8 @@
 import { GraphQLInputObjectType, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
-import SDisplay from "src/graphQL/SDisplay";
-import SPosition from "src/graphQL/SPosition";
-import SNode, { SNodeFields } from 'src/graphQL/SNode';
+import SDisplay, { SDisplayInput } from "src/graphQL/SDisplay";
+import SPosition, { SPositionInput } from "src/graphQL/SPosition";
+import SNode, { SNodeFields, SNodeInputFields } from 'src/graphQL/SNode';
 
 const SConfiguration = new GraphQLObjectType({
   fields: {
@@ -20,7 +20,12 @@ const SConfiguration = new GraphQLObjectType({
 
 export const SConfigurationInput = new GraphQLInputObjectType({
   fields: {
+    ...SNodeInputFields,
+    displays: {
+      type: new GraphQLList(new GraphQLNonNull(SDisplayInput)),
+    },
     name: { type: GraphQLString },
+    position: { type: SPositionInput },
   },
   name: 'ConfigInput',
 });

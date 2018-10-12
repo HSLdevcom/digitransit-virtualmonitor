@@ -62,7 +62,6 @@ export interface IConfigurations {
 };
 
 export interface IConfigurationListProps {
-  readonly configurations: IConfigurations,
 };
 
 const createLocalConfigurationMutation = gql`
@@ -71,7 +70,7 @@ const createLocalConfigurationMutation = gql`
   }
 `;
 
-const ConfigurationList = ({configurations, t}: IConfigurationListProps & InjectedTranslateProps ) => (
+const ConfigurationList = ({t}: IConfigurationListProps & InjectedTranslateProps ) => (
   <ConfigurationRetriever
   >
     {(result: ConfigurationRetrieverResult): React.ReactNode => {
@@ -83,16 +82,16 @@ const ConfigurationList = ({configurations, t}: IConfigurationListProps & Inject
           {t('configurationRetrieveError')} - {result.error ? result.error.message : 'Weird...'}
         </div>);
       }
-      if (!result.data.configurations || (result.data.configurations.length <= 0)) {
+      if ((!result.data.configurations || (result.data.configurations.length <= 0)) && (!result.data.localConfigurations || (result.data.localConfigurations.length <= 0))) {
         return (<div>
           {t('configurationRetrieveNotFound')}
         </div>);
       }
       return (
         <div>
-          {Object.values([...result.data.configurations, ...(result.data.localConfigurations || [])] ).map((configuration, i) => (
+          {Object.values([...(result.data.configurations || []), ...(result.data.localConfigurations || [])] ).map((configuration, i) => (
             <ConfigEditor
-              key={`${configuration.name}${i}`}
+              key={configuration.id}
               configuration={configuration}
             />
           ))}

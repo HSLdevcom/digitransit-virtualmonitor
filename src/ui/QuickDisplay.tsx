@@ -33,17 +33,11 @@ const addQuickConfiguration = gql`
   }
 `;
 
-class QuickDisplay extends React.Component<{}, { show: boolean }> {
+class QuickDisplay extends React.Component {
   constructor(props: {}) {
     super(props);
-    this.state = {
-      show: false,
-    };
   }
 
-  show() {
-    this.setState({ show: true });
-  }
   render() {
     return (
       <>
@@ -61,16 +55,10 @@ class QuickDisplay extends React.Component<{}, { show: boolean }> {
             </Mutation>)
           }
         </ApolloClientsContext.Consumer>
-        <button onClick={this.show.bind(this)} value={'Create'}>
-          Show
-        </button>
-        { this.state.show
-          ? (<ConfigurationList />)
-          : null
-        }
+        <ConfigurationList />
       </>
     );
-  }  
+  }
 }
 
 export default QuickDisplay;

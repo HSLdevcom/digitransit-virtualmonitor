@@ -10,10 +10,10 @@ import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 import StopInfoRetriver, { IStopInfoResponse } from 'src/ui/StopInfoRetriever';
 import StopSearch from 'src/ui/StopSearch';
 
-interface IViewEditorProps {
+type IViewEditorProps = {
   readonly configuration?: IConfiguration,
   readonly view: IStopTimesView,
-};
+} & InjectedTranslateProps;
 
 const ADD_STOP = gql`
   mutation AddStopToStopTimesView($stopTimesViewId: ID!, $stop: Stop!) {
@@ -27,7 +27,7 @@ const REMOVE_STOP = gql`
   }
 `;
 
-const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps & InjectedTranslateProps) => (
+const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
   <ApolloClientsContext.Consumer>
     {({ virtualMonitor }) => (
       <div>

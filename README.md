@@ -6,6 +6,8 @@ Real-time, updating public transport info display that aggregates OpenTripPlanne
 
 `npm install`
 
+If using npm version <4, also run `npm run prepare`
+
 ## Compiling and running.
 
 To run the graphql server: `tsc && node build build/dist/graphQL/server.js`

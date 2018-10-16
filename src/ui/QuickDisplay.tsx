@@ -7,6 +7,9 @@ import { IConfiguration, IDisplay } from 'src/ui/ConfigurationList';
 import { QueryResult } from 'react-apollo';
 import DisplayEditor from 'src/ui/DisplayEditor';
 import { DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
+import { pairs } from 'src/ui/DisplayUrlCompression';
+import { RouteComponentProps } from 'react-router';
+import { History } from 'history';
 
 const addQuickConfiguration = gql`
   mutation addQuickConfiguration {
@@ -35,13 +38,20 @@ const addQuickConfiguration = gql`
   }
 `;
 
+interface ICompressedDisplayRouteParams {
+  version: string,
+  packedDisplay: string
+};
+
+type IQuickDisplayProps = RouteComponentProps<ICompressedDisplayRouteParams>;
+
 interface IQuickDisplayState {
   displayId?: string,
 };
 class DisplayQuery extends Query<{ display: IDisplay }, { id: string }> {}
 
-class QuickDisplay extends React.Component<{}, IQuickDisplayState> {
-  constructor(props: {}) {
+class QuickDisplay extends React.Component<IQuickDisplayProps, IQuickDisplayState> {
+  constructor(props: IQuickDisplayProps) {
     super(props);
     this.state = {};
   }
@@ -98,6 +108,7 @@ class QuickDisplay extends React.Component<{}, IQuickDisplayState> {
                   }}
                 >
                   {(result: QueryResult<{ display: IDisplay }>): React.ReactNode => {
+                    console.log('Rendering a DisplayEditor');
                     if (result.loading) {
                       return (<div>Ladataan...</div>)
                     }
@@ -108,8 +119,9 @@ class QuickDisplay extends React.Component<{}, IQuickDisplayState> {
                       return (<div>Väliaikaisen näytön luonti epäonnistui</div>)
                     }
                     return (
-                      <DisplayEditor
+                      <DisplayEditorHistoryUpdater
                         display={result.data.display}
+                        history={this.props.history}
                       />
                     );
                   }}
@@ -120,6 +132,52 @@ class QuickDisplay extends React.Component<{}, IQuickDisplayState> {
           </>)
         }
       </ApolloClientsContext.Consumer>
+    );
+  }
+}
+
+class DisplayEditorHistoryUpdater extends React.PureComponent<{display: IDisplay, history: History}> {
+  constructor({ display, history }: {display: IDisplay, history: History}) {
+    super({ display, history });
+  }
+
+  // Removes IDs and __typenames from the display.
+  minimizeDisplay(display: IDisplay): IDisplay {
+    const removeIDAndTypename = (o: { id?: string, __typename?: string }): {  } => {
+      const { id, __typename, ...rest } = o;
+      return rest;
+    }
+    const recursive = (o: {}): {} => {
+      return (
+        Object.getOwnPropertyNames(removeIDAndTypename(o)).map(propName =>
+          [
+            propName,
+            (typeof o[propName] === 'object')
+              ? recursive(o[propName])
+              : o[propName]
+          ]
+        ).reduce(
+          (acc: {}, [propName, propValue]) => ({ ...acc, [propName]:propValue }),
+          {}
+        )
+      );
+    }
+    return recursive(display) as IDisplay;
+  }
+
+  public componentDidUpdate(prevProps: {display: IDisplay}) {
+    if ((prevProps.display !== this.props.display) && (JSON.stringify(this.props.display) !== JSON.stringify(prevProps.display))) {
+      const sanitized = this.minimizeDisplay(this.props.display);
+      const version = 'v0';
+      pairs[version].pack(sanitized).then(packed => { console.log(packed); this.props.history.push(`/quickDisplay/${version}/${encodeURIComponent(packed)}`); });
+    }
+  }
+
+  public render() {
+    return (
+      <DisplayEditor
+        display={this.props.display}
+      />
     );
   }
 }

@@ -34,11 +34,11 @@ const ConfigEditor: React.StatelessComponent<IConfigEditorProps & InjectedTransl
         value={configuration.name}
       />
     </h1>
-    {Object.entries(configuration.displays).map(([key, d]) => (
+    {Object.values(configuration.displays).map(display => (
       <DisplayEditor
-        key={key}
+        key={display.id}
         configuration={configuration}
-        display={d}
+        display={display}
       />
     ))}
     <label>JSON: </label>

@@ -81,6 +81,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                       return (
                           <li key={s.gtfsId}>
                             Pysäkkiä Id:llä {s.gtfsId} ei löytynyt.
+                            &nbsp;
                             {removeStopButton}
                           </li>
                         );

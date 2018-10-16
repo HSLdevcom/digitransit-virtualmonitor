@@ -5,37 +5,45 @@ import { Query, QueryProps, QueryResult } from "react-apollo";
 import { IConfiguration } from "src/ui/ConfigurationList";
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
-export const ConfigurationFieldsFragment = gql`
-fragment configurationFields on Configuration {
+export const DisplayFieldsFragment = gql`
+fragment displayFields on Display {
   id
-  displays {
+  name
+  viewCarousel {
+    id
+    displaySeconds
+    view {
       id
-      name
-      viewCarousel {
-        id
-        displaySeconds
-        view {
+      title {
+        fi
+        en
+      }
+      type
+      ... on StopTimesView {
+        stops {
           id
-          title {
-            fi
-            en
-          }
-          type
-          ... on StopTimesView {
-        		stops {
-              id
-              gtfsId
-              overrideStopName
-            }
-          }
+          gtfsId
+          overrideStopName
         }
       }
     }
+  }
+}
+`;
+
+export const ConfigurationFieldsFragment = gql`
+${DisplayFieldsFragment}
+
+fragment configurationFields on Configuration {
+  id
+  displays {
+    ...displayFields
     name
     position {
       lat
       lon
     }
+  }
 }
 `;
 

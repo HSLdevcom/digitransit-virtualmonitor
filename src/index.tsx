@@ -17,7 +17,6 @@ import registerServiceWorker from 'src/registerServiceWorker';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import { IConfiguration, IStop, IStopTimesView, IDisplay } from 'src/ui/ConfigurationList';
 import schema, { OptionalId } from 'src/graphQL/schema';
-import StopTimesView from 'src/ui/Views/StopTimesView';
 import { ConfigurationFieldsFragment } from 'src/ui/ConfigurationRetriever';
 
 const resolvers = {
@@ -44,7 +43,15 @@ const reittiOpasClient = new ApolloBoostClient({
 });
 (reittiOpasClient as any).name = 'reittiOpasClient';
 
-const virtualMonitorCache = new InMemoryCache();
+const virtualMonitorCache = new InMemoryCache({
+  cacheRedirects: { 
+    Query: {
+      display: (_: any, { id }: { id: string }, context: Context) => {
+        return context.getCacheKey({ __typename: 'Display', id });
+      }
+    },
+  },
+});
 
 @state({
   defaults: {
@@ -56,11 +63,18 @@ const virtualMonitorCache = new InMemoryCache();
     gql`
       type Query {
         localConfigurations: [Configuration!]!
+        node(id: ID): Node
       }
     `
   ],
 })
 export class ViMoState {
+  // @resolve('Query.node')
+  // node(_: any, { id }: { id: string }, context: Context) {
+  //   return context.getCacheKey({ __typename: 'Node', id });
+  //   // debugger;
+  // }
+
   @mutation('addQuickConfiguration')
   addQuickConfiguration(_: any, context: Context) {
     const newConfiguration: any = {
@@ -73,7 +87,7 @@ export class ViMoState {
           viewCarousel: [
             {
               id: uuidv4(),
-              displaySeconds: 1,
+              displaySeconds: 2,
               view: {
                 id: uuidv4(),
                 type: 'stopTimes',
@@ -106,6 +120,8 @@ export class ViMoState {
         data.localConfigurations.push(newConfiguration);
       }
     );
+
+    return newConfiguration;
   }
 
   @mutation('removeStopFromStopTimesView')

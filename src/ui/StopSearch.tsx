@@ -8,6 +8,7 @@ import { QueryResult } from 'react-apollo';
 type IProps = {
   readonly children?: (stops: ReadonlyArray<IStopWithName>) => React.ReactNode,
   readonly phrase?: string,
+  readonly showTitle?: boolean,
 } & InjectedTranslateProps;
 
 interface IState {
@@ -22,6 +23,12 @@ class StopSearch extends React.Component<IProps, IState> {
     };
   }
 
+  static get defaultProps() {
+    return {
+      showTitle: false,
+    };
+  }
+
   public render() { return(
     <div className={'stop-selector'}>
       <form
@@ -29,18 +36,20 @@ class StopSearch extends React.Component<IProps, IState> {
         action={'searchStop'}
         method={'GET'}
       >
-        <div>{this.props.t('stopSearcher')}</div>
-        <div>
-          <label htmlFor={'stopSearchInput'}>
-            {this.props.t('stopSearcherPhrase')}:&nbsp;
-          </label>
-          <input
-            id={'stopSearchInput'}
-            type={'text'}
-            name={'searchPhrase'}
-            defaultValue={this.props.phrase || ''}
-          />
-        </div>
+        {this.props.showTitle
+          ? <h3>{this.props.t('stopSearcher')}</h3>
+          : null
+        }
+        <label htmlFor={'stopSearchInput'}>
+          {this.props.t('stopSearcherPhrase')}:&nbsp;
+        </label>
+        <input
+          id={'stopSearchInput'}
+          type={'text'}
+          name={'searchPhrase'}
+          defaultValue={this.props.phrase || ''}
+        />
+        &nbsp;
         <button
           type={'submit'}
         >

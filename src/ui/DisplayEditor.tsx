@@ -54,7 +54,9 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
           {...display.position!}
           editable={true}
         />)
-      : (<button>
+      : (<button
+          disabled
+        >
           Määritä sijainti
         </button>)
     }
@@ -77,7 +79,9 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
         </Link>
       )}
     />
-    <button>
+    <button
+      disabled
+    >
       Lisää uusi pysäkkinäkymä karuselliin.
     </button>
     {/* <ApolloClientsContext.Consumer>

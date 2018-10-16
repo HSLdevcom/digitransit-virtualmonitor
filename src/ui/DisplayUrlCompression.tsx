@@ -43,7 +43,17 @@ Object.entries({ a: 'b'}).reduce((acc, [version, renderer]) => ({
 }),
 {})
 
-export const pairs = Object.entries(renderers).reduce(
+type IPair = ReturnType<typeof createUrlCompression>;
+
+type IPairWithRenderer = IPair & {
+  renderer: (display: IDisplay) => React.ReactNode,
+}
+
+interface IPairsWithRenderers {
+  [version: string]: IPairWithRenderer,
+};
+
+export const pairs: IPairsWithRenderers = Object.entries(renderers).reduce(
   (acc, [version, renderer]) => ({
     ...acc,
     [version]: {

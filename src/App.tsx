@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, Switch, RouteComponentProps } from 'react-router-dom';
 
 import 'src/App.css';
 import AutoMoment from 'src/ui/AutoMoment';
@@ -14,19 +14,32 @@ import StopTimesView from 'src/ui/Views/StopTimesView';
 import DisplayEditor from 'src/ui/DisplayEditor';
 import QuickDisplay from 'src/ui/QuickDisplay';
 
+interface ICompressedDisplayRouteParams {
+  version: string,
+  packedDisplay: string
+};
+
+interface IConfigurationDisplayRouteParams {
+  configuration: string,
+  displayName: string,
+};
+
+interface IStopRouteParams {
+  stopId: string,
+  displayedRoutes?: string,
+};
+
 class App extends React.Component {
   public render() {
     return (
       <Switch>
         <Route
-          path={'/quickDisplay/'}
-          component={() => (
-            <QuickDisplay />
-          )}
+          path={'/quickDisplay/:version?/:packedDisplay?'}
+          component={QuickDisplay}
         />
         <Route
           path={'/urld/:version/:packedDisplay'}
-          component={({ match: { params: { version, packedDisplay }} }: any) => (
+          component={({ match: { params: { version, packedDisplay }} }: RouteComponentProps<ICompressedDisplayRouteParams>) => (
             <DisplayUrlCompression
               version={decodeURIComponent(version)}
               packedString={decodeURIComponent(packedDisplay)}
@@ -35,7 +48,7 @@ class App extends React.Component {
         />
         <Route
           path={'/configuration/:configuration/display/:display'}
-          component={({ match: { params: { configuration, displayName }}}: any) => (
+          component={({ match: { params: { configuration, displayName }}}: RouteComponentProps<IConfigurationDisplayRouteParams>) => (
             <ConfigurationDisplay
               configurationName={configuration}
               displayName={displayName}
@@ -44,10 +57,10 @@ class App extends React.Component {
         />
         <Route
           path={'/stop/:stopId/:displayedRoutes?'}
-          component={({ match: { params: { stopId, displayedRoutes }} }: { match: { params: { stopId: string, displayedRoutes: number }}}) => (
+          component={({ match: { params: { stopId, displayedRoutes }} }: RouteComponentProps<IStopRouteParams>) => (
             <StopTimesView
               stopIds={[stopId]}
-              displayedRoutes={displayedRoutes}
+              displayedRoutes={Number(displayedRoutes)}
             />
           )}
         />
@@ -70,9 +83,12 @@ class App extends React.Component {
                 <AutoMoment />
               </div>
             </Titlebar>
-            <Link to={'/configs/1'}>
-              Configs playground
+            <Link to={'/quickDisplay'}>
+              Create a new display
             </Link>
+            {/* <Link to={'/configs/1'}>
+              Configs playground
+            </Link> */}
             <StopSelectorSwitch />
           </div>
         </Route>

@@ -19,56 +19,56 @@ const configs: IConfigurations =
             view: {
               id: 'Foobar4',
               pierColumnTitle: 'FromConfig',
-              stops: {
-                'HSL:1040271': {
+              stops: [
+                {
                   id: 'Foobara1',
                 gtfsId: 'HSL:1040271',
                 },
-                'HSL:1040272': {
+                {
                   id: 'Foobara2',
                   gtfsId: 'HSL:1040272'
                 },
-                'HSL:1040273': {
+                {
                   id: 'Foobara3',
                   gtfsId: 'HSL:1040273'
                 },
-                'HSL:1040274': {
+                {
                   id: 'Foobara4',
                   gtfsId: 'HSL:1040274'
                 },
-                'HSL:1040275': {
+                {
                   id: 'Foobara5',
                   gtfsId: 'HSL:1040275'
                 },
-                'HSL:1040276': {
+                {
                   id: 'Foobara6',
                   gtfsId: 'HSL:1040276'
                 },
-                'HSL:1040277': {
+                {
                   id: 'Foobara7',
                   gtfsId: 'HSL:1040277'
                 },
-                'HSL:1040278': {
+                {
                   id: 'Foobara8',
                   gtfsId: 'HSL:1040278'
                 },
-                'HSL:1040279': {
+                {
                   id: 'Foobara9',
                   gtfsId: 'HSL:1040279'
                 },
-                'HSL:1040280': {
+                {
                   id: 'Foobara10',
                   gtfsId: 'HSL:1040280'
                 },
-                'HSL:1040281': {
+                {
                   id: 'Foobara11',
                     gtfsId: 'HSL:1040281'
                 },
-                'HSL:1040282': {
+                {
                   id: 'Foobara12',
                   gtfsId: 'HSL:1040282'
                 },
-              },
+              ],
               title: {
                 en: '',
                 fi: 'Kampin lyhyen kantaman bussilinjat',
@@ -84,16 +84,16 @@ const configs: IConfigurations =
             displaySeconds: 3,
             view: {
               id: 'Foobarb2',
-              stops: {
-                'HSL:1040601': {
+              stops: [
+                {
                   id: 'Foobarba1',
                   gtfsId: 'HSL:1040601',
                 },
-                'HSL:1040602': {
+                {
                   id: 'Foobarba2',
                   gtfsId: 'HSL:1040602',
                 },
-              },
+              ],
               title: {
                 en: '',
                 fi: 'Metro kamppi',
@@ -130,18 +130,18 @@ const configs: IConfigurations =
             view: {
               id: 'Xyzza',
               pierColumnTitle: 'Pysäkki',
-              stops: {
-                'HSL:4700210': {
+              stops: [
+                {
                   id: 'Xyzzb1',
                   gtfsId: 'HSL:4700210',
                   overrideStopName: 'LähiPysäkki',
                 },
-                'HSL:4740217': {
+                {
                   id: 'Xyzzb2',
                   gtfsId: 'HSL:4740217',
                   overrideStopName: 'KaukoPysäkki',
                 },
-              },
+              ],
               title: {
                 en: '',
                 fi: 'Koivukylä etelä',

@@ -21,16 +21,16 @@ const testConfigs: IConfigurations = {
             displaySeconds: 4,
             view: {
               id: 'Testing v',
-              stops: {
-                'HSL:4700210': {
+              stops: [
+                {
                   id: 'Testing s1',
                   gtfsId: 'HSL:4700210',
                 },
-                'HSL:4740217': {
+                {
                   id: 'Testing s2',
                   gtfsId: 'HSL:4740217',
                 },
-              },
+              ],
               title: {
                 en: '',
                 fi: 'Koivukylä etelä',

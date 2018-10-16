@@ -80,7 +80,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
             // Map renamed stops from configuration
             .map(stopTime => {
               if ((props as IStopTimesViewPropsWithIStops).stops && stopTime.stop && stopTime.stop.gtfsId) {
-                const foundIStop: (IStop | undefined) = (props as IStopTimesViewPropsWithIStops).stops .find(stop => stop.gtfsId === stopTime.stop!.gtfsId);
+                const foundIStop: (IStop | undefined) = (props as IStopTimesViewPropsWithIStops).stops.find(stop => stop.gtfsId === stopTime.stop!.gtfsId);
                 return ({
                   ...stopTime,
                   stop: {

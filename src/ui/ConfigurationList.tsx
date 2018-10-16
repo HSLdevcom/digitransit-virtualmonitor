@@ -29,9 +29,7 @@ export interface IViewBase extends INode {
 export interface IStopTimesView extends IViewBase {
   readonly displayedRoutes?: number,
   readonly pierColumnTitle?: string,
-  readonly stops: {
-    readonly [gtfsId: string]: IStop,
-  },
+  readonly stops: ReadonlyArray<IStop>,
 };
 
 type AnyView = IStopTimesView;

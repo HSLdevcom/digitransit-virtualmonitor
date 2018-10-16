@@ -4,8 +4,8 @@ import { create } from 'react-test-renderer';
 
 import ConfigurationList, { IConfigurationListProps, IConfigurations } from 'src/ui/ConfigurationList';
 
-const testConfigs: IConfigurations = {
-  test: {
+const testConfigs: IConfigurations = [
+  {
     id: 'Testing c',
     displays: [
       {
@@ -50,7 +50,7 @@ const testConfigs: IConfigurations = {
       lon: 30,
     },
   },
-};
+];
 
 const WrappedConfig = ({ configProps }: { configProps: IConfigurationListProps } = { configProps: { configurations: testConfigs } }) => (
   <MockedProvider>

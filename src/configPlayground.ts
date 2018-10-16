@@ -1,11 +1,11 @@
 import { IConfigurations } from 'src/ui/ConfigurationList';
 
 const configs: IConfigurations =
-{
-  'kamppi': {
+[
+  {
     id: 'Foobar',
-    displays: {
-      'kamppinäyttö': {
+    displays: [
+      {
         id: 'Foobar2',
         name: 'kamppinäyttö',
         position: {
@@ -106,17 +106,17 @@ const configs: IConfigurations =
           },
         ]
       },
-    },
+    ],
     name: 'kamppi',
     position: {
       lat: 7.5,
       lon: 30,
     },
   },
-  'koivukylä': {
+  {
     id: 'Xyzzy',
-    displays: {
-      'eteläinenNäyttö': {
+    displays: [
+      {
         id: 'Xyzzyz',
         name: 'eteläinenNäyttö',
         position: {
@@ -154,13 +154,13 @@ const configs: IConfigurations =
           },
         ],
       },
-    },
+    ],
     name: 'Koivukylän juna-asema',
     position: {
       lat: 7.5,
       lon: 30,
     },
   },
-};
+];
 
 export default configs;

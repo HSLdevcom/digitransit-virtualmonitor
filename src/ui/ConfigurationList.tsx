@@ -53,9 +53,7 @@ export interface IConfiguration extends INode {
   readonly position?: ILatLon;
 };
 
-export interface IConfigurations {
-  readonly [configurationName: string]: IConfiguration,
-};
+export type IConfigurations = ReadonlyArray<IConfiguration>;
 
 export interface IConfigurationListProps {
 };

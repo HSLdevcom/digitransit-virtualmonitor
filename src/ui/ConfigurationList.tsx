@@ -49,9 +49,7 @@ export interface IDisplay extends INode {
 
 export interface IConfiguration extends INode {
   readonly name: string,
-  readonly displays: {
-    readonly [displayId: string]: IDisplay,
-  },
+  readonly displays: ReadonlyArray<IDisplay>,
   readonly position?: ILatLon;
 };
 

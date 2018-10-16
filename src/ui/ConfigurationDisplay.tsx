@@ -40,7 +40,7 @@ const ConfigurationDisplay = ({ configurationName, displayName, t }: IConfigurat
         if (!usedConfiguration) {
           return null;
         }
-        const usedDisplay = usedConfiguration.displays[displayName] || usedConfiguration.displays.default || usedConfiguration.displays[0];
+        const usedDisplay = usedConfiguration.displays.find(display => display.name === displayName) || usedConfiguration.displays[0];
         if (!usedDisplay) {
           return null;
         }

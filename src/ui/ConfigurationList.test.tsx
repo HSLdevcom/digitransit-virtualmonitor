@@ -7,8 +7,8 @@ import ConfigurationList, { IConfigurationListProps, IConfigurations } from 'src
 const testConfigs: IConfigurations = {
   test: {
     id: 'Testing c',
-    displays: {
-      'Test display': {
+    displays: [
+      {
         id: 'Testing 1',
         name: 'test display',
         position: {
@@ -43,7 +43,7 @@ const testConfigs: IConfigurations = {
           },
         ],
       },
-    },
+    ],
     name: 'Test configuration',
     position: {
       lat: 7.5,

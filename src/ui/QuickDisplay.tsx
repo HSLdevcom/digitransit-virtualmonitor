@@ -142,7 +142,7 @@ class DisplayEditorHistoryUpdater extends React.PureComponent<{display: IDisplay
   }
 
   // Removes IDs and __typenames from the display.
-  minimizeDisplay(display: IDisplay): IDisplay {
+  static minimizeDisplay(display: IDisplay): IDisplay {
     const removeIDAndTypename = (o: { id?: string, __typename?: string }): {  } => {
       const { id, __typename, ...rest } = o;
       return rest;
@@ -167,7 +167,7 @@ class DisplayEditorHistoryUpdater extends React.PureComponent<{display: IDisplay
 
   public componentDidUpdate(prevProps: {display: IDisplay}) {
     if ((prevProps.display !== this.props.display) && (JSON.stringify(this.props.display) !== JSON.stringify(prevProps.display))) {
-      const sanitized = this.minimizeDisplay(this.props.display);
+      const sanitized = DisplayEditorHistoryUpdater.minimizeDisplay(this.props.display);
       const version = 'v0';
       pairs[version].pack(sanitized).then(packed => { console.log(packed); this.props.history.push(`/quickDisplay/${version}/${encodeURIComponent(packed)}`); });
     }

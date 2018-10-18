@@ -37,12 +37,6 @@ const renderers = {
   ),
 };
 
-Object.entries({ a: 'b'}).reduce((acc, [version, renderer]) => ({
-  ...acc,
-  version: renderer
-}),
-{})
-
 type IPair = ReturnType<typeof createUrlCompression>;
 
 type IPairWithRenderer = IPair & {

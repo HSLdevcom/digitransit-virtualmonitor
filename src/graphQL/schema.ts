@@ -23,7 +23,7 @@ interface IData {
 
 let current: IData = (() => {
   const configurations = Object.values(initialConfigurations);
-  const displays = configurations.map(c => Object.values(c.displays)).reduce((acc: IDisplay[], current) => [...acc, ...current], []);
+  const displays = configurations.map(c => c.displays).reduce((acc: IDisplay[], current) => [...acc, ...current], []);
   const views = displays.map(d => d.viewCarousel).reduce((acc, current) => [...acc, ...current], []).map(vc => vc.view);
 
   return ({

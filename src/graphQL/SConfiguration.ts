@@ -8,7 +8,7 @@ const SConfiguration = new GraphQLObjectType({
   fields: {
     ...SNodeFields,
     displays: {
-      resolve: (root, {}) => Object.values(root.displays),
+      resolve: (root, {}) => root.displays,
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
     },
     name: { type: new GraphQLNonNull(GraphQLString) },

@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import * as React from 'react';
 import { Mutation, Query } from '@loona/react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import { IConfiguration, IDisplay } from 'src/ui/ConfigurationList';
@@ -10,10 +11,38 @@ import { DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
 import { pairs } from 'src/ui/DisplayUrlCompression';
 import { RouteComponentProps } from 'react-router';
 import { History } from 'history';
+import { virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
 
 const addQuickConfiguration = gql`
   mutation addQuickConfiguration {
     addQuickConfiguration @client {
+      id
+      name
+      displays {
+        id
+        name
+        viewCarousel {
+          id
+          displaySeconds
+          view {
+            id
+            type
+            ...on StopTimesView {
+              title {
+                fi
+              }
+              stops
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+const addQuickDisplay = gql`
+  mutation addQuickDisplay($display: SDisplayInput!) {
+    addQuickDisplay(display: $display) @client {
       id
       name
       displays {
@@ -47,29 +76,81 @@ type IQuickDisplayProps = RouteComponentProps<ICompressedDisplayRouteParams>;
 
 interface IQuickDisplayState {
   displayId?: string,
+  unpackedDisplayUrl?: IDisplay,
 };
 class DisplayQuery extends Query<{ display: IDisplay }, { id: string }> {}
 
-class QuickDisplay extends React.Component<IQuickDisplayProps, IQuickDisplayState> {
-  constructor(props: IQuickDisplayProps) {
+class QuickDisplay extends React.Component<IQuickDisplayProps & { virtualMonitor: typeof virtualMonitorClient }, IQuickDisplayState> {
+  constructor(props: IQuickDisplayProps & { virtualMonitor: typeof virtualMonitorClient }) {
     super(props);
     this.state = {};
-  }
-
-  async addQuickConfiguration2(addQuickConfiguration: any) {
-    const { data, errors }: { data?: { addQuickConfiguration: IConfiguration }, errors?: any } = await addQuickConfiguration();
-    if (errors) {
-      throw new Error(errors);
-    }
-    if (data && (Object.values(data.addQuickConfiguration.displays).length > 0)) {
-      this.setState({
-        displayId: Object.values(data.addQuickConfiguration.displays)[0].id,
+    if (props.match.params.version && props.match.params.packedDisplay) {
+      pairs[props.match.params.version].unpack(decodeURIComponent(props.match.params.packedDisplay)).then((unpacked: IDisplay) => {
+        this.insertDisplayToCache(props.virtualMonitor, unpacked);
+        this.setState({ unpackedDisplayUrl : unpacked });
       });
     } else {
-      this.setState({
-        displayId: undefined,
-      });
+      props.virtualMonitor.mutate({
+        mutation: addQuickConfiguration,
+      }).then(({ data, errors }: { data?: { addQuickConfiguration: IConfiguration }, errors?: any }) => {
+        if (errors) {
+          throw new Error(errors);
+        }
+        if (data && (data.addQuickConfiguration.displays).length > 0) {
+          this.setState({
+            displayId: data.addQuickConfiguration.displays[0].id,
+          });
+        } else {
+          this.setState({
+            displayId: undefined,
+          });
+        }
+      })
     }
+  }
+
+  insertDisplayToCache(virtualMonitor: typeof virtualMonitorClient, display: IDisplay) {
+    const insertable: any = {
+      ...display,
+      id: uuidv4(),
+      __typename: 'Display',
+      viewCarousel: Array.from(display.viewCarousel).map(vce => ({
+        ...vce,
+        id: uuidv4(),
+        __typename: 'SViewWithDisplaySeconds',
+        view: {
+          ...vce.view,
+          id: uuidv4(),
+          __typename: 'StopTimesView',
+          title: {
+            ...vce.view.title,
+            __typename: 'TranslatedString',
+          },
+          stops: Array.from(vce.view.stops).map(stop => ({
+            ...stop,
+            id: uuidv4(),
+            __typename: 'Stop',
+          })),
+        }
+      }))
+    };
+
+    virtualMonitor.mutate({
+      mutation: addQuickDisplay,
+      variables: {
+        display: insertable,
+      },
+    }).then(({ data, errors }: { data?: { addQuickDisplay: IDisplay }, errors?: any }) => {
+      if (data && data.addQuickDisplay) {
+        this.setState({
+          displayId: data.addQuickDisplay.id,
+        });
+      } else {
+        this.setState({
+          displayId: undefined,
+        });
+      }
+    });
   }
 
   public render() {
@@ -77,16 +158,18 @@ class QuickDisplay extends React.Component<IQuickDisplayProps, IQuickDisplayStat
       <ApolloClientsContext.Consumer>
         {({ virtualMonitor }) =>
           (<>
-            <Mutation
-              mutation={addQuickConfiguration}
-              client={virtualMonitor}
-            >
-              {addQuickConfiguration => (
-                <button onClick={() => this.addQuickConfiguration2(addQuickConfiguration)} value={'Create'}>
-                  Create a new Quick Display
-                </button>
-              )}
-            </Mutation>
+            {/* {this.state.unpackedDisplayUrl
+              ? (
+                <>
+                  <span>unpackedDisplayUrl</span>
+                  <textarea
+                    readOnly
+                    value={JSON.stringify(this.state.unpackedDisplayUrl)}
+                  />
+                </>
+              )
+              : null
+            } */}
             {this.state.displayId
               ? (
                 <DisplayQuery
@@ -108,7 +191,6 @@ class QuickDisplay extends React.Component<IQuickDisplayProps, IQuickDisplayStat
                   }}
                 >
                   {(result: QueryResult<{ display: IDisplay }>): React.ReactNode => {
-                    console.log('Rendering a DisplayEditor');
                     if (result.loading) {
                       return (<div>Ladataan...</div>)
                     }
@@ -136,37 +218,52 @@ class QuickDisplay extends React.Component<IQuickDisplayProps, IQuickDisplayStat
   }
 }
 
-class DisplayEditorHistoryUpdater extends React.PureComponent<{display: IDisplay, history: History}> {
-  constructor({ display, history }: {display: IDisplay, history: History}) {
-    super({ display, history });
+interface IDisplayEditorHistoryUpdaterProps {
+  display: IDisplay,
+  history: History,
+};
+
+class DisplayEditorHistoryUpdater extends React.PureComponent<IDisplayEditorHistoryUpdaterProps> {
+  constructor(props: IDisplayEditorHistoryUpdaterProps) {
+    super(props);
   }
 
-  // Removes IDs and __typenames from the display.
+  // Removes IDs and __typenames from the display. Preserve nulls.
   static minimizeDisplay(display: IDisplay): IDisplay {
     const removeIDAndTypename = (o: { id?: string, __typename?: string }): {  } => {
-      const { id, __typename, ...rest } = o;
+      const { id, __typename, ...rest } = { ...o, id: undefined, __typename: undefined };
       return rest;
     }
     const recursive = (o: {}): {} => {
       return (
-        Object.getOwnPropertyNames(removeIDAndTypename(o)).map(propName =>
-          [
-            propName,
-            (typeof o[propName] === 'object')
-              ? recursive(o[propName])
-              : o[propName]
-          ]
-        ).reduce(
-          (acc: {}, [propName, propValue]) => ({ ...acc, [propName]:propValue }),
-          {}
-        )
+        Object.getOwnPropertyNames(removeIDAndTypename(o))
+          .filter(propName => (o[propName] !== undefined) && (o[propName] !== null))
+          .map(propName => {
+            const prop = o[propName];
+            let minimizedPropType;
+            if ((Array.isArray(prop)) || (prop === null)) {
+              minimizedPropType = prop;
+            } else if (typeof prop === 'object') {
+              minimizedPropType = recursive(prop)
+            } else {
+              minimizedPropType = prop;
+            }
+            return [
+              propName,
+              minimizedPropType,
+            ];
+          })
+          .reduce(
+            (acc: {}, [propName, propValue]) => ({ ...acc, [propName]:propValue }),
+            {}
+          )
       );
     }
     return recursive(display) as IDisplay;
   }
 
   public componentDidUpdate(prevProps: {display: IDisplay}) {
-    if ((prevProps.display !== this.props.display) && (JSON.stringify(this.props.display) !== JSON.stringify(prevProps.display))) {
+    if (this.props.display && (prevProps.display !== this.props.display) && (JSON.stringify(this.props.display) !== JSON.stringify(prevProps.display))) {
       const sanitized = DisplayEditorHistoryUpdater.minimizeDisplay(this.props.display);
       const version = 'v0';
       pairs[version].pack(sanitized).then(packed => { console.log(packed); this.props.history.push(`/quickDisplay/${version}/${encodeURIComponent(packed)}`); });
@@ -175,11 +272,38 @@ class DisplayEditorHistoryUpdater extends React.PureComponent<{display: IDisplay
 
   public render() {
     return (
-      <DisplayEditor
-        display={this.props.display}
-      />
+      <>
+        {/* <span>this.props.display</span>
+        <textarea
+          readOnly
+          value={JSON.stringify(this.props.display)}
+        /> */}
+        <DisplayEditor
+          display={this.props.display}
+        />
+      </>
     );
   }
 }
 
-export default QuickDisplay;
+/* <Mutation
+                      mutation={addQuickDisplay}
+                      client={virtualMonitor}
+                    >
+                      {addQuickDisplay => (
+                        <button onClick={() => this.addQuickDisplay2(addQuickDisplay)} value={'Create'}>
+                          Add the Quick Display
+                        </button>
+                      )}
+                    </Mutation>
+ */
+export default (props: IQuickDisplayProps) => (
+  <ApolloClientsContext.Consumer>
+    {({ virtualMonitor }) =>
+      <QuickDisplay
+        virtualMonitor={virtualMonitor}
+        {...props}
+      />
+    }
+  </ApolloClientsContext.Consumer>
+);

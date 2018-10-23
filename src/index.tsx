@@ -17,7 +17,8 @@ import registerServiceWorker from 'src/registerServiceWorker';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import { IConfiguration, IStop, IStopTimesView, IDisplay } from 'src/ui/ConfigurationList';
 import schema, { OptionalId } from 'src/graphQL/schema';
-import { ConfigurationFieldsFragment } from 'src/ui/ConfigurationRetriever';
+import { ConfigurationFieldsFragment, DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
+import { virtualMonitorClient, loona } from 'src/graphQL/virtualMonitorClient';
 
 const resolvers = {
   Mutation: {
@@ -43,16 +44,6 @@ const reittiOpasClient = new ApolloBoostClient({
 });
 (reittiOpasClient as any).name = 'reittiOpasClient';
 
-const virtualMonitorCache = new InMemoryCache({
-  cacheRedirects: { 
-    Query: {
-      display: (_: any, { id }: { id: string }, context: Context) => {
-        return context.getCacheKey({ __typename: 'Display', id });
-      }
-    },
-  },
-});
-
 @state({
   defaults: {
     localConfigurations: [
@@ -61,6 +52,28 @@ const virtualMonitorCache = new InMemoryCache({
   typeDefs: [
     schema,
     gql`
+      # input SViewInput {
+      #   id!
+      #     type: String!
+      #     ...on StopTimesView {
+      #       title {
+      #         fi: String!
+      #       }!!
+      #     }
+      # }
+
+      input SViewCarouselInput {
+        id: ID!
+        displaySeconds: Float!
+        # view: SViewInput!
+      }
+
+      input SDisplayInput {
+        id: ID!
+        name: String!
+        viewCarousel: [SViewCarouselInput!]!
+      }
+
       type Query {
         localConfigurations: [Configuration!]!
         node(id: ID): Node
@@ -87,7 +100,7 @@ export class ViMoState {
           viewCarousel: [
             {
               id: uuidv4(),
-              displaySeconds: 2,
+              displaySeconds: 3,
               view: {
                 id: uuidv4(),
                 type: 'stopTimes',
@@ -97,13 +110,16 @@ export class ViMoState {
                   __typename: 'TranslatedString',
                 },
                 stops: [],
+                __typename: 'StopTimesView', // This doesn't seem to work for some reason.
               },
               __typename: 'SViewWithDisplaySeconds',
             },
           ],
+          position: null,
           __typename: 'Display',
         },
       ],
+      position: null,
       __typename: 'Configuration',
     };
 
@@ -122,6 +138,39 @@ export class ViMoState {
     );
 
     return newConfiguration;
+  }
+
+  @mutation('addQuickDisplay')
+  addQuickDisplay({ display }: { display: IDisplay }, context: Context) {
+
+    const nullifiedDisplay: any = {
+      ...display,
+      position: display.position || null,
+    }
+
+    const newConfiguration: any = {
+      id: uuidv4(),
+      name: 'QuickConfiguration',
+      displays: [ nullifiedDisplay ],
+      position: null,
+      __typename: 'Configuration',
+    };
+
+    context.patchQuery(
+      gql`
+        ${DisplayFieldsFragment}
+        {
+          localConfigurations @client {
+            ...displayFields
+          }
+        }
+      `,
+      (data) => {
+        data.localConfigurations.push(newConfiguration);
+      }
+    );
+
+    return display;
   }
 
   @mutation('removeStopFromStopTimesView')
@@ -237,19 +286,6 @@ export class ViMoState {
     );
   }
 };
-
-const loona = createLoona(virtualMonitorCache);
-
-const virtualMonitorClient = new ApolloClient({
-  cache: virtualMonitorCache,
-  link: ApolloLink.from([
-    loona,
-    new HttpLink({
-      uri: 'http://localhost:4000',
-    })
-  ]),
-});
-(virtualMonitorClient as any).name = 'VirtualMonitorClient';
 
 export const contextValue: IApolloClientContextType = {
   default: reittiOpasClient,

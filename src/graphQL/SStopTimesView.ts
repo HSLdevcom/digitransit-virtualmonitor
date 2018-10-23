@@ -11,7 +11,7 @@ const SStopTimesView = new GraphQLObjectType({
     ...SViewFields,
     pierColumnTitle: { type: GraphQLString },
     stops: {
-      resolve: (root, {}) => Object.values(root.stops),
+      resolve: (root, {}) => root.stops,
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SStop)))
     },
   }),

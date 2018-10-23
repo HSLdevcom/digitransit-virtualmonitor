@@ -34,7 +34,7 @@ const ConfigEditor: React.StatelessComponent<IConfigEditorProps & InjectedTransl
         value={configuration.name}
       />
     </h1>
-    {Object.values(configuration.displays).map(display => (
+    {configuration.displays.map(display => (
       <DisplayEditor
         key={display.id}
         configuration={configuration}

@@ -28,6 +28,10 @@ fragment displayFields on Display {
       }
     }
   }
+  position {
+    lat
+    lon
+  }
 }
 `;
 
@@ -38,11 +42,11 @@ fragment configurationFields on Configuration {
   id
   displays {
     ...displayFields
-    name
-    position {
-      lat
-      lon
-    }
+  }
+  name
+  position {
+    lat
+    lon
   }
 }
 `;

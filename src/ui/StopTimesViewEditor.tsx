@@ -43,69 +43,72 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
             : `${view.title ? view.title.fi : 'Tuntematon näkymä.'}`
           }
         </h2>
-        <StopInfoRetriver
-          stops={Object.values(view.stops).map(stop => stop.gtfsId)}
-        >
-          {(result: QueryResult<IStopInfoResponse>): React.ReactNode => {
-            return (
-              <>
-                {result.loading
-                  ? <div>{t('loadingInfo')}</div>
-                  : null}
-                {result.error
-                  ? <div>{t('error')} {result.error.message}</div>
-                  : null}
-                <ul>
-                  {Object.values(view.stops).map(s => {
-                    const stopInfo = (!result.loading && !result.error)
-                      ? result.data!.stopInfos.find(stopInfo => stopInfo.gtfsId === s.gtfsId)
-                      : undefined;
-                    const removeStopButton = (
-                      <Mutation
-                        mutation={REMOVE_STOP}
-                        client={virtualMonitor}
-                      >
-                        {(removeStopFromStopTimesView) => (
-                          <button onClick={() => removeStopFromStopTimesView({
-                            variables: {
-                              stopId: s.id,
-                            },
-                          })}>
-                            {t('removeStop')}
-                          </button>
-                        )}
-                      </Mutation>
-                    );
-
-                    if (!result.loading && !result.error && !stopInfo) {
-                      return (
-                          <li key={s.gtfsId}>
-                            Pysäkkiä Id:llä {s.gtfsId} ei löytynyt.
-                            &nbsp;
-                            {removeStopButton}
-                          </li>
-                        );
-                      }
-
-                    return (
-                      <li key={s.gtfsId}>
-                        <Link
-                          to={`/stop/${s.gtfsId}`}
+        { view.stops.length > 0
+          ? (<StopInfoRetriver
+            stops={view.stops.map(stop => stop.gtfsId)}
+          >
+            {(result: QueryResult<IStopInfoResponse>): React.ReactNode => {
+              return (
+                <>
+                  {result.loading
+                    ? <div>{t('loadingInfo')}</div>
+                    : null}
+                  {result.error
+                    ? <div>{t('error')} {result.error.message}</div>
+                    : null}
+                  <ul>
+                    {view.stops.map(s => {
+                      const stopInfo = (!result.loading && !result.error)
+                        ? result.data!.stopInfos.find(stopInfo => stopInfo.gtfsId === s.gtfsId)
+                        : undefined;
+                      const removeStopButton = (
+                        <Mutation
+                          mutation={REMOVE_STOP}
+                          client={virtualMonitor}
                         >
-                          {stopInfo
-                            ? (<span>{stopInfo.name} (pysäkkinumero {stopInfo.code || ''})</span>)
-                            : (<span>{s.gtfsId}</span>)
-                          }
-                        </Link>
-                        {removeStopButton}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </>
-            );
-          }}
-        </StopInfoRetriver>
+                          {(removeStopFromStopTimesView) => (
+                            <button onClick={() => removeStopFromStopTimesView({
+                              variables: {
+                                stopId: s.id,
+                              },
+                            })}>
+                              {t('removeStop')}
+                            </button>
+                          )}
+                        </Mutation>
+                      );
+  
+                      if (!result.loading && !result.error && !stopInfo) {
+                        return (
+                            <li key={s.gtfsId}>
+                              Pysäkkiä Id:llä {s.gtfsId} ei löytynyt.
+                              &nbsp;
+                              {removeStopButton}
+                            </li>
+                          );
+                        }
+  
+                      return (
+                        <li key={s.gtfsId}>
+                          <Link
+                            to={`/stop/${s.gtfsId}`}
+                          >
+                            {stopInfo
+                              ? (<span>{stopInfo.name} (pysäkkinumero {stopInfo.code || ''})</span>)
+                              : (<span>{s.gtfsId}</span>)
+                            }
+                          </Link>
+                          {removeStopButton}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </>
+              );
+            }}
+          </StopInfoRetriver>)
+          : null
+        }
         <Mutation
           mutation={ADD_STOP}
           client={virtualMonitor}
@@ -126,6 +129,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                           stopTimesViewId: view.id,
                           stop: {
                             gtfsId: stop.gtfsId,
+                            overrideStopName: null,
                             __typename: 'Stop',
                           },
                         },

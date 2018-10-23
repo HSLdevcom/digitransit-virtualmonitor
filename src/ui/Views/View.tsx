@@ -38,7 +38,7 @@ const View = ({ view, ...additionalProps }: { view: IViewBase }) => {
         <StopTimesView
           displayedRoutes={displayedRoutes}
           pierColumnTitle={pierColumnTitle}
-          stops={Object.values(stops)}
+          stops={stops}
           title={view.title && view.title.fi}
         />
       );

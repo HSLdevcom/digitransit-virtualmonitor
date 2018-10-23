@@ -22,7 +22,7 @@ interface IData {
 };
 
 let current: IData = (() => {
-  const configurations = Object.values(initialConfigurations);
+  const configurations = initialConfigurations;
   const displays = configurations.map(c => c.displays).reduce((acc: IDisplay[], current) => [...acc, ...current], []);
   const views = displays.map(d => d.viewCarousel).reduce((acc, current) => [...acc, ...current], []).map(vc => vc.view);
 
@@ -40,7 +40,7 @@ const configurationsResolve = (_: any, { ids, name } : { ids?: ReadonlyArray<str
     const foundConfiguration = current.configurations.find(c => c.name === name);
     return foundConfiguration ? [foundConfiguration] : [];
   } else  /* if (!ids && !name) Implied */ {
-    return Object.values(current.configurations);
+    return current.configurations;
   }
 }
 

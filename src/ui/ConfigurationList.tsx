@@ -83,7 +83,7 @@ const ConfigurationList = ({t}: IConfigurationListProps & InjectedTranslateProps
       }
       return (
         <div>
-          {Object.values([...(result.data.configurations || []), ...(result.data.localConfigurations || [])] ).map((configuration, i) => (
+          {[...(result.data.configurations || []), ...(result.data.localConfigurations || [])].map((configuration, i) => (
             <ConfigEditor
               key={configuration.id}
               configuration={configuration}

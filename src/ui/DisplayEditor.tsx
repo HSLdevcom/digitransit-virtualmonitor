@@ -16,27 +16,28 @@ interface IDisplayEditorProps {
   readonly display?: IDisplay,
 };
 
-// const ADD_STOP = gql`
-//   mutation AddStop {
-//     addStop @client
-//   }
-// `;
-
 interface IDisplayEditorPropsDefaulted extends IDisplayEditorProps {
   readonly display: IDisplay,
 };
 
-// {
-//   Mutation: {
-//     addStop: (_: any, { configuration, display }: { configuration: string, display: string }, { cache, getCacheKey }: any) => {
-//       cache.writeData();
-//     },
-//   },
-// };
-
-// const wrapper: MouseEvent<HTMLButtonElement> = () => {
-
-// };
+const addViewCarouselMutation = gql`
+  mutation addViewCarouselElement($displayId: ID!, $viewCarouselElement: SViewWithDisplaySeconds) {
+    addViewCarouselElement(displayId: $displayId, viewCarouselElement: $viewCarouselElement) @client {
+      id
+      displaySeconds
+      view {
+        id
+        type
+        ...on StopTimesView {
+          title {
+            fi
+          }
+          stops
+        }
+      }
+    }
+  }
+`;
 
 const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = ({configuration, display, t}: IDisplayEditorPropsDefaulted & InjectedTranslateProps) => (
   <div>
@@ -79,25 +80,20 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
         </Link>
       )}
     />
-    <button
-      disabled
-    >
-      Lisää uusi pysäkkinäkymä karuselliin.
-    </button>
-    {/* <ApolloClientsContext.Consumer>
+    <ApolloClientsContext.Consumer>
       {({ virtualMonitor }) =>
         (<Mutation
-          mutation={ADD_STOP}
+          mutation={addViewCarouselMutation}
           client={virtualMonitor}
         >
-          {addStop => (
-            <button onClick={() => addStop()}>
-              {t('prepareStop')}
+          {addViewCarousel => (
+            <button onClick={() => addViewCarousel({ variables: { displayId: display.id } })}>
+              Lisää uusi pysäkkinäkymä karuselliin.
             </button>
           )}
         </Mutation>)
       }
-    </ApolloClientsContext.Consumer> */}
+    </ApolloClientsContext.Consumer>
   </div>
 );
 

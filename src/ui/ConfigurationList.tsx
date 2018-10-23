@@ -10,6 +10,7 @@ import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 interface INode {
   readonly id: string,
+  readonly __typename?: string,
 };
 
 interface ITranslatedString {

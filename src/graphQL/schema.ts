@@ -11,7 +11,7 @@ type Mutable<T> = {
   -readonly [P in keyof T]: T[P];
 };
 
-export type OptionalId<T> = {
+export type OptionalId<T> = T & {
   id: string;
 };
 

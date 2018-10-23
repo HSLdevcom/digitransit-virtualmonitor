@@ -15,7 +15,7 @@ import i18n from 'src/i18n';
 import 'src/index.css';
 import registerServiceWorker from 'src/registerServiceWorker';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
-import { IConfiguration, IStop, IStopTimesView, IDisplay } from 'src/ui/ConfigurationList';
+import { IConfiguration, IStop, IDisplay, IViewCarouselElement } from 'src/ui/ConfigurationList';
 import schema, { OptionalId } from 'src/graphQL/schema';
 import { ConfigurationFieldsFragment, DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
 import { virtualMonitorClient, loona } from 'src/graphQL/virtualMonitorClient';
@@ -245,7 +245,7 @@ export class ViMoState {
         }
       }
     );
-    return;
+    return stopWithId;
 
     const updated = context.cache.readQuery({
       query: gql`
@@ -284,6 +284,56 @@ export class ViMoState {
         // })
       }
     );
+  }
+
+  @mutation('addViewCarouselElement')
+  addViewCarouselElement({ displayId, viewCarouselElement }: { displayId: string, viewCarouselElement: OptionalId<IViewCarouselElement> }, context: Context) {
+    const defaultViewCarouselElement = {
+      displaySeconds: 2,
+      view: {
+        title: {
+          fi: '',
+          en: '',
+          __typename: 'TranslatedString',
+        },
+        type: 'stopTimes',
+        stops: [],
+        __typename: 'StopTimesView',
+      },
+      __typename: 'ViewWithDisplaySeconds',
+    };
+
+    const viewCarouselElementToAdd: IViewCarouselElement = {
+      id: uuidv4(),
+      ...(viewCarouselElement || defaultViewCarouselElement),
+      view: {
+        id: uuidv4(),
+        ...(viewCarouselElement || defaultViewCarouselElement).view,
+        __typename: 'StopTimesView',
+      },
+      __typename: 'ViewWithDisplaySeconds',
+    };
+    
+    context.patchQuery(
+      gql`
+        ${ConfigurationFieldsFragment}
+        {
+          localConfigurations @client {
+            ...configurationFields
+          }
+        }
+      `,
+      (data) => {
+        for (let conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
+          for (let display of conf.displays) {
+            if (display.id === displayId) {
+              (display.viewCarousel as Array<IViewCarouselElement>).push(viewCarouselElementToAdd)
+            }
+          }
+        }
+      }
+    );
+    return viewCarouselElementToAdd;
   }
 };
 

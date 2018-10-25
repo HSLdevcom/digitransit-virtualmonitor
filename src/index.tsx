@@ -335,6 +335,31 @@ export class ViMoState {
     );
     return viewCarouselElementToAdd;
   }
+
+  @mutation('setViewCarouselElementDisplaySeconds')
+  setViewCarouselElementDisplaySeconds({ viewCarouselElementId, displaySeconds }: { viewCarouselElementId: string, displaySeconds: number }, context: Context) {
+    context.patchQuery(
+      gql`
+        ${ConfigurationFieldsFragment}
+        {
+          localConfigurations @client {
+            ...configurationFields
+          }
+        }
+      `,
+      (data) => {
+        for (let conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
+          for (let display of conf.displays) {
+            for (let viewCarouselElement of display.viewCarousel) {
+              if (viewCarouselElement.id === viewCarouselElementId) {
+                (viewCarouselElement.displaySeconds as number) = displaySeconds;
+              }
+            }
+          }
+        }
+      }
+    );
+  }
 };
 
 export const contextValue: IApolloClientContextType = {

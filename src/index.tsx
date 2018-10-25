@@ -360,6 +360,31 @@ export class ViMoState {
       }
     );
   }
+
+  @mutation('setViewTitle')
+  setViewTitle({ viewId, title }: { viewId: string, title: string }, context: Context) {
+    context.patchQuery(
+      gql`
+        ${ConfigurationFieldsFragment}
+        {
+          localConfigurations @client {
+            ...configurationFields
+          }
+        }
+      `,
+      (data) => {
+        for (let conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
+          for (let display of conf.displays) {
+            for (let viewCarouselElement of display.viewCarousel) {
+              if ((viewCarouselElement.view.id === viewId) && viewCarouselElement.view.title) {
+                (viewCarouselElement.view.title.fi as string) = title;
+              }
+            }
+          }
+        }
+      }
+    );
+  }
 };
 
 export const contextValue: IApolloClientContextType = {

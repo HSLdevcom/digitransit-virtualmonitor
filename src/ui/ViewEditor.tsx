@@ -43,7 +43,6 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ view }: IViewEditorProps) => 
                 />
               )}
             </Mutation>
-            <b>{view.title ? view.title.fi : 'nimeämätön'}</b>
             {`. `}
             {`Näkymän tyyppi:
             ${view.type}.`}

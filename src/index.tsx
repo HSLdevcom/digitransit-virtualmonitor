@@ -1,7 +1,6 @@
-import ApolloBoostClient, { gql, InMemoryCache, ApolloLink, HttpLink } from 'apollo-boost';
+import { Context, LoonaProvider, mutation, state } from '@loona/react';
+import ApolloBoostClient, { gql, InMemoryCache } from 'apollo-boost';
 import { ApolloCache } from 'apollo-cache';
-import { ApolloClient } from 'apollo-client';
-import { createLoona, LoonaProvider, state, mutation, Context } from '@loona/react';
 import * as React from 'react';
 import { ApolloProvider } from 'react-apollo'
 import * as ReactDOM from 'react-dom';
@@ -11,14 +10,14 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { IApolloClientContextType } from 'src/ApolloClientsContextCreator';
 import App from 'src/App';
+import schema, { OptionalId } from 'src/graphQL/schema';
+import { loona, virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
 import i18n from 'src/i18n';
 import 'src/index.css';
 import registerServiceWorker from 'src/registerServiceWorker';
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
-import { IConfiguration, IStop, IDisplay, IViewCarouselElement } from 'src/ui/ConfigurationList';
-import schema, { OptionalId } from 'src/graphQL/schema';
+import { IConfiguration, IDisplay, IStop, IViewCarouselElement } from 'src/ui/ConfigurationList';
 import { ConfigurationFieldsFragment, DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
-import { virtualMonitorClient, loona } from 'src/graphQL/virtualMonitorClient';
+import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
 const resolvers = {
   Mutation: {
@@ -26,14 +25,14 @@ const resolvers = {
     //   cache.writeData();
     //   return null;
     // },
-    modifyLocalConfigurations: (_: any, { configuration }: { configuration: IConfiguration }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
-      
+    createDisplay: (_: any, { configurationName, name }: { configurationName: string, name: string }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
+      return null;
     },
     createLocalConfiguration: (_: any, { name }: { name: string }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
       return null;
     },
-    createDisplay: (_: any, { configurationName, name }: { configurationName: string, name: string }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
-      return null;
+    modifyLocalConfigurations: (_: any, { configuration }: { configuration: IConfiguration }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
+      
     },
   }
 };
@@ -89,38 +88,38 @@ export class ViMoState {
   // }
 
   @mutation('addQuickConfiguration')
-  addQuickConfiguration(_: any, context: Context) {
+  public addQuickConfiguration(_: any, context: Context) {
     const newConfiguration: any = {
-      id: uuidv4(),
-      name: 'QuickConfiguration',
+      __typename: 'Configuration',
       displays: [
         {
+          __typename: 'Display',
           id: uuidv4(),
           name: 'QuickDisplay',
+          position: null,
           viewCarousel: [
             {
-              id: uuidv4(),
+              __typename: 'SViewWithDisplaySeconds',
               displaySeconds: 3,
+              id: uuidv4(),
               view: {
+                __typename: 'StopTimesView', // This doesn't seem to work for some reason.
                 id: uuidv4(),
-                type: 'stopTimes',
+                stops: [],
                 title: {
+                  __typename: 'TranslatedString',
                   en: '',
                   fi: '',
-                  __typename: 'TranslatedString',
                 },
-                stops: [],
-                __typename: 'StopTimesView', // This doesn't seem to work for some reason.
+                type: 'stopTimes',
               },
-              __typename: 'SViewWithDisplaySeconds',
             },
           ],
-          position: null,
-          __typename: 'Display',
         },
       ],
+      id: uuidv4(),
+      name: 'QuickConfiguration',
       position: null,
-      __typename: 'Configuration',
     };
 
     context.patchQuery(
@@ -141,7 +140,7 @@ export class ViMoState {
   }
 
   @mutation('addQuickDisplay')
-  addQuickDisplay({ display }: { display: IDisplay }, context: Context) {
+  public addQuickDisplay({ display }: { display: IDisplay }, context: Context) {
 
     const nullifiedDisplay: any = {
       ...display,
@@ -149,11 +148,11 @@ export class ViMoState {
     }
 
     const newConfiguration: any = {
+      __typename: 'Configuration',
+      displays: [ nullifiedDisplay ],
       id: uuidv4(),
       name: 'QuickConfiguration',
-      displays: [ nullifiedDisplay ],
       position: null,
-      __typename: 'Configuration',
     };
 
     context.patchQuery(
@@ -174,7 +173,7 @@ export class ViMoState {
   }
 
   @mutation('removeStopFromStopTimesView')
-  removeStopFromStopTimesView({ stopId }: { stopId: string }, context: Context) {
+  public removeStopFromStopTimesView({ stopId }: { stopId: string }, context: Context) {
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}
@@ -185,9 +184,9 @@ export class ViMoState {
         }
       `,
       (data) => {
-        for (let conf of data.localConfigurations) {
-          for (let display of conf.displays) {
-            for (let viewCarouselElement of display.viewCarousel) {
+        for (const conf of data.localConfigurations) {
+          for (const display of conf.displays) {
+            for (const viewCarouselElement of display.viewCarousel) {
               if (viewCarouselElement.view.stops.some((stop: IStop) => stop.id === stopId)) {
                 viewCarouselElement.view.stops = viewCarouselElement.view.stops.filter((stop: IStop) => stop.id !== stopId);
               }
@@ -200,7 +199,7 @@ export class ViMoState {
   }
 
   @mutation('addStopToStopTimesView')
-  addStopToStopTimesView({ stopTimesViewId, stop }: { stopTimesViewId: string, stop: OptionalId<IStop> }, context: Context) {
+  public addStopToStopTimesView({ stopTimesViewId, stop }: { stopTimesViewId: string, stop: OptionalId<IStop> }, context: Context) {
     const stopWithId = {
       id: uuidv4(), // Possibly overriden from stop.
       ...stop,
@@ -234,9 +233,9 @@ export class ViMoState {
         }
       `,
       (data) => {
-        for (let conf of data.localConfigurations) {
-          for (let display of conf.displays) {
-            for (let viewCarouselElement of display.viewCarousel) {
+        for (const conf of data.localConfigurations) {
+          for (const display of conf.displays) {
+            for (const viewCarouselElement of display.viewCarousel) {
               if (viewCarouselElement.view.id === stopTimesViewId) {
                 viewCarouselElement.view.stops.push(stopWithId);
               }
@@ -287,31 +286,31 @@ export class ViMoState {
   }
 
   @mutation('addViewCarouselElement')
-  addViewCarouselElement({ displayId, viewCarouselElement }: { displayId: string, viewCarouselElement: OptionalId<IViewCarouselElement> }, context: Context) {
+  public addViewCarouselElement({ displayId, viewCarouselElement }: { displayId: string, viewCarouselElement: OptionalId<IViewCarouselElement> }, context: Context) {
     const defaultViewCarouselElement = {
+      __typename: 'ViewWithDisplaySeconds',
       displaySeconds: 2,
       view: {
+        __typename: 'StopTimesView',
+        stops: [],
         title: {
-          fi: '',
-          en: '',
           __typename: 'TranslatedString',
+          en: '',
+          fi: '',
         },
         type: 'stopTimes',
-        stops: [],
-        __typename: 'StopTimesView',
       },
-      __typename: 'ViewWithDisplaySeconds',
     };
 
     const viewCarouselElementToAdd: IViewCarouselElement = {
+      __typename: 'ViewWithDisplaySeconds',
       id: uuidv4(),
       ...(viewCarouselElement || defaultViewCarouselElement),
       view: {
+        __typename: 'StopTimesView',
         id: uuidv4(),
         ...(viewCarouselElement || defaultViewCarouselElement).view,
-        __typename: 'StopTimesView',
       },
-      __typename: 'ViewWithDisplaySeconds',
     };
     
     context.patchQuery(
@@ -324,10 +323,10 @@ export class ViMoState {
         }
       `,
       (data) => {
-        for (let conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
-          for (let display of conf.displays) {
+        for (const conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
+          for (const display of conf.displays) {
             if (display.id === displayId) {
-              (display.viewCarousel as Array<IViewCarouselElement>).push(viewCarouselElementToAdd)
+              (display.viewCarousel as IViewCarouselElement[]).push(viewCarouselElementToAdd)
             }
           }
         }
@@ -337,7 +336,7 @@ export class ViMoState {
   }
 
   @mutation('setViewCarouselElementDisplaySeconds')
-  setViewCarouselElementDisplaySeconds({ viewCarouselElementId, displaySeconds }: { viewCarouselElementId: string, displaySeconds: number }, context: Context) {
+  public setViewCarouselElementDisplaySeconds({ viewCarouselElementId, displaySeconds }: { viewCarouselElementId: string, displaySeconds: number }, context: Context) {
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}
@@ -348,9 +347,9 @@ export class ViMoState {
         }
       `,
       (data) => {
-        for (let conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
-          for (let display of conf.displays) {
-            for (let viewCarouselElement of display.viewCarousel) {
+        for (const conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
+          for (const display of conf.displays) {
+            for (const viewCarouselElement of display.viewCarousel) {
               if (viewCarouselElement.id === viewCarouselElementId) {
                 (viewCarouselElement.displaySeconds as number) = displaySeconds;
               }
@@ -362,7 +361,7 @@ export class ViMoState {
   }
 
   @mutation('setViewTitle')
-  setViewTitle({ viewId, title }: { viewId: string, title: string }, context: Context) {
+  public setViewTitle({ viewId, title }: { viewId: string, title: string }, context: Context) {
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}
@@ -373,12 +372,35 @@ export class ViMoState {
         }
       `,
       (data) => {
-        for (let conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
-          for (let display of conf.displays) {
-            for (let viewCarouselElement of display.viewCarousel) {
+        for (const conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
+          for (const display of conf.displays) {
+            for (const viewCarouselElement of display.viewCarousel) {
               if ((viewCarouselElement.view.id === viewId) && viewCarouselElement.view.title) {
                 (viewCarouselElement.view.title.fi as string) = title;
               }
+            }
+          }
+        }
+      }
+    );
+  }
+
+  @mutation('removeViewCarouselElement')
+  public removeViewCarouselElement({ displayId, viewCarouselElementId }: { displayId: string, viewCarouselElementId: string }, context: Context) {
+    context.patchQuery(
+      gql`
+        ${ConfigurationFieldsFragment}
+        {
+          localConfigurations @client {
+            ...configurationFields
+          }
+        }
+      `,
+      (data) => {
+        for (const conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
+          for (const display of conf.displays) {
+            if ((display.id === displayId) && (display.viewCarousel.find(vce => vce.id === viewCarouselElementId))) {
+              (display.viewCarousel as IViewCarouselElement[]) = display.viewCarousel.filter(vce => vce.id !== viewCarouselElementId)
             }
           }
         }

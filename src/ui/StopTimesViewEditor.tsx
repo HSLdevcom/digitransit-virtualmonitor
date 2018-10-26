@@ -4,11 +4,11 @@ import { Mutation, QueryResult } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { IStopWithName as StopsByNameRetrieverIStop } from "src/ui/StopsByNameRetriever";
-import { IConfiguration, IStopTimesView, IStop } from "src/ui/ConfigurationList";
-import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
+import { IConfiguration, IStopTimesView } from "src/ui/ConfigurationList";
 import StopInfoRetriver, { IStopInfoResponse } from 'src/ui/StopInfoRetriever';
+import { IStopWithName as StopsByNameRetrieverIStop } from "src/ui/StopsByNameRetriever";
 import StopSearch from 'src/ui/StopSearch';
+import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 type IViewEditorProps = {
   readonly configuration?: IConfiguration,
@@ -59,7 +59,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                   <ul>
                     {view.stops.map(s => {
                       const stopInfo = (!result.loading && !result.error)
-                        ? result.data!.stopInfos.find(stopInfo => stopInfo.gtfsId === s.gtfsId)
+                        ? result.data!.stopInfos.find(findStopInfo => findStopInfo.gtfsId === s.gtfsId)
                         : undefined;
                       const removeStopButton = (
                         <Mutation
@@ -126,12 +126,12 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                       </Link>
                       <button onClick={() => addStopToStopTimesView({
                         variables: {
-                          stopTimesViewId: view.id,
                           stop: {
+                            __typename: 'Stop',
                             gtfsId: stop.gtfsId,
                             overrideStopName: null,
-                            __typename: 'Stop',
                           },
+                          stopTimesViewId: view.id,
                         },
                       })}>
                         {t('prepareStop')}

@@ -1,6 +1,4 @@
-import { GraphQLNonNull, GraphQLID, GraphQLInterfaceType, GraphQLObjectType, GraphQLScalarType, GraphQLString } from "graphql";
-import SConfiguration from 'src/graphQL/SConfiguration';
-import SStopTimesView from 'src/graphQL/SStopTimesView';
+import { GraphQLID, GraphQLInterfaceType, GraphQLNonNull, GraphQLObjectType } from "graphql";
 
 const typeMap: { [typename: string]: GraphQLObjectType } = {
   // 'configi': SConfiguration,
@@ -8,15 +6,15 @@ const typeMap: { [typename: string]: GraphQLObjectType } = {
 
 export const SNodeFields = {
   id: {
-    type: new GraphQLNonNull(GraphQLString),
     description: 'The unique ID of an object',
+    type: new GraphQLNonNull(GraphQLID),
   },
 };
 
 export const SNodeInputFields = {
   id: {
-    type: GraphQLString,
     description: 'The unique ID of an object',
+    type: GraphQLID,
   },
 };
 

@@ -8,8 +8,8 @@ import { Link } from "react-router-dom";
 import { IConfiguration, IDisplay } from "src/ui/ConfigurationList";
 import { pairs } from 'src/ui/DisplayUrlCompression';
 import LatLonEditor from "src/ui/LatLonEditor";
-import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 import ViewCarouselElementEditor from 'src/ui/ViewCarouselElementEditor';
+import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 interface IDisplayEditorProps {
   readonly configuration?: IConfiguration,
@@ -56,7 +56,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
           editable={true}
         />)
       : (<button
-          disabled
+          disabled={true}
         >
           Määritä sijainti
         </button>)
@@ -73,7 +73,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
       ))}
     </ul>
     <Async
-      promise={pairs['v0'].pack(display)}
+      promise={pairs.v0.pack(display)}
       then={(packedUrl: string) => (
         <Link to={`/urld/v0/${encodeURIComponent(packedUrl)}`}>
           Staattinen linkki

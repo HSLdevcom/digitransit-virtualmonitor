@@ -1,17 +1,17 @@
+import { Query } from '@loona/react';
 import gql from 'graphql-tag';
+import { History } from 'history';
 import * as React from 'react';
-import { Mutation, Query } from '@loona/react';
+import { QueryResult } from 'react-apollo';
+import { RouteComponentProps } from 'react-router';
 import { v4 as uuidv4 } from 'uuid';
 
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
-import { IConfiguration, IDisplay } from 'src/ui/ConfigurationList';
-import { QueryResult } from 'react-apollo';
-import DisplayEditor from 'src/ui/DisplayEditor';
-import { DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
-import { pairs } from 'src/ui/DisplayUrlCompression';
-import { RouteComponentProps } from 'react-router';
-import { History } from 'history';
 import { virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
+import { IConfiguration, IDisplay } from 'src/ui/ConfigurationList';
+import { DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
+import DisplayEditor from 'src/ui/DisplayEditor';
+import { pairs } from 'src/ui/DisplayUrlCompression';
+import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
 const addQuickConfiguration = gql`
   mutation addQuickConfiguration {
@@ -109,50 +109,6 @@ class QuickDisplay extends React.Component<IQuickDisplayProps & { virtualMonitor
     }
   }
 
-  insertDisplayToCache(virtualMonitor: typeof virtualMonitorClient, display: IDisplay) {
-    const insertable: any = {
-      ...display,
-      id: uuidv4(),
-      __typename: 'Display',
-      viewCarousel: Array.from(display.viewCarousel).map(vce => ({
-        ...vce,
-        id: uuidv4(),
-        __typename: 'SViewWithDisplaySeconds',
-        view: {
-          ...vce.view,
-          id: uuidv4(),
-          __typename: 'StopTimesView',
-          title: {
-            ...vce.view.title,
-            __typename: 'TranslatedString',
-          },
-          stops: Array.from(vce.view.stops).map(stop => ({
-            ...stop,
-            id: uuidv4(),
-            __typename: 'Stop',
-          })),
-        }
-      }))
-    };
-
-    virtualMonitor.mutate({
-      mutation: addQuickDisplay,
-      variables: {
-        display: insertable,
-      },
-    }).then(({ data, errors }: { data?: { addQuickDisplay: IDisplay }, errors?: any }) => {
-      if (data && data.addQuickDisplay) {
-        this.setState({
-          displayId: data.addQuickDisplay.id,
-        });
-      } else {
-        this.setState({
-          displayId: undefined,
-        });
-      }
-    });
-  }
-
   public render() {
     return (
       <ApolloClientsContext.Consumer>
@@ -216,6 +172,50 @@ class QuickDisplay extends React.Component<IQuickDisplayProps & { virtualMonitor
       </ApolloClientsContext.Consumer>
     );
   }
+
+  protected insertDisplayToCache(virtualMonitor: typeof virtualMonitorClient, display: IDisplay) {
+    const insertable: any = {
+      ...display,
+      __typename: 'Display',
+      id: uuidv4(),
+      viewCarousel: Array.from(display.viewCarousel).map(vce => ({
+        ...vce,
+        __typename: 'SViewWithDisplaySeconds',
+        id: uuidv4(),
+        view: {
+          ...vce.view,
+          __typename: 'StopTimesView',
+          id: uuidv4(),
+          stops: Array.from(vce.view.stops).map(stop => ({
+            ...stop,
+            __typename: 'Stop',
+            id: uuidv4(),
+          })),
+          title: {
+            ...vce.view.title,
+            __typename: 'TranslatedString',
+          },
+        }
+      }))
+    };
+
+    virtualMonitor.mutate({
+      mutation: addQuickDisplay,
+      variables: {
+        display: insertable,
+      },
+    }).then(({ data, errors }: { data?: { addQuickDisplay: IDisplay }, errors?: any }) => {
+      if (data && data.addQuickDisplay) {
+        this.setState({
+          displayId: data.addQuickDisplay.id,
+        });
+      } else {
+        this.setState({
+          displayId: undefined,
+        });
+      }
+    });
+  }
 }
 
 interface IDisplayEditorHistoryUpdaterProps {
@@ -224,12 +224,8 @@ interface IDisplayEditorHistoryUpdaterProps {
 };
 
 class DisplayEditorHistoryUpdater extends React.PureComponent<IDisplayEditorHistoryUpdaterProps> {
-  constructor(props: IDisplayEditorHistoryUpdaterProps) {
-    super(props);
-  }
-
   // Removes IDs and __typenames from the display. Preserve nulls.
-  static minimizeDisplay(display: IDisplay): IDisplay {
+  public static minimizeDisplay(display: IDisplay): IDisplay {
     const removeIDAndTypename = (o: { id?: string, __typename?: string }): {  } => {
       const { id, __typename, ...rest } = { ...o, id: undefined, __typename: undefined };
       return rest;
@@ -262,11 +258,15 @@ class DisplayEditorHistoryUpdater extends React.PureComponent<IDisplayEditorHist
     return recursive(display) as IDisplay;
   }
 
+  constructor(props: IDisplayEditorHistoryUpdaterProps) {
+    super(props);
+  }
+
   public componentDidUpdate(prevProps: {display: IDisplay}) {
     if (this.props.display && (prevProps.display !== this.props.display) && (JSON.stringify(this.props.display) !== JSON.stringify(prevProps.display))) {
       const sanitized = DisplayEditorHistoryUpdater.minimizeDisplay(this.props.display);
       const version = 'v0';
-      pairs[version].pack(sanitized).then(packed => { console.log(packed); this.props.history.push(`/quickDisplay/${version}/${encodeURIComponent(packed)}`); });
+      pairs[version].pack(sanitized).then(packed => this.props.history.push(`/quickDisplay/${version}/${encodeURIComponent(packed)}`));
     }
   }
 

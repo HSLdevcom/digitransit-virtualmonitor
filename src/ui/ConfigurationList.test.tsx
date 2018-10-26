@@ -6,7 +6,6 @@ import ConfigurationList, { IConfigurationListProps, IConfigurations } from 'src
 
 const testConfigs: IConfigurations = [
   {
-    id: 'Testing c',
     displays: [
       {
         id: 'Testing 1',
@@ -17,18 +16,18 @@ const testConfigs: IConfigurations = [
         },
         viewCarousel: [
           {
-            id: 'Testing vc',
             displaySeconds: 4,
+            id: 'Testing vc',
             view: {
               id: 'Testing v',
               stops: [
                 {
-                  id: 'Testing s1',
                   gtfsId: 'HSL:4700210',
+                  id: 'Testing s1',
                 },
                 {
-                  id: 'Testing s2',
                   gtfsId: 'HSL:4740217',
+                  id: 'Testing s2',
                 },
               ],
               title: {
@@ -44,6 +43,7 @@ const testConfigs: IConfigurations = [
         ],
       },
     ],
+    id: 'Testing c',
     name: 'Test configuration',
     position: {
       lat: 7.5,

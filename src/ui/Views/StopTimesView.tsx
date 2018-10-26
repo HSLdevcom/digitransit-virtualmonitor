@@ -2,12 +2,11 @@ import * as React from "react";
 import { InjectedTranslateProps, translate } from "react-i18next";
 
 import AutoMoment from "src/ui/AutoMoment";
-import HslLogo from "src/ui/HslLogo";
-import { default as StopTimesRetriever, StopId, StopTimesRetrieverQueryResult, IStopTime } from "src/ui/StopTimesRetriever";
 import { IStop } from "src/ui/ConfigurationList";
-import StopName from "src/ui/StopName";
-import Titlebar from "src/ui/Titlebar";
+import HslLogo from "src/ui/HslLogo";
 import StopTimesList from 'src/ui/StopTimesList';
+import { default as StopTimesRetriever, IStopTime, StopId, StopTimesRetrieverQueryResult } from "src/ui/StopTimesRetriever";
+import Titlebar from "src/ui/Titlebar";
 
 interface IStopTimesViewCommonProps {
   readonly title?: string,
@@ -26,7 +25,7 @@ export interface IStopTimesViewPropsWithIStops extends IStopTimesViewCommonProps
 type ICombinedStopTimesViewProps = (IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops) & InjectedTranslateProps;
 
 const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedStopTimesViewProps) => {
-  let stopIds = (props as IStopTimesViewPropsWithStopIds).stopIds
+  const stopIds = (props as IStopTimesViewPropsWithStopIds).stopIds
     || ((props as IStopTimesViewPropsWithIStops).stops.map(stop => stop.gtfsId))
     || [];
 
@@ -53,12 +52,12 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
           }
           if (!result || !result.data) {
             return (<div>
-              {props.t('stopRetrieveError', { stopIds: stopIds })}
+              {props.t('stopRetrieveError', { stopIds })}
             </div>);
           }
           if (!result.data.stops || (result.data.stops.length <= 0)) {
             return (<div>
-              {props.t('stopRetrieveNotFound', { stopIds: stopIds })}
+              {props.t('stopRetrieveNotFound', { stopIds })}
             </div>);
           }
         

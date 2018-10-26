@@ -1,9 +1,9 @@
 import * as React from "react";
+import { QueryResult } from 'react-apollo';
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { isString } from "util";
 
-import StopsByNameRetriever, { IStopsByNameResponse, IStopsByNameQuery, IStopWithName } from "src/ui/StopsByNameRetriever";
-import { QueryResult } from 'react-apollo';
+import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse, IStopWithName } from "src/ui/StopsByNameRetriever";
 
 type IProps = {
   readonly children?: (stops: ReadonlyArray<IStopWithName>) => React.ReactNode,

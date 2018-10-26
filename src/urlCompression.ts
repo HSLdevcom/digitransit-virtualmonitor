@@ -1,7 +1,7 @@
 import { deflate, inflate } from 'zlib';
 
-const createUrlCompression = <T extends Object>(dictionary: Buffer = new Buffer("")) => ({
-  unpack: function (packed: string): Promise<T> {
+const createUrlCompression = <T extends object>(dictionary: Buffer = new Buffer("")) => ({
+  unpack(packed: string): Promise<T> {
     if (!packed) {
       throw TypeError('Invalid 1st argument for genericUnpack');
     }
@@ -14,7 +14,7 @@ const createUrlCompression = <T extends Object>(dictionary: Buffer = new Buffer(
       })
     );
   },
-  pack: function (objectToPack: T): Promise<string> {
+  pack(objectToPack: T): Promise<string> {
     return new Promise((resolve, reject) =>
       deflate(JSON.stringify(objectToPack), { dictionary }, (err: Error | null, buffer: Buffer) => {
         if (err) {

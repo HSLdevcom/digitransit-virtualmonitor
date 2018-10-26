@@ -23,8 +23,8 @@ interface IData {
 
 let current: IData = (() => {
   const configurations = initialConfigurations;
-  const displays = configurations.map(c => c.displays).reduce((acc: IDisplay[], current) => [...acc, ...current], []);
-  const views = displays.map(d => d.viewCarousel).reduce((acc, current) => [...acc, ...current], []).map(vc => vc.view);
+  const displays = configurations.map(c => c.displays).reduce((acc: IDisplay[], cur) => [...acc, ...cur], []);
+  const views = displays.map(d => d.viewCarousel).reduce((acc, cur) => [...acc, ...cur], []).map(vc => vc.view);
 
   return ({
     configurations,
@@ -118,7 +118,9 @@ const schema = new GraphQLSchema({
         },
         resolve: (_, { id }: { id: string }) => {
           if (id) {
-            if (current.configurations.find(c => c.id === id)) return ({ ...(current.configurations.find(c => c.id === id)), __ownTypeName: 'Configuration' });
+            if (current.configurations.find(c => c.id === id)) {
+              return ({ ...(current.configurations.find(c => c.id === id)), __ownTypeName: 'Configuration' });
+            }
             if (current.views.find(v => v.id === id)) {
               const foundView = current.views.find(v => v.id === id);
               const viewTypeMap = {
@@ -126,7 +128,9 @@ const schema = new GraphQLSchema({
               };
               return ({ ...foundView, __ownTypeName: viewTypeMap[(foundView as IViewBase).type] });
             }
-            if (current.displays.find(d => d.id === id)) return ({ ...(current.displays.find(d => d.id === id)), __ownTypeName: 'Display' });
+            if (current.displays.find(d => d.id === id)) {
+              return ({ ...(current.displays.find(d => d.id === id)), __ownTypeName: 'Display' });
+            }
           }
           return null;
         },

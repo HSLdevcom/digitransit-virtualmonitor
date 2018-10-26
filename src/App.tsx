@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Link, Route, Switch, RouteComponentProps } from 'react-router-dom';
+import { Link, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import 'src/App.css';
 import AutoMoment from 'src/ui/AutoMoment';
@@ -9,10 +9,10 @@ import Titlebar from 'src/ui/Titlebar';
 
 import ConfigurationDisplay from 'src/ui/ConfigurationDisplay';
 import ConfigurationList from 'src/ui/ConfigurationList';
-import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
-import StopTimesView from 'src/ui/Views/StopTimesView';
 import DisplayEditor from 'src/ui/DisplayEditor';
+import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
 import QuickDisplay from 'src/ui/QuickDisplay';
+import StopTimesView from 'src/ui/Views/StopTimesView';
 
 interface ICompressedDisplayRouteParams {
   version: string,

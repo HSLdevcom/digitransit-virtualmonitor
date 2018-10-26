@@ -1,17 +1,17 @@
-import React = require('react');
-
-import { IViewBase, IStopTimesView } from 'src/ui/ConfigurationList';
-import StopTimesViewEditor from 'src/ui/StopTimesViewEditor';
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import { RIEInput } from '@attently/riek';
 import { Mutation } from '@loona/react';
 import gql from 'graphql-tag';
+import * as React from 'react';
+
+import { IStopTimesView, IViewBase } from 'src/ui/ConfigurationList';
+import StopTimesViewEditor from 'src/ui/StopTimesViewEditor';
+import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
 export interface IViewEditorProps {
   readonly view: IViewBase,
 };
 
-const setViewTitle = gql`
+const setViewTitleMutation = gql`
   mutation setViewTitle($viewId: ID!, $title: String!) {
     setViewTitle(viewId: $viewId, title: $title) @client
   }
@@ -25,7 +25,7 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ view }: IViewEditorProps) => 
           <div>
             {`Näkymän nimi: `}
             <Mutation
-              mutation={setViewTitle}
+              mutation={setViewTitleMutation}
               client={virtualMonitor}
             >
               {(setViewTitle) => (
@@ -33,8 +33,8 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ view }: IViewEditorProps) => 
                   change={({ viewElementTitle }: { viewElementTitle: string }) => {
                     setViewTitle({
                       variables: {
+                        title: viewElementTitle,
                         viewId: view.id,
-                        title: viewElementTitle
                       }
                     });
                   }}

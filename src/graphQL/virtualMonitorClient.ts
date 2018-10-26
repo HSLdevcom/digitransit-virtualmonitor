@@ -1,7 +1,7 @@
+import { Context, createLoona } from '@loona/react';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
-import { createLoona, LoonaProvider, state, mutation, Context } from '@loona/react';
 import { HttpLink } from 'apollo-link-http';
 
 const virtualMonitorCache = new InMemoryCache({

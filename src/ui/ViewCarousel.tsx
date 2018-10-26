@@ -1,8 +1,8 @@
 import * as React from "react";
 
+import { Seconds } from 'src/time';
 import { IViewBase, IViewCarousel, IViewCarouselElement } from 'src/ui/ConfigurationList';
 import View from 'src/ui/Views/View';
-import { Seconds } from 'src/time';
 
 interface IProps {
   readonly viewCarousel: IViewCarousel,
@@ -94,9 +94,9 @@ class ViewCarousel extends React.Component<IProps, IState> {
       timeAcc: timeAcc - view.displaySeconds,
     });
     
-    const { displayedViewCarouselElement }: { displayedViewCarouselElement?: IViewCarouselElement, timeAcc: Seconds } = this.props.viewCarousel.reduce(redFunc, { displayedViewCarouselElement: undefined, timeAcc: (Date.now() / 1000) % this.state.carouselLoopTime });
+    const { foundDisplayedViewCarouselElement }: { foundDisplayedViewCarouselElement?: IViewCarouselElement, timeAcc: Seconds } = this.props.viewCarousel.reduce(redFunc, { displayedViewCarouselElement: undefined, timeAcc: (Date.now() / 1000) % this.state.carouselLoopTime });
 
-    return (displayedViewCarouselElement || this.props.viewCarousel[0] || {}).view;
+    return (foundDisplayedViewCarouselElement || this.props.viewCarousel[0] || {}).view;
   }
 };
 

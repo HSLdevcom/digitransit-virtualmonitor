@@ -1,12 +1,12 @@
 import * as React from "react";
+import { QueryResult } from 'react-apollo';
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { RouteComponentProps/* , withRouter */ } from 'react-router';
 import { Link } from "react-router-dom";
 import { isString } from "util";
 
-import StopList, { IStopRenderFunc } from "src/ui/StopList";
-import StopsByNameRetriever, { IStopsByNameResponse, IStopsByNameQuery } from "src/ui/StopsByNameRetriever";
-import { QueryResult } from 'react-apollo';
+import { IStopRenderFunc } from "src/ui/StopList";
+import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse } from "src/ui/StopsByNameRetriever";
 
 type IProps = RouteComponentProps<{
   readonly phrase?: string,

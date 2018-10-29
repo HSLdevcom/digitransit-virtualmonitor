@@ -72,7 +72,7 @@ export interface IStopTime {
   },
 };
 
-interface IStop {
+export interface IStop {
   readonly name: string,
   readonly gtfsId: string,
   readonly stoptimesWithoutPatterns?: ReadonlyArray<IStopTime>

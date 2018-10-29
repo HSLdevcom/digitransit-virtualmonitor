@@ -60,7 +60,7 @@ class App extends React.Component {
           component={({ match: { params: { stopId, displayedRoutes }} }: RouteComponentProps<IStopRouteParams>) => (
             <StopTimesView
               stopIds={[stopId]}
-              displayedRoutes={Number(displayedRoutes)}
+              displayedRoutes={displayedRoutes ? Number(displayedRoutes) : undefined}
             />
           )}
         />

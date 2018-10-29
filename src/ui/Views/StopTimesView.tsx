@@ -2,11 +2,13 @@ import * as React from "react";
 import { InjectedTranslateProps, translate } from "react-i18next";
 
 import AutoMoment from "src/ui/AutoMoment";
-import { IStop } from "src/ui/ConfigurationList";
+import { IStop as LocalIStop } from 'src/ui/ConfigurationList'
 import HslLogo from "src/ui/HslLogo";
 import StopTimesList from 'src/ui/StopTimesList';
-import { default as StopTimesRetriever, IStopTime, StopId, StopTimesRetrieverQueryResult } from "src/ui/StopTimesRetriever";
+import { default as StopTimesRetriever, IStop, IStopTime, StopId, StopTimesRetrieverQueryResult } from "src/ui/StopTimesRetriever";
 import Titlebar from "src/ui/Titlebar";
+
+const duplicateRouteTimeThresholdSeconds = 15 * 60;
 
 interface IStopTimesViewCommonProps {
   readonly title?: string,
@@ -19,7 +21,7 @@ export interface IStopTimesViewPropsWithStopIds extends IStopTimesViewCommonProp
 };
 
 export interface IStopTimesViewPropsWithIStops extends IStopTimesViewCommonProps {
-  readonly stops: ReadonlyArray<IStop>,
+  readonly stops: ReadonlyArray<LocalIStop>,
 };
 
 type ICombinedStopTimesViewProps = (IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops) & InjectedTranslateProps;
@@ -69,17 +71,40 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
           // Todo: Prioritize stops for route that are closest to display position.
           const mergedStopTimes = result.data.stops
             .reduce(
-              (acc, curr) => [...acc, ...curr.stoptimesWithoutPatterns || []],
+              (acc: IStopTime[], curr:IStop) => [...acc, ...curr.stoptimesWithoutPatterns || []],
               []
             )
             // Sort by departure time.
             .sort((stopTimeA, stopTimeB) => calcAbsoluteDepartureTime(stopTimeA) - calcAbsoluteDepartureTime(stopTimeB))
+            // Remove duplicate routes. Todo: unless at duplicateRouteTimeThresholdSeconds
+            .reduce(
+              (acc: IStopTime[], curr: IStopTime) => {
+                const foundDuplicate = acc.find(stopTime => (stopTime.trip && curr.trip && stopTime.trip.gtfsId === curr.trip.gtfsId));
+                if (foundDuplicate) {
+                  // Found a duplicate.
+                  if (foundDuplicate.realtimeArrival - curr.realtimeArrival < duplicateRouteTimeThresholdSeconds) {
+                    // If time difference is big enough, show both since they are separate part of the same route.
+                    return [
+                      ...acc,
+                      curr
+                    ]
+                  }
+                  // Leave the existing one, it should be earlier. (For now)
+                  return acc;
+                }
+                return [
+                  ...acc,
+                  curr
+                ]
+              },
+              []
+            )
             // Clip to max of props.displayedRoutes
             .slice(0, props.displayedRoutes)
-            // Map renamed stops from configuration
+            // Map renamed stops from with possible overrideStopName configuration
             .map(stopTime => {
               if ((props as IStopTimesViewPropsWithIStops).stops && stopTime.stop && stopTime.stop.gtfsId) {
-                const foundIStop: (IStop | undefined) = (props as IStopTimesViewPropsWithIStops).stops.find(stop => stop.gtfsId === stopTime.stop!.gtfsId);
+                const foundIStop: (LocalIStop | undefined) = (props as IStopTimesViewPropsWithIStops).stops.find(stop => stop.gtfsId === stopTime.stop!.gtfsId);
                 return ({
                   ...stopTime,
                   stop: {
@@ -90,7 +115,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
                   } as IStopTime['stop'],
                 });
               }
-                return stopTime;
+              return stopTime;
             });
           
           return (

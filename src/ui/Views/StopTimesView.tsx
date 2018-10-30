@@ -82,7 +82,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
                 const foundDuplicate = acc.find(stopTime => (stopTime.trip && curr.trip && stopTime.trip.gtfsId === curr.trip.gtfsId));
                 if (foundDuplicate) {
                   // Found a duplicate.
-                  if (foundDuplicate.realtimeArrival - curr.realtimeArrival < duplicateRouteTimeThresholdSeconds) {
+                  if (foundDuplicate.realtimeArrival - curr.realtimeArrival >= duplicateRouteTimeThresholdSeconds) {
                     // If time difference is big enough, show both since they are separate part of the same route.
                     return [
                       ...acc,

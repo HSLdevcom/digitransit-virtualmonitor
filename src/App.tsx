@@ -3,7 +3,7 @@ import { Link, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import 'src/App.css';
 import AutoMoment from 'src/ui/AutoMoment';
-import HslLogo from 'src/ui/HslLogo';
+import Logo from 'src/ui/Logo';
 import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
 
@@ -75,7 +75,7 @@ class App extends React.Component {
         <Route>
           <div id={'stop-search'}>
             <Titlebar>
-              <HslLogo />
+              <Logo />
               <div id={"title-text"}>
                 {'Virtuaalimonitori'}
               </div>

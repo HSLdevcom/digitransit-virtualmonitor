@@ -3,7 +3,7 @@ import { InjectedTranslateProps, translate } from "react-i18next";
 
 import AutoMoment from "src/ui/AutoMoment";
 import { IStop as LocalIStop } from 'src/ui/ConfigurationList'
-import HslLogo from "src/ui/HslLogo";
+import Logo from 'src/ui/Logo';
 import StopTimesList from 'src/ui/StopTimesList';
 import { default as StopTimesRetriever, IStop, IStopTime, StopId, StopTimesRetrieverQueryResult } from "src/ui/StopTimesRetriever";
 import Titlebar from "src/ui/Titlebar";
@@ -34,7 +34,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
   return (
     <div style={{ color: 'white', display: 'flex', flexDirection:'column' }}>
       <Titlebar>
-        <HslLogo />
+        <Logo />
         <div id={"title-text"}>
           {props.title
             ? props.title

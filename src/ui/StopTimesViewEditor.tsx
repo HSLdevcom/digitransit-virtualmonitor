@@ -5,6 +5,7 @@ import { InjectedTranslateProps, translate } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { IConfiguration, IStopTimesView } from "src/ui/ConfigurationList";
+import StopEditor from 'src/ui/StopEditor';
 import StopInfoRetriver, { IStopInfoResponse } from 'src/ui/StopInfoRetriever';
 import { IStopWithName as StopsByNameRetrieverIStop } from "src/ui/StopsByNameRetriever";
 import StopSearch from 'src/ui/StopSearch';
@@ -90,14 +91,10 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
   
                       return (
                         <li key={s.gtfsId}>
-                          <Link
-                            to={`/stop/${s.gtfsId}`}
-                          >
-                            {stopInfo
-                              ? (<span>{stopInfo.name} (pysäkkinumero {stopInfo.code || ''})</span>)
-                              : (<span>{s.gtfsId}</span>)
-                            }
-                          </Link>
+                          <StopEditor
+                            stop={s}
+                            stopInfo={stopInfo}
+                          />
                           {removeStopButton}
                         </li>
                       );

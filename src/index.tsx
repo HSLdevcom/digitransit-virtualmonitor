@@ -15,7 +15,7 @@ import { loona, virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
 import i18n from 'src/i18n';
 import 'src/index.css';
 import registerServiceWorker from 'src/registerServiceWorker';
-import { IConfiguration, IDisplay, IStop, IViewCarouselElement } from 'src/ui/ConfigurationList';
+import { IConfiguration, IDisplay, IStop, IStopTimesView, IViewCarouselElement } from 'src/ui/ConfigurationList';
 import { ConfigurationFieldsFragment, DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
@@ -333,6 +333,35 @@ export class ViMoState {
       }
     );
     return viewCarouselElementToAdd;
+  }
+
+  @mutation('setOverrideStopName')
+  public setOverrideStopName({ stopId, overrideStopName }: { stopId: string, overrideStopName: string | null }, context: Context) {
+    context.patchQuery(
+      gql`
+        ${ConfigurationFieldsFragment}
+        {
+          localConfigurations @client {
+            ...configurationFields
+          }
+        }
+      `,
+      (data) => {
+        for (const conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
+          for (const display of conf.displays) {
+            for (const viewCarouselElement of display.viewCarousel) {
+              if (viewCarouselElement.view.type === 'stopTimes') {
+                for (const stop of (viewCarouselElement.view as IStopTimesView).stops) {
+                  if (stop.id === stopId) {
+                    (stop.overrideStopName as string | undefined) = overrideStopName ? overrideStopName : undefined;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    );
   }
 
   @mutation('setViewCarouselElementDisplaySeconds')

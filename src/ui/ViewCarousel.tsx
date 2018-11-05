@@ -94,7 +94,8 @@ class ViewCarousel extends React.Component<IProps, IState> {
       timeAcc: timeAcc - view.displaySeconds,
     });
     
-    const { foundDisplayedViewCarouselElement }: { foundDisplayedViewCarouselElement?: IViewCarouselElement, timeAcc: Seconds } = this.props.viewCarousel.reduce(redFunc, { displayedViewCarouselElement: undefined, timeAcc: (Date.now() / 1000) % this.state.carouselLoopTime });
+    const { displayedViewCarouselElement: foundDisplayedViewCarouselElement }: { displayedViewCarouselElement?: IViewCarouselElement, timeAcc: Seconds } =
+      this.props.viewCarousel.reduce(redFunc, { displayedViewCarouselElement: undefined, timeAcc: (Date.now() / 1000) % this.state.carouselLoopTime });
 
     return (foundDisplayedViewCarouselElement || this.props.viewCarousel[0] || {}).view;
   }

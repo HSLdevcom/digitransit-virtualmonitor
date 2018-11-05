@@ -286,17 +286,6 @@ class DisplayEditorHistoryUpdater extends React.PureComponent<IDisplayEditorHist
   }
 }
 
-/* <Mutation
-                      mutation={addQuickDisplay}
-                      client={virtualMonitor}
-                    >
-                      {addQuickDisplay => (
-                        <button onClick={() => this.addQuickDisplay2(addQuickDisplay)} value={'Create'}>
-                          Add the Quick Display
-                        </button>
-                      )}
-                    </Mutation>
- */
 export default (props: IQuickDisplayProps) => (
   <ApolloClientsContext.Consumer>
     {({ virtualMonitor }) =>

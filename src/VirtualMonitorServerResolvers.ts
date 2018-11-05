@@ -15,7 +15,7 @@ const resolvers = {
       return null;
     },
     modifyLocalConfigurations: (_: any, { configuration }: { configuration: IConfiguration }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
-      
+      return null;
     },
   }
 };

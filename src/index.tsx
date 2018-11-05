@@ -1,6 +1,5 @@
 import { LoonaProvider } from '@loona/react';
 import ApolloBoostClient, { InMemoryCache } from 'apollo-boost';
-import { ApolloCache } from 'apollo-cache';
 import * as React from 'react';
 import { ApolloProvider } from 'react-apollo'
 import * as ReactDOM from 'react-dom';
@@ -13,27 +12,8 @@ import { loona, virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
 import i18n from 'src/i18n';
 import 'src/index.css';
 import registerServiceWorker from 'src/registerServiceWorker';
-import { IConfiguration } from 'src/ui/ConfigurationList';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import VirtualMonitorLocalState from 'src/VirtualMonitorLocalState';
-
-// const resolvers = {
-//   Mutation: {
-//     // addStop: (_: any, { configuration, display }: { configuration: string, display: string }, { cache, getCacheKey }: any) => {
-//     //   cache.writeData();
-//     //   return null;
-//     // },
-//     createDisplay: (_: any, { configurationName, name }: { configurationName: string, name: string }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
-//       return null;
-//     },
-//     createLocalConfiguration: (_: any, { name }: { name: string }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
-//       return null;
-//     },
-//     modifyLocalConfigurations: (_: any, { configuration }: { configuration: IConfiguration }, { cache, getCacheKey }: { cache: ApolloCache<any>, getCacheKey: any }) => {
-      
-//     },
-//   }
-// };
 
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),

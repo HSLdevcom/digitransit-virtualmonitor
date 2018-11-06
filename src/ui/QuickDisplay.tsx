@@ -8,61 +8,27 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
 import { IConfiguration, IDisplay } from 'src/ui/ConfigurationList';
-import { DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
+import { DisplayFieldsFragment, ConfigurationFieldsFragment } from 'src/ui/ConfigurationRetriever';
 import DisplayEditor from 'src/ui/DisplayEditor';
 import { pairs } from 'src/ui/DisplayUrlCompression';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
 const addQuickConfiguration = gql`
+  ${ConfigurationFieldsFragment}
+
   mutation addQuickConfiguration {
     addQuickConfiguration @client {
-      id
-      name
-      displays {
-        id
-        name
-        viewCarousel {
-          id
-          displaySeconds
-          view {
-            id
-            type
-            ...on StopTimesView {
-              title {
-                fi
-              }
-              stops
-            }
-          }
-        }
-      }
+      ...configurationFields
     }
   }
 `;
 
 const addQuickDisplay = gql`
+  ${DisplayFieldsFragment}
+
   mutation addQuickDisplay($display: SDisplayInput!) {
     addQuickDisplay(display: $display) @client {
-      id
-      name
-      displays {
-        id
-        name
-        viewCarousel {
-          id
-          displaySeconds
-          view {
-            id
-            type
-            ...on StopTimesView {
-              title {
-                fi
-              }
-              stops
-            }
-          }
-        }
-      }
+      ...displayFields
     }
   }
 `;
@@ -87,7 +53,9 @@ class QuickDisplay extends React.Component<IQuickDisplayProps & { virtualMonitor
     if (props.match.params.version && props.match.params.packedDisplay) {
       pairs[props.match.params.version].unpack(decodeURIComponent(props.match.params.packedDisplay)).then((unpacked: IDisplay) => {
         this.insertDisplayToCache(props.virtualMonitor, unpacked);
-        this.setState({ unpackedDisplayUrl : unpacked });
+        this.setState({
+          unpackedDisplayUrl: unpacked,
+        });
       });
     } else {
       props.virtualMonitor.mutate({
@@ -204,17 +172,21 @@ class QuickDisplay extends React.Component<IQuickDisplayProps & { virtualMonitor
       variables: {
         display: insertable,
       },
-    }).then(({ data, errors }: { data?: { addQuickDisplay: IDisplay }, errors?: any }) => {
-      if (data && data.addQuickDisplay) {
-        this.setState({
-          displayId: data.addQuickDisplay.id,
-        });
-      } else {
-        this.setState({
-          displayId: undefined,
-        });
-      }
-    });
+    }).then(
+      (
+        ({ data, errors }: { data?: { addQuickDisplay: IDisplay }, errors?: any }) => {
+          if (data && data.addQuickDisplay) {
+            this.setState({
+              displayId: data.addQuickDisplay.id,
+            });
+          } else {
+            this.setState({
+              displayId: undefined,
+            });
+          }
+        }
+      ).bind(this)
+    );
   }
 }
 

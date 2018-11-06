@@ -120,10 +120,10 @@ export class VirtualMonitorLocalState {
 
     context.patchQuery(
       gql`
-        ${DisplayFieldsFragment}
+        ${ConfigurationFieldsFragment}
         {
           localConfigurations @client {
-            ...displayFields
+            ...configurationFields
           }
         }
       `,

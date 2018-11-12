@@ -4,6 +4,7 @@ import { Mutation, QueryResult } from "react-apollo";
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { Link } from "react-router-dom";
 
+import { virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
 import { IConfiguration, IStopTimesView } from "src/ui/ConfigurationList";
 import StopEditor from 'src/ui/StopEditor';
 import StopInfoRetriver, { IStopInfoResponse } from 'src/ui/StopInfoRetriever';
@@ -25,6 +26,12 @@ const ADD_STOP = gql`
 const REMOVE_STOP = gql`
   mutation RemoveStopFromStopTimesView($stopId: ID!) {
     removeStopFromStopTimesView(stopId: $stopId) @client
+  }
+`;
+
+const MOVE_STOP = gql`
+  mutation MoveStop($stopTimesViewId: ID!, $stopId: ID!, $direction: String!) {
+    moveStop(stopTimesViewId: $stopTimesViewId, stopId: $stopId, direction: $direction) @client
   }
 `;
 
@@ -78,12 +85,48 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                           )}
                         </Mutation>
                       );
+
+                      const moveStopButtons = (
+                        <Mutation
+                          mutation={MOVE_STOP}
+                          client={virtualMonitorClient}
+                        >
+                          {(moveStop) => (
+                            <>
+                              <button
+                                onClick={() => moveStop({
+                                  variables: {
+                                    direction: 'up',
+                                    stopId: s.id,
+                                    stopTimesViewId: view.id,
+                                  }
+                                })}
+                              >
+                                Up.
+                              </button>
+                              <button
+                                onClick={() => moveStop({
+                                  variables: {
+                                    direction: 'down',
+                                    stopId: s.id,
+                                    stopTimesViewId: view.id,
+                                  }
+                                })}
+                              >
+                                Down.
+                              </button>
+                            </>
+                        )}
+                        </Mutation>
+                      );
   
                       if (!result.loading && !result.error && !stopInfo) {
                         return (
                             <li key={s.gtfsId}>
                               Pysäkkiä Id:llä {s.gtfsId} ei löytynyt.
                               &nbsp;
+                              Jaahahahaha.
+                              {moveStopButtons}
                               {removeStopButton}
                             </li>
                           );
@@ -95,7 +138,8 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                             stop={s}
                             stopInfo={stopInfo}
                           />
-                          {removeStopButton}
+                            {moveStopButtons}
+                            {removeStopButton}
                         </li>
                       );
                     })}

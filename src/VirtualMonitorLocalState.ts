@@ -248,6 +248,54 @@ export class VirtualMonitorLocalState {
     );
   }
 
+  @mutation('moveStop')
+  public moveStop({ stopTimesViewId, stopId, direction }: { stopTimesViewId: string, stopId: string, direction: 'up' | 'down' }, context: Context) {
+    const nudgeArrayElement = <T>(arr: ReadonlyArray<T>, element: T, nudgeDirection: 'up' | 'down') => {
+      const foundIndex = arr.findIndex(e => e === element);
+      if (foundIndex === -1) {
+        return arr;
+      }
+      const newIndex = Math.max(0, Math.min(arr.length - 1, foundIndex + (nudgeDirection === 'up' ? -1 : +1)));
+      if (foundIndex === newIndex) {
+        return arr;
+      }
+      const arrayWithoutElement = arr.filter(e => e !== element);
+      return [
+        ...arrayWithoutElement.slice(0, newIndex),
+        element,
+        ...arrayWithoutElement.slice(newIndex)
+      ]
+    };
+
+    context.patchQuery(
+      gql`
+        ${ConfigurationFieldsFragment}
+        {
+          localConfigurations @client {
+            ...configurationFields
+          }
+        }
+      `,
+      (data) => {
+        for (const conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
+          for (const display of conf.displays) {
+            for (const viewCarouselElement of display.viewCarousel) {
+              if ((viewCarouselElement.view.type === 'stopTimes') && (viewCarouselElement.view.id === stopTimesViewId) && ((viewCarouselElement.view as IStopTimesView).stops)) {
+                const stops = (viewCarouselElement.view as IStopTimesView).stops;
+                const newStops = nudgeArrayElement(
+                  stops,
+                  stops.find(e => e.id === stopId),
+                  direction
+                ) as IStop[];
+                ((viewCarouselElement.view as IStopTimesView).stops as IStop[]) = newStops;
+              }
+            }
+          }
+        }
+      }
+    )
+  }
+
   @mutation('addViewCarouselElement')
   public addViewCarouselElement({ displayId, viewCarouselElement }: { displayId: string, viewCarouselElement: OptionalId<IViewCarouselElement> }, context: Context) {
     const defaultViewCarouselElement = {

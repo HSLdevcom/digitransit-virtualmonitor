@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
 import { IConfiguration, IDisplay } from 'src/ui/ConfigurationList';
-import { DisplayFieldsFragment, ConfigurationFieldsFragment } from 'src/ui/ConfigurationRetriever';
+import { ConfigurationFieldsFragment, DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
 import DisplayEditor from 'src/ui/DisplayEditor';
 import { pairs } from 'src/ui/DisplayUrlCompression';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';

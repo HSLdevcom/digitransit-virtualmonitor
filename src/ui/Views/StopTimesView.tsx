@@ -24,7 +24,7 @@ export interface IStopTimesViewPropsWithIStops extends IStopTimesViewCommonProps
   readonly stops: ReadonlyArray<LocalIStop>,
 };
 
-const stopTimeAbsoluteDepartureTime = (stopTime: IStopTime) => (60*60*24) * stopTime.serviceDay + stopTime.scheduledDeparture;
+const stopTimeAbsoluteDepartureTime = (stopTime: IStopTime) => (60*60*24) * stopTime.serviceDay + stopTime.usedTime;
 
 type ICombinedStopTimesViewProps = (IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops) & InjectedTranslateProps;
 
@@ -43,7 +43,7 @@ const duplicatePruneMethods: {
           const foundDuplicate = acc.find(stopTime => (stopTime.trip && curr.trip && stopTime.trip.gtfsId === curr.trip.gtfsId));
           if (foundDuplicate) {
             // Found a duplicate.
-            if (foundDuplicate.realtimeArrival - curr.realtimeArrival >= duplicateRouteTimeThresholdSeconds) {
+            if (foundDuplicate.usedTime - curr.usedTime >= duplicateRouteTimeThresholdSeconds) {
               // If time difference is big enough, show both since they are separate part of the same route.
               return [
                 ...acc,

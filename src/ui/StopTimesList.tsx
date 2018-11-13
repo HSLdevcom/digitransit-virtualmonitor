@@ -42,7 +42,7 @@ const StopTimesListHeadersTranslated = translate('translations')(StopTimesListHe
 const StopTimeRow = ({ stoptime, showPier } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean }) => (
   <tr>
     <td>
-      <time>{formatTime(parseDaySeconds(stoptime.scheduledArrival))}</time>
+      <time>{formatTime(parseDaySeconds(stoptime.usedTime))}</time>{(stoptime.realtimeState && (stoptime.realtimeState !== 'SCHEDULED')) ? '*' : null }
     </td>
     <td>
       {stoptime.trip.route.shortName}

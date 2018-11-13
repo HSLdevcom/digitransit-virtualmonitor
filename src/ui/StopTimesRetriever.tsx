@@ -9,6 +9,8 @@ import {
 } from "src/time";
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
+const usedStopTimeField = 'realtimeDeparture';
+
 const STOP_TIMES_QUERY = gql`
 query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
   stops(ids: $stopIds) {
@@ -25,6 +27,7 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
       scheduledDeparture
       realtimeDeparture
       departureDelay
+      usedTime: ${usedStopTimeField}
       timepoint
       realtime
       realtimeState
@@ -50,12 +53,13 @@ export interface IStopTime {
     readonly overrideStopName?: string, // Added locally from configuration.
     readonly platformCode?: string,
   },
-  readonly scheduledArrival: DaySeconds,
-  readonly realtimeArrival: DaySeconds,
-  readonly arrivalDelay: Seconds,
-  readonly scheduledDeparture: DaySeconds,
-  readonly realtimeDeparture: DaySeconds,
-  readonly departureDelay: Seconds,
+  // readonly scheduledArrival: DaySeconds,
+  // readonly realtimeArrival: DaySeconds,
+  // readonly arrivalDelay: Seconds,
+  // readonly scheduledDeparture: DaySeconds,
+  // readonly realtimeDeparture: DaySeconds,
+  // readonly departureDelay: Seconds,
+  readonly usedTime: DaySeconds,
   readonly timepoint: boolean,
   readonly realtime: boolean,
   readonly realtimeState: "SCHEDULED" | "UPDATED" | "CANCELED" | "ADDED" | "MODIFIED",

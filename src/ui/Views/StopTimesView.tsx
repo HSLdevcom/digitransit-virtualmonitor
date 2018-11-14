@@ -29,7 +29,7 @@ const stopTimeAbsoluteDepartureTime = (stopTime: IStopTime) => (60*60*24) * stop
 type ICombinedStopTimesViewProps = (IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops) & InjectedTranslateProps;
 
 const duplicatePruneMethods: {
-  [pruneType: string]: (stopsTimes: ReadonlyArray<IStopTime> ) => IStopTime[],
+  [pruneType: string]: (stopsTimes: ReadonlyArray<IStopTime>, stops: ReadonlyArray<StopId>) => IStopTime[],
 } = {
   byFirstDeparture: (stopsTimes: ReadonlyArray<IStopTime>) => {
     // Takes into account date too, only useful for comparing.
@@ -62,9 +62,46 @@ const duplicatePruneMethods: {
       );
   },
   byShortestTravelTime: (stopsTimes: ReadonlyArray<IStopTime>) => {
+    // TODO: needs to compare the following:
+    //  A: Time to travel from display to earlier stop + but travel to later stop.
+    //  B: Time to travel from display to later stop.
     throw Error('duplicatePruneMethods.byShortestTravelTime not implemented.');
   },
-  byStopOrder: (stopsTimes: ReadonlyArray<IStopTime>) => {
+  byStopOrder: (stopsTimes: ReadonlyArray<IStopTime>, stops: ReadonlyArray<StopId>) => {
+    return stopsTimes
+      .reduce(
+        (acc: IStopTime[], curr: IStopTime) => {
+          const foundDuplicate = acc.find(stopTime => (stopTime.trip && curr.trip && stopTime.trip.gtfsId === curr.trip.gtfsId));
+          if (foundDuplicate) {
+            // Found a duplicate.
+            if (foundDuplicate.usedTime - curr.usedTime >= duplicateRouteTimeThresholdSeconds) {
+              // If time difference is big enough, show both since they are separate part of the same route.
+              return [
+                ...acc,
+                curr
+              ];
+            }
+            if (curr.stop && foundDuplicate.stop) {
+              if (stops.findIndex(stop => stop === curr.stop!.gtfsId) < stops.findIndex(stop => stop === foundDuplicate.stop!.gtfsId)) {
+                return [ // Current is earlier in stops list.
+                  ...(acc.filter(stop => stop !== foundDuplicate)),
+                  curr,
+                ];
+              } else {
+                return acc; // Existing item is earlier in stops list.
+              }
+            } else {
+              return acc;
+            }
+          }
+          return [
+            ...acc,
+            curr
+          ];
+        },
+        []
+      );
+
     throw Error('duplicatePruneMethods.byStopOrder not implemented.');
   },
 };
@@ -114,7 +151,8 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
                   []
                 );
 
-              const duplicatePrunedStopTimes = duplicatePruneMethods.byFirstDeparture(mergedStopTimes);
+              const pruneMethod = duplicatePruneMethods.byStopOrder;
+              const duplicatePrunedStopTimes = pruneMethod(mergedStopTimes, stopIds);
 
               const finalStopTimes = duplicatePrunedStopTimes
                 .sort((stopTimeA, stopTimeB) => stopTimeAbsoluteDepartureTime(stopTimeA) - stopTimeAbsoluteDepartureTime(stopTimeB))
@@ -128,9 +166,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
                       ...stopTime,
                       stop: {
                         ...stopTime.stop,
-                        // gtfs: stopTime.stop!.gtfsId,
                         overrideStopName: foundIStop ? foundIStop.overrideStopName : undefined,
-                        // platformCode: stopTime.stop!.gtfsId,
                       } as IStopTime['stop'],
                     });
                   }

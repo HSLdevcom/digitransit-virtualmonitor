@@ -23,3 +23,15 @@ However, the initial server code is available and can be used to examine the Gra
 To run the graphql server: `tsc && node build build/dist/graphQL/server.js`. This is currently mostly used for exploring the GraphQL schema.
 
 To access GraphiQL: http://localhost:4000/
+
+## Deploying
+
+### Google Cloud Platform
+
+Within a project console first check out the repository into it and navigate to the project directory.
+
+Run `npm install`.
+
+Run `npm build`.
+
+`cd build && gcloud app deploy` to deploy.

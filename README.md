@@ -32,6 +32,6 @@ Within a project console first check out the repository into it and navigate to 
 
 Run `npm install`.
 
-Run `npm build`.
+Run `npm run build`.
 
 `cd build && gcloud app deploy` to deploy.

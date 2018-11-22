@@ -13,6 +13,7 @@ import DisplayEditor from 'src/ui/DisplayEditor';
 import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
 import QuickDisplay from 'src/ui/QuickDisplay';
 import StopTimesView from 'src/ui/Views/StopTimesView';
+import TitlebarTime from 'src/ui/TitlebarTime';
 
 interface ICompressedDisplayRouteParams {
   version: string,
@@ -79,9 +80,7 @@ class App extends React.Component {
               <div id={"title-text"}>
                 {'Virtuaalimonitori'}
               </div>
-              <div id={"title-time"}>
-                <AutoMoment />
-              </div>
+              <TitlebarTime />
             </Titlebar>
             <Link to={'/quickDisplay'}>
               Create a new display

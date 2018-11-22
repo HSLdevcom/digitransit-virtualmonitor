@@ -1,12 +1,14 @@
 import * as React from "react";
 import { InjectedTranslateProps, translate } from "react-i18next";
 
+import 'src/ui/Views/StopTimesView.css';
 import AutoMoment from "src/ui/AutoMoment";
 import { IStop as LocalIStop } from 'src/ui/ConfigurationList'
 import Logo from 'src/ui/Logo';
 import StopTimesList from 'src/ui/StopTimesList';
 import { default as StopTimesRetriever, IStop, IStopTime, StopId, StopTimesRetrieverQueryResult } from "src/ui/StopTimesRetriever";
 import Titlebar from "src/ui/Titlebar";
+import TitlebarTime from 'src/ui/TitlebarTime';
 
 const duplicateRouteTimeThresholdSeconds = 15 * 60;
 
@@ -120,9 +122,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
             ? props.title
             : null /*<StopName stopIds={props.stops} />*/}
         </div>
-        <div id={"title-time"}>
-          <AutoMoment />
-        </div>
+        <TitlebarTime />
       </Titlebar>
       { stopIds.length > 0
         ? (

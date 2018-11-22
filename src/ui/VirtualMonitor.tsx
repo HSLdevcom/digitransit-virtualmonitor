@@ -3,6 +3,7 @@ import * as React from "react";
 import AutoMoment from "src/ui/AutoMoment";
 import Logo from 'src/ui/Logo';
 import Titlebar from "src/ui/Titlebar";
+import TitlebarTime from 'src/ui/TitlebarTime';
 
 export interface IVirtualMonitorProps {
   readonly children?: React.ReactNode,
@@ -16,9 +17,7 @@ const VirtualMonitor = (props: IVirtualMonitorProps) => (
       <div id={"title-text"}>
         {props.title || ''}
       </div>
-      <div id={"title-time"}>
-        <AutoMoment />
-      </div>
+      <TitlebarTime />
     </Titlebar>
     {props.children}
   </div>

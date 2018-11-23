@@ -2,7 +2,7 @@ import * as React from "react";
 
 export default ({ style }: {style?: React.CSSProperties} = { style: {} }) => (
   <svg
-    id={"HSL-logo"}
+    id={"logo"}
     viewBox={"0 0 160 60"}
     version={"1.1"}
     preserveAspectRatio={"xMidYMid meet"}

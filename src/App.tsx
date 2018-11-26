@@ -12,8 +12,8 @@ import ConfigurationList from 'src/ui/ConfigurationList';
 import DisplayEditor from 'src/ui/DisplayEditor';
 import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
 import QuickDisplay from 'src/ui/QuickDisplay';
-import StopTimesView from 'src/ui/Views/StopTimesView';
 import TitlebarTime from 'src/ui/TitlebarTime';
+import StopTimesView from 'src/ui/Views/StopTimesView';
 
 interface ICompressedDisplayRouteParams {
   version: string,

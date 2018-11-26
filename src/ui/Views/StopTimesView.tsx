@@ -1,14 +1,13 @@
 import * as React from "react";
 import { InjectedTranslateProps, translate } from "react-i18next";
 
-import 'src/ui/Views/StopTimesView.css';
-import AutoMoment from "src/ui/AutoMoment";
 import { IStop as LocalIStop } from 'src/ui/ConfigurationList'
 import Logo from 'src/ui/Logo';
 import StopTimesList from 'src/ui/StopTimesList';
 import { default as StopTimesRetriever, IStop, IStopTime, StopId, StopTimesRetrieverQueryResult } from "src/ui/StopTimesRetriever";
 import Titlebar from "src/ui/Titlebar";
 import TitlebarTime from 'src/ui/TitlebarTime';
+import 'src/ui/Views/StopTimesView.css';
 
 const duplicateRouteTimeThresholdSeconds = 15 * 60;
 

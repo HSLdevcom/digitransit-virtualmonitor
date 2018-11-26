@@ -57,6 +57,17 @@ const StopTimeRow = ({ stoptime, showPier } : { stoptime: IStopTime & IOverrideS
   </tr>
 );
 
+/* Separator row is used instead of just having bottom border since dashed borders between table cells look terrible. This looks ok. */
+const SeparatorRow = ({ showPier }: { showPier?: boolean }) => (
+  <tr
+    className={"separator"}
+  >
+    <td colSpan={ showPier ? 4 : 3 }
+    >
+    </td>
+  </tr>
+)
+
 const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t } : IStopTimesListProps & InjectedTranslateProps) => (
   <table className={'StopTimesList'}>
     <StopTimesListHeadersTranslated
@@ -64,12 +75,23 @@ const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t 
       showPier={showPier}
     />
     <tbody>
-      {stoptimesWithoutPatterns.map(stoptime => (
-        <StopTimeRow
-          stoptime={stoptime}
-          key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}`}
-          showPier={showPier}
-        />
+      {stoptimesWithoutPatterns.map((stoptime, i) => (
+        <React.Fragment
+          key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}-fragment`}
+        >
+          <StopTimeRow
+            stoptime={stoptime}
+            // key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}`}
+            showPier={showPier}
+          />
+          {(i < (stoptimesWithoutPatterns.length - 1))
+            ? <SeparatorRow
+                // key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}-separator`}
+                showPier={showPier}
+              />
+            : null
+          }
+        </React.Fragment>
       ))}
     </tbody>
   </table>

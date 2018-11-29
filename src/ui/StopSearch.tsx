@@ -3,6 +3,7 @@ import { QueryResult } from 'react-apollo';
 import { InjectedTranslateProps, translate } from "react-i18next";
 import { isString } from "util";
 
+import 'src/ui/StopSearch.css';
 import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse, IStopWithName } from "src/ui/StopsByNameRetriever";
 
 type IProps = {

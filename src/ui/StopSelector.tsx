@@ -5,6 +5,8 @@ import { RouteComponentProps/* , withRouter */ } from 'react-router';
 import { Link } from "react-router-dom";
 import { isString } from "util";
 
+import 'src/ui/StopSearch.css';
+
 import { IStopRenderFunc } from "src/ui/StopList";
 import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse } from "src/ui/StopsByNameRetriever";
 

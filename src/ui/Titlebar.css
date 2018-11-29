@@ -1,6 +1,7 @@
 #title-bar {
   align-items: center;
   display: flex;
+  height: 8em;
   justify-content: space-around;
   margin: 1.5em;
   margin-bottom: 0.5em;

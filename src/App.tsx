@@ -33,65 +33,69 @@ interface IStopRouteParams {
 class App extends React.Component {
   public render() {
     return (
-      <Switch>
-        <Route
-          path={'/quickDisplay/:version?/:packedDisplay?'}
-          component={QuickDisplay}
-        />
-        <Route
-          path={'/urld/:version/:packedDisplay'}
-          component={({ match: { params: { version, packedDisplay }} }: RouteComponentProps<ICompressedDisplayRouteParams>) => (
-            <DisplayUrlCompression
-              version={decodeURIComponent(version)}
-              packedString={decodeURIComponent(packedDisplay)}
-            />
-          )}
-        />
-        <Route
-          path={'/configuration/:configuration/display/:display'}
-          component={({ match: { params: { configuration, displayName }}}: RouteComponentProps<IConfigurationDisplayRouteParams>) => (
-            <ConfigurationDisplay
-              configurationName={configuration}
-              displayName={displayName}
-            />
-          )}
-        />
-        <Route
-          path={'/stop/:stopId/:displayedRoutes?'}
-          component={({ match: { params: { stopId, displayedRoutes }} }: RouteComponentProps<IStopRouteParams>) => (
-            <StopTimesView
-              stopIds={[stopId]}
-              displayedRoutes={displayedRoutes ? Number(displayedRoutes) : undefined}
-            />
-          )}
-        />
-        <Route
-          path={'/configs/:configName?'}
-          component={ConfigurationList}
-        />
-        <Route
-          path={'/displayEditor/'}
-          component={DisplayEditor}
-        />
-        <Route>
-          <div id={'stop-search'}>
-            <Titlebar>
-              <Logo />
-              <div id={"title-text"}>
-                {'Virtuaalimonitori'}
-              </div>
-              <TitlebarTime />
-            </Titlebar>
-            <Link to={'/quickDisplay'}>
-              Create a new display
-            </Link>
-            {/* <Link to={'/configs/1'}>
-              Configs playground
-            </Link> */}
-            <StopSelectorSwitch />
-          </div>
-        </Route>
-      </Switch>
+      <div
+        className={'App'}
+      >
+        <Switch>
+          <Route
+            path={'/quickDisplay/:version?/:packedDisplay?'}
+            component={QuickDisplay}
+          />
+          <Route
+            path={'/urld/:version/:packedDisplay'}
+            component={({ match: { params: { version, packedDisplay }} }: RouteComponentProps<ICompressedDisplayRouteParams>) => (
+              <DisplayUrlCompression
+                version={decodeURIComponent(version)}
+                packedString={decodeURIComponent(packedDisplay)}
+              />
+            )}
+          />
+          <Route
+            path={'/configuration/:configuration/display/:display'}
+            component={({ match: { params: { configuration, displayName }}}: RouteComponentProps<IConfigurationDisplayRouteParams>) => (
+              <ConfigurationDisplay
+                configurationName={configuration}
+                displayName={displayName}
+              />
+            )}
+          />
+          <Route
+            path={'/stop/:stopId/:displayedRoutes?'}
+            component={({ match: { params: { stopId, displayedRoutes }} }: RouteComponentProps<IStopRouteParams>) => (
+              <StopTimesView
+                stopIds={[stopId]}
+                displayedRoutes={displayedRoutes ? Number(displayedRoutes) : undefined}
+              />
+            )}
+          />
+          <Route
+            path={'/configs/:configName?'}
+            component={ConfigurationList}
+          />
+          <Route
+            path={'/displayEditor/'}
+            component={DisplayEditor}
+          />
+          <Route>
+            <div id={'stop-search'}>
+              <Titlebar>
+                <Logo />
+                <div id={"title-text"}>
+                  {'Virtuaalimonitori'}
+                </div>
+                <TitlebarTime />
+              </Titlebar>
+              <Link to={'/quickDisplay'}>
+                Create a new display
+              </Link>
+              {/* <Link to={'/configs/1'}>
+                Configs playground
+              </Link> */}
+              <StopSelectorSwitch />
+            </div>
+          </Route>
+        </Switch>
+      </div>
     );
   }
 };

@@ -1,0 +1,16 @@
+.stop-selector {
+  /* font-size: 2.5em; */
+  font-weight: bold;
+}
+
+.stop-selector form {
+  display: block;
+}
+
+.stop-selector div:not(:last-child) {
+  margin-bottom: 0.35em;
+}
+
+.stop-selector form input,button {
+  font-size: 1em;
+}

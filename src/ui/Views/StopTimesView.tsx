@@ -176,7 +176,6 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
                 <StopTimesList
                   pierColumnTitle={props.pierColumnTitle}
                   stoptimesWithoutPatterns={finalStopTimes}
-                  showPier={stopIds.length > 1}
                 />
               );
             }}

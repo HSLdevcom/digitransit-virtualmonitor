@@ -27,13 +27,13 @@ interface IStopTimesListHeadersProps {
 const StopTimesListHeaders = ({ pierColumnTitle, showPier, t }: IStopTimesListHeadersProps & InjectedTranslateProps) => (
   <thead>
     <tr>
-      <th className={'departureTime'}>{t('departureTime')}</th>
       <th className={'lineId'}>{t('lineId')}</th>
       <th className={'destination'}>{t('destination')}</th>
       {showPier
         ? (<th className={'pier'}>{pierColumnTitle ? pierColumnTitle : t('pier')}</th>)
         : null
       }
+      <th className={'departureTime'}>{t('departureTime')}</th>
     </tr>
   </thead>
 );
@@ -42,18 +42,18 @@ const StopTimesListHeadersTranslated = translate('translations')(StopTimesListHe
 const StopTimeRow = ({ stoptime, showPier } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean }) => (
   <tr>
     <td>
-      <time>{formatTime(parseDaySeconds(stoptime.usedTime))}</time>{(stoptime.realtimeState && (stoptime.realtimeState !== 'SCHEDULED')) ? '*' : null }
-    </td>
-    <td>
       {stoptime.trip.route.shortName}
     </td>
     <td>
       {stoptime.headsign}
     </td>
     {showPier
-        ? (<td className={'pier'}>{(stoptime.stop && (stoptime.stop.overrideStopName || stoptime.stop.platformCode)) || ''}</td>)
-        : null
-      }
+      ? (<td className={'pier'}>{(stoptime.stop && (stoptime.stop.overrideStopName || stoptime.stop.platformCode)) || ''}</td>)
+      : null
+    }
+    <td>
+      <time>{formatTime(parseDaySeconds(stoptime.usedTime))}</time>{(stoptime.realtimeState && (stoptime.realtimeState !== 'SCHEDULED')) ? '*' : null }
+    </td>
   </tr>
 );
 
@@ -68,33 +68,42 @@ const SeparatorRow = ({ showPier }: { showPier?: boolean }) => (
   </tr>
 )
 
-const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t } : IStopTimesListProps & InjectedTranslateProps) => (
-  <table className={'StopTimesList'}>
-    <StopTimesListHeadersTranslated
-      pierColumnTitle={pierColumnTitle}
-      showPier={showPier}
-    />
-    <tbody>
-      {stoptimesWithoutPatterns.map((stoptime, i) => (
-        <React.Fragment
-          key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}-fragment`}
-        >
-          <StopTimeRow
-            stoptime={stoptime}
-            // key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}`}
-            showPier={showPier}
-          />
-          {(i < (stoptimesWithoutPatterns.length - 1))
-            ? <SeparatorRow
-                // key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}-separator`}
-                showPier={showPier}
-              />
-            : null
-          }
-        </React.Fragment>
-      ))}
-    </tbody>
-  </table>
-);
+const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t } : IStopTimesListProps & InjectedTranslateProps) => {
+  const usedShowPier = (showPier !== undefined)
+    ? showPier
+    : stoptimesWithoutPatterns.some(stopTime => (
+        (stopTime.stop !== undefined) &&
+        (((stopTime.stop.overrideStopName !== undefined) && (stopTime.stop.overrideStopName !== null) && (stopTime.stop.overrideStopName !== '')) || ((stopTime.stop.platformCode !== undefined) && (stopTime.stop.platformCode !== null) && (stopTime.stop.platformCode !== '')))
+      ));
+
+  return (
+    <table className={'StopTimesList'}>
+      <StopTimesListHeadersTranslated
+        pierColumnTitle={pierColumnTitle}
+        showPier={usedShowPier}
+      />
+      <tbody>
+        {stoptimesWithoutPatterns.map((stoptime, i) => (
+          <React.Fragment
+            key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}-fragment`}
+          >
+            <StopTimeRow
+              stoptime={stoptime}
+              // key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}`}
+              showPier={usedShowPier}
+            />
+            {(i < (stoptimesWithoutPatterns.length - 1))
+              ? <SeparatorRow
+                  // key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}-separator`}
+                  showPier={usedShowPier}
+                />
+              : null
+            }
+          </React.Fragment>
+        ))}
+      </tbody>
+    </table>
+  );
+}
 
 export default translate('translations')(StopTimesList);

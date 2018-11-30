@@ -33,7 +33,7 @@ export interface IStopsByNameRetrieverProps {
 };
 
 class StopsByNameQuery extends Query<IStopsByNameResponse, IStopsByNameQuery> {}
-const StopsByNameRetriever = ({ phrase, children }: IStopsByNameRetrieverProps) => (
+const StopsByNameRetriever: React.SFC<IStopsByNameRetrieverProps> = ({ phrase, children }) => (
   <ApolloClientsContext.Consumer>
     {({ reittiOpas }) => (
       <StopsByNameQuery

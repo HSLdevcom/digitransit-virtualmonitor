@@ -9,6 +9,8 @@ import 'src/ui/StopSearch.css';
 
 import { IStopRenderFunc } from "src/ui/StopList";
 import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse } from "src/ui/StopsByNameRetriever";
+import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/ConfigurationRetriever';
+import StopTimesRetriever, { StopTimesRetrieverQueryResult } from 'src/ui/StopTimesRetriever';
 
 type IProps = RouteComponentProps<{
   readonly phrase?: string,
@@ -34,84 +36,86 @@ class StopSelector extends React.Component<IProps, IState> {
     }
   }
 
-  public render() { return(
-    <div className={'stop-selector'}>
-      <form
-        onSubmit={this.stopSearchSubmit}
-        action={'searchStop'}
-        method={'GET'}
-      >
-        <div>{this.props.t('stopSearcher')}</div>
-        <div>
-          <label htmlFor={'stopSearchInput'}>
-            {this.props.t('stopSearcherPhrase')}:&nbsp;
-          </label>
-          <input
-            id={'stopSearchInput'}
-            type={'text'}
-            name={'searchPhrase'}
-            defaultValue={this.props.match.params.phrase || ''}
-          />
-        </div>
-        <div>
-          <label htmlFor={'displayedRoutesInput'}>
-          {this.props.t('stopSearcherDisplayedResultCount')}:&nbsp;
-          </label>
-          <input
-            id={'displayedRoutesInput'}
-            type={'number'}
-            name={'searchPhrase'}
-            value={this.state.displayedRoutes}
-            onChange={this.onDisplayedRoutesChange}
-            max={999}
-            maxLength={3}
-            style={{ width: '3em' }}
-          />
-        </div>
-        <button
-          type={'submit'}
+  public render() {
+    return(
+      <div className={'stop-selector'}>
+        <form
+          onSubmit={this.stopSearchSubmit}
+          action={'searchStop'}
+          method={'GET'}
         >
-          {this.props.t('stopSearcherSearch')}
-        </button>
-      </form>
-      {this.state.searchPhrase
-        ? (
+          <div>{this.props.t('stopSearcher')}</div>
           <div>
-            <span>{this.props.t('stopSearcherSearching', { searchPhrase: this.state.searchPhrase })}</span>
-            <StopsByNameRetriever
-              phrase={this.state.searchPhrase}
-            >
-              {(result: QueryResult<IStopsByNameResponse, IStopsByNameQuery>): React.ReactNode => {
-                if (result.loading) {
-                  return (<div>{this.props.t('loading')}</div>);
-                }
-                if (!result || !result.data) {
-                  return (<div>
-                    {this.props.t('stopSearchError', { searchPhrase: this.state.searchPhrase })}
-                  </div>);
-                }
-                if (!result.data.stops || result.data.stops.length === 0) {
-                  return (<div>
-                    {this.props.t('stopSearchNotFound', { searchPhrase: this.state.searchPhrase })}
-                  </div>);
-                }
-                return (
-                  <ul>
-                    {result.data.stops.map((stop) => (
-                      <li key={stop.gtfsId}>
-                        {this.stopRenderer(stop)}
-                      </li>
-                    ))}
-                  </ul>
-                );
-              }}
-            </StopsByNameRetriever>
+            <label htmlFor={'stopSearchInput'}>
+              {this.props.t('stopSearcherPhrase')}:&nbsp;
+            </label>
+            <input
+              id={'stopSearchInput'}
+              type={'text'}
+              name={'searchPhrase'}
+              defaultValue={this.props.match.params.phrase || ''}
+            />
           </div>
-        )
-        : null
-      }
-    </div>
-  )};
+          <div>
+            <label htmlFor={'displayedRoutesInput'}>
+            {this.props.t('stopSearcherDisplayedResultCount')}:&nbsp;
+            </label>
+            <input
+              id={'displayedRoutesInput'}
+              type={'number'}
+              name={'searchPhrase'}
+              value={this.state.displayedRoutes}
+              onChange={this.onDisplayedRoutesChange}
+              max={999}
+              maxLength={3}
+              style={{ width: '3em' }}
+            />
+          </div>
+          <button
+            type={'submit'}
+          >
+            {this.props.t('stopSearcherSearch')}
+          </button>
+        </form>
+        {this.state.searchPhrase
+          ? (
+            <div>
+              <span>{this.props.t('stopSearcherSearching', { searchPhrase: this.state.searchPhrase })}</span>
+              <StopsByNameRetriever
+                phrase={this.state.searchPhrase}
+              >
+                {(result: QueryResult<IStopsByNameResponse, IStopsByNameQuery>): React.ReactNode => {
+                  if (result.loading) {
+                    return (<div>{this.props.t('loading')}</div>);
+                  }
+                  if (!result || !result.data) {
+                    return (<div>
+                      {this.props.t('stopSearchError', { searchPhrase: this.state.searchPhrase })}
+                    </div>);
+                  }
+                  if (!result.data.stops || result.data.stops.length === 0) {
+                    return (<div>
+                      {this.props.t('stopSearchNotFound', { searchPhrase: this.state.searchPhrase })}
+                    </div>);
+                  }
+                  return (
+                    <ul>
+                      {result.data.stops.map((stop) => (
+                        <li key={stop.gtfsId}>
+                          {this.stopRenderer(stop)}
+                        </li>
+                      ))}
+                    </ul>
+                  );
+                }}
+              </StopsByNameRetriever>
+            </div>
+          )
+          : null
+        }
+      </div>
+    );
+  };
   
   protected stopRenderer: IStopRenderFunc = (stop) => (
     <Link

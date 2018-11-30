@@ -32,8 +32,8 @@ it('Passes correct stop to StopTimesRetriver', () => {
   const stopTimesView = renderer.root.findByType(StopTimesView);
   expect(stopTimesView);
   expect(stopTimesView.props).toMatchObject({
-    displayedRoutes: '11',
-    stops: ['HSL:4160216'],
+    displayedRoutes: 11,
+    stopIds: ['HSL:4160216'],
   });
   renderer.unmount();
 });

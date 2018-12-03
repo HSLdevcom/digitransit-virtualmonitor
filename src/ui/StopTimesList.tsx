@@ -52,7 +52,7 @@ const StopTimeRow = ({ stoptime, showPier } : { stoptime: IStopTime & IOverrideS
       : null
     }
     <td>
-      <time>{formatTime(parseDaySeconds(stoptime.usedTime))}</time>{(stoptime.realtimeState && (stoptime.realtimeState !== 'SCHEDULED')) ? '*' : null }
+    {(stoptime.realtimeState && (stoptime.realtimeState !== 'SCHEDULED')) ? null : '~' }<time>{formatTime(parseDaySeconds(stoptime.usedTime))}</time>
     </td>
   </tr>
 );

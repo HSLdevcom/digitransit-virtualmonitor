@@ -18,7 +18,7 @@
 }
 
 #title-bar #title-time {
-  flex: 0 1 33%;
+  flex: 0 1;
   /* justify-content: flex-end; */
 }
 
@@ -38,4 +38,9 @@
   align-items: center;
   justify-content: center;
   flex-direction: row;
+}
+
+#title-time time {
+  margin-left: 0.25em;
+  margin-right: 0.25em;
 }

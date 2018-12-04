@@ -3,6 +3,7 @@ import { MemoryRouter, MemoryRouterProps } from 'react-router';
 import { create } from 'react-test-renderer';
 
 import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
+import StopsByNameRetriever from 'src/ui/StopsByNameRetriever';
 
 jest.mock('src/ui/StopsByNameRetriever', () => {
     return {
@@ -32,7 +33,7 @@ it.skip('renders a StopsByNameRetriever with search phrase as param', () => {
   const renderer = create(
     <WrappedStopSelector memoryRouterProps={{ initialEntries: ['/searchStop/myPhrase']}} />
   );
-  const stopsByNameRetriever = renderer.root.findByType('StopsByNameRetriever');
+  const stopsByNameRetriever = renderer.root.findByType(StopsByNameRetriever);
   expect(stopsByNameRetriever).toBeDefined();
   expect(stopsByNameRetriever.props).toMatchObject({ phrase: 'myPhrase' });
   renderer.unmount();

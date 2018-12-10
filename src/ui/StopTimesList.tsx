@@ -39,23 +39,38 @@ const StopTimesListHeaders = ({ pierColumnTitle, showPier, t }: IStopTimesListHe
 );
 const StopTimesListHeadersTranslated = translate('translations')(StopTimesListHeaders);
 
-const StopTimeRow = ({ stoptime, showPier } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean }) => (
-  <tr>
-    <td>
-      {stoptime.trip.route.shortName}
-    </td>
-    <td>
-      {stoptime.headsign}
-    </td>
-    {showPier
-      ? (<td className={'pier'}>{(stoptime.stop && (stoptime.stop.overrideStopName || stoptime.stop.platformCode)) || ''}</td>)
-      : null
-    }
-    <td>
-    {(stoptime.realtimeState && (stoptime.realtimeState !== 'SCHEDULED')) ? null : '~' }<time>{formatTime(parseDaySeconds(stoptime.usedTime))}</time>
-    </td>
-  </tr>
-);
+const StopTimeRow = ({ stoptime, showPier, t } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean } & InjectedTranslateProps) => {
+  const isCanceled = stoptime.realtimeState === 'CANCELED';
+  return (
+    <tr
+      className={isCanceled ? 'canceled' : ''}
+    >
+      <td
+        className={'routeName'}
+      >
+        {stoptime.trip.route.shortName}
+      </td>
+      <td
+        className={'destination'}
+      >
+        {isCanceled
+          ? t('canceled')
+          : stoptime.headsign
+        }
+      </td>
+      {showPier
+        ? (<td className={'pier'}>{(stoptime.stop && (stoptime.stop.overrideStopName || stoptime.stop.platformCode)) || ''}</td>)
+        : null
+      }
+      <td
+        className={'time'}
+      >
+        {(stoptime.realtimeState && (stoptime.realtimeState !== 'SCHEDULED')) ? null : '~' }<time>{formatTime(parseDaySeconds(stoptime.usedTime))}</time>
+      </td>
+    </tr>
+  );
+};
+const StopTimeRowTranslated = translate('translations')(StopTimeRow);
 
 /* Separator row is used instead of just having bottom border since dashed borders between table cells look terrible. This looks ok. */
 const SeparatorRow = ({ showPier }: { showPier?: boolean }) => (
@@ -87,7 +102,7 @@ const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t 
           <React.Fragment
             key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}-fragment`}
           >
-            <StopTimeRow
+            <StopTimeRowTranslated
               stoptime={stoptime}
               // key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}`}
               showPier={usedShowPier}

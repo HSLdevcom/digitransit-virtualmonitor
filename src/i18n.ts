@@ -29,6 +29,7 @@ i18n
       },
       fi: {
         translations: {
+          canceled: 'Peruttu',
           configuration: 'Konfiguraatio',
           departureTime: 'Lähtöaika',
           destination: 'Määränpää',

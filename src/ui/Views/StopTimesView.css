@@ -41,3 +41,8 @@
 .StopTimesList tbody {
   color: white;
 }
+
+.StopTimesList tr.canceled td.time {
+  text-decoration: line-through;
+  text-decoration-color: red;
+}

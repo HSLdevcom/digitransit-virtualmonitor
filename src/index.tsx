@@ -19,6 +19,7 @@ import NtpSyncComponent from 'src/ntp/NtpSyncComponent';
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),
   uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+  // uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
 });
 (reittiOpasClient as any).name = 'reittiOpasClient';
 
@@ -32,19 +33,19 @@ ReactDOM.render(
   (
     <NtpSyncComponent>
       <ApolloClientsContext.Provider value={contextValue}>
-    <ApolloClientsContext.Consumer>
-      {(apolloClientContexts) => (
-        <ApolloProvider client={apolloClientContexts.virtualMonitor}>
-          <LoonaProvider loona={loona} states={[VirtualMonitorLocalState]}>
-            <I18nextProvider i18n={i18n}>
-              <BrowserRouter>
-                <App />
-              </BrowserRouter>
-            </I18nextProvider>
-          </LoonaProvider>
-        </ApolloProvider>
-      )}
-    </ApolloClientsContext.Consumer>
+        <ApolloClientsContext.Consumer>
+          {(apolloClientContexts) => (
+            <ApolloProvider client={apolloClientContexts.virtualMonitor}>
+              <LoonaProvider loona={loona} states={[VirtualMonitorLocalState]}>
+                <I18nextProvider i18n={i18n}>
+                  <BrowserRouter>
+                    <App />
+                  </BrowserRouter>
+                </I18nextProvider>
+              </LoonaProvider>
+            </ApolloProvider>
+          )}
+        </ApolloClientsContext.Consumer>
       </ApolloClientsContext.Provider>
     </NtpSyncComponent>
   ),

@@ -3,6 +3,7 @@ import { InjectedTranslateProps, translate } from "react-i18next";
 
 import { IStop as LocalIStop } from 'src/ui/ConfigurationList'
 import Logo from 'src/ui/Logo';
+import StopName from 'src/ui/StopName';
 import StopTimesList from 'src/ui/StopTimesList';
 import { default as StopTimesRetriever, IStop, IStopTime, StopId, StopTimesRetrieverQueryResult } from "src/ui/StopTimesRetriever";
 import Titlebar from "src/ui/Titlebar";
@@ -102,8 +103,6 @@ const duplicatePruneMethods: {
         },
         []
       );
-
-    throw Error('duplicatePruneMethods.byStopOrder not implemented.');
   },
 };
 
@@ -119,7 +118,11 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
         <div id={"title-text"}>
           {props.title
             ? props.title
-            : null /*<StopName stopIds={props.stops} />*/}
+            : (stopIds.length > 0 ?
+                <StopName stopIds={stopIds} />
+                : null
+              )
+          }
         </div>
         <TitlebarTime />
       </Titlebar>

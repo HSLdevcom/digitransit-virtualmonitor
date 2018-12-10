@@ -1,9 +1,9 @@
 import * as React from "react";
 
 export interface INtpSyncContext {
-  delta: number,
+  deltaMilliseconds: number,
 };
 
 export default React.createContext({
-  delta: 0,
+  deltaMilliseconds: 0,
 });

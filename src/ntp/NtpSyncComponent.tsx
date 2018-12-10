@@ -7,14 +7,14 @@ interface INtpSyncComponent {
 };
 
 interface INtpSyncComponentState {
-  delta: number,
+  deltaMilliseconds: number,
 };
 
 class NtpSyncComponent extends React.Component<INtpSyncComponent, INtpSyncComponentState> {
   constructor (props: INtpSyncComponent) {
     super(props);
     this.state = {
-      delta: 0,
+      deltaMilliseconds: 0,
     };
     this.retrieveTimeDelta();
   }
@@ -25,16 +25,16 @@ class NtpSyncComponent extends React.Component<INtpSyncComponent, INtpSyncCompon
       const remoteTime = await res.json();
       if (remoteTime.now) {
         this.setState({
-          delta: remoteTime.now * 1000 - new Date().getTime(),
+          deltaMilliseconds: remoteTime.now * 1000 - new Date().getTime(),
         });
       } else {
         this.setState({
-          delta: 0,
+          deltaMilliseconds: 0,
         });
       }
     } catch (e) {
       this.setState({
-        delta: 0,
+        deltaMilliseconds: 0,
       });
     }
   };

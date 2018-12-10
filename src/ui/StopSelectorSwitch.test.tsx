@@ -8,8 +8,8 @@ import StopsByNameRetriever from 'src/ui/StopsByNameRetriever';
 jest.mock('src/ui/StopsByNameRetriever', () => {
     return {
       default: ({ children }: { children: any }) => children({
-        loading: true,
         data: {},
+        loading: true,
       }),
     };
   }

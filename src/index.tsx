@@ -14,6 +14,7 @@ import 'src/index.css';
 import registerServiceWorker from 'src/registerServiceWorker';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import VirtualMonitorLocalState from 'src/VirtualMonitorLocalState';
+import NtpSyncComponent from 'src/ntp/NtpSyncComponent';
 
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),
@@ -28,7 +29,9 @@ export const contextValue: IApolloClientContextType = {
 };
 
 ReactDOM.render(
-  (<ApolloClientsContext.Provider value={contextValue}>
+  (
+    <NtpSyncComponent>
+      <ApolloClientsContext.Provider value={contextValue}>
     <ApolloClientsContext.Consumer>
       {(apolloClientContexts) => (
         <ApolloProvider client={apolloClientContexts.virtualMonitor}>
@@ -42,7 +45,9 @@ ReactDOM.render(
         </ApolloProvider>
       )}
     </ApolloClientsContext.Consumer>
-  </ApolloClientsContext.Provider>),
+      </ApolloClientsContext.Provider>
+    </NtpSyncComponent>
+  ),
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();

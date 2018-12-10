@@ -1,6 +1,8 @@
 import * as moment from 'moment';
 import * as React from "react";
 import ReactMoment from 'react-moment';
+
+import NtpSyncContext from 'src/ntp/NtpSyncContext';
 import { EpochMilliseconds, Milliseconds } from "src/time";
 
 export interface ITimeProps {
@@ -9,9 +11,21 @@ export interface ITimeProps {
 };
 
 class AutoMoment extends React.Component<ITimeProps, any> {
+  constructor (props: ITimeProps) {
+    super(props);
+  }
+
+  static get contextType() {
+    return NtpSyncContext;
+  }
+
   public render() {
     return (
-      <ReactMoment format={moment.HTML5_FMT.TIME}/>
+      <ReactMoment
+        interval={20000}
+        format={moment.HTML5_FMT.TIME}
+        add={{ milliseconds: this.context.delta }}
+      />
     );
   }
 };

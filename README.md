@@ -24,6 +24,10 @@ To run the graphql server: `tsc && node build build/dist/graphQL/server.js`. Thi
 
 To access GraphiQL: http://localhost:4000/
 
+## Customization
+
+Steps for customization for different organizations is detailed [separately](Customization.md).
+
 ## Deploying
 
 ### Google Cloud Platform

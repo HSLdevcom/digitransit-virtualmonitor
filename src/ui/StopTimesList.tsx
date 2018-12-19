@@ -104,12 +104,10 @@ const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t 
           >
             <StopTimeRowTranslated
               stoptime={stoptime}
-              // key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}`}
               showPier={usedShowPier}
             />
             {(i < (stoptimesWithoutPatterns.length - 1))
               ? <SeparatorRow
-                  // key={`${stoptime.trip.gtfsId}-${(stoptime.stop && stoptime.stop.gtfsId) || ''}-separator`}
                   showPier={usedShowPier}
                 />
               : null

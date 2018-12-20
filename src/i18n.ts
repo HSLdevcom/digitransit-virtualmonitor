@@ -53,6 +53,8 @@ i18n
           stopSearcherPhrase: 'Pysäkkihakusana',
           stopSearcherSearch: 'Etsi',
           stopSearcherSearching: 'Etsitään hakusanalla {{searchPhrase}}',
+          titlebarTitle: 'Virtuaalimonitori',
+          quickDisplayCreate: 'Luo uusi näyttö',
         },
       },
     },

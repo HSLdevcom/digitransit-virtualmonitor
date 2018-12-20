@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Link, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import 'src/App.css';
-import AutoMoment from 'src/ui/AutoMoment';
 import Logo from 'src/ui/Logo';
 import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
@@ -14,6 +13,7 @@ import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
 import QuickDisplay from 'src/ui/QuickDisplay';
 import TitlebarTime from 'src/ui/TitlebarTime';
 import StopTimesView from 'src/ui/Views/StopTimesView';
+import { translate, InjectedTranslateProps } from 'react-i18next';
 
 interface ICompressedDisplayRouteParams {
   version: string,
@@ -30,7 +30,7 @@ interface IStopRouteParams {
   displayedRoutes?: string,
 };
 
-class App extends React.Component {
+class App extends React.Component<InjectedTranslateProps> {
   public render() {
     return (
       <div
@@ -81,12 +81,12 @@ class App extends React.Component {
               <Titlebar>
                 <Logo />
                 <div id={"title-text"}>
-                  {'Virtuaalimonitori'}
+                  {this.props.t('titlebarTitle')}
                 </div>
                 <TitlebarTime />
               </Titlebar>
               <Link to={'/quickDisplay'}>
-                Create a new display
+                {this.props.t('quickDisplayCreate')}
               </Link>
               {/* <Link to={'/configs/1'}>
                 Configs playground
@@ -100,4 +100,4 @@ class App extends React.Component {
   }
 };
 
-export default App;
+export default translate('translations')(App);

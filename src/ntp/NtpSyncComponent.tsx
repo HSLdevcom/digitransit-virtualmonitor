@@ -19,7 +19,17 @@ class NtpSyncComponent extends React.Component<INtpSyncComponent, INtpSyncCompon
     this.retrieveTimeDelta();
   }
 
-  retrieveTimeDelta = async () => {
+  public render() {
+    return (
+      <NtpSyncContext.Provider
+        value={this.state}
+      >
+        {this.props.children}
+      </NtpSyncContext.Provider>
+    );
+  };
+
+  protected retrieveTimeDelta = async () => {
     try {
       const res = await fetch('https://use.ntpjs.org/v1/time.json');
       const remoteTime = await res.json();
@@ -37,16 +47,6 @@ class NtpSyncComponent extends React.Component<INtpSyncComponent, INtpSyncCompon
         deltaMilliseconds: 0,
       });
     }
-  };
-
-  public render() {
-    return (
-      <NtpSyncContext.Provider
-        value={this.state}
-      >
-        {this.props.children}
-      </NtpSyncContext.Provider>
-    );
   };
 }
 

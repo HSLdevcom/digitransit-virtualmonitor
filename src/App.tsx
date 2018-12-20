@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { InjectedTranslateProps, translate } from 'react-i18next';
 import { Link, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import 'src/App.css';
@@ -13,7 +14,6 @@ import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
 import QuickDisplay from 'src/ui/QuickDisplay';
 import TitlebarTime from 'src/ui/TitlebarTime';
 import StopTimesView from 'src/ui/Views/StopTimesView';
-import { translate, InjectedTranslateProps } from 'react-i18next';
 
 interface ICompressedDisplayRouteParams {
   version: string,

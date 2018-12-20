@@ -9,8 +9,6 @@ import 'src/ui/StopSearch.css';
 
 import { IStopRenderFunc } from "src/ui/StopList";
 import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse } from "src/ui/StopsByNameRetriever";
-import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/ConfigurationRetriever';
-import StopTimesRetriever, { StopTimesRetrieverQueryResult } from 'src/ui/StopTimesRetriever';
 
 type IProps = RouteComponentProps<{
   readonly phrase?: string,

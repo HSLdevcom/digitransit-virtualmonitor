@@ -1,4 +1,5 @@
 import * as React from "react";
+import { InjectedTranslateProps, translate } from 'react-i18next';
 
 import { IStopTimesView, IViewBase } from 'src/ui/ConfigurationList';
 import { StopId } from 'src/ui/StopTimesRetriever';
@@ -20,7 +21,7 @@ type ViewComponent =
 //   }
 // };
 
-const View = ({ view, ...additionalProps }: { view: IViewBase }) => {
+const View = ({ t, view, ...additionalProps }: { view: IViewBase } & InjectedTranslateProps) => {
   // const ViewComponent = viewTypeMap[view.type];
   // return (
   //   <ViewComponent
@@ -45,10 +46,10 @@ const View = ({ view, ...additionalProps }: { view: IViewBase }) => {
     default:
       return (
       <div>
-        {`Unknown view with title '${view.title}' of type ${view.type}`}
+        {t('viewErrorUnknownView')}
       </div>
       );
   }
 };
 
-export default View;
+export default translate('translations')(View);

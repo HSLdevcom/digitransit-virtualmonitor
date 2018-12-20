@@ -2,8 +2,8 @@ import * as React from 'react';
 import { MemoryRouter, MemoryRouterProps } from 'react-router';
 import { create } from 'react-test-renderer';
 
-import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import StopsByNameRetriever from 'src/ui/StopsByNameRetriever';
+import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 
 jest.mock('src/ui/StopsByNameRetriever', () => {
     return {

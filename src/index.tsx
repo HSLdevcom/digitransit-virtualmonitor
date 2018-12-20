@@ -11,10 +11,10 @@ import App from 'src/App';
 import { loona, virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
 import i18n from 'src/i18n';
 import 'src/index.css';
+import NtpSyncComponent from 'src/ntp/NtpSyncComponent';
 import registerServiceWorker from 'src/registerServiceWorker';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import VirtualMonitorLocalState from 'src/VirtualMonitorLocalState';
-import NtpSyncComponent from 'src/ntp/NtpSyncComponent';
 
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),

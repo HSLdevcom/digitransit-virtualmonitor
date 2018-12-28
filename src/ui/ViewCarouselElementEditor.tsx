@@ -6,6 +6,7 @@ import React = require('react');
 import { IViewCarouselElement } from 'src/ui/ConfigurationList';
 import ViewEditor from 'src/ui/ViewEditor';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+import { translate, InjectedTranslateProps } from 'react-i18next';
 
 export interface IViewCarouselElementEditorProps {
   readonly viewCarouselElement: IViewCarouselElement,
@@ -23,10 +24,10 @@ const removeViewCarouselElementMutation = gql`
   }
 `;
 
-const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps> = ({ viewCarouselElement }: IViewCarouselElementEditorProps) => (
+const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps & InjectedTranslateProps> = ({ t, viewCarouselElement }) => (
   <>
     <div>
-      Näytetty aika:&#32;
+      {t('viewCarouselElementEditorShownTime')}:&#32;
       <ApolloClientsContext.Consumer>
         {({ virtualMonitor }) => (
           <>
@@ -48,9 +49,9 @@ const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps> = ({
                     propName={'displaySeconds'}
                     validate={(newNumber: string) => (parseFloat(newNumber) >= 0)}
                     value={viewCarouselElement.displaySeconds}
-                  />&nbsp;sekuntia.
+                  />&nbsp;{t('seconds')}.
                   {viewCarouselElement.displaySeconds === 0
-                    ? (<span> <b>Näkymä pois käytöstä.</b></span>)
+                    ? (<span><b>{t('viewCarouselElementEditorViewDisabled')}</b></span>)
                     : null
                   }
                 </>)
@@ -67,7 +68,7 @@ const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps> = ({
                     viewCarouselElementId: viewCarouselElement.id,
                   }})}
                 >
-                  Poista näkymä.
+                  {t('viewCarouselElementEditorDeleteView')}
                 </button>)
               }
             </Mutation>
@@ -79,4 +80,4 @@ const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps> = ({
   </>
 );
 
-export default ViewCarouselElementEditor;
+export default translate('translations')(ViewCarouselElementEditor);

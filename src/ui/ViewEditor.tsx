@@ -6,6 +6,7 @@ import * as React from 'react';
 import { IStopTimesView, IViewBase } from 'src/ui/ConfigurationList';
 import StopTimesViewEditor from 'src/ui/StopTimesViewEditor';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+import { translate, InjectedTranslateProps } from 'react-i18next';
 
 export interface IViewEditorProps {
   readonly view: IViewBase,
@@ -17,13 +18,13 @@ const setViewTitleMutation = gql`
   }
 `;
 
-const ViewEditor: React.SFC<IViewEditorProps> = ({ view }: IViewEditorProps) => {
+const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps & InjectedTranslateProps) => {
   const viewWrapper = (innerView: React.ReactNode) => (
     <>
       <ApolloClientsContext.Consumer>
         {({ virtualMonitor }) => (
           <div>
-            {`Näkymän nimi: `}
+            {`${t('viewEditorName')}: `}
             <Mutation
               mutation={setViewTitleMutation}
               client={virtualMonitor}
@@ -44,7 +45,7 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ view }: IViewEditorProps) => 
               )}
             </Mutation>
             {`. `}
-            {`Näkymän tyyppi:
+            {`${t('viewEditorType')}: 
             ${view.type}.`}
           </div>
         )}
@@ -68,4 +69,4 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ view }: IViewEditorProps) => 
   }
 };
 
-export default ViewEditor;
+export default translate('translations')(ViewEditor);

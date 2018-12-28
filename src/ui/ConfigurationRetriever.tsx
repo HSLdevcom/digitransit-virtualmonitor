@@ -99,7 +99,7 @@ const ConfigurationRetriever: React.SFC<IConfigurationRetrieverCommonProps | ICo
 
   let vars: { ids?: IConfigurationRetrieverPropsWithId['ids'], name?: IConfigurationRetrieverPropsWithName['name']};
   if (ids && name) {
-    throw new TypeError("Component of type can not have both 'ids' and 'name' props.");
+    throw new TypeError("ConfigurationRetriever component can not have both 'ids' and 'name' props.");
   } else if (ids) {
     vars = {
       ids,

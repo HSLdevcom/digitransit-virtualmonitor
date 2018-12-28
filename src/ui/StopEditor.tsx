@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { IStop } from 'src/ui/ConfigurationList';
 import { IStopInfo } from 'src/ui/StopInfoRetriever';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+import { InjectedTranslateProps, translate } from 'react-i18next';
 
 interface IStopEditorProps {
   stop: IStop,
@@ -19,16 +20,17 @@ const SET_OVERRIDE_STOP_NAME = gql`
   }
 `;
 
-const StopEditor: React.SFC<IStopEditorProps> = ({
+const StopEditor: React.SFC<IStopEditorProps & InjectedTranslateProps> = ({
   stop,
   stopInfo,
+  t,
 }) => (
   <div>
     <Link
       to={`/stop/${stop.gtfsId}`}
     >
       {stopInfo
-        ? (<span>{stopInfo.name} (pysäkkinumero {stopInfo.code || ''})</span>)
+        ? (<span>{stopInfo.name} ({t('stopCode')} {stopInfo.code || ''})</span>)
         : (<span>{stop.gtfsId}</span>)
       }
     </Link>
@@ -40,7 +42,11 @@ const StopEditor: React.SFC<IStopEditorProps> = ({
         >
           {setOverrideStopName => (
             <>
-              <label>Pysäkin nimi: </label>
+              <label
+                style={{ marginLeft: '0.5em', }}
+              >
+                {`${t('stopName')}: `}
+              </label>
               <RIEInput
                 change={({ overrideStopName }: { overrideStopName: string }) => setOverrideStopName({ variables: { stopId: stop.id, overrideStopName } })}
                 value={stop.overrideStopName}
@@ -54,4 +60,4 @@ const StopEditor: React.SFC<IStopEditorProps> = ({
   </div>
 );
 
-export default StopEditor;
+export default translate('translations')(StopEditor);

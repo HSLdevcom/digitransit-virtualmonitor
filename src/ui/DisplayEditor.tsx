@@ -57,8 +57,9 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
         />)
       : (<button
           disabled={true}
+          style={{ display: 'none' }} // This feature isn't currently used.
         >
-          Määritä sijainti
+          {t('displayEditorDefinePosition')}
         </button>)
     }
     <ul>
@@ -76,7 +77,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
       promise={pairs.v0.pack(display)}
       then={(packedUrl: string) => (
         <Link to={`/urld/v0/${encodeURIComponent(packedUrl)}`}>
-          Staattinen linkki
+          {t('displayEditorStaticLink')}
         </Link>
       )}
     />
@@ -88,7 +89,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
         >
           {addViewCarousel => (
             <button onClick={() => addViewCarousel({ variables: { displayId: display.id } })}>
-              Lisää uusi pysäkkinäkymä karuselliin.
+              {t('displayEditorNewView')}
             </button>
           )}
         </Mutation>)
@@ -100,7 +101,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
 DisplayEditor.defaultProps = {
   display: {
     id: 'Temporary',
-    name: 'Uusi näyttö',
+    name: 'Temporary Display',
     viewCarousel: [],
   },
 };

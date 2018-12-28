@@ -244,16 +244,9 @@ class DisplayEditorHistoryUpdater extends React.PureComponent<IDisplayEditorHist
 
   public render() {
     return (
-      <>
-        {/* <span>this.props.display</span>
-        <textarea
-          readOnly
-          value={JSON.stringify(this.props.display)}
-        /> */}
-        <DisplayEditor
-          display={this.props.display}
-        />
-      </>
+      <DisplayEditor
+        display={this.props.display}
+      />
     );
   }
 }

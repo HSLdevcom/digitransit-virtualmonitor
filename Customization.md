@@ -28,4 +28,4 @@ Favicon is defined in `public/manifest.json`.
 
 ## In-app title
 
-`src/App.tsx` has `<div id={"title-text"}>`, inside of which is the application title (currently Virtuaalimonitori).
+`src/i18n.ts` has `titlebarTitle`, the translation string for the title diplayed in titlebar (currently Virtuaalimonitori).

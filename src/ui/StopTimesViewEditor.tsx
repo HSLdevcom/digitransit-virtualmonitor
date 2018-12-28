@@ -48,7 +48,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                 : view.title
               }
             </Link>)
-            : `${view.title ? view.title.fi : 'Tuntematon näkymä.'}`
+            : `${view.title ? view.title.fi : t('viewErrorNoTitle')}`
           }
         </h2>
         { view.stops.length > 0
@@ -80,7 +80,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                                 stopId: s.id,
                               },
                             })}>
-                              {t('removeStop')}
+                              {t('viewEditorRemoveStop')}
                             </button>
                           )}
                         </Mutation>
@@ -102,7 +102,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                                   }
                                 })}
                               >
-                                Up.
+                                {t('viewEditorMoveStopUp')}
                               </button>
                               <button
                                 onClick={() => moveStop({
@@ -113,7 +113,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                                   }
                                 })}
                               >
-                                Down.
+                                {t('viewEditorMoveStopDown')}
                               </button>
                             </>
                         )}
@@ -123,9 +123,8 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                       if (!result.loading && !result.error && !stopInfo) {
                         return (
                             <li key={s.gtfsId}>
-                              Pysäkkiä Id:llä {s.gtfsId} ei löytynyt.
+                              {t('viewEditorErrorStopNotFound', { stopId: s.gtfsId })}
                               &nbsp;
-                              Jaahahahaha.
                               {moveStopButtons}
                               {removeStopButton}
                             </li>

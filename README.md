@@ -38,7 +38,7 @@ To access the virtual monitor: http://localhost:3000/
 
 ## Developing Virtual Monitor
 
-See [main article](Developing.md).
+See [main article, Development.md](Developing.md).
 
 ## Current state of the GraphQL server.
 
@@ -48,7 +48,7 @@ The initial server code is available and can be used to examine the GraphQL sche
 
 ## Customization
 
-Steps for customization for different organizations is detailed [separately](Customization.md).
+Steps for customization for different organizations is detailed [separately in Customisation.md](Customization.md).
 
 ## Deploying
 

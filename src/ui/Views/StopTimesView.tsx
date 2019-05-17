@@ -110,7 +110,6 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
   const stopIds = (props as IStopTimesViewPropsWithStopIds).stopIds
     || ((props as IStopTimesViewPropsWithIStops).stops.map(stop => stop.gtfsId))
     || [];
-
   return (
     <div style={{ color: 'white', display: 'flex', flexDirection:'column' }}>
       <Titlebar>
@@ -155,7 +154,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
 
               const pruneMethod = duplicatePruneMethods.byStopOrder;
               const duplicatePrunedStopTimes = pruneMethod(mergedStopTimes, stopIds);
-
+              console.log(duplicatePrunedStopTimes)
               const finalStopTimes = duplicatePrunedStopTimes
                 .sort((stopTimeA, stopTimeB) => stopTimeAbsoluteDepartureTime(stopTimeA) - stopTimeAbsoluteDepartureTime(stopTimeB))
                 // Clip to max of props.displayedRoutes

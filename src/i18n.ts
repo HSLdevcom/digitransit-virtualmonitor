@@ -50,6 +50,7 @@ i18n
           prepareStop: 'Lisää pysäkki',
           quickDisplayCreate: 'Luo uusi näyttö',
           seconds: 'sekuntia',
+          stops: 'Pysäkit',
           stop: 'Pysäkki {{stop}}',
           stopCode: 'pysäkkinumero',
           stopName: 'Pysäkin nimi',

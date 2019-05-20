@@ -19,10 +19,11 @@ import VirtualMonitorLocalState from 'src/VirtualMonitorLocalState';
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),
  // uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+   // uri: process.env.datauri || 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
 });
+console.log(reittiOpasClient.cache);
 (reittiOpasClient as any).name = 'reittiOpasClient';
-
 export const contextValue: IApolloClientContextType = {
   default: reittiOpasClient,
   reittiOpas: reittiOpasClient,

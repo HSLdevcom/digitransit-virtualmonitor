@@ -114,9 +114,9 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
     <div style={{ color: 'white', display: 'flex', flexDirection:'column' }}>
       <Titlebar>
         <Logo />
-        <div id={"title-text"}>
-          {props.title
-            ? props.title
+        <div style={{fontWeight:'bold', fontSize:'1.5em'}}>
+          {stopIds.length > 1 ? props.t('stops') : props.t('stop')}
+          {stopIds.length > 0 ? stopIds.map(stop => <StopName stopIds={[stop]}/> ) : props.title ? props.title
             : (stopIds.length > 0 ?
                 <StopName stopIds={stopIds} />
                 : null
@@ -145,16 +145,23 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
                 </div>);
               }
             
-              // Merge the stoptimes. Show each route only once.
+              // Merge the stoptimes. Show each route only once. Filter out nulls and undefined. (not found)
               const mergedStopTimes = result.data.stops
+                .filter(function (stop) {
+                  return stop != null;
+                })
                 .reduce(
                   (acc: IStopTime[], curr:IStop) => [...acc, ...curr.stoptimesWithoutPatterns || []],
                   []
                 );
+                if(!mergedStopTimes || (mergedStopTimes.length <= 0)) {
+                  return (<div>
+                    {props.t('stopRetrieveNotFound', {stopIds})}
+                  </div>)
+                }
 
               const pruneMethod = duplicatePruneMethods.byStopOrder;
               const duplicatePrunedStopTimes = pruneMethod(mergedStopTimes, stopIds);
-              console.log(duplicatePrunedStopTimes)
               const finalStopTimes = duplicatePrunedStopTimes
                 .sort((stopTimeA, stopTimeB) => stopTimeAbsoluteDepartureTime(stopTimeA) - stopTimeAbsoluteDepartureTime(stopTimeB))
                 // Clip to max of props.displayedRoutes

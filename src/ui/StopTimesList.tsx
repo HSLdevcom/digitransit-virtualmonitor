@@ -80,7 +80,7 @@ const SeparatorRow = ({ showPier }: { showPier?: boolean }) => (
     className={"separator"}
   >
     <td
-      colSpan={ showPier ? 4 : 3 }
+      colSpan={ showPier ? 5 : 4 }
     />
   </tr>
 )

@@ -1,0 +1,13 @@
+sudo: required
+
+branches:
+  only:
+    - master
+    - tampere
+services: docker
+
+language: bash
+
+script:
+  - ./build-docker-image.sh
+

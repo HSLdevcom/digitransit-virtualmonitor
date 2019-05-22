@@ -116,12 +116,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
         <Logo />
         <div style={{fontWeight:'bold', fontSize:'1.5em'}}>
           {stopIds.length > 1 ? props.t('stops') : props.t('stop')}
-          {stopIds.length > 0 ? stopIds.map(stop => <StopName stopIds={[stop]}/> ) : props.title ? props.title
-            : (stopIds.length > 0 ?
-                <StopName stopIds={stopIds} />
-                : null
-              )
-          }
+          {stopIds.length > 0 ? stopIds.map(stop => <StopName stopIds={[stop]}/> ) : null  }
         </div>
         <TitlebarTime />
       </Titlebar>
@@ -154,7 +149,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
                   (acc: IStopTime[], curr:IStop) => [...acc, ...curr.stoptimesWithoutPatterns || []],
                   []
                 );
-                if(!mergedStopTimes || (mergedStopTimes.length <= 0)) {
+                if(!mergedStopTimes || !Array.isArray(mergedStopTimes) || mergedStopTimes.length <= 0) {
                   return (<div>
                     {props.t('stopRetrieveNotFound', {stopIds})}
                   </div>)

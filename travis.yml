@@ -9,5 +9,5 @@ services: docker
 language: bash
 
 script:
-  - ./build-docker-image.sh
+  - CI=1 npm run test -- --watchAll=false && ./build-docker-image.sh
 

@@ -28,8 +28,19 @@
     "react-promise": "^2.0.3",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "^2.17.0",
-    "uuid": "^3.3.2",
-    "ts-node": "^7.0.1",
+    "uuid": "^3.3.2"
+  },
+  "scripts": {
+    "prepare": "patch-package",
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts -r esm test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "react-test-renderer": "^16.4.1",
+	"ts-node": "^7.0.1",
     "typescript": "^3.2.1",
     "@attently/riek": "^2.0.1",
     "@types/history": "^4.6.2",
@@ -41,17 +52,6 @@
     "@types/react-router-dom": "^4.3.0",
     "@types/react-test-renderer": "^16.0.1",
     "@types/uuid": "^3.4.4"
-  },
-  "scripts": {
-    "prepare": "patch-package",
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts -r esm test --env=jsdom",
-    "eject": "react-scripts-ts eject"
-  },
-  "devDependencies": {
-    "@types/jest": "^23.3.1",
-    "react-test-renderer": "^16.4.1"
   },
   "jest": {
     "moduleNameMapper": {

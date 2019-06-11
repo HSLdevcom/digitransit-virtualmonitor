@@ -1,6 +1,6 @@
 import * as React from "react";
 import { InjectedTranslateProps, translate } from 'react-i18next';
-
+import StopName from "src/ui/StopName";
 import {
   formatTime,
   parseDaySeconds,
@@ -33,6 +33,7 @@ const StopTimesListHeaders = ({ pierColumnTitle, showPier, t }: IStopTimesListHe
         ? (<th className={'pier'}>{pierColumnTitle ? pierColumnTitle : t('pier')}</th>)
         : null
       }
+      <th className={'destination'}> Pysäkki </th>
       <th className={'departureTime'}>{t('departureTime')}</th>
     </tr>
   </thead>
@@ -62,6 +63,7 @@ const StopTimeRow = ({ stoptime, showPier, t } : { stoptime: IStopTime & IOverri
         ? (<td className={'pier'}>{(stoptime.stop && (stoptime.stop.overrideStopName || stoptime.stop.platformCode)) || ''}</td>)
         : null
       }
+      <td className={'pier'}> {stoptime.stop === undefined ? 'not found' : <StopName stopIds={[stoptime.stop.gtfsId]} />}</td>
       <td
         className={'time'}
       >
@@ -78,7 +80,7 @@ const SeparatorRow = ({ showPier }: { showPier?: boolean }) => (
     className={"separator"}
   >
     <td
-      colSpan={ showPier ? 4 : 3 }
+      colSpan={ showPier ? 5 : 4 }
     />
   </tr>
 )

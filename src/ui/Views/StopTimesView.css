@@ -15,6 +15,11 @@
   padding: 0.2em;
 }
 
+.StopTimesListTitles {
+  font-weight: bold;
+  font-size: 2.25em;
+}
+
 .StopTimesList th:last-child,td:last-child {
   text-align: end;
 }

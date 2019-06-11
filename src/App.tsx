@@ -63,7 +63,7 @@ class App extends React.Component<InjectedTranslateProps> {
             path={'/stop/:stopId/:displayedRoutes?'}
             component={({ match: { params: { stopId, displayedRoutes }} }: RouteComponentProps<IStopRouteParams>) => (
               <StopTimesView
-                stopIds={[stopId]}
+                stopIds={stopId.split(",")}
                 displayedRoutes={displayedRoutes ? Number(displayedRoutes) : undefined}
               />
             )}

@@ -22,7 +22,6 @@ const reittiOpasClient = new ApolloBoostClient({
    // uri: process.env.datauri || 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
 });
-console.log(reittiOpasClient.cache);
 (reittiOpasClient as any).name = 'reittiOpasClient';
 export const contextValue: IApolloClientContextType = {
   default: reittiOpasClient,

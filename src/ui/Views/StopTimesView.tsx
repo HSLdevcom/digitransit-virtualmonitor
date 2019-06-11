@@ -110,6 +110,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
   const stopIds = (props as IStopTimesViewPropsWithStopIds).stopIds
     || ((props as IStopTimesViewPropsWithIStops).stops.map(stop => stop.gtfsId))
     || [];
+  const showStopColumn = stopIds.length == 1
   return (
     <div style={{ color: 'white', display: 'flex', flexDirection:'column' }}>
       <Titlebar>
@@ -180,6 +181,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
                 <StopTimesList
                   pierColumnTitle={props.pierColumnTitle}
                   stoptimesWithoutPatterns={finalStopTimes}
+                  showStopColumn={showStopColumn}
                 />
               );
             }}

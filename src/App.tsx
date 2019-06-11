@@ -14,6 +14,7 @@ import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
 import QuickDisplay from 'src/ui/QuickDisplay';
 import TitlebarTime from 'src/ui/TitlebarTime';
 import StopTimesView from 'src/ui/Views/StopTimesView';
+import HelpPage from 'src/ui/HelpPage';
 
 interface ICompressedDisplayRouteParams {
   version: string,
@@ -40,6 +41,10 @@ class App extends React.Component<InjectedTranslateProps> {
           <Route
             path={'/quickDisplay/:version?/:packedDisplay?'}
             component={QuickDisplay}
+          />
+          <Route
+           path={'/help/'}
+           component={HelpPage} 
           />
           <Route
             path={'/urld/:version/:packedDisplay'}

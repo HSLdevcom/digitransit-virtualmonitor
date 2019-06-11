@@ -4,9 +4,11 @@ metadata:
   name: tampere-virtualmonitor-service
 spec:
   ports:
-  - name: "virtualmonitor-entrypor"
+  - name: "virtualmonitor-entryport"
     port: 80
     targetPort: 3000
+  loadBalancerIP: 104.40.236.82  
+  type: LoadBalancer  
   selector:
     app: tampere-virtualmonitor
 ---
@@ -25,8 +27,8 @@ spec:
         app: tampere-virtualmonitor
     spec:
       containers:
-      - name: <TODO>
-        image: <TODO>
+      - name: digitransit-virtualmonitor-tampere
+        image: hsldevcom/digitransit-virtualmonitor:tampere
         imagePullPolicy: "Always"
         ports: 
          - containerPort: 3000

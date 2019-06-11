@@ -17,14 +17,16 @@ export interface IStopTimesListProps {
   readonly pierColumnTitle?: string,
   readonly stoptimesWithoutPatterns: ReadonlyArray<IStopTime & IOverrideStopName>,
   readonly showPier?: boolean,
+  readonly showStopColumn?: boolean,
 };
 
 interface IStopTimesListHeadersProps {
   readonly pierColumnTitle?: string,
   readonly showPier?: boolean,
+  readonly showStopColumn?: boolean,
 };
 
-const StopTimesListHeaders = ({ pierColumnTitle, showPier, t }: IStopTimesListHeadersProps & InjectedTranslateProps) => (
+const StopTimesListHeaders = ({ pierColumnTitle, showPier, t, showStopColumn }: IStopTimesListHeadersProps & InjectedTranslateProps) => (
   <thead>
     <tr>
       <th className={'lineId'}>{t('lineId')}</th>
@@ -33,15 +35,18 @@ const StopTimesListHeaders = ({ pierColumnTitle, showPier, t }: IStopTimesListHe
         ? (<th className={'pier'}>{pierColumnTitle ? pierColumnTitle : t('pier')}</th>)
         : null
       }
-      <th className={'destination'}> Pysäkki </th>
+     {!showStopColumn 
+       ? <th className={'destination'}> Pysäkki </th> 
+       : null}
       <th className={'departureTime'}>{t('departureTime')}</th>
     </tr>
   </thead>
 );
 const StopTimesListHeadersTranslated = translate('translations')(StopTimesListHeaders);
 
-const StopTimeRow = ({ stoptime, showPier, t } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean } & InjectedTranslateProps) => {
+const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, } & InjectedTranslateProps) => {
   const isCanceled = stoptime.realtimeState === 'CANCELED';
+  console.log(showStopColumn)
   return (
     <tr
       className={isCanceled ? 'canceled' : ''}
@@ -63,7 +68,9 @@ const StopTimeRow = ({ stoptime, showPier, t } : { stoptime: IStopTime & IOverri
         ? (<td className={'pier'}>{(stoptime.stop && (stoptime.stop.overrideStopName || stoptime.stop.platformCode)) || ''}</td>)
         : null
       }
-      <td className={'pier'}> {stoptime.stop === undefined ? 'not found' : <StopName stopIds={[stoptime.stop.gtfsId]} />}</td>
+      {!showStopColumn ?
+       <td className={'pier'}> {stoptime.stop === undefined ? 'not found' : <StopName stopIds={[stoptime.stop.gtfsId]} />}</td>
+        :null}
       <td
         className={'time'}
       >
@@ -75,17 +82,17 @@ const StopTimeRow = ({ stoptime, showPier, t } : { stoptime: IStopTime & IOverri
 const StopTimeRowTranslated = translate('translations')(StopTimeRow);
 
 /* Separator row is used instead of just having bottom border since dashed borders between table cells look terrible. This looks ok. */
-const SeparatorRow = ({ showPier }: { showPier?: boolean }) => (
+const SeparatorRow = ({ showPier, showStopColumn }: { showPier?: boolean, showStopColumn?: boolean, }) => (
   <tr
     className={"separator"}
   >
     <td
-      colSpan={ showPier ? 5 : 4 }
+      colSpan={ showPier && showStopColumn ? 5 :  4}
     />
   </tr>
 )
 
-const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t } : IStopTimesListProps & InjectedTranslateProps) => {
+const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t, showStopColumn } : IStopTimesListProps & InjectedTranslateProps) => {
   const usedShowPier = (showPier !== undefined)
     ? showPier
     : stoptimesWithoutPatterns.some(stopTime => (
@@ -98,6 +105,7 @@ const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t 
       <StopTimesListHeadersTranslated
         pierColumnTitle={pierColumnTitle}
         showPier={usedShowPier}
+        showStopColumn={showStopColumn}
       />
       <tbody>
         {stoptimesWithoutPatterns.map((stoptime, i) => (
@@ -107,10 +115,12 @@ const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t 
             <StopTimeRowTranslated
               stoptime={stoptime}
               showPier={usedShowPier}
+              showStopColumn={showStopColumn}
             />
             {(i < (stoptimesWithoutPatterns.length - 1))
               ? <SeparatorRow
                   showPier={usedShowPier}
+                  showStopColumn={showStopColumn}
                 />
               : null
             }

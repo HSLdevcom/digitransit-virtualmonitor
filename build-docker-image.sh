@@ -19,7 +19,6 @@ if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
   docker build --tag="$ORG/$DOCKER_IMAGE:$DOCKER_TAG" .
   docker push $ORG/$DOCKER_IMAGE:$DOCKER_TAG
   tagandpush $TRAVIS_BRANCH
-  fi
 else
   echo "processing pr $TRAVIS_PULL_REQUEST"
   docker build --tag="$ORG/$DOCKER_IMAGE:$DOCKER_TAG" .

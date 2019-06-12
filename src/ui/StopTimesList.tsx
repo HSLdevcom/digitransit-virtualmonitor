@@ -46,7 +46,6 @@ const StopTimesListHeadersTranslated = translate('translations')(StopTimesListHe
 
 const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, } & InjectedTranslateProps) => {
   const isCanceled = stoptime.realtimeState === 'CANCELED';
-  console.log(showStopColumn)
   return (
     <tr
       className={isCanceled ? 'canceled' : ''}

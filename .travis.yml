@@ -14,5 +14,5 @@ cache:
     - node_modules
 
 script:
-  - CI=1 npm run test -- --watchAll=false && ./build-docker-image.sh
+  - npm run install && CI=1 npm run test -- --watchAll=false && ./build-docker-image.sh
 

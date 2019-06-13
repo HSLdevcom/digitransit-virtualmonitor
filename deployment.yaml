@@ -5,10 +5,10 @@ metadata:
 spec:
   ports:
   - name: "virtualmonitor-entryport"
-    port: 80
-    targetPort: 3000
-  loadBalancerIP: 104.40.236.82  
-  type: LoadBalancer  
+    port: 3000
+#    targetPort: 3000
+#  loadBalancerIP: 104.40.236.82  
+#  type: LoadBalancer  
   selector:
     app: tampere-virtualmonitor
 ---

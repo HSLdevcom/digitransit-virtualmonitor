@@ -7,6 +7,7 @@ public render() {
   return (
     <div>
       <h1>Virtuaalimonitorin käyttöopas</h1>
+        <h2>Käytä Chromea parhaan käyttökokemuksen takaamiseksi!</h2>
         <h2>Virtuaalimonitorin käyttö selainparametrien avulla </h2>
        <p>
          Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/tampere:0010/10 näyttää 10 riviä pysäkiltä Keskustori F. 

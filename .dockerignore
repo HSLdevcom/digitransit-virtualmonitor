@@ -1,0 +1,8 @@
+.git
+.gitignore
+.*swp
+LICENSE*
+VERSION
+README.md
+docker-compose.yml
+node_modules

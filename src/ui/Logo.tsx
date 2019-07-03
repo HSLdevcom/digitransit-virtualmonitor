@@ -1,3 +1,3 @@
-import HslLogo from "src/ui/HslLogo";
+import NysseLogo from "src/ui/NysseLogo";
 
-export default HslLogo;
+export default NysseLogo;

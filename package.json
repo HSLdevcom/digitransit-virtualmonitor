@@ -38,9 +38,12 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/jest": "^23.3.1",
+    "react-test-renderer": "^16.4.1",
+	"ts-node": "^7.0.1",
+    "typescript": "^3.2.1",
     "@attently/riek": "^2.0.1",
     "@types/history": "^4.6.2",
-    "@types/jest": "^23.3.1",
     "@types/node": "^10.11.0",
     "@types/prop-types": "^15.5.6",
     "@types/react": "^16.7.13",
@@ -48,10 +51,7 @@
     "@types/react-i18next": "^7.8.1",
     "@types/react-router-dom": "^4.3.0",
     "@types/react-test-renderer": "^16.0.1",
-    "@types/uuid": "^3.4.4",
-    "react-test-renderer": "^16.4.1",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.2.1"
+    "@types/uuid": "^3.4.4"
   },
   "jest": {
     "moduleNameMapper": {

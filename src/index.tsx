@@ -15,13 +15,15 @@ import NtpSyncComponent from 'src/ntp/NtpSyncComponent';
 import registerServiceWorker from 'src/registerServiceWorker';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import VirtualMonitorLocalState from 'src/VirtualMonitorLocalState';
+ import {default as config} from 'src/monitorConfig.js';
 
+console.log(window.location.href)
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),
     // uri for hsl data
  // uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
    // uri for waltti cities data
-   uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+  uri: window.location.href.indexOf("localhost") > 0 ? config.hsl.uri : config.tampere.uri,
 });
 (reittiOpasClient as any).name = 'reittiOpasClient';
 export const contextValue: IApolloClientContextType = {

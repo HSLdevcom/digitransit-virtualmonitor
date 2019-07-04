@@ -16,6 +16,7 @@ interface IStopTimesViewCommonProps {
   readonly title?: string,
   readonly displayedRoutes?: number,
   readonly pierColumnTitle?: string,
+  readonly monitorConfig?: object,
 };
 
 export interface IStopTimesViewPropsWithStopIds extends IStopTimesViewCommonProps {
@@ -110,11 +111,13 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
   const stopIds = (props as IStopTimesViewPropsWithStopIds).stopIds
     || ((props as IStopTimesViewPropsWithIStops).stops.map(stop => stop.gtfsId))
     || [];
-  const showStopColumn = stopIds.length == 1
+  const showStopColumn = stopIds.length === 1
+  const monitorConfig = (props as IStopTimesViewCommonProps).monitorConfig;
+
   return (
     <div style={{ color: 'white', display: 'flex', flexDirection:'column' }}>
       <Titlebar>
-        <Logo />
+        <Logo monitorConfig={monitorConfig} />
         <div style={{fontWeight:'bold', fontSize:'1.5em'}}>
           {stopIds.length > 1 ? props.t('stops') : props.t('stop')}
           {stopIds.length > 0 ? stopIds.map(stop => <StopName stopIds={[stop]}/> ) : null  }

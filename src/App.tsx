@@ -16,6 +16,11 @@ import TitlebarTime from 'src/ui/TitlebarTime';
 import StopTimesView from 'src/ui/Views/StopTimesView';
 import HelpPage from 'src/ui/HelpPage';
 
+
+
+export interface IConfigruationProps{
+  monitorConfig?: object,
+}
 interface ICompressedDisplayRouteParams {
   version: string,
   packedDisplay: string
@@ -31,8 +36,12 @@ interface IStopRouteParams {
   displayedRoutes?: string,
 };
 
-class App extends React.Component<InjectedTranslateProps> {
+type combinedConfigurationAndInjected = IConfigruationProps & InjectedTranslateProps
+
+class App extends React.Component<combinedConfigurationAndInjected> {
   public render() {
+    const monitorConfig = (this.props as combinedConfigurationAndInjected).monitorConfig;
+
     return (
       <div
         className={'App'}
@@ -70,6 +79,7 @@ class App extends React.Component<InjectedTranslateProps> {
               <StopTimesView
                 stopIds={stopId.split(",")}
                 displayedRoutes={displayedRoutes ? Number(displayedRoutes) : undefined}
+                monitorConfig={monitorConfig}
               />
             )}
           />
@@ -84,7 +94,7 @@ class App extends React.Component<InjectedTranslateProps> {
           <Route>
             <div id={'stop-search'}>
               <Titlebar>
-                <Logo />
+                <Logo monitorConfig={monitorConfig} />
                 <div id={"title-text"}>
                   {this.props.t('titlebarTitle')}
                 </div>

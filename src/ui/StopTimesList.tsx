@@ -86,7 +86,7 @@ const SeparatorRow = ({ showPier, showStopColumn }: { showPier?: boolean, showSt
     className={"separator"}
   >
     <td
-      colSpan={ showPier && showStopColumn ? 5 :  4}
+      colSpan={ showPier ? 6 : showStopColumn? 5 : 4}
     />
   </tr>
 )
@@ -98,7 +98,7 @@ const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t,
         (stopTime.stop !== undefined) &&
         (((stopTime.stop.overrideStopName !== undefined) && (stopTime.stop.overrideStopName !== null) && (stopTime.stop.overrideStopName !== '')) || ((stopTime.stop.platformCode !== undefined) && (stopTime.stop.platformCode !== null) && (stopTime.stop.platformCode !== '')))
       ));
-
+      
   return (
     <table className={'StopTimesList'}>
       <StopTimesListHeadersTranslated

@@ -12,8 +12,8 @@ class Logo extends React.Component<ICommonProps> {
    const monitorConfig = (this.props as ICommonProps).monitorConfig
 
     if(monitorConfig) {
-      const agency = monitorConfig.agency;
-      switch (agency) {
+      const feedId = monitorConfig.feedId;
+      switch (feedId) {
         case "tampere":
           return <NysseLogo />;
         case "hsl":

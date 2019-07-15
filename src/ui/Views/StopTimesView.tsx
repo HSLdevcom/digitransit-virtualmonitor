@@ -120,7 +120,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
         <Logo monitorConfig={monitorConfig} />
         <div style={{fontWeight:'bold', fontSize:'1.5em'}}>
           {stopIds.length > 1 ? props.t('stops') : props.t('stop')}
-          {stopIds.length > 0 ? stopIds.map(stop => <StopName stopIds={[stop]}/> ) : null  }
+          {stopIds.length > 0 ? stopIds.map(stop => <StopName key={stop} stopIds={[stop]}/> ) : null  }
         </div>
         <TitlebarTime />
       </Titlebar>

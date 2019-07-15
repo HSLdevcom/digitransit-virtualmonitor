@@ -17,8 +17,8 @@ import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import VirtualMonitorLocalState from 'src/VirtualMonitorLocalState';
  import {default as config} from 'src/monitorConfig.js';
 
-var domain = window.location.hostname;
-let monitorConfig: { agency?: string; uri: any; };
+const domain = window.location.hostname;
+let monitorConfig: { feedId?: string; uri: any; };
 
 if(domain.indexOf('tremonitori') >= 0) {
   // domain url for Tampere Virtual monitor

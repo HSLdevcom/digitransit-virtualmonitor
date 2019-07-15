@@ -18,7 +18,7 @@ import HelpPage from 'src/ui/HelpPage';
 
 
 
-export interface IConfigruationProps{
+export interface IConfigurationProps{
   monitorConfig?: object,
 }
 interface ICompressedDisplayRouteParams {
@@ -36,7 +36,7 @@ interface IStopRouteParams {
   displayedRoutes?: string,
 };
 
-type combinedConfigurationAndInjected = IConfigruationProps & InjectedTranslateProps
+type combinedConfigurationAndInjected = IConfigurationProps & InjectedTranslateProps
 
 class App extends React.Component<combinedConfigurationAndInjected> {
   public render() {

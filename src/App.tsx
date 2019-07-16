@@ -16,10 +16,18 @@ import TitlebarTime from 'src/ui/TitlebarTime';
 import StopTimesView from 'src/ui/Views/StopTimesView';
 import HelpPage from 'src/ui/HelpPage';
 
-
+interface IMonitorConfig {
+  feedId?:  string,
+  uri?: string,
+      // Texts for Help page
+  urlParamUsageText?: string,
+  urlMultipleStopsText?: string,
+  urlParamFindText?: string,
+  urlParamFindAltText?: string,
+}
 
 export interface IConfigurationProps{
-  monitorConfig?: object,
+  monitorConfig?: IMonitorConfig,
 }
 interface ICompressedDisplayRouteParams {
   version: string,
@@ -36,12 +44,28 @@ interface IStopRouteParams {
   displayedRoutes?: string,
 };
 
-type combinedConfigurationAndInjected = IConfigurationProps & InjectedTranslateProps
+export type combinedConfigurationAndInjected = IConfigurationProps & InjectedTranslateProps
 
 class App extends React.Component<combinedConfigurationAndInjected> {
+  constructor(props: combinedConfigurationAndInjected) {
+    super(props);
+  }
   public render() {
-    const monitorConfig = (this.props as combinedConfigurationAndInjected).monitorConfig;
+    const monitorConfig = this.props.monitorConfig;
 
+    let helpPageUrlParamText: string;
+    let helpPageurlMultipleStopsText: string;
+    let helpPageUrlParamFindText: string;
+    let helpPageUrlParamFindAltText: string;
+
+    if(monitorConfig) {
+     // set texts for help page.
+      helpPageUrlParamText = monitorConfig.urlParamUsageText ? monitorConfig.urlParamUsageText : '';
+      helpPageurlMultipleStopsText = monitorConfig.urlMultipleStopsText ? monitorConfig.urlMultipleStopsText : '';
+      helpPageUrlParamFindText = monitorConfig.urlParamFindText ? monitorConfig.urlParamFindText : '';
+      helpPageUrlParamFindAltText = monitorConfig.urlParamFindAltText ? monitorConfig.urlParamFindAltText : '';
+    }
+    
     return (
       <div
         className={'App'}
@@ -53,7 +77,13 @@ class App extends React.Component<combinedConfigurationAndInjected> {
           />
           <Route
            path={'/help/'}
-           component={HelpPage} 
+           component={({ match: { params: { }} }: RouteComponentProps<IMonitorConfig>) => (
+            <HelpPage urlParamUsageText={helpPageUrlParamText}
+                      urlMultipleStopsText={helpPageurlMultipleStopsText}
+                      urlParamFindText={helpPageUrlParamFindText}
+                      urlParamFindAltText={helpPageUrlParamFindAltText}
+             />
+            )}         
           />
           <Route
             path={'/urld/:version/:packedDisplay'}

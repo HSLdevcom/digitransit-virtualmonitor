@@ -1,21 +1,41 @@
 import * as React from 'react';
 import { render } from 'react-dom';
 
+interface IMonitorConfig {
+  feedId?: string,
+  uri?: string,
+  urlParamUsageText?: string,
+  urlMultipleStopsText?: string,
+  urlParamFindText?: string,
+  urlParamFindAltText?: string,
+}
 
-class HelpPage extends React.Component {
+interface IConfigurationProps{
+  monitorConfig?: IMonitorConfig,
+}
+
+class HelpPage extends React.Component<IMonitorConfig> {
 public render() {
+  if(!this.props) {
+    return (<p> ERROR: OHJEITA EI LÖYTYNYT</p>)
+  }
+
   return (
     <div>
       <h1>Virtuaalimonitorin käyttöopas</h1>
         <h2>Virtuaalimonitorin käyttö selainparametrien avulla </h2>
-       <p>
-         Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/tampere:0010/10 näyttää 10 riviä pysäkiltä Keskustori F. 
-      </p>
-      <p>
-         Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi stop/tampere:0010,tampere:3729,tampere:3730/10.
-      </p>
+          <p>
+            {this.props.urlParamUsageText}
+          </p>
+          <p>
+           {this.props.urlMultipleStopsText}
+        </p>
+        <h2> Oikean pysäkki-id:n löytäminen</h2>
+         <p> {this.props.urlParamFindText}</p>
+         <p> {this.props.urlParamFindAltText} </p>
+        
     </div>
   )
-}
+ }
 }
 export default HelpPage;

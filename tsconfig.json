@@ -20,7 +20,8 @@
       "esnext.asynciterable"
     ],
     "sourceMap": true,
-    "allowJs": false,
+    "allowJs": true,
+    "declaration": false,
     "jsx": "react",
     "moduleResolution": "node",
     "rootDir": "src",

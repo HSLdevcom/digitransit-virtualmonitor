@@ -14,7 +14,21 @@ import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
 import QuickDisplay from 'src/ui/QuickDisplay';
 import TitlebarTime from 'src/ui/TitlebarTime';
 import StopTimesView from 'src/ui/Views/StopTimesView';
+import HelpPage from 'src/ui/HelpPage';
 
+interface IMonitorConfig {
+  feedId?:  string,
+  uri?: string,
+      // Texts for Help page
+  urlParamUsageText?: string,
+  urlMultipleStopsText?: string,
+  urlParamFindText?: string,
+  urlParamFindAltText?: string,
+}
+
+export interface IConfigurationProps{
+  monitorConfig?: IMonitorConfig,
+}
 interface ICompressedDisplayRouteParams {
   version: string,
   packedDisplay: string
@@ -30,8 +44,28 @@ interface IStopRouteParams {
   displayedRoutes?: string,
 };
 
-class App extends React.Component<InjectedTranslateProps> {
+export type combinedConfigurationAndInjected = IConfigurationProps & InjectedTranslateProps
+
+class App extends React.Component<combinedConfigurationAndInjected> {
+  constructor(props: combinedConfigurationAndInjected) {
+    super(props);
+  }
   public render() {
+    const monitorConfig = this.props.monitorConfig;
+
+    let helpPageUrlParamText: string = '';
+    let helpPageurlMultipleStopsText: string = '';
+    let helpPageUrlParamFindText: string = '';
+    let helpPageUrlParamFindAltText: string = '';
+
+    if(monitorConfig) {
+     // set texts for help page.
+      helpPageUrlParamText = monitorConfig.urlParamUsageText ? monitorConfig.urlParamUsageText : '';
+      helpPageurlMultipleStopsText = monitorConfig.urlMultipleStopsText ? monitorConfig.urlMultipleStopsText : '';
+      helpPageUrlParamFindText = monitorConfig.urlParamFindText ? monitorConfig.urlParamFindText : '';
+      helpPageUrlParamFindAltText = monitorConfig.urlParamFindAltText ? monitorConfig.urlParamFindAltText : '';
+    }
+    
     return (
       <div
         className={'App'}
@@ -40,6 +74,16 @@ class App extends React.Component<InjectedTranslateProps> {
           <Route
             path={'/quickDisplay/:version?/:packedDisplay?'}
             component={QuickDisplay}
+          />
+          <Route
+           path={'/help/'}
+           component={({ match: { params: { }} }: RouteComponentProps<IMonitorConfig>) => (
+            <HelpPage urlParamUsageText={helpPageUrlParamText}
+                      urlMultipleStopsText={helpPageurlMultipleStopsText}
+                      urlParamFindText={helpPageUrlParamFindText}
+                      urlParamFindAltText={helpPageUrlParamFindAltText}
+             />
+            )}         
           />
           <Route
             path={'/urld/:version/:packedDisplay'}
@@ -65,6 +109,7 @@ class App extends React.Component<InjectedTranslateProps> {
               <StopTimesView
                 stopIds={stopId.split(",")}
                 displayedRoutes={displayedRoutes ? Number(displayedRoutes) : undefined}
+                monitorConfig={monitorConfig}
               />
             )}
           />
@@ -79,7 +124,7 @@ class App extends React.Component<InjectedTranslateProps> {
           <Route>
             <div id={'stop-search'}>
               <Titlebar>
-                <Logo />
+                <Logo monitorConfig={monitorConfig} />
                 <div id={"title-text"}>
                   {this.props.t('titlebarTitle')}
                 </div>

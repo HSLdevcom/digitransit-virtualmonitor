@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tampere-virtualmonitor-service
+spec:
+  ports:
+  - name: "virtualmonitor-entryport"
+    port: 3000
+#    targetPort: 3000
+#  loadBalancerIP: 104.40.236.82  
+#  type: LoadBalancer  
+  selector:
+    app: tampere-virtualmonitor
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: tampere-virtualmonitor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tampere-virtualmonitor
+  template:
+    metadata:
+      labels:
+        app: tampere-virtualmonitor
+    spec:
+      containers:
+      - name: digitransit-virtualmonitor-tampere
+        image: hsldevcom/digitransit-virtualmonitor:tampere
+        imagePullPolicy: "Always"
+        ports: 
+         - containerPort: 3000
+---  

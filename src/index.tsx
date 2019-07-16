@@ -15,12 +15,24 @@ import NtpSyncComponent from 'src/ntp/NtpSyncComponent';
 import registerServiceWorker from 'src/registerServiceWorker';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import VirtualMonitorLocalState from 'src/VirtualMonitorLocalState';
+ import {default as config} from 'src/monitorConfig.js';
+
+const domain = window.location.hostname;
+let monitorConfig: { feedId?: string; uri: any; };
+
+if(domain.indexOf('tremonitori') >= 0) {
+  // domain url for Tampere Virtual monitor
+  monitorConfig = config.tampere;
+} else {
+  monitorConfig = config.hsl;
+}
+
+
 
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),
- // uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
-   // uri: process.env.datauri || 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
-   uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+ //GraphQL API endpoint
+  uri: monitorConfig.uri,
 });
 (reittiOpasClient as any).name = 'reittiOpasClient';
 export const contextValue: IApolloClientContextType = {
@@ -39,7 +51,7 @@ ReactDOM.render(
               <LoonaProvider loona={loona} states={[VirtualMonitorLocalState]}>
                 <I18nextProvider i18n={i18n}>
                   <BrowserRouter>
-                    <App />
+                    <App monitorConfig={monitorConfig}/>
                   </BrowserRouter>
                 </I18nextProvider>
               </LoonaProvider>

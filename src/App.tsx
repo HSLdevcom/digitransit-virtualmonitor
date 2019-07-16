@@ -53,10 +53,10 @@ class App extends React.Component<combinedConfigurationAndInjected> {
   public render() {
     const monitorConfig = this.props.monitorConfig;
 
-    let helpPageUrlParamText: string;
-    let helpPageurlMultipleStopsText: string;
-    let helpPageUrlParamFindText: string;
-    let helpPageUrlParamFindAltText: string;
+    let helpPageUrlParamText: string = '';
+    let helpPageurlMultipleStopsText: string = '';
+    let helpPageUrlParamFindText: string = '';
+    let helpPageUrlParamFindAltText: string = '';
 
     if(monitorConfig) {
      // set texts for help page.

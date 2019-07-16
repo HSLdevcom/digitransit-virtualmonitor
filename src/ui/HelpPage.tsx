@@ -1,20 +1,14 @@
 import * as React from 'react';
 import { render } from 'react-dom';
 
-interface IMonitorConfig {
-  feedId?: string,
-  uri?: string,
+interface IHelpPageProps {
   urlParamUsageText?: string,
   urlMultipleStopsText?: string,
   urlParamFindText?: string,
   urlParamFindAltText?: string,
 }
 
-interface IConfigurationProps{
-  monitorConfig?: IMonitorConfig,
-}
-
-class HelpPage extends React.Component<IMonitorConfig> {
+class HelpPage extends React.Component<IHelpPageProps> {
 public render() {
   if(!this.props) {
     return (<p> ERROR: OHJEITA EI LÖYTYNYT</p>)

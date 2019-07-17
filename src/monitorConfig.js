@@ -22,7 +22,7 @@ export default {
       urlParamUsageText: 'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/Kuopio:201646/10 Näyttää 10 riviä pysäkiltä Puijonlaaksontie E',
       urlMultipleStopsText: 'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/Kuopio:201646,Kuopio:201854/10.',
       urlParamFindText: 'Löydät oikean pysäkki-id:n helposti esimerkiksi reittioppaasta: Siirry halutun Waltti-kaupungin pysäkin pysäkkinäkymään, ja katso urlin lopusta pysäkki-id. ',
-      urlParamFindAltText: 'Esimerkiksi kuopio.digitransit.fi/pysakit/Kuopio%3A201646 nähdään, että pysäkki-id on Kuopiio:201646. Huomaathan että %3A on HTML koodia, ja se tarkoittaa : merkkiä.',
+      urlParamFindAltText: 'Esimerkiksi kuopio.digitransit.fi/pysakit/Kuopio%3A201646 nähdään, että pysäkki-id on Kuopio:201646. Huomaathan että %3A on HTML koodia, ja se tarkoittaa : merkkiä.',
     },
 };
 

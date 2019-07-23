@@ -23,6 +23,9 @@ let monitorConfig: { feedId?: string; uri: any; };
 if(domain.indexOf('tremonitori') >= 0) {
   // domain url for Tampere Virtual monitor
   monitorConfig = config.tampere;
+} else if(domain.indexOf('matkamonitori') >= 0) {
+  // domain url for Matka.fi Virtual monitor
+  monitorConfig = config.matka;
 } else {
   monitorConfig = config.hsl;
 }

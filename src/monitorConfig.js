@@ -15,7 +15,15 @@ export default {
       urlMultipleStopsText: 'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/HSL:1040279,HSL:1230109/10.',
       urlParamFindText: 'Löydät oikean pysäkki-id:n helposti esimerkiksi reittioppaasta: Siirry halutun pysäkin pysäkkinäkymään, ja katso urlin lopusta pysäkki-id. ',
       urlParamFindAltText: 'Esimerkiksi reittiopas.hsl.fi/pysakit/HSL%3A123010 nähdään, että pysäkki-id on HSL:123010. Huomaathan että %3A on HTML koodia, ja se tarkoittaa : merkkiä.',
-    }
+    },
+    matka: {
+      feedId: 'matka',
+      uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql', 
+      urlParamUsageText: 'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/Kuopio:201646/10 Näyttää 10 riviä pysäkiltä Puijonlaaksontie E',
+      urlMultipleStopsText: 'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/Kuopio:201646,Kuopio:201854/10.',
+      urlParamFindText: 'Löydät oikean pysäkki-id:n helposti esimerkiksi reittioppaasta: Siirry halutun Waltti-kaupungin pysäkin pysäkkinäkymään, ja katso urlin lopusta pysäkki-id. ',
+      urlParamFindAltText: 'Esimerkiksi kuopio.digitransit.fi/pysakit/Kuopio%3A201646 nähdään, että pysäkki-id on Kuopio:201646. Huomaathan että %3A on HTML koodia, ja se tarkoittaa : merkkiä.',
+    },
 };
 
 

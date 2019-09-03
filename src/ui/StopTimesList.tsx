@@ -46,6 +46,15 @@ const StopTimesListHeadersTranslated = translate('translations')(StopTimesListHe
 
 const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, } & InjectedTranslateProps) => {
   const isCanceled = stoptime.realtimeState === 'CANCELED';
+  let isLastStop = false;
+  if(!stoptime.headsign) {
+    if(stoptime.trip && stoptime.trip.stops) {
+     const tripStops = stoptime.trip.stops;
+     const lastStop = tripStops[tripStops.length -1 ];
+    isLastStop = stoptime.stop.id === lastStop.id;
+    }
+  }
+  console.log('is terminal:  ', isLastStop);
   return (
     <tr
       className={isCanceled ? 'canceled' : ''}

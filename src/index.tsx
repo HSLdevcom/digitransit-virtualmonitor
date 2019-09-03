@@ -27,7 +27,7 @@ if(domain.indexOf('tremonitori') >= 0) {
   // domain url for Matka.fi Virtual monitor
   monitorConfig = config.matka;
 } else {
-  monitorConfig = config.hsl;
+  monitorConfig = config.matka;
 }
 
 

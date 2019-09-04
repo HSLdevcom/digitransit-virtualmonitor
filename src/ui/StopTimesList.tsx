@@ -46,15 +46,21 @@ const StopTimesListHeadersTranslated = translate('translations')(StopTimesListHe
 
 const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, } & InjectedTranslateProps) => {
   const isCanceled = stoptime.realtimeState === 'CANCELED';
-  let isLastStop = false;
+
+  // If the Vehicle is arriving to its' destination, its headsign is null. 
+  // Check that the vehicle is arriving, and that the stop is indeed last stop of the route. 
+  let isLastStopTerminal = false;
+  const isArrival = stoptime.pickupType === 'NONE';
   if(!stoptime.headsign) {
     if(stoptime.trip && stoptime.trip.stops) {
-     const tripStops = stoptime.trip.stops;
-     const lastStop = tripStops[tripStops.length -1 ];
-    isLastStop = stoptime.stop.id === lastStop.id;
+     const lastStop = stoptime.trip.stops.slice(-1).pop();
+     if( lastStop && stoptime.stop ) {
+      isLastStopTerminal = (stoptime.stop.id === lastStop.id) && isArrival;
+     }
     }
   }
-  console.log('is terminal:  ', isLastStop);
+
+  let destination = !isLastStopTerminal ? stoptime.headsign : t('arriveTerminal');
   return (
     <tr
       className={isCanceled ? 'canceled' : ''}
@@ -69,7 +75,7 @@ const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: ISt
       >
         {isCanceled
           ? t('canceled')
-          : stoptime.headsign
+          : destination
         }
       </td>
       {showPier

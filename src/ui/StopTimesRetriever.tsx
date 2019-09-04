@@ -50,7 +50,9 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
   }
 }
 `;
-
+export interface ITripStops {
+  readonly id: string,
+}
 export interface IStopTime {
   readonly stop?: {
     readonly gtfsId: string,
@@ -75,9 +77,7 @@ export interface IStopTime {
   readonly headsign: string,
   readonly trip: {
     readonly gtfsId: string,
-    readonly stops: {
-      readonly id: string,
-    }
+    readonly stops: ReadonlyArray<ITripStops>
     readonly route: {
       readonly shortName: string,
     },

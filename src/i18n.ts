@@ -30,6 +30,7 @@ i18n
       },
       fi: {
         translations: {
+          arriveTerminal: 'Saapuu / määränpää',
           canceled: 'Peruttu',
           configuration: 'Konfiguraatio',
           departureTime: 'Lähtöaika',

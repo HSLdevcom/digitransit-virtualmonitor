@@ -47,20 +47,18 @@ const StopTimesListHeadersTranslated = translate('translations')(StopTimesListHe
 const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, } & InjectedTranslateProps) => {
   const isCanceled = stoptime.realtimeState === 'CANCELED';
 
-  // If the Vehicle is arriving to its' destination, its headsign is null. 
+  // If the Vehicle is arriving to its' destination, its headsign is null, or stop's name.
   // Check that the vehicle is arriving, and that the stop is indeed last stop of the route. 
   let isLastStopTerminal = false;
   const isArrival = stoptime.pickupType === 'NONE';
-  if(!stoptime.headsign) {
-    if(stoptime.trip && stoptime.trip.stops) {
-     const lastStop = stoptime.trip.stops.slice(-1).pop();
-     if( lastStop && stoptime.stop ) {
-      isLastStopTerminal = (stoptime.stop.id === lastStop.id) && isArrival;
+  if( stoptime.trip && stoptime.trip.stops ) {
+    const lastStop = stoptime.trip.stops.slice(-1).pop();
+    if( lastStop && stoptime.stop ) {
+        isLastStopTerminal = (stoptime.stop.id === lastStop.id) && isArrival;
      }
     }
-  }
 
-  let destination = !isLastStopTerminal ? stoptime.headsign : t('arriveTerminal');
+  let destination = isLastStopTerminal ? t('arriveTerminal') : stoptime.headsign;
   return (
     <tr
       className={isCanceled ? 'canceled' : ''}

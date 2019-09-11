@@ -18,6 +18,7 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
     gtfsId,
     stoptimesWithoutPatterns(numberOfDepartures: $numberOfDepartures) {
       stop {
+        id
         gtfsId
         platformCode
       }
@@ -38,6 +39,9 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
       headsign,
       trip {
         gtfsId,
+        stops {
+          id
+        },
         route {
           shortName,
         },
@@ -46,12 +50,15 @@ query GetStops($stopIds: [String], $numberOfDepartures: Int!) {
   }
 }
 `;
-
+export interface ITripStops {
+  readonly id: string,
+}
 export interface IStopTime {
   readonly stop?: {
     readonly gtfsId: string,
     readonly overrideStopName?: string, // Added locally from configuration.
     readonly platformCode?: string,
+    readonly id: string,
   },
   // readonly scheduledArrival: DaySeconds,
   // readonly realtimeArrival: DaySeconds,
@@ -70,6 +77,7 @@ export interface IStopTime {
   readonly headsign: string,
   readonly trip: {
     readonly gtfsId: string,
+    readonly stops: ReadonlyArray<ITripStops>
     readonly route: {
       readonly shortName: string,
     },

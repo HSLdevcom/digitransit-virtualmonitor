@@ -24,6 +24,14 @@ export default {
       urlParamFindText: 'Löydät oikean pysäkki-id:n helposti esimerkiksi reittioppaasta: Siirry halutun Waltti-kaupungin pysäkin pysäkkinäkymään, ja katso urlin lopusta pysäkki-id. ',
       urlParamFindAltText: 'Esimerkiksi https://opas.matka.fi/pysakit/MATKA%3A7_201848 nähdään, että pysäkki-id on MATKA:7_201848. Huomaathan että %3A on HTML koodia, ja se tarkoittaa : merkkiä.',
     },
+    linkki: {
+      feedId: 'linkki',
+      uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+      urlParamUsageText: 'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/LINKKI:207477/10 näyttää 10 riviä pysäkiltä Urhonkatu 1.',
+      urlMultipleStopsText: 'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/LINKKI:207477,LINKKI:207818,LINKKI:207478/10.',
+      urlParamFindText: 'Löydät oikean pysäkki-id:n helposti esimerkiksi jyvaskyla.digitransit.fi osoitteesta. Siirry pysäkin pysäkkinäkymään, ja katso urlin lopusta pysäkki-id.',
+      urlParamFindAltText: '',
+    },
 };
 
 

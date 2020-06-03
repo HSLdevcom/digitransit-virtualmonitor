@@ -26,7 +26,7 @@ if(domain.indexOf('tremonitori') >= 0) {
 } else if(domain.indexOf('matkamonitori') >= 0) {
   // domain url for Matka.fi Virtual monitor
   monitorConfig = config.matka;
-} else if(domain.indexOf('linkkimonitori') >= 0) {
+} else if(domain.indexOf('jyvaskyla') >= 0) {
   // domain url for Linkki Virtual monitor
   monitorConfig = config.linkki;
 } else {

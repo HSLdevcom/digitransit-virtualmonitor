@@ -4,7 +4,7 @@ import * as Logo from 'src/ui/linkki-logo.svg'
 export default ({ style }: {style?: React.CSSProperties} = { style: {} }) => (
   <svg
   id={"logo"}
-  viewBox={"0 0 60 60"}
+  viewBox={"0 0 240 60"}
   version={"1.1"}
   preserveAspectRatio={"xMidYMid meet"}
   style={{ color: 'gray', ...style }}

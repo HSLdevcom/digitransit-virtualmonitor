@@ -3,6 +3,7 @@ import HslLogo from "src/ui/HslLogo";
 import * as React from 'react';
 import { render } from 'react-dom';
 import MatkaLogo from 'src/ui/MatkaLogo';
+import LinkkiLogo from 'src/ui/LinkkiLogo';
 
 interface ICommonProps {
   readonly monitorConfig?: any,
@@ -20,7 +21,9 @@ class Logo extends React.Component<ICommonProps> {
         case "hsl":
           return <HslLogo />;
         case "matka":
-          return <MatkaLogo />
+          return <MatkaLogo />;
+        case "linkki":
+          return <LinkkiLogo />;
         default:
           return null;
       }

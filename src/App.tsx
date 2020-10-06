@@ -3,7 +3,7 @@ import { InjectedTranslateProps, translate } from 'react-i18next';
 import { Link, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import 'src/App.css';
-import Logo from 'src/ui/Logo';
+import Logo from 'src/ui/logo/Logo';
 import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import { InjectedTranslateProps, translate } from "react-i18next";
 
 import { IStop as LocalIStop } from 'src/ui/ConfigurationList'
-import Logo from 'src/ui/Logo';
+import Logo from 'src/ui/logo/Logo';
 import StopName from 'src/ui/StopName';
 import StopTimesList from 'src/ui/StopTimesList';
 import { default as StopTimesRetriever, IStop, IStopTime, StopId, StopTimesRetrieverQueryResult } from "src/ui/StopTimesRetriever";

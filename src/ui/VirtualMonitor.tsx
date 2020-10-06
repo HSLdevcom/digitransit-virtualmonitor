@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import AutoMoment from "src/ui/AutoMoment";
-import Logo from 'src/ui/Logo';
+import Logo from 'src/ui/logo/Logo';
 import Titlebar from "src/ui/Titlebar";
 import TitlebarTime from 'src/ui/TitlebarTime';
 

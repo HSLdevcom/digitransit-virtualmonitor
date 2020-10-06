@@ -5,8 +5,8 @@ export default ({ style }: {style?: React.CSSProperties} = { style: {} }) => (
     id={"logo"}
     viewBox={"0 0 160 60"}
     version={"1.1"}
-    preserveAspectRatio={"xMidYMid meet"}
-    style={{ color: 'gray', ...style }}
+    preserveAspectRatio={"xMinYMid meet"}
+    style={{ color: "gray", ...style }}
   >
     <path
       fill={"#ffffff"}

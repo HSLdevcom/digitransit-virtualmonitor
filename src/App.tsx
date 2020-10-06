@@ -3,7 +3,7 @@ import { InjectedTranslateProps, translate } from 'react-i18next';
 import { Link, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import 'src/App.css';
-import Logo from 'src/ui/Logo';
+import Logo from 'src/ui/logo/Logo';
 import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
 
@@ -16,7 +16,7 @@ import TitlebarTime from 'src/ui/TitlebarTime';
 import StopTimesView from 'src/ui/Views/StopTimesView';
 import HelpPage from 'src/ui/HelpPage';
 
-interface IMonitorConfig {
+export interface IMonitorConfig {
   feedId?:  string,
   uri?: string,
       // Texts for Help page
@@ -24,11 +24,12 @@ interface IMonitorConfig {
   urlMultipleStopsText?: string,
   urlParamFindText?: string,
   urlParamFindAltText?: string,
-}
+};
 
 export interface IConfigurationProps{
   monitorConfig?: IMonitorConfig,
-}
+};
+
 interface ICompressedDisplayRouteParams {
   version: string,
   packedDisplay: string

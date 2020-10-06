@@ -1,7 +1,8 @@
 import * as React from "react";
 import { InjectedTranslateProps, translate } from "react-i18next";
 
-import { IStop as LocalIStop } from 'src/ui/ConfigurationList'
+import { IStop as LocalIStop } from 'src/ui/ConfigurationList';
+import { IMonitorConfig } from 'src/App';
 import Logo from 'src/ui/logo/Logo';
 import StopName from 'src/ui/StopName';
 import StopTimesList from 'src/ui/StopTimesList';
@@ -16,7 +17,7 @@ interface IStopTimesViewCommonProps {
   readonly title?: string,
   readonly displayedRoutes?: number,
   readonly pierColumnTitle?: string,
-  readonly monitorConfig?: object,
+  readonly monitorConfig?: IMonitorConfig;
 };
 
 export interface IStopTimesViewPropsWithStopIds extends IStopTimesViewCommonProps {
@@ -115,12 +116,19 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
   const monitorConfig = (props as IStopTimesViewCommonProps).monitorConfig;
 
   return (
-    <div style={{ color: 'white', display: 'flex', flexDirection:'column' }}>
+    <div style={{ color: 'white', display: 'flex', flexDirection: 'column' }}>
       <Titlebar>
         <Logo monitorConfig={monitorConfig} />
-        <div style={{fontWeight:'bold', fontSize:'1.5em'}}>
-          {stopIds.length > 1 ? props.t('stops') : props.t('stop')}
-          {stopIds.length > 0 ? stopIds.map(stop => <StopName key={stop} stopIds={[stop]}/> ) : null  }
+        <div style={{ fontWeight:'bold', fontSize:'2em' }}>
+          {
+            monitorConfig && monitorConfig.feedId !== 'linkki' &&
+              <span >
+                {stopIds.length > 1 ? props.t('stops') : props.t('stop')}
+              </span>
+          }
+          <span>
+            {stopIds.length > 0 ? stopIds.map(stop => <StopName key={stop} stopIds={[stop]} />) : null }
+          </span>
         </div>
         <TitlebarTime />
       </Titlebar>

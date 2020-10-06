@@ -16,7 +16,7 @@ import TitlebarTime from 'src/ui/TitlebarTime';
 import StopTimesView from 'src/ui/Views/StopTimesView';
 import HelpPage from 'src/ui/HelpPage';
 
-interface IMonitorConfig {
+export interface IMonitorConfig {
   feedId?:  string,
   uri?: string,
       // Texts for Help page
@@ -24,11 +24,12 @@ interface IMonitorConfig {
   urlMultipleStopsText?: string,
   urlParamFindText?: string,
   urlParamFindAltText?: string,
-}
+};
 
 export interface IConfigurationProps{
   monitorConfig?: IMonitorConfig,
-}
+};
+
 interface ICompressedDisplayRouteParams {
   version: string,
   packedDisplay: string

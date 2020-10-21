@@ -3,7 +3,8 @@
   flex-direction: column;
 }
 
-#stop-search #logo {
+#stop-search {
+  display: flex;
   flex: 0 3 33%;
   justify-self: flex-start;
 }

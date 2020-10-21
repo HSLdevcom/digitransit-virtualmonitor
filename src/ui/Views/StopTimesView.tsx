@@ -1,14 +1,15 @@
-import * as React from "react";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import * as React from 'react';
+import { InjectedTranslateProps, translate } from 'react-i18next';
 
 import { IStop as LocalIStop } from 'src/ui/ConfigurationList';
 import { IMonitorConfig } from 'src/App';
 import Logo from 'src/ui/logo/Logo';
 import StopName from 'src/ui/StopName';
 import StopTimesList from 'src/ui/StopTimesList';
-import { default as StopTimesRetriever, IStop, IStopTime, StopId, StopTimesRetrieverQueryResult } from "src/ui/StopTimesRetriever";
-import Titlebar from "src/ui/Titlebar";
+import { default as StopTimesRetriever, IStop, IStopTime, StopId, StopTimesRetrieverQueryResult } from 'src/ui/StopTimesRetriever';
+import Titlebar from 'src/ui/Titlebar';
 import TitlebarTime from 'src/ui/TitlebarTime';
+
 import 'src/ui/Views/StopTimesView.css';
 
 const duplicateRouteTimeThresholdSeconds = 15 * 60;
@@ -119,16 +120,26 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
     <div style={{ color: 'white', display: 'flex', flexDirection: 'column' }}>
       <Titlebar>
         <Logo monitorConfig={monitorConfig} />
-        <div style={{ fontWeight:'bold', fontSize:'2em' }}>
+        <div id={'title-text'} style={{
+          fontSize: stopIds.length === 1 ? 'min(4vw, 4em)' : 'min(3vw, 2em)',
+          justifyContent: stopIds.length === 1 && monitorConfig ? 'center' : 'flex-start'
+        }}>
           {
-            monitorConfig && monitorConfig.feedId !== 'linkki' &&
-              <span >
-                {stopIds.length > 1 ? props.t('stops') : props.t('stop')}
-              </span>
+            stopIds.length > 0
+              ? stopIds.map((stop) =>
+                  <div
+                    key={stop}
+                    id={'title-text-stop'}
+                    style={{
+                      width: stopIds.length > 3 ? '40%' : '100%',
+                      justifyContent: stopIds.length === 1 && monitorConfig ? 'center' : 'flex-start'
+                    }}
+                  >
+                    <StopName key={stop} stopIds={[stop]} />
+                  </div>
+                )
+              : null
           }
-          <span>
-            {stopIds.length > 0 ? stopIds.map(stop => <StopName key={stop} stopIds={[stop]} />) : null }
-          </span>
         </div>
         <TitlebarTime />
       </Titlebar>
@@ -197,10 +208,11 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
               );
             }}
           </StopTimesRetriever>
+        ) : (
+          <div>
+            {props.t('noStopsDefined')}
+          </div>
         )
-        : (<div>
-          {props.t('noStopsDefined')}
-        </div>)
       }
     </div>
   );

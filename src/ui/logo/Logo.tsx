@@ -18,13 +18,21 @@ class Logo extends React.Component<ICommonProps> {
 
       switch (feedId) {
         case "tampere":
-          return <NysseLogo style={{ height: "7em", paddingRight: '1em' }} />;
+          return <div id={"title-logo"}>
+            <NysseLogo style={{ height: "7em" }} />
+          </div>;
         case "hsl":
-          return <HslLogo style={{ height: "6em", paddingRight: '1em' }} />;
+          return <div id={"title-logo"}>
+            <HslLogo style={{ height: "6em" }} />
+          </div>;
         case "matka":
-          return <MatkaLogo style={{ maxHeight: "6em" }} />;
+          return <div id={"title-logo"}>
+            <MatkaLogo style={{ maxHeight: "6em" }} />
+          </div>;
         case "linkki":
-          return <LinkkiLogo style={{ maxHeight: "6em", paddingRight: '1em' }} />;
+          return <div id={"title-logo"}>
+            <LinkkiLogo style={{ maxHeight: "6em" }} />
+          </div>;
         default:
           return null;
       }

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { InjectedTranslateProps, translate } from 'react-i18next';
 import { Link, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
-import 'src/App.css';
 import Logo from 'src/ui/logo/Logo';
 import StopSelectorSwitch from 'src/ui/StopSelectorSwitch';
 import Titlebar from 'src/ui/Titlebar';
@@ -11,10 +10,12 @@ import ConfigurationDisplay from 'src/ui/ConfigurationDisplay';
 import ConfigurationList from 'src/ui/ConfigurationList';
 import DisplayEditor from 'src/ui/DisplayEditor';
 import DisplayUrlCompression from 'src/ui/DisplayUrlCompression';
+import HelpPage from 'src/ui/HelpPage';
 import QuickDisplay from 'src/ui/QuickDisplay';
 import TitlebarTime from 'src/ui/TitlebarTime';
 import StopTimesView from 'src/ui/Views/StopTimesView';
-import HelpPage from 'src/ui/HelpPage';
+
+import 'src/App.css';
 
 export interface IMonitorConfig {
   feedId?:  string,

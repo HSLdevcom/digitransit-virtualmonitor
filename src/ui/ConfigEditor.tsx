@@ -11,6 +11,7 @@ import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 const copyConfigurationToClipboard = (configuration: IConfiguration) => () => copy(JSON.stringify(configuration));
 
+// tslint:disable-next-line
 const emptyFunc = () => {};
 
 interface IConfigEditorProps {

@@ -1,17 +1,18 @@
 # Customizing Virtual Monitor
 
-The default themeing is for HSL, but that might not be what you need. Here's instructions on what to change and where if you want to customize the virtual monitor for a different organization.
+The default theming is for HSL, but that might not be what you need. Here's instructions on what to change and where if you want to customize the virtual monitor for a different organization.
 
 ## API backend.
 
 The GraphQL API endpoint is defined in `src/monitorConfig.js`.
 
 ## monitorConfig.js 
- MonitorConfig.js hold all the relevant information for configuring virtual monitor's appereance and incoming data. FeedId string is meant for  `src/ui/Logo.tsx` to change correct logo depending on url where the user is going to. uri is the  GraphQL API endpoint.
+
+MonitorConfig.js hold all the relevant information for configuring virtual monitor's appereance and incoming data. FeedId string is meant for  `src/ui/logo/Logo.tsx` to change correct logo depending on url where the user is going to. uri is the  GraphQL API endpoint.
 
 ## Logo
 
-Logo is in `src/ui/Logo.tsx` which by default returns the logo depending on feedId, like tampere for example. You can create a new file for a new logo and have `src/ui/Logo.tsx` import that too. The logo can be either JSX or an image tag or whatever you might want.
+Logo is in `src/ui/logo/Logo.tsx` which by default returns the logo depending on feedId, like tampere for example. You can create a new file for a new logo and have `src/ui/logo/Logo.tsx` import that too. The logo can be either JSX or an image tag or whatever you might want.
 
 ## Page title
 

@@ -56,8 +56,8 @@ export interface IConfiguration extends INode {
 
 export type IConfigurations = ReadonlyArray<IConfiguration>;
 
-export interface IConfigurationListProps {
-};
+// tslint:disable-next-line
+export interface IConfigurationListProps {};
 
 const createLocalConfigurationMutation = gql`
   mutation createLocalConfiguration($name: String!) {

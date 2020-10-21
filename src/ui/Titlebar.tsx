@@ -7,7 +7,7 @@ export interface ITitlebarProps {
 };
 
 export default (props: ITitlebarProps) => (
-  <div id={'title-bar'} style={{ display: 'flex'}}>
+  <div id={'title-bar'}>
     {props.children}
   </div>
 );

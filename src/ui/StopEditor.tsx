@@ -2,12 +2,12 @@ import { RIEInput } from '@attently/riek';
 import gql from 'graphql-tag';
 import * as React from "react";
 import { Mutation } from 'react-apollo';
+import { InjectedTranslateProps, translate } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { IStop } from 'src/ui/ConfigurationList';
 import { IStopInfo } from 'src/ui/StopInfoRetriever';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
-import { InjectedTranslateProps, translate } from 'react-i18next';
 
 interface IStopEditorProps {
   stop: IStop,

@@ -54,7 +54,7 @@ const StopName = (props: IStopInfoProps & InjectedTranslateProps) => (
             return notLoaded();
           }
           return (
-            <div>
+            <div style={{ wordBreak: 'break-all' }}>
               {result.data.stop.name}
             </div>
           );

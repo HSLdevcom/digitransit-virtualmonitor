@@ -1,12 +1,12 @@
 import { RIENumber } from "@attently/riek";
 import { Mutation } from '@loona/react';
 import gql from 'graphql-tag';
-import React = require('react');
+import * as React from 'react';
+import { InjectedTranslateProps, translate } from 'react-i18next';
 
 import { IViewCarouselElement } from 'src/ui/ConfigurationList';
 import ViewEditor from 'src/ui/ViewEditor';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
-import { translate, InjectedTranslateProps } from 'react-i18next';
 
 export interface IViewCarouselElementEditorProps {
   readonly viewCarouselElement: IViewCarouselElement,

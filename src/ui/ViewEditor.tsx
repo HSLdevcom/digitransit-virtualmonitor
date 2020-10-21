@@ -2,11 +2,11 @@ import { RIEInput } from '@attently/riek';
 import { Mutation } from '@loona/react';
 import gql from 'graphql-tag';
 import * as React from 'react';
+import { InjectedTranslateProps, translate } from 'react-i18next';
 
 import { IStopTimesView, IViewBase } from 'src/ui/ConfigurationList';
 import StopTimesViewEditor from 'src/ui/StopTimesViewEditor';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
-import { translate, InjectedTranslateProps } from 'react-i18next';
 
 export interface IViewEditorProps {
   readonly view: IViewBase,

@@ -3,6 +3,7 @@
 const React = require('react');
 const reactI18next = require('react-i18next');
 
+/* tslint:disable */
 module.exports = {
   // this mock makes sure any components using the translate HoC receive the t function as a prop
   translate: () => Component => props => <Component t={(template, props) => `${template} - ${JSON.stringify(props)}`} {...props} />,

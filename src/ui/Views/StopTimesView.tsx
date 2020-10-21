@@ -1,12 +1,18 @@
 import * as React from 'react';
 import { InjectedTranslateProps, translate } from 'react-i18next';
 
-import { IStop as LocalIStop } from 'src/ui/ConfigurationList';
 import { IMonitorConfig } from 'src/App';
+import { IStop as LocalIStop } from 'src/ui/ConfigurationList';
 import Logo from 'src/ui/logo/Logo';
 import StopName from 'src/ui/StopName';
 import StopTimesList from 'src/ui/StopTimesList';
-import { default as StopTimesRetriever, IStop, IStopTime, StopId, StopTimesRetrieverQueryResult } from 'src/ui/StopTimesRetriever';
+import {
+  default as StopTimesRetriever,
+  IStop,
+  IStopTime,
+  StopId,
+  StopTimesRetrieverQueryResult,
+} from 'src/ui/StopTimesRetriever';
 import Titlebar from 'src/ui/Titlebar';
 import TitlebarTime from 'src/ui/TitlebarTime';
 
@@ -124,21 +130,19 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
           fontSize: stopIds.length === 1 ? 'min(4vw, 4em)' : 'min(3vw, 2em)',
           justifyContent: stopIds.length === 1 && monitorConfig ? 'center' : 'flex-start'
         }}>
-          {
-            stopIds.length > 0
-              ? stopIds.map((stop) =>
-                  <div
-                    key={stop}
-                    id={'title-text-stop'}
-                    style={{
-                      width: stopIds.length > 3 ? '40%' : '100%',
-                      justifyContent: stopIds.length === 1 && monitorConfig ? 'center' : 'flex-start'
-                    }}
-                  >
-                    <StopName key={stop} stopIds={[stop]} />
-                  </div>
-                )
-              : null
+          {stopIds.length > 0 ?
+            stopIds.map((stop) =>
+              <div
+                key={stop}
+                id={'title-text-stop'}
+                style={{
+                  justifyContent: stopIds.length === 1 && monitorConfig ? 'center' : 'flex-start',
+                  width: stopIds.length > 3 ? '40%' : '100%'
+                }}
+              >
+                <StopName key={stop} stopIds={[stop]} />
+              </div>
+            ) : null
           }
         </div>
         <TitlebarTime />
@@ -165,7 +169,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
             
               // Merge the stoptimes. Show each route only once. Filter out nulls and undefined. (not found)
               const mergedStopTimes = result.data.stops
-                .filter(function (stop) {
+                .filter((stop) => {
                   return stop != null;
                 })
                 .reduce(

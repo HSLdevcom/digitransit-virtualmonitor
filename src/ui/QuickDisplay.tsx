@@ -44,8 +44,11 @@ interface IQuickDisplayState {
   displayId?: string,
   unpackedDisplayUrl?: IDisplay,
 };
+
+// tslint:disable-next-line
 class DisplayQuery extends Query<{ display: IDisplay }, { id: string }> {}
 
+// tslint:disable-next-line
 class QuickDisplay extends React.Component<IQuickDisplayProps & { virtualMonitor: typeof virtualMonitorClient }, IQuickDisplayState> {
   constructor(props: IQuickDisplayProps & { virtualMonitor: typeof virtualMonitorClient }) {
     super(props);
@@ -195,6 +198,7 @@ interface IDisplayEditorHistoryUpdaterProps {
   history: History,
 };
 
+// tslint:disable-next-line
 class DisplayEditorHistoryUpdater extends React.PureComponent<IDisplayEditorHistoryUpdaterProps> {
   // Removes IDs and __typenames from the display. Preserve nulls.
   public static minimizeDisplay(display: IDisplay): IDisplay {

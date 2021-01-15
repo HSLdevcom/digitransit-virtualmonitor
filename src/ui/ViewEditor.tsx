@@ -2,7 +2,7 @@ import { RIEInput } from '@attently/riek';
 import { Mutation } from '@loona/react';
 import gql from 'graphql-tag';
 import * as React from 'react';
-import { InjectedTranslateProps, translate } from 'react-i18next';
+import { WithTranslation, withTranslation } from "react-i18next";
 
 import { IStopTimesView, IViewBase } from 'src/ui/ConfigurationList';
 import StopTimesViewEditor from 'src/ui/StopTimesViewEditor';
@@ -18,7 +18,7 @@ const setViewTitleMutation = gql`
   }
 `;
 
-const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps & InjectedTranslateProps) => {
+const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps & WithTranslation) => {
   const viewWrapper = (innerView: React.ReactNode) => (
     <>
       <ApolloClientsContext.Consumer>
@@ -45,7 +45,7 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps &
               )}
             </Mutation>
             {`. `}
-            {`${t('viewEditorType')}: 
+            {`${t('viewEditorType')}:
             ${view.type}.`}
           </div>
         )}
@@ -69,4 +69,4 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps &
   }
 };
 
-export default translate('translations')(ViewEditor);
+export default withTranslation('translations')(ViewEditor);

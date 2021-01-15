@@ -2,7 +2,7 @@ import { RIENumber } from "@attently/riek";
 import { Mutation } from '@loona/react';
 import gql from 'graphql-tag';
 import * as React from 'react';
-import { InjectedTranslateProps, translate } from 'react-i18next';
+import { WithTranslation, withTranslation } from "react-i18next";
 
 import { IViewCarouselElement } from 'src/ui/ConfigurationList';
 import ViewEditor from 'src/ui/ViewEditor';
@@ -24,7 +24,7 @@ const removeViewCarouselElementMutation = gql`
   }
 `;
 
-const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps & InjectedTranslateProps> = ({ t, viewCarouselElement }) => (
+const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps & WithTranslation> = ({ t, viewCarouselElement }) => (
   <>
     <div>
       {t('viewCarouselElementEditorShownTime')}:&#32;
@@ -80,4 +80,4 @@ const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps & Inj
   </>
 );
 
-export default translate('translations')(ViewCarouselElementEditor);
+export default withTranslation('translations')(ViewCarouselElementEditor);

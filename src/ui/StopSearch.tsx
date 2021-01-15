@@ -1,7 +1,6 @@
 import * as React from "react";
 import { QueryResult } from 'react-apollo';
-import { InjectedTranslateProps, translate } from "react-i18next";
-import { isString } from "util";
+import { WithTranslation, withTranslation } from "react-i18next";
 
 import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse, IStopWithName } from "src/ui/StopsByNameRetriever";
 import 'src/ui/StopSearch.css';
@@ -10,7 +9,7 @@ type IProps = {
   readonly children?: (stops: ReadonlyArray<IStopWithName>) => React.ReactNode,
   readonly phrase?: string,
   readonly showTitle?: boolean,
-} & InjectedTranslateProps;
+} & WithTranslation;
 
 interface IState {
   readonly searchPhrase: string,
@@ -103,8 +102,8 @@ class StopSearch extends React.Component<IProps, IState> {
     event.stopPropagation();
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    this.setState({ searchPhrase: isString(data.get('searchPhrase')) ? (data.get('searchPhrase') as string) : '' });
+    this.setState({ searchPhrase: typeof (data.get('searchPhrase')) === 'string' ? (data.get('searchPhrase') as string) : '' });
   }
 }
 
-export default translate('translations')(StopSearch);
+export default withTranslation('translations')(StopSearch);

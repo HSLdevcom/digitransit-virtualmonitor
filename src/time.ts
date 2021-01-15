@@ -20,9 +20,9 @@ export const parseDaySeconds = (daySeconds: DaySeconds): ITimeOfDay => ({
 
 const doubleDigit = (num: (string | number)) => num.toString().padStart(2, '0')
 
-export interface IformatTimeOptions {
+export interface IFormatTimeOptions {
 	showSeconds?: boolean,
 };
 
-export const formatTime = (timeOfDay: ITimeOfDay, options: IformatTimeOptions = {}) : string =>
+export const formatTime = (timeOfDay: ITimeOfDay, options: IFormatTimeOptions = {}) : string =>
 	(`${doubleDigit(timeOfDay.hours)}:${doubleDigit(timeOfDay.minutes)}${options.showSeconds ? `:${doubleDigit(timeOfDay.seconds)}` : ''}`);

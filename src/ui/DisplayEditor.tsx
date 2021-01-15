@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { Mutation } from "react-apollo";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 import Async from 'react-promise';
 import { Link } from "react-router-dom";
 
@@ -39,7 +39,7 @@ const addViewCarouselMutation = gql`
   }
 `;
 
-const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = ({configuration, display, t}: IDisplayEditorPropsDefaulted & InjectedTranslateProps) => (
+const DisplayEditor: React.SFC<IDisplayEditorProps & WithTranslation> = ({configuration, display, t}: IDisplayEditorPropsDefaulted & WithTranslation) => (
   <div>
     <h2>
       {(configuration)
@@ -87,7 +87,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & InjectedTranslateProps> = (
           mutation={addViewCarouselMutation}
           client={virtualMonitor}
         >
-          {addViewCarousel => (
+          {(addViewCarousel: (arg0: { variables: { displayId: string | undefined; }; }) => void) => (
             <button onClick={() => addViewCarousel({ variables: { displayId: display.id } })}>
               {t('displayEditorNewView')}
             </button>
@@ -106,4 +106,4 @@ DisplayEditor.defaultProps = {
   },
 };
 
-export default translate('translations')(DisplayEditor);
+export default withTranslation('translations')(DisplayEditor);

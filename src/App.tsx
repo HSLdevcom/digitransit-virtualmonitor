@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { InjectedTranslateProps, translate } from 'react-i18next';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { Link, Route, RouteComponentProps, Switch } from 'react-router-dom';
 
 import Logo from 'src/ui/logo/Logo';
@@ -27,7 +27,7 @@ export interface IMonitorConfig {
   urlParamFindAltText?: string,
 };
 
-export interface IConfigurationProps{
+export interface IConfigurationProps {
   monitorConfig?: IMonitorConfig,
 };
 
@@ -46,7 +46,7 @@ interface IStopRouteParams {
   displayedRoutes?: string,
 };
 
-export type combinedConfigurationAndInjected = IConfigurationProps & InjectedTranslateProps
+export type combinedConfigurationAndInjected = IConfigurationProps & WithTranslation
 
 class App extends React.Component<combinedConfigurationAndInjected> {
   constructor(props: combinedConfigurationAndInjected) {
@@ -67,7 +67,7 @@ class App extends React.Component<combinedConfigurationAndInjected> {
       helpPageUrlParamFindText = monitorConfig.urlParamFindText ? monitorConfig.urlParamFindText : '';
       helpPageUrlParamFindAltText = monitorConfig.urlParamFindAltText ? monitorConfig.urlParamFindAltText : '';
     }
-    
+
     return (
       <div
         className={'App'}
@@ -85,7 +85,7 @@ class App extends React.Component<combinedConfigurationAndInjected> {
                       urlParamFindText={helpPageUrlParamFindText}
                       urlParamFindAltText={helpPageUrlParamFindAltText}
              />
-            )}         
+            )}
           />
           <Route
             path={'/urld/:version/:packedDisplay'}
@@ -147,4 +147,4 @@ class App extends React.Component<combinedConfigurationAndInjected> {
   }
 };
 
-export default translate('translations')(App);
+export default withTranslation('translations')(App);

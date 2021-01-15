@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryResult } from "react-apollo";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 
 import StationsList from "src/ui/StationList";
 
@@ -22,7 +22,7 @@ interface IData {
 };
 
 class EmptyQuery extends Query<IData> {}
-const StationsRetriever = (props: InjectedTranslateProps) => (
+const StationsRetriever = (props: WithTranslation) => (
 	<EmptyQuery
 		query={STATIONS_QUERY}
 	>
@@ -40,7 +40,7 @@ const StationsRetriever = (props: InjectedTranslateProps) => (
 		}}
 	</EmptyQuery>
 );
-export default translate('translations')(StationsRetriever)
+export default withTranslation('translations')(StationsRetriever)
 
 // const stationsRetrieverQuery = graphql<Data, Variables>(STATIONS_QUERY, {
 // })

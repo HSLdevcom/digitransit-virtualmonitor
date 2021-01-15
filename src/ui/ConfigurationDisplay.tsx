@@ -1,5 +1,5 @@
 import * as React from "react";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 
 import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/ConfigurationRetriever';
 import ViewCarousel from 'src/ui/ViewCarousel';
@@ -10,7 +10,7 @@ export interface IConfigurationDisplayProps {
   readonly displayName: string,
 };
 
-const ConfigurationDisplay = ({ configurationName, displayName, t }: IConfigurationDisplayProps & InjectedTranslateProps) => {
+const ConfigurationDisplay = ({ configurationName, displayName, t }: IConfigurationDisplayProps & WithTranslation) => {
   return (
     <ConfigurationRetriever
       name={configurationName}
@@ -19,11 +19,13 @@ const ConfigurationDisplay = ({ configurationName, displayName, t }: IConfigurat
         if (result.loading) {
           return (<div>{t('loading')}</div>);
         }
+        
         if (!result || !result.data) {
           return (<div>
             {t('configurationRetrieveError')} - {result.error ? result.error.message : 'Unspecified error'}
           </div>);
         }
+
         if (!result.data.configurations || (result.data.configurations.length <= 0)) {
           return (<div>
             {t('configurationRetrieveNotFound')}
@@ -40,19 +42,20 @@ const ConfigurationDisplay = ({ configurationName, displayName, t }: IConfigurat
         if (!usedConfiguration) {
           return null;
         }
+
         const usedDisplay = usedConfiguration.displays.find(display => display.name === displayName) || usedConfiguration.displays[0];
         if (!usedDisplay) {
           return null;
         }
-        
+
         return (
           <ViewCarousel
             viewCarousel={usedDisplay.viewCarousel}
           />
         );
       }}
-    </ConfigurationRetriever>    
+    </ConfigurationRetriever>
   );
 };
 
-export default translate('translations')(ConfigurationDisplay);
+export default withTranslation('translations')(ConfigurationDisplay);

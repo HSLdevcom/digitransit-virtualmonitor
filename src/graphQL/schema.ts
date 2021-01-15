@@ -1,15 +1,10 @@
 import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
 import initialConfigurations from 'src/configPlayground';
 import SConfiguration, { defaultValue as defaultConfiguration, SConfigurationInput } from "src/graphQL/SConfiguration";
-import SDisplay from 'src/graphQL/SDisplay';
 import SNode from 'src/graphQL/SNode';
 import SStopTimesView from 'src/graphQL/SStopTimesView';
-import SView from "src/graphQL/SView";
 import { IConfiguration, IDisplay, IViewBase } from 'src/ui/ConfigurationList';
 
-type Mutable<T> = {
-  -readonly [P in keyof T]: T[P];
-};
 
 export type OptionalId<T> = T & {
   id: string;
@@ -25,7 +20,6 @@ let current: IData = (() => {
   const configurations = initialConfigurations;
   const displays = configurations.map(c => c.displays).reduce((acc: IDisplay[], cur) => [...acc, ...cur], []);
   const views = displays.map(d => d.viewCarousel).reduce((acc, cur) => [...acc, ...cur], []).map(vc => vc.view);
-
   return ({
     configurations,
     displays,
@@ -70,7 +64,7 @@ const schema = new GraphQLSchema({
           }
         },
         description: 'Modify or create a Configuration, returns the modified/created Configuration',
-        resolve: (_, { configuration }) => {
+        resolve: (_, { configuration }: { configuration: IConfiguration, configurationId: string }) => {
           const newConfiguration = { ...defaultConfiguration, ...configuration };
           current = { ...current, configurations: [...current.configurations.filter(conf => conf.name !== newConfiguration.name), newConfiguration] };
           return newConfiguration;
@@ -84,7 +78,7 @@ const schema = new GraphQLSchema({
           }
         },
         description: 'Add a new Configuration, returns the newly created Configuration',
-        resolve: (_, { configuration }) => {
+        resolve: (_, { configuration }: { configuration: IConfiguration, configurationId: string }) => {
           const newConfiguration = { ...defaultConfiguration, ...configuration };
           current = { ...current, configurations: [...current.configurations, newConfiguration]};
           return newConfiguration;
@@ -116,7 +110,7 @@ const schema = new GraphQLSchema({
             type: new GraphQLNonNull(GraphQLID),
           },
         },
-        resolve: (_, { id }: { id: string }) => {
+        resolve: (_, { id }: { id: string, name: string }) => {
           if (id) {
             if (current.configurations.find(c => c.id === id)) {
               return ({ ...(current.configurations.find(c => c.id === id)), __ownTypeName: 'Configuration' });

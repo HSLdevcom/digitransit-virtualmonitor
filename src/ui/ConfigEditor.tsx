@@ -3,7 +3,7 @@ import * as copy from "copy-to-clipboard";
 import gql from "graphql-tag";
 import * as React from "react";
 import { Mutation } from "react-apollo";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 
 import { IConfiguration } from "src/ui/ConfigurationList";
 import DisplayEditor from "src/ui/DisplayEditor";
@@ -25,7 +25,7 @@ const saveConfigurationMutation = gql`
   }
 `;
 
-const ConfigEditor: React.StatelessComponent<IConfigEditorProps & InjectedTranslateProps> = ({ configuration, readonly, t }: IConfigEditorProps & InjectedTranslateProps) => (
+const ConfigEditor: React.StatelessComponent<IConfigEditorProps & WithTranslation> = ({ configuration, readonly, t }: IConfigEditorProps & WithTranslation) => (
   <div>
     <h1>
       <label>{t('configuration')}: </label>
@@ -54,7 +54,7 @@ const ConfigEditor: React.StatelessComponent<IConfigEditorProps & InjectedTransl
           mutation={saveConfigurationMutation}
           client={virtualMonitor}
         >
-          {saveConfiguration => (
+          {(saveConfiguration: () => void) => (
             <button onClick={() => saveConfiguration()} value={'Save'}>
               Save to server
             </button>
@@ -69,4 +69,4 @@ ConfigEditor.defaultProps = {
   readonly: true,
 };
 
-export default translate('translations')(ConfigEditor);
+export default withTranslation('translations')(ConfigEditor);

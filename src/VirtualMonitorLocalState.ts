@@ -11,37 +11,6 @@ import { ConfigurationFieldsFragment, DisplayFieldsFragment } from 'src/ui/Confi
     localConfigurations: [
     ],
   },
-  typeDefs: [
-    schema,
-    gql`
-      # input SViewInput {
-      #   id!
-      #     type: String!
-      #     ...on StopTimesView {
-      #       title {
-      #         fi: String!
-      #       }!!
-      #     }
-      # }
-
-      input SViewCarouselInput {
-        id: ID!
-        displaySeconds: Float!
-        # view: SViewInput!
-      }
-
-      input SDisplayInput {
-        id: ID!
-        name: String!
-        viewCarousel: [SViewCarouselInput!]!
-      }
-
-      type Query {
-        localConfigurations: [Configuration!]!
-        node(id: ID): Node
-      }
-    `
-  ],
 })
 export class VirtualMonitorLocalState {
   // @resolve('Query.node')
@@ -164,8 +133,8 @@ export class VirtualMonitorLocalState {
   @mutation('addStopToStopTimesView')
   public addStopToStopTimesView({ stopTimesViewId, stop }: { stopTimesViewId: string, stop: OptionalId<IStop> }, context: Context) {
     const stopWithId = {
-      id: uuidv4(), // Possibly overriden from stop.
       ...stop,
+      id: uuidv4(),
     };
 
     const StopTimesViewFragment = gql`
@@ -185,7 +154,7 @@ export class VirtualMonitorLocalState {
       }
     }
     `;
-    
+
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}
@@ -315,15 +284,15 @@ export class VirtualMonitorLocalState {
 
     const viewCarouselElementToAdd: IViewCarouselElement = {
       __typename: 'ViewWithDisplaySeconds',
-      id: uuidv4(),
       ...(viewCarouselElement || defaultViewCarouselElement),
+      id: uuidv4(),
       view: {
         __typename: 'StopTimesView',
-        id: uuidv4(),
         ...(viewCarouselElement || defaultViewCarouselElement).view,
+        id: uuidv4(),
       },
     };
-    
+
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}

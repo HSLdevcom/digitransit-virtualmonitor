@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { Mutation } from "react-apollo";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 
 import ConfigEditor from "src/ui/ConfigEditor";
 import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/ConfigurationRetriever';
@@ -9,7 +9,7 @@ import { ILatLon } from "src/ui/LatLonEditor";
 import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 
 interface INode {
-  readonly id: string,
+  readonly id?: string
   readonly __typename?: string,
 };
 
@@ -49,7 +49,7 @@ export interface IDisplay extends INode {
 };
 
 export interface IConfiguration extends INode {
-  readonly name: string,
+  readonly name?: string,
   readonly displays: ReadonlyArray<IDisplay>,
   readonly position?: ILatLon;
 };
@@ -65,7 +65,7 @@ const createLocalConfigurationMutation = gql`
   }
 `;
 
-const ConfigurationList = ({t}: IConfigurationListProps & InjectedTranslateProps ) => (
+const ConfigurationList = ({t}: IConfigurationListProps & WithTranslation ) => (
   <ConfigurationRetriever
   >
     {(result: ConfigurationRetrieverResult): React.ReactNode => {
@@ -96,7 +96,7 @@ const ConfigurationList = ({t}: IConfigurationListProps & InjectedTranslateProps
                 mutation={createLocalConfigurationMutation}
                 client={virtualMonitor}
               >
-                {createLocalConfiguration => (
+                {(createLocalConfiguration: (arg0: { variables: { name: string; }; }) => void) => (
                   <button onClick={() => createLocalConfiguration({ variables: {name: 'Derp'}}) }>
                     {t('prepareConfiguration')}
                   </button>
@@ -110,4 +110,4 @@ const ConfigurationList = ({t}: IConfigurationListProps & InjectedTranslateProps
   </ConfigurationRetriever>
 );
 
-export default translate('translations')(ConfigurationList);
+export default withTranslation('translations')(ConfigurationList);

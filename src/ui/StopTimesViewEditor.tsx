@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { Mutation, QueryResult } from "react-apollo";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 import { virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
@@ -15,7 +15,7 @@ import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
 type IViewEditorProps = {
   readonly configuration?: IConfiguration,
   readonly view: IStopTimesView,
-} & InjectedTranslateProps;
+} & WithTranslation;
 
 const ADD_STOP = gql`
   mutation AddStopToStopTimesView($stopTimesViewId: ID!, $stop: Stop!) {
@@ -74,7 +74,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                           mutation={REMOVE_STOP}
                           client={virtualMonitor}
                         >
-                          {(removeStopFromStopTimesView) => (
+                          {(removeStopFromStopTimesView: (arg0: { variables: { stopId: string | undefined; }; }) => void) => (
                             <button onClick={() => removeStopFromStopTimesView({
                               variables: {
                                 stopId: s.id,
@@ -91,7 +91,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                           mutation={MOVE_STOP}
                           client={virtualMonitorClient}
                         >
-                          {(moveStop) => (
+                          {(moveStop: (arg0: { variables: { direction: string; stopId: string | undefined; stopTimesViewId: string | undefined; } | { direction: string; stopId: string | undefined; stopTimesViewId: string | undefined; }; }) => void) => (
                             <>
                               <button
                                 onClick={() => moveStop({
@@ -119,7 +119,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                         )}
                         </Mutation>
                       );
-  
+
                       if (!result.loading && !result.error && !stopInfo) {
                         return (
                             <li key={s.gtfsId}>
@@ -130,7 +130,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                             </li>
                           );
                         }
-  
+
                       return (
                         <li key={s.gtfsId}>
                           <StopEditor
@@ -153,7 +153,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
           mutation={ADD_STOP}
           client={virtualMonitor}
         >
-          {(addStopToStopTimesView) => (
+          {(addStopToStopTimesView: (arg0: { variables: { stop: { __typename: string; gtfsId: string; overrideStopName: null; }; stopTimesViewId: string | undefined; }; }) => void) => (
             <StopSearch>
               {(stops: ReadonlyArray<StopsByNameRetrieverIStop>) => (
                 <ul>
@@ -188,4 +188,4 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
   </ApolloClientsContext.Consumer>
 );
 
-export default translate('translations')(StopTimesViewEditor);
+export default withTranslation('translations')(StopTimesViewEditor);

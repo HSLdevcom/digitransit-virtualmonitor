@@ -11,11 +11,11 @@ import App from 'src/App';
 import { loona, virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
 import i18n from 'src/i18n';
 import 'src/index.css';
+import {default as config} from 'src/monitorConfig.js';
 import NtpSyncComponent from 'src/ntp/NtpSyncComponent';
 import registerServiceWorker from 'src/registerServiceWorker';
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 import VirtualMonitorLocalState from 'src/VirtualMonitorLocalState';
- import {default as config} from 'src/monitorConfig.js';
 
 const domain = window.location.hostname;
 let monitorConfig: { feedId?: string; uri: any; };
@@ -37,7 +37,7 @@ if(domain.indexOf('tremonitori') >= 0) {
 
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),
- //GraphQL API endpoint
+ // GraphQL API endpoint
   uri: monitorConfig.uri,
 });
 (reittiOpasClient as any).name = 'reittiOpasClient';

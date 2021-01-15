@@ -2,7 +2,7 @@ import { RIEInput } from '@attently/riek';
 import gql from 'graphql-tag';
 import * as React from "react";
 import { Mutation } from 'react-apollo';
-import { InjectedTranslateProps, translate } from 'react-i18next';
+import { WithTranslation, withTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
 
 import { IStop } from 'src/ui/ConfigurationList';
@@ -20,7 +20,7 @@ const SET_OVERRIDE_STOP_NAME = gql`
   }
 `;
 
-const StopEditor: React.SFC<IStopEditorProps & InjectedTranslateProps> = ({
+const StopEditor: React.SFC<IStopEditorProps & WithTranslation> = ({
   stop,
   stopInfo,
   t,
@@ -40,7 +40,7 @@ const StopEditor: React.SFC<IStopEditorProps & InjectedTranslateProps> = ({
           mutation={SET_OVERRIDE_STOP_NAME}
           client={virtualMonitor}
         >
-          {setOverrideStopName => (
+          {(setOverrideStopName: (arg0: { variables: { stopId: string | undefined; overrideStopName: string; }; }) => any) => (
             <>
               <label
                 style={{ marginLeft: '0.5em', }}
@@ -60,4 +60,4 @@ const StopEditor: React.SFC<IStopEditorProps & InjectedTranslateProps> = ({
   </div>
 );
 
-export default translate('translations')(StopEditor);
+export default withTranslation('translations')(StopEditor);

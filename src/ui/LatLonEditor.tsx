@@ -1,6 +1,6 @@
 import { RIENumber } from "@attently/riek";
 import * as React from "react";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 
 const openMapEnabled = true;
 
@@ -15,7 +15,7 @@ export interface ILatLonEditor {
 
 const dummy = () => null;
 
-const LatLonEditor = ({ editable, lat, lon, t }: ILatLon & ILatLonEditor & InjectedTranslateProps) => (
+const LatLonEditor = ({ editable, lat, lon, t }: ILatLon & ILatLonEditor & WithTranslation) => (
   <div>
     <label>
       {t('latitude')}:&nbsp;
@@ -43,4 +43,4 @@ const LatLonEditor = ({ editable, lat, lon, t }: ILatLon & ILatLonEditor & Injec
   </div>
 );
 
-export default translate('translations')(LatLonEditor);
+export default withTranslation('translations')(LatLonEditor);

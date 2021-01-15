@@ -8,27 +8,27 @@
   ],
   "private": true,
   "dependencies": {
-    "@loona/react": "^1.0.0-beta.5",
-    "@types/graphql": "^14.0.3",
-    "apollo-boost": "^0.1.16",
-    "copy-to-clipboard": "^3.0.8",
-    "esm": "^3.0.84",
-    "graphql": "^14.0.0",
-    "graphql-tag": "^2.9.2",
-    "graphql-yoga": "^1.16.7",
-    "i18next": "^11.5.0",
-    "module-alias": "^2.1.0",
-    "moment": "^2.22.2",
-    "patch-package": "^5.1.1",
-    "react": "^16.6.3",
-    "react-apollo": "^2.1.11",
-    "react-dom": "^16.6.3",
-    "react-i18next": "^8.0.6",
+    "@loona/react": "^1.0.0",
+    "@types/graphql": "^14.5.0",
+    "apollo-boost": "^0.1.28",
+    "copy-to-clipboard": "^3.3.1",
+    "esm": "^3.2.25",
+    "graphql": "^14.7.0",
+    "graphql-tag": "^2.11.0",
+    "graphql-yoga": "^1.18.3",
+    "i18next": "^19.8.4",
+    "module-alias": "^2.2.2",
+    "moment": "^2.29.1",
+    "patch-package": "^5.1.2",
+    "react": "^16.14.0",
+    "react-apollo": "^2.5.8",
+    "react-dom": "^16.14.0",
+    "react-i18next": "^11.8.5",
     "react-moment": "^0.7.9",
-    "react-promise": "^2.0.3",
+    "react-promise": "^2.1.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts-ts": "^2.17.0",
-    "uuid": "^3.3.2"
+    "react-scripts-ts": "^4.0.8",
+    "uuid": "^3.4.0"
   },
   "scripts": {
     "prepare": "patch-package",
@@ -38,20 +38,20 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.1",
-    "react-test-renderer": "^16.4.1",
-    "ts-node": "^7.0.1",
-    "typescript": "^3.2.1",
     "@attently/riek": "^2.0.1",
-    "@types/history": "^4.6.2",
-    "@types/node": "^10.11.0",
-    "@types/prop-types": "^15.5.6",
-    "@types/react": "^16.7.13",
-    "@types/react-dom": "^16.0.11",
-    "@types/react-i18next": "^7.8.1",
-    "@types/react-router-dom": "^4.3.0",
-    "@types/react-test-renderer": "^16.0.1",
-    "@types/uuid": "^3.4.4"
+    "@types/history": "^4.7.8",
+    "@types/jest": "^23.3.14",
+    "@types/node": "^10.17.50",
+    "@types/prop-types": "^15.7.3",
+    "@types/react": "^16.14.2",
+    "@types/react-dom": "^16.9.10",
+    "@types/react-i18next": "^7.8.3",
+    "@types/react-router-dom": "^4.3.5",
+    "@types/react-test-renderer": "^16.9.4",
+    "@types/uuid": "^3.4.9",
+    "react-test-renderer": "^16.14.0",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.9.7"
   },
   "jest": {
     "moduleNameMapper": {
@@ -63,5 +63,11 @@
   },
   "_moduleAliases": {
     "src": "build/dist"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

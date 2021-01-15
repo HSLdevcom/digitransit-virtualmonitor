@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { InjectedTranslateProps, translate } from 'react-i18next';
+import { WithTranslation, withTranslation } from "react-i18next";
 
 import {
   formatTime,
@@ -27,7 +27,7 @@ interface IStopTimesListHeadersProps {
   readonly showStopColumn?: boolean,
 };
 
-const StopTimesListHeaders = ({ pierColumnTitle, showPier, t, showStopColumn }: IStopTimesListHeadersProps & InjectedTranslateProps) => (
+const StopTimesListHeaders = ({ pierColumnTitle, showPier, t, showStopColumn }: IStopTimesListHeadersProps & WithTranslation) => (
   <thead>
     <tr>
       <th className={'lineId'}>{t('lineId')}</th>
@@ -37,15 +37,15 @@ const StopTimesListHeaders = ({ pierColumnTitle, showPier, t, showStopColumn }: 
         : null
       }
      {!showStopColumn 
-       ? <th className={'destination'}> Pysäkki </th> 
+       ? <th className={'destination'}>Pysäkki</th> 
        : null}
       <th className={'departureTime'}>{t('departureTime')}</th>
     </tr>
   </thead>
 );
-const StopTimesListHeadersTranslated = translate('translations')(StopTimesListHeaders);
+const StopTimesListHeadersTranslated = withTranslation('translations')(StopTimesListHeaders);
 
-const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, } & InjectedTranslateProps) => {
+const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, } & WithTranslation) => {
   const isCanceled = stoptime.realtimeState === 'CANCELED';
 
   // If the Vehicle is arriving to its' destination, its headsign is null, or headsign is stop's name.
@@ -93,7 +93,7 @@ const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: ISt
     </tr>
   );
 };
-const StopTimeRowTranslated = translate('translations')(StopTimeRow);
+const StopTimeRowTranslated = withTranslation('translations')(StopTimeRow);
 
 /* Separator row is used instead of just having bottom border since dashed borders between table cells look terrible. This looks ok. */
 const SeparatorRow = ({ showPier, showStopColumn }: { showPier?: boolean, showStopColumn?: boolean, }) => (
@@ -106,14 +106,14 @@ const SeparatorRow = ({ showPier, showStopColumn }: { showPier?: boolean, showSt
   </tr>
 )
 
-const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t, showStopColumn } : IStopTimesListProps & InjectedTranslateProps) => {
+const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t, showStopColumn } : IStopTimesListProps & WithTranslation) => {
   const usedShowPier = (showPier !== undefined)
     ? showPier
     : stoptimesWithoutPatterns.some(stopTime => (
         (stopTime.stop !== undefined) &&
         (((stopTime.stop.overrideStopName !== undefined) && (stopTime.stop.overrideStopName !== null) && (stopTime.stop.overrideStopName !== '')) || ((stopTime.stop.platformCode !== undefined) && (stopTime.stop.platformCode !== null) && (stopTime.stop.platformCode !== '')))
       ));
-      
+
   return (
     <table className={'StopTimesList'}>
       <StopTimesListHeadersTranslated
@@ -145,4 +145,4 @@ const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t,
   );
 }
 
-export default translate('translations')(StopTimesList);
+export default withTranslation('translations')(StopTimesList);

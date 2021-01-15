@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryResult } from "react-apollo";
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
 
 export const STOP_INFO_QUERY = gql`
@@ -30,7 +30,7 @@ export interface IStopInfoProps {
   readonly stopIds: ReadonlyArray<string>,
 };
 
-const StopName = (props: IStopInfoProps & InjectedTranslateProps) => (
+const StopName = (props: IStopInfoProps & WithTranslation) => (
   <ApolloClientsContext.Consumer>
     {({ reittiOpas }) =>
       (<StopInfoQuery
@@ -64,4 +64,4 @@ const StopName = (props: IStopInfoProps & InjectedTranslateProps) => (
   </ApolloClientsContext.Consumer>
 );
 
-export default translate('translations')(StopName);
+export default withTranslation('translations')(StopName);

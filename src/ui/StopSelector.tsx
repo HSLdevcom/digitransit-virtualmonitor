@@ -1,9 +1,8 @@
 import * as React from "react";
 import { QueryResult } from 'react-apollo';
-import { InjectedTranslateProps, translate } from "react-i18next";
+import { WithTranslation, withTranslation } from "react-i18next";
 import { RouteComponentProps/* , withRouter */ } from 'react-router';
 import { Link } from "react-router-dom";
-import { isString } from "util";
 
 import 'src/ui/StopSearch.css';
 
@@ -12,7 +11,7 @@ import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse } from "s
 
 type IProps = RouteComponentProps<{
   readonly phrase?: string,
-}> & InjectedTranslateProps;
+}> & WithTranslation;
 
 interface IState {
   readonly displayedRoutes: number,
@@ -114,7 +113,7 @@ class StopSelector extends React.Component<IProps, IState> {
       </div>
     );
   };
-  
+
   protected stopRenderer: IStopRenderFunc = (stop) => (
     <Link
       to={`/stop/${stop.gtfsId}/${this.state.displayedRoutes}`}
@@ -127,7 +126,7 @@ class StopSelector extends React.Component<IProps, IState> {
     event.stopPropagation();
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    this.setState({ searchPhrase: isString(data.get('searchPhrase')) ? (data.get('searchPhrase') as string) : '' });
+    this.setState({ searchPhrase: typeof (data.get('searchPhrase')) === 'string' ? (data.get('searchPhrase') as string) : '' });
   }
 
   private onDisplayedRoutesChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -135,4 +134,4 @@ class StopSelector extends React.Component<IProps, IState> {
   }
 }
 
-export default translate('translations')(StopSelector);
+export default withTranslation('translations')(StopSelector);

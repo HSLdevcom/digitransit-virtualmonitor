@@ -1,5 +1,5 @@
 import * as React from "react";
-import { InjectedTranslateProps, translate } from 'react-i18next';
+import { WithTranslation, withTranslation } from "react-i18next";
 
 import { IStopTimesView, IViewBase } from 'src/ui/ConfigurationList';
 import StopTimesView from 'src/ui/Views/StopTimesView';
@@ -9,7 +9,7 @@ export interface IViewProps {
   [additionalProps: string]: any,
 };
 
-const View = ({ t, view }: { view: IViewBase } & InjectedTranslateProps) => {
+const View = ({ t, view }: { view: IViewBase } & WithTranslation) => {
   const { type }: { type: string } = view;
 
   switch (type) {
@@ -33,4 +33,4 @@ const View = ({ t, view }: { view: IViewBase } & InjectedTranslateProps) => {
   }
 };
 
-export default translate('translations')(View);
+export default withTranslation('translations')(View);

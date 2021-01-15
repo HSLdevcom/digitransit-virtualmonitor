@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { InjectedTranslateProps, translate } from 'react-i18next';
+import { WithTranslation, withTranslation } from "react-i18next";
 
 import { IMonitorConfig } from 'src/App';
 import { IStop as LocalIStop } from 'src/ui/ConfigurationList';
@@ -37,7 +37,7 @@ export interface IStopTimesViewPropsWithIStops extends IStopTimesViewCommonProps
 
 const stopTimeAbsoluteDepartureTime = (stopTime: IStopTime) => (60*60*24) * stopTime.serviceDay + stopTime.usedTime;
 
-type ICombinedStopTimesViewProps = (IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops) & InjectedTranslateProps;
+type ICombinedStopTimesViewProps = (IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops) & WithTranslation;
 
 const duplicatePruneMethods: {
   [pruneType: string]: (stopsTimes: ReadonlyArray<IStopTime>, stops: ReadonlyArray<StopId>) => IStopTime[],
@@ -166,7 +166,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
                   {props.t('stopRetrieveNotFound', { stopIds })}
                 </div>);
               }
-            
+
               // Merge the stoptimes. Show each route only once. Filter out nulls and undefined. (not found)
               const mergedStopTimes = result.data.stops
                 .filter((stop) => {
@@ -202,7 +202,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
                   }
                   return stopTime;
                 });
-              
+
               return (
                 <StopTimesList
                   pierColumnTitle={props.pierColumnTitle}
@@ -227,4 +227,4 @@ StopTimesView.defaultProps = {
 };
 
 // Terrible hack until @types/react-i18next is fixed.
-export default translate('translations')(StopTimesView) as any as React.SFC<IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops>;
+export default withTranslation('translations')(StopTimesView) as any as React.SFC<IStopTimesViewPropsWithStopIds | IStopTimesViewPropsWithIStops>;

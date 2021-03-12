@@ -159,11 +159,9 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                 <ul>
                   {stops.map((stop) => (
                     <li key={stop.gtfsId}>
-                      <Link
-                        to={`/stop/${stop.gtfsId}`}
-                      >
-                      {stop.name} - {stop.gtfsId}
-                      </Link>
+                      <span>
+                        {stop.name} - {stop.gtfsId}
+                      </span>
                       <button onClick={() => addStopToStopTimesView({
                         variables: {
                           stop: {

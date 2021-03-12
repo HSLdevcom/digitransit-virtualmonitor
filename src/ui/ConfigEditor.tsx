@@ -1,4 +1,3 @@
-import { RIEInput } from "@attently/riek";
 import * as copy from "copy-to-clipboard";
 import gql from "graphql-tag";
 import * as React from "react";

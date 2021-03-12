@@ -1,4 +1,3 @@
-import { RIEInput } from '@attently/riek';
 import { Mutation } from '@loona/react';
 import gql from 'graphql-tag';
 import * as React from 'react';
@@ -31,23 +30,17 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps &
               client={virtualMonitor}
             >
               {(setViewTitle) => (
-                <RIEInput
-                  change={({ viewElementTitle }: { viewElementTitle: string }) => {
-                    setViewTitle({
-                      variables: {
-                        title: viewElementTitle,
-                        viewId: view.id,
-                      }
-                    });
-                  }}
-                  propName={'viewElementTitle'}
-                  value={view.title ? 'foo - ' + view.title.fi : 'foo'}
+                <input name="viewElementTitle" onChange={e =>
+                  setViewTitle({
+                    variables: {
+                      title: e.target.value,
+                      viewId: view.id,
+                    }
+                  })
+                }
                 />
               )}
             </Mutation>
-            {`. `}
-            {`${t('viewEditorType')}:
-            ${view.type}.`}
           </div>
         )}
       </ApolloClientsContext.Consumer>

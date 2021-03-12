@@ -45,9 +45,9 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & WithTranslation> = ({config
       {(configuration)
         ? (<Link to={`/configuration/${configuration!.name}/display/${display.name}`}>
           {`${t('display')}: `}
-          {display.name || configuration!.name}
+          {t(display.name) || configuration!.name}
         </Link>)
-        : <span>{display.name}</span>
+        : <span>{t(display.name)}</span>
       }
     </h2>
     {display.position

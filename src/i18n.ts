@@ -22,6 +22,7 @@ i18n
     resources: {
       en: {
         translations: {
+          createViewTitle: 'Create new view',
           departureTime: 'Time',
           destination: 'Destination',
           lineId: 'Line',
@@ -32,6 +33,7 @@ i18n
         translations: {
           arriveTerminal: 'Saapuu / Päätepysäkki',
           canceled: 'Peruttu',
+          createViewTitle: 'Luo uusi näkymä',
           configuration: 'Konfiguraatio',
           departureTime: 'Lähtöaika',
           destination: 'Määränpää',

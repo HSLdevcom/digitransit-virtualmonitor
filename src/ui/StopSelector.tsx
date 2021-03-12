@@ -118,7 +118,7 @@ class StopSelector extends React.Component<IProps, IState> {
     <Link
       to={`/stop/${stop.gtfsId}/${this.state.displayedRoutes}`}
     >
-    {stop.name} - {stop.gtfsId}
+    foo {stop.name} - {stop.gtfsId}
     </Link>
   );
 

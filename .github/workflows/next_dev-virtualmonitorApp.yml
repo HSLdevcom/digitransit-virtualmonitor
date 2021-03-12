@@ -19,17 +19,17 @@ jobs:
     - uses: azure/docker-login@v1
       with:
         login-server: https://index.docker.io/v1/
-        username: ${{ secrets.AzureAppService_ContainerUsername_b16316c2f0474d369a6d40e8e5fe7b9e }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_dfb45aed3eb6495a992fc770d64eaacc }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_60e925249e694d2896f1c2a466ddf37d }}
 
     - run: |
-        docker build . -t index.docker.io/${{ secrets.AzureAppService_ContainerUsername_b16316c2f0474d369a6d40e8e5fe7b9e }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
-        docker push index.docker.io/${{ secrets.AzureAppService_ContainerUsername_b16316c2f0474d369a6d40e8e5fe7b9e }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
+        docker build . -t index.docker.io/${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
+        docker push index.docker.io/${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'dev-virtualmonitorApp'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_41c64e95006b48f7abaa140dfa61793c }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_b16316c2f0474d369a6d40e8e5fe7b9e }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_ac199bbb79794ee4b4543ac859416c54 }}
+        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'

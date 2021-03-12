@@ -29,9 +29,9 @@ const ConfigEditor: React.StatelessComponent<IConfigEditorProps & WithTranslatio
   <div>
     <h1>
       <label>{t('configuration')}: </label>
-      <RIEInput
-        change={emptyFunc}
-        propName={'name'}
+      <input
+        onChange={emptyFunc}
+        name={'name'}
         value={configuration.name}
       />
     </h1>

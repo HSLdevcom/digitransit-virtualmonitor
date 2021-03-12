@@ -19,6 +19,7 @@ const setViewTitleMutation = gql`
 `;
 
 const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps & WithTranslation) => {
+  console.log('ViewEditor:', view);
   const viewWrapper = (innerView: React.ReactNode) => (
     <>
       <ApolloClientsContext.Consumer>
@@ -40,7 +41,7 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps &
                     });
                   }}
                   propName={'viewElementTitle'}
-                  value={view.title ? view.title.fi : ''}
+                  value={view.title ? 'foo - ' + view.title.fi : 'foo'}
                 />
               )}
             </Mutation>

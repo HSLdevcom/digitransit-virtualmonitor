@@ -1,0 +1,35 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - dev-virtualmonitorApp
+
+on:
+  push:
+    branches:
+      - next
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: https://index.docker.io/v1/
+        username: ${{ secrets.AzureAppService_ContainerUsername_b16316c2f0474d369a6d40e8e5fe7b9e }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_dfb45aed3eb6495a992fc770d64eaacc }}
+
+    - run: |
+        docker build . -t index.docker.io/${{ secrets.AzureAppService_ContainerUsername_b16316c2f0474d369a6d40e8e5fe7b9e }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
+        docker push index.docker.io/${{ secrets.AzureAppService_ContainerUsername_b16316c2f0474d369a6d40e8e5fe7b9e }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'dev-virtualmonitorApp'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_41c64e95006b48f7abaa140dfa61793c }}
+        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_b16316c2f0474d369a6d40e8e5fe7b9e }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'

@@ -5,14 +5,14 @@ import { v4 as uuidv4 } from 'uuid';
 import schema, { OptionalId } from 'src/graphQL/schema';
 import { IConfiguration, IDisplay, IStop, IStopTimesView, IViewCarouselElement } from 'src/ui/ConfigurationList';
 import { ConfigurationFieldsFragment, DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
-
 @state({
   defaults: {
     localConfigurations: [
     ],
   },
 })
-export class VirtualMonitorLocalState {
+
+class VirtualMonitorLocalState {
   // @resolve('Query.node')
   // node(_: any, { id }: { id: string }, context: Context) {
   //   return context.getCacheKey({ __typename: 'Node', id });
@@ -27,7 +27,7 @@ export class VirtualMonitorLocalState {
         {
           __typename: 'Display',
           id: uuidv4(),
-          name: 'QuickDisplay',
+          name: 'createViewTitle',
           position: null,
           viewCarousel: [
             {
@@ -177,44 +177,6 @@ export class VirtualMonitorLocalState {
       }
     );
     return stopWithId;
-
-    const updated = context.cache.readQuery({
-      query: gql`
-        ${StopTimesViewFragment}
-        {
-          node(id: $stopTimesViewId) @client {
-            ...stopTimesViewFields
-          }
-        }
-      `,
-      variables: {
-        stopTimesViewId,
-      },
-    });
-
-    context.patchQuery(
-    // context.patchFragment(
-      // StopTimesViewFragment,
-      gql`
-        ${StopTimesViewFragment}
-        {
-          node(id: "${stopTimesViewId}") @client {
-            ...stopTimesViewFields
-          }
-        }
-      `,
-      (data) => {
-        data.node
-        data.node.stops.push(stopWithId)
-        // return (data);
-        // stopTimesView: IStopTimesView) => ({
-        //   stops: 
-        //     ...stopTimesView.stops,
-        //     [stopWithId.id]: stopWithId
-        //   }
-        // })
-      }
-    );
   }
 
   @mutation('moveStop')

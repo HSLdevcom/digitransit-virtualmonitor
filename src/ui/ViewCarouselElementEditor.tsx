@@ -1,4 +1,3 @@
-import { RIENumber } from "@attently/riek";
 import { Mutation } from '@loona/react';
 import gql from 'graphql-tag';
 import * as React from 'react';
@@ -37,19 +36,13 @@ const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps & Wit
             >
               {(setViewCarouselElementDisplaySeconds) =>
                 (<>
-                  <RIENumber
-                    change={({ displaySeconds }: { displaySeconds: string}) =>
-                      setViewCarouselElementDisplaySeconds({
+                  <input id="number" type="number" min="3" defaultValue="3" onChange={e => setViewCarouselElementDisplaySeconds({
                         variables: {
-                          displaySeconds: parseFloat(displaySeconds),
+                          displaySeconds: e.target.value,
                           viewCarouselElementId: viewCarouselElement.id,
                         }
-                      })
-                    }
-                    propName={'displaySeconds'}
-                    validate={(newNumber: string) => (parseFloat(newNumber) >= 0)}
-                    value={viewCarouselElement.displaySeconds}
-                  />&nbsp;{t('seconds')}.
+                      })} />
+                  &nbsp;{t('seconds')}.
                   {viewCarouselElement.displaySeconds === 0
                     ? (<span><b>{t('viewCarouselElementEditorViewDisabled')}</b></span>)
                     : null

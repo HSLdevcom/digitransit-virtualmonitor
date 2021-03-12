@@ -1,4 +1,3 @@
-import { RIEInput } from '@attently/riek';
 import gql from 'graphql-tag';
 import * as React from "react";
 import { Mutation } from 'react-apollo';
@@ -26,14 +25,12 @@ const StopEditor: React.SFC<IStopEditorProps & WithTranslation> = ({
   t,
 }) => (
   <div>
-    <Link
-      to={`/stop/${stop.gtfsId}`}
-    >
+    <span>
       {stopInfo
         ? (<span>{stopInfo.name} ({t('stopCode')} {stopInfo.code || ''})</span>)
         : (<span>{stop.gtfsId}</span>)
       }
-    </Link>
+    </span>
     <ApolloClientsContext.Consumer>
       {({ virtualMonitor }) => (
         <Mutation
@@ -47,11 +44,7 @@ const StopEditor: React.SFC<IStopEditorProps & WithTranslation> = ({
               >
                 {`${t('stopName')}: `}
               </label>
-              <RIEInput
-                change={({ overrideStopName }: { overrideStopName: string }) => setOverrideStopName({ variables: { stopId: stop.id, overrideStopName } })}
-                value={stop.overrideStopName}
-                propName={'overrideStopName'}
-              />
+              <input onChange={e => setOverrideStopName({ variables: { stopId: stop.id, overrideStopName: e.target.value } })} />
             </>
           )}
         </Mutation>

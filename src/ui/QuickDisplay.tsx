@@ -89,7 +89,7 @@ class QuickDisplay extends React.Component<IQuickDisplayProps & { virtualMonitor
               ? (
                 <>
                   <span>unpackedDisplayUrl</span>
-                  <textarea
+                  <textarea style={{ width: '200px', height: '100px' }}
                     readOnly
                     value={JSON.stringify(this.state.unpackedDisplayUrl)}
                   />

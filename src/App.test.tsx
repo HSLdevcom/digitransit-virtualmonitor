@@ -1,4 +1,4 @@
-import * as React from 'react';
+/*import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils'
 import { StaticRouter } from 'react-router';
 import { create } from 'react-test-renderer';
@@ -52,3 +52,4 @@ it('passes search phase to StopSelector', () => {
   expect(stopSelector.props.match.params.phrase).toBe('Kaivo');
   renderer.unmount();
 });
+*/

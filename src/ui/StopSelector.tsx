@@ -96,13 +96,18 @@ class StopSelector extends React.Component<IProps, IState> {
                     </div>);
                   }
                   return (
-                    <ul>
-                      {result.data.stops.map((stop) => (
-                        <li key={stop.gtfsId}>
-                          {this.stopRenderer(stop)}
-                        </li>
-                      ))}
-                    </ul>
+                    <div>
+                      <div>{this.props.t('stopSearchResult')}</div>
+                      <div>
+                        <ul>
+                          {result.data.stops.map((stop) => (
+                            <li key={stop.gtfsId}>
+                              {this.stopRenderer(stop)}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
                   );
                 }}
               </StopsByNameRetriever>
@@ -118,7 +123,7 @@ class StopSelector extends React.Component<IProps, IState> {
     <Link
       to={`/stop/${stop.gtfsId}/${this.state.displayedRoutes}`}
     >
-    foo {stop.name} - {stop.gtfsId}
+    {stop.name} - {stop.gtfsId}
     </Link>
   );
 

@@ -18,8 +18,8 @@ const setViewCarouselElementDisplaySecondsMutation = gql`
 `;
 
 const removeViewCarouselElementMutation = gql`
-  mutation removeViewCarouselElement($diplayId: ID!, $viewCarouselElementId: ID!) {
-    removeViewCarouselElement(viewCarouselElementId: $viewCarouselElementId, displaySeconds: $displaySeconds) @client
+  mutation removeViewCarouselElement($viewCarouselElementId: ID!) {
+    removeViewCarouselElement(viewCarouselElementId: $viewCarouselElementId) @client
   }
 `;
 
@@ -57,7 +57,6 @@ const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps & Wit
               {(removeViewCarouselElement) =>
                 (<button
                   onClick={() => removeViewCarouselElement({ variables: {
-                    displayId: 'aaaaaa',
                     viewCarouselElementId: viewCarouselElement.id,
                   }})}
                 >

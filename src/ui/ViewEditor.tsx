@@ -18,7 +18,6 @@ const setViewTitleMutation = gql`
 `;
 
 const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps & WithTranslation) => {
-  console.log('ViewEditor:', view);
   const viewWrapper = (innerView: React.ReactNode) => (
     <>
       <ApolloClientsContext.Consumer>

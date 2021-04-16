@@ -9,6 +9,11 @@
   justify-self: flex-start;
 }
 
+#stop-search form {
+  margin-bottom: 10px;
+}
+
+
 #stop-search .stop-selector {
   flex: 1 1 66%;
   margin: 0.25em;

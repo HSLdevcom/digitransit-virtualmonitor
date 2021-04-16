@@ -1,0 +1,13 @@
+#viewCarouselElement {
+  padding-inline-start: 0;
+  list-style-type: none;
+  margin-bottom: 10px;
+}
+
+#viewCarouselElement li ViewCarouselElementEditor {
+  margin-bottom: 10px;
+}
+
+#viewCarouselElement li ViewCarouselElementEditor:not(:last-child) {
+  border-bottom: 1px solid white;
+}

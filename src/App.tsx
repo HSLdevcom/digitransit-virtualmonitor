@@ -92,10 +92,6 @@ class App extends React.Component<combinedConfigurationAndInjected> {
             component={({ match: { params: { version, packedDisplay }} }: RouteComponentProps<ICompressedDisplayRouteParams>) => {
               return (
               <>
-                <Titlebar>
-                  <Logo monitorConfig={monitorConfig} />
-                  <TitlebarTime />
-                </Titlebar>
                 <DisplayUrlCompression
                   version={decodeURIComponent(version)}
                   packedString={decodeURIComponent(packedDisplay)}

@@ -130,22 +130,13 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
           fontSize: stopIds.length === 1 ? 'min(4vw, 4em)' : 'min(3vw, 2em)',
           justifyContent: stopIds.length === 1 && monitorConfig ? 'center' : 'flex-start'
         }}>
-          {/* stopIds.length > 0 ?
-            stopIds.map((stop) =>
-              <div
-                key={stop}
-                id={'title-text-stop'}
-                style={{
-                  justifyContent: stopIds.length === 1 && monitorConfig ? 'center' : 'flex-start',
-                  width: stopIds.length > 3 ? '40%' : '100%'
-                }}
-              >
-                % <StopName key={stop} stopIds={[stop]} /> %
-              </div>
-            ) : null
-          */}
+          {stopIds.length === 1 ?
+            <StopName key={stopIds[0]} stopIds={[stopIds[0]]} />
+             : null
+          }
           {props.title}
         </div>
+        <TitlebarTime />
       </Titlebar>
       { stopIds.length > 0
         ? (

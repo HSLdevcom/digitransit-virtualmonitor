@@ -15,6 +15,7 @@ import {
 } from 'src/ui/StopTimesRetriever';
 import Titlebar from 'src/ui/Titlebar';
 import TitlebarTime from 'src/ui/TitlebarTime';
+import {getConfig} from 'src/getConfig';
 
 import 'src/ui/Views/StopTimesView.css';
 
@@ -120,17 +121,19 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
     || ((props as IStopTimesViewPropsWithIStops).stops.map(stop => stop.gtfsId))
     || [];
   const showStopColumn = stopIds.length === 1
-  const monitorConfig = (props as IStopTimesViewCommonProps).monitorConfig;
-
+  let monitorConfig = (props as IStopTimesViewCommonProps).monitorConfig;
+  if (!monitorConfig) {
+    monitorConfig = getConfig();
+  }
   return (
     <div style={{ color: 'white', display: 'flex', flexDirection: 'column' }}>
       <Titlebar>
         <Logo monitorConfig={monitorConfig} />
         <div id={'title-text'} style={{
-          fontSize: stopIds.length === 1 ? 'min(4vw, 4em)' : 'min(3vw, 2em)',
-          justifyContent: stopIds.length === 1 && monitorConfig ? 'center' : 'flex-start'
+          fontSize: stopIds.length <= 1 || props.title ? 'min(4vw, 4em)' : 'min(3vw, 2em)',
+          justifyContent: stopIds.length <= 1  || props.title ? 'center' : 'flex-start'
         }}>
-          {stopIds.length === 1 ?
+          {stopIds.length === 1  && !props.title ?
             <StopName key={stopIds[0]} stopIds={[stopIds[0]]} />
              : null
           }

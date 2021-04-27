@@ -33,7 +33,21 @@ if(domain.indexOf('tremonitori') >= 0) {
   monitorConfig = config.matka;
 }
 
+const getParams = (query: string) => {
+  if (!query) {
+    return {};
+  }
 
+  return query
+    .substring(1)
+    .split('&')
+    .map(v => v.split('='))
+    .reduce((params, [key, value]) => {
+      const newParam = {};
+      newParam[key] = decodeURIComponent(value);
+      return { ...params, ...newParam };
+    }, {});
+};
 
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),
@@ -57,7 +71,7 @@ ReactDOM.render(
               <LoonaProvider loona={loona} states={[VirtualMonitorLocalState]}>
                 <I18nextProvider i18n={i18n}>
                   <BrowserRouter>
-                    <App monitorConfig={monitorConfig}/>
+                    <App monitorConfig={monitorConfig} search={getParams(window.location.search)}/>
                   </BrowserRouter>
                 </I18nextProvider>
               </LoonaProvider>

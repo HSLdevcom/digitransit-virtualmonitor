@@ -47,7 +47,18 @@
 .StopTimesList tbody {
   color: white;
 }
-
+.StopTimesList tr.four-rows{
+  font-size: 2.1vw;
+}
+.StopTimesList tr.three-rows{
+  font-size: 2.7vw;
+}
+.StopTimesList tr.two-rows{
+  font-size: 3vw;
+}
+.StopTimesList tr.one-row{
+  font-size: 3.2vw;
+}
 .StopTimesList tr.canceled td.time {
   text-decoration: line-through;
   text-decoration-color: red;

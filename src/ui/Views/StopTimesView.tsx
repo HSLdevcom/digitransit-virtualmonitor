@@ -24,6 +24,7 @@ const duplicateRouteTimeThresholdSeconds = 15 * 60;
 interface IStopTimesViewCommonProps {
   readonly title?: string,
   readonly displayedRoutes?: number,
+  readonly urlTitle?: string,
   readonly pierColumnTitle?: string,
   readonly monitorConfig?: IMonitorConfig;
 };
@@ -130,12 +131,12 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
       <Titlebar>
         <Logo monitorConfig={monitorConfig} />
         <div id={'title-text'} style={{
-          fontSize: stopIds.length <= 1 || props.title ? 'min(4vw, 4em)' : 'min(3vw, 2em)',
-          justifyContent: stopIds.length <= 1  || props.title ? 'center' : 'flex-start'
+          fontSize: 'min(4vw, 4em)',
+          justifyContent: 'center'
         }}>
           {stopIds.length === 1  && !props.title ?
             <StopName key={stopIds[0]} stopIds={[stopIds[0]]} />
-             : null
+             : props.urlTitle ?? ''
           }
           {props.title}
         </div>

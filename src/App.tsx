@@ -27,8 +27,13 @@ export interface IMonitorConfig {
   urlParamFindAltText?: string,
 };
 
+export interface IQueryString {
+  title?: string,
+}
+
 export interface IConfigurationProps {
   monitorConfig?: IMonitorConfig,
+  search?: IQueryString,
 };
 
 interface ICompressedDisplayRouteParams {
@@ -44,6 +49,7 @@ interface IConfigurationDisplayRouteParams {
 interface IStopRouteParams {
   stopId: string,
   displayedRoutes?: string,
+  search?: string,
 };
 
 export type combinedConfigurationAndInjected = IConfigurationProps & WithTranslation
@@ -115,6 +121,7 @@ class App extends React.Component<combinedConfigurationAndInjected> {
                 stopIds={stopId.split(",")}
                 displayedRoutes={displayedRoutes ? Number(displayedRoutes) : undefined}
                 monitorConfig={monitorConfig}
+                urlTitle={this.props.search?.title}
               />
             )}
           />

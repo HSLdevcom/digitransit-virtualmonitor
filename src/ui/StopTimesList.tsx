@@ -60,20 +60,26 @@ const StopTimeRow = ({ stoptime, showPier, t, showStopColumn, stopTimesRowsLen }
     }
 
   const destination = isLastStopTerminal ? t('arriveTerminal') : stoptime.headsign;
-  let className = isCanceled ? 'canceled ' : ''
+  let className = isCanceled ? 'canceled ' : '';
   if(stopTimesRowsLen) {
-    switch ( stopTimesRowsLen ){
+    switch ( stopTimesRowsLen ) {
+      case 6:
+        className = className.concat('six-rows');
+        break;
+      case 5:
+        className = className.concat('five-rows');
+            break;
       case 4:
-        className = className.concat('four-rows')
+        className = className.concat('four-rows');
             break;
       case 3:
-        className = className.concat('three-rows')
+        className = className.concat('three-rows');
             break;
       case 2:
-        className = className.concat('two-rows')
+        className = className.concat('two-rows');
             break;
       case 1:
-        className = className.concat('one-row')
+        className = className.concat('one-row');
     }
   }
 

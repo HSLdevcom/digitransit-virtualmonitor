@@ -15,6 +15,7 @@ import {
 } from 'src/ui/StopTimesRetriever';
 import Titlebar from 'src/ui/Titlebar';
 import TitlebarTime from 'src/ui/TitlebarTime';
+import {getConfig} from 'src/getConfig';
 
 import 'src/ui/Views/StopTimesView.css';
 
@@ -23,6 +24,7 @@ const duplicateRouteTimeThresholdSeconds = 15 * 60;
 interface IStopTimesViewCommonProps {
   readonly title?: string,
   readonly displayedRoutes?: number,
+  readonly urlTitle?: string,
   readonly pierColumnTitle?: string,
   readonly monitorConfig?: IMonitorConfig;
 };
@@ -119,31 +121,24 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
   const stopIds = (props as IStopTimesViewPropsWithStopIds).stopIds
     || ((props as IStopTimesViewPropsWithIStops).stops.map(stop => stop.gtfsId))
     || [];
-  const showStopColumn = stopIds.length === 1
-  const monitorConfig = (props as IStopTimesViewCommonProps).monitorConfig;
-
+  const showStopColumn = !(stopIds.length === 1);
+  let monitorConfig = (props as IStopTimesViewCommonProps).monitorConfig;
+  if (!monitorConfig) {
+    monitorConfig = getConfig();
+  }
   return (
     <div style={{ color: 'white', display: 'flex', flexDirection: 'column' }}>
       <Titlebar>
         <Logo monitorConfig={monitorConfig} />
         <div id={'title-text'} style={{
-          fontSize: stopIds.length === 1 ? 'min(4vw, 4em)' : 'min(3vw, 2em)',
-          justifyContent: stopIds.length === 1 && monitorConfig ? 'center' : 'flex-start'
+          fontSize: 'min(4vw, 4em)',
+          justifyContent: 'center'
         }}>
-          {stopIds.length > 0 ?
-            stopIds.map((stop) =>
-              <div
-                key={stop}
-                id={'title-text-stop'}
-                style={{
-                  justifyContent: stopIds.length === 1 && monitorConfig ? 'center' : 'flex-start',
-                  width: stopIds.length > 3 ? '40%' : '100%'
-                }}
-              >
-                <StopName key={stop} stopIds={[stop]} />
-              </div>
-            ) : null
+          {stopIds.length === 1  && !props.title ?
+            <StopName key={stopIds[0]} stopIds={[stopIds[0]]} />
+             : props.urlTitle ?? ''
           }
+          {props.title}
         </div>
         <TitlebarTime />
       </Titlebar>

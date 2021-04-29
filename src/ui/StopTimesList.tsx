@@ -36,7 +36,7 @@ const StopTimesListHeaders = ({ pierColumnTitle, showPier, t, showStopColumn }: 
         ? (<th className={'pier'}>{pierColumnTitle ? pierColumnTitle : t('pier')}</th>)
         : null
       }
-     {!showStopColumn 
+     {showStopColumn 
        ? <th className={'destination'}>Pysäkki</th> 
        : null}
       <th className={'departureTime'}>{t('departureTime')}</th>
@@ -45,7 +45,7 @@ const StopTimesListHeaders = ({ pierColumnTitle, showPier, t, showStopColumn }: 
 );
 const StopTimesListHeadersTranslated = withTranslation('translations')(StopTimesListHeaders);
 
-const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, } & WithTranslation) => {
+const StopTimeRow = ({ stoptime, showPier, t, showStopColumn, stopTimesRowsLen } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, stopTimesRowsLen?: number } & WithTranslation) => {
   const isCanceled = stoptime.realtimeState === 'CANCELED';
 
   // If the Vehicle is arriving to its' destination, its headsign is null, or headsign is stop's name.
@@ -60,10 +60,35 @@ const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: ISt
     }
 
   const destination = isLastStopTerminal ? t('arriveTerminal') : stoptime.headsign;
+  let className = isCanceled ? 'canceled ' : '';
+  if(stopTimesRowsLen) {
+    switch ( stopTimesRowsLen ) {
+      case 6:
+        className = className.concat('six-rows');
+        break;
+      case 5:
+        className = className.concat('five-rows');
+            break;
+      case 4:
+        className = className.concat('four-rows');
+            break;
+      case 3:
+        className = className.concat('three-rows');
+            break;
+      case 2:
+        className = className.concat('two-rows');
+            break;
+      case 1:
+        className = className.concat('one-row');
+    }
+  }
+  if (showStopColumn && stopTimesRowsLen && stopTimesRowsLen < 6) {
+    className = className.concat(' with-pier');
+  }
 
   return (
     <tr
-      className={isCanceled ? 'canceled' : ''}
+      className={className}
     >
       <td
         className={'routeName'}
@@ -82,7 +107,7 @@ const StopTimeRow = ({ stoptime, showPier, t, showStopColumn } : { stoptime: ISt
         ? (<td className={'pier'}>{(stoptime.stop && (stoptime.stop.overrideStopName || stoptime.stop.platformCode)) || ''}</td>)
         : null
       }
-      {!showStopColumn ?
+      {showStopColumn ?
        <td className={'pier'}> {stoptime.stop === undefined ? 'not found' : <StopName stopIds={[stoptime.stop.gtfsId]} />}</td>
         :null}
       <td
@@ -113,7 +138,7 @@ const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t,
         (stopTime.stop !== undefined) &&
         (((stopTime.stop.overrideStopName !== undefined) && (stopTime.stop.overrideStopName !== null) && (stopTime.stop.overrideStopName !== '')) || ((stopTime.stop.platformCode !== undefined) && (stopTime.stop.platformCode !== null) && (stopTime.stop.platformCode !== '')))
       ));
-
+  const stopTimesRowsLen = stoptimesWithoutPatterns.length
   return (
     <table className={'StopTimesList'}>
       <StopTimesListHeadersTranslated
@@ -130,6 +155,7 @@ const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t,
               stoptime={stoptime}
               showPier={usedShowPier}
               showStopColumn={showStopColumn}
+              stopTimesRowsLen={stopTimesRowsLen}
             />
             {(i < (stoptimesWithoutPatterns.length - 1))
               ? <SeparatorRow

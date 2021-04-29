@@ -357,7 +357,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('removeViewCarouselElement')
-  public removeViewCarouselElement({ displayId, viewCarouselElementId }: { displayId: string, viewCarouselElementId: string }, context: Context) {
+  public removeViewCarouselElement({ viewCarouselElementId }: { viewCarouselElementId: string }, context: Context) {
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}
@@ -370,7 +370,7 @@ class VirtualMonitorLocalState {
       (data) => {
         for (const conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
           for (const display of conf.displays) {
-            if ((display.id === displayId) && (display.viewCarousel.find(vce => vce.id === viewCarouselElementId))) {
+            if (display.viewCarousel.find(vce => vce.id === viewCarouselElementId)) {
               (display.viewCarousel as IViewCarouselElement[]) = display.viewCarousel.filter(vce => vce.id !== viewCarouselElementId)
             }
           }

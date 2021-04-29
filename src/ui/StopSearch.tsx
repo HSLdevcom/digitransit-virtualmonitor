@@ -30,7 +30,7 @@ class StopSearch extends React.Component<IProps, IState> {
   }
 
   public render() { return(
-    <div className={'stop-selector'}>
+    <div id="stop-search" className={'stop-selector'}>
       <form
         onSubmit={this.stopSearchSubmit}
         action={'searchStop'}
@@ -58,40 +58,50 @@ class StopSearch extends React.Component<IProps, IState> {
       </form>
       {this.state.searchPhrase
         ? (
-          <div>
-            <span>{this.props.t('stopSearcherSearching', { searchPhrase: this.state.searchPhrase })}</span>
-            <StopsByNameRetriever
-              phrase={this.state.searchPhrase}
-            >
-              {(result: QueryResult<IStopsByNameResponse, IStopsByNameQuery>): React.ReactNode => {
-                if (result.loading) {
-                  return (<div>{this.props.t('loading')}</div>);
-                }
-                if (!result || !result.data) {
-                  return (<div>
-                    {this.props.t('stopSearchError', { searchPhrase: this.state.searchPhrase })}
-                  </div>);
-                }
-                if (!result.data.stops || result.data.stops.length === 0) {
-                  return (<div>
-                    {this.props.t('stopSearchNotFound', { searchPhrase: this.state.searchPhrase })}
-                  </div>);
-                }
-                return (this.props.children
-                  ? this.props.children(result.data.stops)
-                  : (
-                    <ul>
-                      {result.data.stops.map((stop) => (
-                        <li key={stop.gtfsId}>
-                          {stop.name} - {stop.gtfsId}
+          <>
+            <div>
+              <span>{this.props.t('stopSearchResult', { searchPhrase: this.state.searchPhrase })}:</span>
+              <StopsByNameRetriever
+                phrase={this.state.searchPhrase}
+              >
+                {(result: QueryResult<IStopsByNameResponse, IStopsByNameQuery>): React.ReactNode => {
+                  if (result.loading) {
+                    return (<div>{this.props.t('loading')}</div>);
+                  }
+                  if (!result || !result.data) {
+                    return (
+                      <ul>
+                        <li>
+                          {this.props.t('stopSearchError', { searchPhrase: this.state.searchPhrase })}
                         </li>
-                      ))}
-                    </ul>
-                  )
-                );
-              }}
-            </StopsByNameRetriever>
-          </div>
+                      </ul>
+                    );
+                  }
+                  if (!result.data.stops || result.data.stops.length === 0) {
+                    return (
+                      <ul>
+                        <li>
+                          {this.props.t('stopSearchNotFound', { searchPhrase: this.state.searchPhrase })}
+                        </li>
+                      </ul>
+                    );
+                  }
+                  return (this.props.children
+                    ? this.props.children(result.data.stops)
+                    : (
+                      <ul>
+                        {result.data.stops.map((stop) => (
+                          <li key={stop.gtfsId}>
+                            {stop.name} - {stop.gtfsId}
+                          </li>
+                        ))}
+                      </ul>
+                    )
+                  );
+                }}
+              </StopsByNameRetriever>
+            </div>
+          </>
         )
         : null
       }

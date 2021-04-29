@@ -36,7 +36,7 @@ const StopTimesListHeaders = ({ pierColumnTitle, showPier, t, showStopColumn }: 
         ? (<th className={'pier'}>{pierColumnTitle ? pierColumnTitle : t('pier')}</th>)
         : null
       }
-     {!showStopColumn 
+     {showStopColumn 
        ? <th className={'destination'}>Pysäkki</th> 
        : null}
       <th className={'departureTime'}>{t('departureTime')}</th>
@@ -82,6 +82,9 @@ const StopTimeRow = ({ stoptime, showPier, t, showStopColumn, stopTimesRowsLen }
         className = className.concat('one-row');
     }
   }
+  if (showStopColumn && stopTimesRowsLen && stopTimesRowsLen < 6) {
+    className = className.concat(' with-pier');
+  }
 
   return (
     <tr
@@ -104,7 +107,7 @@ const StopTimeRow = ({ stoptime, showPier, t, showStopColumn, stopTimesRowsLen }
         ? (<td className={'pier'}>{(stoptime.stop && (stoptime.stop.overrideStopName || stoptime.stop.platformCode)) || ''}</td>)
         : null
       }
-      {!showStopColumn ?
+      {showStopColumn ?
        <td className={'pier'}> {stoptime.stop === undefined ? 'not found' : <StopName stopIds={[stoptime.stop.gtfsId]} />}</td>
         :null}
       <td

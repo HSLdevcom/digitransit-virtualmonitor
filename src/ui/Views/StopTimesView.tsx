@@ -121,7 +121,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (props: ICombinedS
   const stopIds = (props as IStopTimesViewPropsWithStopIds).stopIds
     || ((props as IStopTimesViewPropsWithIStops).stops.map(stop => stop.gtfsId))
     || [];
-  const showStopColumn = stopIds.length === 1
+  const showStopColumn = !(stopIds.length === 1);
   let monitorConfig = (props as IStopTimesViewCommonProps).monitorConfig;
   if (!monitorConfig) {
     monitorConfig = getConfig();

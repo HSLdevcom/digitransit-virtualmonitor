@@ -14,7 +14,7 @@ fragment displayFields on Display {
     displaySeconds
     view {
       id
-      amount
+      displayedRoutes
       title {
         fi
         en

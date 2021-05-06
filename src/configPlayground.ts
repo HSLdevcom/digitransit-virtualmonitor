@@ -17,7 +17,7 @@ const configs: IConfigurations =
             id: 'Foobar3',
             view: {
               id: 'Foobar4',
-              amount: 3,
+              displayedRoutes: 3,
               pierColumnTitle: 'FromConfig',
               stops: [
                 {
@@ -84,7 +84,7 @@ const configs: IConfigurations =
             id: 'Foobarb',
             view: {
               id: 'Foobarb2',
-              amount: 3,
+              displayedRoutes: 3,
               stops: [
                 {
                   gtfsId: 'HSL:1040601',
@@ -130,7 +130,7 @@ const configs: IConfigurations =
             id: 'Xyzzyx',
             view: {
               id: 'Xyzza',
-              amount: 3,
+              displayedRoutes: 3,
               pierColumnTitle: 'Pysäkki',
               stops: [
                 {

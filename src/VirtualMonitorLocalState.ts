@@ -37,7 +37,7 @@ class VirtualMonitorLocalState {
               view: {
                 __typename: 'StopTimesView', // This doesn't seem to work for some reason.
                 id: uuidv4(),
-                amount: 3,
+                displayedRoutes: 3,
                 stops: [],
                 title: {
                   __typename: 'TranslatedString',
@@ -234,7 +234,7 @@ class VirtualMonitorLocalState {
       __typename: 'ViewWithDisplaySeconds',
       displaySeconds: 2,
       view: {
-        amount: 3,
+        displayedRoutes: 3,
         __typename: 'StopTimesView',
         stops: [],
         title: {
@@ -309,7 +309,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('setAmountOfRoutesShown')
-  public setAmountOfRoutesShown({viewId, amount} : {viewId: string, amount: number} , context: Context){
+  public setAmountOfRoutesShown({viewId, displayedRoutes} : {viewId: string, displayedRoutes: number} , context: Context){
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}
@@ -324,7 +324,7 @@ class VirtualMonitorLocalState {
           for (const display of conf.displays) {
             for (const viewCarouselElement of display.viewCarousel) {
               if (viewCarouselElement.view.id === viewId) {
-                (viewCarouselElement.view.amount as number) = amount;
+                (viewCarouselElement.view.displayedRoutes as number) = displayedRoutes;
               }
             }
           }
@@ -373,7 +373,6 @@ class VirtualMonitorLocalState {
         for (const conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
           for (const display of conf.displays) {
             for (const viewCarouselElement of display.viewCarousel) {
-              console.log(viewCarouselElement.view.id)
               if ((viewCarouselElement.view.id === viewId) && viewCarouselElement.view.title) {
                 (viewCarouselElement.view.title.fi as string) = title;
               }

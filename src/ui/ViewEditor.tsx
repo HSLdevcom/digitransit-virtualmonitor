@@ -19,8 +19,8 @@ const setViewTitleMutation = gql`
 
 
 const setAmountOfRoutesShown = gql`
-  mutation setAmountOfRoutesShown($viewId: ID!, $amount: Int!) {
-    setAmountOfRoutesShown(viewId: $viewId, amount: $amount) @client
+  mutation setAmountOfRoutesShown($viewId: ID!, $displayedRoutes: Int!) {
+    setAmountOfRoutesShown(viewId: $viewId, displayedRoutes: $displayedRoutes) @client
   }
 `;
 
@@ -58,8 +58,8 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps &
                     id={'displayedRoutesInput'}
                     type={'number'}
                     name={'searchPhrase'}
-                    min="3" defaultValue="3"
-                    onChange={e => setAmountOfRoutesShown({variables: {amount: e.target.value, viewId: view.id}})}
+                    min="1" defaultValue="7"
+                    onChange={e => setAmountOfRoutesShown({variables: {displayedRoutes: e.target.value, viewId: view.id}})}
                     max={999}
                     maxLength={3}
                     style={{ width: '3em' }}

@@ -14,6 +14,7 @@ fragment displayFields on Display {
     displaySeconds
     view {
       id
+      amount
       title {
         fi
         en

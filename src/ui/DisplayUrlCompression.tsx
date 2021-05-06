@@ -27,6 +27,7 @@ const AsyncInflater = <T extends {}>({ children, promise }: { children: (unpacke
 // DO NOT MODIFY existing dictionaries as this would break all existing urls.
 const displayDictionaries = {
   'v0': '{"displaySeconds":,"view":{"pierColumnTitle":","stops":[","},"title":{"fi","en"}}]}},"type":"stopTimes"HSL:10"]}',
+  //'v0': '{"displaySeconds":,"amount":,"view":{"pierColumnTitle":","stops":[","},"title":{"fi","en"}}]}},"type":"stopTimes"HSL:10"]}',
 };
 
 const renderers = {

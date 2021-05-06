@@ -25,6 +25,7 @@ export interface IStop extends INode {
 export interface IViewBase extends INode {
   readonly title?: ITranslatedString,
   readonly type: string,
+  readonly amount?: number,
 };
 
 export interface IStopTimesView extends IViewBase {

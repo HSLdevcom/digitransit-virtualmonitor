@@ -14,11 +14,11 @@ const View = ({ t, view }: { view: IViewBase } & WithTranslation) => {
 
   switch (type) {
     case 'stopTimes':
-      const { displayedRoutes, pierColumnTitle, stops } : IStopTimesView = view as IStopTimesView;
-
+      const { displayedRoutes, pierColumnTitle, stops, amount } : IStopTimesView = view as IStopTimesView;
+      console.log(amount)
       return (
         <StopTimesView
-          displayedRoutes={displayedRoutes}
+          displayedRoutes={displayedRoutes || amount}
           pierColumnTitle={pierColumnTitle}
           stops={stops}
           title={view.title && view.title.fi}

@@ -20,6 +20,7 @@ const testConfigs: IConfigurations = [
             id: 'Testing vc',
             view: {
               id: 'Testing v',
+              amount: 3,
               stops: [
                 {
                   gtfsId: 'HSL:4700210',

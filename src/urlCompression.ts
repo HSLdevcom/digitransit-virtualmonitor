@@ -10,7 +10,6 @@ const createUrlCompression = <T extends object>(dictionary: Buffer = new Buffer(
         if (err) {
           return reject(Error);
         }
-        console.log((JSON.parse(buffer.toString())))
         return resolve(JSON.parse(buffer.toString()));
       })
     );

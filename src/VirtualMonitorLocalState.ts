@@ -37,7 +37,7 @@ class VirtualMonitorLocalState {
               view: {
                 __typename: 'StopTimesView', // This doesn't seem to work for some reason.
                 id: uuidv4(),
-                displayedRoutes: 3,
+                displayedRoutes: 7,
                 stops: [],
                 title: {
                   __typename: 'TranslatedString',
@@ -234,7 +234,7 @@ class VirtualMonitorLocalState {
       __typename: 'ViewWithDisplaySeconds',
       displaySeconds: 2,
       view: {
-        displayedRoutes: 3,
+        displayedRoutes: 7,
         __typename: 'StopTimesView',
         stops: [],
         title: {

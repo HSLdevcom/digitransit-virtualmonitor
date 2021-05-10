@@ -15,6 +15,7 @@ const View = ({ t, view }: { view: IViewBase } & WithTranslation) => {
   switch (type) {
     case 'stopTimes':
       const { displayedRoutes, pierColumnTitle, stops } : IStopTimesView = view as IStopTimesView;
+
       return (
         <StopTimesView
           displayedRoutes={displayedRoutes}

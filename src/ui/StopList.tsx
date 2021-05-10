@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 
-import { IStopWithName } from "src/ui/StopsByNameRetriever";
+import { IStopWithName } from "./StopsByNameRetriever";
 
 export type IStopRenderFunc = (stop: IStopWithName) => JSX.Element;
 

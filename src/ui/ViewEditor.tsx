@@ -3,9 +3,9 @@ import gql from 'graphql-tag';
 import * as React from 'react';
 import { WithTranslation, withTranslation } from "react-i18next";
 
-import { IStopTimesView, IViewBase } from 'src/ui/ConfigurationList';
-import StopTimesViewEditor from 'src/ui/StopTimesViewEditor';
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+import { IStopTimesView, IViewBase } from './ConfigurationList';
+import StopTimesViewEditor from './StopTimesViewEditor';
+import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
 export interface IViewEditorProps {
   readonly view: IViewBase,

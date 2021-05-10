@@ -1,8 +1,8 @@
 import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 
-import SNode, { SNodeFields } from 'src/graphQL/SNode';
-import SStop from 'src/graphQL/SStop';
-import SView, { SViewFields } from 'src/graphQL/SView';
+import SNode, { SNodeFields } from './SNode';
+import SStop from './SStop';
+import SView, { SViewFields } from './SView';
 
 const SStopTimesView = new GraphQLObjectType({
   fields: () => ({

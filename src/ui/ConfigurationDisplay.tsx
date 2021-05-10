@@ -1,8 +1,8 @@
 import * as React from "react";
 import { WithTranslation, withTranslation } from "react-i18next";
 
-import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/ConfigurationRetriever';
-import ViewCarousel from 'src/ui/ViewCarousel';
+import ConfigurationRetriever, { ConfigurationRetrieverResult } from '../ui/ConfigurationRetriever';
+import ViewCarousel from '../ui/ViewCarousel';
 
 export interface IConfigurationDisplayProps {
   readonly title?: string,

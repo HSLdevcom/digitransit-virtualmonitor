@@ -1,6 +1,6 @@
 import { ApolloCache } from 'apollo-cache';
 
-import { IConfiguration } from 'src/ui/ConfigurationList';
+import { IConfiguration } from './ui/ConfigurationList';
 
 const resolvers = {
   Mutation: {

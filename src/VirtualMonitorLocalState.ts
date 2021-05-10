@@ -2,9 +2,9 @@ import { Context, mutation, state } from '@loona/react';
 import gql from 'graphql-tag';
 import { v4 as uuidv4 } from 'uuid';
 
-import schema, { OptionalId } from 'src/graphQL/schema';
-import { IConfiguration, IDisplay, IStop, IStopTimesView, IViewCarouselElement } from 'src/ui/ConfigurationList';
-import { ConfigurationFieldsFragment, DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
+import schema, { OptionalId } from './graphQL/schema';
+import { IConfiguration, IDisplay, IStop, IStopTimesView, IViewCarouselElement } from '../src/ui/ConfigurationList';
+import { ConfigurationFieldsFragment, DisplayFieldsFragment } from '../src/ui/ConfigurationRetriever';
 @state({
   defaults: {
     localConfigurations: [
@@ -20,7 +20,7 @@ class VirtualMonitorLocalState {
   // }
 
   @mutation('addQuickConfiguration')
-  public addQuickConfiguration(_: any, context: Context) {
+  addQuickConfiguration(_: any, context: Context) {
     const newConfiguration: any = {
       __typename: 'Configuration',
       displays: [
@@ -72,7 +72,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('addQuickDisplay')
-  public addQuickDisplay({ display }: { display: IDisplay }, context: Context) {
+  addQuickDisplay({ display }: { display: IDisplay }, context: Context) {
 
     const nullifiedDisplay: any = {
       ...display,
@@ -105,7 +105,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('removeStopFromStopTimesView')
-  public removeStopFromStopTimesView({ stopId }: { stopId: string }, context: Context) {
+  removeStopFromStopTimesView({ stopId }: { stopId: string }, context: Context) {
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}
@@ -131,7 +131,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('addStopToStopTimesView')
-  public addStopToStopTimesView({ stopTimesViewId, stop }: { stopTimesViewId: string, stop: OptionalId<IStop> }, context: Context) {
+  addStopToStopTimesView({ stopTimesViewId, stop }: { stopTimesViewId: string, stop: OptionalId<IStop> }, context: Context) {
     const stopWithId = {
       ...stop,
       id: uuidv4(),
@@ -180,7 +180,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('moveStop')
-  public moveStop({ stopTimesViewId, stopId, direction }: { stopTimesViewId: string, stopId: string, direction: 'up' | 'down' }, context: Context) {
+  moveStop({ stopTimesViewId, stopId, direction }: { stopTimesViewId: string, stopId: string, direction: 'up' | 'down' }, context: Context) {
     const nudgeArrayElement = <T>(arr: ReadonlyArray<T>, element: T, nudgeDirection: 'up' | 'down') => {
       const foundIndex = arr.findIndex(e => e === element);
       if (foundIndex === -1) {
@@ -228,7 +228,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('addViewCarouselElement')
-  public addViewCarouselElement({ displayId, viewCarouselElement }: { displayId: string, viewCarouselElement: OptionalId<IViewCarouselElement> }, context: Context) {
+  addViewCarouselElement({ displayId, viewCarouselElement }: { displayId: string, viewCarouselElement: OptionalId<IViewCarouselElement> }, context: Context) {
     const defaultViewCarouselElement = {
       __typename: 'ViewWithDisplaySeconds',
       displaySeconds: 2,
@@ -278,7 +278,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('setOverrideStopName')
-  public setOverrideStopName({ stopId, overrideStopName }: { stopId: string, overrideStopName: string | null }, context: Context) {
+  setOverrideStopName({ stopId, overrideStopName }: { stopId: string, overrideStopName: string | null }, context: Context) {
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}
@@ -307,7 +307,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('setViewCarouselElementDisplaySeconds')
-  public setViewCarouselElementDisplaySeconds({ viewCarouselElementId, displaySeconds }: { viewCarouselElementId: string, displaySeconds: number }, context: Context) {
+  setViewCarouselElementDisplaySeconds({ viewCarouselElementId, displaySeconds }: { viewCarouselElementId: string, displaySeconds: number }, context: Context) {
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}
@@ -332,7 +332,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('setViewTitle')
-  public setViewTitle({ viewId, title }: { viewId: string, title: string }, context: Context) {
+  setViewTitle({ viewId, title }: { viewId: string, title: string }, context: Context) {
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}
@@ -357,7 +357,7 @@ class VirtualMonitorLocalState {
   }
 
   @mutation('removeViewCarouselElement')
-  public removeViewCarouselElement({ viewCarouselElementId }: { viewCarouselElementId: string }, context: Context) {
+  removeViewCarouselElement({ viewCarouselElementId }: { viewCarouselElementId: string }, context: Context) {
     context.patchQuery(
       gql`
         ${ConfigurationFieldsFragment}

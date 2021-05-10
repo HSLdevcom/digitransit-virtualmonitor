@@ -1,6 +1,6 @@
-import React = require('react');
+import React from 'react';
 
-import AutoMoment from 'src/ui/AutoMoment';
+import AutoMoment from './AutoMoment';
 
 const TitlebarTime = () => (
   <div id={'title-time'} style={{fontSize: 'min(4vw, 4em)'}}>

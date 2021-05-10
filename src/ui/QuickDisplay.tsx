@@ -6,12 +6,13 @@ import { QueryResult } from 'react-apollo';
 import { RouteComponentProps } from 'react-router';
 import { v4 as uuidv4 } from 'uuid';
 
-import { virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
-import { IConfiguration, IDisplay } from 'src/ui/ConfigurationList';
-import { ConfigurationFieldsFragment, DisplayFieldsFragment } from 'src/ui/ConfigurationRetriever';
-import DisplayEditor from 'src/ui/DisplayEditor';
-import { pairs } from 'src/ui/DisplayUrlCompression';
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+import { virtualMonitorClient } from '../graphQL/virtualMonitorClient';
+import { IConfiguration, IDisplay } from './ConfigurationList';
+import { ConfigurationFieldsFragment, DisplayFieldsFragment } from './ConfigurationRetriever';
+import DisplayEditor from './DisplayEditor';
+import { pairs } from './DisplayUrlCompression';
+import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
+import { any } from 'prop-types';
 
 const addQuickConfiguration = gql`
   ${ConfigurationFieldsFragment}
@@ -206,7 +207,7 @@ class DisplayEditorHistoryUpdater extends React.PureComponent<IDisplayEditorHist
       const { id, __typename, ...rest } = { ...o, id: undefined, __typename: undefined };
       return rest;
     }
-    const recursive = (o: {}): {} => {
+    const recursive = (o: {[index: string]:any}): {} => {
       return (
         Object.getOwnPropertyNames(removeIDAndTypename(o))
           .filter(propName => (o[propName] !== undefined) && (o[propName] !== null))
@@ -242,7 +243,7 @@ class DisplayEditorHistoryUpdater extends React.PureComponent<IDisplayEditorHist
     if (this.props.display && (prevProps.display !== this.props.display) && (JSON.stringify(this.props.display) !== JSON.stringify(prevProps.display))) {
       const sanitized = DisplayEditorHistoryUpdater.minimizeDisplay(this.props.display);
       const version = 'v0';
-      pairs[version].pack(sanitized).then(packed => this.props.history.push(`/quickDisplay/${version}/${encodeURIComponent(packed)}`));
+      pairs[version].pack(sanitized).then((packed: any) => this.props.history.push(`/quickDisplay/${version}/${encodeURIComponent(packed)}`));
     }
   }
 

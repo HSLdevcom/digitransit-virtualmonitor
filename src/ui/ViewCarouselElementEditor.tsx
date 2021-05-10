@@ -3,9 +3,9 @@ import gql from 'graphql-tag';
 import * as React from 'react';
 import { WithTranslation, withTranslation } from "react-i18next";
 
-import { IViewCarouselElement } from 'src/ui/ConfigurationList';
-import ViewEditor from 'src/ui/ViewEditor';
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+import { IViewCarouselElement } from './ConfigurationList';
+import ViewEditor from './ViewEditor';
+import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
 export interface IViewCarouselElementEditorProps {
   readonly viewCarouselElement: IViewCarouselElement,
@@ -28,7 +28,7 @@ const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps & Wit
     <div>
       {t('viewCarouselElementEditorShownTime')}:&#32;
       <ApolloClientsContext.Consumer>
-        {({ virtualMonitor }) => (
+        {({ virtualMonitor } : any) => (
           <>
             <Mutation
               mutation={setViewCarouselElementDisplaySecondsMutation}

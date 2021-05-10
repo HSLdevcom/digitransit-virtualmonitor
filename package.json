@@ -27,30 +27,30 @@
     "react-moment": "^0.7.9",
     "react-promise": "^2.1.0",
     "react-router-dom": "^4.3.1",
-    "react-scripts-ts": "^4.0.8",
+    "react-scripts": "^4.0.3",
     "uuid": "^3.4.0"
   },
   "scripts": {
     "prepare": "patch-package",
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts -r esm test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
     "@types/history": "^4.7.8",
     "@types/jest": "^23.3.14",
-    "@types/node": "^10.17.50",
+    "@types/node": "^10.17.59",
     "@types/prop-types": "^15.7.3",
-    "@types/react": "^16.14.2",
-    "@types/react-dom": "^16.9.10",
+    "@types/react": "^16.14.6",
+    "@types/react-dom": "^16.9.12",
     "@types/react-i18next": "^7.8.3",
     "@types/react-router-dom": "^4.3.5",
     "@types/react-test-renderer": "^16.9.4",
     "@types/uuid": "^3.4.9",
     "react-test-renderer": "^16.14.0",
     "ts-node": "^7.0.1",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.9"
   },
   "jest": {
     "moduleNameMapper": {
@@ -68,5 +68,11 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  }
 }

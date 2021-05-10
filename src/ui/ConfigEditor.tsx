@@ -1,12 +1,12 @@
-import * as copy from "copy-to-clipboard";
+import copy from "copy-to-clipboard";
 import gql from "graphql-tag";
 import * as React from "react";
 import { Mutation } from "react-apollo";
 import { WithTranslation, withTranslation } from "react-i18next";
 
-import { IConfiguration } from "src/ui/ConfigurationList";
-import DisplayEditor from "src/ui/DisplayEditor";
-import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
+import { IConfiguration } from "./ConfigurationList";
+import DisplayEditor from "./DisplayEditor";
+import { ApolloClientsContext } from "../VirtualMonitorApolloClients";
 
 const copyConfigurationToClipboard = (configuration: IConfiguration) => () => copy(JSON.stringify(configuration));
 

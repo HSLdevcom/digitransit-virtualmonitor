@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { create } from 'react-test-renderer';
 
-import Titlebar from 'src/ui/Titlebar';
+import Titlebar from './Titlebar';
 
 it('renders without crashing', () => {
   const renderer = create(

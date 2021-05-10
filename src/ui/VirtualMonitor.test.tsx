@@ -2,10 +2,10 @@ import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils'
 import { create } from 'react-test-renderer';
 
-import AutoMoment from 'src/ui/AutoMoment';
+import AutoMoment from './AutoMoment';
 // import StopTimesRetriever from 'src/ui/StopTimesRetriever';
 // import StopName from 'src/ui/StopName';
-import VirtualMonitor, { IVirtualMonitorProps } from 'src/ui/VirtualMonitor';
+import VirtualMonitor, { IVirtualMonitorProps } from './VirtualMonitor';
 
 const WrappedVirtualMonitor = (props: IVirtualMonitorProps) => (
   <MockedProvider>

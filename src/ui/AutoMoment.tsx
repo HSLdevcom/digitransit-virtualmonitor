@@ -2,8 +2,8 @@ import * as moment from 'moment';
 import * as React from "react";
 import ReactMoment from 'react-moment';
 
-import NtpSyncContext from 'src/ntp/NtpSyncContext';
-import { EpochMilliseconds, Milliseconds } from "src/time";
+import NtpSyncContext from '../ntp/NtpSyncContext';
+import { EpochMilliseconds, Milliseconds } from "../time";
 
 export interface ITimeProps {
   readonly currentTime?: EpochMilliseconds,

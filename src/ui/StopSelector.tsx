@@ -4,10 +4,10 @@ import { WithTranslation, withTranslation } from "react-i18next";
 import { RouteComponentProps/* , withRouter */ } from 'react-router';
 import { Link } from "react-router-dom";
 
-import 'src/ui/StopSearch.css';
+import './StopSearch.css';
 
-import { IStopRenderFunc } from "src/ui/StopList";
-import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse } from "src/ui/StopsByNameRetriever";
+import { IStopRenderFunc } from "./StopList";
+import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse } from "./StopsByNameRetriever";
 
 type IProps = RouteComponentProps<{
   readonly phrase?: string,

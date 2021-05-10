@@ -3,7 +3,7 @@ import * as React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { WithTranslation, withTranslation } from "react-i18next";
 
-import StationsList from "src/ui/StationList";
+import StationsList from "./StationList";
 
 const STATIONS_QUERY = gql`
 	query {

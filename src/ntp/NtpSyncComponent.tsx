@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import NtpSyncContext from 'src/ntp/NtpSyncContext';
+import NtpSyncContext from './NtpSyncContext';
 
 interface INtpSyncComponent {
   children: React.ReactChild,

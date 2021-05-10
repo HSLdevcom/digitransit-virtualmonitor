@@ -2,8 +2,8 @@ import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryProps, QueryResult } from "react-apollo";
 
-import { IConfiguration } from "src/ui/ConfigurationList";
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+import { IConfiguration } from "./ConfigurationList";
+import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
 export const DisplayFieldsFragment = gql`
 fragment displayFields on Display {

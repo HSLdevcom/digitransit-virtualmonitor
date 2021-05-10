@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import HslLogo from 'src/ui/logo/HslLogo';
-import LinkkiLogo from 'src/ui/logo/LinkkiLogo';
-import MatkaLogo from 'src/ui/logo/MatkaLogo';
-import NysseLogo from 'src/ui/logo/NysseLogo';
+import HslLogo from './HslLogo';
+import LinkkiLogo from './LinkkiLogo';
+import MatkaLogo from './MatkaLogo';
+import NysseLogo from './NysseLogo';
 
 interface ICommonProps {
   readonly monitorConfig?: any,

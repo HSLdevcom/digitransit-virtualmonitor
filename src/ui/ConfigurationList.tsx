@@ -3,10 +3,10 @@ import * as React from "react";
 import { Mutation } from "react-apollo";
 import { WithTranslation, withTranslation } from "react-i18next";
 
-import ConfigEditor from "src/ui/ConfigEditor";
-import ConfigurationRetriever, { ConfigurationRetrieverResult } from 'src/ui/ConfigurationRetriever';
-import { ILatLon } from "src/ui/LatLonEditor";
-import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
+import ConfigEditor from "./ConfigEditor";
+import ConfigurationRetriever, { ConfigurationRetrieverResult } from './ConfigurationRetriever';
+import { ILatLon } from "./LatLonEditor";
+import { ApolloClientsContext } from "../VirtualMonitorApolloClients";
 
 interface INode {
   readonly id?: string

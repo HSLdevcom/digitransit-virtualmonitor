@@ -37,11 +37,11 @@ const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps & Wit
               {(setViewCarouselElementDisplaySeconds) =>
                 (<>
                   <input id="number" type="number" min="3" defaultValue="3" onChange={e => setViewCarouselElementDisplaySeconds({
-                    variables: {
-                      displaySeconds: e.target.value,
-                      viewCarouselElementId: viewCarouselElement.id,
-                    }
-                  })} />
+                        variables: {
+                          displaySeconds: e.target.value,
+                          viewCarouselElementId: viewCarouselElement.id,
+                        }
+                      })} />
                   &nbsp;{t('seconds')}.
                   {viewCarouselElement.displaySeconds === 0
                     ? (<span><b>{t('viewCarouselElementEditorViewDisabled')}</b></span>)
@@ -50,7 +50,6 @@ const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps & Wit
                 </>)
               }
             </Mutation>
-
             <Mutation
               mutation={removeViewCarouselElementMutation}
               client={virtualMonitor}

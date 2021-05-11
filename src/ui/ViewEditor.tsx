@@ -17,6 +17,13 @@ const setViewTitleMutation = gql`
   }
 `;
 
+
+const setAmountOfRoutesShown = gql`
+  mutation setAmountOfRoutesShown($viewId: ID!, $displayedRoutes: Int!) {
+    setAmountOfRoutesShown(viewId: $viewId, displayedRoutes: $displayedRoutes) @client
+  }
+`;
+
 const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps & WithTranslation) => {
   const viewWrapper = (innerView: React.ReactNode) => (
     <>
@@ -39,6 +46,27 @@ const ViewEditor: React.SFC<IViewEditorProps> = ({ t, view }: IViewEditorProps &
                 }
                 />
               )}
+            </Mutation>
+            <Mutation mutation={setAmountOfRoutesShown} client={virtualMonitor}>
+              {(setAmountOfRoutesShown) =>
+                <>
+                  <div>
+                  <label htmlFor={'displayedRoutesInput'}>
+                  {t('stopSearcherDisplayedResultCount')}:&nbsp;
+                  </label>
+                  <input
+                    id={'displayedRoutesInput'}
+                    type={'number'}
+                    name={'searchPhrase'}
+                    min="1" defaultValue="7"
+                    onChange={e => setAmountOfRoutesShown({variables: {displayedRoutes: e.target.value, viewId: view.id}})}
+                    max={999}
+                    maxLength={3}
+                    style={{ width: '3em' }}
+                  />
+                </div>
+              </>
+              }
             </Mutation>
           </div>
         )}

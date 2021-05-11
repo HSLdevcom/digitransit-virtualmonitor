@@ -37,6 +37,7 @@ class VirtualMonitorLocalState {
               view: {
                 __typename: 'StopTimesView', // This doesn't seem to work for some reason.
                 id: uuidv4(),
+                displayedRoutes: 7,
                 stops: [],
                 title: {
                   __typename: 'TranslatedString',
@@ -233,6 +234,7 @@ class VirtualMonitorLocalState {
       __typename: 'ViewWithDisplaySeconds',
       displaySeconds: 2,
       view: {
+        displayedRoutes: 7,
         __typename: 'StopTimesView',
         stops: [],
         title: {
@@ -298,6 +300,31 @@ class VirtualMonitorLocalState {
                     (stop.overrideStopName as string | undefined) = overrideStopName ? overrideStopName : undefined;
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    );
+  }
+
+  @mutation('setAmountOfRoutesShown')
+  public setAmountOfRoutesShown({viewId, displayedRoutes} : {viewId: string, displayedRoutes: number} , context: Context){
+    context.patchQuery(
+      gql`
+        ${ConfigurationFieldsFragment}
+        {
+          localConfigurations @client {
+            ...configurationFields
+          }
+        }
+      `,
+      (data) => {
+        for (const conf of (data.localConfigurations as ReadonlyArray<IConfiguration>)) {
+          for (const display of conf.displays) {
+            for (const viewCarouselElement of display.viewCarousel) {
+              if (viewCarouselElement.view.id === viewId) {
+                (viewCarouselElement.view.displayedRoutes as number) = displayedRoutes;
               }
             }
           }

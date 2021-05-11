@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Route, Switch } from 'react-router-dom';
-import StopSelector from 'src/ui/StopSelector';
+import StopSelector from './StopSelector';
 
 const StopSelectorSwitch = () => (
   <Switch>

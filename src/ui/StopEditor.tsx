@@ -4,9 +4,9 @@ import { Mutation } from 'react-apollo';
 import { WithTranslation, withTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
 
-import { IStop } from 'src/ui/ConfigurationList';
-import { IStopInfo } from 'src/ui/StopInfoRetriever';
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+import { IStop } from './ConfigurationList';
+import { IStopInfo } from './StopInfoRetriever';
+import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
 interface IStopEditorProps {
   stop: IStop,

@@ -1,23 +1,23 @@
 import * as React from 'react';
 import { WithTranslation, withTranslation } from "react-i18next";
 
-import { IMonitorConfig } from 'src/App';
-import { IStop as LocalIStop } from 'src/ui/ConfigurationList';
-import Logo from 'src/ui/logo/Logo';
-import StopName from 'src/ui/StopName';
-import StopTimesList from 'src/ui/StopTimesList';
+import { IMonitorConfig } from '../../App';
+import { IStop as LocalIStop } from '../ConfigurationList';
+import Logo from '../logo/Logo';
+import StopName from '../StopName';
+import StopTimesList from '../StopTimesList';
 import {
   default as StopTimesRetriever,
   IStop,
   IStopTime,
   StopId,
   StopTimesRetrieverQueryResult,
-} from 'src/ui/StopTimesRetriever';
-import Titlebar from 'src/ui/Titlebar';
-import TitlebarTime from 'src/ui/TitlebarTime';
-import {getConfig} from 'src/getConfig';
+} from '../StopTimesRetriever';
+import Titlebar from '../Titlebar';
+import TitlebarTime from '../TitlebarTime';
+import {getConfig} from '../../getConfig';
 
-import 'src/ui/Views/StopTimesView.css';
+import './StopTimesView.css';
 
 const duplicateRouteTimeThresholdSeconds = 15 * 60;
 

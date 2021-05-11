@@ -1,6 +1,6 @@
 import ApolloBoostClient, { InMemoryCache } from 'apollo-boost';
 
-import ApolloClientsContextCreator from 'src/ApolloClientsContextCreator';
+import ApolloClientsContextCreator from './ApolloClientsContextCreator';
 
 const apolloCache = new InMemoryCache();
 

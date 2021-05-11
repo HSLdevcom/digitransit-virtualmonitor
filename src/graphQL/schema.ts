@@ -1,9 +1,9 @@
 import { GraphQLID, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql";
-import initialConfigurations from 'src/configPlayground';
-import SConfiguration, { defaultValue as defaultConfiguration, SConfigurationInput } from "src/graphQL/SConfiguration";
-import SNode from 'src/graphQL/SNode';
-import SStopTimesView from 'src/graphQL/SStopTimesView';
-import { IConfiguration, IDisplay, IViewBase } from 'src/ui/ConfigurationList';
+import initialConfigurations from '../configPlayground';
+import SConfiguration, { defaultValue as defaultConfiguration, SConfigurationInput } from "./SConfiguration";
+import SNode from './SNode';
+import SStopTimesView from './SStopTimesView';
+import { IConfiguration, IDisplay, IViewBase } from '../ui/ConfigurationList';
 
 
 export type OptionalId<T> = T & {

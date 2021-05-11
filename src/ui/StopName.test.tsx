@@ -2,7 +2,7 @@ import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils'
 import { create } from 'react-test-renderer';
 
-import StopName, { IStopInfoProps, STOP_INFO_QUERY } from 'src/ui/StopName';
+import StopName, { IStopInfoProps, STOP_INFO_QUERY } from './StopName';
 
 const delay = (milliSeconds = 0) => new Promise(resolve => setTimeout(resolve, milliSeconds));
 

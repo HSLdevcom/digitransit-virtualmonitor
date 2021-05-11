@@ -2,7 +2,7 @@ import * as React from 'react';
 import { MockedProvider } from 'react-apollo/test-utils'
 import { create } from 'react-test-renderer';
 
-import ConfigurationList, { IConfigurationListProps, IConfigurations } from 'src/ui/ConfigurationList';
+import ConfigurationList, { IConfigurationListProps, IConfigurations } from '../ui/ConfigurationList';
 
 const testConfigs: IConfigurations = [
   {

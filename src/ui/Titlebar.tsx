@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import 'src/ui/Titlebar.css';
+import './Titlebar.css';
 
 export interface ITitlebarProps {
   readonly children: React.ReactNode;

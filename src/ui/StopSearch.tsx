@@ -2,8 +2,8 @@ import * as React from "react";
 import { QueryResult } from 'react-apollo';
 import { WithTranslation, withTranslation } from "react-i18next";
 
-import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse, IStopWithName } from "src/ui/StopsByNameRetriever";
-import 'src/ui/StopSearch.css';
+import StopsByNameRetriever, { IStopsByNameQuery, IStopsByNameResponse, IStopWithName } from "./StopsByNameRetriever";
+import './StopSearch.css';
 
 type IProps = {
   readonly children?: (stops: ReadonlyArray<IStopWithName>) => React.ReactNode,

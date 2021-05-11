@@ -5,13 +5,13 @@ import { WithTranslation, withTranslation } from "react-i18next";
 import Async from 'react-promise';
 import { Link } from "react-router-dom";
 
-import { IConfiguration, IDisplay } from "src/ui/ConfigurationList";
-import { pairs } from 'src/ui/DisplayUrlCompression';
-import LatLonEditor from "src/ui/LatLonEditor";
-import ViewCarouselElementEditor from 'src/ui/ViewCarouselElementEditor';
-import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
+import { IConfiguration, IDisplay } from "./ConfigurationList";
+import { pairs } from './DisplayUrlCompression';
+import LatLonEditor from "./LatLonEditor";
+import ViewCarouselElementEditor from './ViewCarouselElementEditor';
+import { ApolloClientsContext } from "../VirtualMonitorApolloClients";
 
-import 'src/ui/DisplayEditor.css';
+import './DisplayEditor.css';
 
 interface IDisplayEditorProps {
   readonly configuration?: IConfiguration,

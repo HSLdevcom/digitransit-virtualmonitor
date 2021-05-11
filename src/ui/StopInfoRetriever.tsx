@@ -2,8 +2,8 @@ import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryProps } from "react-apollo";
 
-import { StopId } from 'src/ui/StopTimesRetriever';
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+import { StopId } from './StopTimesRetriever';
+import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
 const STOP_INFO_QUERY = gql`
   query GetStopInfos($stopIds: [String]) {

@@ -4,9 +4,9 @@ import { WithTranslation, withTranslation } from "react-i18next";
 import {
   formatTime,
   parseDaySeconds,
-} from 'src/time';
-import StopName from 'src/ui/StopName';
-import { IStopTime } from 'src/ui/StopTimesRetriever';
+} from '../time';
+import StopName from './StopName';
+import { IStopTime } from './StopTimesRetriever';
 
 interface IOverrideStopName {
   readonly stop?: {

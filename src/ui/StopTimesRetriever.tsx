@@ -6,8 +6,8 @@ import {
   DaySeconds,
   EpochSecondsLocal,
   Seconds
-} from "src/time";
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+} from "../time";
+import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
 const usedStopTimeField = 'realtimeDeparture';
 

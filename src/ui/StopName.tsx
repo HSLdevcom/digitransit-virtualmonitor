@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 import * as React from "react";
 import { Query, QueryResult } from "react-apollo";
 import { WithTranslation, withTranslation } from "react-i18next";
-import { ApolloClientsContext } from 'src/VirtualMonitorApolloClients';
+import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
 export const STOP_INFO_QUERY = gql`
 query GetStop($stopId: String!) {

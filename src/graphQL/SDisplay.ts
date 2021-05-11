@@ -1,9 +1,9 @@
 import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
 
-import SNode, { SNodeFields, SNodeInputFields } from 'src/graphQL/SNode';
-import SPosition, { SPositionInput } from "src/graphQL/SPosition";
+import SNode, { SNodeFields, SNodeInputFields } from './SNode';
+import SPosition, { SPositionInput } from "./SPosition";
 // import STranslatedString from "src/graphQL/STranslatedString";
-import SView from 'src/graphQL/SView';
+import SView from './SView';
 
 const SViewWithDisplaySeconds = new GraphQLObjectType({
   fields: {

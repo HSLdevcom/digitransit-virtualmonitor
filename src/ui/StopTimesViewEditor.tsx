@@ -4,13 +4,13 @@ import { Mutation, QueryResult } from "react-apollo";
 import { WithTranslation, withTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
-import { virtualMonitorClient } from 'src/graphQL/virtualMonitorClient';
-import { IConfiguration, IStopTimesView } from "src/ui/ConfigurationList";
-import StopEditor from 'src/ui/StopEditor';
-import StopInfoRetriver, { IStopInfoResponse } from 'src/ui/StopInfoRetriever';
-import { IStopWithName as StopsByNameRetrieverIStop } from "src/ui/StopsByNameRetriever";
-import StopSearch from 'src/ui/StopSearch';
-import { ApolloClientsContext } from "src/VirtualMonitorApolloClients";
+import { virtualMonitorClient } from '../graphQL/virtualMonitorClient';
+import { IConfiguration, IStopTimesView } from "./ConfigurationList";
+import StopEditor from './StopEditor';
+import StopInfoRetriver, { IStopInfoResponse } from './StopInfoRetriever';
+import { IStopWithName as StopsByNameRetrieverIStop } from "./StopsByNameRetriever";
+import StopSearch from './StopSearch';
+import { ApolloClientsContext } from "../VirtualMonitorApolloClients";
 
 type IViewEditorProps = {
   readonly configuration?: IConfiguration,

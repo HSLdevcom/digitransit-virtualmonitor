@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { Seconds } from 'src/time';
-import { IViewBase, IViewCarousel, IViewCarouselElement } from 'src/ui/ConfigurationList';
-import View from 'src/ui/Views/View';
+import { Seconds } from '../time';
+import { IViewBase, IViewCarousel, IViewCarouselElement } from './ConfigurationList';
+import View from './Views/View';
 
 interface IProps {
   readonly viewCarousel: IViewCarousel,

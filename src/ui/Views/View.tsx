@@ -1,8 +1,8 @@
 import * as React from "react";
 import { WithTranslation, withTranslation } from "react-i18next";
 
-import { IStopTimesView, IViewBase } from 'src/ui/ConfigurationList';
-import StopTimesView from 'src/ui/Views/StopTimesView';
+import { IStopTimesView, IViewBase } from '../ConfigurationList';
+import StopTimesView from './StopTimesView';
 
 export interface IViewProps {
   view: IStopTimesView,

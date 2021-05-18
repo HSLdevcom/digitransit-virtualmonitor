@@ -14,6 +14,8 @@
 
 .StopTimesList th,td {
   padding: 0.2em;
+  padding-right: 0.4em;
+  padding-left: 0;
 }
 
 .StopTimesListTitles {
@@ -23,6 +25,7 @@
 
 .StopTimesList th:last-child,td:last-child {
   text-align: end;
+  padding: 0;
 }
 
 .StopTimesList thead th {
@@ -63,10 +66,10 @@
   font-size: 2.3vw;
 }
 .StopTimesList tr.two-rows {
-  font-size: 2.6vw;
+  font-size: 2.55vw;
 }
 .StopTimesList tr.one-row {
-  font-size: 3.2vw;
+  font-size: 2.55vw;
 }
 .StopTimesList tr.canceled td.time {
   text-decoration: line-through;

@@ -27,7 +27,7 @@ interface IStopTimesListHeadersProps {
   readonly showStopColumn?: boolean,
 };
 
-const StopTimesListHeaders = ({ pierColumnTitle, showPier, t, showStopColumn }: IStopTimesListHeadersProps & WithTranslation) => (
+const StopTimesListHeaders = ({ pierColumnTitle, showPier, showStopColumn, t }: IStopTimesListHeadersProps & WithTranslation) => (
   <thead>
     <tr>
       <th className={'lineId'}>{t('lineId')}</th>
@@ -36,8 +36,8 @@ const StopTimesListHeaders = ({ pierColumnTitle, showPier, t, showStopColumn }: 
         ? (<th className={'pier'}>{pierColumnTitle ? pierColumnTitle : t('pier')}</th>)
         : null
       }
-     {showStopColumn 
-       ? <th className={'destination'}>Pysäkki</th> 
+     {showStopColumn
+       ? <th className={'destination'}>Pysäkki</th>
        : null}
       <th className={'departureTime'}>{t('departureTime')}</th>
     </tr>
@@ -45,7 +45,7 @@ const StopTimesListHeaders = ({ pierColumnTitle, showPier, t, showStopColumn }: 
 );
 const StopTimesListHeadersTranslated = withTranslation('translations')(StopTimesListHeaders);
 
-const StopTimeRow = ({ stoptime, showPier, t, showStopColumn, stopTimesRowsLen } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, stopTimesRowsLen?: number } & WithTranslation) => {
+const StopTimeRow = ({ stoptime, showPier, showStopColumn, stopTimesRowsLen, t } : { stoptime: IStopTime & IOverrideStopName, showPier?: boolean, showStopColumn?: boolean, stopTimesRowsLen?: number } & WithTranslation) => {
   const isCanceled = stoptime.realtimeState === 'CANCELED';
 
   // If the Vehicle is arriving to its' destination, its headsign is null, or headsign is stop's name.
@@ -59,7 +59,15 @@ const StopTimeRow = ({ stoptime, showPier, t, showStopColumn, stopTimesRowsLen }
      }
     }
 
-  const destination = isLastStopTerminal ? t('arriveTerminal') : stoptime.headsign;
+  const headsign = stoptime.headsign;
+  const noEmptyVia = headsign && headsign.endsWith(' via') ? headsign.substring(0, headsign.indexOf(' via')) : headsign;
+
+  const splitDestination = noEmptyVia && noEmptyVia.includes(' via');
+  const splittedDestination = splitDestination ? noEmptyVia.substring(0, noEmptyVia.indexOf(' via')) : noEmptyVia;
+  const viaDestination = splitDestination ? noEmptyVia.substring(noEmptyVia.indexOf(' via') + 1) : undefined;
+
+  const destination = isLastStopTerminal ? t('arriveTerminal') : splittedDestination;
+
   let className = isCanceled ? 'canceled ' : '';
   if(stopTimesRowsLen) {
     switch ( stopTimesRowsLen ) {
@@ -96,11 +104,19 @@ const StopTimeRow = ({ stoptime, showPier, t, showStopColumn, stopTimesRowsLen }
         {stoptime.trip.route.shortName}
       </td>
       <td
-        className={'destination'}
+        className={viaDestination && stopTimesRowsLen > 4 ? 'destination' : 'destination-two-rows'}
       >
         {isCanceled
           ? t('canceled')
           : destination
+        }
+        {viaDestination && stopTimesRowsLen <= 4
+          ? <span>{viaDestination}</span>
+          : null
+        }
+        {viaDestination && stopTimesRowsLen > 4
+          ? <span>{' '}{viaDestination}</span>
+          : null
         }
       </td>
       {showPier
@@ -138,7 +154,11 @@ const StopTimesList = ({ pierColumnTitle, showPier, stoptimesWithoutPatterns, t,
         (stopTime.stop !== undefined) &&
         (((stopTime.stop.overrideStopName !== undefined) && (stopTime.stop.overrideStopName !== null) && (stopTime.stop.overrideStopName !== '')) || ((stopTime.stop.platformCode !== undefined) && (stopTime.stop.platformCode !== null) && (stopTime.stop.platformCode !== '')))
       ));
-  const stopTimesRowsLen = stoptimesWithoutPatterns.length
+  let stopTimesRowsLen = stoptimesWithoutPatterns.length;
+  // if via-word founds from one of destination then shrink text
+  if (stoptimesWithoutPatterns.some(s => s.headsign.includes(' via'))) {
+    stopTimesRowsLen += 1;
+  }
   return (
     <table className={'StopTimesList'}>
       <StopTimesListHeadersTranslated

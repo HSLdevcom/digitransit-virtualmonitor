@@ -18,6 +18,19 @@
   padding-left: 0;
 }
 
+.StopTimesList .destination span, .StopTimesList .destination-two-rows span {
+  font-size: 0.7em;
+}
+
+.StopTimesList .destination-two-rows span::before {
+  content: "\A";
+  white-space: pre;
+}
+
+.StopTimesList .destination-two-rows {
+  line-height: 0.8;
+}
+
 .StopTimesListTitles {
   font-weight: bold;
   font-size: 2.25em;

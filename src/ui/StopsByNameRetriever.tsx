@@ -9,6 +9,7 @@ export const STOPS_BY_NAME_QUERY = gql`
 		stops(name: $phrase) {
       name,
       gtfsId,
+      code,
 		}
 	}
 `;
@@ -16,6 +17,7 @@ export const STOPS_BY_NAME_QUERY = gql`
 export interface IStopWithName {
   readonly name: string,
   readonly gtfsId: string,
+  readonly code: string,
 };
 
 export interface IStopsByNameResponse {

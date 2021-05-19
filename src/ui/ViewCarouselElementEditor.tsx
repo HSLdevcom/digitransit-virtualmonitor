@@ -25,6 +25,7 @@ const removeViewCarouselElementMutation = gql`
 
 const ViewCarouselElementEditor: React.SFC<IViewCarouselElementEditorProps & WithTranslation> = ({ t, viewCarouselElement }) => (
   <>
+    <hr/>
     <div>
       {t('viewCarouselElementEditorShownTime')}:&#32;
       <ApolloClientsContext.Consumer>

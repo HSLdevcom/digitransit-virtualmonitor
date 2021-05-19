@@ -26,7 +26,7 @@ StopList.defaultProps = {
     <Link
       to={`/stop/${stop.gtfsId}`}
     >
-    {stop.name} - {stop.gtfsId}
+    {stop.name} - {stop.gtfsId} {stop.code ? `(${stop.code})`: ''}
     </Link>
   ),
 };

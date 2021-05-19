@@ -92,7 +92,7 @@ class StopSearch extends React.Component<IProps, IState> {
                       <ul>
                         {result.data.stops.map((stop) => (
                           <li key={stop.gtfsId}>
-                            {stop.name} - {stop.gtfsId}
+                            {stop.name} - {stop.gtfsId} {stop.code ? `(${stop.code})`: ''}
                           </li>
                         ))}
                       </ul>

@@ -75,11 +75,14 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & WithTranslation> = ({config
         </li>
       ))}
     </ul>
+
+    <hr/>
+    <hr/>
     <Async
       promise={pairs.v0.pack(display)}
       then={(packedUrl: string) => (
         <Link to={`/urld/v0/${encodeURIComponent(packedUrl)}`}>
-          {t('displayEditorStaticLink')}
+          <button>{t('displayEditorStaticLink')}</button>
         </Link>
       )}
     />

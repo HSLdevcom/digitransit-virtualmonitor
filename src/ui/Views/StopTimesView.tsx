@@ -84,7 +84,7 @@ const duplicatePruneMethods: {
     return stopsTimes
       .reduce(
         (acc: IStopTime[], curr: IStopTime) => {
-          const foundDuplicate = acc.find(stopTime => (stopTime.trip && curr.trip && stopTime.trip.gtfsId === curr.trip.gtfsId));
+          const foundDuplicate = acc.find(stopTime => (stopTime.trip && curr.trip && stopTime.stop.gtfsId === curr.stop.gtfsId && stopTime.trip.gtfsId === curr.trip.gtfsId));
           if (foundDuplicate) {
             // Found a duplicate.
             if (foundDuplicate.usedTime - curr.usedTime >= duplicateRouteTimeThresholdSeconds) {

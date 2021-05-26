@@ -189,7 +189,7 @@ class QuickDisplay extends React.Component<IQuickDisplayProps & { virtualMonitor
             });
           }
         }
-      ).bind(this)
+      )
     );
   }
 }

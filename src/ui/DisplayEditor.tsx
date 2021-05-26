@@ -11,7 +11,7 @@ import LatLonEditor from "./LatLonEditor";
 import ViewCarouselElementEditor from './ViewCarouselElementEditor';
 import { ApolloClientsContext } from "../VirtualMonitorApolloClients";
 
-import './DisplayEditor.css';
+import './DisplayEditor.scss';
 
 interface IDisplayEditorProps {
   readonly configuration?: IConfiguration,
@@ -68,6 +68,7 @@ const DisplayEditor: React.SFC<IDisplayEditorProps & WithTranslation> = ({config
       {display.viewCarousel.map(viewCarouselElement => (
         <li
           key={viewCarouselElement.view.id}
+          className="ViewCarouselElementEditor"
         >
           <ViewCarouselElementEditor
             viewCarouselElement={viewCarouselElement}

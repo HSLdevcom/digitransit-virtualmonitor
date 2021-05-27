@@ -1,0 +1,40 @@
+.stop-row-container {
+  font-family: 'Roboto';
+  display: flex;
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  height: 40px;
+  margin: 10px 0;
+  padding: 10px 0;
+  .stop-row-icon {
+    width: 60px;
+  }
+  .stop-row-main {
+    flex: 1;
+    .stop-upper-row {
+      font-size: 0.9375rem;
+      margin-bottom: 2px;
+    }
+    .stop-bottom-row {
+      color: #666;
+      font-size: 0.8125rem;
+      .address {
+        padding-right: 5px;
+      }
+    }
+  }
+  .stop-row-delete {
+    border-left: 1px solid #ddd;
+    width: 50px;
+  }
+  .stop-row-drag {
+    cursor: move;
+    border-left: 1px solid #ddd;
+    width: 40px;
+  }
+  .stop-bottom-row {
+    display: flex;
+  }
+}

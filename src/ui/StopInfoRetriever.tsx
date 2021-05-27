@@ -23,20 +23,20 @@ export interface IStopInfo {
   desc?: string,
   gtfsId: StopId,
   platformCode: string,
-};
+}
 
 export interface IStopInfoResponse {
   readonly stopInfos: ReadonlyArray<IStopInfo>
-};
+}
 
 interface IStopInfoVariables {
   readonly stopIds: ReadonlyArray<StopId>,
-};
+}
 
 interface IStopInfoRetrieverProps {
   readonly children: QueryProps<IStopInfoResponse, IStopInfoVariables>['children'],
   readonly stops: ReadonlyArray<StopId>,
-};
+}
 
 class StopInfoQuery extends Query<IStopInfoResponse, IStopInfoVariables> {}
 const StopInfoRetriver = ({ children, stops }: IStopInfoRetrieverProps) => (

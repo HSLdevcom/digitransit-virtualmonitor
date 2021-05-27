@@ -82,13 +82,13 @@ export interface IStopTime {
       readonly shortName: string,
     },
   },
-};
+}
 
 export interface IStop {
   readonly name: string,
   readonly gtfsId: string,
   readonly stoptimesWithoutPatterns?: ReadonlyArray<IStopTime>
-};
+}
 
 export interface IStopTimesResponse {
   readonly stops: ReadonlyArray<IStop>
@@ -99,7 +99,7 @@ export type StopId = string
 export interface IStopTimesQuery {
   readonly stopIds: ReadonlyArray<StopId>,
   readonly numberOfDepartures: number,
-};
+}
 
 export type StopTimesRetrieverQueryResult = QueryResult<IStopTimesResponse, IStopTimesQuery>;
 
@@ -108,7 +108,7 @@ class StopTimesQuery extends Query<IStopTimesResponse, IStopTimesQuery> {}
 export interface IStopTimesRetrieverProps {
   readonly children: QueryProps['children'],
   readonly stopIds: ReadonlyArray<StopId>,
-};
+}
 
 const StopTimesRetriever: React.StatelessComponent<IStopTimesRetrieverProps> = (props: IStopTimesRetrieverProps) => (
   <ApolloClientsContext.Consumer>

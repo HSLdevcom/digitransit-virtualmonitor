@@ -16,7 +16,7 @@ type IProps = RouteComponentProps<{
 interface IState {
   readonly displayedRoutes: number,
   readonly searchPhrase: string,
-};
+}
 
 class StopSelector extends React.Component<IProps, IState> {
   constructor (props: IProps) {
@@ -117,7 +117,7 @@ class StopSelector extends React.Component<IProps, IState> {
         }
       </div>
     );
-  };
+  }
 
   protected stopRenderer: IStopRenderFunc = (stop) => (
     <Link

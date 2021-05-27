@@ -14,7 +14,7 @@ interface IData {
   configurations: ReadonlyArray<IConfiguration>,
   displays: ReadonlyArray<IDisplay>,
   views: ReadonlyArray<IViewBase>,
-};
+}
 
 let current: IData = (() => {
   const configurations = initialConfigurations;

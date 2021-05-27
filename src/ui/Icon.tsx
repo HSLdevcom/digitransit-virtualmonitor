@@ -20,8 +20,8 @@ const IconMap = ( style: IIconMapProps) => {
     const {color, height, width, fill, rotate } = style;
     return {
         edit: <svg width={width ? width : "24"} height={ height ? height :"24"} color={color} rotate={rotate} viewBox="0 0 24 24" fill={fill ? fill :"none"} xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M10.2893 17.5714L6.42729 13.7059L5 19L10.2893 17.5714Z" fill={fill ? fill : "#007AC9"} />
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M16.603 5.40339C16.3343 5.13452 15.9649 5.00006 15.6123 5.00006C15.2597 5.00006 14.8902 5.13452 14.6216 5.40339L7.36761 12.6639L11.3304 16.6303L18.5844 9.36977C19.1385 8.81518 19.1385 7.94124 18.5844 7.3866L16.603 5.40339Z" fill={fill ? fill : "#007AC9"}/>
+            <path fillRule="evenodd" clipRule="evenodd" d="M10.2893 17.5714L6.42729 13.7059L5 19L10.2893 17.5714Z" fill={fill ? fill : "#007AC9"} />
+            <path fillRule="evenodd" clipRule="evenodd" d="M16.603 5.40339C16.3343 5.13452 15.9649 5.00006 15.6123 5.00006C15.2597 5.00006 14.8902 5.13452 14.6216 5.40339L7.36761 12.6639L11.3304 16.6303L18.5844 9.36977C19.1385 8.81518 19.1385 7.94124 18.5844 7.3866L16.603 5.40339Z" fill={fill ? fill : "#007AC9"}/>
         </svg>,
 
     }

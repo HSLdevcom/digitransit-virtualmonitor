@@ -8,7 +8,7 @@ import TitlebarTime from './TitlebarTime';
 export interface IVirtualMonitorProps {
   readonly children?: React.ReactNode,
   readonly title?: React.ReactNode,
-};
+}
 
 const VirtualMonitor = (props: IVirtualMonitorProps) => (
   <div style={{ color: 'white', display: 'flex', flexDirection:'column' }}>

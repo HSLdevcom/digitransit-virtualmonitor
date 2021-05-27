@@ -4,11 +4,11 @@ import NtpSyncContext from './NtpSyncContext';
 
 interface INtpSyncComponent {
   children: React.ReactChild,
-};
+}
 
 interface INtpSyncComponentState {
   deltaMilliseconds: number,
-};
+}
 
 class NtpSyncComponent extends React.Component<INtpSyncComponent, INtpSyncComponentState> {
   constructor (props: INtpSyncComponent) {
@@ -27,7 +27,7 @@ class NtpSyncComponent extends React.Component<INtpSyncComponent, INtpSyncCompon
         {this.props.children}
       </NtpSyncContext.Provider>
     );
-  };
+  }
 
   protected retrieveTimeDelta = async () => {
     try {

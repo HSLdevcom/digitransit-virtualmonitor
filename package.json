@@ -46,8 +46,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "npm-run-all lint-ts lint-scss",
-    "lint-ts": "eslint ./src/**/*{ts,tsx,js} --fix",
-    "lint-scss": "stylelint src/**/*.{scss,sass} --fix"
+    "lint-ts": "eslint ./src/**/*{ts,tsx,js} --fix --quiet",
+    "lint-scss": "stylelint src/**/*.{scss,sass} --fix --quiet"
   },
   "devDependencies": {
     "@types/history": "^4.7.8",
@@ -67,7 +67,9 @@
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "ts-node": "^7.0.1",
-    "typescript": "^3.9.9"
+    "typescript": "^3.9.9",
+    "eslint-plugin-prettier": "3.1.4",
+    "eslint-config-prettier": "6.11.0"
   },
   "jest": {
     "moduleNameMapper": {

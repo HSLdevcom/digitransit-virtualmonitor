@@ -69,7 +69,7 @@ query getConfigurations($ids: [String], $name: String) {
 interface IConfigurationResponse {
   readonly configurations: ReadonlyArray<IConfiguration>
   readonly localConfigurations: ReadonlyArray<IConfiguration>,
-};
+}
 
 export type ConfigurationRetrieverResult = QueryResult<IConfigurationResponse>;
 
@@ -84,15 +84,15 @@ class ConfigurationQuery extends Query<IConfigurationResponse, IConfigurationQue
 // Props can be without both or with either ids or name. When no params given, retrieves all configurations.
 interface IConfigurationRetrieverCommonProps {
   readonly children: QueryProps['children'],
-};
+}
 
 interface IConfigurationRetrieverPropsWithId extends IConfigurationRetrieverCommonProps {
   readonly ids: ReadonlyArray<string>,
-};
+}
 
 interface IConfigurationRetrieverPropsWithName extends IConfigurationRetrieverCommonProps{
   readonly name: string,
-};
+}
 
 const ConfigurationRetriever: React.SFC<IConfigurationRetrieverCommonProps | IConfigurationRetrieverPropsWithId | IConfigurationRetrieverPropsWithName> = (props: IConfigurationRetrieverCommonProps | IConfigurationRetrieverPropsWithId | IConfigurationRetrieverPropsWithName) => {
   const ids = (props as IConfigurationRetrieverPropsWithId).ids;

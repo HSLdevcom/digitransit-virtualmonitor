@@ -8,7 +8,7 @@ import createUrlCompression from '../urlCompression';
 interface IDisplayUrlCompressionProps {
   readonly version: string,
   readonly packedString: string,
-};
+}
 
 const AsyncInflater = <T extends {}>({ children, promise }: { children: (unpacked: T) => React.ReactNode, promise: AsyncProps<T>['promise'] }) => (
   <Async
@@ -45,7 +45,7 @@ type IPairWithRenderer = IPair & {
 
 interface IPairsWithRenderers {
   [version: string]: IPairWithRenderer,
-};
+}
 
 export const pairs: IPairsWithRenderers = Object.entries(renderers).reduce(
   (acc, [version, renderer]) => ({

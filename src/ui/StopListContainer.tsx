@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import StopRow from './StopRow';
 import { ReactSortable } from 'react-sortablejs';
+import { IStopInfo } from './StopInfoRetriever';
 
 const stops = [
   {
@@ -42,8 +43,14 @@ interface IStopListContainer {
 const StopListContainer : FC<IStopListContainer> = (props) => {
   const [stopList, setStopList] = useState(stops);
 
+  const onDeleteStop = (stop: IStopInfo) => {
+    setStopList(stopList.filter(s => {
+      s.gtfsId === stop.gtfsId;
+    }))
+  }
+
   const stopElements =  stopList.map(stop => {
-    return <StopRow stop={stop}/>
+    return <StopRow stop={stop} onDelete={onDeleteStop(stop)}/>
   })
   return (
     <ReactSortable 

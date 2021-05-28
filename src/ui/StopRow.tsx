@@ -2,7 +2,7 @@ import * as React from "react";
 import StopCode from './StopCode';
 import './StopRow.scss';
 
-const StopRow = ({stop}) => {
+const StopRow = ({stop, onDelete}) => {
   return (
     <div className='stop-row-container'>
       <div className='stop-row-icon'></div>
@@ -13,7 +13,7 @@ const StopRow = ({stop}) => {
           <StopCode code={stop.code}/>
         </div>
       </div>
-      <div className='stop-row-delete'></div>
+      <div className='stop-row-delete' onClick={() => onDelete(stop.gtfsId)}></div>
       <div className='stop-row-drag'></div>
     </div>
   );

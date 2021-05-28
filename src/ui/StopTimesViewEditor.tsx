@@ -54,7 +54,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
         </h2>
         { view.stops.length > 0
           ? (
-          <><StopInfoRetriver
+          <StopInfoRetriver
             stops={view.stops.map(stop => stop.gtfsId)}
             >
             {(result: QueryResult<IStopInfoResponse>): React.ReactNode => {
@@ -148,9 +148,7 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
                 </>
               );
             }}
-          </StopInfoRetriver>
-          <StopListContainer stops={view.stops.map(stop => stop.gtfsId)}/>
-          </>)
+          </StopInfoRetriver>)
           : null
         }
         <Mutation

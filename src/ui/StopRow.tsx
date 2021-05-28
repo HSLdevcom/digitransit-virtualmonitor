@@ -36,5 +36,3 @@ const StopRow : FC<IProps & WithTranslation> = ({stop, onDelete, t}) => {
 }
 
 export default withTranslation('translations')(StopRow);
-
-

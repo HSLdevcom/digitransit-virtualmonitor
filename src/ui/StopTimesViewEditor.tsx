@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { virtualMonitorClient } from '../graphQL/virtualMonitorClient';
 import { IConfiguration, IStopTimesView } from "./ConfigurationList";
 import StopEditor from './StopEditor';
-import StopListContainer from './StopListContainer';
 import StopInfoRetriver, { IStopInfoResponse } from './StopInfoRetriever';
 import { IStopWithName as StopsByNameRetrieverIStop } from "./StopsByNameRetriever";
 import StopSearch from './StopSearch';
@@ -53,10 +52,9 @@ const StopTimesViewEditor = ({configuration, view, t}: IViewEditorProps) => (
           }
         </h2>
         { view.stops.length > 0
-          ? (
-          <StopInfoRetriver
+          ? (<StopInfoRetriver
             stops={view.stops.map(stop => stop.gtfsId)}
-            >
+          >
             {(result: QueryResult<IStopInfoResponse>): React.ReactNode => {
               return (
                 <>

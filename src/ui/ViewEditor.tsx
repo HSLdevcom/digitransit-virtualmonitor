@@ -9,7 +9,7 @@ import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
 export interface IViewEditorProps {
   readonly view: IViewBase,
-};
+}
 
 const setViewTitleMutation = gql`
   mutation setViewTitle($viewId: ID!, $title: String!) {

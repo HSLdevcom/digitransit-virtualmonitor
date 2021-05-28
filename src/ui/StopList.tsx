@@ -8,7 +8,7 @@ export type IStopRenderFunc = (stop: IStopWithName) => JSX.Element;
 export interface IProps {
   readonly stops: ReadonlyArray<IStopWithName>,
   readonly stopRenderer?: IStopRenderFunc,
-};
+}
 
 const StopList: React.StatelessComponent<IProps> =
   ({ stops, stopRenderer }: Required<IProps>) => (

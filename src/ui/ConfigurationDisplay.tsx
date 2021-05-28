@@ -8,7 +8,7 @@ export interface IConfigurationDisplayProps {
   readonly title?: string,
   readonly configurationName: string,
   readonly displayName: string,
-};
+}
 
 const ConfigurationDisplay = ({ configurationName, displayName, t }: IConfigurationDisplayProps & WithTranslation) => {
   return (

@@ -26,8 +26,11 @@ i18n
           departureTime: 'Time',
           destination: 'Destination',
           lineId: 'Line',
+          stopsText: 'Stops',
           viewErrorUnknownView: 'Unknown view with title \'{{viewTitle}}\' of type {{viewType}}',
-        },
+          stoptitle: 'Title of stop view',
+
+},
       },
       fi: {
         translations: {
@@ -54,6 +57,7 @@ i18n
           quickDisplayCreate: 'Luo uusi näyttö',
           seconds: 'sekuntia',
           stop: 'Pysäkki {{stop}}',
+          stopsText: 'Pysäkki',
           stopCode: 'pysäkkinumero',
           stopName: 'Pysäkin nimi',
           stopRetrieveError: 'Virhe haettaessa pysäkkiä {{stopId}}',
@@ -67,6 +71,7 @@ i18n
           stopSearcherSearch: 'Etsi',
           stopSearcherSearching: 'Etsitään hakusanalla {{searchPhrase}}',
           stops: 'Pysäkit',
+          stoptitle: 'Pysäkkinäkymän nimi',
           titlebarTitle: 'Virtuaalimonitori',
           viewCarouselElementEditorDeleteView: 'Poista näkymä',
           viewCarouselElementEditorShownTime: 'Näytetty aika',
@@ -81,6 +86,10 @@ i18n
           viewErrorUnknownView: 'Tuntematon näkymä \'{{viewTitle}}\' tyypillä {{viewType}}',
         },
       },
+      sv: {
+        stoptitle: 'TODO',
+        stopsText: 'Hållplats'
+      }
     },
   });
 

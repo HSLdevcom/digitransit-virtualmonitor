@@ -37,14 +37,14 @@ const addQuickDisplay = gql`
 interface ICompressedDisplayRouteParams {
   version: string,
   packedDisplay: string
-};
+}
 
 type IQuickDisplayProps = RouteComponentProps<ICompressedDisplayRouteParams>;
 
 interface IQuickDisplayState {
   displayId?: string,
   unpackedDisplayUrl?: IDisplay,
-};
+}
 
 // tslint:disable-next-line
 class DisplayQuery extends Query<{ display: IDisplay }, { id: string }> {}
@@ -197,7 +197,7 @@ class QuickDisplay extends React.Component<IQuickDisplayProps & { virtualMonitor
 interface IDisplayEditorHistoryUpdaterProps {
   display: IDisplay,
   history: History,
-};
+}
 
 // tslint:disable-next-line
 class DisplayEditorHistoryUpdater extends React.PureComponent<IDisplayEditorHistoryUpdaterProps> {

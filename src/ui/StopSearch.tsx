@@ -13,7 +13,7 @@ type IProps = {
 
 interface IState {
   readonly searchPhrase: string,
-};
+}
 
 class StopSearch extends React.Component<IProps, IState> {
   constructor (props: IProps) {
@@ -106,7 +106,7 @@ class StopSearch extends React.Component<IProps, IState> {
         : null
       }
     </div>
-  )};
+  )}
 
   protected stopSearchSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.stopPropagation();

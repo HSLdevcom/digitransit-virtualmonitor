@@ -12,20 +12,20 @@ interface IOverrideStopName {
   readonly stop?: {
     readonly overrideStopName?: string,
   },
-};
+}
 
 export interface IStopTimesListProps {
   readonly pierColumnTitle?: string,
   readonly stoptimesWithoutPatterns: ReadonlyArray<IStopTime & IOverrideStopName>,
   readonly showPier?: boolean,
   readonly showStopColumn?: boolean,
-};
+}
 
 interface IStopTimesListHeadersProps {
   readonly pierColumnTitle?: string,
   readonly showPier?: boolean,
   readonly showStopColumn?: boolean,
-};
+}
 
 const StopTimesListHeaders = ({ pierColumnTitle, showPier, showStopColumn, t }: IStopTimesListHeadersProps & WithTranslation) => (
   <thead>

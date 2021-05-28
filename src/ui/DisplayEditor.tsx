@@ -16,11 +16,11 @@ import './DisplayEditor.scss';
 interface IDisplayEditorProps {
   readonly configuration?: IConfiguration,
   readonly display?: IDisplay,
-};
+}
 
 interface IDisplayEditorPropsDefaulted extends IDisplayEditorProps {
   readonly display: IDisplay,
-};
+}
 
 const addViewCarouselMutation = gql`
   mutation addViewCarouselElement($displayId: ID!, $viewCarouselElement: SViewWithDisplaySeconds) {

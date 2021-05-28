@@ -9,7 +9,7 @@ import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
 export interface IViewCarouselElementEditorProps {
   readonly viewCarouselElement: IViewCarouselElement,
-};
+}
 
 const setViewCarouselElementDisplaySecondsMutation = gql`
   mutation setViewCarouselElementDisplaySeconds($viewCarouselElementId: ID!, $displaySeconds: Float!) {

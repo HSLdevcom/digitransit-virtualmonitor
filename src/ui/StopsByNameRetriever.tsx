@@ -18,21 +18,21 @@ export interface IStopWithName {
   readonly name: string,
   readonly gtfsId: string,
   readonly code: string,
-};
+}
 
 export interface IStopsByNameResponse {
 	readonly stops: ReadonlyArray<IStopWithName>,
-};
+}
 
 export interface IStopsByNameQuery {
   readonly phrase: string,
-};
+}
 
 
 export interface IStopsByNameRetrieverProps {
   readonly children: QueryProps<IStopsByNameResponse, IStopsByNameQuery>['children'],
   readonly phrase: string,
-};
+}
 
 class StopsByNameQuery extends Query<IStopsByNameResponse, IStopsByNameQuery> {}
 const StopsByNameRetriever: React.SFC<IStopsByNameRetrieverProps> = ({ phrase, children }) => (

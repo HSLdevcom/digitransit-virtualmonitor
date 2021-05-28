@@ -15,11 +15,11 @@ const STATIONS_QUERY = gql`
 
 interface IStation {
 	readonly name: string,
-};
+}
 
 interface IData {
 	readonly stations: ReadonlyArray<IStation>,
-};
+}
 
 class EmptyQuery extends Query<IData> {}
 const StationsRetriever = (props: WithTranslation) => (

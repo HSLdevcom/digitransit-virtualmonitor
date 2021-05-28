@@ -16,7 +16,7 @@ const emptyFunc = () => {};
 interface IConfigEditorProps {
   readonly configuration: IConfiguration,
   readonly readonly?: boolean,
-};
+}
 
 const saveConfigurationMutation = gql`
   mutation saveConfiguration($name: String!) {

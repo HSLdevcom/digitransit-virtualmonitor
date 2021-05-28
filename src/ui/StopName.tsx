@@ -14,21 +14,21 @@ query GetStop($stopId: String!) {
 
 export interface IStopInfo {
   readonly name: string,
-};
+}
 
 interface IStopInfoResponse {
   readonly stop: IStopInfo,
-};
+}
 
 interface IStopQuery {
   readonly stopId: string,
-};
+}
 
 class StopInfoQuery extends Query<IStopInfoResponse, IStopQuery> {}
 
 export interface IStopInfoProps {
   readonly stopIds: ReadonlyArray<string>,
-};
+}
 
 const StopName = (props: IStopInfoProps & WithTranslation) => (
   <ApolloClientsContext.Consumer>

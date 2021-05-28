@@ -1,0 +1,61 @@
+.stop-row-container {
+  font-family: 'Roboto';
+  display: flex;
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  height: 40px;
+  margin: 10px 0;
+  padding: 10px 0;
+  .icon {
+    text-align: center;
+  }
+  .stop-row-stop {
+    padding-top: 4px;
+    width: 60px;
+    text-align: center;
+  }
+  .stop-row-main {
+    flex: 1;
+    padding-right: 15px;
+    padding-top: 2px;
+    .stop-upper-row {
+      font-size: 0.9375rem;
+      margin-bottom: 2px;
+      display: flex;
+      .hidden-routes {
+        flex: 1;
+        text-align: right;
+        color: #007AC9;
+      }
+    }
+    .stop-bottom-row {
+      color: #666;
+      font-size: 0.8125rem;
+      display: flex;
+      .address {
+        padding-right: 5px;
+      }
+      .hidden-choices {
+        flex: 1;
+        text-align: right;
+      }
+    }
+  }
+  .stop-row-delete {
+    cursor: pointer;
+    border-left: 1px solid #ddd;
+    width: 50px;
+    padding-top: 8px;
+  }
+  .stop-row-drag {
+    cursor: pointer;
+    padding-top: 8px;
+    border-left: 1px solid #ddd;
+    width: 40px;
+  }
+  .stop-bottom-row {
+    display: flex;
+  }
+}

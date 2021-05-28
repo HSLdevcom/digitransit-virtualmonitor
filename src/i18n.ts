@@ -25,12 +25,13 @@ i18n
           createViewTitle: 'Create new view',
           departureTime: 'Time',
           destination: 'Destination',
+          hiddenNoChoices: 'No choices',
+          hiddenRoutes: 'Hidden routes',
           lineId: 'Line',
           stopsText: 'Stops',
           viewErrorUnknownView: 'Unknown view with title \'{{viewTitle}}\' of type {{viewType}}',
           stoptitle: 'Title of stop view',
-
-},
+        },
       },
       fi: {
         translations: {
@@ -44,6 +45,8 @@ i18n
           displayEditorDefinePosition: 'Määritä sijainti',
           displayEditorNewView: 'Lisää uusi pysäkkinäkymä karuselliin',
           displayEditorStaticLink: 'Luo näkymä',
+          hiddenNoChoices: 'Ei valintoja',
+          hiddenRoutes: 'Piilotetut linjat',
           latitude: 'Latitude',
           lineId: 'Linja',
           loading: 'Ladataan…',
@@ -87,8 +90,12 @@ i18n
         },
       },
       sv: {
-        stoptitle: 'TODO',
-        stopsText: 'Hållplats'
+        translations: {
+          hiddenNoChoices: 'Ei valintoja',
+          hiddenRoutes: 'Piilotetut linjat',
+          stoptitle: 'TODO',
+          stopsText: 'Hållplats',
+        }
       }
     },
   });

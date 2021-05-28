@@ -44,6 +44,8 @@ i18n
           displayEditorDefinePosition: 'Määritä sijainti',
           displayEditorNewView: 'Lisää uusi pysäkkinäkymä karuselliin',
           displayEditorStaticLink: 'Luo näkymä',
+          hiddenNoChoices: 'Ei valintoja',
+          hiddenRoutes: 'Piilotetut linjat',
           latitude: 'Latitude',
           lineId: 'Linja',
           loading: 'Ladataan…',

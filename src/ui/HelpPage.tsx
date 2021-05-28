@@ -33,7 +33,7 @@ public render() {
          <p> {this.props.urlParamFindAltText} </p>
         
     </div>
-    <StopListContainer stops={[0]}/>
+    <StopListContainer />
     </>
   )
  }

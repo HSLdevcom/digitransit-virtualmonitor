@@ -4,6 +4,11 @@
   color: #666;
   height: 80px;
   width: 250px;
+  svg {
+    position: relative;
+    top: 41px;
+    left: 24px;
+  }
 }
 
 .stop-title-input {
@@ -31,10 +36,4 @@
   line-height: 24px;
   letter-spacing: -0.30000001192092896px;
   text-align: left;
-}
-
-svg {
-  position: relative;
-  top: 41px;
-  left: 24px;
 }

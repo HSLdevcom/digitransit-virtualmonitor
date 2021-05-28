@@ -12,12 +12,14 @@
     text-align: center;
   }
   .stop-row-stop {
+    padding-top: 4px;
     width: 60px;
     text-align: center;
   }
   .stop-row-main {
     flex: 1;
     padding-right: 15px;
+    padding-top: 2px;
     .stop-upper-row {
       font-size: 0.9375rem;
       margin-bottom: 2px;

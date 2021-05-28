@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { render } from 'react-dom';
+import StopViewTitleEditor from "./StopViewTitleEditor";
 
 interface IHelpPageProps {
   urlParamUsageText?: string,
@@ -16,6 +17,7 @@ public render() {
 
   return (
     <div>
+        <StopViewTitleEditor/>
       <h1>Virtuaalimonitorin käyttöopas</h1>
         <h2>Virtuaalimonitorin käyttö selainparametrien avulla </h2>
           <p>

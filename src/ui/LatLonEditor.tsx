@@ -6,11 +6,11 @@ const openMapEnabled = true;
 export interface ILatLon {
   readonly lat: number,
   readonly lon: number,
-};
+}
 
 export interface ILatLonEditor {
   readonly editable?: boolean,
-};
+}
 
 const dummy = () => null;
 

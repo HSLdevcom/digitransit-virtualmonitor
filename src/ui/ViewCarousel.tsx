@@ -6,12 +6,12 @@ import View from './Views/View';
 
 interface IProps {
   readonly viewCarousel: IViewCarousel,
-};
+}
 
 interface IState {
   carouselTimeout?: number,
   carouselLoopTime: Seconds,
-};
+}
 
 class ViewCarousel extends React.Component<IProps, IState> {
   constructor (props: IProps) {
@@ -39,7 +39,7 @@ class ViewCarousel extends React.Component<IProps, IState> {
         carouselTimeout: this.createTransitionTimeout(),
       })
     }
-  };
+  }
 
   public componentWillUnmount() {
     if (this.state.carouselTimeout !== undefined) {
@@ -60,7 +60,7 @@ class ViewCarousel extends React.Component<IProps, IState> {
         view={currentView}
       />
     );
-  };
+  }
 
   public getTotalCarouselTime(): Seconds {
     return this.props.viewCarousel.reduce((totalTime: Seconds, viewCarouselElement: IViewCarouselElement) => totalTime + (viewCarouselElement.displaySeconds || 0), 0);
@@ -99,6 +99,6 @@ class ViewCarousel extends React.Component<IProps, IState> {
 
     return (foundDisplayedViewCarouselElement || this.props.viewCarousel[0] || {}).view;
   }
-};
+}
 
 export default ViewCarousel;

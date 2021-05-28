@@ -10,6 +10,7 @@
   "rules": {
     "jsx-no-lambda": false,
     "no-unused-expression": false,
-    "no-unused-variable": false
+    "no-unused-variable": false,
+    "no-console": "error"
   }
 }

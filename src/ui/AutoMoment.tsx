@@ -8,7 +8,7 @@ import { EpochMilliseconds, Milliseconds } from "../time";
 export interface ITimeProps {
   readonly currentTime?: EpochMilliseconds,
   readonly updateInterval?: Milliseconds,
-};
+}
 
 class AutoMoment extends React.Component<ITimeProps, any> {
   constructor (props: ITimeProps) {
@@ -28,6 +28,6 @@ class AutoMoment extends React.Component<ITimeProps, any> {
       />
     );
   }
-};
+}
 
 export default AutoMoment;

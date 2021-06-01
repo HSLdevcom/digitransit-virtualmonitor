@@ -14,7 +14,16 @@ import HelpPage from './ui/HelpPage';
 import QuickDisplay from './ui/QuickDisplay';
 import TitlebarTime from './ui/TitlebarTime';
 import StopTimesView from './ui/Views/StopTimesView';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+} from "@apollo/client";
 
+const client = new ApolloClient({
+  uri: "https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql",
+  cache: new InMemoryCache()
+});
 import './App.css';
 
 export interface IMonitorConfig {
@@ -86,11 +95,16 @@ class App extends React.Component<combinedConfigurationAndInjected> {
           <Route
            path={'/help/'}
            component={({ match: { params: { }} }: RouteComponentProps<IMonitorConfig>) => (
-            <HelpPage urlParamUsageText={helpPageUrlParamText}
-                      urlMultipleStopsText={helpPageurlMultipleStopsText}
-                      urlParamFindText={helpPageUrlParamFindText}
-                      urlParamFindAltText={helpPageUrlParamFindAltText}
-             />
+               <ApolloProvider client={client}>
+                     <HelpPage
+                         client={client}
+                         urlParamUsageText={helpPageUrlParamText}
+                         urlMultipleStopsText={helpPageurlMultipleStopsText}
+                         urlParamFindText={helpPageUrlParamFindText}
+                         urlParamFindAltText={helpPageUrlParamFindAltText}
+                     />
+               </ApolloProvider>
+
             )}
           />
           <Route

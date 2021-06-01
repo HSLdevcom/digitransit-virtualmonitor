@@ -22,6 +22,7 @@ i18n
     resources: {
       en: {
         translations: {
+          autosuggestPlaceHolder: 'Name or number of the stop',
           createViewTitle: 'Create new view',
           departureTime: 'Time',
           destination: 'Destination',
@@ -36,6 +37,7 @@ i18n
       fi: {
         translations: {
           arriveTerminal: 'Saapuu / Päätepysäkki',
+          autosuggestPlaceHolder: 'Pysäkin nimi tai numero',
           canceled: 'Peruttu',
           configuration: 'Konfiguraatio',
           createViewTitle: 'Uuden näkymän luonti',
@@ -91,6 +93,7 @@ i18n
       },
       sv: {
         translations: {
+          autosuggestPlaceHolder: 'Name or number of the stop',
           hiddenNoChoices: 'Ei valintoja',
           hiddenRoutes: 'Piilotetut linjat',
           stoptitle: 'TODO',

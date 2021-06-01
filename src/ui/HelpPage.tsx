@@ -6,7 +6,7 @@ import DTAutosuggest from '@digitransit-component/digitransit-component-autosugg
 import { gql, useLazyQuery } from '@apollo/client';
 import getSearchContext from "./searchContext";
 
- const getGTFSId = ( id ) => {
+const getGTFSId = ( id ) => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
     if (id.indexOf('#') === -1) {
       return id.substring(5);
@@ -41,7 +41,6 @@ const HelpPage :React.FC<IHelpPageProps> = (props) =>  {
     return (<p> ERROR: OHJEITA EI LÖYTYNYT</p>)
   }
 
-  const [singleStop, setSingleStop] = useState();
   const [stops, setStops] =  useState([]);
   const [
     getStop,
@@ -64,7 +63,7 @@ const HelpPage :React.FC<IHelpPageProps> = (props) =>  {
     if(data?.stopInfos) {
       setStops(stops.concat(data.stopInfos.filter(stop => stop !== null)))
     }
-  }, data);
+  }, [data]);
 
   const onDelete = (stop: string) => {
     setStops(stops.filter(s => s.gtfsId !== stop))

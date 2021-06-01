@@ -1,13 +1,13 @@
 import React, { FC, useState, useEffect } from "react";
 import StopRow from './StopRow';
 import { ReactSortable } from 'react-sortablejs';
+
 interface Props {
   stops: any,
-  onDelete: (stop: string) => void,
+  onDelete: Function,
 }
 
 const StopListContainer : FC<Props> = (props) => {
-  console.log('STOPLISTCONTAINER ', props.stops)
   const [stopList, setStopList] = useState([]);
   useEffect(() => {
     setStopList(props.stops)

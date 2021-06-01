@@ -1,0 +1,44 @@
+.dd-select {
+  width: 100%;
+
+  &.withMinWidth {
+    min-width: 115px;
+  }
+
+  &.withWidth {
+    min-width: 130px;
+    &.time {
+      min-width: 75px;
+      margin-left: 10px;
+    }
+  }
+
+  .dd__group-heading {
+    text-align: center;
+  }
+
+  .dd__option {
+    color: #888888;
+    &--is-selected {
+      color: #FFFFFF;
+    }
+    svg {
+      position: relative;
+      left: 28px;
+    }
+  }
+
+  .dd__indicators {
+    padding-right: 10px;
+  }
+
+  .dd__control--menu-is-open {
+    outline: none;
+    border-style: none;
+    .dd__indicators {
+      svg {
+        transform: rotate(-180deg);
+      }
+    }
+  }
+}

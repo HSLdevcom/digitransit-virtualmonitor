@@ -13,7 +13,7 @@ const StopRow : FC<IProps & WithTranslation> = ({stop, onDelete, t}) => {
   const [hiddenRoutes, setHiddenRoutes] = useState([]);
   return (
     <div className='stop-row-container'>
-      <div className='stop-row-stop icon'><Icon img='stop' /></div>
+      <div className='stop-row-stop icon'><Icon img='stop-bus' color={'#007ac9'}/></div>
       <div className='stop-row-main'>
         <div className='stop-upper-row'>
           {stop.name}
@@ -29,8 +29,8 @@ const StopRow : FC<IProps & WithTranslation> = ({stop, onDelete, t}) => {
           </div>
         </div>
       </div>
-      <div className='stop-row-delete icon' onClick={() => onDelete(stop.gtfsId)}><Icon img='delete' /></div>
-      <div className='stop-row-drag icon'><Icon img='drag' /></div>
+      <div className='stop-row-delete icon' onClick={() => onDelete(stop.gtfsId)}><Icon img='delete' color={'#888888'}/></div>
+      <div className='stop-row-drag icon'><Icon img='drag' color={'#888888'}/></div>
     </div>
   );
 }

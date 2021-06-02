@@ -5,6 +5,7 @@ import StopListContainer from './StopListContainer';
 import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
 import { gql, useLazyQuery } from '@apollo/client';
 import getSearchContext from "./searchContext";
+import LayoutAndTimeContainer from './LayoutAndTimeContainer'
 
 const getGTFSId = ( id ) => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -74,24 +75,23 @@ const HelpPage :React.FC<IHelpPageProps> = (props) =>  {
   const sources = [ 'Datasource'] // Defines where you are searching. all available are: Favourite, History (previously searched searches) and Datasource. Leave empty to use all sources.
   return (
     <>
-    <div>
-        <StopViewTitleEditor/>
-      <h1>Virtuaalimonitorin käyttöopas</h1>
-        <h2>Virtuaalimonitorin käyttö selainparametrien avulla </h2>
+      <div>
+          <StopViewTitleEditor/>
+          <h1>Virtuaalimonitorin käyttöopas</h1>
+          <h2>Virtuaalimonitorin käyttö selainparametrien avulla </h2>
           <p>
             {props.urlParamUsageText}
           </p>
           <p>
-           {props.urlMultipleStopsText}
-        </p>
-        <h2> Oikean pysäkki-id:n löytäminen</h2>
-         <p> {props.urlParamFindText}</p>
-         <p> {props.urlParamFindAltText} </p>
-
-    </div>
+            {props.urlMultipleStopsText}
+          </p>
+          <h2> Oikean pysäkki-id:n löytäminen</h2>
+          <p> {props.urlParamFindText}</p>
+          <p> {props.urlParamFindAltText} </p>
+      </div>
       <DTAutosuggest
           appElement={"root"} // Required. Root element's id. Needed for react-modal component.
-           searchContext={context}
+            searchContext={context}
           icon="search"
           id="search"
           placeholder={placeholder}
@@ -103,7 +103,8 @@ const HelpPage :React.FC<IHelpPageProps> = (props) =>  {
           sources={sources}
           targets={targets}
       />
-    <StopListContainer stops={stops} onDelete={onDelete}/>
+      <StopListContainer stops={stops} onDelete={onDelete}/>
+      <LayoutAndTimeContainer />
     </>
   )
 }

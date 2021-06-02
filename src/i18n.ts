@@ -26,6 +26,7 @@ i18n
           createViewTitle: 'Create new view',
           departureTime: 'Time',
           destination: 'Destination',
+          dropdownPlaceHolder: 'Select...',
           hiddenNoChoices: 'No choices',
           hiddenRoutes: 'Hidden routes',
           lineId: 'Line',
@@ -47,6 +48,7 @@ i18n
           displayEditorDefinePosition: 'Määritä sijainti',
           displayEditorNewView: 'Lisää uusi pysäkkinäkymä karuselliin',
           displayEditorStaticLink: 'Luo näkymä',
+          dropdownPlaceHolder: 'Valitse...',
           hiddenNoChoices: 'Ei valintoja',
           hiddenRoutes: 'Piilotetut linjat',
           latitude: 'Latitude',
@@ -94,6 +96,7 @@ i18n
       sv: {
         translations: {
           autosuggestPlaceHolder: 'Name or number of the stop',
+          dropdownPlaceHolder: 'Välja...',
           hiddenNoChoices: 'Ei valintoja',
           hiddenRoutes: 'Piilotetut linjat',
           stoptitle: 'TODO',

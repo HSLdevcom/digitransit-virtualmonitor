@@ -43,7 +43,7 @@ class StopViewTitleEditor extends React.Component<WithTranslation, IState, IProp
                        onChange={e => this.updateValue(e)}
                 />
                 <div role="button" onClick={this.onClick}>
-                    <Icon img="edit"/>
+                    <Icon img="edit" color={'#007ac9'}/>
                 </div>
             </div>
         )

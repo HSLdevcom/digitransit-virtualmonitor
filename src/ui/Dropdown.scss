@@ -6,15 +6,26 @@
   }
 
   &.withWidth {
-    min-width: 130px;
+    min-width: 150px;
     &.time {
       min-width: 75px;
       margin-left: 10px;
     }
   }
 
+  .dd__placeholder, .dd__value-container, .dd__single-value {
+    color: #888888;
+    span {
+      position: relative;
+      top: -14px;
+      margin-left: 10px;
+      color: #888888;
+    }
+  }
+
   .dd__group-heading {
     text-align: center;
+    font-weight: bold;
   }
 
   .dd__option {
@@ -22,9 +33,11 @@
     &--is-selected {
       color: #FFFFFF;
     }
-    svg {
+
+    span {
       position: relative;
-      left: 28px;
+      top: -14px;
+      margin-left: 10px;
     }
   }
 

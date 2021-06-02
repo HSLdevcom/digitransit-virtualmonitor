@@ -12,32 +12,32 @@ const layouts = [
     {
         label: 'Yksijakoinen',
         options: [
-            { value: '1', label: (<Icon img="layout1"/>)},
-            { value: '2', label: (<Icon img="layout2"/>)},
-            { value: '3', label: (<Icon img="layout3"/>)}
+            { value: '1', label: (<><Icon img="layout1"/><span>4</span></>)},
+            { value: '2', label: (<><Icon img="layout2"/><span>8</span></>)},
+            { value: '3', label: (<><Icon img="layout3"/><span>12</span></>)}
         ]
     },
     {
         label: 'Kaksijakoinen',
         options: [
-            { value: '4', label: (<Icon img="layout4" />)},
-            { value: '5', label: (<Icon img="layout5" />)},
-            { value: '6', label: (<Icon img="layout6" />)}
+            { value: '4', label: (<><Icon img="layout4"/><span>4+4</span></>)},
+            { value: '5', label: (<><Icon img="layout5"/><span>8+8</span></>)},
+            { value: '6', label: (<><Icon img="layout6"/><span>12+12</span></>)}
         ]
     },
     {
         label: 'Kaksijakoinen yhdistelmä',
         options: [
-            { value: '7', label: (<Icon img="layout7" />)},
-            { value: '8', label: (<Icon img="layout8" />)}
+            { value: '7', label: (<><Icon img="layout7"/><span>4+8</span></>)},
+            { value: '8', label: (<><Icon img="layout8"/><span>8+12</span></>)}
         ]
     },
     {
         label: 'Itään / länteen',
         options: [
-            { value: '9', label: (<Icon img="layout9" />)},
-            { value: '10', label: (<Icon img="layout10" />)},
-            { value: '11', label: (<Icon img="layout11" />)}
+            { value: '9', label: (<><Icon img="layout9"/><span>4+4</span></>)},
+            { value: '10', label: (<><Icon img="layout10"/><span>8+8</span></>)},
+            { value: '11', label: (<><Icon img="layout11"/><span>12+12</span></>)}
         ]
     }
 ];

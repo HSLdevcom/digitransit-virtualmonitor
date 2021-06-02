@@ -13,16 +13,16 @@ const layouts = [
         label: 'Yksijakoinen',
         options: [
             { value: '1', label: (<><Icon img="layout1"/><span>4</span></>)},
-            { value: '2', label: (<><Icon img="layout2"/><span>8</span></>)},
-            { value: '3', label: (<><Icon img="layout3"/><span>12</span></>)}
+            { value: '2', label: (<><Icon img="layout3"/><span>8</span></>)},
+            { value: '3', label: (<><Icon img="layout2"/><span>12</span></>)}
         ]
     },
     {
         label: 'Kaksijakoinen',
         options: [
             { value: '4', label: (<><Icon img="layout4"/><span>4+4</span></>)},
-            { value: '5', label: (<><Icon img="layout5"/><span>8+8</span></>)},
-            { value: '6', label: (<><Icon img="layout6"/><span>12+12</span></>)}
+            { value: '5', label: (<><Icon img="layout6"/><span>8+8</span></>)},
+            { value: '6', label: (<><Icon img="layout5"/><span>12+12</span></>)}
         ]
     },
     {
@@ -36,8 +36,8 @@ const layouts = [
         label: 'Itään / länteen',
         options: [
             { value: '9', label: (<><Icon img="layout9"/><span>4+4</span></>)},
-            { value: '10', label: (<><Icon img="layout10"/><span>8+8</span></>)},
-            { value: '11', label: (<><Icon img="layout11"/><span>12+12</span></>)}
+            { value: '10', label: (<><Icon img="layout11"/><span>8+8</span></>)},
+            { value: '11', label: (<><Icon img="layout10"/><span>12+12</span></>)}
         ]
     }
 ];

@@ -1,10 +1,7 @@
 import * as React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Link, Route, RouteComponentProps, Switch } from 'react-router-dom';
-
-import Logo from './ui/logo/Logo';
-import StopSelectorSwitch from './ui/StopSelectorSwitch';
-import Titlebar from './ui/Titlebar';
+import IndexPage from "./IndexPage";
 
 import ConfigurationDisplay from './ui/ConfigurationDisplay';
 import ConfigurationList from './ui/ConfigurationList';
@@ -12,7 +9,6 @@ import DisplayEditor from './ui/DisplayEditor';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import HelpPage from './ui/HelpPage';
 import QuickDisplay from './ui/QuickDisplay';
-import TitlebarTime from './ui/TitlebarTime';
 import StopTimesView from './ui/Views/StopTimesView';
 import {
   ApolloClient,
@@ -63,7 +59,7 @@ interface IStopRouteParams {
 
 export type combinedConfigurationAndInjected = IConfigurationProps & WithTranslation
 
-class App extends React.Component<combinedConfigurationAndInjected> {
+class App extends React.Component<combinedConfigurationAndInjected, any> {
   constructor(props: combinedConfigurationAndInjected) {
     super(props);
   }
@@ -147,24 +143,10 @@ class App extends React.Component<combinedConfigurationAndInjected> {
             path={'/displayEditor/'}
             component={DisplayEditor}
           />
-          <Route>
-            <div id={'stop-search'}>
-              <Titlebar>
-                <Logo monitorConfig={monitorConfig} />
-                <div id={"title-text"}>
-                  {this.props.t('titlebarTitle')}
-                </div>
-                <TitlebarTime />
-              </Titlebar>
-              <Link to={'/quickDisplay'}>
-                {this.props.t('quickDisplayCreate')}
-              </Link>
-              {/* <Link to={'/configs/1'}>
-                Configs playground
-              </Link> */}
-              <StopSelectorSwitch />
-            </div>
-          </Route>
+          <Route
+              path={'/'}
+            component={IndexPage}
+          />
         </Switch>
       </div>
     );

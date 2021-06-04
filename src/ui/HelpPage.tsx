@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import * as React from 'react';
+import ContentContainer from "../ContentContainer";
 import StopViewTitleEditor from "./StopViewTitleEditor";
 import StopListContainer from './StopListContainer';
 import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
@@ -75,6 +76,7 @@ const HelpPage :React.FC<IHelpPageProps> = (props) =>  {
   const sources = [ 'Datasource'] // Defines where you are searching. all available are: Favourite, History (previously searched searches) and Datasource. Leave empty to use all sources.
   return (
     <>
+        <ContentContainer>
       <div>
           <StopViewTitleEditor/>
           <h1>Virtuaalimonitorin käyttöopas</h1>
@@ -105,6 +107,7 @@ const HelpPage :React.FC<IHelpPageProps> = (props) =>  {
       />
       <StopListContainer stops={stops} onDelete={onDelete}/>
       <LayoutAndTimeContainer />
+        </ContentContainer>
     </>
   )
 }

@@ -1,5 +1,6 @@
 .dd-select {
   width: 100%;
+  height: 100%;
 
   &.withMinWidth {
     min-width: 115px;
@@ -8,13 +9,14 @@
   &.withWidth {
     min-width: 150px;
     &.time {
-      min-width: 75px;
-      margin-left: 10px;
+      min-width: 110px;
+      margin-left: 20px;
     }
   }
 
   .dd__placeholder, .dd__value-container, .dd__single-value {
     color: #888888;
+
     span {
       position: relative;
       top: -14px;
@@ -30,6 +32,7 @@
 
   .dd__option {
     color: #888888;
+
     &--is-selected {
       color: #FFFFFF;
     }
@@ -45,12 +48,16 @@
     padding-right: 10px;
   }
 
-  .dd__control--menu-is-open {
-    outline: none;
-    border-style: none;
-    .dd__indicators {
-      svg {
-        transform: rotate(-180deg);
+  .dd__control {
+    height: 44px;
+    &--menu-is-open {
+      outline: none;
+      border-style: none;
+
+      .dd__indicators {
+        svg {
+          transform: rotate(-180deg);
+        }
       }
     }
   }

@@ -1,39 +1,35 @@
 .stop-title {
   display: flex;
+  flex-direction: column;
   background: #ffff;
   color: #666;
   height: 80px;
   width: 250px;
-  svg {
-    position: relative;
-    top: 41px;
-    left: 24px;
+}
+
+.stop-title-input-container {
+  display: flex;
+  .stop-title-input {
+    font-size: 21px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: -0.3px;
+    text-align: left;
+    width: 178px;
+    height: 24px;
+    padding-right: 50px;
   }
 }
 
-.stop-title-input {
-  top: 34px;
-  position: relative;
-  left: 27px;
-  border: 0;
-  font-size: 21px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 24px;
-  letter-spacing: -0.30000001192092896px;
-  text-align: left;
-  width: 128px;
-  height: 34px;
-}
-
 .description {
-  position: absolute;
-  top: 14px;
-  left: 43px;
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: 24px;
-  letter-spacing: -0.30000001192092896px;
+  letter-spacing: -0.3px;
   text-align: left;
+  white-space: nowrap;
+  margin-top: 17px;
+  margin-bottom: 0;
 }

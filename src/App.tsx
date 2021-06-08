@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { Link, Route, RouteComponentProps, Switch } from 'react-router-dom';
-import IndexPage from './IndexPage';
-
+import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import IndexPage from "./IndexPage";
 import ConfigurationDisplay from './ui/ConfigurationDisplay';
 import ConfigurationList from './ui/ConfigurationList';
 import DisplayEditor from './ui/DisplayEditor';
@@ -10,13 +9,19 @@ import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import HelpPage from './ui/HelpPage';
 import QuickDisplay from './ui/QuickDisplay';
 import StopTimesView from './ui/Views/StopTimesView';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import CreateViewPage from './ui/CreateViewPage';
+
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+} from "@apollo/client";
 
 const client = new ApolloClient({
   uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
   cache: new InMemoryCache(),
 });
-import './App.css';
+import './App.scss';
 
 export interface IMonitorConfig {
   feedId?: string;
@@ -88,25 +93,32 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
       <div className={'App'}>
         <Switch>
           <Route
+            path={'/createView'}
+            component={({ match: { params: {}} }: RouteComponentProps<IMonitorConfig>) => (
+              <ApolloProvider client={client}>
+                    <CreateViewPage />
+              </ApolloProvider>
+
+           )}
+          />
+          <Route
             path={'/quickDisplay/:version?/:packedDisplay?'}
             component={QuickDisplay}
           />
           <Route
-            path={'/help/'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <ApolloProvider client={client}>
-                <HelpPage
-                  client={client}
-                  urlParamUsageText={helpPageUrlParamText}
-                  urlMultipleStopsText={helpPageurlMultipleStopsText}
-                  urlParamFindText={helpPageUrlParamFindText}
-                  urlParamFindAltText={helpPageUrlParamFindAltText}
-                />
-              </ApolloProvider>
+           path={'/help/'}
+           // eslint-disable-next-line no-empty-pattern
+           component={({ match: { params: {}} }: RouteComponentProps<IMonitorConfig>) => (
+               <ApolloProvider client={client}>
+                     <HelpPage
+                         client={client}
+                         urlParamUsageText={helpPageUrlParamText}
+                         urlMultipleStopsText={helpPageurlMultipleStopsText}
+                         urlParamFindText={helpPageUrlParamFindText}
+                         urlParamFindAltText={helpPageUrlParamFindAltText}
+                     />
+               </ApolloProvider>
+
             )}
           />
           <Route

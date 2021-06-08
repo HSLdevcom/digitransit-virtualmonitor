@@ -18,11 +18,12 @@ const STOP_INFO_QUERY = gql`
 `;
 
 export interface IStopInfo {
-  name: string;
-  code?: string;
-  desc?: string;
-  gtfsId: StopId;
-  platformCode: string;
+  id?: string,
+  name: string,
+  code?: string,
+  desc?: string,
+  gtfsId: StopId,
+  platformCode: string,
 }
 
 export interface IStopInfoResponse {

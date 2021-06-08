@@ -2,6 +2,7 @@
 import React from 'react';
 import { ReactComponent as ArrowDown } from './icons/arrow-down.svg';
 import { ReactComponent as Check } from './icons/check.svg';
+import { ReactComponent as Close } from "./icons/close.svg";
 import { ReactComponent as Delete } from './icons/delete.svg';
 import { ReactComponent as Drag } from './icons/drag.svg';
 import { ReactComponent as Edit } from './icons/edit.svg';
@@ -39,6 +40,7 @@ const IconMap = ( style: IIconMapProps) => {
     return {
         'arrow-down': <ArrowDown style={style} />,
         'check': <Check style={style} />,
+        'close': <Close style={style} />,
         'delete': <Delete style={style} />,
         'drag': <Drag style={style} />,
         'edit': <Edit style={style} />,

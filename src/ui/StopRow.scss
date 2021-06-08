@@ -20,6 +20,14 @@
     flex: 1;
     padding-right: 15px;
     padding-top: 2px;
+    .modal-container{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+    }
     .stop-upper-row {
       font-size: 0.9375rem;
       margin-bottom: 2px;
@@ -40,6 +48,9 @@
       .hidden-choices {
         flex: 1;
         text-align: right;
+        &:hover {
+          cursor: pointer;
+        }
       }
     }
   }

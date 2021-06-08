@@ -22,6 +22,7 @@ i18n
     resources: {
       en: {
         translations: {
+          all: 'All',
           autosuggestPlaceHolder: 'Name or number of the stop',
           createViewTitle: 'Create new view',
           departureTime: 'Time',
@@ -34,6 +35,7 @@ i18n
           hiddenRoutes: 'Hidden routes',
           lineId: 'Line',
           stopsText: 'Stops',
+          showhidden: 'Select routes to hide for the stop:',
           title: 'Now you can create...',
           viewErrorUnknownView: 'Unknown view with title \'{{viewTitle}}\' of type {{viewType}}',
           stoptitle: 'Title of stop view',
@@ -41,6 +43,7 @@ i18n
       },
       fi: {
         translations: {
+          all: 'Kaikki',
           arriveTerminal: 'Saapuu / Päätepysäkki',
           autosuggestPlaceHolder: 'Pysäkin nimi tai numero',
           canceled: 'Peruttu',
@@ -70,6 +73,7 @@ i18n
           prepareStop: 'Lisää pysäkki',
           quickDisplayCreate: 'Luo uusi näyttö',
           seconds: 'sekuntia',
+          showHidden: 'Valitse piilotettavat linjat pysäkille:' ,
           stop: 'Pysäkki {{stop}}',
           stopsText: 'Pysäkki',
           stopCode: 'pysäkkinumero',
@@ -103,6 +107,7 @@ i18n
       },
       sv: {
         translations: {
+          all: 'Alla',
           autosuggestPlaceHolder: 'Name or number of the stop',
           dropdownPlaceHolder: 'Välja...',
           frontPageParagraph1: 'todo',
@@ -110,6 +115,7 @@ i18n
           frontPageParagraph3: 'todo',
           hiddenNoChoices: 'Ei valintoja',
           hiddenRoutes: 'Piilotetut linjat',
+          showHidden: 'TODO',
           stoptitle: 'TODO',
           stopsText: 'Hållplats',
           title: 'Now you can create...'

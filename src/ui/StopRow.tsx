@@ -7,11 +7,12 @@ import Icon from './Icon';
 import { IStopInfo } from './StopInfoRetriever'
 import './StopRow.scss';
 import sortBy from 'lodash/sortBy'
+import { SortableHandle } from 'react-sortable-hoc';
 
 interface IProps {
   readonly stop: IStopInfo,
-  readonly onDelete: Function,
-    readonly stopId?: string,
+  readonly stopId?: string,
+  readonly onDelete?: Function,
 }
 
 const GET_ROUTES = gql `
@@ -34,45 +35,50 @@ const StopRow : FC<IProps & WithTranslation> = ({stop, onDelete, stopId, t}) => 
       setHiddenRoutes(routes)
       changeOpen(false);
   }
-    const [
-        getRoutes,
-        { loading, data, error }
-    ] = useLazyQuery(GET_ROUTES);
-    if(!routesFetched) {
-        getRoutes({ variables: {id: stopId}})
-        setRoutesFetched(true);
-    }
-    const handleClick = () => {
-        if(data) {
-            changeOpen(true)
-        }
-    }
-    let routes;
-    if(error) {
-       return <div>Error...</div>
-    }
-    if(loading) {
-        return <div>Loading...</div>
-    }
-    if(data) {
-        if(!routes) {
-            routes = sortBy(sortBy(data.stop.routes, 'shortName'), 'shortName.length');
-        }
-    }
+  const [
+      getRoutes,
+      { loading, data, error }
+  ] = useLazyQuery(GET_ROUTES);
 
+  if(!routesFetched) {
+      getRoutes({ variables: {id: stopId}})
+      setRoutesFetched(true);
+  }
+
+  const handleClick = () => {
+      if(data) {
+          changeOpen(true)
+      }
+  }
+  
+  let routes;
+  if(error) {
+      return <div>Error...</div>
+  }
+  if(loading) {
+      return <div>Loading...</div>
+  }
+  if(data) {
+      if(!routes) {
+          routes = sortBy(sortBy(data.stop.routes, 'shortName'), 'shortName.length');
+      }
+  }
+
+  const SortableHandleItem = SortableHandle(({children}) => children);
   return (
     <div className='stop-row-container'>
+      <div>{stop.id}</div>
       <div className='stop-row-stop icon'><Icon img='stop-bus' color={'#007ac9'}/></div>
       <div className='stop-row-main'>
         <div className='stop-upper-row'>
           {stop.name}
-          <div className='hidden-routes'>{t('hiddenRoutes')}</div>
+          <div className='hidden-routes' onClick={handleClick}>{t('hiddenRoutes')}</div>
         </div>
-          {showModal && (
-              <div className="modal-container" >
-              <StopRoutesModal  hiddenRoutes={hiddenRoutes} closeModal={gethidden} showModal={showModal} stop={stop} routes={routes} />
-              </div>
-          )}
+        {showModal && (
+            <div className="modal-container" >
+            <StopRoutesModal  hiddenRoutes={hiddenRoutes} closeModal={gethidden} showModal={showModal} stop={stop} routes={routes} />
+            </div>
+        )}
         <div className='stop-bottom-row'>
           {stop.desc && (<div className='address'>{stop.desc}</div>)}
           <StopCode code={stop.code}/>
@@ -87,7 +93,9 @@ const StopRow : FC<IProps & WithTranslation> = ({stop, onDelete, stopId, t}) => 
         </div>
       </div>
       <div className='stop-row-delete icon' onClick={() => onDelete(stop.gtfsId)}><Icon img='delete' color={'#888888'}/></div>
-      <div className='stop-row-drag icon'><Icon img='drag' color={'#888888'}/></div>
+      <SortableHandleItem>
+        <div className='stop-row-drag icon'><Icon img='drag' color={'#888888'}/></div>
+      </SortableHandleItem>
     </div>
   );
 }

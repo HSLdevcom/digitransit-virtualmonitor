@@ -22,7 +22,7 @@ class IndexPage extends React.Component<WithTranslation, any> {
                             <p className={"welcome-text"}> {t1} <br/><br/> {t2} <br/><br/> {t3}
                             </p>
                             <button className="todisplay">
-                                <Link to={'/quickDisplay'}>
+                                <Link to={'/createView'}>
                                     {this.props.t('quickDisplayCreate')}
                                 </Link>
                             </button>

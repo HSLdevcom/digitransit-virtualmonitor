@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { MockedProvider } from 'react-apollo/test-utils'
+import { MockedProvider } from 'react-apollo/test-utils';
 import { create } from 'react-test-renderer';
 
-import ConfigurationList, { IConfigurationListProps, IConfigurations } from '../ui/ConfigurationList';
+import ConfigurationList, {
+  IConfigurationListProps,
+  IConfigurations,
+} from '../ui/ConfigurationList';
 
 const testConfigs: IConfigurations = [
   {
@@ -53,7 +56,11 @@ const testConfigs: IConfigurations = [
   },
 ];
 
-const WrappedConfig = ({ configProps }: { configProps: IConfigurationListProps } = { configProps: { configurations: testConfigs } }) => (
+const WrappedConfig = (
+  { configProps }: { configProps: IConfigurationListProps } = {
+    configProps: { configurations: testConfigs },
+  },
+) => (
   <MockedProvider>
     <ConfigurationList {...configProps} />
   </MockedProvider>
@@ -61,9 +68,7 @@ const WrappedConfig = ({ configProps }: { configProps: IConfigurationListProps }
 
 it('renders a without crashing', () => {
   const renderer = create(
-    <WrappedConfig
-      configProps={{configurations: testConfigs}}
-    />
+    <WrappedConfig configProps={{ configurations: testConfigs }} />,
   );
   renderer.unmount();
 });

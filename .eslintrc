@@ -2,7 +2,9 @@
   "root": true,
   "parser": "@typescript-eslint/parser",
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "prettier",
+    "react"
   ],
   "extends": [
     "eslint:recommended",
@@ -20,7 +22,7 @@
         "endOfLine": "auto",
         "singleQuote": true,
         "trailingComma": "all"
-      },
+      }
     ]
   }
 }

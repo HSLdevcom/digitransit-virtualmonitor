@@ -1,4 +1,9 @@
-import { GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import {
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
 
 import SNode, { SNodeFields } from './SNode';
 import SStop from './SStop';
@@ -11,7 +16,7 @@ const SStopTimesView = new GraphQLObjectType({
     pierColumnTitle: { type: GraphQLString },
     stops: {
       resolve: (root, {}) => root.stops,
-      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SStop)))
+      type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SStop))),
     },
   }),
   interfaces: () => [SNode, SView],

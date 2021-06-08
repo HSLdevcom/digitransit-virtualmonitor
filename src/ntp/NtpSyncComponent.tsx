@@ -3,15 +3,18 @@ import * as React from 'react';
 import NtpSyncContext from './NtpSyncContext';
 
 interface INtpSyncComponent {
-  children: React.ReactChild,
+  children: React.ReactChild;
 }
 
 interface INtpSyncComponentState {
-  deltaMilliseconds: number,
+  deltaMilliseconds: number;
 }
 
-class NtpSyncComponent extends React.Component<INtpSyncComponent, INtpSyncComponentState> {
-  constructor (props: INtpSyncComponent) {
+class NtpSyncComponent extends React.Component<
+  INtpSyncComponent,
+  INtpSyncComponentState
+> {
+  constructor(props: INtpSyncComponent) {
     super(props);
     this.state = {
       deltaMilliseconds: 0,
@@ -21,9 +24,7 @@ class NtpSyncComponent extends React.Component<INtpSyncComponent, INtpSyncCompon
 
   public render() {
     return (
-      <NtpSyncContext.Provider
-        value={this.state}
-      >
+      <NtpSyncContext.Provider value={this.state}>
         {this.props.children}
       </NtpSyncContext.Provider>
     );

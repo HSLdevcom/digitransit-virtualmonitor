@@ -1,0 +1,72 @@
+.stopcard-row-container  {
+  font-family: 'Roboto';
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px 0;
+  width: 720px;
+  height: auto;
+  padding-left: 30px;
+  padding-right: 30px;
+
+  .title-with-icons {
+    display: flex;
+    max-height: 80px;
+    width: 720px;
+    border-bottom: 1px solid #DDDDDD;
+
+    .icons {
+      display: flex;
+      height: 40px;
+      position: relative;
+      left: 385px;
+      top: 20px;
+
+      .delete {
+        cursor: pointer;
+        width: 50px;
+        padding-top: 8px;
+        text-align: center;
+      }
+
+      .drag {
+        cursor: pointer;
+        padding-top: 8px;
+        border-left: 1px solid #ddd;
+        width: 50px;
+        text-align: center;
+      }
+    }
+  }
+
+  .search-stop-with-layout-and-time {
+    display: flex;
+    margin-top: 22px;
+
+    .search-stop {
+      width: 380px;
+      margin-right: 40px;
+
+      div[class^='styles_autosuggest-input-icon'] svg {
+        fill: #888888;
+      }
+    }
+  }
+
+  .stop-list {
+    position: relative;
+    top: -10px;
+    list-style-type: none;
+  }
+}
+
+.drag {
+  cursor: pointer;
+  padding-top: 8px;
+  border-left: 1px solid #ddd;
+  width: 40px;
+  list-style-type: none;
+}

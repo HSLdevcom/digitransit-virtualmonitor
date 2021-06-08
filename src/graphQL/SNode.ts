@@ -1,4 +1,9 @@
-import { GraphQLID, GraphQLInterfaceType, GraphQLNonNull, GraphQLObjectType } from "graphql";
+import {
+  GraphQLID,
+  GraphQLInterfaceType,
+  GraphQLNonNull,
+  GraphQLObjectType,
+} from 'graphql';
 
 const typeMap: { [typename: string]: GraphQLObjectType } = {
   // 'configi': SConfiguration,

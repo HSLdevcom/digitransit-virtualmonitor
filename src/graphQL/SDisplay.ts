@@ -1,7 +1,15 @@
-import { GraphQLID, GraphQLInputObjectType, GraphQLInt, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from "graphql";
+import {
+  GraphQLID,
+  GraphQLInputObjectType,
+  GraphQLInt,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLObjectType,
+  GraphQLString,
+} from 'graphql';
 
 import SNode, { SNodeFields, SNodeInputFields } from './SNode';
-import SPosition, { SPositionInput } from "./SPosition";
+import SPosition, { SPositionInput } from './SPosition';
 // import STranslatedString from "src/graphQL/STranslatedString";
 import SView from './SView';
 

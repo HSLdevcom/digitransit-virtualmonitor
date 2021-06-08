@@ -7,7 +7,7 @@ it('renders without crashing', () => {
   const renderer = create(
     <Titlebar>
       <div>Dummy div</div>
-    </Titlebar>
+    </Titlebar>,
   );
   renderer.unmount();
 });

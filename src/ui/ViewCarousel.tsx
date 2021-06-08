@@ -1,21 +1,25 @@
-import * as React from "react";
+import * as React from 'react';
 
 import { Seconds } from '../time';
-import { IViewBase, IViewCarousel, IViewCarouselElement } from './ConfigurationList';
+import {
+  IViewBase,
+  IViewCarousel,
+  IViewCarouselElement,
+} from './ConfigurationList';
 import View from './Views/View';
 
 interface IProps {
-  readonly viewCarousel: IViewCarousel,
+  readonly viewCarousel: IViewCarousel;
 }
 
 interface IState {
-  carouselTimeout?: number,
-  carouselLoopTime: Seconds,
+  carouselTimeout?: number;
+  carouselLoopTime: Seconds;
 }
 
 class ViewCarousel extends React.Component<IProps, IState> {
-  constructor (props: IProps) {
-    super(props)
+  constructor(props: IProps) {
+    super(props);
 
     this.state = {
       carouselLoopTime: this.getTotalCarouselTime(),
@@ -34,10 +38,10 @@ class ViewCarousel extends React.Component<IProps, IState> {
       if (this.state.carouselTimeout !== undefined) {
         clearTimeout(this.state.carouselTimeout);
       }
-      this.setState ({
+      this.setState({
         carouselLoopTime: this.getTotalCarouselTime(),
         carouselTimeout: this.createTransitionTimeout(),
-      })
+      });
     }
   }
 
@@ -50,27 +54,32 @@ class ViewCarousel extends React.Component<IProps, IState> {
 
   public render() {
     if (!this.props.viewCarousel || this.props.viewCarousel.length === 0) {
-      return (<div>No carousel entries</div>)
+      return <div>No carousel entries</div>;
     }
 
     const currentView = this.getCurrentView();
 
-    return(
-      <View
-        view={currentView}
-      />
-    );
+    return <View view={currentView} />;
   }
 
   public getTotalCarouselTime(): Seconds {
-    return this.props.viewCarousel.reduce((totalTime: Seconds, viewCarouselElement: IViewCarouselElement) => totalTime + (viewCarouselElement.displaySeconds || 0), 0);
+    return this.props.viewCarousel.reduce(
+      (totalTime: Seconds, viewCarouselElement: IViewCarouselElement) =>
+        totalTime + (viewCarouselElement.displaySeconds || 0),
+      0,
+    );
   }
 
   public getTimeToNextTransition(): Seconds {
-    const redFunc = (timeAcc: Seconds, view: IViewCarouselElement) => 
+    const redFunc = (timeAcc: Seconds, view: IViewCarouselElement) =>
       timeAcc >= 0 ? timeAcc - view.displaySeconds : timeAcc;
-    
-    const timeToTransition = -1 * this.props.viewCarousel.reduce(redFunc, (Date.now() / 1000) % this.state.carouselLoopTime) ;
+
+    const timeToTransition =
+      -1 *
+      this.props.viewCarousel.reduce(
+        redFunc,
+        (Date.now() / 1000) % this.state.carouselLoopTime,
+      );
     return timeToTransition;
   }
 
@@ -89,15 +98,36 @@ class ViewCarousel extends React.Component<IProps, IState> {
   }
 
   protected getCurrentView(): IViewBase {
-    const redFunc = ({ displayedViewCarouselElement, timeAcc }: { displayedViewCarouselElement?: IViewCarouselElement, timeAcc: Seconds }, view: IViewCarouselElement) => ({
-      displayedViewCarouselElement: timeAcc >= 0 ? view : displayedViewCarouselElement,
+    const redFunc = (
+      {
+        displayedViewCarouselElement,
+        timeAcc,
+      }: {
+        displayedViewCarouselElement?: IViewCarouselElement;
+        timeAcc: Seconds;
+      },
+      view: IViewCarouselElement,
+    ) => ({
+      displayedViewCarouselElement:
+        timeAcc >= 0 ? view : displayedViewCarouselElement,
       timeAcc: timeAcc - view.displaySeconds,
     });
-    
-    const { displayedViewCarouselElement: foundDisplayedViewCarouselElement }: { displayedViewCarouselElement?: IViewCarouselElement, timeAcc: Seconds } =
-      this.props.viewCarousel.reduce(redFunc, { displayedViewCarouselElement: undefined, timeAcc: (Date.now() / 1000) % this.state.carouselLoopTime });
 
-    return (foundDisplayedViewCarouselElement || this.props.viewCarousel[0] || {}).view;
+    const {
+      displayedViewCarouselElement: foundDisplayedViewCarouselElement,
+    }: {
+      displayedViewCarouselElement?: IViewCarouselElement;
+      timeAcc: Seconds;
+    } = this.props.viewCarousel.reduce(redFunc, {
+      displayedViewCarouselElement: undefined,
+      timeAcc: (Date.now() / 1000) % this.state.carouselLoopTime,
+    });
+
+    return (
+      foundDisplayedViewCarouselElement ||
+      this.props.viewCarousel[0] ||
+      {}
+    ).view;
   }
 }
 

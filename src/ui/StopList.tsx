@@ -1,32 +1,30 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
+import * as React from 'react';
+import { Link } from 'react-router-dom';
 
-import { IStopWithName } from "./StopsByNameRetriever";
+import { IStopWithName } from './StopsByNameRetriever';
 
 export type IStopRenderFunc = (stop: IStopWithName) => JSX.Element;
 
 export interface IProps {
-  readonly stops: ReadonlyArray<IStopWithName>,
-  readonly stopRenderer?: IStopRenderFunc,
+  readonly stops: ReadonlyArray<IStopWithName>;
+  readonly stopRenderer?: IStopRenderFunc;
 }
 
-const StopList: React.StatelessComponent<IProps> =
-  ({ stops, stopRenderer }: Required<IProps>) => (
+const StopList: React.StatelessComponent<IProps> = ({
+  stops,
+  stopRenderer,
+}: Required<IProps>) => (
   <ul>
     {stops.map((stop: IStopWithName) => (
-      <li key={stop.gtfsId}>
-        {stopRenderer(stop)}
-      </li>
+      <li key={stop.gtfsId}>{stopRenderer(stop)}</li>
     ))}
   </ul>
 );
 
 StopList.defaultProps = {
   stopRenderer: (stop: IStopWithName) => (
-    <Link
-      to={`/stop/${stop.gtfsId}`}
-    >
-    {stop.name} - {stop.gtfsId} {stop.code ? `(${stop.code})`: ''}
+    <Link to={`/stop/${stop.gtfsId}`}>
+      {stop.name} - {stop.gtfsId} {stop.code ? `(${stop.code})` : ''}
     </Link>
   ),
 };

@@ -1,8 +1,8 @@
-import * as React from "react";
-import Logo from "./matka-logo.svg"
+import * as React from 'react';
+import Logo from './matka-logo.svg';
 
-export default ({ style }: {style?: React.CSSProperties} = { style: {} }) => (
+export default ({ style }: { style?: React.CSSProperties } = { style: {} }) => (
   <div style={{ textAlign: 'left' }}>
-    <img id={"logo"} src={Logo} style={style} />
+    <img id={'logo'} src={Logo} style={style} />
   </div>
 );

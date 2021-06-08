@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
-import * as React from "react";
+import * as React from 'react';
 import { Mutation } from 'react-apollo';
-import { WithTranslation, withTranslation } from "react-i18next";
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { IStop } from './ConfigurationList';
@@ -9,13 +9,14 @@ import { IStopInfo } from './StopInfoRetriever';
 import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
 interface IStopEditorProps {
-  stop: IStop,
-  stopInfo?: IStopInfo,
+  stop: IStop;
+  stopInfo?: IStopInfo;
 }
 
 const SET_OVERRIDE_STOP_NAME = gql`
   mutation setOverrideStopName($stopId: ID!, $overrideStopName: String) {
-    setOverrideStopName(stopId: $stopId, overrideStopName: $overrideStopName) @client
+    setOverrideStopName(stopId: $stopId, overrideStopName: $overrideStopName)
+      @client
   }
 `;
 
@@ -26,25 +27,39 @@ const StopEditor: React.SFC<IStopEditorProps & WithTranslation> = ({
 }) => (
   <div>
     <span>
-      {stopInfo
-        ? (<span>{stopInfo.name} ({t('stopCode')} {stopInfo.code || ''})</span>)
-        : (<span>{stop.gtfsId}</span>)
-      }
+      {stopInfo ? (
+        <span>
+          {stopInfo.name} ({t('stopCode')} {stopInfo.code || ''})
+        </span>
+      ) : (
+        <span>{stop.gtfsId}</span>
+      )}
     </span>
     <ApolloClientsContext.Consumer>
       {({ virtualMonitor }) => (
-        <Mutation
-          mutation={SET_OVERRIDE_STOP_NAME}
-          client={virtualMonitor}
-        >
-          {(setOverrideStopName: (arg0: { variables: { stopId: string | undefined; overrideStopName: string; }; }) => any) => (
+        <Mutation mutation={SET_OVERRIDE_STOP_NAME} client={virtualMonitor}>
+          {(
+            setOverrideStopName: (arg0: {
+              variables: {
+                stopId: string | undefined;
+                overrideStopName: string;
+              };
+            }) => any,
+          ) => (
             <>
-              <label
-                style={{ marginLeft: '0.5em', }}
-              >
+              <label style={{ marginLeft: '0.5em' }}>
                 {`${t('stopName')}: `}
               </label>
-              <input onChange={e => setOverrideStopName({ variables: { stopId: stop.id, overrideStopName: e.target.value } })} />
+              <input
+                onChange={e =>
+                  setOverrideStopName({
+                    variables: {
+                      stopId: stop.id,
+                      overrideStopName: e.target.value,
+                    },
+                  })
+                }
+              />
             </>
           )}
         </Mutation>

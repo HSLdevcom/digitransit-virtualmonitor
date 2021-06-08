@@ -84,9 +84,8 @@
 // }
 // `;
 
-
 // // interface IStop {
-// //   name: string,  
+// //   name: string,
 // // };
 
 // interface IFullStop {

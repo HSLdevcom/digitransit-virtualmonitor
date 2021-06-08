@@ -12,26 +12,30 @@ class IndexPage extends React.Component<WithTranslation, any> {
     const t2 = this.props.t('frontPageParagraph2');
     const t3 = this.props.t('frontPageParagraph3');
 
-        return (
-            <div id={'stop-search'} className={"index"}>
-                <ContentContainer>
-                    <div className="left">
-                        <h1 className="title">{title}</h1>
-                        <div className={'welcome'}>
-                            <p className={"welcome-text"}> {t1} <br/><br/> {t2} <br/><br/> {t3}
-                            </p>
-                            <button className="todisplay">
-                                <Link to={'/createView'}>
-                                    {this.props.t('quickDisplayCreate')}
-                                </Link>
-                            </button>
-                        </div>
-                    </div>
-                        <div className="right">
-                            <img className={"desktop-img"} src={NysseLaptop} alt=""/>
-                        </div>
-                </ContentContainer>
-      </div> 
+    return (
+      <div id={'stop-search'} className={'index'}>
+        <ContentContainer>
+          <div className="left">
+            <h1 className="title">{title}</h1>
+            <div className={'welcome'}>
+              <p className={'welcome-text'}>
+                {' '}
+                {t1} <br />
+                <br /> {t2} <br />
+                <br /> {t3}
+              </p>
+              <button className="todisplay">
+                <Link to={'/createView'}>
+                  {this.props.t('quickDisplayCreate')}
+                </Link>
+              </button>
+            </div>
+          </div>
+          <div className="right">
+            <img className={'desktop-img'} src={NysseLaptop} alt="" />
+          </div>
+        </ContentContainer>
+      </div>
     );
   }
 }

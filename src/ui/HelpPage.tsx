@@ -1,5 +1,5 @@
 import * as React from 'react';
-import ContentContainer from "../ContentContainer";
+import ContentContainer from '../ContentContainer';
 interface IHelpPageProps {
   urlParamUsageText?: string;
   urlMultipleStopsText?: string;
@@ -8,10 +8,9 @@ interface IHelpPageProps {
   client: any;
 }
 
-
-const HelpPage:React.FC<IHelpPageProps> = (props) =>  {
-  if(!props) {
-    return (<p> ERROR: OHJEITA EI LÖYTYNYT</p>)
+const HelpPage: React.FC<IHelpPageProps> = props => {
+  if (!props) {
+    return <p> ERROR: OHJEITA EI LÖYTYNYT</p>;
   }
 
   return (

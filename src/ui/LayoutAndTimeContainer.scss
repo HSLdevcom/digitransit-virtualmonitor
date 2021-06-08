@@ -1,4 +1,17 @@
 .layout-and-time-container {
   display: flex;
   width: 250px;
+
+  .layout {
+    background-color: #FFFFFF;
+    border: 1px solid  #888888;
+    height: 38px;
+    width: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .row-count {
+      margin-left: 10px;
+    }
+  }
 }

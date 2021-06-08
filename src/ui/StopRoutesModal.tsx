@@ -1,9 +1,11 @@
-import React from "react";
+import React, {FC, useState} from "react";
 import './StopRoutesModal.scss'
 import './StopCode.scss'
 import Icon from "./Icon";
 import {withTranslation, WithTranslation} from "react-i18next";
 import { IStopInfo } from './StopInfoRetriever'
+import Modal from 'react-modal';
+Modal.setAppElement('#root')
 
 interface Route {
     gtfsId: string,
@@ -14,70 +16,60 @@ interface Props {
  showModal: boolean,
  routes: Route[],
  stop: IStopInfo,
- closeModal: (route: Route) => void,
+ closeModal: (route: Route[]) => void,
  hiddenRoutes?: Route[]
 }
 
-class StopRoutesModal extends React.Component<Props & WithTranslation, any> {
-    constructor(props: Props & WithTranslation) {
-        super(props);
-        this.state = {
-            hiddenRoutes: props.hiddenRoutes
-        }
-    }
+    const StopRoutesModal : FC<Props & WithTranslation> = (props: Props & WithTranslation) => {
+        const [hiddenRoutes, setHiddenRoutes] = useState(props.hiddenRoutes)
+        const text = props.t('showHidden');
+        const handleCheck = (e, route) => {
+            const target = e.target;
+            const value = target.type === 'checkbox' ? target.checked : target.value;
+            if(e.target.name === 'all') {
+                const routes = value ? props.routes : []
+                setHiddenRoutes(routes)
+            } else if(value) {
+                   setHiddenRoutes( [...hiddenRoutes, route])
 
-     handleCheck = (e, route) => {
-        const target = e.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        if(e.target.name === 'all') {
-            this.setState({
-                hiddenRoutes: value ? this.props.routes : [],
-            });
-        } else if(value) {
-            this.setState(prevState => ({
-                hiddenRoutes: [...prevState.hiddenRoutes, route]
-            }));
-        } else if(this.state.hiddenRoutes.includes(route)) {
-            this.setState(prevState => ({
-                hiddenRoutes: prevState.hiddenRoutes.filter((r) => {
-                   return  r.shortName !== route.shortName
-                })
-            }));
-        }
+            } else if(hiddenRoutes.includes(route)) {
+                setHiddenRoutes(hiddenRoutes.filter((r) => {
+                    return r.shortName !== route.shortName
+                }))
+            }
 
-        if(this.state.hiddenRoutes.length !== this.props.routes.length) {
-            const input = document?.getElementById("all") as HTMLInputElement;
-            if(input) {
-                input.checked  = false;
+            if(hiddenRoutes.length !== props.routes.length) {
+                const input = document?.getElementById("all") as HTMLInputElement;
+                if(input) {
+                    input.checked  = false;
+                }
             }
         }
-    }
 
-    handleClose = () => {
-        this.props.closeModal?.(this.state.hiddenRoutes);
-    }
-    isChecked = (route) => {
-        if(!route) {
-            return  this.state.hiddenRoutes.length === this.props.routes.length;
+        const handleClose = () => {
+            props.closeModal?.(hiddenRoutes);
         }
-        return this.state.hiddenRoutes.includes(route);
-    }
-    render() {
-        if(!this.props.showModal) {
-           return null
+       const  isChecked = (route) => {
+            if(!route) {
+                return hiddenRoutes.length === props.routes.length;
+            }
+            return hiddenRoutes.includes(route);
         }
-        const text = this.props.t('showHidden');
         return (
+            <Modal
+                isOpen={props.showModal}
+                onRequestClose={handleClose}
+                portalClassName="modal-stop-routes">
             <div className="modal">
-                <div className="close" onClick={this.handleClose} role="button"> <Icon img="close" width={20} height={20}/></div>
+                <div className="close" onClick={handleClose} role="button"> <Icon img="close" width={20} height={20}/></div>
                 <span className="title"> {text} </span>
-                <span className="stop">{this.props.stop.name}</span>
-                <span className="stop-code">{this.props.stop.code}</span>
-                <div className="row"> <input id="all" type="checkbox" name="all" checked={this.isChecked(null)}
-                                             onChange={e => this.handleCheck(e, null)}/> {this.props.t('all')}
+                <span className="stop">{props.stop.name}</span>
+                <span className="stop-code">{props.stop.code}</span>
+                <div className="row"> <input id="all" type="checkbox" name="all" checked={isChecked(null)}
+                                             onChange={e => handleCheck(e, null)}/> {props.t('all')}
                 </div>
-                {this.props.routes.map(route => {
-                    return (<div className="row"> <input type="checkbox" name={route.shortName} checked={this.isChecked( route)} onChange={e => this.handleCheck(e, route)}/>
+                {props.routes.map(route => {
+                    return (<div className="row"> <input type="checkbox" name={route.shortName} checked={isChecked( route)} onChange={e => handleCheck(e, route)}/>
                             {route.shortName} -  {route.gtfsId}
                             </div>
                             );
@@ -85,7 +77,7 @@ class StopRoutesModal extends React.Component<Props & WithTranslation, any> {
                          )
                 }
             </div>
+            </Modal>
         )
     }
-}
 export default withTranslation('translations')(StopRoutesModal);

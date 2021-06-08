@@ -13,9 +13,9 @@ const StopListContainer: FC<Props> = props => {
     setStopList(props.stops);
   }, [props.stops]);
 
-  const stopElements = stopList.map(stop => {
-    return <StopRow stop={stop} onDelete={props.onDelete} />;
-  });
+  const stopElements =  stopList.map(stop => {
+    return <StopRow stop={stop} stopId={stop.gtfsId} onDelete={props.onDelete}/>
+  })
   return (
     <ReactSortable
       list={stopList}

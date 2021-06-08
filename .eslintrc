@@ -4,8 +4,7 @@
   "plugins": [
     "@typescript-eslint",
     "prettier",
-    "react",
-    "prettier"
+    "react"
   ],
   "extends": [
     "eslint:recommended",

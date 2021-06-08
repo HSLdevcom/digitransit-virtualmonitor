@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from "react";
 import StopRow from './StopRow';
 import {SortableContainer, SortableElement} from 'react-sortable-hoc';
 import arrayMove from 'array-move';
+import { v4 as uuid } from 'uuid';
 
 interface Props {
   stops: any,
@@ -21,7 +22,7 @@ const SortableStopList = SortableContainer(({items}) => {
     <ul className="stops">
       {items.map((item, index) => {
         return (
-          <SortableStopItem key={`item-${item}`} index={index} value={item} />
+          <SortableStopItem key={uuid()} index={index} value={item} />
         )
       })}
     </ul>

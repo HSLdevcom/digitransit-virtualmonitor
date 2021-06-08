@@ -18,7 +18,7 @@ const STOP_INFO_QUERY = gql`
 `;
 
 export interface IStopInfo {
-  id?: number,
+  id?: string,
   name: string,
   code?: string,
   desc?: string,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReactComponent as ArrowDown } from './icons/arrow-down.svg';
 import { ReactComponent as Check } from './icons/check.svg';
-import { ReactComponent as Close } from "./icons/close.svg";
+import { ReactComponent as Close } from './icons/close.svg';
 import { ReactComponent as Delete } from './icons/delete.svg';
 import { ReactComponent as Drag } from './icons/drag.svg';
 import { ReactComponent as Edit } from './icons/edit.svg';
@@ -35,27 +35,27 @@ export interface ICustomInputProps {
   width?: number;
 }
 
-const IconMap = ( style: IIconMapProps) => {
-    return {
-        'arrow-down': <ArrowDown style={style} />,
-        'check': <Check style={style} />,
-        'close': <Close style={style} />,
-        'delete': <Delete style={style} />,
-        'drag': <Drag style={style} />,
-        'edit': <Edit style={style} />,
-        'layout1': <Layout1 style={style} />,
-        'layout2': <Layout2 style={style} />,
-        'layout3': <Layout3 style={style} />,
-        'layout4': <Layout4 style={style} />,
-        'layout5': <Layout5 style={style} />,
-        'layout6': <Layout6 style={style} />,
-        'layout7': <Layout7 style={style} />,
-        'layout8': <Layout8 style={style} />,
-        'layout9': <Layout9 style={style} />,
-        'layout10': <Layout10 style={style} />,
-        'layout11': <Layout11 style={style} />,
-        'stop-bus': <StopBus style={style} />,
-    }
+const IconMap = (style: IIconMapProps) => {
+  return {
+    'arrow-down': <ArrowDown style={style} />,
+    check: <Check style={style} />,
+    close: <Close style={style} />,
+    delete: <Delete style={style} />,
+    drag: <Drag style={style} />,
+    edit: <Edit style={style} />,
+    layout1: <Layout1 style={style} />,
+    layout2: <Layout2 style={style} />,
+    layout3: <Layout3 style={style} />,
+    layout4: <Layout4 style={style} />,
+    layout5: <Layout5 style={style} />,
+    layout6: <Layout6 style={style} />,
+    layout7: <Layout7 style={style} />,
+    layout8: <Layout8 style={style} />,
+    layout9: <Layout9 style={style} />,
+    layout10: <Layout10 style={style} />,
+    layout11: <Layout11 style={style} />,
+    'stop-bus': <StopBus style={style} />,
+  };
 };
 /**
  * Icon renders predefined Svg icons as react component.

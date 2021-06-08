@@ -36,6 +36,7 @@
         flex: 1;
         text-align: right;
         color: #007AC9;
+        cursor: pointer;
       }
     }
     .stop-bottom-row {
@@ -65,6 +66,7 @@
     padding-top: 8px;
     border-left: 1px solid #ddd;
     width: 40px;
+    list-style-type: none;
   }
   .stop-bottom-row {
     display: flex;

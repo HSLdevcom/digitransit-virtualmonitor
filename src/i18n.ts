@@ -33,6 +33,7 @@ i18n
           frontPageParagraph3: 'todo',
           hiddenNoChoices: 'No choices',
           hiddenRoutes: 'Hidden routes',
+          languageCode: 'en',
           lineId: 'Line',
           stopsText: 'Stops',
           showhidden: 'Select routes to hide for the stop:',
@@ -61,6 +62,7 @@ i18n
           frontPageParagraph3: 'Aikataulujen lisäksi palvelun kautta saa liikenne- ja häiriötiedotteita.',
           hiddenNoChoices: 'Ei valintoja',
           hiddenRoutes: 'Piilotetut linjat',
+          languageCode: 'fi',
           latitude: 'Latitude',
           lineId: 'Linja',
           loading: 'Ladataan…',
@@ -116,6 +118,7 @@ i18n
           hiddenNoChoices: 'Ei valintoja',
           hiddenRoutes: 'Piilotetut linjat',
           showHidden: 'TODO',
+          languageCode: 'sv',
           stoptitle: 'TODO',
           stopsText: 'Hållplats',
           title: 'Now you can create...'

@@ -1,21 +1,22 @@
-import copy from "copy-to-clipboard";
-import gql from "graphql-tag";
-import * as React from "react";
-import { Mutation } from "react-apollo";
-import { WithTranslation, withTranslation } from "react-i18next";
+import copy from 'copy-to-clipboard';
+import gql from 'graphql-tag';
+import * as React from 'react';
+import { Mutation } from 'react-apollo';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
-import { IConfiguration } from "./ConfigurationList";
-import DisplayEditor from "./DisplayEditor";
-import { ApolloClientsContext } from "../VirtualMonitorApolloClients";
+import { IConfiguration } from './ConfigurationList';
+import DisplayEditor from './DisplayEditor';
+import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
-const copyConfigurationToClipboard = (configuration: IConfiguration) => () => copy(JSON.stringify(configuration));
+const copyConfigurationToClipboard = (configuration: IConfiguration) => () =>
+  copy(JSON.stringify(configuration));
 
 // tslint:disable-next-line
 const emptyFunc = () => {};
 
 interface IConfigEditorProps {
-  readonly configuration: IConfiguration,
-  readonly readonly?: boolean,
+  readonly configuration: IConfiguration;
+  readonly readonly?: boolean;
 }
 
 const saveConfigurationMutation = gql`
@@ -24,15 +25,13 @@ const saveConfigurationMutation = gql`
   }
 `;
 
-const ConfigEditor: React.StatelessComponent<IConfigEditorProps & WithTranslation> = ({ configuration, readonly, t }: IConfigEditorProps & WithTranslation) => (
+const ConfigEditor: React.StatelessComponent<
+  IConfigEditorProps & WithTranslation
+> = ({ configuration, readonly, t }: IConfigEditorProps & WithTranslation) => (
   <div>
     <h1>
       <label>{t('configuration')}: </label>
-      <input
-        onChange={emptyFunc}
-        name={'name'}
-        value={configuration.name}
-      />
+      <input onChange={emptyFunc} name={'name'} value={configuration.name} />
     </h1>
     {configuration.displays.map(display => (
       <DisplayEditor
@@ -42,24 +41,23 @@ const ConfigEditor: React.StatelessComponent<IConfigEditorProps & WithTranslatio
       />
     ))}
     <label>JSON: </label>
-    <textarea
-      value={JSON.stringify(configuration)}
-      onChange={emptyFunc}
-    />
-    <button onClick={copyConfigurationToClipboard(configuration)} value={'Copy JSON to clipboard'}>Copy JSON to clipboard</button>
+    <textarea value={JSON.stringify(configuration)} onChange={emptyFunc} />
+    <button
+      onClick={copyConfigurationToClipboard(configuration)}
+      value={'Copy JSON to clipboard'}
+    >
+      Copy JSON to clipboard
+    </button>
     <ApolloClientsContext.Consumer>
-      {({ virtualMonitor }) =>
-        (<Mutation
-          mutation={saveConfigurationMutation}
-          client={virtualMonitor}
-        >
+      {({ virtualMonitor }) => (
+        <Mutation mutation={saveConfigurationMutation} client={virtualMonitor}>
           {(saveConfiguration: () => void) => (
             <button onClick={() => saveConfiguration()} value={'Save'}>
               Save to server
             </button>
           )}
-        </Mutation>)
-      }
+        </Mutation>
+      )}
     </ApolloClientsContext.Consumer>
   </div>
 );

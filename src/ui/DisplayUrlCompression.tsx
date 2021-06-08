@@ -6,19 +6,23 @@ import ViewCarousel from './ViewCarousel';
 import createUrlCompression from '../urlCompression';
 
 interface IDisplayUrlCompressionProps {
-  readonly version: string,
-  readonly packedString: string,
+  readonly version: string;
+  readonly packedString: string;
 }
 
-const AsyncInflater = <T extends {}>({ children, promise }: { children: (unpacked: T) => React.ReactNode, promise: AsyncProps<T>['promise'] }) => (
+const AsyncInflater = <T extends {}>({
+  children,
+  promise,
+}: {
+  children: (unpacked: T) => React.ReactNode;
+  promise: AsyncProps<T>['promise'];
+}) => (
   <Async
     promise={promise}
-    then={(unpacked) => (
-      unpacked
-        ? children(unpacked)
-        : (<div>Error while unpacking</div>)
-    )}
-    pending={() => (<div>Still unpacking...</div>)}
+    then={unpacked =>
+      unpacked ? children(unpacked) : <div>Error while unpacking</div>
+    }
+    pending={() => <div>Still unpacking...</div>}
   />
 );
 
@@ -26,25 +30,23 @@ const AsyncInflater = <T extends {}>({ children, promise }: { children: (unpacke
 // writing "displaySeconds", manually. This is especially effective for shorter data.
 // DO NOT MODIFY existing dictionaries as this would break all existing urls.
 const displayDictionaries = {
-  'v0': '{"displaySeconds":,"view":{"pierColumnTitle":","stops":[","},"title":{"fi","en"}}]}},"type":"stopTimes"HSL:10"]}',
+  v0: '{"displaySeconds":,"view":{"pierColumnTitle":","stops":[","},"title":{"fi","en"}}]}},"type":"stopTimes"HSL:10"]}',
 };
 
 const renderers = {
-  'v0': (display: IDisplay) => (
-    <ViewCarousel
-      viewCarousel={display.viewCarousel}
-    />
+  v0: (display: IDisplay) => (
+    <ViewCarousel viewCarousel={display.viewCarousel} />
   ),
 };
 
 type IPair = ReturnType<typeof createUrlCompression>;
 
 type IPairWithRenderer = IPair & {
-  renderer: (display: IDisplay) => React.ReactNode,
-}
+  renderer: (display: IDisplay) => React.ReactNode;
+};
 
 interface IPairsWithRenderers {
-  [version: string]: IPairWithRenderer,
+  [version: string]: IPairWithRenderer;
 }
 
 export const pairs: IPairsWithRenderers = Object.entries(renderers).reduce(
@@ -55,13 +57,14 @@ export const pairs: IPairsWithRenderers = Object.entries(renderers).reduce(
       ...createUrlCompression(Buffer.from(displayDictionaries[version])),
     },
   }),
-  {}
+  {},
 );
 
-const DisplayUrlCompression = ({version, packedString}: IDisplayUrlCompressionProps) => (
-  <AsyncInflater
-    promise={pairs[version].unpack(packedString)}
-  >
+const DisplayUrlCompression = ({
+  version,
+  packedString,
+}: IDisplayUrlCompressionProps) => (
+  <AsyncInflater promise={pairs[version].unpack(packedString)}>
     {pairs[version].renderer}
   </AsyncInflater>
 );

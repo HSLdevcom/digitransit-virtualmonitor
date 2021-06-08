@@ -1,6 +1,6 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState } from 'react';
 import StopCardRow from './StopCardRow';
-import {SortableContainer, SortableElement} from 'react-sortable-hoc';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import { v4 as uuid } from 'uuid';
 
@@ -10,30 +10,38 @@ interface Props {
 }
 
 const stopCardsArray = [
-  {id: 1, title: 'Näkymä1', stops: []},
-  {id: 2, title: 'Näkymä2', stops: []},
-  {id: 3, title: 'Näkymä3', stops: []},
+  { id: 1, title: 'Näkymä1', stops: [] },
+  { id: 2, title: 'Näkymä2', stops: [] },
+  { id: 3, title: 'Näkymä3', stops: [] },
 ];
 
-const SortableStopCardItem = SortableElement(({value}) => {
+const SortableStopCardItem = SortableElement(({ value }) => {
   return (
-    <li className="stopcard"><StopCardRow id={value.id} title={value.title} stops={value.stops} onCardDelete={value.onCardDelete} setStops={value.setStops} onStopDelete={value.onStopDelete} updateTitle={value.updateTitle} /></li>
+    <li className="stopcard">
+      <StopCardRow
+        id={value.id}
+        title={value.title}
+        stops={value.stops}
+        onCardDelete={value.onCardDelete}
+        setStops={value.setStops}
+        onStopDelete={value.onStopDelete}
+        updateTitle={value.updateTitle}
+      />
+    </li>
   );
 });
 
-const SortableStopCardList = SortableContainer(({items}) => {
+const SortableStopCardList = SortableContainer(({ items }) => {
   return (
     <ul className="stopcards">
       {items.map((item, index) => {
-        return (
-          <SortableStopCardItem key={uuid()} index={index} value={item} />
-        )
+        return <SortableStopCardItem key={uuid()} index={index} value={item} />;
       })}
     </ul>
   );
 });
 
-const StopCardListContainer : FC<Props> = (props) => {
+const StopCardListContainer: FC<Props> = props => {
   const [stopCardList, setStopCardList] = useState(stopCardsArray);
 
   const onCardDelete = (id: number) => {
@@ -65,25 +73,29 @@ const StopCardListContainer : FC<Props> = (props) => {
     const index = stopCardList.indexOf(card);
     array[index] = card;
     setStopCardList(array);
-  }
+  };
 
-  const onSortEnd = ({oldIndex, newIndex}) => {
+  const onSortEnd = ({ oldIndex, newIndex }) => {
     setStopCardList(arrayMove(stopCardList, oldIndex, newIndex));
   };
 
   const modifiedStopCardList = stopCardList.map(card => {
-    return ({
+    return {
       ...card,
       onCardDelete: onCardDelete,
       onStopDelete: onStopDelete,
       setStops: setStops,
       updateTitle: updateTitle,
-    });
+    };
   });
 
   return (
-    <SortableStopCardList items={modifiedStopCardList} useDragHandle onSortEnd={onSortEnd} />
-  )
-}
+    <SortableStopCardList
+      items={modifiedStopCardList}
+      useDragHandle
+      onSortEnd={onSortEnd}
+    />
+  );
+};
 
 export default StopCardListContainer;

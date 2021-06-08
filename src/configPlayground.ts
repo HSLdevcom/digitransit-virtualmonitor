@@ -1,7 +1,6 @@
 import { IConfigurations } from './ui/ConfigurationList';
 
-const configs: IConfigurations =
-[
+const configs: IConfigurations = [
   {
     displays: [
       {
@@ -105,7 +104,7 @@ const configs: IConfigurations =
               type: 'stopTimes',
             },
           },
-        ]
+        ],
       },
     ],
     id: 'Foobar',

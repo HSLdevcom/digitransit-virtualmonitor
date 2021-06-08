@@ -5,11 +5,11 @@ import { ApolloLink } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
 
 const virtualMonitorCache = new InMemoryCache({
-  cacheRedirects: { 
+  cacheRedirects: {
     Query: {
       display: (_: any, { id }: { id: string }, context: Context) => {
         return context.getCacheKey({ __typename: 'Display', id });
-      }
+      },
     },
   },
 });
@@ -22,7 +22,7 @@ export const virtualMonitorClient = new ApolloClient({
     loona,
     new HttpLink({
       uri: 'http://localhost:4000',
-    })
+    }),
   ]),
 });
 (virtualMonitorClient as any).name = 'VirtualMonitorClient';

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MockedProvider } from 'react-apollo/test-utils'
+import { MockedProvider } from 'react-apollo/test-utils';
 import { create } from 'react-test-renderer';
 
 import AutoMoment from './AutoMoment';

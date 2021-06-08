@@ -23,7 +23,7 @@ const layouts = [
     value: '2',
     label: (
       <>
-        <Icon img="layout3" />
+        <Icon img="layout2" />
         <span className="row-count">8</span>
       </>
     ),
@@ -32,7 +32,7 @@ const layouts = [
     value: '3',
     label: (
       <>
-        <Icon img="layout2" />
+        <Icon img="layout3" />
         <span className="row-count">12</span>
       </>
     ),
@@ -50,7 +50,7 @@ const layouts = [
     value: '5',
     label: (
       <>
-        <Icon img="layout6" />
+        <Icon img="layout5" />
         <span className="row-count">8+8</span>
       </>
     ),
@@ -59,7 +59,7 @@ const layouts = [
     value: '6',
     label: (
       <>
-        <Icon img="layout5" />
+        <Icon img="layout6" />
         <span className="row-count">12+12</span>
       </>
     ),
@@ -95,7 +95,7 @@ const layouts = [
     value: '10',
     label: (
       <>
-        <Icon img="layout11" />
+        <Icon img="layout10" />
         <span className="row-count">8+8</span>
       </>
     ),
@@ -104,7 +104,7 @@ const layouts = [
     value: '11',
     label: (
       <>
-        <Icon img="layout10" />
+        <Icon img="layout11" />
         <span className="row-count">12+12</span>
       </>
     ),

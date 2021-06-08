@@ -33,7 +33,7 @@ const layouts = [
         value: '2',
         label: (
           <>
-            <Icon img="layout3" height={90} width={160} />
+            <Icon img="layout2" height={90} width={160} />
             <span className="label-text">8</span>
           </>
         ),
@@ -42,7 +42,7 @@ const layouts = [
         value: '3',
         label: (
           <>
-            <Icon img="layout2" height={90} width={160} />
+            <Icon img="layout3" height={90} width={160} />
             <span className="label-text">12</span>
           </>
         ),
@@ -65,7 +65,7 @@ const layouts = [
         value: '5',
         label: (
           <>
-            <Icon img="layout6" height={90} width={160} />
+            <Icon img="layout5" height={90} width={160} />
             <span className="label-text">8+8</span>
           </>
         ),
@@ -74,7 +74,7 @@ const layouts = [
         value: '6',
         label: (
           <>
-            <Icon img="layout5" height={90} width={160} />
+            <Icon img="layout6" height={90} width={160} />
             <span className="label-text">12+12</span>
           </>
         ),
@@ -120,7 +120,7 @@ const layouts = [
         value: '10',
         label: (
           <>
-            <Icon img="layout11" height={90} width={160} />
+            <Icon img="layout10" height={90} width={160} />
             <span className="label-text">8+8</span>
           </>
         ),
@@ -129,7 +129,7 @@ const layouts = [
         value: '11',
         label: (
           <>
-            <Icon img="layout10" height={90} width={160} />
+            <Icon img="layout11" height={90} width={160} />
             <span className="label-text">12+12</span>
           </>
         ),

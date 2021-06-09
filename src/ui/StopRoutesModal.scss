@@ -1,5 +1,5 @@
-.modal {
-  height: 300px;
+.modal-stop-routes {
+  /* height: 300px;
   width: 500px;
   background-color: #FFFFFF;
   position: absolute;
@@ -10,7 +10,14 @@
   font-size: 18px;
   overflow-y: auto;
   overflow-x: hidden;
-  border-radius: 5px;
+  border-radius: 5px; */
+  .ReactModal__Content {
+    width: 500px;
+    height: 300px;
+    left: 20vw !important;
+    top: 20vw !important;
+
+  }
   .close{
     position: absolute;;
     right: 10px;

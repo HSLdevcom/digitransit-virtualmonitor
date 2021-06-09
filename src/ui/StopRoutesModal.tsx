@@ -4,7 +4,7 @@ import './StopCode.scss';
 import Icon from './Icon';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { IStopInfo } from './StopInfoRetriever';
-import {v4 as uuid } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 interface Route {
   gtfsId: string;

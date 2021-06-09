@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { gql, useLazyQuery } from '@apollo/client';
 import Icon from './Icon';
-import { uniqBy, sortBy }from 'lodash';
+import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
 import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
 import getSearchContext from './searchContext';
@@ -23,8 +23,8 @@ const getGTFSId = id => {
 };
 
 const GET_STOP = gql`
-query stopQuery($ids: [String]) {
-  stop: stops(ids: $ids) {
+  query stopQuery($ids: [String]) {
+    stop: stops(ids: $ids) {
       id
       name
       code
@@ -91,10 +91,10 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
     const properties = selected.properties;
     switch (properties.layer) {
       case 'stop':
-        getStop({ variables: {ids: getGTFSId(properties.id)}})
+        getStop({ variables: { ids: getGTFSId(properties.id) } });
         break;
       case 'station':
-        getStation({ variables: {ids: getGTFSId(properties.id)}})
+        getStation({ variables: { ids: getGTFSId(properties.id) } });
         break;
       default:
         console.log('unknown', selected);
@@ -107,49 +107,62 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   };
 
   useEffect(() => {
-    if(stopState.data?.stop) {
-      console.log(stopState.data.stop.filter(stop => stop && !stops.some(el => el.id === stop.id)).map(stop => {
-        return {
-          ...stop,
-          routes: sortBy(
-            sortBy(stop.routes, 'shortName'),
-            'shortName.length',
-          ),
-        }
-      }))
-      setStops(id, stopState.data.stop.filter(stop => stop && !stops.some(el => el.id === stop.id)).map(stop => {
-        return {
-          ...stop,
-          routes: sortBy(
-            sortBy(stop.routes, 'shortName'),
-            'shortName.length',
-          ),
-        }
-      }), false)
+    if (stopState.data?.stop) {
+      console.log(
+        stopState.data.stop
+          .filter(stop => stop && !stops.some(el => el.id === stop.id))
+          .map(stop => {
+            return {
+              ...stop,
+              routes: sortBy(
+                sortBy(stop.routes, 'shortName'),
+                'shortName.length',
+              ),
+            };
+          }),
+      );
+      setStops(
+        id,
+        stopState.data.stop
+          .filter(stop => stop && !stops.some(el => el.id === stop.id))
+          .map(stop => {
+            return {
+              ...stop,
+              routes: sortBy(
+                sortBy(stop.routes, 'shortName'),
+                'shortName.length',
+              ),
+            };
+          }),
+        false,
+      );
     }
   }, [stopState.data]);
 
   useEffect(() => {
-    if(stationState.data?.station) {
-      setStops(id, stationState.data.station.filter(s => s && !stops.some(el => el.id === s.id)).map(station => {
-        let routes = [];
-        station.stops.forEach(stop => routes.push(...stop.routes))
-        console.log(routes)
-        routes = uniqBy(routes, 'gtfsId');
-        console.log(routes)
-        routes = sortBy(
-          sortBy(routes, 'shortName'),
-          'shortName.length',
-        );
-        return {
-          ...station,
-          code: t('station'),
-          desc: station.stops[0].desc,
-          routes: routes,
-        }
-      }), false)
+    if (stationState.data?.station) {
+      setStops(
+        id,
+        stationState.data.station
+          .filter(s => s && !stops.some(el => el.id === s.id))
+          .map(station => {
+            let routes = [];
+            station.stops.forEach(stop => routes.push(...stop.routes));
+            console.log(routes);
+            routes = uniqBy(routes, 'gtfsId');
+            console.log(routes);
+            routes = sortBy(sortBy(routes, 'shortName'), 'shortName.length');
+            return {
+              ...station,
+              code: t('station'),
+              desc: station.stops[0].desc,
+              routes: routes,
+            };
+          }),
+        false,
+      );
     }
-  }, [stationState.data])
+  }, [stationState.data]);
 
   return (
     <div className="stopcard-row-container">

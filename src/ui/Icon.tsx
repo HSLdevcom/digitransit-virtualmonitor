@@ -76,9 +76,6 @@ const Icon = (props: ICustomInputProps) => {
   if (props.img === 'stop-bus') {
     height = '32';
     width = '32';
-  } else if (props.img.indexOf('layout') !== -1) {
-    height = '42';
-    width = '42';
   } else if (props.img === 'check') {
     fill = null;
     height = '18';

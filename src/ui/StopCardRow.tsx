@@ -97,7 +97,6 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         getStation({ variables: { ids: getGTFSId(properties.id) } });
         break;
       default:
-        console.log('unknown', selected);
         break;
     }
   };
@@ -108,19 +107,6 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
 
   useEffect(() => {
     if (stopState.data?.stop) {
-      console.log(
-        stopState.data.stop
-          .filter(stop => stop && !stops.some(el => el.id === stop.id))
-          .map(stop => {
-            return {
-              ...stop,
-              routes: sortBy(
-                sortBy(stop.routes, 'shortName'),
-                'shortName.length',
-              ),
-            };
-          }),
-      );
       setStops(
         id,
         stopState.data.stop
@@ -148,15 +134,12 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
           .map(station => {
             let routes = [];
             station.stops.forEach(stop => routes.push(...stop.routes));
-            console.log(routes);
             routes = uniqBy(routes, 'gtfsId');
-            console.log(routes);
-            routes = sortBy(sortBy(routes, 'shortName'), 'shortName.length');
             return {
               ...station,
               code: t('station'),
               desc: station.stops[0].desc,
-              routes: routes,
+              routes: sortBy(sortBy(routes, 'shortName'), 'shortName.length'),
             };
           }),
         false,

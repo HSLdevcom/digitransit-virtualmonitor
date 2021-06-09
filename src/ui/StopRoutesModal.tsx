@@ -4,6 +4,7 @@ import './StopCode.scss';
 import Icon from './Icon';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { IStopInfo } from './StopInfoRetriever';
+import {v4 as uuid } from 'uuid';
 
 interface Route {
   gtfsId: string;
@@ -89,7 +90,7 @@ class StopRoutesModal extends React.Component<Props & WithTranslation, any> {
         </div>
         {this.props.routes.map(route => {
           return (
-            <div className="row">
+            <div key={uuid()} className="row">
               {' '}
               <input
                 type="checkbox"

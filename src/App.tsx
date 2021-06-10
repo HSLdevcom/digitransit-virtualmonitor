@@ -105,6 +105,18 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
             component={QuickDisplay}
           />
           <Route
+            path={'/help/:contenthash'}
+            component={({  }: RouteComponentProps<IConfigurationDisplayRouteParams>) => (
+              <HelpPage
+                  client={null}
+                  urlParamUsageText={helpPageUrlParamText}
+                  urlMultipleStopsText={helpPageurlMultipleStopsText}
+                  urlParamFindText={helpPageUrlParamFindText}
+                  urlParamFindAltText={helpPageUrlParamFindAltText}
+                />
+            )}
+          />
+          <Route
             path={'/help/'}
             // eslint-disable-next-line no-empty-pattern
             component={({

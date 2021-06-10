@@ -3,6 +3,7 @@ import StopCardRow from './StopCardRow';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import { v4 as uuid } from 'uuid';
+import hash from 'object-hash';
 
 interface Props {
   //stopCards: any,
@@ -47,7 +48,7 @@ const StopCardListContainer: FC<Props> = props => {
   const onCardDelete = (id: number) => {
     setStopCardList(stopCardList.filter(s => s.id !== id));
   };
-
+  console.log('hash:', hash(stopCardList));
   const onStopDelete = (cardId: number, gtfsId: string) => {
     const card = stopCardList.find(card => card.id === cardId);
     card.stops = card.stops.filter(stop => stop.gtfsId !== gtfsId);

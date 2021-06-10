@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - next
-      - remove-autosuggest
   workflow_dispatch:
 
 jobs:

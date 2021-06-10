@@ -55,6 +55,7 @@
     "uuid": "^3.4.0"
   },
   "scripts": {
+    "start-prod": "cd server && npm start",
     "prepare": "patch-package",
     "start": "react-scripts start",
     "build": "react-scripts build",

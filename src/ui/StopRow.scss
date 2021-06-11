@@ -71,4 +71,11 @@
   .stop-bottom-row {
     display: flex;
   }
+  .drag-and-drop-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #888888;
+    padding-left: 10px;
+  }
 }

@@ -2,25 +2,29 @@ import React, { FC, useState } from 'react';
 import './StopViewTitleEditor.scss';
 import Icon from './Icon';
 import { WithTranslation, withTranslation } from 'react-i18next';
-
+import { focusToInput, onClick } from './InputUtils';
 interface IProps {
   id: number;
   title: string;
-  updateValue?: Function;
+  updateCardInfo?: Function;
 }
 
 const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   id,
   title,
-  updateValue,
+  updateCardInfo,
   t,
 }) => {
   const [newTitle, setNewTitle] = useState(title);
   const [changed, setChanged] = useState(false);
 
-  const onClick = event => {
-    event.target.select();
+  const onBlur = event => {
+    if (updateCardInfo) {
+      updateCardInfo(id, 'title', event.target.value);
+      setChanged(true);
+    }
   };
+
   const isKeyboardSelectionEvent = event => {
     const backspace = [8, 'Backspace'];
     const space = [13, ' ', 'Spacebar'];
@@ -50,6 +54,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
       setChanged(true);
       return false;
     }
+
     if (!key || !enter.includes(key)) {
       if (key.length === 1) {
         setNewTitle(newTitle.concat(key));
@@ -57,78 +62,32 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
       }
       return false;
     }
+
     event.preventDefault();
-    if (updateValue) {
-      updateValue(id, newTitle);
+    if (updateCardInfo) {
+      updateCardInfo(id, 'title', newTitle);
       setChanged(false);
     }
     return true;
   };
   return (
     <div className="stop-title">
-      <p className="description">
-        {t('stoptitle')}
-        {id}
-      </p>
+      <p className="description">{t('stoptitle')}</p>
       <div className="stop-title-input-container">
         <input
           className="stop-title-input"
           id={`stop-title-input${id}`}
           onClick={e => onClick(e)}
           onKeyDown={e => isKeyboardSelectionEvent(e)}
+          onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
           value={changed ? newTitle : title}
         />
-        <div role="button">
+        <div role="button" onClick={() => focusToInput(`stop-title-input${id}`)}>
           <Icon img="edit" color={'#007ac9'} />
         </div>
       </div>
     </div>
   );
 };
-/*class StopViewTitleEditor extends React.Component<WithTranslation & IProps, IState > {
-    constructor(props: IProps) {
-        super(props);
-        this.state = {
-            value: props.title,
-        }
-    }
-
-    onClick = () => {
-        const {id} = this.props;
-        if(this.state.value === this.props.t('stopText')) {
-            this.setState({value: ''},function (){
-                document?.getElementById(`stop-title-input${id}`)!.focus();
-            })
-        } else {
-            document?.getElementById(`stop-title-input${id}`)!.focus();
-        }
-
-  onClick = () => {
-    if (this.state.value === this.props.t('stopsText')) {
-      this.setState({ value: '' }, function () {
-        document?.getElementById('stop-title-input')!.focus();
-      });
-    } else {
-      document?.getElementById('stop-title-input')!.focus();
-    }
-
-    render() {
-        const {t, id, title} = this.props;
-        return (
-            <div className="stop-title">
-                <p className="description">{t('stoptitle')}{id}</p>
-                <div className="stop-title-input-container">
-                    <input className="stop-title-input" id={`stop-title-input${id}`}
-                       value={this.state.value || title}
-                       onKeyDown={ e => this.isKeyboardSelectionEvent(e)}
-                    />
-                    <div role="button" onClick={this.onClick}>
-                        <Icon img="edit" color={'#007ac9'}/>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}*/
 
 export default withTranslation('translations')(StopViewTitleEditor);

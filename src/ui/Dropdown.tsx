@@ -11,6 +11,7 @@ interface IProps {
   readonly isSearchable?: boolean;
   readonly options?: Array<Option>;
   readonly placeholder?: string | JSX.Element;
+  readonly handleChange?: Function;
 }
 
 interface Option {
@@ -30,6 +31,7 @@ const Dropdown: FC<IProps & WithTranslation> = ({
   isSearchable,
   options,
   placeholder,
+  handleChange,
   t,
 }) => {
   const ddIndicator = (
@@ -64,6 +66,7 @@ const Dropdown: FC<IProps & WithTranslation> = ({
       options={options}
       placeholder={placeholder ? placeholder : t('dropdownPlaceHolder')}
       tabIndex="0"
+      onChange={handleChange}
     />
   );
 };

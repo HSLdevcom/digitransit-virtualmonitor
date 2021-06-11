@@ -1,17 +1,21 @@
 .layout-and-time-container {
   display: flex;
-  width: 250px;
+  width: 280px;
+  justify-content: flex-end;
 
-  .layout {
+  .layout-button {
     background-color: #FFFFFF;
-    border: 1px solid  #888888;
-    height: 38px;
-    width: 90px;
+    border: 1px solid  hsl(0, 0%, 70%);
+    border-radius: 5px;
+    height: 44px;
+    width: 130px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    .row-count {
+    .label {
       margin-left: 10px;
+      font-size: 15px;
+      color: #888888;
     }
   }
 }

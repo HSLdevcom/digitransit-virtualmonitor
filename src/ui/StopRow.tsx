@@ -1,4 +1,3 @@
-import { gql, useLazyQuery } from '@apollo/client';
 import React, { FC, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import StopRoutesModal from './StopRoutesModal';
@@ -6,23 +5,44 @@ import StopCode from './StopCode';
 import Icon from './Icon';
 import { IStopInfo } from './StopInfoRetriever';
 import './StopRow.scss';
-import sortBy from 'lodash/sortBy';
+import { SortableHandle } from 'react-sortable-hoc';
+
+interface IStopInfoPlus extends IStopInfo {
+  cardId?: number;
+  hiddenRoutes?: any;
+  layout: number;
+  locality?: string;
+}
 
 interface IProps {
-  readonly stop: IStopInfo;
-  readonly onDelete: Function;
+  readonly side: string;
+  readonly stop: IStopInfoPlus;
   readonly stopId?: string;
+  readonly onStopDelete: Function;
+  readonly setStops?: Function;
 }
 
 const StopRow: FC<IProps & WithTranslation> = ({
+  side,
   stop,
-  onDelete,
-  stopId,
+  onStopDelete,
+  setStops,
   t,
 }) => {
   const [hiddenRoutes, setHiddenRoutes] = useState([]);
   const [showModal, changeOpen] = useState(false);
-  const gethidden = routes => {
+  const saveHiddenRoutes = routes => {
+    const newStop = {
+      code: stop.code,
+      desc: stop.desc,
+      gtfsId: stop.gtfsId,
+      hiddenRoutes: routes,
+      name: stop.name,
+      platformCode: stop.platformCode,
+      locality: stop.locality,
+      routes: stop.routes,
+    };
+    setStops(stop.cardId, side, newStop, false, stop.gtfsId);
     setHiddenRoutes(routes);
     changeOpen(false);
   };
@@ -32,6 +52,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
     }
   };
 
+  const SortableHandleItem = SortableHandle(({ children }) => children);
   return (
     <div className="stop-row-container">
       <div className="stop-row-stop icon">
@@ -40,13 +61,13 @@ const StopRow: FC<IProps & WithTranslation> = ({
       <div className="stop-row-main">
         <div className="stop-upper-row">
           {stop.name}
-          <div className="hidden-routes">{t('hiddenRoutes')}</div>
+          <div className="hidden-routes" onClick={handleClick}>{t('hiddenRoutes')}</div>
         </div>
         {showModal && (
           <div className="modal-container">
             <StopRoutesModal
-              hiddenRoutes={hiddenRoutes}
-              closeModal={gethidden}
+              hiddenRoutes={stop.hiddenRoutes}
+              closeModal={saveHiddenRoutes}
               showModal={showModal}
               stop={stop}
               routes={stop.routes}
@@ -54,17 +75,16 @@ const StopRow: FC<IProps & WithTranslation> = ({
           </div>
         )}
         <div className="stop-bottom-row">
-          {stop.desc && <div className="address">{stop.desc}</div>}
+          {stop.desc && <div className="address">{stop.locality}</div>}
           <StopCode code={stop.code} />
           <div className="hidden-choices" role="button" onClick={handleClick}>
-            {!hiddenRoutes.length && t('hiddenNoChoices')}
-            {hiddenRoutes.length > 0 && (
+            {!stop.hiddenRoutes.length && t('hiddenNoChoices')}
+            {stop.hiddenRoutes.length > 0 && (
               <span>
-                {' '}
-                {hiddenRoutes.length
+                {stop.hiddenRoutes.length
                   .toString()
                   .concat(' / ')
-                  .concat(stop.routes.length.toString())}{' '}
+                  .concat(stop.routes.length.toString())}
               </span>
             )}
           </div>
@@ -72,13 +92,17 @@ const StopRow: FC<IProps & WithTranslation> = ({
       </div>
       <div
         className="stop-row-delete icon"
-        onClick={() => onDelete(stop.gtfsId)}
+        onClick={() => onStopDelete(stop.cardId, side, stop.gtfsId)}
       >
         <Icon img="delete" color={'#888888'} />
       </div>
-      <div className="stop-row-drag icon">
-        <Icon img="drag" color={'#888888'} />
-      </div>
+      {stop.layout >= 9 && (
+        <SortableHandleItem>
+          <div className="stop-row-drag icon">
+            <Icon img="drag" color={'#888888'} />
+          </div>
+        </SortableHandleItem>
+      )}
     </div>
   );
 };

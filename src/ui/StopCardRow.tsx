@@ -9,7 +9,9 @@ import getSearchContext from './searchContext';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import { SortableHandle } from 'react-sortable-hoc';
-
+import { ICardInfo } from './CardInfo';
+import cx from 'classnames';
+import { focusToInput, onClick } from './InputUtils';
 import './StopCardRow.scss';
 
 const getGTFSId = id => {
@@ -61,34 +63,118 @@ const GET_STATION = gql`
 
 interface IProps {
   //readonly stopCard: IViewCarouselElement,
-  readonly id: number;
-  readonly title: string;
+  readonly cardInfo: ICardInfo;
   readonly stops: any;
   readonly onCardDelete?: Function;
   readonly onStopDelete?: Function;
   readonly setStops?: Function;
-  readonly updateTitle?: Function;
+  readonly updateCardInfo?: Function;
 }
 
-const SortableHandleItem = SortableHandle(({ children }) => children);
-
 const StopCardRow: FC<IProps & WithTranslation> = ({
-  id,
-  title,
+  cardInfo,
   stops,
   onCardDelete,
   onStopDelete,
   setStops,
-  updateTitle,
+  updateCardInfo,
   t,
 }) => {
-  const lang = t('languageCode');
-
   const [getStop, stopState] = useLazyQuery(GET_STOP);
   const [getStation, stationState] = useLazyQuery(GET_STATION);
+  const [newTitleLeft, setNewTitleLeft] = useState(stops['left'].title);
+  const [changedLeft, setChangedLeft] = useState(false);
+  const [newTitleRight, setNewTitleRight] = useState(stops['right'].title);
+  const [changedRight, setChangedRight] = useState(false);
+  const [autosuggestValue, setAutosuggestValue] = useState(undefined);
+
+  const onBlur = (event: any, side: string) => {
+    if (event && updateCardInfo) {
+      updateCardInfo(cardInfo.id, `title-${side}`, event.target.value);
+      if (side === 'left') {
+        setChangedLeft(false);
+      } else {
+        setChangedRight(false);
+      }
+    }
+  };
+
+  const isKeyboardSelectionEvent = (event: any, side: string) => {
+    const backspace = [8, 'Backspace'];
+    const space = [13, ' ', 'Spacebar'];
+    const enter = [32, 'Enter'];
+
+    const key = (event && (event.key || event.which || event.keyCode)) || '';
+
+    const newTitle = side === 'left' ? newTitleLeft : newTitleRight;
+
+    if (
+      key &&
+      typeof event.target.selectionStart === 'number' &&
+      event.target.selectionStart === 0 &&
+      event.target.selectionEnd === event.target.value.length &&
+      newTitle
+    ) {
+      if (backspace.concat(space).includes(key)) {
+        if (side === 'left') {
+          setNewTitleLeft('');
+          setChangedLeft(true);
+        } else {
+          setNewTitleRight('');
+          setChangedRight(true);
+        }
+      } else if (key.length === 1) {
+        event.target.value = key;
+        if (side === 'left') {
+          setNewTitleLeft(key);
+          setChangedLeft(true);
+        } else {
+          setNewTitleRight(key);
+          setChangedRight(true);
+        }
+      }
+      return false;
+    }
+
+    if (key && backspace.includes(key)) {
+      if (side === 'left') {
+        setNewTitleLeft(newTitleLeft.slice(0, -1));
+        setChangedLeft(true);
+      } else {
+        setNewTitleRight(newTitleRight.slice(0, -1));
+        setChangedRight(true);
+      }
+      return false;
+    }
+
+    if (!key || !enter.includes(key)) {
+      if (key.length === 1) {
+        if (side === 'left') {
+          setNewTitleLeft(newTitleLeft.concat(key));
+          setChangedLeft(true);
+        } else {
+          setNewTitleRight(newTitleRight.concat(key));
+          setChangedRight(true);
+        }
+      }
+      return false;
+    }
+
+    event.preventDefault();
+    if (updateCardInfo) {
+      updateCardInfo(cardInfo.id, `title-${side}`, side === 'left' ? newTitleLeft : newTitleRight);
+      if (side === 'left') {
+        setChangedLeft(false);
+      } else {
+        setChangedRight(false);
+      }
+    }
+    return true;
+  };
 
   const onSelect = selected => {
     const properties = selected.properties;
+    setAutosuggestValue(properties);
     switch (properties.layer) {
       case 'stop':
         getStop({ variables: { ids: getGTFSId(properties.id) } });
@@ -108,19 +194,26 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   useEffect(() => {
     if (stopState.data?.stop) {
       setStops(
-        id,
+        cardInfo.id,
+        'left',
         stopState.data.stop
-          .filter(stop => stop && !stops.some(el => el.id === stop.id))
+          .filter(stop => stop && !stops['left'].items.some(el => el.id === stop.id))
           .map(stop => {
-            return {
+            const stopWithGTFS = {
               ...stop,
+              locality: autosuggestValue.locality,
+            }
+            return {
+              ...stopWithGTFS,
               routes: sortBy(
                 sortBy(stop.routes, 'shortName'),
                 'shortName.length',
               ),
+              hiddenRoutes: [],
             };
           }),
         false,
+        undefined,
       );
     }
   }, [stopState.data]);
@@ -128,15 +221,20 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   useEffect(() => {
     if (stationState.data?.station) {
       setStops(
-        id,
+        cardInfo.id,
+        'left',
         stationState.data.station
           .filter(s => s && !stops.some(el => el.id === s.id))
           .map(station => {
             let routes = [];
             station.stops.forEach(stop => routes.push(...stop.routes));
             routes = uniqBy(routes, 'gtfsId');
-            return {
+            const stationWithGTFS = {
               ...station,
+              locality: autosuggestValue.locality,
+            }
+            return {
+              ...stationWithGTFS,
               code: t('station'),
               desc: station.stops[0].desc,
               routes: sortBy(sortBy(routes, 'shortName'), 'shortName.length'),
@@ -147,12 +245,15 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
     }
   }, [stationState.data]);
 
+  const lang = t('languageCode');
+  const SortableHandleItem = SortableHandle(({ children }) => children);
+  const showStopTitles = stops['left'].items.length + stops['right'].items.length > 0;
   return (
     <div className="stopcard-row-container">
       <div className="title-with-icons">
-        <StopViewTitleEditor id={id} title={title} updateValue={updateTitle} />
+        <StopViewTitleEditor id={cardInfo.id} title={cardInfo.title} updateCardInfo={updateCardInfo} />
         <div className="icons">
-          <div className="delete icon" onClick={() => onCardDelete(id)}>
+          <div className="delete icon" onClick={() => onCardDelete(cardInfo.id)}>
             <Icon img="delete" color={'#888888'} />
           </div>
           <SortableHandleItem>
@@ -161,6 +262,11 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             </div>
           </SortableHandleItem>
         </div>
+      </div>
+      <div className="headers">
+        <div className="stop">{t('prepareStop')}</div>
+        <div className="layout">{t('layout')}</div>
+        <div className="duration">{t('duration')}</div>
       </div>
       <div className="search-stop-with-layout-and-time">
         <div className="search-stop">
@@ -179,16 +285,74 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             targets={['Stops']}
           />
         </div>
-        <LayoutAndTimeContainer />
+        <LayoutAndTimeContainer cardInfo={cardInfo} updateCardInfo={updateCardInfo} />
       </div>
+      {cardInfo.layout >= 9 && showStopTitles && (
+        <div className={cx('stop-list-title', 'left')}>
+          <input
+            className="input-left"
+            id={'stop-list-title-input-left'}
+            onClick={e => onClick(e)}
+            onKeyDown={e => isKeyboardSelectionEvent(e, 'left')}
+            onBlur={e => !isKeyboardSelectionEvent(e, 'left') && onBlur(e, 'left')}
+            value={changedLeft ? newTitleLeft : stops['left'].title}
+          />
+          <div role="button" onClick={() => focusToInput('stop-list-title-input-left')}>
+            <Icon img="edit" color={'#007ac9'} width={20} height={20}/>
+          </div>
+        </div>
+      )}
       <div className="stop-list">
         <StopListContainer
+          side={'left'}
           stops={stops}
-          cardId={id}
+          cardId={cardInfo.id}
+          layout={cardInfo.layout}
           onStopDelete={onStopDelete}
           setStops={setStops}
         />
       </div>
+      {cardInfo.layout >= 9 && showStopTitles && (
+        <div className={cx('stop-list-title', 'right')}>
+          <input
+            className="input-right"
+            id={'stop-list-title-input-right'}
+            onClick={e => onClick(e)}
+            onKeyDown={e => isKeyboardSelectionEvent(e, 'right')}
+            onBlur={e => !isKeyboardSelectionEvent(e, 'right') && onBlur(e, 'right')}
+            value={changedRight ? newTitleRight : stops['right'].title}
+          />
+          <div role="button" onClick={() => focusToInput('stop-list-title-input-right')}>
+            <Icon img="edit" color={'#007ac9'} width={20} height={20}/>
+          </div>
+        </div>
+      )}
+      {cardInfo.layout >= 9 && showStopTitles && stops['right'].items.length === 0 && (
+        <div className="stop-list">
+          <ul className="stops">
+            <li className="stop">
+              <div className="stop-row-container">
+                <div className="drag-and-drop-placeholder">
+                  {t('drag-and-drop-placeholder', {title: stops['left'].title})}
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      )}
+      {cardInfo.layout >= 9 && stops['right'].items.length > 0 && (
+        <div className="stop-list">
+          <StopListContainer
+            side={'right'}
+            stops={stops}
+            cardId={cardInfo.id}
+            layout={cardInfo.layout}
+            onStopDelete={onStopDelete}
+            setStops={setStops}
+          />
+        </div>
+      )}
+
     </div>
   );
 };

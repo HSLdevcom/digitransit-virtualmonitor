@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
-import IndexPage from './IndexPage';
+import IndexPage from './ui/IndexPage';
 import monitorConfig from './monitorConfig';
 import Banner from './ui/Banner';
 import Logo from './ui/logo/Logo';

@@ -1,13 +1,15 @@
 import React, { FC, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { log } from 'util';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 import './LayoutAndTimeContainer.scss';
 import LayoutModal from './LayoutModal';
+import { ICardInfo } from './CardInfo';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IProps {}
+interface IProps {
+  cardInfo: ICardInfo;
+  updateCardInfo: Function;
+}
 
 const layouts = [
   {
@@ -15,7 +17,7 @@ const layouts = [
     label: (
       <>
         <Icon img="layout1" />
-        <span className="row-count">4</span>
+        <span className="label">4</span>
       </>
     ),
   },
@@ -24,7 +26,7 @@ const layouts = [
     label: (
       <>
         <Icon img="layout2" />
-        <span className="row-count">8</span>
+        <span className="label">8</span>
       </>
     ),
   },
@@ -33,7 +35,7 @@ const layouts = [
     label: (
       <>
         <Icon img="layout3" />
-        <span className="row-count">12</span>
+        <span className="label">12</span>
       </>
     ),
   },
@@ -42,7 +44,7 @@ const layouts = [
     label: (
       <>
         <Icon img="layout4" />
-        <span className="row-count">4+4</span>
+        <span className="label">4+4</span>
       </>
     ),
   },
@@ -51,7 +53,7 @@ const layouts = [
     label: (
       <>
         <Icon img="layout5" />
-        <span className="row-count">8+8</span>
+        <span className="label">8+8</span>
       </>
     ),
   },
@@ -60,7 +62,7 @@ const layouts = [
     label: (
       <>
         <Icon img="layout6" />
-        <span className="row-count">12+12</span>
+        <span className="label">12+12</span>
       </>
     ),
   },
@@ -69,7 +71,7 @@ const layouts = [
     label: (
       <>
         <Icon img="layout7" />
-        <span className="row-count">4+8</span>
+        <span className="label">4+8</span>
       </>
     ),
   },
@@ -78,7 +80,7 @@ const layouts = [
     label: (
       <>
         <Icon img="layout8" />
-        <span className="row-count">8+12</span>
+        <span className="label">8+12</span>
       </>
     ),
   },
@@ -87,7 +89,7 @@ const layouts = [
     label: (
       <>
         <Icon img="layout9" />
-        <span className="row-count">4+4</span>
+        <span className="label">4+4</span>
       </>
     ),
   },
@@ -96,7 +98,7 @@ const layouts = [
     label: (
       <>
         <Icon img="layout10" />
-        <span className="row-count">8+8</span>
+        <span className="label">8+8</span>
       </>
     ),
   },
@@ -104,8 +106,8 @@ const layouts = [
     value: '11',
     label: (
       <>
-        <Icon img="layout11" />
-        <span className="row-count">12+12</span>
+        <Icon img="layout11" height={36} width={64} />
+        <span className="label">12+12</span>
       </>
     ),
   },
@@ -121,22 +123,37 @@ const times = [
   { value: '30', label: '30s' },
 ];
 
-const LayoutAndTimeContainer: FC<IProps & WithTranslation> = () => {
+const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({ cardInfo, updateCardInfo }) => {
+  const placeHolder = times.find(time => time.value === cardInfo.time.toString()).label;
+  const layout = layouts.find(layout => layout.value === cardInfo.layout.toString());
+  const layoutButton = layout.label;
+  
   const [isOpen, changeOpen] = useState(false);
-  const [layout, setLayout] = useState(layouts[1]);
+  //const [layout, setLayout] = useState();
 
   const setOpen = () => {
     changeOpen(true);
   };
+
   const getLayout = option => {
+    if (updateCardInfo) {
+      updateCardInfo(cardInfo.id, 'layout', option.value.toString());
+    }
     changeOpen(false);
-    setLayout(layouts[option.value - 1]);
+    //setLayout(layouts[option.value - 1]);
   };
+
+  const handleChange = option => {
+    if (updateCardInfo) {
+      updateCardInfo(cardInfo.id, 'time', option.value);
+    }
+  };
+
   return (
     <div className="layout-and-time-container">
       <div role="button" onClick={setOpen}>
-        <button className="layout" name="layout">
-          {layout.label}{' '}
+        <button className="layout-button" name="layout">
+          {layoutButton}
         </button>
       </div>
       <div>
@@ -144,7 +161,8 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = () => {
           name="time"
           isSearchable={false}
           options={times}
-          placeholder={times[1].label}
+          placeholder={placeHolder}
+          handleChange={handleChange}
         />
       </div>
       <LayoutModal isOpen={isOpen} option={layout} onClose={getLayout} />

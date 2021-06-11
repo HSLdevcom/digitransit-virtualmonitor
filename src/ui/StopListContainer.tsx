@@ -5,19 +5,23 @@ import arrayMove from 'array-move';
 import { v4 as uuid } from 'uuid';
 
 interface Props {
+  side: string;
   stops: any;
   cardId: number;
+  layout: number;
   onStopDelete?: Function;
   setStops?: Function;
 }
 
-const SortableStopItem = SortableElement(({ value }) => {
+const SortableStopItem = SortableElement(({ value: item }) => {
   return (
     <li className="stop">
       <StopRow
-        stop={value}
-        stopId={value.gtfsId}
-        onDelete={() => value.onStopDelete(value.cardId, value.gtfsId)}
+        side={item.side}
+        stop={item}
+        stopId={item.gtfsId}
+        onStopDelete={item.onStopDelete}
+        setStops={item.setStops}
       />
     </li>
   );
@@ -36,22 +40,26 @@ const SortableStopList = SortableContainer(({ items }) => {
 const StopListContainer: FC<Props> = props => {
   const [stopList, setStopList] = useState([]);
   useEffect(() => {
-    setStopList(props.stops);
-  }, [props.stops]);
+    setStopList(props.stops[props.side].items);
+  }, [props.stops[props.side].items]);
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const reorderedList = arrayMove(stopList, oldIndex, newIndex);
     setStopList(reorderedList);
     if (props && props.cardId && props.setStops) {
-      props.setStops(props.cardId, reorderedList, true);
+      props.setStops(props.cardId, props.side, reorderedList, true, undefined);
     }
   };
 
-  const modifiedStopList = stopList.map(stop => ({
+
+  const modifiedStopList = stopList.length > 0 ? stopList.map(stop => ({
+    side: props.side,
     ...stop,
     cardId: props.cardId,
+    layout: props.layout,
     onStopDelete: props.onStopDelete,
-  }));
+    setStops: props.setStops,
+  })) : [];
 
   return (
     <SortableStopList

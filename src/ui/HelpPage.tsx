@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import ContentContainer from '../ContentContainer';
+import ContentContainer from './ContentContainer';
 import monitorAPI from '../api';
 interface IHelpPageProps {
   urlParamUsageText?: string;

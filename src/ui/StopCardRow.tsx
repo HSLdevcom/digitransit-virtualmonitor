@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { gql, useLazyQuery } from '@apollo/client';
 import Icon from './Icon';
+import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
 import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
 import getSearchContext from './searchContext';
@@ -22,13 +23,38 @@ const getGTFSId = id => {
 };
 
 const GET_STOP = gql`
-  query GetStopInfos($stopIds: [String]) {
-    stopInfos: stops(ids: $stopIds) {
+  query stopQuery($ids: [String]) {
+    stop: stops(ids: $ids) {
+      id
       name
       code
       desc
       gtfsId
       platformCode
+      routes {
+        shortName
+        gtfsId
+      }
+    }
+  }
+`;
+
+const GET_STATION = gql`
+  query stationQuery($ids: [String]) {
+    station: stations(ids: $ids) {
+      id
+      name
+      code
+      desc
+      gtfsId
+      platformCode
+      stops {
+        desc
+        routes {
+          shortName
+          gtfsId
+        }
+      }
     }
   }
 `;
@@ -43,6 +69,9 @@ interface IProps {
   readonly setStops?: Function;
   readonly updateTitle?: Function;
 }
+
+const SortableHandleItem = SortableHandle(({ children }) => children);
+
 const StopCardRow: FC<IProps & WithTranslation> = ({
   id,
   title,
@@ -55,11 +84,21 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
 }) => {
   const lang = t('languageCode');
 
-  const [getStop, { data }] = useLazyQuery(GET_STOP);
+  const [getStop, stopState] = useLazyQuery(GET_STOP);
+  const [getStation, stationState] = useLazyQuery(GET_STATION);
 
   const onSelect = selected => {
     const properties = selected.properties;
-    getStop({ variables: { stopIds: getGTFSId(properties.id) } });
+    switch (properties.layer) {
+      case 'stop':
+        getStop({ variables: { ids: getGTFSId(properties.id) } });
+        break;
+      case 'station':
+        getStation({ variables: { ids: getGTFSId(properties.id) } });
+        break;
+      default:
+        break;
+    }
   };
 
   const onClear = () => {
@@ -67,16 +106,46 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   };
 
   useEffect(() => {
-    if (data?.stopInfos) {
+    if (stopState.data?.stop) {
       setStops(
         id,
-        data.stopInfos.filter(stop => stop !== null),
+        stopState.data.stop
+          .filter(stop => stop && !stops.some(el => el.id === stop.id))
+          .map(stop => {
+            return {
+              ...stop,
+              routes: sortBy(
+                sortBy(stop.routes, 'shortName'),
+                'shortName.length',
+              ),
+            };
+          }),
         false,
       );
     }
-  }, [data]);
+  }, [stopState.data]);
 
-  const SortableHandleItem = SortableHandle(({ children }) => children);
+  useEffect(() => {
+    if (stationState.data?.station) {
+      setStops(
+        id,
+        stationState.data.station
+          .filter(s => s && !stops.some(el => el.id === s.id))
+          .map(station => {
+            let routes = [];
+            station.stops.forEach(stop => routes.push(...stop.routes));
+            routes = uniqBy(routes, 'gtfsId');
+            return {
+              ...station,
+              code: t('station'),
+              desc: station.stops[0].desc,
+              routes: sortBy(sortBy(routes, 'shortName'), 'shortName.length'),
+            };
+          }),
+        false,
+      );
+    }
+  }, [stationState.data]);
 
   return (
     <div className="stopcard-row-container">

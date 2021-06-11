@@ -14,18 +14,6 @@ interface IProps {
   readonly stopId?: string;
 }
 
-const GET_ROUTES = gql`
-  query getRoutes($id: String!) {
-    stop(id: $id) {
-      name
-      routes {
-        shortName
-        gtfsId
-      }
-    }
-  }
-`;
-
 const StopRow: FC<IProps & WithTranslation> = ({
   stop,
   onDelete,
@@ -34,36 +22,15 @@ const StopRow: FC<IProps & WithTranslation> = ({
 }) => {
   const [hiddenRoutes, setHiddenRoutes] = useState([]);
   const [showModal, changeOpen] = useState(false);
-  const [routesFetched, setRoutesFetched] = useState(false);
   const gethidden = routes => {
     setHiddenRoutes(routes);
     changeOpen(false);
   };
-  const [getRoutes, { loading, data, error }] = useLazyQuery(GET_ROUTES);
-  if (!routesFetched) {
-    getRoutes({ variables: { id: stopId } });
-    setRoutesFetched(true);
-  }
   const handleClick = () => {
-    if (data) {
+    if (true) {
       changeOpen(true);
     }
   };
-  let routes;
-  if (error) {
-    return <div>Error...</div>;
-  }
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (data) {
-    if (!routes) {
-      routes = sortBy(
-        sortBy(data.stop.routes, 'shortName'),
-        'shortName.length',
-      );
-    }
-  }
 
   return (
     <div className="stop-row-container">
@@ -82,7 +49,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
               closeModal={gethidden}
               showModal={showModal}
               stop={stop}
-              routes={routes}
+              routes={stop.routes}
             />
           </div>
         )}
@@ -97,7 +64,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
                 {hiddenRoutes.length
                   .toString()
                   .concat(' / ')
-                  .concat(data.stop.routes.length.toString())}{' '}
+                  .concat(stop.routes.length.toString())}{' '}
               </span>
             )}
           </div>

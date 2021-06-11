@@ -24,6 +24,7 @@ export interface IStopInfo {
   desc?: string;
   gtfsId: StopId;
   platformCode: string;
+  routes: Array<any>;
 }
 
 export interface IStopInfoResponse {

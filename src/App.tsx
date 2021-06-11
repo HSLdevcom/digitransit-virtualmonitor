@@ -2,6 +2,9 @@ import * as React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import IndexPage from './IndexPage';
+import monitorConfig from './monitorConfig';
+import Banner from './ui/Banner';
+import Logo from './ui/logo/Logo';
 import ConfigurationDisplay from './ui/ConfigurationDisplay';
 import ConfigurationList from './ui/ConfigurationList';
 import DisplayEditor from './ui/DisplayEditor';
@@ -18,7 +21,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 import './App.scss';
-
 export interface IMonitorConfig {
   feedId?: string;
   uri?: string;
@@ -96,6 +98,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <ApolloProvider client={client}>
+                <Banner config={monitorConfig} />
                 <CreateViewPage />
               </ApolloProvider>
             )}
@@ -113,6 +116,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <ApolloProvider client={client}>
+                <Banner config={monitorConfig} />
                 <HelpPage
                   client={client}
                   urlParamUsageText={helpPageUrlParamText}
@@ -172,7 +176,19 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
           />
           <Route path={'/configs/:configName?'} component={ConfigurationList} />
           <Route path={'/displayEditor/'} component={DisplayEditor} />
-          <Route path={'/'} component={IndexPage} />
+          <Route
+            path={'/'}
+            component={({
+              match: {
+                params: {},
+              },
+            }: RouteComponentProps<IMonitorConfig>) => (
+              <ApolloProvider client={client}>
+                <Banner config={monitorConfig} />
+                <IndexPage />
+              </ApolloProvider>
+            )}
+          />
         </Switch>
       </div>
     );

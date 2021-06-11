@@ -8,7 +8,7 @@ const client = new CosmosClient({ endpoint, key });
 const database = client.database(databaseId);
 const container = database.container(containerId);
 
-const foo = {
+const monitorService = {
 getAll: async function getAll(req, res) {
   try {
     // <QueryItems>
@@ -35,4 +35,4 @@ getAll: async function getAll(req, res) {
 }
 }
 
-module.exports = foo;
+module.exports = monitorService;

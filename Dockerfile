@@ -17,12 +17,3 @@ RUN npm run build
 RUN cd server
 RUN npm install
 CMD ["npm","run","start-prod"]
-
-# CMD ['cd', 'server']
-# CMD ['npm', 'start']
-
-# Copy your code in the docker image
-#FROM nginx:1.12-alpine
-#COPY default.conf /etc/nginx/conf.d/default.conf
-#COPY --from=build /app/build /usr/share/nginx/html
-#CMD ["nginx", "-g", "daemon off;"]

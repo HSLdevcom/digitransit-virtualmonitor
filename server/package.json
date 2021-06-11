@@ -1,7 +1,7 @@
 {
-  "name": "azure-cosmosdb-sql-api-nodejs-getting-started",
+  "name": "digitransit-virtualmonitor-backend",
   "version": "0.0.0",
-  "description": "A short sample app to demonstrate how to get started with Azure Cosmos DB's SQL API",
+  "description": "Backend for Azure Cosmos DB's SQL API",
   "scripts": {
     "start": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 node server.js"
   },

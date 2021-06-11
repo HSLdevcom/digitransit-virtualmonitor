@@ -1,10 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const monitorService = require('./foo');
+const monitorService = require('./monitorService');
 
 router.get('/monitors', (req, res) => {
-  console.log(monitorService, req, res)
   monitorService.getAll(req, res);
 });
 

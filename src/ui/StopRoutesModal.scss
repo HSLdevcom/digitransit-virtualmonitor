@@ -11,6 +11,9 @@
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: 5px; */
+  .ReactModal__Overlay {
+    z-index: 10;
+  }
   .ReactModal__Content {
     width: 500px;
     height: 300px;

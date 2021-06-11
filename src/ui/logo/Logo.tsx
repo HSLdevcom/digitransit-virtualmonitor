@@ -20,25 +20,25 @@ class Logo extends React.Component<ICommonProps> {
         case 'tampere':
           return (
             <div id={'title-logo'}>
-              <NysseLogo style={{ height: '7em' }} />
+              <NysseLogo style={{ height: '5em' }} />
             </div>
           );
         case 'hsl':
           return (
             <div id={'title-logo'}>
-              <HslLogo style={{ height: '6em' }} />
+              <HslLogo style={{ height: '4em' }} />
             </div>
           );
         case 'matka':
           return (
             <div id={'title-logo'}>
-              <MatkaLogo style={{ maxHeight: '6em' }} />
+              <MatkaLogo style={{ maxHeight: '4em' }} />
             </div>
           );
         case 'linkki':
           return (
             <div id={'title-logo'}>
-              <LinkkiLogo style={{ maxHeight: '6em' }} />
+              <LinkkiLogo style={{ maxHeight: '4em' }} />
             </div>
           );
         default:

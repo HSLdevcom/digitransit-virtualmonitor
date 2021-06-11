@@ -14,6 +14,6 @@ COPY ./server ./server
 RUN npm install
 # build the app
 RUN npm run build
-RUN cd server
-RUN npm install
+RUN cd server && npm install
+
 CMD ["npm","run","start-prod"]

@@ -10,10 +10,9 @@ interface IHelpPageProps {
 }
 
 const HelpPage: React.FC<IHelpPageProps> = props => {
-
   useEffect(() => {
-    monitorAPI.get().then(json => console.log( json ));
-  }, [])
+    monitorAPI.get().then(json => console.log(json));
+  }, []);
   if (!props) {
     return <p> ERROR: OHJEITA EI LÖYTYNYT</p>;
   }

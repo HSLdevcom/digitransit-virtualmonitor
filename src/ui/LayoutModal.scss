@@ -1,16 +1,4 @@
 .modal {
-/*  height: 1020px;
-  width: 720px;
-  background-color: #FFFFFF;
-  position: absolute;
-  padding: 10px;
-  left: 35vw;
-  top: 10vw;
-  z-index: 1;
-  font-size: 18px;
-  overflow-y: auto;
-  overflow-x: auto;
-  border-radius: 5px;*/
   .ReactModal__Overlay {
     z-index: 10;
   }
@@ -45,15 +33,14 @@
           top: 10px;
           left: 7px;
         }
-
-    .label-text {
-      display: flex;
-      justify-content: center;
-      position: relative;
-      margin-top: 20px;
+      .label-text {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        margin-top: 20px;
+        }
       }
     }
-  }
   }
   .close-button {
     font-size: 1.125em;
@@ -69,5 +56,5 @@
     height: 50px;
     margin-left: 205px;
     margin-top: 30px;
-    }
   }
+}

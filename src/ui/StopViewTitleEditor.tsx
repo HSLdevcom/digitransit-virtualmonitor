@@ -6,7 +6,7 @@ import { focusToInput, onClick } from './InputUtils';
 interface IProps {
   id: number;
   title: string;
-  updateCardInfo?: Function;
+  updateCardInfo?: (cardId: number, type: string, value: string) => void;
 }
 
 const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
@@ -82,7 +82,10 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
           onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
           value={changed ? newTitle : title}
         />
-        <div role="button" onClick={() => focusToInput(`stop-title-input${id}`)}>
+        <div
+          role="button"
+          onClick={() => focusToInput(`stop-title-input${id}`)}
+        >
           <Icon img="edit" color={'#007ac9'} />
         </div>
       </div>

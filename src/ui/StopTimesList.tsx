@@ -153,7 +153,7 @@ const StopTimeRow = ({
           )}
         </td>
       ) : null}
-      <td className={'time'}>
+      <td className={'duration'}>
         {stoptime.realtimeState && stoptime.realtimeState !== 'SCHEDULED'
           ? null
           : '~'}

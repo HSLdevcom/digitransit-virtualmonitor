@@ -65,10 +65,24 @@ interface IProps {
   //readonly stopCard: IViewCarouselElement,
   readonly cardInfo: ICardInfo;
   readonly stops: any;
-  readonly onCardDelete?: Function;
-  readonly onStopDelete?: Function;
-  readonly setStops?: Function;
-  readonly updateCardInfo?: Function;
+  readonly onCardDelete?: (id: number) => void;
+  readonly onStopDelete?: (
+    cardId: number,
+    side: string,
+    gtfsId: string,
+  ) => void;
+  readonly setStops?: (
+    cardId: number,
+    side: string,
+    stops: any,
+    reorder: boolean,
+    gtfsIdForHidden: string,
+  ) => void;
+  readonly updateCardInfo?: (
+    cardId: number,
+    type: string,
+    value: string,
+  ) => void;
 }
 
 const StopCardRow: FC<IProps & WithTranslation> = ({
@@ -153,7 +167,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
           setNewTitleLeft(newTitleLeft.concat(key));
           setChangedLeft(true);
         } else {
-          setNewTitleRight(newTitleRight.concat(key));
+          setNewTitleRight(newTitleRight ? newTitleRight.concat(key) : key);
           setChangedRight(true);
         }
       }
@@ -162,7 +176,11 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
 
     event.preventDefault();
     if (updateCardInfo) {
-      updateCardInfo(cardInfo.id, `title-${side}`, side === 'left' ? newTitleLeft : newTitleRight);
+      updateCardInfo(
+        cardInfo.id,
+        `title-${side}`,
+        side === 'left' ? newTitleLeft : newTitleRight ? newTitleRight : '',
+      );
       if (side === 'left') {
         setChangedLeft(false);
       } else {
@@ -197,12 +215,14 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         cardInfo.id,
         'left',
         stopState.data.stop
-          .filter(stop => stop && !stops['left'].items.some(el => el.id === stop.id))
+          .filter(
+            stop => stop && !stops['left'].items.some(el => el.id === stop.id),
+          )
           .map(stop => {
             const stopWithGTFS = {
               ...stop,
               locality: autosuggestValue.locality,
-            }
+            };
             return {
               ...stopWithGTFS,
               routes: sortBy(
@@ -224,7 +244,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         cardInfo.id,
         'left',
         stationState.data.station
-          .filter(s => s && !stops.some(el => el.id === s.id))
+          .filter(s => s && !stops['left'].items.some(el => el.id === s.id))
           .map(station => {
             let routes = [];
             station.stops.forEach(stop => routes.push(...stop.routes));
@@ -232,28 +252,37 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             const stationWithGTFS = {
               ...station,
               locality: autosuggestValue.locality,
-            }
+            };
             return {
               ...stationWithGTFS,
               code: t('station'),
               desc: station.stops[0].desc,
               routes: sortBy(sortBy(routes, 'shortName'), 'shortName.length'),
+              hiddenRoutes: [],
             };
           }),
         false,
+        undefined,
       );
     }
   }, [stationState.data]);
 
   const lang = t('languageCode');
   const SortableHandleItem = SortableHandle(({ children }) => children);
-  const showStopTitles = stops['left'].items.length + stops['right'].items.length > 0;
+  const showStopTitles = stops['left'].items.length > 0;
   return (
     <div className="stopcard-row-container">
       <div className="title-with-icons">
-        <StopViewTitleEditor id={cardInfo.id} title={cardInfo.title} updateCardInfo={updateCardInfo} />
+        <StopViewTitleEditor
+          id={cardInfo.id}
+          title={cardInfo.title}
+          updateCardInfo={updateCardInfo}
+        />
         <div className="icons">
-          <div className="delete icon" onClick={() => onCardDelete(cardInfo.id)}>
+          <div
+            className="delete icon"
+            onClick={() => onCardDelete(cardInfo.id)}
+          >
             <Icon img="delete" color={'#888888'} />
           </div>
           <SortableHandleItem>
@@ -285,7 +314,10 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             targets={['Stops']}
           />
         </div>
-        <LayoutAndTimeContainer cardInfo={cardInfo} updateCardInfo={updateCardInfo} />
+        <LayoutAndTimeContainer
+          cardInfo={cardInfo}
+          updateCardInfo={updateCardInfo}
+        />
       </div>
       {cardInfo.layout >= 9 && showStopTitles && (
         <div className={cx('stop-list-title', 'left')}>
@@ -294,11 +326,16 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             id={'stop-list-title-input-left'}
             onClick={e => onClick(e)}
             onKeyDown={e => isKeyboardSelectionEvent(e, 'left')}
-            onBlur={e => !isKeyboardSelectionEvent(e, 'left') && onBlur(e, 'left')}
+            onBlur={e =>
+              !isKeyboardSelectionEvent(e, 'left') && onBlur(e, 'left')
+            }
             value={changedLeft ? newTitleLeft : stops['left'].title}
           />
-          <div role="button" onClick={() => focusToInput('stop-list-title-input-left')}>
-            <Icon img="edit" color={'#007ac9'} width={20} height={20}/>
+          <div
+            role="button"
+            onClick={() => focusToInput('stop-list-title-input-left')}
+          >
+            <Icon img="edit" color={'#007ac9'} width={20} height={20} />
           </div>
         </div>
       )}
@@ -319,27 +356,36 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             id={'stop-list-title-input-right'}
             onClick={e => onClick(e)}
             onKeyDown={e => isKeyboardSelectionEvent(e, 'right')}
-            onBlur={e => !isKeyboardSelectionEvent(e, 'right') && onBlur(e, 'right')}
+            onBlur={e =>
+              !isKeyboardSelectionEvent(e, 'right') && onBlur(e, 'right')
+            }
             value={changedRight ? newTitleRight : stops['right'].title}
           />
-          <div role="button" onClick={() => focusToInput('stop-list-title-input-right')}>
-            <Icon img="edit" color={'#007ac9'} width={20} height={20}/>
+          <div
+            role="button"
+            onClick={() => focusToInput('stop-list-title-input-right')}
+          >
+            <Icon img="edit" color={'#007ac9'} width={20} height={20} />
           </div>
         </div>
       )}
-      {cardInfo.layout >= 9 && showStopTitles && stops['right'].items.length === 0 && (
-        <div className="stop-list">
-          <ul className="stops">
-            <li className="stop">
-              <div className="stop-row-container">
-                <div className="drag-and-drop-placeholder">
-                  {t('drag-and-drop-placeholder', {title: stops['left'].title})}
+      {cardInfo.layout >= 9 &&
+        showStopTitles &&
+        stops['right'].items.length === 0 && (
+          <div className="stop-list">
+            <ul className="stops">
+              <li className="stop">
+                <div className="stop-row-container">
+                  <div className="drag-and-drop-placeholder">
+                    {t('drag-and-drop-placeholder', {
+                      title: stops['left'].title,
+                    })}
+                  </div>
                 </div>
-              </div>
-            </li>
-          </ul>
-        </div>
-      )}
+              </li>
+            </ul>
+          </div>
+        )}
       {cardInfo.layout >= 9 && stops['right'].items.length > 0 && (
         <div className="stop-list">
           <StopListContainer
@@ -352,7 +398,6 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
           />
         </div>
       )}
-
     </div>
   );
 };

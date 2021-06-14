@@ -18,8 +18,14 @@ interface IProps {
   readonly side: string;
   readonly stop: IStopInfoPlus;
   readonly stopId?: string;
-  readonly onStopDelete: Function;
-  readonly setStops?: Function;
+  readonly onStopDelete: (cardId: number, side: string, gtfsId: string) => void;
+  readonly setStops?: (
+    cardId: number,
+    side: string,
+    stops: any,
+    reorder: boolean,
+    gtfsIdForHidden: string,
+  ) => void;
 }
 
 const StopRow: FC<IProps & WithTranslation> = ({
@@ -61,18 +67,18 @@ const StopRow: FC<IProps & WithTranslation> = ({
       <div className="stop-row-main">
         <div className="stop-upper-row">
           {stop.name}
-          <div className="hidden-routes" onClick={handleClick}>{t('hiddenRoutes')}</div>
+          <div className="hidden-routes" onClick={handleClick}>
+            {t('hiddenRoutes')}
+          </div>
         </div>
         {showModal && (
-          <div className="modal-container">
-            <StopRoutesModal
-              hiddenRoutes={stop.hiddenRoutes}
-              closeModal={saveHiddenRoutes}
-              showModal={showModal}
-              stop={stop}
-              routes={stop.routes}
-            />
-          </div>
+          <StopRoutesModal
+            hiddenRoutes={stop.hiddenRoutes}
+            closeModal={saveHiddenRoutes}
+            showModal={showModal}
+            stop={stop}
+            routes={stop.routes}
+          />
         )}
         <div className="stop-bottom-row">
           {stop.desc && <div className="address">{stop.locality}</div>}

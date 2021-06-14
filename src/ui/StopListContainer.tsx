@@ -9,8 +9,14 @@ interface Props {
   stops: any;
   cardId: number;
   layout: number;
-  onStopDelete?: Function;
-  setStops?: Function;
+  onStopDelete?: (cardId: number, side: string, gtfsId: string) => void;
+  setStops?: (
+    cardId: number,
+    side: string,
+    stops: any,
+    reorder: boolean,
+    gtfsIdForHidden: string,
+  ) => void;
 }
 
 const SortableStopItem = SortableElement(({ value: item }) => {
@@ -51,15 +57,17 @@ const StopListContainer: FC<Props> = props => {
     }
   };
 
-
-  const modifiedStopList = stopList.length > 0 ? stopList.map(stop => ({
-    side: props.side,
-    ...stop,
-    cardId: props.cardId,
-    layout: props.layout,
-    onStopDelete: props.onStopDelete,
-    setStops: props.setStops,
-  })) : [];
+  const modifiedStopList =
+    stopList.length > 0
+      ? stopList.map(stop => ({
+          side: props.side,
+          ...stop,
+          cardId: props.cardId,
+          layout: props.layout,
+          onStopDelete: props.onStopDelete,
+          setStops: props.setStops,
+        }))
+      : [];
 
   return (
     <SortableStopList

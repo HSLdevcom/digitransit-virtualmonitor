@@ -8,7 +8,7 @@ import { ICardInfo } from './CardInfo';
 
 interface IProps {
   cardInfo: ICardInfo;
-  updateCardInfo: Function;
+  updateCardInfo: (cardId: number, type: string, value: string) => void;
 }
 
 const layouts = [
@@ -16,7 +16,7 @@ const layouts = [
     value: '1',
     label: (
       <>
-        <Icon img="layout1" />
+        <Icon img="layout1" height={36} width={64} />
         <span className="label">4</span>
       </>
     ),
@@ -25,7 +25,7 @@ const layouts = [
     value: '2',
     label: (
       <>
-        <Icon img="layout2" />
+        <Icon img="layout2" height={36} width={64} />
         <span className="label">8</span>
       </>
     ),
@@ -34,7 +34,7 @@ const layouts = [
     value: '3',
     label: (
       <>
-        <Icon img="layout3" />
+        <Icon img="layout3" height={36} width={64} />
         <span className="label">12</span>
       </>
     ),
@@ -43,7 +43,7 @@ const layouts = [
     value: '4',
     label: (
       <>
-        <Icon img="layout4" />
+        <Icon img="layout4" height={36} width={64} />
         <span className="label">4+4</span>
       </>
     ),
@@ -52,7 +52,7 @@ const layouts = [
     value: '5',
     label: (
       <>
-        <Icon img="layout5" />
+        <Icon img="layout5" height={36} width={64} />
         <span className="label">8+8</span>
       </>
     ),
@@ -61,7 +61,7 @@ const layouts = [
     value: '6',
     label: (
       <>
-        <Icon img="layout6" />
+        <Icon img="layout6" height={36} width={64} />
         <span className="label">12+12</span>
       </>
     ),
@@ -70,7 +70,7 @@ const layouts = [
     value: '7',
     label: (
       <>
-        <Icon img="layout7" />
+        <Icon img="layout7" height={36} width={64} />
         <span className="label">4+8</span>
       </>
     ),
@@ -79,7 +79,7 @@ const layouts = [
     value: '8',
     label: (
       <>
-        <Icon img="layout8" />
+        <Icon img="layout8" height={36} width={64} />
         <span className="label">8+12</span>
       </>
     ),
@@ -88,7 +88,7 @@ const layouts = [
     value: '9',
     label: (
       <>
-        <Icon img="layout9" />
+        <Icon img="layout9" height={36} width={64} />
         <span className="label">4+4</span>
       </>
     ),
@@ -97,7 +97,7 @@ const layouts = [
     value: '10',
     label: (
       <>
-        <Icon img="layout10" />
+        <Icon img="layout10" height={36} width={64} />
         <span className="label">8+8</span>
       </>
     ),
@@ -113,7 +113,7 @@ const layouts = [
   },
 ];
 
-const times = [
+const durations = [
   { value: '3', label: '3s' },
   { value: '5', label: '5s' },
   { value: '10', label: '10s' },
@@ -123,13 +123,19 @@ const times = [
   { value: '30', label: '30s' },
 ];
 
-const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({ cardInfo, updateCardInfo }) => {
-  const placeHolder = times.find(time => time.value === cardInfo.time.toString()).label;
-  const layout = layouts.find(layout => layout.value === cardInfo.layout.toString());
+const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
+  cardInfo,
+  updateCardInfo,
+}) => {
+  const placeHolder = durations.find(
+    duration => duration.value === cardInfo.duration.toString(),
+  ).label;
+  const layout = layouts.find(
+    layout => layout.value === cardInfo.layout.toString(),
+  );
   const layoutButton = layout.label;
-  
+
   const [isOpen, changeOpen] = useState(false);
-  //const [layout, setLayout] = useState();
 
   const setOpen = () => {
     changeOpen(true);
@@ -140,12 +146,11 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({ cardInfo, update
       updateCardInfo(cardInfo.id, 'layout', option.value.toString());
     }
     changeOpen(false);
-    //setLayout(layouts[option.value - 1]);
   };
 
   const handleChange = option => {
     if (updateCardInfo) {
-      updateCardInfo(cardInfo.id, 'time', option.value);
+      updateCardInfo(cardInfo.id, 'duration', option.value);
     }
   };
 
@@ -158,9 +163,9 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({ cardInfo, update
       </div>
       <div>
         <Dropdown
-          name="time"
+          name="duration"
           isSearchable={false}
-          options={times}
+          options={durations}
           placeholder={placeHolder}
           handleChange={handleChange}
         />

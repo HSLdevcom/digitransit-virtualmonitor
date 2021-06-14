@@ -11,7 +11,7 @@ interface IProps {
   readonly isSearchable?: boolean;
   readonly options?: Array<Option>;
   readonly placeholder?: string | JSX.Element;
-  readonly handleChange?: Function;
+  readonly handleChange?: (option: any) => void;
 }
 
 interface Option {
@@ -52,7 +52,7 @@ const Dropdown: FC<IProps & WithTranslation> = ({
           withWidth: placeholder,
         },
         {
-          time: name === 'time',
+          duration: name === 'duration',
         },
       )}
       classNamePrefix={'dd'}

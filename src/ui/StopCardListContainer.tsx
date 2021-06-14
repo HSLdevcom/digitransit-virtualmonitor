@@ -8,7 +8,12 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
 
 const SortableStopCardItem = SortableElement(({ value: item }) => {
-  const cardInfo: ICardInfo = { id: item.id, title: item.title, layout: item.layout, time: item.time };
+  const cardInfo: ICardInfo = {
+    id: item.id,
+    title: item.title,
+    layout: item.layout,
+    duration: item.duration,
+  };
   return (
     <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
       <StopCardRow
@@ -33,84 +38,82 @@ const SortableStopCardList = SortableContainer(({ items }) => {
   );
 });
 
-const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
-  const defaultStopCard = {
-    id: 1,
-    title: t('viewEditorName'),
-    stops: {
-      left: {
-        title: t('sideLeft'),
-        items: [],
-      },
-      right: {
-        title: t('sideRight'),
-        items: [],
-      },
+const defaultStopCard = t => ({
+  id: 1,
+  title: t('viewEditorName'),
+  stops: {
+    left: {
+      inUse: true,
+      title: t('sideLeft'),
+      items: [],
     },
-    layout: 2,
-    time: 5,
-  };
-  //const defaultStopCard = { id: 1, title: t('viewEditorName'), stops: [], layout: 2, time: 5 };
-  const [stopCardList, setStopCardList] = useState([defaultStopCard]);
+    right: {
+      inUse: false,
+      title: t('sideRight'),
+      items: [],
+    },
+  },
+  layout: 2,
+  duration: 5,
+});
+
+const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
+  const [stopCardList, setStopCardList] = useState([defaultStopCard(t)]);
 
   const onCardDelete = (id: number) => {
     setStopCardList(stopCardList.filter(s => s.id !== id));
   };
-  
-  console.log('hash:', hash(stopCardList));
 
   const onStopDelete = (cardId: number, side: string, gtfsId: string) => {
-    const card = stopCardList.find(card => card.id === cardId);
+    const cardIndex = stopCardList.findIndex(card => card.id === cardId);
+    stopCardList[cardIndex].stops[side].items = stopCardList[cardIndex].stops[
+      side
+    ].items.filter(stop => stop.gtfsId !== gtfsId);
+    /*const card = stopCardList.find(card => card.id === cardId);
     card.stops[side].items = card.stops[side].items.filter(stop => stop.gtfsId !== gtfsId);
     const array = stopCardList.slice();
     const index = stopCardList.indexOf(card);
     array[index] = card;
-    setStopCardList(array);
+    setStopCardList(array);*/
+    setStopCardList(stopCardList.slice());
   };
 
-  /*const onStopDelete = (cardId: number, gtfsId: string) => {
-    const card = stopCardList.find(card => card.id === cardId);
-    card.stops = card.stops.filter(stop => stop.gtfsId !== gtfsId);
-    const array = stopCardList.slice();
-    const index = stopCardList.indexOf(card);
-    array[index] = card;
-    setStopCardList(array);
-  };*/
-
-  const setStops = (cardId: number, side: string, stops: any, reorder: boolean, gtfsIdForHidden: string) => {
-    const card = stopCardList.find(card => card.id === cardId);
+  const setStops = (
+    cardId: number,
+    side: string,
+    stops: any,
+    reorder: boolean,
+    gtfsIdForHidden: string,
+  ) => {
+    const cardIndex = stopCardList.findIndex(card => card.id === cardId);
     if (!gtfsIdForHidden) {
-      card.stops[side].items = reorder ? stops : card.stops[side].items.concat(stops);
+      stopCardList[cardIndex].stops[side].items = reorder
+        ? stops
+        : stopCardList[cardIndex].stops[side].items.concat(stops);
+      setStopCardList(stopCardList.slice());
     } else {
-      const stopToUpdate = card.stops[side].items.find(stop => stop.gtfsId === gtfsIdForHidden);
-      const stopArray = card.stops[side].items.slice();
-      const stopIndex = card.stops[side].items.indexOf(stopToUpdate);
-      stopArray[stopIndex] = stops;
-      card.stops[side].items = stopArray;
+      const stopIndex = stopCardList[cardIndex].stops[side].items.findIndex(
+        stop => stop.gtfsId === gtfsIdForHidden,
+      );
+      stopCardList[cardIndex].stops[side].items[stopIndex] = stops;
+      setStopCardList(stopCardList.slice());
     }
-    const array = stopCardList.slice();
-    const index = stopCardList.indexOf(card);
-    array[index] = card;
-    setStopCardList(array);
   };
 
   const updateCardInfo = (cardId: number, type: string, value: string) => {
-    const card = stopCardList.find(card => card.id === cardId);
+    const cardIndex = stopCardList.findIndex(card => card.id === cardId);
     if (type === 'title') {
-      card.title = value;
+      stopCardList[cardIndex].title = value;
     } else if (type === 'title-left') {
-      card.stops['left'].title = value;
+      stopCardList[cardIndex].stops['left'].title = value;
     } else if (type === 'title-right') {
-      card.stops['right'].title = value;
+      stopCardList[cardIndex].stops['right'].title = value;
     } else if (type === 'layout') {
-      card.layout = Number(value);
-    } else if (type === 'time') {
-      card.time = Number(value);
+      stopCardList[cardIndex].layout = Number(value);
+    } else if (type === 'duration') {
+      stopCardList[cardIndex].duration = Number(value);
     }
-    const array = stopCardList.slice();
-    const index = stopCardList.indexOf(card);
-    array[index] = card;
-    setStopCardList(array);
+    setStopCardList(stopCardList.slice());
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
@@ -119,21 +122,25 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
 
   const onSortStart = ({ index, node }) => {
     const card = stopCardList[index];
-    const input = node.childNodes[0].childNodes[0].childNodes[0].childNodes[1].childNodes[0] as HTMLInputElement;
+    const input = node.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
+      .childNodes[0] as HTMLInputElement;
     if (card.title !== input.value) {
       updateCardInfo(stopCardList[index].id, 'title', input.value);
     }
   };
 
   const addNew = () => {
+    console.log(stopCardList);
     let cnt = stopCardList.length + 1;
     while (cnt > 0) {
       if (stopCardList.filter(s => s.id === cnt).length === 0) {
         const newCard = {
-          ...defaultStopCard,
+          ...defaultStopCard(t),
           id: cnt,
         };
+
         setStopCardList(stopCardList.concat(newCard));
+        console.log(stopCardList.concat(newCard));
         cnt = 0;
       }
       cnt--;

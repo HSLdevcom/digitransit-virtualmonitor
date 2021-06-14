@@ -1,6 +1,6 @@
 export interface ICardInfo {
   id: number;
   layout?: number;
-  time?: number;
+  duration?: number;
   title?: string;
 }

@@ -81,9 +81,6 @@ const Icon = (props: ICustomInputProps) => {
     height = '18';
     width = '14';
     stroke = props.color;
-  } else if (props.img.startsWith('layout') && height === '24' && width === '24') {
-    height = '36';
-    width = '64';
   }
   const style = {
     fill: fill,

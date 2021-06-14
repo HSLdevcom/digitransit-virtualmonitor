@@ -280,16 +280,18 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         />
         <div className="icons">
           <div
-            className="delete icon"
+            className={cx('delete icon', cardInfo.possibleToDrag ? '' : 'move-end')}
             onClick={() => onCardDelete(cardInfo.id)}
           >
             <Icon img="delete" color={'#888888'} />
           </div>
-          <SortableHandleItem>
-            <div className="drag icon">
-              <Icon img="drag" color={'#888888'} />
-            </div>
-          </SortableHandleItem>
+          {cardInfo.possibleToDrag && (
+            <SortableHandleItem>
+              <div className="drag icon">
+                <Icon img="drag" color={'#888888'} />
+              </div>
+            </SortableHandleItem>
+          )}
         </div>
       </div>
       <div className="headers">

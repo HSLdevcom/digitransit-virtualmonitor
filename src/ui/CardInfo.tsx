@@ -3,4 +3,5 @@ export interface ICardInfo {
   layout?: number;
   duration?: number;
   title?: string;
+  possibleToDrag: boolean,
 }

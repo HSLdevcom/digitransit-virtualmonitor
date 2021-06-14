@@ -3,16 +3,16 @@ import StopCardRow from './StopCardRow';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import { v4 as uuid } from 'uuid';
-import hash from 'object-hash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
 
-const SortableStopCardItem = SortableElement(({ value: item }) => {
+const SortableStopCardItem = SortableElement(({ value: item, possibleToDrag }) => {
   const cardInfo: ICardInfo = {
     id: item.id,
     title: item.title,
     layout: item.layout,
     duration: item.duration,
+    possibleToDrag: possibleToDrag,
   };
   return (
     <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
@@ -32,7 +32,7 @@ const SortableStopCardList = SortableContainer(({ items }) => {
   return (
     <ul className="stopcards">
       {items.map((item, index) => {
-        return <SortableStopCardItem key={uuid()} index={index} value={item} />;
+        return <SortableStopCardItem key={uuid()} index={index} value={item} possibleToDrag={items.length > 1} />;
       })}
     </ul>
   );
@@ -69,12 +69,6 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
     stopCardList[cardIndex].stops[side].items = stopCardList[cardIndex].stops[
       side
     ].items.filter(stop => stop.gtfsId !== gtfsId);
-    /*const card = stopCardList.find(card => card.id === cardId);
-    card.stops[side].items = card.stops[side].items.filter(stop => stop.gtfsId !== gtfsId);
-    const array = stopCardList.slice();
-    const index = stopCardList.indexOf(card);
-    array[index] = card;
-    setStopCardList(array);*/
     setStopCardList(stopCardList.slice());
   };
 
@@ -108,6 +102,7 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
       stopCardList[cardIndex].stops['left'].title = value;
     } else if (type === 'title-right') {
       stopCardList[cardIndex].stops['right'].title = value;
+      stopCardList[cardIndex].stops['right'].inUse = true;
     } else if (type === 'layout') {
       stopCardList[cardIndex].layout = Number(value);
     } else if (type === 'duration') {
@@ -122,6 +117,7 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
 
   const onSortStart = ({ index, node }) => {
     const card = stopCardList[index];
+    //stopcard/stopcard-row-container/title-with-icons/stop-title/stop-title-input-container/stop-title-input
     const input = node.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
       .childNodes[0] as HTMLInputElement;
     if (card.title !== input.value) {
@@ -130,7 +126,6 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
   };
 
   const addNew = () => {
-    console.log(stopCardList);
     let cnt = stopCardList.length + 1;
     while (cnt > 0) {
       if (stopCardList.filter(s => s.id === cnt).length === 0) {
@@ -138,9 +133,7 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
           ...defaultStopCard(t),
           id: cnt,
         };
-
         setStopCardList(stopCardList.concat(newCard));
-        console.log(stopCardList.concat(newCard));
         cnt = 0;
       }
       cnt--;

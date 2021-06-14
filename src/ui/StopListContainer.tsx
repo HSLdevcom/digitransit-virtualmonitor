@@ -59,8 +59,8 @@ const StopListContainer: FC<Props> = props => {
   const rightRef = useRef();
 
   /*useEffect(() => {
-    setStopList(props.stops[props.side].items);
-  }, [props.stops[props.side].items]);
+    setStopList(props.stops[props.side].stops);
+  }, [props.stops[props.side].stops]);
 
   const handleDragEnd = ({ oldIndex, newIndex }) => {
     const reorderedList = arrayMove(stopList, oldIndex, newIndex);

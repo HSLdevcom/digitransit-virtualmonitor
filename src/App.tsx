@@ -33,6 +33,7 @@ export interface IMonitorConfig {
 
 export interface IQueryString {
   title?: string;
+  cont?: string;
 }
 
 export interface IConfigurationProps {
@@ -108,25 +109,13 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
             component={QuickDisplay}
           />
           <Route
-            path={'/help/:contenthash'}
-            component={({  }: RouteComponentProps<IConfigurationDisplayRouteParams>) => (
-              <HelpPage
-                  client={null}
-                  urlParamUsageText={helpPageUrlParamText}
-                  urlMultipleStopsText={helpPageurlMultipleStopsText}
-                  urlParamFindText={helpPageUrlParamFindText}
-                  urlParamFindAltText={helpPageUrlParamFindAltText}
-                />
-            )}
-          />
-          <Route
-            path={'/help/'}
+            path={'/help'}
             // eslint-disable-next-line no-empty-pattern
             component={({
               match: {
                 params: {},
               },
-            }: RouteComponentProps<IMonitorConfig>) => (
+            } : RouteComponentProps<IMonitorConfig>) => (
               <ApolloProvider client={client}>
                 <Banner config={monitorConfig} />
                 <HelpPage
@@ -135,6 +124,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
                   urlMultipleStopsText={helpPageurlMultipleStopsText}
                   urlParamFindText={helpPageUrlParamFindText}
                   urlParamFindAltText={helpPageUrlParamFindAltText}
+                  content={this.props.search.cont}
                 />
               </ApolloProvider>
             )}

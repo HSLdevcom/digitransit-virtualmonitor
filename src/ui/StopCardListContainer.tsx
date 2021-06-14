@@ -3,8 +3,10 @@ import StopCardRow from './StopCardRow';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import { v4 as uuid } from 'uuid';
+import hash from 'object-hash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
+import monitorAPI from '../api';
 
 const SortableStopCardItem = SortableElement(({ value: item, possibleToDrag }) => {
   const cardInfo: ICardInfo = {
@@ -18,7 +20,7 @@ const SortableStopCardItem = SortableElement(({ value: item, possibleToDrag }) =
     <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
       <StopCardRow
         cardInfo={cardInfo}
-        stops={item.stops}
+        columns={item.columns}
         onCardDelete={item.onCardDelete}
         setStops={item.setStops}
         onStopDelete={item.onStopDelete}
@@ -41,16 +43,16 @@ const SortableStopCardList = SortableContainer(({ items }) => {
 const defaultStopCard = t => ({
   id: 1,
   title: t('viewEditorName'),
-  stops: {
+  columns: {
     left: {
       inUse: true,
       title: t('sideLeft'),
-      items: [],
+      stops: [],
     },
     right: {
       inUse: false,
       title: t('sideRight'),
-      items: [],
+      stops: [],
     },
   },
   layout: 2,
@@ -66,9 +68,9 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
 
   const onStopDelete = (cardId: number, side: string, gtfsId: string) => {
     const cardIndex = stopCardList.findIndex(card => card.id === cardId);
-    stopCardList[cardIndex].stops[side].items = stopCardList[cardIndex].stops[
+    stopCardList[cardIndex].columns[side].stops = stopCardList[cardIndex].columns[
       side
-    ].items.filter(stop => stop.gtfsId !== gtfsId);
+    ].stops.filter(stop => stop.gtfsId !== gtfsId);
     setStopCardList(stopCardList.slice());
   };
 
@@ -81,15 +83,15 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
   ) => {
     const cardIndex = stopCardList.findIndex(card => card.id === cardId);
     if (!gtfsIdForHidden) {
-      stopCardList[cardIndex].stops[side].items = reorder
+      stopCardList[cardIndex].columns[side].stops = reorder
         ? stops
-        : stopCardList[cardIndex].stops[side].items.concat(stops);
+        : stopCardList[cardIndex].columns[side].stops.concat(stops);
       setStopCardList(stopCardList.slice());
     } else {
-      const stopIndex = stopCardList[cardIndex].stops[side].items.findIndex(
+      const stopIndex = stopCardList[cardIndex].columns[side].stops.findIndex(
         stop => stop.gtfsId === gtfsIdForHidden,
       );
-      stopCardList[cardIndex].stops[side].items[stopIndex] = stops;
+      stopCardList[cardIndex].columns[side].stops[stopIndex] = stops;
       setStopCardList(stopCardList.slice());
     }
   };
@@ -99,10 +101,10 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
     if (type === 'title') {
       stopCardList[cardIndex].title = value;
     } else if (type === 'title-left') {
-      stopCardList[cardIndex].stops['left'].title = value;
+      stopCardList[cardIndex].columns['left'].title = value;
     } else if (type === 'title-right') {
-      stopCardList[cardIndex].stops['right'].title = value;
-      stopCardList[cardIndex].stops['right'].inUse = true;
+      stopCardList[cardIndex].columns['right'].title = value;
+      stopCardList[cardIndex].columns['right'].inUse = true;
     } else if (type === 'layout') {
       stopCardList[cardIndex].layout = Number(value);
     } else if (type === 'duration') {
@@ -150,6 +152,14 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
     };
   });
 
+  const createMonitor = () => {
+    const newCard = {
+      ...stopCardList,
+      contenthash: hash(stopCardList, { algorithm: 'md5', encoding: 'base64' }),
+    }
+    monitorAPI.create(newCard).then(json => console.log( json ));
+  }
+
   return (
     <>
       <SortableStopCardList
@@ -160,7 +170,7 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
       />
       <button onClick={addNew}>{t('prepareDisplay')}</button>
       <button>{t('previewView')} - ei tee mitään</button>
-      <button>{t('displayEditorStaticLink')} - ei tee mitään</button>
+      <button onClick={createMonitor}>{t('displayEditorStaticLink')} - ei tee mitään</button>
     </>
   );
 };

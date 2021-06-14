@@ -7,6 +7,10 @@ router.get('/monitors', (req, res) => {
   monitorService.getAll(req, res);
 });
 
+router.get('/monitor/:id', (req, res) => {
+  monitorService.get(req, res);
+});
+
 router.put('/monitor', (req, res) => {
   monitorService.create(req, res);
 });

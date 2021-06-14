@@ -64,7 +64,7 @@ const GET_STATION = gql`
 interface IProps {
   //readonly stopCard: IViewCarouselElement,
   readonly cardInfo: ICardInfo;
-  readonly stops: any;
+  readonly columns: any;
   readonly onCardDelete?: (id: number) => void;
   readonly onStopDelete?: (
     cardId: number,
@@ -87,7 +87,7 @@ interface IProps {
 
 const StopCardRow: FC<IProps & WithTranslation> = ({
   cardInfo,
-  stops,
+  columns,
   onCardDelete,
   onStopDelete,
   setStops,
@@ -96,9 +96,9 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
 }) => {
   const [getStop, stopState] = useLazyQuery(GET_STOP);
   const [getStation, stationState] = useLazyQuery(GET_STATION);
-  const [newTitleLeft, setNewTitleLeft] = useState(stops['left'].title);
+  const [newTitleLeft, setNewTitleLeft] = useState(columns['left'].title);
   const [changedLeft, setChangedLeft] = useState(false);
-  const [newTitleRight, setNewTitleRight] = useState(stops['right'].title);
+  const [newTitleRight, setNewTitleRight] = useState(columns['right'].title);
   const [changedRight, setChangedRight] = useState(false);
   const [autosuggestValue, setAutosuggestValue] = useState(undefined);
 
@@ -216,7 +216,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         'left',
         stopState.data.stop
           .filter(
-            stop => stop && !stops['left'].items.some(el => el.id === stop.id),
+            stop => stop && !columns['left'].stops.some(el => el.id === stop.id),
           )
           .map(stop => {
             const stopWithGTFS = {
@@ -244,7 +244,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         cardInfo.id,
         'left',
         stationState.data.station
-          .filter(s => s && !stops['left'].items.some(el => el.id === s.id))
+          .filter(s => s && !columns['left'].stops.some(el => el.id === s.id))
           .map(station => {
             let routes = [];
             station.stops.forEach(stop => routes.push(...stop.routes));
@@ -256,7 +256,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             return {
               ...stationWithGTFS,
               code: t('station'),
-              desc: station.stops[0].desc,
+              desc: station.columns[0].desc,
               routes: sortBy(sortBy(routes, 'shortName'), 'shortName.length'),
               hiddenRoutes: [],
             };
@@ -269,7 +269,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
 
   const lang = t('languageCode');
   const SortableHandleItem = SortableHandle(({ children }) => children);
-  const showStopTitles = stops['left'].items.length > 0;
+  const showStopTitles = columns['left'].stops.length > 0;
   return (
     <div className="stopcard-row-container">
       <div className="title-with-icons">
@@ -331,7 +331,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             onBlur={e =>
               !isKeyboardSelectionEvent(e, 'left') && onBlur(e, 'left')
             }
-            value={changedLeft ? newTitleLeft : stops['left'].title}
+            value={changedLeft ? newTitleLeft : columns['left'].title}
           />
           <div
             role="button"
@@ -344,7 +344,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
       <div className="stop-list">
         <StopListContainer
           side={'left'}
-          stops={stops}
+          stops={columns}
           cardId={cardInfo.id}
           layout={cardInfo.layout}
           onStopDelete={onStopDelete}
@@ -361,7 +361,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             onBlur={e =>
               !isKeyboardSelectionEvent(e, 'right') && onBlur(e, 'right')
             }
-            value={changedRight ? newTitleRight : stops['right'].title}
+            value={changedRight ? newTitleRight : columns['right'].title}
           />
           <div
             role="button"
@@ -373,14 +373,14 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
       )}
       {cardInfo.layout >= 9 &&
         showStopTitles &&
-        stops['right'].items.length === 0 && (
+        columns['right'].stops.length === 0 && (
           <div className="stop-list">
             <ul className="stops">
               <li className="stop">
                 <div className="stop-row-container">
                   <div className="drag-and-drop-placeholder">
                     {t('drag-and-drop-placeholder', {
-                      title: stops['left'].title,
+                      title: columns['left'].title,
                     })}
                   </div>
                 </div>
@@ -388,11 +388,11 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             </ul>
           </div>
         )}
-      {cardInfo.layout >= 9 && stops['right'].items.length > 0 && (
+      {cardInfo.layout >= 9 && columns['right'].stops.length > 0 && (
         <div className="stop-list">
           <StopListContainer
             side={'right'}
-            stops={stops}
+            stops={columns}
             cardId={cardInfo.id}
             layout={cardInfo.layout}
             onStopDelete={onStopDelete}

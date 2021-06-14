@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useRef } from 'react';
 import StopRow from './StopRow';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
@@ -19,7 +19,8 @@ interface Props {
   ) => void;
 }
 
-const SortableStopItem = SortableElement(({ value: item }) => {
+const SortableStopItem = SortableElement((props) => {
+  const {item} = props;
   return (
     <li className="stop">
       <StopRow
@@ -33,33 +34,46 @@ const SortableStopItem = SortableElement(({ value: item }) => {
   );
 });
 
-const SortableStopList = SortableContainer(({ items }) => {
+const SortableStopList = SortableContainer((props) => {
+  const {items, area, isDragging} = props;
   return (
     <ul className="stops">
-      {items.map((item, index) => {
-        return <SortableStopItem key={uuid()} index={index} value={item} />;
+      {items && items.map((item, index) => {
+        return <SortableStopItem area={area} key={uuid()} index={index} item={item} collection={area} isDragging={isDragging} />;
       })}
     </ul>
   );
 });
 
 const StopListContainer: FC<Props> = props => {
-  const [stopList, setStopList] = useState([]);
-  useEffect(() => {
+  console.log('PROPS:', props);
+  const [leftItems, setLeftItems] = useState([]);
+  const [rightItems, setRightItems] = useState([]);
+  const [draggingItem, setDraggingItem] = useState(null);
+  const [draggingItemIndex, setDraggingItemIndex] = useState(null);
+  const [targetOrderIndex, setTargetOrderIndex] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [sourceArea, setSourceArea] = useState(null);
+  const [targetArea, setTargetArea] = useState(null);
+  const leftRef = useRef();
+  const rightRef = useRef();
+
+  /*useEffect(() => {
     setStopList(props.stops[props.side].items);
   }, [props.stops[props.side].items]);
 
-  const onSortEnd = ({ oldIndex, newIndex }) => {
+  const handleDragEnd = ({ oldIndex, newIndex }) => {
     const reorderedList = arrayMove(stopList, oldIndex, newIndex);
     setStopList(reorderedList);
     if (props && props.cardId && props.setStops) {
       props.setStops(props.cardId, props.side, reorderedList, true, undefined);
     }
-  };
+  };*/
 
-  const modifiedStopList =
-    stopList.length > 0
-      ? stopList.map(stop => ({
+  const items = props.side === 'left' ? leftItems : rightItems;
+  const modifiedItems =
+    items.length > 0
+      ? items.map(stop => ({
           side: props.side,
           ...stop,
           cardId: props.cardId,
@@ -71,9 +85,24 @@ const StopListContainer: FC<Props> = props => {
 
   return (
     <SortableStopList
+      /*area={props.side}
       items={modifiedStopList}
+      isDragging={props.isDragging}
       useDragHandle
-      onSortEnd={onSortEnd}
+      onSortEnd={onSortEnd}*/
+      axis="y"
+      area={props.side}
+      items={modifiedItems}
+      draggingItem={draggingItem}
+      isDragging={isDragging}
+      sourceArea={sourceArea}
+      targetArea={targetArea}
+      ref={props.side === 'left' ? leftRef : rightRef}
+      selfRef={props.side === 'left' ? leftRef : rightRef}
+      otherRef={props.side === 'left' ? rightRef : leftRef}
+      //onSortStart={handleDragStart}
+      //onSortOver={handleDragOver}
+      //onSortEnd={handleDragEnd}
     />
   );
 };

@@ -1,7 +1,7 @@
 const baseAPI = '/api';
 
 const monitorAPI = {
-  get() {
+  getAll() {
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/monitors`,{
         headers:{
@@ -10,7 +10,6 @@ const monitorAPI = {
     })
         .then(response => response.json())
         .then(json => {
-          console.log(json)
           return resolve(json)
         })
         .catch(err => {
@@ -18,24 +17,41 @@ const monitorAPI = {
         });
     });
   },
+  get(monitor) {
+    console.log(monitor)
+    return new Promise((resolve, reject) => {
+      fetch(`${baseAPI}/monitor/${monitor}`, {
+        headers: {
+         // Accept: 'application/json',
+         // 'Content-Type': 'application/json'
+         "accepts":"application/json"
+        }
+      })
+        .then(result => result.json())
+        .then(json => resolve(json))
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
 
-  // create(hero) {
-  //   return new Promise((resolve, reject) => {
-  //     fetch(`${baseAPI}/hero`, {
-  //       method: 'PUT',
-  //       body: JSON.stringify(hero),
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json'
-  //       }
-  //     })
-  //       .then(result => result.json())
-  //       .then(json => resolve(json))
-  //       .catch(err => {
-  //         reject(err);
-  //       });
-  //   });
-  // },
+  create(monitor) {
+    return new Promise((resolve, reject) => {
+      fetch(`${baseAPI}/monitor`, {
+        method: 'PUT',
+        body: JSON.stringify(monitor),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(result => result.json())
+        .then(json => resolve(json))
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
 
   // update(hero) {
   //   return new Promise((resolve, reject) => {

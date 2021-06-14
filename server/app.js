@@ -1,11 +1,3 @@
-// // @ts-check
-// //  <ImportConfiguration>
-// const CosmosClient = require("@azure/cosmos").CosmosClient;
-// const config = require("./config");
-// const dbContext = require("./data/databaseContext");
-// //  </ImportConfiguration>
-
-// //  <DefineNewItem>
 // const newItem = {
 //     contenthash: "abc1231",
 //     monitors: [
@@ -64,37 +56,7 @@
 //         }
 //     ]
 // };
-// //  </DefineNewItem>
-// const { endpoint, key, databaseId, containerId } = config;
 
-// const client = new CosmosClient({ endpoint, key });
-
-// const database = client.database(databaseId);
-// const container = database.container(containerId);
-
-// async function getAll(req, res) {
-//   try {
-//     // <QueryItems>
-//     console.log(`Querying container: monitors`);
-
-//     // query to return all items
-//     const querySpec = {
-//       query: "SELECT * from c"
-//     };
-    
-//     // read all items in the Items container
-//     const { resources: items } = await container.items
-//       .query(querySpec)
-//       .fetchAll();
-
-//     items.forEach(item => {
-//       console.log(`${item.contenthash}`);
-//     });
-//     res.json(items);
-//   } catch (e) {
-//     res.status(500).send(e);
-//   }
-// }
 const express = require('express');
 const path = require('path');
 const logger = require('morgan');

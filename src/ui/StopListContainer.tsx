@@ -46,8 +46,8 @@ const SortableStopList = SortableContainer(({ items }) => {
 const StopListContainer: FC<Props> = props => {
   const [stopList, setStopList] = useState([]);
   useEffect(() => {
-    setStopList(props.stops[props.side].items);
-  }, [props.stops[props.side].items]);
+    setStopList(props.stops[props.side].stops);
+  }, [props.stops[props.side].stops]);
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     const reorderedList = arrayMove(stopList, oldIndex, newIndex);

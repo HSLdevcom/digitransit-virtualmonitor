@@ -4,29 +4,25 @@ import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 import { v4 as uuid } from 'uuid';
 import hash from 'object-hash';
+import { withTranslation, WithTranslation } from 'react-i18next';
+import { ICardInfo } from './CardInfo';
 
-interface Props {
-  //stopCards: any,
-  //onDelete: Function,
-}
-
-const stopCardsArray = [
-  { id: 1, title: 'Näkymä1', stops: [] },
-  { id: 2, title: 'Näkymä2', stops: [] },
-  { id: 3, title: 'Näkymä3', stops: [] },
-];
-
-const SortableStopCardItem = SortableElement(({ value }) => {
+const SortableStopCardItem = SortableElement(({ value: item }) => {
+  const cardInfo: ICardInfo = {
+    id: item.id,
+    title: item.title,
+    layout: item.layout,
+    duration: item.duration,
+  };
   return (
-    <li className="stopcard">
+    <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
       <StopCardRow
-        id={value.id}
-        title={value.title}
-        stops={value.stops}
-        onCardDelete={value.onCardDelete}
-        setStops={value.setStops}
-        onStopDelete={value.onStopDelete}
-        updateTitle={value.updateTitle}
+        cardInfo={cardInfo}
+        stops={item.stops}
+        onCardDelete={item.onCardDelete}
+        setStops={item.setStops}
+        onStopDelete={item.onStopDelete}
+        updateCardInfo={item.updateCardInfo}
       />
     </li>
   );
@@ -42,42 +38,113 @@ const SortableStopCardList = SortableContainer(({ items }) => {
   );
 });
 
-const StopCardListContainer: FC<Props> = props => {
-  const [stopCardList, setStopCardList] = useState(stopCardsArray);
+const defaultStopCard = t => ({
+  id: 1,
+  title: t('viewEditorName'),
+  stops: {
+    left: {
+      inUse: true,
+      title: t('sideLeft'),
+      items: [],
+    },
+    right: {
+      inUse: false,
+      title: t('sideRight'),
+      items: [],
+    },
+  },
+  layout: 2,
+  duration: 5,
+});
+
+const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
+  const [stopCardList, setStopCardList] = useState([defaultStopCard(t)]);
 
   const onCardDelete = (id: number) => {
     setStopCardList(stopCardList.filter(s => s.id !== id));
   };
-  console.log('hash:', hash(stopCardList));
-  const onStopDelete = (cardId: number, gtfsId: string) => {
-    const card = stopCardList.find(card => card.id === cardId);
-    card.stops = card.stops.filter(stop => stop.gtfsId !== gtfsId);
+
+  const onStopDelete = (cardId: number, side: string, gtfsId: string) => {
+    const cardIndex = stopCardList.findIndex(card => card.id === cardId);
+    stopCardList[cardIndex].stops[side].items = stopCardList[cardIndex].stops[
+      side
+    ].items.filter(stop => stop.gtfsId !== gtfsId);
+    /*const card = stopCardList.find(card => card.id === cardId);
+    card.stops[side].items = card.stops[side].items.filter(stop => stop.gtfsId !== gtfsId);
     const array = stopCardList.slice();
     const index = stopCardList.indexOf(card);
     array[index] = card;
-    setStopCardList(array);
+    setStopCardList(array);*/
+    setStopCardList(stopCardList.slice());
   };
 
-  const setStops = (cardId: number, stops: any, reorder: boolean) => {
-    const card = stopCardList.find(card => card.id === cardId);
-    card.stops = reorder ? stops : card.stops.concat(stops);
-    const array = stopCardList.slice();
-    const index = stopCardList.indexOf(card);
-    array[index] = card;
-    setStopCardList(array);
+  const setStops = (
+    cardId: number,
+    side: string,
+    stops: any,
+    reorder: boolean,
+    gtfsIdForHidden: string,
+  ) => {
+    const cardIndex = stopCardList.findIndex(card => card.id === cardId);
+    if (!gtfsIdForHidden) {
+      stopCardList[cardIndex].stops[side].items = reorder
+        ? stops
+        : stopCardList[cardIndex].stops[side].items.concat(stops);
+      setStopCardList(stopCardList.slice());
+    } else {
+      const stopIndex = stopCardList[cardIndex].stops[side].items.findIndex(
+        stop => stop.gtfsId === gtfsIdForHidden,
+      );
+      stopCardList[cardIndex].stops[side].items[stopIndex] = stops;
+      setStopCardList(stopCardList.slice());
+    }
   };
 
-  const updateTitle = (cardId: number, title: string) => {
-    const card = stopCardList.find(card => card.id === cardId);
-    card.title = title;
-    const array = stopCardList.slice();
-    const index = stopCardList.indexOf(card);
-    array[index] = card;
-    setStopCardList(array);
+  const updateCardInfo = (cardId: number, type: string, value: string) => {
+    const cardIndex = stopCardList.findIndex(card => card.id === cardId);
+    if (type === 'title') {
+      stopCardList[cardIndex].title = value;
+    } else if (type === 'title-left') {
+      stopCardList[cardIndex].stops['left'].title = value;
+    } else if (type === 'title-right') {
+      stopCardList[cardIndex].stops['right'].title = value;
+    } else if (type === 'layout') {
+      stopCardList[cardIndex].layout = Number(value);
+    } else if (type === 'duration') {
+      stopCardList[cardIndex].duration = Number(value);
+    }
+    setStopCardList(stopCardList.slice());
   };
 
   const onSortEnd = ({ oldIndex, newIndex }) => {
     setStopCardList(arrayMove(stopCardList, oldIndex, newIndex));
+  };
+
+  const onSortStart = ({ index, node }) => {
+    const card = stopCardList[index];
+    const input = node.childNodes[0].childNodes[0].childNodes[0].childNodes[1]
+      .childNodes[0] as HTMLInputElement;
+    if (card.title !== input.value) {
+      updateCardInfo(stopCardList[index].id, 'title', input.value);
+    }
+  };
+
+  const addNew = () => {
+    console.log(stopCardList);
+    let cnt = stopCardList.length + 1;
+    while (cnt > 0) {
+      if (stopCardList.filter(s => s.id === cnt).length === 0) {
+        const newCard = {
+          ...defaultStopCard(t),
+          id: cnt,
+        };
+
+        setStopCardList(stopCardList.concat(newCard));
+        console.log(stopCardList.concat(newCard));
+        cnt = 0;
+      }
+      cnt--;
+    }
   };
 
   const modifiedStopCardList = stopCardList.map(card => {
@@ -86,17 +153,23 @@ const StopCardListContainer: FC<Props> = props => {
       onCardDelete: onCardDelete,
       onStopDelete: onStopDelete,
       setStops: setStops,
-      updateTitle: updateTitle,
+      updateCardInfo: updateCardInfo,
     };
   });
 
   return (
-    <SortableStopCardList
-      items={modifiedStopCardList}
-      useDragHandle
-      onSortEnd={onSortEnd}
-    />
+    <>
+      <SortableStopCardList
+        items={modifiedStopCardList}
+        useDragHandle
+        onSortEnd={onSortEnd}
+        onSortStart={onSortStart}
+      />
+      <button onClick={addNew}>{t('prepareDisplay')}</button>
+      <button>{t('previewView')} - ei tee mitään</button>
+      <button>{t('displayEditorStaticLink')} - ei tee mitään</button>
+    </>
   );
 };
 
-export default StopCardListContainer;
+export default withTranslation('translations')(StopCardListContainer);

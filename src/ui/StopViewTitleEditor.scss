@@ -19,6 +19,10 @@
     width: 178px;
     height: 24px;
     padding-right: 50px;
+    border: none;
+    &:focus {
+      outline: none;
+    }
   }
 }
 

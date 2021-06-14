@@ -1,16 +1,4 @@
 .modal-stop-routes {
-  /* height: 300px;
-  width: 500px;
-  background-color: #FFFFFF;
-  position: absolute;
-  padding: 10px;
-  left: 35vw;
-  top: 15vw;
-  z-index: 1;
-  font-size: 18px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  border-radius: 5px; */
   .ReactModal__Overlay {
     z-index: 10;
   }
@@ -22,7 +10,7 @@
 
   }
   .close{
-    position: absolute;;
+    position: absolute;
     right: 10px;
   }
     .title {

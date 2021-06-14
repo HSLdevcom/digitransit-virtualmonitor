@@ -11,6 +11,7 @@
   height: auto;
   padding-left: 30px;
   padding-right: 30px;
+  padding-bottom: 20px;
 
   .title-with-icons {
     display: flex;
@@ -42,13 +43,32 @@
     }
   }
 
-  .search-stop-with-layout-and-time {
+  .headers {
     display: flex;
     margin-top: 22px;
+    font-size: 15px;
+
+    .stop {
+      width: 440px;
+    }
+    .layout {
+      width: 130px;
+    }
+    .duration {
+      margin-left: 20px;
+    }
+  }
+  .search-stop-with-layout-and-time {
+    display: flex;
+    margin-top: 5px;
 
     .search-stop {
       width: 380px;
       margin-right: 40px;
+
+      input[class^='styles_input'] {
+        border: 1px solid #888888;
+      }
 
       div[class^='styles_autosuggest-input-icon'] svg {
         fill: #888888;
@@ -58,8 +78,32 @@
 
   .stop-list {
     position: relative;
-    top: -10px;
     list-style-type: none;
+  }
+
+  .stop-list-title {
+    &.left, &.right {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: row;
+
+      .input-left, .input-right {
+        font-size: 16px;
+        width: 130px;
+        border: none;
+        &:focus {
+          outline: none;
+        }
+      }
+
+      svg {
+        position: relative;
+        top: 2px;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+      }
+    }
   }
 }
 

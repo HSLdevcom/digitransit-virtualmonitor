@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import ContentContainer from '../ContentContainer';
+import ContentContainer from './ContentContainer';
 import monitorAPI from '../api';
 interface IHelpPageProps {
   urlParamUsageText?: string;
@@ -10,10 +10,9 @@ interface IHelpPageProps {
 }
 
 const HelpPage: React.FC<IHelpPageProps> = props => {
-
   useEffect(() => {
-    monitorAPI.get().then(json => console.log( json ));
-  }, [])
+    monitorAPI.get().then(json => console.log(json));
+  }, []);
   if (!props) {
     return <p> ERROR: OHJEITA EI LÖYTYNYT</p>;
   }

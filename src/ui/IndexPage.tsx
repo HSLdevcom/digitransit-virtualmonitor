@@ -2,7 +2,7 @@ import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import ContentContainer from './ContentContainer';
-import NysseLaptop from './ui/icons/nysse-reittiopas.jpg';
+import NysseLaptop from './icons/nysse-reittiopas.jpg';
 import './IndexPage.scss';
 
 class IndexPage extends React.Component<WithTranslation, any> {

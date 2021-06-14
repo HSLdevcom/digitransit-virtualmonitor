@@ -18,7 +18,7 @@ interface Props {
   routes: Route[];
   stop: IStopInfo;
   closeModal: (route: Route[]) => void;
-  hiddenRoutes?: Route[];
+  hiddenRoutes?: any;
 }
 
 const StopRoutesModal: FC<Props & WithTranslation> = (

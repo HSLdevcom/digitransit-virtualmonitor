@@ -124,11 +124,11 @@ const Monitor: FC<IProps> = ({ view, config }) => {
   );
   const { loading, error, data } = useQuery(GET_DEPARTURES, {
     variables: { ids: stopIds, numberOfDepartures: 12 },
-    pollInterval: 10000,
+    pollInterval: 30000,
   });
   const stationState = useQuery(GET_DEPARTURES_FOR_STATIONS, {
     variables: { ids: stationIds, numberOfDepartures: 12 },
-    pollInterval: 10000,
+    pollInterval: 30000,
   });
   useEffect(() => {
     if (data?.stops) {

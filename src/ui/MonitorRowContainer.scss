@@ -10,24 +10,13 @@
   flex: 1;
   font-family: 'Roboto';
   color: #fff;
-  .left {
+  .grid {
+    margin: 0 15px;
     flex: 1;
     display: grid;
     justify-content: space-between;
     grid-template-columns: 1fr 2fr 1fr;
     grid-template-rows: 50px auto;
-
-    border-collapse: collapse;
-    div {
-      display: flex;
-      align-items: center;
-    }
-  }
-  .right {
-    grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 50px auto;
-    flex: 1;
-    display: grid;
     div {
       display: flex;
       align-items: center;
@@ -37,7 +26,6 @@
 .divider {
   width: 5px;
   background-color: white;
-  margin: 0 15px;
 }
 .separator {
   grid-column: span 3;
@@ -45,6 +33,5 @@
   height: 0;
 }
 .departure-time {
-  margin-right: 10px;
-  justify-content:flex-end;
+  justify-content: flex-end;
 }

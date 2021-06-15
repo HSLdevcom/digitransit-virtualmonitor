@@ -1,4 +1,4 @@
-import { default as config } from './monitorConfig.js';
+import { default as config } from '../monitorConfig.js';
 
 export const getConfig = () => {
   const domain = window.location.hostname;

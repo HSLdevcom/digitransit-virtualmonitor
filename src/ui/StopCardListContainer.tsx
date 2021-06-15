@@ -158,7 +158,10 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
   const createMonitor = () => {
     const newCard = {
       ...stopCardList,
-      contenthash: hash(stopCardList, { algorithm: 'md5', encoding: 'base64' }).replace('/', '-'),
+      contenthash: hash(stopCardList, {
+        algorithm: 'md5',
+        encoding: 'base64',
+      }).replace('/', '-'),
     };
     monitorAPI.create(newCard).then(res => {
       console.log(res);

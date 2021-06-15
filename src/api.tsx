@@ -18,7 +18,6 @@ const monitorAPI = {
     });
   },
   get(monitor) {
-    console.log(monitor);
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/monitor/${monitor}`, {
         headers: {

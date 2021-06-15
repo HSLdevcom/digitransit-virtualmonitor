@@ -2,8 +2,11 @@ import React, { FC, useState, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
+import Logo from './logo/Logo';
 import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
+import { IMonitorConfig } from '../App';
+import { IDeparture } from './MonitorRow';
 
 const GET_DEPARTURES = gql`
   query GetDepartures($ids: [String!]!, $numberOfDepartures: Int!) {
@@ -81,10 +84,31 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
   }
 `;
 
-interface IProps {
-  readonly view: any;
+interface IStop {
+  code: string;
+  desc: string;
+  gtfsId: string;
+  locationType: string;
+  name: string;
 }
-const Monitor: FC<IProps> = ({ view }) => {
+interface ISides {
+  stops: Array<IStop>
+}
+interface IColumn {
+  left: ISides;
+  right: ISides;
+}
+interface IView {
+  columns: IColumn;
+  title: string;
+  layout: number;
+}
+
+interface IProps {
+  readonly view: Array<IView>;
+  readonly config: IMonitorConfig;
+}
+const Monitor: FC<IProps> = ({ view, config }) => {
   const [stopDepartures, setStopDepartures] = useState([]);
   const [stationDepartures, setStationDepartures] = useState([]);
   const [stopsFetched, setStopsFetched] = useState(false);
@@ -92,7 +116,7 @@ const Monitor: FC<IProps> = ({ view }) => {
 
   const stationIds = [];
   const stopIds = [];
-  console.log(view)
+
   view[0].columns.left.stops.forEach(stop =>
     stop.locationType === 'STOP'
       ? stopIds.push(stop.gtfsId)
@@ -108,11 +132,10 @@ const Monitor: FC<IProps> = ({ view }) => {
   });
   useEffect(() => {
     if (data?.stops) {
-      const departures = [];
+      const departures: Array<IDeparture> = [];
       data.stops.forEach(stop =>
         departures.push(...stop.stoptimesWithoutPatterns),
       );
-      //departures.sort((a,b) => a.realtimeDeparture - b.realtimeDeparture);
       setStopDepartures(departures);
       setStopsFetched(true);
     }
@@ -126,7 +149,6 @@ const Monitor: FC<IProps> = ({ view }) => {
       stationState.data.stations.forEach(stop =>
         departures.push(...stop.stoptimesWithoutPatterns),
       );
-      //departures.sort((a,b) => a.realtimeDeparture - b.realtimeDeparture);
       setStationDepartures(departures);
       setStationsFetched(true);
     }
@@ -142,7 +164,7 @@ const Monitor: FC<IProps> = ({ view }) => {
     <div className="main-content-container">
       {' '}
       <Titlebar>
-        {/* <Logo monitorConfig={monitorConfig} /> */}
+        <Logo monitorConfig={config} />
         <div
           id={'title-text'}
           style={{

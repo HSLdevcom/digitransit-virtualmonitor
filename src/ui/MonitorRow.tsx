@@ -1,10 +1,21 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC } from 'react';
 import { getStartTimeWithColon } from '../time';
 import './MonitorRow.scss';
 import cx from 'classnames';
 
+interface IRoute {
+  shortName: string;
+}
+interface ITrip {
+  route: IRoute;
+}
+export interface IDeparture {
+  trip: ITrip;
+  headsign: string;
+  realtimeDeparture: number;
+}
 interface IProps {
-  departure: any;
+  departure: IDeparture;
   size: number;
   withSeparator: boolean;
 }
@@ -24,11 +35,14 @@ const MonitorRow: FC<IProps> = ({ departure, size, withSeparator }) => {
   }
   return (
     <>
-    <div className="separator"></div>
-      <div className={cx('short-name', className)}>{departure?.trip.route.shortName}</div>
+      <div className="separator"></div>
+      <div className={cx('short-name', className)}>
+        {departure?.trip.route.shortName}
+      </div>
       <div className={cx('headsign', className)}>{departure?.headsign}</div>
-      <div className={cx('departure-time', className)}>{getStartTimeWithColon(departure?.realtimeDeparture)}</div>
-      
+      <div className={cx('departure-time', className)}>
+        {getStartTimeWithColon(departure?.realtimeDeparture)}
+      </div>
     </>
   );
 };

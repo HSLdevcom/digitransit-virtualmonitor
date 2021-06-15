@@ -15,7 +15,7 @@ import {
 } from '../StopTimesRetriever';
 import Titlebar from '../Titlebar';
 import TitlebarTime from '../TitlebarTime';
-import { getConfig } from '../../getConfig';
+import { getConfig } from '../../util/getConfig';
 
 import './StopTimesView.css';
 

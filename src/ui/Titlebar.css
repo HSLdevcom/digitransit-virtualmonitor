@@ -1,12 +1,11 @@
 #title-bar {
   display: flex;
-  flex: 1 0;
   flex-direction: row;
   justify-content: space-between;
   justify-self: flex-start;
   align-items: center;
   height: 8em;
-  margin: 0.75em 1.5em 1em 1.5em;
+  padding: 0.75em 1.5em 1em 1.5em;
 }
 
 #title-logo {
@@ -24,6 +23,7 @@
   margin-right: 0.5em;
   font-size: 4em;
   font-weight: bold;
+  color: #fff;
 }
 
 #title-text-stop {

@@ -13,6 +13,7 @@ import HelpPage from './ui/HelpPage';
 import QuickDisplay from './ui/QuickDisplay';
 import StopTimesView from './ui/Views/StopTimesView';
 import CreateViewPage from './ui/CreateViewPage';
+import WithDatabaseConnection from './ui/WithDatabaseConnection';
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
@@ -90,108 +91,114 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
 
     return (
       <div className={'App'}>
-        <Switch>
-          <Route
-            path={'/createView'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <ApolloProvider client={client}>
-                <Banner config={monitorConfig} />
-                <CreateViewPage />
-              </ApolloProvider>
-            )}
-          />
-          <Route
-            path={'/quickDisplay/:version?/:packedDisplay?'}
-            component={QuickDisplay}
-          />
-          <Route
-            path={'/help'}
-            // eslint-disable-next-line no-empty-pattern
-            component={({
-              match: {
-                params: {},
-              },
-            } : RouteComponentProps<IMonitorConfig>) => (
-              <ApolloProvider client={client}>
-                <Banner config={monitorConfig} />
-                <HelpPage
-                  client={client}
-                  urlParamUsageText={helpPageUrlParamText}
-                  urlMultipleStopsText={helpPageurlMultipleStopsText}
-                  urlParamFindText={helpPageUrlParamFindText}
-                  urlParamFindAltText={helpPageUrlParamFindAltText}
-                  content={this.props.search.cont}
-                />
-              </ApolloProvider>
-            )}
-          />
-          <Route
-            path={'/urld/:version/:packedDisplay'}
-            component={({
-              match: {
-                params: { version, packedDisplay },
-              },
-            }: RouteComponentProps<ICompressedDisplayRouteParams>) => {
-              return (
+        <ApolloProvider client={client}>
+          <Switch>
+            <Route
+              path={'/createView'}
+              component={({
+                match: {
+                  params: {},
+                },
+              }: RouteComponentProps<IMonitorConfig>) => (
                 <>
-                  <DisplayUrlCompression
-                    version={decodeURIComponent(version)}
-                    packedString={decodeURIComponent(packedDisplay)}
+                  <Banner config={monitorConfig} />
+                  <CreateViewPage />
+                </>
+              )}
+            />
+            <Route
+              path={'/quickDisplay/:version?/:packedDisplay?'}
+              component={QuickDisplay}
+            />
+            <Route path={'/view'} component={WithDatabaseConnection} />
+            <Route
+              path={'/help'}
+              // eslint-disable-next-line no-empty-pattern
+              component={({
+                match: {
+                  params: {},
+                },
+              }: RouteComponentProps<IMonitorConfig>) => (
+                <>
+                  <Banner config={monitorConfig} />
+                  <HelpPage
+                    client={client}
+                    urlParamUsageText={helpPageUrlParamText}
+                    urlMultipleStopsText={helpPageurlMultipleStopsText}
+                    urlParamFindText={helpPageUrlParamFindText}
+                    urlParamFindAltText={helpPageUrlParamFindAltText}
+                    content={this.props.search.cont}
                   />
                 </>
-              );
-            }}
-          />
-          <Route
-            path={'/configuration/:configuration/display/:display'}
-            component={({
-              match: {
-                params: { configuration, displayName },
-              },
-            }: RouteComponentProps<IConfigurationDisplayRouteParams>) => (
-              <ConfigurationDisplay
-                configurationName={configuration}
-                displayName={displayName}
-              />
-            )}
-          />
-          <Route
-            path={'/stop/:stopId/:displayedRoutes?'}
-            component={({
-              match: {
-                params: { stopId, displayedRoutes },
-              },
-            }: RouteComponentProps<IStopRouteParams>) => (
-              <StopTimesView
-                stopIds={stopId.split(',')}
-                displayedRoutes={
-                  displayedRoutes ? Number(displayedRoutes) : undefined
-                }
-                monitorConfig={monitorConfig}
-                urlTitle={this.props.search?.title}
-              />
-            )}
-          />
-          <Route path={'/configs/:configName?'} component={ConfigurationList} />
-          <Route path={'/displayEditor/'} component={DisplayEditor} />
-          <Route
-            path={'/'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <ApolloProvider client={client}>
-                <Banner config={monitorConfig} />
-                <IndexPage />
-              </ApolloProvider>
-            )}
-          />
-        </Switch>
+              )}
+            />
+            <Route
+              path={'/urld/:version/:packedDisplay'}
+              component={({
+                match: {
+                  params: { version, packedDisplay },
+                },
+              }: RouteComponentProps<ICompressedDisplayRouteParams>) => {
+                return (
+                  <>
+                    <DisplayUrlCompression
+                      version={decodeURIComponent(version)}
+                      packedString={decodeURIComponent(packedDisplay)}
+                    />
+                  </>
+                );
+              }}
+            />
+            <Route
+              path={'/configuration/:configuration/display/:display'}
+              component={({
+                match: {
+                  params: { configuration, displayName },
+                },
+              }: RouteComponentProps<IConfigurationDisplayRouteParams>) => (
+                <ConfigurationDisplay
+                  configurationName={configuration}
+                  displayName={displayName}
+                />
+              )}
+            />
+            <Route
+              path={'/stop/:stopId/:displayedRoutes?'}
+              component={({
+                match: {
+                  params: { stopId, displayedRoutes },
+                },
+              }: RouteComponentProps<IStopRouteParams>) => (
+                <StopTimesView
+                  stopIds={stopId.split(',')}
+                  displayedRoutes={
+                    displayedRoutes ? Number(displayedRoutes) : undefined
+                  }
+                  monitorConfig={monitorConfig}
+                  urlTitle={this.props.search?.title}
+                />
+              )}
+            />
+            <Route
+              path={'/configs/:configName?'}
+              component={ConfigurationList}
+            />
+            <Route path={'/displayEditor/'} component={DisplayEditor} />
+            <Route
+              path={'/'}
+              component={({
+                match: {
+                  params: {},
+                },
+              }: RouteComponentProps<IMonitorConfig>) => (
+                <>
+                  <Banner config={monitorConfig} />
+                  <IndexPage />
+                </>
+              )}
+            />
+          </Switch>
+        </ApolloProvider>
       </div>
     );
   }

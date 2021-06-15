@@ -31,3 +31,9 @@ export const formatTime = (
   `${doubleDigit(timeOfDay.hours)}:${doubleDigit(timeOfDay.minutes)}${
     options.showSeconds ? `:${doubleDigit(timeOfDay.seconds)}` : ''
   }`;
+
+export const getStartTimeWithColon = time => {
+  const hours = `0${Math.floor(time / 60 / 60)}`.slice(-2);
+  const mins = `0${Math.floor(time / 60) % 60}`.slice(-2);
+  return `${hours}:${mins}`;
+};

@@ -16,6 +16,7 @@ import NtpSyncComponent from './ntp/NtpSyncComponent';
 import registerServiceWorker from './registerServiceWorker';
 import { ApolloClientsContext } from './VirtualMonitorApolloClients';
 import VirtualMonitorLocalState from './VirtualMonitorLocalState';
+import {getParams} from './util/queryUtils';
 
 const domain = window.location.hostname;
 let monitorConfig: { feedId?: string; uri: any };
@@ -33,21 +34,7 @@ if (domain.indexOf('tremonitori') >= 0) {
   monitorConfig = config.matka;
 }
 
-const getParams = (query: string) => {
-  if (!query) {
-    return {};
-  }
 
-  return query
-    .substring(1)
-    .split('&')
-    .map(v => v.split('='))
-    .reduce((params, [key, value]) => {
-      const newParam: { [index: string]: any } = {};
-      newParam[key] = decodeURIComponent(value);
-      return { ...params, ...newParam };
-    }, {});
-};
 
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),

@@ -3,14 +3,14 @@ const baseAPI = '/api';
 const monitorAPI = {
   getAll() {
     return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/monitors`,{
-        headers:{
-            "accepts":"application/json"
-        }
-    })
+      fetch(`${baseAPI}/monitors`, {
+        headers: {
+          accepts: 'application/json',
+        },
+      })
         .then(response => response.json())
         .then(json => {
-          return resolve(json)
+          return resolve(json);
         })
         .catch(err => {
           reject(err);
@@ -18,14 +18,14 @@ const monitorAPI = {
     });
   },
   get(monitor) {
-    console.log(monitor)
+    console.log(monitor);
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/monitor/${monitor}`, {
         headers: {
-         // Accept: 'application/json',
-         // 'Content-Type': 'application/json'
-         "accepts":"application/json"
-        }
+          // Accept: 'application/json',
+          // 'Content-Type': 'application/json'
+          accepts: 'application/json',
+        },
       })
         .then(result => result.json())
         .then(json => resolve(json))
@@ -42,8 +42,8 @@ const monitorAPI = {
         body: JSON.stringify(monitor),
         headers: {
           Accept: 'application/json',
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       })
         .then(result => result.json())
         .then(json => resolve(json))

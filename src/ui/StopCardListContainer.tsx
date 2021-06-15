@@ -7,6 +7,7 @@ import hash from 'object-hash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
 import monitorAPI from '../api';
+import { Redirect } from 'react-router-dom';
 
 const SortableStopCardItem = SortableElement(({ value: item }) => {
   const cardInfo: ICardInfo = {
@@ -60,6 +61,8 @@ const defaultStopCard = t => ({
 
 const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
   const [stopCardList, setStopCardList] = useState([defaultStopCard(t)]);
+  const [redirect, setRedirect] = useState(false);
+  const [view, setView] = useState(undefined);
 
   const onCardDelete = (id: number) => {
     setStopCardList(stopCardList.filter(s => s.id !== id));
@@ -67,9 +70,9 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
 
   const onStopDelete = (cardId: number, side: string, gtfsId: string) => {
     const cardIndex = stopCardList.findIndex(card => card.id === cardId);
-    stopCardList[cardIndex].columns[side].stops = stopCardList[cardIndex].columns[
-      side
-    ].stops.filter(stop => stop.gtfsId !== gtfsId);
+    stopCardList[cardIndex].columns[side].stops = stopCardList[
+      cardIndex
+    ].columns[side].stops.filter(stop => stop.gtfsId !== gtfsId);
     setStopCardList(stopCardList.slice());
   };
 
@@ -155,9 +158,24 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
   const createMonitor = () => {
     const newCard = {
       ...stopCardList,
-      contenthash: hash(stopCardList, { algorithm: 'md5', encoding: 'base64' }),
-    }
-    monitorAPI.create(newCard).then(json => console.log( json ));
+      contenthash: hash(stopCardList, { algorithm: 'md5', encoding: 'base64' }).replace('/', '-'),
+    };
+    monitorAPI.create(newCard).then(res => {
+      console.log(res);
+      setRedirect(true);
+      setView(newCard);
+    });
+  };
+  if (redirect && view) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/view',
+          search: `?cont=${view.contenthash}`,
+          state: { view: view },
+        }}
+      />
+    );
   }
 
   return (
@@ -169,8 +187,8 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
         onSortStart={onSortStart}
       />
       <button onClick={addNew}>{t('prepareDisplay')}</button>
-      <button>{t('previewView')} - ei tee mitään</button>
-      <button onClick={createMonitor}>{t('displayEditorStaticLink')} - ei tee mitään</button>
+      <button>{t('previewView')}</button>
+      <button onClick={createMonitor}>{t('displayEditorStaticLink')}</button>
     </>
   );
 };

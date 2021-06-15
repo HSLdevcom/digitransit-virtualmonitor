@@ -1,6 +1,17 @@
+body, html {
+  height: 100%;
+}
+
 body {
   padding: 0;
+  margin: 0;
 }
 ul {
   padding-inline-start: 0;
+}
+#root {
+  height: 100%;
+}
+.App {
+  height: 100%;
 }

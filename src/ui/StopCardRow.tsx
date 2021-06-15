@@ -33,6 +33,7 @@ const GET_STOP = gql`
       desc
       gtfsId
       platformCode
+      locationType
       routes {
         shortName
         gtfsId
@@ -50,6 +51,7 @@ const GET_STATION = gql`
       desc
       gtfsId
       platformCode
+      locationType
       stops {
         desc
         routes {
@@ -216,7 +218,8 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         'left',
         stopState.data.stop
           .filter(
-            stop => stop && !columns['left'].stops.some(el => el.id === stop.id),
+            stop =>
+              stop && !columns['left'].stops.some(el => el.id === stop.id),
           )
           .map(stop => {
             const stopWithGTFS = {
@@ -256,7 +259,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             return {
               ...stationWithGTFS,
               code: t('station'),
-              desc: station.columns[0].desc,
+              desc: station.stops[0].desc,
               routes: sortBy(sortBy(routes, 'shortName'), 'shortName.length'),
               hiddenRoutes: [],
             };

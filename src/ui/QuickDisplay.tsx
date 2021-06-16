@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import { Query } from '@loona/react';
 import gql from 'graphql-tag';
 import { History } from 'history';
@@ -15,7 +16,6 @@ import {
 import DisplayEditor from './DisplayEditor';
 import { pairs } from './DisplayUrlCompression';
 import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
-import { any } from 'prop-types';
 
 const addQuickConfiguration = gql`
   ${ConfigurationFieldsFragment}
@@ -242,6 +242,7 @@ class DisplayEditorHistoryUpdater extends React.PureComponent<IDisplayEditorHist
       };
       return rest;
     };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const recursive = (o: { [index: string]: any }): {} => {
       return Object.getOwnPropertyNames(removeIDAndTypename(o))
         .filter(propName => o[propName] !== undefined && o[propName] !== null)

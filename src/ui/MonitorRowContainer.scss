@@ -2,14 +2,15 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  background-color: #007AC9;
+  background-color: #007ac9;
 }
 
 .monitor-container {
   display: flex;
   flex: 1;
-  font-family: 'Roboto';
+  font-family: 'Roboto', Arial, Georgia, serif;
   color: #fff;
+
   .grid {
     margin: 0 15px;
     flex: 1;
@@ -17,21 +18,25 @@
     justify-content: space-between;
     grid-template-columns: 1fr 2fr 1fr;
     grid-template-rows: 50px auto;
+
     div {
       display: flex;
       align-items: center;
     }
   }
 }
+
 .divider {
   width: 5px;
   background-color: white;
 }
+
 .separator {
   grid-column: span 3;
   border-top: 5px dotted #fff;
   height: 0;
 }
+
 .departure-time {
   justify-content: flex-end;
 }

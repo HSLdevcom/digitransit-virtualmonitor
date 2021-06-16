@@ -8,10 +8,8 @@ import DTAutosuggest from '@digitransit-component/digitransit-component-autosugg
 import getSearchContext from './searchContext';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
-import { SortableHandle } from 'react-sortable-hoc';
 import { ICardInfo } from './CardInfo';
 import cx from 'classnames';
-import { focusToInput, onClick } from './InputUtils';
 import './StopCardRow.scss';
 
 const getGTFSId = id => {
@@ -191,6 +189,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
       <div className="title-with-icons">
         <StopViewTitleEditor
           id={cardInfo.id}
+          layout={cardInfo.layout}
           title={cardInfo.title}
           updateCardInfo={updateCardInfo}
         />

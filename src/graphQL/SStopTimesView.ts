@@ -15,6 +15,7 @@ const SStopTimesView = new GraphQLObjectType({
     ...SViewFields,
     pierColumnTitle: { type: GraphQLString },
     stops: {
+      // eslint-disable-next-line no-empty-pattern
       resolve: (root, {}) => root.stops,
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SStop))),
     },

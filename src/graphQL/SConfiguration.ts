@@ -14,6 +14,7 @@ const SConfiguration = new GraphQLObjectType({
   fields: {
     ...SNodeFields,
     displays: {
+      // eslint-disable-next-line no-empty-pattern
       resolve: (root, {}) => root.displays,
       type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(SDisplay))),
     },

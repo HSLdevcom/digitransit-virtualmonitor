@@ -5,8 +5,10 @@ import { v4 as uuid } from 'uuid';
 import hash from 'object-hash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
+import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
+import './StopCardListContainer.scss';
 
 const StopCardItem = ({ value: item, possibleToMove, index, totalCount }) => {
   const cardInfo: ICardInfo = {
@@ -75,6 +77,14 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
   const [stopCardList, setStopCardList] = useState([defaultStopCard(t)]);
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
+  const [isOpen, setOpen] = useState(false);
+
+  const openPreview = () => {
+    setOpen(true);
+  };
+  const closePreview = () => {
+    setOpen(false);
+  };
 
   const onCardDelete = (id: number) => {
     setStopCardList(stopCardList.filter(s => s.id !== id));
@@ -182,7 +192,6 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
       }).replace('/', '-'),
     };
     monitorAPI.create(newCard).then(res => {
-      console.log(res);
       setRedirect(true);
       setView(newCard);
     });
@@ -201,10 +210,25 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
 
   return (
     <>
+      {isOpen && (
+        <PreviewModal
+          view={stopCardList}
+          isOpen={isOpen}
+          onClose={closePreview}
+        />
+      )}
       <StopCardList items={modifiedStopCardList} />
-      <button onClick={addNew}>{t('prepareDisplay')}</button>
-      <button>{t('previewView')}</button>
-      <button onClick={createMonitor}>{t('displayEditorStaticLink')}</button>
+      <div className="buttons">
+        <button className="button" onClick={addNew}>
+          <span>{t('prepareDisplay')}</span>
+        </button>
+        <button className="button" onClick={openPreview}>
+          <span>{t('previewView')}</span>
+        </button>
+        <button className="button" onClick={createMonitor}>
+          <span>{t('displayEditorStaticLink')}</span>
+        </button>
+      </div>
     </>
   );
 };

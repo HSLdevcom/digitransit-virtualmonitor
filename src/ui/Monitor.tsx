@@ -117,8 +117,9 @@ const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
 interface IProps {
   readonly view: Array<IView>;
   readonly config: IMonitorConfig;
+  readonly noPolling?: boolean;
 }
-const Monitor: FC<IProps> = ({ view, config }) => {
+const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   const [stopDepartures, setStopDepartures] = useState([]);
   const [stationDepartures, setStationDepartures] = useState([]);
   const [stopsFetched, setStopsFetched] = useState(false);
@@ -126,7 +127,8 @@ const Monitor: FC<IProps> = ({ view, config }) => {
 
   const stationIds = [];
   const stopIds = [];
-
+  // Don't poll on preview
+  const pollInterval = noPolling ? 0 : 3000;
   view[0].columns.left.stops.forEach(stop =>
     stop.locationType === 'STOP'
       ? stopIds.push(stop.gtfsId)
@@ -134,11 +136,11 @@ const Monitor: FC<IProps> = ({ view, config }) => {
   );
   const { loading, error, data } = useQuery(GET_DEPARTURES, {
     variables: { ids: stopIds, numberOfDepartures: 24 },
-    pollInterval: 30000,
+    pollInterval: pollInterval,
   });
   const stationState = useQuery(GET_DEPARTURES_FOR_STATIONS, {
     variables: { ids: stationIds, numberOfDepartures: 24 },
-    pollInterval: 30000,
+    pollInterval: pollInterval,
   });
   useEffect(() => {
     if (data?.stops) {

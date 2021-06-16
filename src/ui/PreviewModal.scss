@@ -1,0 +1,13 @@
+.preview {
+  .ReactModal__Content {
+    position: absolute;
+    top: 78px !important;
+    padding: 25px !important;
+    .close {
+      position: absolute;
+      right: 0;
+      top: 0;
+      padding: 10px;
+    }
+  }
+}

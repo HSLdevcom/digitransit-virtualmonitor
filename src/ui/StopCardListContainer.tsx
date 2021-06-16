@@ -207,17 +207,15 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
       <div className="buttons">
         <button
           className="button"
-          style={{ color: `#007AC9` }}
           onClick={addNew}
         >
           <span>{t('prepareDisplay')}</span>
         </button>
-        <button className="button" style={{ color: `#007AC9` }}>
+        <button className="button">
           <span>{t('previewView')}</span>
         </button>
         <button
           className="button"
-          style={{ color: `#007AC9` }}
           onClick={createMonitor}
         >
           <span>{t('displayEditorStaticLink')}</span>

@@ -164,7 +164,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
           .map(station => {
             let routes = [];
             station.stops.forEach(stop => routes.push(...stop.routes));
-            routes = uniqBy(routes, 'gtfsId');
+            //routes = routes//uniqBy(routes, 'gtfsId');
             const stationWithGTFS = {
               ...station,
               locality: autosuggestValue.locality,

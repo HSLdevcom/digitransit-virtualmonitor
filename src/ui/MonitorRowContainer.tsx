@@ -10,7 +10,8 @@ interface IProps {
 
 const MonitorRowContainer: FC<IProps> = ({ departures, layout }) => {
   const sortedDepartures = departures.sort(
-    (a, b) => a.realtimeDeparture - b.realtimeDeparture,
+    (a, b) =>
+      a.realtimeDeparture + a.serviceDay - (b.realtimeDeparture + b.serviceDay),
   );
   const [leftColumnCount, rightColumnCount, isMultiDisplay] = layout;
 

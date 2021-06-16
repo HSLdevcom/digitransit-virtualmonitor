@@ -2,31 +2,35 @@
   position: absolute;
   top: 0;
   left: 0;
-  background: #007AC9;
+  background: #007ac9;
   min-width: 100%;
   z-index: 2;
   height: 70px;
- .lang-section {
-   border-bottom: 1px solid #ddd;
-   .lang-select {
-     text-decoration: none;
-     line-height: normal;
-     color: #1c57cf;
-     font-family: Roboto, Arial, Georgia, Serif;
-     font-weight: 700;
-     letter-spacing: 0;
-     font-size: 1.25rem;
-     display: inline-block;
-     text-transform: uppercase;
-     cursor: pointer;
-     padding: 8px 13px;
-     margin: 0 2px;
-   }
- }
+
+  .lang-section {
+    border-bottom: 1px solid #ddd;
+
+    .lang-select {
+      text-decoration: none;
+      line-height: normal;
+      color: #1c57cf;
+      font-family: Roboto, Arial, Georgia, serif;
+      font-weight: 700;
+      letter-spacing: 0;
+      font-size: 1.25rem;
+      display: inline-block;
+      text-transform: uppercase;
+      cursor: pointer;
+      padding: 8px 13px;
+      margin: 0 2px;
+    }
+  }
+
   .link-section {
     display: flex !important;
     flex-direction: column;
     border-bottom: 1px solid #ddd;
+
     .link {
       text-decoration: none;
       outline: none;
@@ -36,16 +40,17 @@
       height: 100%;
       overflow-y: auto;
       text-align: left;
-      font-family: Roboto,Arial,Georgia,Serif;
+      font-family: Roboto, Arial, Georgia, serif;
       font-weight: 700;
       letter-spacing: 0;
       padding-top: 10px;
       padding-bottom: 10px;
     }
   }
+
   /* Position and sizing of burger button */
   .bm-burger-button {
-    position: fixed;
+    position: absolute;
     width: 36px;
     height: 30px;
     right: 36px;
@@ -54,10 +59,10 @@
 
   /* Color/shape of burger icon bars */
   .bm-burger-bars {
-    background: #FFFFFF;
+    background: #fff;
   }
 
-  /* Color/shape of burger icon bars on hover*/
+  /* Color/shape of burger icon bars on hover */
   .bm-burger-bars-hover {
     background: #a90000;
   }
@@ -80,12 +85,12 @@
   .bm-menu-wrap {
     position: fixed;
     height: 100%;
-    top: 70px
+    top: 70px;
   }
 
   /* General sidebar styles */
   .bm-menu {
-    background: #FFFFFF;
+    background: #fff;
     padding: 2.5em 1.5em 0;
     font-size: 1.15em;
     overflow: hidden !important;
@@ -111,5 +116,4 @@
   .bm-overlay {
     background: rgba(0, 0, 0, 0.3);
   }
-
 }

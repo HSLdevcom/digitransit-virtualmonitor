@@ -2,46 +2,56 @@
   .ReactModal__Overlay {
     z-index: 10;
   }
+
   .ReactModal__Content {
     width: 720px;
     inset: 0 !important;
-    top: 0vh !important;
+    top: 0 !important;
     left: 25vw !important;
   }
+
   .row {
     padding-left: 61px;
+
     .header {
       padding-bottom: 20px;
       display: flex;
       align-items: end;
       flex-flow: column;
     }
+
     .options {
       display: flex;
+
       .label {
         display: flex;
         flex-direction: column;
-        border: 1px solid #DDDDDD;
+        border: 1px solid #ddd;
+
         &.label-selected {
-          border: 1px solid #333333;
+          border: 1px solid #333;
         }
+
         height: 140px;
         width: 180px;
         margin-right: 40px;
+
         svg {
-         position: relative;
+          position: relative;
           top: 10px;
           left: 7px;
         }
-      .label-text {
-        display: flex;
-        justify-content: center;
-        position: relative;
-        margin-top: 20px;
+
+        .label-text {
+          display: flex;
+          justify-content: center;
+          position: relative;
+          margin-top: 20px;
         }
       }
     }
   }
+
   .close-button {
     font-size: 1.125em;
     font-style: normal;
@@ -49,8 +59,8 @@
     line-height: 22px;
     letter-spacing: -0.02em;
     text-align: center;
-    background: #007AC9;
-    color: #FFFFFF;
+    background: #007ac9;
+    color: #fff;
     border-radius: 50px;
     width: 216px;
     height: 50px;

@@ -1,5 +1,5 @@
-.stopcard-row-container  {
-  font-family: 'Roboto';
+.stopcard-row-container {
+  font-family: 'Gotham Rounded A', 'Gotham Rounded B', 'Roboto', Arial, Georgia, serif;
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -17,7 +17,7 @@
     display: flex;
     max-height: 80px;
     width: 720px;
-    border-bottom: 1px solid #DDDDDD;
+    border-bottom: 1px solid #ddd;
 
     .icons {
       display: flex;
@@ -52,13 +52,17 @@
             width: 30px;
             height: 40px;
           }
+
           div {
             position: relative;
             left: 5px;
+
             &:first-child {
-              top: 0px;
+              top: 0;
             }
-            &:nth-child(2), &:nth-child(3) {
+
+            &:nth-child(2),
+            &:nth-child(3) {
               top: -15px;
             }
           }
@@ -75,52 +79,30 @@
     .stop {
       width: 440px;
     }
+
     .layout {
       width: 130px;
     }
+
     .duration {
       margin-left: 20px;
     }
   }
-  .search-stop-with-layout-and-time {
-    display: flex;
-    margin-top: 5px;
-
-    .search-stop {
-      width: 380px;
-      margin-right: 40px;
-
-      input[class^='styles_input'] {
-        border: 1px solid #888888;
-      }
-
-      div[class^='styles_autosuggest-input-icon'] svg {
-        fill: #888888;
-      }
-    }
-  }
-
-  .stop-list {
-    position: relative;
-    list-style-type: none;
-  }
 
   .stop-list-title {
-    .header {
-      position: relative;
-      top: 3px;
-      margin-right: 5px;
-    }
-
-    &.left, &.right {
-      margin-top: 10px;
+    &.left,
+    &.right {
       display: flex;
       flex-direction: row;
 
-      .input-left, .input-right {
-        font-size: 16px;
+      .input-left,
+      .input-right {
+        font-size: 21px;
+        line-height: 24px;
+        letter-spacing: -0.3px;
         width: 130px;
         border: none;
+
         &:focus {
           outline: none;
         }
@@ -134,5 +116,39 @@
         align-content: center;
       }
     }
+  }
+
+  .search-stop-with-layout-and-time {
+    display: flex;
+    margin-top: 5px;
+
+    .search-stop {
+      width: 380px;
+      margin-right: 40px;
+
+      input[class^='styles_input'] {
+        border: 1px solid #888;
+      }
+
+      div[class^='styles_autosuggest-input-icon'] svg {
+        fill: #888;
+      }
+    }
+  }
+
+  .stop-list {
+    position: relative;
+    list-style-type: none;
+  }
+
+  .header {
+    position: relative;
+    margin-top: 16px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 24px;
+    letter-spacing: -0.3px;
+    color: #666;
   }
 }

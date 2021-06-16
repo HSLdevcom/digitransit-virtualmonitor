@@ -27,7 +27,8 @@ const TitleItem = props => {
   const [changedLeft, setChangedLeft] = useState(false);
   const [newTitleRight, setNewTitleRight] = useState(props.titleRight);
   const [changedRight, setChangedRight] = useState(false);
-  const { cardInfo, side, updateCardInfo } = props;
+  const { cardInfo, side, updateCardInfo, leftItemsHeader, rightItemsHeader } =
+    props;
 
   const onBlur = (event: any, side: string) => {
     if (event && updateCardInfo) {
@@ -120,25 +121,27 @@ const TitleItem = props => {
   const valueLeft = changedLeft ? newTitleLeft : props.titleLeft;
   const valueRight = changedRight ? newTitleRight : props.titleRight;
   return (
-    <div className={cx('stop-list-title', side)}>
+    <>
       <div className="header">
-        {side === 'left' ? 'Vasen puoli:' : 'Oikea puoli:'}
+        {side === 'left' ? leftItemsHeader : rightItemsHeader}
       </div>
-      <input
-        className={`input-${side}`}
-        id={`stop-list-title-input-${side}`}
-        onClick={e => onClick(e)}
-        onKeyDown={e => isKeyboardSelectionEvent(e, side)}
-        onBlur={e => !isKeyboardSelectionEvent(e, side) && onBlur(e, side)}
-        value={side === 'left' ? valueLeft : valueRight}
-      />
-      <div
-        role="button"
-        onClick={() => focusToInput(`stop-list-title-input-${side}`)}
-      >
-        <Icon img="edit" color={'#007ac9'} width={20} height={20} />
+      <div className={cx('stop-list-title', side)}>
+        <input
+          className={`input-${side}`}
+          id={`stop-list-title-input-${side}`}
+          onClick={e => onClick(e)}
+          onKeyDown={e => isKeyboardSelectionEvent(e, side)}
+          onBlur={e => !isKeyboardSelectionEvent(e, side) && onBlur(e, side)}
+          value={side === 'left' ? valueLeft : valueRight}
+        />
+        <div
+          role="button"
+          onClick={() => focusToInput(`stop-list-title-input-${side}`)}
+        >
+          <Icon img="edit" color={'#007ac9'} width={20} height={20} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -147,8 +150,8 @@ const StopListPlaceHolder = props => {
   return (
     <ul className="stops">
       <li className="stop">
-        <div className="stop-row-container">
-          <div className="drag-and-drop-placeholder">{title ? title : ''}</div>
+        <div className="stop-row-container placeholder">
+          <div className="placeholder-no-stops">{title ? title : ''}</div>
         </div>
       </li>
     </ul>
@@ -180,13 +183,20 @@ const StopList = props => {
     layout,
     leftItemsPlaceHolder,
     rightItemsPlaceHolder,
+    leftItemsHeader,
+    rightItemsHeader,
   } = props;
-  const showStopTitles =
-    layout >= 9 && (leftItems.length > 0 || rightItems.length > 0);
+
+  const showStopTitles = layout >= 9;
+
   return (
     <div>
       {showStopTitles && (
-        <TitleItem side="left" titleLeft={leftTitle} titleRight={rightTitle} />
+        <TitleItem
+          side="left"
+          titleLeft={leftTitle}
+          leftItemsHeader={leftItemsHeader}
+        />
       )}
       {showStopTitles && leftItems.length === 0 && (
         <StopListPlaceHolder title={leftItemsPlaceHolder} />
@@ -207,7 +217,11 @@ const StopList = props => {
         </ul>
       </div>
       {showStopTitles && (
-        <TitleItem side="right" titleLeft={leftTitle} titleRight={rightTitle} />
+        <TitleItem
+          side="right"
+          titleRight={rightTitle}
+          rightItemsHeader={rightItemsHeader}
+        />
       )}
       {showStopTitles && rightItems.length === 0 && (
         <StopListPlaceHolder title={rightItemsPlaceHolder} />
@@ -263,10 +277,12 @@ const StopListContainer: FC<Props & WithTranslation> = props => {
     <div className="stop-list">
       <StopList
         leftItems={addInfoToItems(props, leftItems)}
-        leftItemsPlaceHolder={props.t('add-stop-placeholder')}
+        leftItemsHeader={props.t('headerSideLeft')}
+        leftItemsPlaceHolder={props.t('placeholderSideLeft')}
         leftTitle={props.stops['left'].title}
         rightItems={addInfoToItems(props, rightItems)}
-        rightItemsPlaceHolder={props.t('drag-and-drop-placeholder', {
+        rightItemsHeader={props.t('headerSideRight')}
+        rightItemsPlaceHolder={props.t('placeholderSideRight', {
           title: props.stops['left'].title,
         })}
         rightTitle={props.stops['right'].title}

@@ -7,6 +7,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
 import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
+import './StopCardListContainer.scss';
 
 const StopCardItem = ({ value: item, possibleToMove, index, totalCount }) => {
   const cardInfo: ICardInfo = {
@@ -182,6 +183,7 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
       }).replace('/', '-'),
     };
     monitorAPI.create(newCard).then(res => {
+      // eslint-disable-next-line no-console
       console.log(res);
       setRedirect(true);
       setView(newCard);
@@ -202,9 +204,25 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
   return (
     <>
       <StopCardList items={modifiedStopCardList} />
-      <button onClick={addNew}>{t('prepareDisplay')}</button>
-      <button>{t('previewView')}</button>
-      <button onClick={createMonitor}>{t('displayEditorStaticLink')}</button>
+      <div className="buttons">
+        <button
+          className="button"
+          style={{ color: `#007AC9` }}
+          onClick={addNew}
+        >
+          <span>{t('prepareDisplay')}</span>
+        </button>
+        <button className="button" style={{ color: `#007AC9` }}>
+          <span>{t('previewView')}</span>
+        </button>
+        <button
+          className="button"
+          style={{ color: `#007AC9` }}
+          onClick={createMonitor}
+        >
+          <span>{t('displayEditorStaticLink')}</span>
+        </button>
+      </div>
     </>
   );
 };

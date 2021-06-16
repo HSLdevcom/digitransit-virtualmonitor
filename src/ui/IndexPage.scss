@@ -1,9 +1,9 @@
 
 .index {
-
   .left {
     width: 50%;
     color: black;
+
     .title {
       position: relative;
       left: 121px;
@@ -13,6 +13,7 @@
     .welcome {
       display: flex;
       justify-content: space-between;
+
       .welcome-text {
         font-size: 18px;
         font-style: normal;
@@ -36,12 +37,13 @@
       line-height: 22px;
       letter-spacing: -0.02em;
       text-align: center;
-      background: #007AC9;
+      background: #007ac9;
       border-radius: 50px;
       width: 216px;
       height: 50px;
+
       a {
-        color: #FFFFFF;
+        color: #fff;
         text-decoration: none;
       }
     }
@@ -53,6 +55,7 @@
     right: 0;
     height: 100%;
     width: 50%;
+
     .desktop-img {
       position: absolute;
       top: 0;
@@ -69,6 +72,7 @@
       display: none;
       width: 0;
     }
+
     .left {
       width: 100%;
     }

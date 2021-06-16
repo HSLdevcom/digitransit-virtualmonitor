@@ -1,5 +1,5 @@
 .stop-row-container {
-  font-family: 'Roboto';
+  font-family: 'Gotham Rounded A', 'Gotham Rounded B', 'Roboto', Arial, Georgia, serif;
   display: flex;
   background-color: white;
   color: #333;
@@ -8,65 +8,86 @@
   height: 40px;
   margin: 10px 0;
   padding: 10px 0;
+
+  &.placeholder {
+    margin: 0;
+    padding: 0;
+    border: none;
+    position: relative;
+    left: -10px;
+    font-size: 13px;
+    line-height: 24px;
+    letter-spacing: -0.3px;
+    color: #666;
+  }
+
   .icon {
     text-align: center;
   }
+
   .stop-row-stop {
     padding-top: 4px;
     width: 60px;
     text-align: center;
   }
+
+  .stop-bottom-row {
+    color: #666;
+    font-size: 0.8125rem;
+    display: flex;
+
+    .address {
+      padding-right: 5px;
+    }
+
+    .hidden-choices {
+      flex: 1;
+      text-align: right;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
   .stop-row-main {
     flex: 1;
     padding-right: 15px;
     padding-top: 2px;
+
     .stop-upper-row {
       font-size: 0.9375rem;
       margin-bottom: 2px;
       display: flex;
+
       .hidden-routes {
         flex: 1;
         text-align: right;
-        color: #007AC9;
+        color: #007ac9;
         cursor: pointer;
       }
     }
-    .stop-bottom-row {
-      color: #666;
-      font-size: 0.8125rem;
-      display: flex;
-      .address {
-        padding-right: 5px;
-      }
-      .hidden-choices {
-        flex: 1;
-        text-align: right;
-        &:hover {
-          cursor: pointer;
-        }
-      }
-    }
   }
+
   .stop-row-delete {
     cursor: pointer;
     border-left: 1px solid #ddd;
     width: 50px;
     padding-top: 8px;
   }
+
   .stop-row-move {
     cursor: pointer;
     border-left: 1px solid #ddd;
     width: 40px;
     list-style-type: none;
   }
-  .stop-bottom-row {
-    display: flex;
-  }
-  .drag-and-drop-placeholder {
+
+  .placeholder-no-stops {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #888888;
+    color: #888;
     padding-left: 10px;
   }
 }

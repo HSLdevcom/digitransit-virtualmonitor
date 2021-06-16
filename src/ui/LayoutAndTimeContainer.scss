@@ -4,7 +4,7 @@
   justify-content: flex-end;
 
   .layout-button {
-    background-color: #FFFFFF;
+    background-color: #fff;
     border: 1px solid  hsl(0, 0%, 70%);
     border-radius: 5px;
     height: 44px;
@@ -12,10 +12,11 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
+
     .label {
       margin-left: 10px;
       font-size: 15px;
-      color: #888888;
+      color: #888;
     }
   }
 }

@@ -10,6 +10,7 @@ interface IDisplayUrlCompressionProps {
   readonly packedString: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const AsyncInflater = <T extends {}>({
   children,
   promise,

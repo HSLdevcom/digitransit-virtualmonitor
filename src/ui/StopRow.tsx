@@ -106,7 +106,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
           onClick={() => onStopMove(stop.cardId, side, stop.gtfsId)}
         >
           <Icon
-            img={side === 'left' ? 'move-down' : 'move-up'}
+            img={side === 'left' ? 'move-both-down' : 'move-both-up'}
             color={'#007AC9'}
             width={30}
             height={40}

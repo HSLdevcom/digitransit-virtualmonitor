@@ -5,17 +5,19 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { focusToInput, onClick } from './InputUtils';
 interface IProps {
   id: number;
+  layout: number;
   title: string;
   updateCardInfo?: (cardId: number, type: string, value: string) => void;
 }
 
 const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   id,
+  layout,
   title,
   updateCardInfo,
   t,
 }) => {
-  const [newTitle, setNewTitle] = useState(title);
+  const [newTitle, setNewTitle] = useState(layout >= 9 ? t('layout') : title);
   const [changed, setChanged] = useState(false);
 
   const onBlur = event => {
@@ -70,24 +72,39 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
     }
     return true;
   };
+  const layoutTitle = t('layoutEastWest');
   return (
     <div className="stop-title">
-      <p className="description">{t('stoptitle')}</p>
+      <p className="description">
+        {layout >= 9 ? t('layout') : t('stoptitle')}
+      </p>
       <div className="stop-title-input-container">
-        <input
-          className="stop-title-input"
-          id={`stop-title-input${id}`}
-          onClick={e => onClick(e)}
-          onKeyDown={e => isKeyboardSelectionEvent(e)}
-          onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
-          value={changed ? newTitle : title}
-        />
-        <div
-          role="button"
-          onClick={() => focusToInput(`stop-title-input${id}`)}
-        >
-          <Icon img="edit" color={'#007ac9'} />
-        </div>
+        {layout < 9 && (
+          <input
+            className="stop-title-input"
+            id={`stop-title-input${id}`}
+            onClick={e => onClick(e)}
+            onKeyDown={e => isKeyboardSelectionEvent(e)}
+            onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
+            value={changed ? newTitle : title}
+          />
+        )}
+        {layout >= 9 && (
+          <input
+            className="stop-title-input"
+            id={`stop-title-input${id}`}
+            value={layoutTitle}
+            readOnly
+          />
+        )}
+        {layout < 9 && (
+          <div
+            role="button"
+            onClick={() => focusToInput(`stop-title-input${id}`)}
+          >
+            <Icon img="edit" color={'#007ac9'} />
+          </div>
+        )}
       </div>
     </div>
   );

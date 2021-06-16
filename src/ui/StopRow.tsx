@@ -36,21 +36,13 @@ const StopRow: FC<IProps & WithTranslation> = ({
   setStops,
   t,
 }) => {
-  const [hiddenRoutes, setHiddenRoutes] = useState([]);
   const [showModal, changeOpen] = useState(false);
   const saveHiddenRoutes = routes => {
     const newStop = {
-      code: stop.code,
-      desc: stop.desc,
-      gtfsId: stop.gtfsId,
+      ...stop,
       hiddenRoutes: routes,
-      name: stop.name,
-      platformCode: stop.platformCode,
-      locality: stop.locality,
-      routes: stop.routes,
     };
     setStops(stop.cardId, side, newStop, false, stop.gtfsId);
-    setHiddenRoutes(routes);
     changeOpen(false);
   };
   const handleClick = () => {

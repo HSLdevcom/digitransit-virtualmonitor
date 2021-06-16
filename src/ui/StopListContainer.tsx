@@ -5,6 +5,7 @@ import StopRow from './StopRow';
 import { v4 as uuid } from 'uuid';
 import cx from 'classnames';
 import { focusToInput, onClick } from './InputUtils';
+import { getLayout } from '../util/getLayout';
 
 interface Props {
   side?: string;
@@ -187,7 +188,7 @@ const StopList = props => {
     rightItemsHeader,
   } = props;
 
-  const showStopTitles = layout >= 9;
+  const showStopTitles = getLayout(layout)[2];
 
   return (
     <div>

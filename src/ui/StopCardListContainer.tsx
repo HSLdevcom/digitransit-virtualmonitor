@@ -205,19 +205,13 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
     <>
       <StopCardList items={modifiedStopCardList} />
       <div className="buttons">
-        <button
-          className="button"
-          onClick={addNew}
-        >
+        <button className="button" onClick={addNew}>
           <span>{t('prepareDisplay')}</span>
         </button>
         <button className="button">
           <span>{t('previewView')}</span>
         </button>
-        <button
-          className="button"
-          onClick={createMonitor}
-        >
+        <button className="button" onClick={createMonitor}>
           <span>{t('displayEditorStaticLink')}</span>
         </button>
       </div>

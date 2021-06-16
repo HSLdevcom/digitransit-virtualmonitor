@@ -3,6 +3,7 @@ import './StopViewTitleEditor.scss';
 import Icon from './Icon';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { focusToInput, onClick } from './InputUtils';
+import { getLayout } from '../util/getLayout';
 interface IProps {
   id: number;
   layout: number;
@@ -17,7 +18,9 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   updateCardInfo,
   t,
 }) => {
-  const [newTitle, setNewTitle] = useState(layout >= 9 ? t('layout') : title);
+  const [newTitle, setNewTitle] = useState(
+    getLayout(layout)[2] ? t('layout') : title,
+  );
   const [changed, setChanged] = useState(false);
 
   const onBlur = event => {
@@ -76,10 +79,10 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   return (
     <div className="stop-title">
       <p className="description">
-        {layout >= 9 ? t('layout') : t('stoptitle')}
+        {getLayout(layout)[2] ? t('layout') : t('stoptitle')}
       </p>
       <div className="stop-title-input-container">
-        {layout < 9 && (
+        {!getLayout(layout)[2] && (
           <input
             className="stop-title-input"
             id={`stop-title-input${id}`}
@@ -89,7 +92,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
             value={changed ? newTitle : title}
           />
         )}
-        {layout >= 9 && (
+        {getLayout(layout)[2] && (
           <input
             className="stop-title-input"
             id={`stop-title-input${id}`}
@@ -97,7 +100,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
             readOnly
           />
         )}
-        {layout < 9 && (
+        {!getLayout(layout)[2] && (
           <div
             role="button"
             onClick={() => focusToInput(`stop-title-input${id}`)}

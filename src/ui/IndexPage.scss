@@ -4,6 +4,26 @@
     width: 50%;
     color: black;
 
+    .button-container {
+      padding-left: 120px;
+      padding-bottom: 60px;
+
+      .create-new {
+        font-size: 1.125em;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 22px;
+        letter-spacing: -0.02em;
+        text-align: center;
+        background: #007ac9;
+        border-radius: 50px;
+        width: 216px;
+        height: 50px;
+        color: #fff;
+        cursor: pointer;
+      }
+    }
+
     .title {
       position: relative;
       left: 121px;
@@ -24,27 +44,6 @@
         padding-right: 120px;
         padding-left: 120px;
         padding-top: 13px;
-      }
-    }
-
-    .todisplay {
-      position: absolute;
-      bottom: 80px;
-      left: 120px;
-      font-size: 1.125em;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 22px;
-      letter-spacing: -0.02em;
-      text-align: center;
-      background: #007ac9;
-      border-radius: 50px;
-      width: 216px;
-      height: 50px;
-
-      a {
-        color: #fff;
-        text-decoration: none;
       }
     }
   }

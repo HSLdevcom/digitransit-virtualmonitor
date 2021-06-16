@@ -5,6 +5,7 @@ import StopCode from './StopCode';
 import Icon from './Icon';
 import { IStopInfo } from './StopInfoRetriever';
 import './StopRow.scss';
+import { getLayout } from '../util/getLayout';
 
 interface IStopInfoPlus extends IStopInfo {
   cardId?: number;
@@ -100,7 +101,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
       >
         <Icon img="delete" color={'#007AC9'} />
       </div>
-      {stop.layout >= 9 && (
+      {getLayout(stop.layout)[2] && (
         <div
           className="stop-row-move icon"
           onClick={() => onStopMove(stop.cardId, side, stop.gtfsId)}

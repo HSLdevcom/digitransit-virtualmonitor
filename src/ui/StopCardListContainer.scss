@@ -27,22 +27,23 @@
   border-radius: 40px;
   cursor: pointer;
 
-  &:not(:first-child):not(:last-child) {
-    margin-left: 40px;
-    margin-right: 40px;
-  }
-
-  &:last-child {
-    background: #007ac9;
-    span {
-      color: #FFFFFF;
-    }
-  }
-
   span {
     font-size: 16px;
     line-height: 19px;
     letter-spacing: -0.02em;
     color: #007ac9;
+  }
+
+  &:last-child {
+    background: #007ac9;
+
+    span {
+      color: #fff;
+    }
+  }
+
+  &:not(:first-child):not(:last-child) {
+    margin-left: 40px;
+    margin-right: 40px;
   }
 }

@@ -8,20 +8,23 @@
 
   &.withWidth {
     min-width: 150px;
+
     &.duration {
       min-width: 110px;
       margin-left: 20px;
     }
   }
 
-  .dd__placeholder, .dd__value-container, .dd__single-value {
-    color: #888888;
+  .dd__placeholder,
+  .dd__value-container,
+  .dd__single-value {
+    color: #888;
 
     span {
       position: relative;
       top: -14px;
       margin-left: 10px;
-      color: #888888;
+      color: #888;
     }
   }
 
@@ -31,10 +34,10 @@
   }
 
   .dd__option {
-    color: #888888;
+    color: #888;
 
     &--is-selected {
-      color: #FFFFFF;
+      color: #fff;
     }
 
     span {
@@ -50,6 +53,7 @@
 
   .dd__control {
     height: 44px;
+
     &--menu-is-open {
       outline: none;
       border-style: none;

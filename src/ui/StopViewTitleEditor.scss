@@ -9,6 +9,7 @@
 
 .stop-title-input-container {
   display: flex;
+
   .stop-title-input {
     font-size: 21px;
     font-style: normal;
@@ -20,6 +21,7 @@
     height: 24px;
     padding-right: 50px;
     border: none;
+
     &:focus {
       outline: none;
     }

@@ -40,22 +40,6 @@ const GET_DEPARTURES = gql`
           }
         }
       }
-      stoptimesWithoutPatterns(numberOfDepartures: $numberOfDepartures) {
-        serviceDay
-        scheduledArrival
-        realtimeArrival
-        arrivalDelay
-        scheduledDeparture
-        realtimeDeparture
-        departureDelay
-        headsign
-        trip {
-          gtfsId
-          route {
-            shortName
-          }
-        }
-      }
     }
   }
 `;
@@ -94,22 +78,6 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
             route {
               shortName
             }
-          }
-        }
-      }
-      stoptimesWithoutPatterns(numberOfDepartures: $numberOfDepartures) {
-        serviceDay
-        scheduledArrival
-        realtimeArrival
-        arrivalDelay
-        scheduledDeparture
-        realtimeDeparture
-        departureDelay
-        headsign
-        trip {
-          gtfsId
-          route {
-            shortName
           }
         }
       }

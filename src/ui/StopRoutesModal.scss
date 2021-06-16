@@ -2,30 +2,32 @@
   .ReactModal__Overlay {
     z-index: 10;
   }
+
   .ReactModal__Content {
     width: 500px;
     height: 300px;
     left: 20vw !important;
     top: 20vw !important;
-
   }
-  .close{
+
+  .close {
     position: absolute;
     right: 10px;
   }
-    .title {
-      font-size: 22px;
-      padding-bottom: 20px;
-      padding-left: 50px;
-    }
 
-    .stop {
-      font-size: 20px;
-      padding-left: 150px;
-      padding-right: 8px;
-    }
+  .title {
+    font-size: 22px;
+    padding-bottom: 20px;
+    padding-left: 50px;
+  }
+
+  .stop {
+    font-size: 20px;
+    padding-left: 150px;
+    padding-right: 8px;
+  }
 
   .row {
-    padding-top: 10px
+    padding-top: 10px;
   }
 }

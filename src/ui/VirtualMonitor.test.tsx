@@ -35,7 +35,6 @@ it('renders a a <StopName /> if no title provided', () => {
  */
 it('displays current time', () => {
   const renderer = create(<WrappedVirtualMonitor />);
-  // eslint-disable-next-line jest/valid-expect
   expect(renderer.root.findByType(AutoMoment));
   renderer.unmount();
 });

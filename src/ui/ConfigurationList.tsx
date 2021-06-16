@@ -58,7 +58,7 @@ export interface IConfiguration extends INode {
 
 export type IConfigurations = ReadonlyArray<IConfiguration>;
 
-// tslint:disable-next-line
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface IConfigurationListProps {}
 
 const createLocalConfigurationMutation = gql`

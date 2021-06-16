@@ -17,6 +17,11 @@ import { ReactComponent as Layout9 } from './icons/layout9.svg';
 import { ReactComponent as Layout10 } from './icons/layout10.svg';
 import { ReactComponent as Layout11 } from './icons/layout11.svg';
 import { ReactComponent as StopBus } from './icons/stop-bus.svg';
+import { ReactComponent as MoveDown } from './icons/move-down.svg';
+import { ReactComponent as MoveUp } from './icons/move-up.svg';
+import { ReactComponent as MoveBothDown } from './icons/move-both-down.svg';
+import { ReactComponent as MoveBothUp } from './icons/move-both-up.svg';
+import { ReactComponent as MoveDivider } from './icons/move-divider.svg';
 
 export interface IIconMapProps {
   color?: string;
@@ -55,6 +60,11 @@ const IconMap = (style: IIconMapProps) => {
     layout10: <Layout10 style={style} />,
     layout11: <Layout11 style={style} />,
     'stop-bus': <StopBus style={style} />,
+    'move-down': <MoveDown style={style} />,
+    'move-up': <MoveUp style={style} />,
+    'move-both-down': <MoveBothDown style={style} />,
+    'move-both-up': <MoveBothUp style={style} />,
+    'move-divider': <MoveDivider style={style} />,
   };
 };
 /**

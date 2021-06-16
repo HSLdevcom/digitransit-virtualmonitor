@@ -24,7 +24,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
     return <div>loading..</div>;
   }
   const config = getConfig();
-  return <Monitor view={monitor} config={config}/>;
+  return <Monitor view={monitor} config={config} />;
 };
 
 export default WithDatabaseConnection;

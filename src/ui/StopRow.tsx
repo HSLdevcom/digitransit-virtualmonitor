@@ -5,7 +5,6 @@ import StopCode from './StopCode';
 import Icon from './Icon';
 import { IStopInfo } from './StopInfoRetriever';
 import './StopRow.scss';
-import { SortableHandle } from 'react-sortable-hoc';
 
 interface IStopInfoPlus extends IStopInfo {
   cardId?: number;
@@ -19,6 +18,7 @@ interface IProps {
   readonly stop: IStopInfoPlus;
   readonly stopId?: string;
   readonly onStopDelete: (cardId: number, side: string, gtfsId: string) => void;
+  readonly onStopMove: (cardId: number, side: string, gtfsId: string) => void;
   readonly setStops?: (
     cardId: number,
     side: string,
@@ -32,6 +32,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
   side,
   stop,
   onStopDelete,
+  onStopMove,
   setStops,
   t,
 }) => {
@@ -53,12 +54,9 @@ const StopRow: FC<IProps & WithTranslation> = ({
     changeOpen(false);
   };
   const handleClick = () => {
-    if (true) {
-      changeOpen(true);
-    }
+    changeOpen(true);
   };
 
-  const SortableHandleItem = SortableHandle(({ children }) => children);
   return (
     <div className="stop-row-container">
       <div className="stop-row-stop icon">
@@ -100,14 +98,20 @@ const StopRow: FC<IProps & WithTranslation> = ({
         className="stop-row-delete icon"
         onClick={() => onStopDelete(stop.cardId, side, stop.gtfsId)}
       >
-        <Icon img="delete" color={'#888888'} />
+        <Icon img="delete" color={'#007AC9'} />
       </div>
       {stop.layout >= 9 && (
-        <SortableHandleItem>
-          <div className="stop-row-drag icon">
-            <Icon img="drag" color={'#888888'} />
-          </div>
-        </SortableHandleItem>
+        <div
+          className="stop-row-move icon"
+          onClick={() => onStopMove(stop.cardId, side, stop.gtfsId)}
+        >
+          <Icon
+            img={side === 'left' ? 'move-down' : 'move-up'}
+            color={'#007AC9'}
+            width={30}
+            height={40}
+          />
+        </div>
       )}
     </div>
   );

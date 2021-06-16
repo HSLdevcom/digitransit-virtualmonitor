@@ -92,7 +92,7 @@ interface IStop {
   name: string;
 }
 interface ISides {
-  stops: Array<IStop>
+  stops: Array<IStop>;
 }
 interface IColumn {
   left: ISides;

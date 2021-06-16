@@ -45,10 +45,12 @@ i18n.init({
     },
     fi: {
       translations: {
+        'add-stop-placeholder': 'Lisää pysäkki...',
         all: 'Kaikki',
         arriveTerminal: 'Saapuu / Päätepysäkki',
         autosuggestPlaceHolder: 'Pysäkin nimi tai numero',
         canceled: 'Peruttu',
+        'clear-button-label': 'Tyhjennä',
         configuration: 'Konfiguraatio',
         createViewTitle: 'Uuden näkymän luonti',
         departureTime: 'Lähtöaika',
@@ -58,9 +60,10 @@ i18n.init({
         displayEditorNewView: 'Lisää uusi pysäkkinäkymä karuselliin',
         displayEditorStaticLink: 'Luo näkymä',
         'drag-and-drop-placeholder':
-          "Raahaa pysäkki tähän '{{title}}'-sarakkeesta",
+          "Lisää tähän pysäkki '{{title}}'-sarakkeesta painamalla 'Siirrä'-painiketta",
         dropdownPlaceHolder: 'Valitse...',
         duration: 'Kesto',
+        favourite: 'Suosikki',
         frontPageParagraph1:
           'Luo itsellesi puhelimen tai tietokoneen ruudulla näkyvä pysäkkinäyttö ja valitse minkä pysäkkien ja linjojen aikatauluista olet kiinnostunut.',
         frontPageParagraph2:
@@ -83,6 +86,12 @@ i18n.init({
         prepareStop: 'Lisää pysäkki',
         previewView: 'Esikatsele',
         quickDisplayCreate: 'Luo uusi näyttö',
+        search: 'Etsi',
+        'search-autosuggest-label':
+          'Paikka, linja ja pysäkkihaku. Navigoi listassa nuolinäppäimillä ja valitse enterillä',
+        'search-autosuggest-len': ' Löydettiin {{count}} ehdotus',
+        'search-autosuggest-len_plural': ' Löydettiin {{count}} ehdotusta',
+        'search-current-suggestion': 'Tämänhetkinen valinta: {{selection}}',
         seconds: 'sekuntia',
         showHidden: 'Valitse piilotettavat linjat pysäkille:',
         station: 'Asema',

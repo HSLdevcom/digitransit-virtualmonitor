@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import hash from 'object-hash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
+import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
 
@@ -63,6 +64,14 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
   const [stopCardList, setStopCardList] = useState([defaultStopCard(t)]);
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
+  const [isOpen, setOpen] = useState(false);
+
+  const openPreview = () => {
+    setOpen(true);
+  };
+  const closePreview = () => {
+    setOpen(false);
+  };
 
   const onCardDelete = (id: number) => {
     setStopCardList(stopCardList.filter(s => s.id !== id));
@@ -128,7 +137,6 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
   };
 
   const addNew = () => {
-    console.log(stopCardList);
     let cnt = stopCardList.length + 1;
     while (cnt > 0) {
       if (stopCardList.filter(s => s.id === cnt).length === 0) {
@@ -138,7 +146,6 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
         };
 
         setStopCardList(stopCardList.concat(newCard));
-        console.log(stopCardList.concat(newCard));
         cnt = 0;
       }
       cnt--;
@@ -164,7 +171,6 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
       }).replace('/', '-'),
     };
     monitorAPI.create(newCard).then(res => {
-      console.log(res);
       setRedirect(true);
       setView(newCard);
     });
@@ -183,6 +189,13 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
 
   return (
     <>
+      {isOpen && (
+        <PreviewModal
+          view={stopCardList}
+          isOpen={isOpen}
+          onClose={closePreview}
+        />
+      )}
       <SortableStopCardList
         items={modifiedStopCardList}
         useDragHandle
@@ -190,7 +203,7 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
         onSortStart={onSortStart}
       />
       <button onClick={addNew}>{t('prepareDisplay')}</button>
-      <button>{t('previewView')}</button>
+      <button onClick={openPreview}> {t('previewView')}</button>
       <button onClick={createMonitor}>{t('displayEditorStaticLink')}</button>
     </>
   );

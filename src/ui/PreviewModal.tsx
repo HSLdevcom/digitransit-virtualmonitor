@@ -12,6 +12,7 @@ interface IStop {
   gtfsId: string;
   locationType: string;
   name: string;
+  hiddenRoutes: Array<any>;
 }
 interface ISides {
   stops: Array<IStop>

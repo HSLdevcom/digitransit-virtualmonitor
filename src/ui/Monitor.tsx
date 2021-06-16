@@ -128,7 +128,7 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   const stationIds = [];
   const stopIds = [];
   // Don't poll on preview
-  const pollInterval = noPolling ? 0 : 3000;
+  const pollInterval = noPolling ? 0 : 30000;
   view[0].columns.left.stops.forEach(stop =>
     stop.locationType === 'STOP'
       ? stopIds.push(stop.gtfsId)

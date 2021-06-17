@@ -44,11 +44,10 @@ const monitorAPI = {
           'Content-Type': 'application/json',
         },
       })
-        .then(result => result.json())
-        .then(json => resolve(json))
-        .catch(err => {
-          reject(err);
-        });
+      .then(result => resolve(result))
+      .catch(err => {
+        reject(err);
+      });
     });
   },
 

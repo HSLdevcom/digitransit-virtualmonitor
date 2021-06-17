@@ -1,6 +1,7 @@
 import React, { ClassAttributes, FC, useState } from 'react';
 import { getConfig } from '../util/getConfig';
 import Modal from 'react-modal';
+import CarouselContainer from "./CarouselContainer";
 import Icon from './Icon';
 import Monitor from './Monitor';
 
@@ -20,13 +21,17 @@ interface IColumn {
   left: ISides;
   right: ISides;
 }
-interface IView {
-  columns: IColumn;
+interface ICard {
   title: string;
   layout: number;
+  duration: number;
+  columns: IColumn;
+}
+interface IView {
+  cards: Array<ICard>;
 }
 interface Props {
-  view: Array<IView>;
+  view: IView;
   isOpen: boolean;
   onClose: (boolean) => void;
 }
@@ -46,7 +51,7 @@ const PreviewModal: FC<Props> = (props: Props) => {
         >
           <Icon img={'close'} height={12} width={12} color={'#007AC9'} />{' '}
         </div>
-        <Monitor view={props.view} config={config} noPolling />
+        <CarouselContainer views={props.view.cards} noPolling />
       </Modal>
     </>
   );

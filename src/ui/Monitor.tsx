@@ -105,7 +105,7 @@ interface IView {
 }
 
 interface IProps {
-  readonly view: Array<IView>;
+  readonly view: IView;
   readonly config: IMonitorConfig;
   readonly noPolling?: boolean;
 }
@@ -119,7 +119,7 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   const stopIds = [];
   // Don't poll on preview
   const pollInterval = noPolling ? 0 : 3000;
-  view[0].columns.left.stops.forEach(stop =>
+  view.columns.left.stops.forEach(stop =>
     stop.locationType === 'STOP'
       ? stopIds.push(stop.gtfsId)
       : stationIds.push(stop.gtfsId),
@@ -174,14 +174,14 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
             justifyContent: 'center',
           }}
         >
-          {view[0].title}
+          {view.title}
         </div>
         <TitlebarTime />
       </Titlebar>
       {stationsFetched && stopsFetched && (
         <MonitorRowContainer
           departures={[...stopDepartures, ...stationDepartures]}
-          layout={getLayout(view[0].layout)}
+          layout={getLayout(view.layout)}
         />
       )}
     </div>

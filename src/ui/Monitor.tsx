@@ -109,7 +109,6 @@ interface IView {
 }
 const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
   const departures = [];
-  console.log(hiddenRoutes);
   stop.stoptimesForPatterns.forEach(stoptimeList => {
     if (!hiddenRoutes.includes(stoptimeList.pattern.code)) {
       departures.push(...stoptimeList.stoptimes);

@@ -160,7 +160,6 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             const routes = stop.stoptimesForPatterns.map(
               stoptimes => stoptimes.pattern,
             );
-            console.log(routes);
             return {
               ...stopWithGTFS,
               patterns: sortBy(
@@ -194,7 +193,6 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               ...station,
               locality: autosuggestValue.locality,
             };
-            console.log(patterns);
             return {
               ...stationWithGTFS,
               code: t('station'),

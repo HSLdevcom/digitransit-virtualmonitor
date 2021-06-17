@@ -40,7 +40,6 @@ const StopRow: FC<IProps & WithTranslation> = ({
 }) => {
   const [showModal, changeOpen] = useState(false);
   const saveHiddenRoutes = routes => {
-    console.log(routes);
     const newStop = {
       ...stop,
       hiddenRoutes: routes,
@@ -51,7 +50,6 @@ const StopRow: FC<IProps & WithTranslation> = ({
   const handleClick = () => {
     changeOpen(true);
   };
-  console.log(stop.hiddenRoutes.length);
 
   return (
     <div className="stop-row-container">

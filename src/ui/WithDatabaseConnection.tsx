@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
 import { getConfig } from '../util/getConfig';
+import CarouselContainer from "./CarouselContainer";
 import Monitor from './Monitor';
 
 interface IProps {
@@ -23,8 +24,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   if ((!fetched && !location?.state?.view) || !monitor?.contenthash) {
     return <div>loading..</div>;
   }
-  const config = getConfig();
-  return <Monitor view={monitor} config={config} />;
+  return <CarouselContainer views={monitor} />;
 };
 
 export default WithDatabaseConnection;

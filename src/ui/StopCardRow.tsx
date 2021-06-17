@@ -157,8 +157,10 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               ...stop,
               locality: autosuggestValue.locality,
             };
-            const routes = stop.stoptimesForPatterns.map(stoptimes => stoptimes.pattern);
-            console.log(routes)
+            const routes = stop.stoptimesForPatterns.map(
+              stoptimes => stoptimes.pattern,
+            );
+            console.log(routes);
             return {
               ...stopWithGTFS,
               patterns: sortBy(
@@ -183,19 +185,24 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
           .filter(s => s && !columns['left'].stops.some(el => el.id === s.id))
           .map(station => {
             let patterns = [];
-            
-            station.stops.forEach(stop => patterns.push(...stop.stoptimesForPatterns));
+
+            station.stops.forEach(stop =>
+              patterns.push(...stop.stoptimesForPatterns),
+            );
             patterns = uniqBy(patterns, 'pattern.code');
             const stationWithGTFS = {
               ...station,
               locality: autosuggestValue.locality,
             };
-            console.log(patterns)
+            console.log(patterns);
             return {
               ...stationWithGTFS,
               code: t('station'),
               desc: station.stops[0].desc,
-              patterns: sortBy(sortBy(patterns, 'pattern.route.shortname'), 'pattern.route.shortname.length').map(e => e.pattern),
+              patterns: sortBy(
+                sortBy(patterns, 'pattern.route.shortname'),
+                'pattern.route.shortname.length',
+              ).map(e => e.pattern),
               hiddenRoutes: [],
             };
           }),

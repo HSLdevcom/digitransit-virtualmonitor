@@ -15,7 +15,7 @@ interface IStop {
   hiddenRoutes: Array<any>;
 }
 interface ISides {
-  stops: Array<IStop>
+  stops: Array<IStop>;
 }
 interface IColumn {
   left: ISides;

@@ -9,12 +9,12 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 interface Route {
- // route: any;
+  // route: any;
 }
 
 interface Props {
   showModal: boolean;
-  routes: any//Route[];
+  routes: any; //Route[];
   stop: IStopInfo;
   closeModal: (route: Route[]) => void;
   hiddenRoutes?: any;

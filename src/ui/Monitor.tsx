@@ -17,7 +17,7 @@ const GET_DEPARTURES = gql`
         longName
         id
       }
-      stoptimesForPatterns (numberOfDepartures: $numberOfDepartures) {
+      stoptimesForPatterns(numberOfDepartures: $numberOfDepartures) {
         pattern {
           code
           route {
@@ -59,7 +59,7 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
           gtfsId
         }
       }
-      stoptimesForPatterns (numberOfDepartures: $numberOfDepartures) {
+      stoptimesForPatterns(numberOfDepartures: $numberOfDepartures) {
         pattern {
           code
           route {
@@ -107,16 +107,16 @@ interface IView {
   title: string;
   layout: number;
 }
-const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
+const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
   const departures = [];
-  console.log(hiddenRoutes)
+  console.log(hiddenRoutes);
   stop.stoptimesForPatterns.forEach(stoptimeList => {
     if (!hiddenRoutes.includes(stoptimeList.pattern.code)) {
       departures.push(...stoptimeList.stoptimes);
     }
-  })
+  });
   return departures;
-}
+};
 interface IProps {
   readonly view: Array<IView>;
   readonly config: IMonitorConfig;
@@ -147,11 +147,15 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   });
   useEffect(() => {
     if (data?.stops) {
-      let departures: Array<IDeparture> = [];
+      const departures: Array<IDeparture> = [];
       const stops = view[0].columns.left.stops;
       data.stops.forEach(stop => {
-        const routesToHide: Array<string> = stops.find(s => s.gtfsId === stop.gtfsId).hiddenRoutes.map(route => route.code);
-        departures.push(...getDeparturesWithoutHiddenRoutes(stop, routesToHide));
+        const routesToHide: Array<string> = stops
+          .find(s => s.gtfsId === stop.gtfsId)
+          .hiddenRoutes.map(route => route.code);
+        departures.push(
+          ...getDeparturesWithoutHiddenRoutes(stop, routesToHide),
+        );
       });
       setStopDepartures(departures);
       setStopsFetched(true);
@@ -163,18 +167,25 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   useEffect(() => {
     if (stationState.data?.stations) {
       const stops = view[0].columns.left.stops;
-      let departures : Array<IDeparture> = [];
+      const departures: Array<IDeparture> = [];
       stationState.data.stations
         .filter(s => s)
         .forEach(stop => {
           const routes = [];
           stop.stops.forEach(stop => routes.push(...stop.routes));
-          const routesToHide = stops.find(s => s.gtfsId === stop.gtfsId).hiddenRoutes.map(route => route.code);
+          const routesToHide = stops
+            .find(s => s.gtfsId === stop.gtfsId)
+            .hiddenRoutes.map(route => route.code);
           const stationWithRoutes = {
             ...stop,
             routes: routes,
           };
-          departures.push(...getDeparturesWithoutHiddenRoutes(stationWithRoutes, routesToHide));
+          departures.push(
+            ...getDeparturesWithoutHiddenRoutes(
+              stationWithRoutes,
+              routesToHide,
+            ),
+          );
         });
       setStationDepartures(departures);
       setStationsFetched(true);

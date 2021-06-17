@@ -30,19 +30,14 @@ interface IProps {
   noPolling?: boolean;
 }
 const CarouselContainer: FC<IProps> = ({ views, noPolling }) => {
-  // in Preview, there is no contentHash, but in monitor view we need to  substract the contentHash key
-  const len = noPolling
-    ? Object.keys(views).length
-    : Object.keys(views).length - 1;
+  const len = views.length;
   const [current, setCurrent] = useState(0);
-  if (len > 1) {
     useEffect(() => {
       const next = (current + 1) % len;
       const time = views[current].duration * 1000;
       const id = setTimeout(() => setCurrent(next), time);
       return () => clearTimeout(id);
     }, [current]);
-  }
   const config = getConfig();
   return (
     <Monitor view={views[current]} config={config} noPolling={noPolling} />

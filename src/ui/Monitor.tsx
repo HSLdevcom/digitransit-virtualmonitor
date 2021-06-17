@@ -121,8 +121,11 @@ interface IProps {
   readonly view: IView;
   readonly config: IMonitorConfig;
   readonly noPolling?: boolean;
+  readonly index: number;
 }
-const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
+const Monitor: FC<IProps> = ({ view, index, config, noPolling }) => {
+  const [monitorData, setMonitorData] = useState([]);
+  const [skip, setSkip] = useState(false);
   const [stopDepartures, setStopDepartures] = useState([]);
   const [stationDepartures, setStationDepartures] = useState([]);
   const [stopsFetched, setStopsFetched] = useState(false);
@@ -131,28 +134,46 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   const stationIds = [];
   const stopIds = [];
   // Don't poll on preview
-  const pollInterval = noPolling ? 0 : 3000;
+  const pollInterval = noPolling ? 0 : 30000;
   view.columns.left.stops.forEach(stop =>
     stop.locationType === 'STOP'
       ? stopIds.push(stop.gtfsId)
       : stationIds.push(stop.gtfsId),
   );
-  const { loading, error, data } = useQuery(GET_DEPARTURES, {
+  const { loading, error, data, previousData } = useQuery(GET_DEPARTURES, {
     variables: { ids: stopIds, numberOfDepartures: 24 },
     pollInterval: pollInterval,
+    skip: skip,
   });
   const stationState = useQuery(GET_DEPARTURES_FOR_STATIONS, {
     variables: { ids: stationIds, numberOfDepartures: 24 },
     pollInterval: pollInterval,
+    skip: skip,
   });
+  useEffect(() => {
+    if (monitorData[index]?.stations) {
+      setSkip(true);
+    }
+  }, [monitorData])
+  useEffect(() => {
+    if (stationState.previousData?.stations) {
+      const foo = monitorData;
+      foo[index] = stationState.previousData;
+      setMonitorData(foo);
+      setTimeout(() => setSkip(false), pollInterval)
+    }
+  }, [stationState.previousData])
   useEffect(() => {
     if (data?.stops) {
       const departures: Array<IDeparture> = [];
       const stops = view.columns.left.stops;
       data.stops.forEach(stop => {
-        const routesToHide: Array<string> = stops
-          .find(s => s.gtfsId === stop.gtfsId)
-          .hiddenRoutes.map(route => route.code);
+        let routesToHide: Array<string> = stops
+          .find(s => {return s.gtfsId === stop.gtfsId})
+          ?.hiddenRoutes.map(route => route.code);
+        if (!routesToHide[0]) {
+          routesToHide = [];
+        }
         departures.push(
           ...getDeparturesWithoutHiddenRoutes(stop, routesToHide),
         );
@@ -170,14 +191,17 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
       const departures: Array<IDeparture> = [];
       stationState.data.stations
         .filter(s => s)
-        .forEach(stop => {
+        .forEach(station => {
           const routes = [];
-          stop.stops.forEach(stop => routes.push(...stop.routes));
-          const routesToHide = stops
-            .find(s => s.gtfsId === stop.gtfsId)
-            .hiddenRoutes.map(route => route.code);
+          station.stops.forEach(stop => routes.push(...stop.routes));
+          let routesToHide = stops
+            .find(s => {return s.gtfsId === station.gtfsId})
+            ?.hiddenRoutes.map(route => route.code);
+            if (!routesToHide) {
+              routesToHide = [];
+            }
           const stationWithRoutes = {
-            ...stop,
+            ...station,
             routes: routes,
           };
           departures.push(

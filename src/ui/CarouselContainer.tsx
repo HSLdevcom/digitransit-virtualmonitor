@@ -31,6 +31,7 @@ interface IProps {
   noPolling?: boolean;
 }
 const CarouselContainer: FC<IProps> = ({ views, noPolling }) => {
+
   const len = views.length;
   const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -41,7 +42,7 @@ const CarouselContainer: FC<IProps> = ({ views, noPolling }) => {
     }, [current]);
   const config = getConfig();
   return (
-    <Monitor view={views[current]} config={config} noPolling={noPolling} />
+    <Monitor view={views[current]} index={current} config={config} noPolling={noPolling} />
   );
 };
 

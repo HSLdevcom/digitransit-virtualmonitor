@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
 import { getConfig } from '../util/getConfig';
+import CarouselContainer from "./CarouselContainer";
 import Monitor from './Monitor';
 
 interface IProps {
@@ -10,7 +11,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const [view, setView] = useState({});
   const [fetched, setFetched] = useState(false);
   useEffect(() => {
-    if (!location?.state?.view) {
+    if (!location?.state?.view?.cards) {
       const hash: any = location.search.split('cont=');
       monitorAPI.get(hash[1]).then(r => {
         setFetched(true);
@@ -19,12 +20,11 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
     }
   }, []);
 
-  const monitor = fetched ? view : location?.state?.view;
-  if ((!fetched && !location?.state?.view) || !monitor?.contenthash) {
+  const monitor = fetched ? view : location?.state?.view.cards;
+  if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
     return <div>loading..</div>;
   }
-  const config = getConfig();
-  return <Monitor view={monitor} config={config} />;
+  return <CarouselContainer views={monitor.cards} />;
 };
 
 export default WithDatabaseConnection;

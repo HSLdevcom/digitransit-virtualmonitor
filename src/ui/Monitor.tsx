@@ -106,6 +106,7 @@ interface IView {
   columns: IColumn;
   title: string;
   layout: number;
+  duration: number;
 }
 const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
   const departures = [];
@@ -117,7 +118,7 @@ const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
   return departures;
 };
 interface IProps {
-  readonly view: Array<IView>;
+  readonly view: IView;
   readonly config: IMonitorConfig;
   readonly noPolling?: boolean;
 }
@@ -130,8 +131,8 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   const stationIds = [];
   const stopIds = [];
   // Don't poll on preview
-  const pollInterval = noPolling ? 0 : 30000;
-  view[0].columns.left.stops.forEach(stop =>
+  const pollInterval = noPolling ? 0 : 3000;
+  view.columns.left.stops.forEach(stop =>
     stop.locationType === 'STOP'
       ? stopIds.push(stop.gtfsId)
       : stationIds.push(stop.gtfsId),
@@ -147,7 +148,7 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   useEffect(() => {
     if (data?.stops) {
       const departures: Array<IDeparture> = [];
-      const stops = view[0].columns.left.stops;
+      const stops = view.columns.left.stops;
       data.stops.forEach(stop => {
         const routesToHide: Array<string> = stops
           .find(s => s.gtfsId === stop.gtfsId)
@@ -165,7 +166,7 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   }, [data]);
   useEffect(() => {
     if (stationState.data?.stations) {
-      const stops = view[0].columns.left.stops;
+      const stops = view.columns.left.stops;
       const departures: Array<IDeparture> = [];
       stationState.data.stations
         .filter(s => s)
@@ -209,14 +210,14 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
             justifyContent: 'center',
           }}
         >
-          {view[0].title}
+          {view.title}
         </div>
         <TitlebarTime />
       </Titlebar>
       {stationsFetched && stopsFetched && (
         <MonitorRowContainer
           departures={[...stopDepartures, ...stationDepartures]}
-          layout={getLayout(view[0].layout)}
+          layout={getLayout(view.layout)}
         />
       )}
     </div>

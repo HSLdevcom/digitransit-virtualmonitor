@@ -185,7 +185,7 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
 
   const createMonitor = () => {
     const newCard = {
-      ...stopCardList,
+      cards: stopCardList,
       contenthash: hash(stopCardList, {
         algorithm: 'md5',
         encoding: 'base64',
@@ -202,20 +202,18 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
         to={{
           pathname: '/view',
           search: `?cont=${view.contenthash}`,
-          state: { view: view },
+          state: { view: view.cards },
         }}
       />
     );
   }
-
+  const cards = {
+    cards: stopCardList,
+  };
   return (
     <>
       {isOpen && (
-        <PreviewModal
-          view={stopCardList}
-          isOpen={isOpen}
-          onClose={closePreview}
-        />
+        <PreviewModal view={cards} isOpen={isOpen} onClose={closePreview} />
       )}
       <StopCardList items={modifiedStopCardList} />
       <div className="buttons">

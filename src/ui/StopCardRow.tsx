@@ -32,6 +32,16 @@ const GET_STOP = gql`
       gtfsId
       platformCode
       locationType
+      stoptimesForPatterns {
+        pattern {
+          code
+          headsign
+          route {
+            shortName
+            gtfsId
+          }
+        }
+      }
       routes {
         shortName
         gtfsId
@@ -52,6 +62,16 @@ const GET_STATION = gql`
       locationType
       stops {
         desc
+        stoptimesForPatterns {
+          pattern {
+            code
+            headsign
+            route {
+              shortName
+              gtfsId
+            }
+          }
+        }
         routes {
           shortName
           gtfsId
@@ -137,10 +157,12 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               ...stop,
               locality: autosuggestValue.locality,
             };
+            const routes = stop.stoptimesForPatterns.map(stoptimes => stoptimes.pattern);
+            console.log(routes)
             return {
               ...stopWithGTFS,
-              routes: sortBy(
-                sortBy(stop.routes, 'shortName'),
+              patterns: sortBy(
+                sortBy(routes, 'route.shortName'),
                 'shortName.length',
               ),
               hiddenRoutes: [],
@@ -160,18 +182,20 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         stationState.data.station
           .filter(s => s && !columns['left'].stops.some(el => el.id === s.id))
           .map(station => {
-            let routes = [];
-            station.stops.forEach(stop => routes.push(...stop.routes));
-            //routes = routes//uniqBy(routes, 'gtfsId');
+            let patterns = [];
+            
+            station.stops.forEach(stop => patterns.push(...stop.stoptimesForPatterns));
+            patterns = uniqBy(patterns, 'pattern.code');
             const stationWithGTFS = {
               ...station,
               locality: autosuggestValue.locality,
             };
+            console.log(patterns)
             return {
               ...stationWithGTFS,
               code: t('station'),
               desc: station.stops[0].desc,
-              routes: sortBy(sortBy(routes, 'shortName'), 'shortName.length'),
+              patterns: sortBy(sortBy(patterns, 'pattern.route.shortname'), 'pattern.route.shortname.length').map(e => e.pattern),
               hiddenRoutes: [],
             };
           }),

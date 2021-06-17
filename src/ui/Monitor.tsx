@@ -19,6 +19,7 @@ const GET_DEPARTURES = gql`
       }
       stoptimesForPatterns (numberOfDepartures: $numberOfDepartures) {
         pattern {
+          code
           route {
             gtfsId
           }
@@ -60,6 +61,7 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
       }
       stoptimesForPatterns (numberOfDepartures: $numberOfDepartures) {
         pattern {
+          code
           route {
             gtfsId
           }
@@ -107,8 +109,9 @@ interface IView {
 }
 const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
   const departures = [];
+  console.log(hiddenRoutes)
   stop.stoptimesForPatterns.forEach(stoptimeList => {
-    if (!hiddenRoutes.includes(stoptimeList.pattern.route.gtfsId)) {
+    if (!hiddenRoutes.includes(stoptimeList.pattern.code)) {
       departures.push(...stoptimeList.stoptimes);
     }
   })
@@ -147,7 +150,7 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
       let departures: Array<IDeparture> = [];
       const stops = view[0].columns.left.stops;
       data.stops.forEach(stop => {
-        const routesToHide = stops.find(s => s.gtfsId === stop.gtfsId).hiddenRoutes.map(route => route.gtfsId);
+        const routesToHide: Array<string> = stops.find(s => s.gtfsId === stop.gtfsId).hiddenRoutes.map(route => route.code);
         departures.push(...getDeparturesWithoutHiddenRoutes(stop, routesToHide));
       });
       setStopDepartures(departures);
@@ -166,7 +169,7 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
         .forEach(stop => {
           const routes = [];
           stop.stops.forEach(stop => routes.push(...stop.routes));
-          const routesToHide = stops.find(s => s.gtfsId === stop.gtfsId).hiddenRoutes.map(route => route.gtfsId);
+          const routesToHide = stops.find(s => s.gtfsId === stop.gtfsId).hiddenRoutes.map(route => route.code);
           const stationWithRoutes = {
             ...stop,
             routes: routes,

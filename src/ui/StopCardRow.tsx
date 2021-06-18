@@ -108,22 +108,6 @@ interface IProps {
   ) => void;
 }
 
-const filterSearchResults = results => {
-  const gtfsIds = results.map(x => {
-    const gtfsId = x.properties.gtfsId
-      ? x.properties.gtfsId
-      : getGTFSId({ id: x.properties.id });
-    if (gtfsId) {
-      return {
-        gtfsId,
-        ...x,
-      };
-    }
-    return gtfsIds;
-  });
-  return results;
-};
-
 const StopCardRow: FC<IProps & WithTranslation> = ({
   feedIds,
   cardsCount,
@@ -344,7 +328,6 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             lang={lang}
             sources={['Datasource']}
             targets={['Stops']}
-            filterResults={filterSearchResults}
           />
         </div>
         <LayoutAndTimeContainer

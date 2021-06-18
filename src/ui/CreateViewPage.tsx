@@ -3,6 +3,7 @@ import StopCardListContainer from './StopCardListContainer';
 import ContentContainer from './ContentContainer';
 
 interface IProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   config: any;
 }
 

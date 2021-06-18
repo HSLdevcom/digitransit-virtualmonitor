@@ -12,6 +12,7 @@ interface IStopInfoPlus extends IStopInfo {
   hiddenRoutes?: any;
   layout: number;
   locality?: string;
+  patterns: Array<any>;
 }
 
 interface IProps {
@@ -37,21 +38,13 @@ const StopRow: FC<IProps & WithTranslation> = ({
   setStops,
   t,
 }) => {
-  const [hiddenRoutes, setHiddenRoutes] = useState([]);
   const [showModal, changeOpen] = useState(false);
   const saveHiddenRoutes = routes => {
     const newStop = {
-      code: stop.code,
-      desc: stop.desc,
-      gtfsId: stop.gtfsId,
+      ...stop,
       hiddenRoutes: routes,
-      name: stop.name,
-      platformCode: stop.platformCode,
-      locality: stop.locality,
-      routes: stop.routes,
     };
     setStops(stop.cardId, side, newStop, false, stop.gtfsId);
-    setHiddenRoutes(routes);
     changeOpen(false);
   };
   const handleClick = () => {
@@ -76,7 +69,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
             closeModal={saveHiddenRoutes}
             showModal={showModal}
             stop={stop}
-            routes={stop.routes}
+            routes={stop.patterns}
           />
         )}
         <div className="stop-bottom-row">
@@ -89,7 +82,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
                 {stop.hiddenRoutes.length
                   .toString()
                   .concat(' / ')
-                  .concat(stop.routes.length.toString())}
+                  .concat(stop.patterns.length.toString())}
               </span>
             )}
           </div>

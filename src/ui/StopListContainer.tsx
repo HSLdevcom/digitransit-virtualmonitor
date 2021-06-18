@@ -159,22 +159,6 @@ const StopListPlaceHolder = props => {
   );
 };
 
-const StopItem = props => {
-  const { item, collection } = props;
-  return (
-    <li className="stop">
-      <StopRow
-        side={collection === 'leftItems' ? 'left' : 'right'}
-        stop={item}
-        stopId={item.gtfsId}
-        onStopDelete={item.onStopDelete}
-        onStopMove={item.onStopMove}
-        setStops={item.setStops}
-      />
-    </li>
-  );
-};
-
 const StopList = props => {
   const {
     leftItems,
@@ -205,14 +189,18 @@ const StopList = props => {
       <div>
         <ul className="stops">
           {leftItems &&
-            leftItems.map((item, index) => {
+            leftItems.map(item => {
               return (
-                <StopItem
-                  key={uuid()}
-                  index={index}
-                  item={item}
-                  collection={'leftItems'}
-                />
+                <li className="stop">
+                  <StopRow
+                    key={uuid()}
+                    stop={item}
+                    side={'left'}
+                    onStopDelete={props.onStopDelete}
+                    onStopMove={props.onStopMove}
+                    setStops={props.setStops}
+                  />
+                </li>
               );
             })}
         </ul>
@@ -230,14 +218,18 @@ const StopList = props => {
       <div>
         <ul className="stops">
           {rightItems &&
-            rightItems.map((item, index) => {
+            rightItems.map(item => {
               return (
-                <StopItem
-                  key={uuid()}
-                  index={index}
-                  item={item}
-                  collection={'rightItems'}
-                />
+                <li className="stop">
+                  <StopRow
+                    key={uuid()}
+                    stop={item}
+                    side={'right'}
+                    onStopDelete={props.onStopDelete}
+                    onStopMove={props.onStopMove}
+                    setStops={props.setStops}
+                  />
+                </li>
               );
             })}
         </ul>
@@ -254,9 +246,6 @@ const addInfoToItems = (props, items) => {
           ...stop,
           cardId: props.cardId,
           layout: props.layout,
-          onStopDelete: props.onStopDelete,
-          onStopMove: props.onStopMove,
-          setStops: props.setStops,
         }))
       : [];
   return modifiedItems;
@@ -288,6 +277,9 @@ const StopListContainer: FC<Props & WithTranslation> = props => {
         })}
         rightTitle={props.stops['right'].title}
         layout={props.layout}
+        onStopDelete={props.onStopDelete}
+        onStopMove={props.onStopMove}
+        setStops={props.setStops}
       />
     </div>
   );

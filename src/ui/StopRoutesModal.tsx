@@ -9,13 +9,12 @@ import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
 interface Route {
-  gtfsId: string;
-  shortName: string;
+  // route: any;
 }
 
 interface Props {
   showModal: boolean;
-  routes: Route[];
+  routes: any; //Route[];
   stop: IStopInfo;
   closeModal: (route: Route[]) => void;
   hiddenRoutes?: any;
@@ -37,7 +36,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     } else if (hiddenRoutes.includes(route)) {
       setHiddenRoutes(
         hiddenRoutes.filter(r => {
-          return r.shortName !== route.shortName;
+          return r.code !== route.code;
         }),
       );
     }
@@ -84,17 +83,18 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
           />{' '}
           {props.t('all')}
         </div>
-        {props.routes.map(route => {
+        {props.routes.map(pattern => {
+          const route = pattern.route;
           return (
             <div key={uuid()} className="row">
               {' '}
               <input
                 type="checkbox"
                 name={route.shortName}
-                checked={isChecked(route)}
-                onChange={e => handleCheck(e, route)}
+                checked={isChecked(pattern)}
+                onChange={e => handleCheck(e, pattern)}
               />
-              {route.shortName} - {route.gtfsId}
+              {route.shortName} - {pattern.headsign}
             </div>
           );
         })}

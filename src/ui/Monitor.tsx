@@ -17,28 +17,27 @@ const GET_DEPARTURES = gql`
         longName
         id
       }
-      stoptimesForPatterns {
-        stoptimes {
-          trip {
+      stoptimesForPatterns(numberOfDepartures: $numberOfDepartures) {
+        pattern {
+          code
+          route {
             gtfsId
           }
         }
-      }
-      stoptimesWithoutPatterns(numberOfDepartures: $numberOfDepartures) {
-        scheduledArrival
-        realtimeArrival
-        arrivalDelay
-        scheduledDeparture
-        realtimeDeparture
-        departureDelay
-        headsign
-        trip {
-          gtfsId
-          stops {
-            id
-          }
-          route {
-            shortName
+        stoptimes {
+          serviceDay
+          scheduledArrival
+          realtimeArrival
+          arrivalDelay
+          scheduledDeparture
+          realtimeDeparture
+          departureDelay
+          headsign
+          trip {
+            gtfsId
+            route {
+              shortName
+            }
           }
         }
       }
@@ -55,28 +54,32 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
         longName
         id
       }
-      stoptimesForPatterns {
-        stoptimes {
-          trip {
+      stops {
+        routes {
+          gtfsId
+        }
+      }
+      stoptimesForPatterns(numberOfDepartures: $numberOfDepartures) {
+        pattern {
+          code
+          route {
             gtfsId
           }
         }
-      }
-      stoptimesWithoutPatterns(numberOfDepartures: $numberOfDepartures) {
-        scheduledArrival
-        realtimeArrival
-        arrivalDelay
-        scheduledDeparture
-        realtimeDeparture
-        departureDelay
-        headsign
-        trip {
-          gtfsId
-          stops {
-            id
-          }
-          route {
-            shortName
+        stoptimes {
+          serviceDay
+          scheduledArrival
+          realtimeArrival
+          arrivalDelay
+          scheduledDeparture
+          realtimeDeparture
+          departureDelay
+          headsign
+          trip {
+            gtfsId
+            route {
+              shortName
+            }
           }
         }
       }
@@ -90,6 +93,7 @@ interface IStop {
   gtfsId: string;
   locationType: string;
   name: string;
+  hiddenRoutes: Array<any>;
 }
 interface ISides {
   stops: Array<IStop>;
@@ -102,14 +106,26 @@ interface IView {
   columns: IColumn;
   title: string;
   layout: number;
+  duration: number;
 }
-
+const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
+  const departures = [];
+  stop.stoptimesForPatterns.forEach(stoptimeList => {
+    if (!hiddenRoutes.includes(stoptimeList.pattern.code)) {
+      departures.push(...stoptimeList.stoptimes);
+    }
+  });
+  return departures;
+};
 interface IProps {
   readonly view: IView;
   readonly config: IMonitorConfig;
   readonly noPolling?: boolean;
+  readonly index: number;
 }
-const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
+const Monitor: FC<IProps> = ({ view, index, config, noPolling }) => {
+  const [monitorData, setMonitorData] = useState([]);
+  const [skip, setSkip] = useState(false);
   const [stopDepartures, setStopDepartures] = useState([]);
   const [stationDepartures, setStationDepartures] = useState([]);
   const [stopsFetched, setStopsFetched] = useState(false);
@@ -118,26 +134,50 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   const stationIds = [];
   const stopIds = [];
   // Don't poll on preview
-  const pollInterval = noPolling ? 0 : 3000;
+  const pollInterval = noPolling ? 0 : 30000;
   view.columns.left.stops.forEach(stop =>
     stop.locationType === 'STOP'
       ? stopIds.push(stop.gtfsId)
       : stationIds.push(stop.gtfsId),
   );
-  const { loading, error, data } = useQuery(GET_DEPARTURES, {
-    variables: { ids: stopIds, numberOfDepartures: 12 },
+  const { loading, error, data, previousData } = useQuery(GET_DEPARTURES, {
+    variables: { ids: stopIds, numberOfDepartures: 24 },
     pollInterval: pollInterval,
+    skip: skip,
   });
   const stationState = useQuery(GET_DEPARTURES_FOR_STATIONS, {
-    variables: { ids: stationIds, numberOfDepartures: 12 },
-    pollInterval: 30000,
+    variables: { ids: stationIds, numberOfDepartures: 24 },
+    pollInterval: pollInterval,
+    skip: skip,
   });
+  useEffect(() => {
+    if (monitorData[index]?.stations) {
+      setSkip(true);
+    }
+  }, [monitorData])
+  useEffect(() => {
+    if (stationState.previousData?.stations) {
+      const foo = monitorData;
+      foo[index] = stationState.previousData;
+      setMonitorData(foo);
+      setTimeout(() => setSkip(false), pollInterval)
+    }
+  }, [stationState.previousData])
   useEffect(() => {
     if (data?.stops) {
       const departures: Array<IDeparture> = [];
-      data.stops.forEach(stop =>
-        departures.push(...stop.stoptimesWithoutPatterns),
-      );
+      const stops = view.columns.left.stops;
+      data.stops.forEach(stop => {
+        let routesToHide: Array<string> = stops
+          .find(s => {return s.gtfsId === stop.gtfsId})
+          ?.hiddenRoutes.map(route => route.code);
+        if (!routesToHide[0]) {
+          routesToHide = [];
+        }
+        departures.push(
+          ...getDeparturesWithoutHiddenRoutes(stop, routesToHide),
+        );
+      });
       setStopDepartures(departures);
       setStopsFetched(true);
     }
@@ -147,10 +187,30 @@ const Monitor: FC<IProps> = ({ view, config, noPolling }) => {
   }, [data]);
   useEffect(() => {
     if (stationState.data?.stations) {
-      const departures = [];
-      stationState.data.stations.forEach(stop =>
-        departures.push(...stop.stoptimesWithoutPatterns),
-      );
+      const stops = view.columns.left.stops;
+      const departures: Array<IDeparture> = [];
+      stationState.data.stations
+        .filter(s => s)
+        .forEach(station => {
+          const routes = [];
+          station.stops.forEach(stop => routes.push(...stop.routes));
+          let routesToHide = stops
+            .find(s => {return s.gtfsId === station.gtfsId})
+            ?.hiddenRoutes.map(route => route.code);
+            if (!routesToHide) {
+              routesToHide = [];
+            }
+          const stationWithRoutes = {
+            ...station,
+            routes: routes,
+          };
+          departures.push(
+            ...getDeparturesWithoutHiddenRoutes(
+              stationWithRoutes,
+              routesToHide,
+            ),
+          );
+        });
       setStationDepartures(departures);
       setStationsFetched(true);
     }

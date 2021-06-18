@@ -31,18 +31,22 @@ interface IProps {
   noPolling?: boolean;
 }
 const CarouselContainer: FC<IProps> = ({ views, noPolling }) => {
-
   const len = views.length;
   const [current, setCurrent] = useState(0);
-    useEffect(() => {
-      const next = (current + 1) % len;
-      const time = views[current].duration * 1000;
-      const id = setTimeout(() => setCurrent(next), time);
-      return () => clearTimeout(id);
-    }, [current]);
+  useEffect(() => {
+    const next = (current + 1) % len;
+    const time = views[current].duration * 1000;
+    const id = setTimeout(() => setCurrent(next), time);
+    return () => clearTimeout(id);
+  }, [current]);
   const config = getConfig();
   return (
-    <Monitor view={views[current]} index={current} config={config} noPolling={noPolling} />
+    <Monitor
+      view={views[current]}
+      index={current}
+      config={config}
+      noPolling={noPolling}
+    />
   );
 };
 

@@ -5,7 +5,7 @@ import Icon from './Icon';
 import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
 import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
-import getSearchContext from './searchContext';
+import { setSearchContextWithFeedIds } from './searchContext';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import { ICardInfo } from './CardInfo';
@@ -82,6 +82,7 @@ const GET_STATION = gql`
 `;
 
 interface IProps {
+  readonly feedIds: Array<string>;
   readonly cardsCount: number;
   readonly cardInfo: ICardInfo;
   readonly columns: any;
@@ -107,7 +108,24 @@ interface IProps {
   ) => void;
 }
 
+const filterSearchResults = results => {
+  const gtfsIds = results.map(x => {
+    const gtfsId = x.properties.gtfsId
+      ? x.properties.gtfsId
+      : getGTFSId({ id: x.properties.id });
+    if (gtfsId) {
+      return {
+        gtfsId,
+        ...x,
+      };
+    }
+    return gtfsIds;
+  });
+  return results;
+};
+
 const StopCardRow: FC<IProps & WithTranslation> = ({
+  feedIds,
   cardsCount,
   cardInfo,
   columns,
@@ -213,6 +231,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   const lang = t('languageCode');
   const isFirst = cardInfo.index === 0;
   const isLast = cardInfo.index === cardsCount - 1;
+
   return (
     <div className="stopcard-row-container">
       <div className="title-with-icons">
@@ -223,15 +242,17 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
           updateCardInfo={updateCardInfo}
         />
         <div className="icons">
-          <div
-            className={cx(
-              'delete icon',
-              cardInfo.possibleToMove ? '' : 'move-end',
-            )}
-            onClick={() => onCardDelete(cardInfo.id)}
-          >
-            <Icon img="delete" color={'#007AC9'} />
-          </div>
+          {cardsCount > 1 && (
+            <div
+              className={cx(
+                'delete icon',
+                cardInfo.possibleToMove ? '' : 'move-end',
+              )}
+              onClick={() => onCardDelete(cardInfo.id)}
+            >
+              <Icon img="delete" color={'#007AC9'} />
+            </div>
+          )}
           {cardInfo.possibleToMove && (
             <div
               className={cx(
@@ -312,7 +333,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         <div className="search-stop">
           <DTAutosuggest
             appElement={'root'}
-            searchContext={getSearchContext()}
+            searchContext={setSearchContextWithFeedIds(feedIds)}
             icon="search"
             id="search"
             placeholder={'autosuggestPlaceHolder'}
@@ -323,6 +344,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             lang={lang}
             sources={['Datasource']}
             targets={['Stops']}
+            filterResults={filterSearchResults}
           />
         </div>
         <LayoutAndTimeContainer

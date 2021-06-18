@@ -14,7 +14,8 @@ class Logo extends React.Component<ICommonProps> {
     const monitorConfig = (this.props as ICommonProps).monitorConfig;
 
     if (monitorConfig) {
-      const feedId = monitorConfig.feedId;
+      const feedIds = monitorConfig.feedIds;
+      const feedId = feedIds[0].toLowerCase();
 
       switch (feedId) {
         case 'tampere':

@@ -10,8 +10,19 @@ import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
 import './StopCardListContainer.scss';
 
-const StopCardItem = ({ value: item, possibleToMove, index, totalCount }) => {
+interface IProps {
+  feedIds: Array<string>;
+}
+
+const StopCardItem = ({
+  value: item,
+  possibleToMove,
+  index,
+  totalCount,
+  feedIds,
+}) => {
   const cardInfo: ICardInfo = {
+    feedIds: feedIds,
     index: index,
     id: item.id,
     title: item.title,
@@ -22,6 +33,7 @@ const StopCardItem = ({ value: item, possibleToMove, index, totalCount }) => {
   return (
     <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
       <StopCardRow
+        feedIds={feedIds}
         cardsCount={totalCount}
         cardInfo={cardInfo}
         columns={item.columns}
@@ -36,12 +48,13 @@ const StopCardItem = ({ value: item, possibleToMove, index, totalCount }) => {
   );
 };
 
-const StopCardList = ({ items }) => {
+const StopCardList = ({ feedIds, items }) => {
   return (
     <ul className="stopcards">
       {items.map((item, index) => {
         return (
           <StopCardItem
+            feedIds={feedIds}
             key={uuid()}
             index={index}
             value={item}
@@ -73,7 +86,10 @@ const defaultStopCard = t => ({
   duration: 5,
 });
 
-const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
+const StopCardListContainer: FC<IProps & WithTranslation> = ({
+  feedIds,
+  t,
+}) => {
   const [stopCardList, setStopCardList] = useState([defaultStopCard(t)]);
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
@@ -215,7 +231,7 @@ const StopCardListContainer: FC<WithTranslation> = ({ t }) => {
       {isOpen && (
         <PreviewModal view={cards} isOpen={isOpen} onClose={closePreview} />
       )}
-      <StopCardList items={modifiedStopCardList} />
+      <StopCardList feedIds={feedIds} items={modifiedStopCardList} />
       <div className="buttons">
         <button className="button" onClick={addNew}>
           <span>{t('prepareDisplay')}</span>

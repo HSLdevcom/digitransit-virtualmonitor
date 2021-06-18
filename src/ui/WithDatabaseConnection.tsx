@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
 import { getConfig } from '../util/getConfig';
-import CarouselContainer from "./CarouselContainer";
+import CarouselContainer from './CarouselContainer';
 import Monitor from './Monitor';
 
 interface IProps {

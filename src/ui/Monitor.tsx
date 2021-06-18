@@ -154,22 +154,24 @@ const Monitor: FC<IProps> = ({ view, index, config, noPolling }) => {
     if (monitorData[index]?.stations) {
       setSkip(true);
     }
-  }, [monitorData])
+  }, [monitorData]);
   useEffect(() => {
     if (stationState.previousData?.stations) {
       const foo = monitorData;
       foo[index] = stationState.previousData;
       setMonitorData(foo);
-      setTimeout(() => setSkip(false), pollInterval)
+      setTimeout(() => setSkip(false), pollInterval);
     }
-  }, [stationState.previousData])
+  }, [stationState.previousData]);
   useEffect(() => {
     if (data?.stops) {
       const departures: Array<IDeparture> = [];
       const stops = view.columns.left.stops;
       data.stops.forEach(stop => {
         let routesToHide: Array<string> = stops
-          .find(s => {return s.gtfsId === stop.gtfsId})
+          .find(s => {
+            return s.gtfsId === stop.gtfsId;
+          })
           ?.hiddenRoutes.map(route => route.code);
         if (!routesToHide[0]) {
           routesToHide = [];
@@ -195,11 +197,13 @@ const Monitor: FC<IProps> = ({ view, index, config, noPolling }) => {
           const routes = [];
           station.stops.forEach(stop => routes.push(...stop.routes));
           let routesToHide = stops
-            .find(s => {return s.gtfsId === station.gtfsId})
+            .find(s => {
+              return s.gtfsId === station.gtfsId;
+            })
             ?.hiddenRoutes.map(route => route.code);
-            if (!routesToHide) {
-              routesToHide = [];
-            }
+          if (!routesToHide) {
+            routesToHide = [];
+          }
           const stationWithRoutes = {
             ...station,
             routes: routes,

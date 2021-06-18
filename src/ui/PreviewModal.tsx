@@ -1,7 +1,7 @@
 import React, { ClassAttributes, FC, useState } from 'react';
 import { getConfig } from '../util/getConfig';
 import Modal from 'react-modal';
-import CarouselContainer from "./CarouselContainer";
+import CarouselContainer from './CarouselContainer';
 import Icon from './Icon';
 import Monitor from './Monitor';
 

@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { getConfig } from '../util/getConfig';
 import Monitor from './Monitor';
-import WithDatabaseConnection from './WithDatabaseConnection';
+import { EpochMilliseconds } from '../time';
 
 interface IStop {
   code: string;
@@ -13,6 +13,7 @@ interface IStop {
 }
 interface ISides {
   stops: Array<IStop>;
+  title: string;
 }
 interface IColumn {
   left: ISides;
@@ -29,8 +30,10 @@ interface IView {
 interface IProps {
   views: Array<IView>;
   noPolling?: boolean;
+  time?: EpochMilliseconds;
 }
-const CarouselContainer: FC<IProps> = ({ views, noPolling }) => {
+
+const CarouselContainer: FC<IProps> = ({ views, noPolling, time }) => {
   const len = views.length;
   const [current, setCurrent] = useState(0);
   useEffect(() => {
@@ -46,6 +49,7 @@ const CarouselContainer: FC<IProps> = ({ views, noPolling }) => {
       index={current}
       config={config}
       noPolling={noPolling}
+      time={time}
     />
   );
 };

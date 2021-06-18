@@ -7,6 +7,7 @@ import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
 import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
+import { EpochMilliseconds } from '../time';
 
 const GET_DEPARTURES = gql`
   query GetDepartures($ids: [String!]!, $numberOfDepartures: Int!) {
@@ -97,6 +98,7 @@ interface IStop {
 }
 interface ISides {
   stops: Array<IStop>;
+  title: string;
 }
 interface IColumn {
   left: ISides;
@@ -122,8 +124,9 @@ interface IProps {
   readonly config: IMonitorConfig;
   readonly noPolling?: boolean;
   readonly index: number;
+  readonly time?: EpochMilliseconds;
 }
-const Monitor: FC<IProps> = ({ view, index, config, noPolling }) => {
+const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
   const [monitorData, setMonitorData] = useState([]);
   const [skip, setSkip] = useState(false);
   const [stopDepartures, setStopDepartures] = useState([]);
@@ -226,26 +229,34 @@ const Monitor: FC<IProps> = ({ view, index, config, noPolling }) => {
   if (loading) {
     return <div>LOADING</div>;
   }
+  const currentTime = time ? time : new Date().getTime();
+  const isMultiDisplay = getLayout(view.layout)[2];
   return (
     <div className="main-content-container">
-      {' '}
       <Titlebar>
         <Logo monitorConfig={config} />
-        <div
-          id={'title-text'}
-          style={{
-            fontSize: 'min(4vw, 4em)',
-            justifyContent: 'center',
-          }}
-        >
-          {view.title}
-        </div>
-        <TitlebarTime />
+        {!isMultiDisplay && (
+          <div
+            id={'title-text'}
+            style={{
+              fontSize: 'min(4vw, 4em)',
+              justifyContent: 'center',
+            }}
+          >
+            {view.title}
+          </div>
+        )}
+        <TitlebarTime
+          currentTime={currentTime}
+          updateInterval={noPolling ? 0 : 20000}
+        />
       </Titlebar>
       {stationsFetched && stopsFetched && (
         <MonitorRowContainer
           departures={[...stopDepartures, ...stationDepartures]}
           layout={getLayout(view.layout)}
+          leftTitle={view.columns.left.title}
+          rightTitle={view.columns.right.title}
         />
       )}
     </div>

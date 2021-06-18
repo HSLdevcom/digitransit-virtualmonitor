@@ -35,5 +35,8 @@ export const formatTime = (
 export const getStartTimeWithColon = time => {
   const hours = `0${Math.floor((time / 60 / 60) % 24)}`.slice(-2);
   const mins = `0${Math.floor(time / 60) % 60}`.slice(-2);
-  return `${hours}:${mins}`;
+  if (hours !== 'aN' || mins !== 'aN') {
+    return `${hours}:${mins}`;
+  }
+  return null;
 };

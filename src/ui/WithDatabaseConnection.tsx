@@ -1,10 +1,9 @@
 import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
-import { getConfig } from '../util/getConfig';
 import CarouselContainer from './CarouselContainer';
-import Monitor from './Monitor';
 
 interface IProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly location?: any;
 }
 const WithDatabaseConnection: FC<IProps> = ({ location }) => {

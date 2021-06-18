@@ -1,9 +1,7 @@
-import React, { ClassAttributes, FC, useState } from 'react';
-import { getConfig } from '../util/getConfig';
+import React, { FC } from 'react';
 import Modal from 'react-modal';
 import CarouselContainer from './CarouselContainer';
 import Icon from './Icon';
-import Monitor from './Monitor';
 
 import './PreviewModal.scss';
 Modal.setAppElement('#root');
@@ -13,10 +11,12 @@ interface IStop {
   gtfsId: string;
   locationType: string;
   name: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hiddenRoutes: Array<any>;
 }
 interface ISides {
   stops: Array<IStop>;
+  title: string;
 }
 interface IColumn {
   left: ISides;
@@ -37,7 +37,7 @@ interface Props {
   onClose: (boolean) => void;
 }
 const PreviewModal: FC<Props> = (props: Props) => {
-  const config = getConfig();
+  const currentMillis = new Date().getTime();
   return (
     <>
       <Modal
@@ -52,7 +52,11 @@ const PreviewModal: FC<Props> = (props: Props) => {
         >
           <Icon img={'close'} height={12} width={12} color={'#007AC9'} />{' '}
         </div>
-        <CarouselContainer views={props.view.cards} noPolling />
+        <CarouselContainer
+          views={props.view.cards}
+          noPolling
+          time={currentMillis}
+        />
       </Modal>
     </>
   );

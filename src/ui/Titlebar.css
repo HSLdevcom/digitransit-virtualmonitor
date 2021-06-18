@@ -15,6 +15,7 @@
 }
 
 #title-text {
+  font-family: 'Roboto', Arial, Georgia, serif;
   display: flex;
   flex: 1;
   flex-direction: row;
@@ -31,6 +32,7 @@
 }
 
 #title-time {
+  font-family: 'Roboto', Arial, Georgia, serif;
   display: flex;
   flex: 0;
   flex-direction: row;
@@ -43,6 +45,7 @@
 }
 
 #title-time time {
+  font-family: 'Roboto', Arial, Georgia, serif;
   margin-left: 0.25em;
   margin-right: 0.25em;
 }

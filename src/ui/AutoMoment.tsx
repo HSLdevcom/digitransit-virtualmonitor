@@ -22,7 +22,8 @@ class AutoMoment extends React.Component<ITimeProps, any> {
   public render() {
     return (
       <ReactMoment
-        interval={20000}
+        date={this.props.currentTime}
+        interval={this.props.updateInterval}
         format={moment.HTML5_FMT.TIME}
         add={{ milliseconds: this.context.delta }}
       />

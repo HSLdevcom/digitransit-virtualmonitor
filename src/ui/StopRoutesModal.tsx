@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState } from 'react';
 import './StopRoutesModal.scss';
 import './StopCode.scss';
@@ -8,6 +9,7 @@ import { v4 as uuid } from 'uuid';
 import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Route {
   // route: any;
 }

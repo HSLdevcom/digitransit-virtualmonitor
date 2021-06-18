@@ -20,8 +20,22 @@
     grid-template-rows: 50px auto;
 
     div {
+      font-size: 24px;
       display: flex;
       align-items: center;
+
+      &.title {
+        font-size: 28px;
+        justify-content: center;
+        grid-column-start: 1;
+        grid-column-end: 4;
+        grid-row-start: 1;
+        grid-row-end: 1;
+      }
+
+      &.time {
+        justify-content: flex-end;
+      }
     }
   }
 }

@@ -1,14 +1,23 @@
-import React, { FC, useState, useEffect } from 'react';
-import { getStartTimeWithColon } from '../time';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { FC } from 'react';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow from './MonitorRow';
 import './MonitorRowContainer.scss';
 
 interface IProps {
   departures: any;
   layout: any;
+  leftTitle: string;
+  rightTitle: string;
 }
 
-const MonitorRowContainer: FC<IProps> = ({ departures, layout }) => {
+const MonitorRowContainer: FC<IProps & WithTranslation> = ({
+  departures,
+  layout,
+  leftTitle,
+  rightTitle,
+  t,
+}) => {
   const sortedDepartures = departures.sort(
     (a, b) =>
       a.realtimeDeparture + a.serviceDay - (b.realtimeDeparture + b.serviceDay),
@@ -41,18 +50,20 @@ const MonitorRowContainer: FC<IProps> = ({ departures, layout }) => {
   return (
     <div className="monitor-container">
       <div className="left grid">
-        <div>Linja</div>
-        <div>Määränpää</div>
-        <div>Lähtöaika</div>
+        {isMultiDisplay && <div className="title">{leftTitle}</div>}
+        <div>{t('lineId')}</div>
+        <div>{t('destination')}</div>
+        <div className="time">{t('departureTime')}</div>
         {leftColumn}
       </div>
       {rightColumnCount > 0 && (
         <>
           <div className="divider" />
           <div className="right grid">
-            <div>Linja</div>
-            <div>Määränpää</div>
-            <div>Lähtöaika</div>
+            {isMultiDisplay && <div className="title">{rightTitle}</div>}
+            <div>{t('lineId')}</div>
+            <div>{t('destination')}</div>
+            <div className="time">{t('departureTime')}</div>
             {rightColumn}
           </div>
         </>
@@ -61,4 +72,4 @@ const MonitorRowContainer: FC<IProps> = ({ departures, layout }) => {
   );
 };
 
-export default MonitorRowContainer;
+export default withTranslation('translations')(MonitorRowContainer);

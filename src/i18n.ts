@@ -53,7 +53,7 @@ i18n.init({
         'clear-button-label': 'Tyhjennä',
         configuration: 'Konfiguraatio',
         createViewTitle: 'Uuden näkymän luonti',
-        departureTime: 'Lähtöaika',
+        departureTime: 'Aika/min',
         destination: 'Määränpää',
         display: 'Näyttö',
         displayEditorDefinePosition: 'Määritä sijainti',

@@ -1,4 +1,4 @@
-function getSearchContext() {
+export function getSearchContext() {
   const searchContext = {
     isPeliasLocationAware: false, // true / false does Let Pelias suggest based on current user location
     minimalRegexp: undefined, // used for testing min. regexp. For example: new RegExp('.{2,}'),
@@ -32,4 +32,10 @@ function getSearchContext() {
   return { ...searchContext };
 }
 
-export default getSearchContext;
+export function setSearchContextWithFeedIds(feedIds: Array<string>) {
+  const searchContext = getSearchContext();
+  return {
+    ...searchContext,
+    feedIDs: feedIds,
+  };
+}

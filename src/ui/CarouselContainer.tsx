@@ -32,6 +32,7 @@ interface IProps {
   noPolling?: boolean;
   time?: EpochMilliseconds;
 }
+
 const CarouselContainer: FC<IProps> = ({ views, noPolling, time }) => {
   const len = views.length;
   const [current, setCurrent] = useState(0);

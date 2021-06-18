@@ -1,10 +1,9 @@
+/* eslint-disable no-empty-pattern */
 import * as React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import IndexPage from './ui/IndexPage';
-import monitorConfig from './monitorConfig';
 import Banner from './ui/Banner';
-import Logo from './ui/logo/Logo';
 import ConfigurationDisplay from './ui/ConfigurationDisplay';
 import ConfigurationList from './ui/ConfigurationList';
 import DisplayEditor from './ui/DisplayEditor';
@@ -17,13 +16,9 @@ import WithDatabaseConnection from './ui/WithDatabaseConnection';
 
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
-const client = new ApolloClient({
-  uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
-  cache: new InMemoryCache(),
-});
 import './App.scss';
 export interface IMonitorConfig {
-  feedId?: string;
+  //feedIds?: Array<string>;
   uri?: string;
   // Texts for Help page
   urlParamUsageText?: string;
@@ -68,6 +63,11 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
   render() {
     const monitorConfig = this.props.monitorConfig;
 
+    const client = new ApolloClient({
+      uri: monitorConfig.uri,
+      cache: new InMemoryCache(),
+    });
+
     let helpPageUrlParamText = '';
     let helpPageurlMultipleStopsText = '';
     let helpPageUrlParamFindText = '';
@@ -102,7 +102,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
                   <Banner config={monitorConfig} />
-                  <CreateViewPage />
+                  <CreateViewPage config={monitorConfig} />
                 </>
               )}
             />

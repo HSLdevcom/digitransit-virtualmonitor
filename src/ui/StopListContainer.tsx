@@ -6,12 +6,11 @@ import { v4 as uuid } from 'uuid';
 import cx from 'classnames';
 import { focusToInput, onClick } from './InputUtils';
 import { getLayout } from '../util/getLayout';
+import { ICardInfo } from './CardInfo';
 
 interface Props {
   side?: string;
   stops: any;
-  cardId: number;
-  layout: number;
   onStopDelete?: (cardId: number, side: string, gtfsId: string) => void;
   onStopMove?: (cardId: number, side: string, gtfsId: string) => void;
   setStops?: (
@@ -21,12 +20,14 @@ interface Props {
     reorder: boolean,
     gtfsIdForHidden: string,
   ) => void;
+  cardInfo: ICardInfo;
+  updateCardInfo?: (cardId: number, type: string, value: string) => void;
 }
 
 const TitleItem = props => {
-  const [newTitleLeft, setNewTitleLeft] = useState(props.titleLeft);
+  const [newTitleLeft, setNewTitleLeft] = useState('');
   const [changedLeft, setChangedLeft] = useState(false);
-  const [newTitleRight, setNewTitleRight] = useState(props.titleRight);
+  const [newTitleRight, setNewTitleRight] = useState('');
   const [changedRight, setChangedRight] = useState(false);
   const { cardInfo, side, updateCardInfo, leftItemsHeader, rightItemsHeader } =
     props;
@@ -49,14 +50,12 @@ const TitleItem = props => {
 
     const key = (event && (event.key || event.which || event.keyCode)) || '';
 
-    const newTitle = side === 'left' ? newTitleLeft : newTitleRight;
-
     if (
       key &&
       typeof event.target.selectionStart === 'number' &&
       event.target.selectionStart === 0 &&
       event.target.selectionEnd === event.target.value.length &&
-      newTitle
+      event.target.value === (side === 'left' ? newTitleLeft : newTitleRight)
     ) {
       if (backspace.concat(space).includes(key)) {
         if (side === 'left') {
@@ -121,6 +120,7 @@ const TitleItem = props => {
 
   const valueLeft = changedLeft ? newTitleLeft : props.titleLeft;
   const valueRight = changedRight ? newTitleRight : props.titleRight;
+
   return (
     <>
       <div className="header">
@@ -165,14 +165,15 @@ const StopList = props => {
     leftTitle,
     rightTitle,
     rightItems,
-    layout,
     leftItemsPlaceHolder,
     rightItemsPlaceHolder,
     leftItemsHeader,
     rightItemsHeader,
+    cardInfo,
+    updateCardInfo,
   } = props;
 
-  const showStopTitles = getLayout(layout)[2];
+  const showStopTitles = getLayout(cardInfo.layout)[2];
 
   return (
     <div>
@@ -181,6 +182,8 @@ const StopList = props => {
           side="left"
           titleLeft={leftTitle}
           leftItemsHeader={leftItemsHeader}
+          cardInfo={cardInfo}
+          updateCardInfo={updateCardInfo}
         />
       )}
       {showStopTitles && leftItems.length === 0 && (
@@ -210,6 +213,8 @@ const StopList = props => {
           side="right"
           titleRight={rightTitle}
           rightItemsHeader={rightItemsHeader}
+          cardInfo={cardInfo}
+          updateCardInfo={updateCardInfo}
         />
       )}
       {showStopTitles && rightItems.length === 0 && (
@@ -238,14 +243,14 @@ const StopList = props => {
   );
 };
 
-const addInfoToItems = (props, items) => {
+const addInfoToItems = (props, items, side) => {
   const modifiedItems =
     items.length > 0
-      ? items.map(stop => ({
-          side: props.side,
-          ...stop,
-          cardId: props.cardId,
-          layout: props.layout,
+      ? items.map(item => ({
+          ...item,
+          side: side,
+          cardId: props.cardInfo.id,
+          layout: props.cardInfo.layout,
         }))
       : [];
   return modifiedItems;
@@ -266,20 +271,21 @@ const StopListContainer: FC<Props & WithTranslation> = props => {
   return (
     <div className="stop-list">
       <StopList
-        leftItems={addInfoToItems(props, leftItems)}
+        leftItems={addInfoToItems(props, leftItems, 'left')}
         leftItemsHeader={props.t('headerSideLeft')}
         leftItemsPlaceHolder={props.t('placeholderSideLeft')}
         leftTitle={props.stops['left'].title}
-        rightItems={addInfoToItems(props, rightItems)}
+        rightItems={addInfoToItems(props, rightItems, 'right')}
         rightItemsHeader={props.t('headerSideRight')}
         rightItemsPlaceHolder={props.t('placeholderSideRight', {
           title: props.stops['left'].title,
         })}
         rightTitle={props.stops['right'].title}
-        layout={props.layout}
         onStopDelete={props.onStopDelete}
         onStopMove={props.onStopMove}
         setStops={props.setStops}
+        cardInfo={props.cardInfo}
+        updateCardInfo={props.updateCardInfo}
       />
     </div>
   );

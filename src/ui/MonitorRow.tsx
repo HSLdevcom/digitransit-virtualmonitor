@@ -37,7 +37,7 @@ const MonitorRow: FC<IProps> = ({ departure, size, withSeparator }) => {
     <>
       <div className="separator"></div>
       <div className={cx('short-name', className)}>
-        {departure?.trip.route.shortName}
+        {departure?.trip?.route.shortName}
       </div>
       <div className={cx('headsign', className)}>{departure?.headsign}</div>
       <div className={cx('departure-time', className)}>

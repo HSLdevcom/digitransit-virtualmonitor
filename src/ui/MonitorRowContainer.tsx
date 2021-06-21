@@ -5,46 +5,71 @@ import MonitorRow from './MonitorRow';
 import './MonitorRowContainer.scss';
 
 interface IProps {
-  departures: any;
+  departuresLeft: any;
+  departuresRight: any;
   layout: any;
   leftTitle: string;
   rightTitle: string;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
-  departures,
+  departuresLeft,
+  departuresRight,
   layout,
   leftTitle,
   rightTitle,
   t,
 }) => {
-  const sortedDepartures = departures.sort(
+  const sortedDeparturesLeft = departuresLeft.sort(
     (a, b) =>
       a.realtimeDeparture + a.serviceDay - (b.realtimeDeparture + b.serviceDay),
   );
+
+  const sortedDeparturesRight =
+    departuresRight && departuresRight.length > 0
+      ? departuresRight.sort(
+          (a, b) =>
+            a.realtimeDeparture +
+            a.serviceDay -
+            (b.realtimeDeparture + b.serviceDay),
+        )
+      : departuresRight;
+
   const [leftColumnCount, rightColumnCount, isMultiDisplay] = layout;
 
-  const leftColumn = [],
-    rightColumn = [];
+  const leftColumn = [];
+  const rightColumn = [];
 
   for (let i = 0; i < leftColumnCount; i++) {
     leftColumn.push(
       <MonitorRow
-        departure={sortedDepartures[i]}
+        departure={sortedDeparturesLeft[i]}
         size={leftColumnCount}
         withSeparator
       />,
     );
   }
 
-  for (let i = leftColumnCount; i < leftColumnCount + rightColumnCount; i++) {
-    rightColumn.push(
-      <MonitorRow
-        departure={sortedDepartures[i]}
-        size={rightColumnCount}
-        withSeparator
-      />,
-    );
+  if (!isMultiDisplay) {
+    for (let i = leftColumnCount; i < leftColumnCount + rightColumnCount; i++) {
+      rightColumn.push(
+        <MonitorRow
+          departure={sortedDeparturesLeft[i]}
+          size={rightColumnCount}
+          withSeparator
+        />,
+      );
+    }
+  } else {
+    for (let i = 0; i < rightColumnCount; i++) {
+      rightColumn.push(
+        <MonitorRow
+          departure={sortedDeparturesRight[i]}
+          size={rightColumnCount}
+          withSeparator
+        />,
+      );
+    }
   }
 
   return (

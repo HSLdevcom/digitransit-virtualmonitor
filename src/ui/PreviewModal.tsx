@@ -45,18 +45,24 @@ const PreviewModal: FC<Props> = (props: Props) => {
         onRequestClose={() => props.onClose(false)}
         portalClassName="preview"
       >
-        <div
-          role="button"
-          className="close"
-          onClick={() => props.onClose(false)}
-        >
-          <Icon img={'close'} height={12} width={12} color={'#007AC9'} />{' '}
+        <div className="title-and-close">
+          <div className="title">Esikatselu</div>
+          <div
+            role="button"
+            className="close"
+            onClick={() => props.onClose(false)}
+          >
+            <Icon img={'close'} height={15} width={15} color={'#FFFFFF'} />{' '}
+          </div>
         </div>
-        <CarouselContainer
-          views={props.view.cards}
-          noPolling
-          time={currentMillis}
-        />
+        <div className="carouselContainer">
+          <CarouselContainer
+            views={props.view.cards}
+            noPolling
+            time={currentMillis}
+            isPreview
+          />
+        </div>
       </Modal>
     </>
   );

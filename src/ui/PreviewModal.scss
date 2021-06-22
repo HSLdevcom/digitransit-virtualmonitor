@@ -1,14 +1,49 @@
 .preview {
   .ReactModal__Content {
     position: absolute;
-    top: 78px !important;
-    padding: 25px !important;
+    width: 700px !important;
+    height: 470px !important;
+    left: 370px !important;
+    top: 220px !important;
+    padding: 0px !important;
 
-    .close {
-      position: absolute;
-      right: 0;
-      top: 0;
-      padding: 10px;
+    background: #000000 !important;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.25) !important;
+    border-radius: 5px !important;
+
+    overflow: hidden !important ;
+
+    .title-and-close {
+      position: relative;
+      width: 640px;
+      height: 75px;
+      top: 29px;
+      left: 30px;
+
+      .title {
+        position: relative;
+        font-family: 'Roboto', Arial, Helvetica, sans-serif;
+        font-size: 24px;
+        line-height: 29px;
+        letter-spacing: -0.02em;
+        color: #FFFFFF;
+        width: 540px;
+      }
+      .close {
+        height: 15px;
+        width: 15px;
+        position: relative;
+        left: 622.5px;
+        top: -28.5px;
+      }
+    }
+
+    .carouselContainer {
+      position: relative;
+      top: 0px;
+      left: 30px;
+      width: 640px;
+      height: 370px;
     }
   }
 }

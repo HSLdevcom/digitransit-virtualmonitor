@@ -125,8 +125,9 @@ interface IProps {
   readonly noPolling?: boolean;
   readonly index: number;
   readonly time?: EpochMilliseconds;
+  readonly isPreview: boolean;
 }
-const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
+const Monitor: FC<IProps> = ({ view, index, config, noPolling, time, isPreview }) => {
   const [monitorData, setMonitorData] = useState([]);
   const [skip, setSkip] = useState(false);
   const [stopDepartures, setStopDepartures] = useState([]);
@@ -234,12 +235,12 @@ const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
   return (
     <div className="main-content-container">
       <Titlebar>
-        <Logo monitorConfig={config} />
+        <Logo monitorConfig={config} isPreview />
         {!isMultiDisplay && (
           <div
             id={'title-text'}
             style={{
-              fontSize: 'min(4vw, 4em)',
+              fontSize: isPreview ? '16px' : 'min(4vw, 4em)',
               justifyContent: 'center',
             }}
           >
@@ -249,6 +250,7 @@ const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
         <TitlebarTime
           currentTime={currentTime}
           updateInterval={noPolling ? 0 : 20000}
+          isPreview
         />
       </Titlebar>
       {stationsFetched && stopsFetched && (

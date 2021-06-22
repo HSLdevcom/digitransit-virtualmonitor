@@ -174,10 +174,10 @@ interface IProps {
 }
 const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
   const [skip, setSkip] = useState(false);
-  const [monitorDataStopLeft, setMonitorDataStopLeft] = useState([]);
-  const [monitorDataStopRight, setMonitorDataStopRight] = useState([]);
-  const [monitorDataStationLeft, setMonitorDataStationLeft] = useState([]);
-  const [monitorDataStationRight, setMonitorDataStationRight] = useState([]);
+  const [stopDataLeft, setStopDataLeft] = useState([]);
+  const [stopDataRight, setStopDataRight] = useState([]);
+  const [stationDataLeft, setStationDataLeft] = useState([]);
+  const [stationDataRight, setStationDataRight] = useState([]);
   const [stopDeparturesLeft, setStopDeparturesLeft] = useState([]);
   const [stopDeparturesRight, setStopDeparturesRight] = useState([]);
   const [stationDeparturesLeft, setStationDeparturesLeft] = useState([]);
@@ -193,15 +193,6 @@ const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
   const stopIdsRight = [];
   const stationIdsLeft = [];
   const stationIdsRight = [];
-
-  let stopStateRight: QueryResult<
-    any,
-    { ids: any[]; numberOfDepartures: number }
-  >;
-  let stationStateRight: QueryResult<
-    any,
-    { ids: any[]; numberOfDepartures: number }
-  >;
 
   view.columns.left.stops.forEach(stop => {
     stop.locationType === 'STOP'
@@ -229,76 +220,74 @@ const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
     skip: skip,
   });
 
-  if (isMultiDisplay) {
-    stopStateRight = useQuery(GET_DEPARTURES, {
-      variables: { ids: stopIdsRight, numberOfDepartures: 24 },
-      pollInterval: pollInterval,
-      skip: skip,
-    });
+  const stopStateRight = useQuery(GET_DEPARTURES, {
+    variables: { ids: stopIdsRight, numberOfDepartures: 24 },
+    pollInterval: pollInterval,
+    skip: !isMultiDisplay || skip,
+  });
 
-    stationStateRight = useQuery(GET_DEPARTURES_FOR_STATIONS, {
-      variables: { ids: stationIdsRight, numberOfDepartures: 24 },
-      pollInterval: pollInterval,
-      skip: skip,
-    });
-  }
+  const stationStateRight = useQuery(GET_DEPARTURES_FOR_STATIONS, {
+    variables: { ids: stationIdsRight, numberOfDepartures: 24 },
+    pollInterval: pollInterval,
+    skip: !isMultiDisplay || skip,
+  });
 
   useEffect(() => {
-    if (monitorDataStopLeft[index]?.stops) {
+    if (stopDataLeft[index]?.stops) {
       setSkip(true);
     }
-  }, [monitorDataStopLeft]);
+  }, [stopDataLeft]);
 
   useEffect(() => {
-    if (monitorDataStopRight[index]?.stops) {
+    if (stopDataRight[index]?.stops) {
       setSkip(true);
     }
-  }, [monitorDataStopRight]);
+  }, [stopDataRight]);
 
   useEffect(() => {
-    if (monitorDataStationLeft[index]?.stations) {
+    if (stationDataLeft[index]?.stations) {
       setSkip(true);
     }
-  }, [monitorDataStationLeft]);
+  }, [stationDataLeft]);
 
   useEffect(() => {
-    if (monitorDataStationRight[index]?.stations) {
+    if (stationDataRight[index]?.stations) {
       setSkip(true);
     }
-  }, [monitorDataStationRight]);
+  }, [stationDataRight]);
 
   useEffect(() => {
     if (stopStateLeft.previousData?.stations) {
-      const currentData = monitorDataStopLeft;
+      const currentData = stopDataLeft;
       currentData[index] = stopStateLeft.previousData;
-      setMonitorDataStopLeft(currentData);
+      setStopDataLeft(currentData);
       setTimeout(() => setSkip(false), pollInterval);
     }
-  }, [stopStateLeft.previousData]);
+  }, [stopStateLeft?.previousData]);
 
   useEffect(() => {
     if (isMultiDisplay && stopStateRight.previousData?.stations) {
-      const currentData = monitorDataStopRight;
+      const currentData = stopDataRight;
       currentData[index] = stopStateRight.previousData;
-      setMonitorDataStopRight(currentData);
+      setStopDataRight(currentData);
       setTimeout(() => setSkip(false), pollInterval);
     }
   }, [stopStateRight?.previousData]);
 
   useEffect(() => {
     if (stationStateLeft.previousData?.stations) {
-      const currentData = monitorDataStationLeft;
+      const currentData = stationDataLeft;
       currentData[index] = stationStateLeft.previousData;
-      setMonitorDataStationLeft(currentData);
+      setStationDataLeft(currentData);
       setTimeout(() => setSkip(false), pollInterval);
     }
-  }, [stationStateLeft.previousData]);
+  }, [stationStateLeft?.previousData]);
 
   useEffect(() => {
     if (isMultiDisplay && stationStateRight.previousData?.stations) {
-      const currentData = monitorDataStationRight;
+      const currentData = stationDataRight;
       currentData[index] = stationStateRight.previousData;
-      setMonitorDataStationRight(currentData);
+      setStationDataRight(currentData);
       setTimeout(() => setSkip(false), pollInterval);
     }
   }, [stationStateRight?.previousData]);

@@ -3,6 +3,7 @@ import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow from './MonitorRow';
 import './MonitorRowContainer.scss';
+import cx from 'classnames'; 
 
 interface IProps {
   departuresLeft: any;
@@ -33,7 +34,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             a.serviceDay -
             (b.realtimeDeparture + b.serviceDay),
         )
-      : departuresRight;
+      : [];
 
   const [leftColumnCount, rightColumnCount, isMultiDisplay] = layout;
 
@@ -46,6 +47,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         departure={sortedDeparturesLeft[i]}
         size={leftColumnCount}
         withSeparator
+        isFirst={i === 0}
       />,
     );
   }
@@ -57,6 +59,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           departure={sortedDeparturesLeft[i]}
           size={rightColumnCount}
           withSeparator
+          isFirst={i === leftColumnCount}
         />,
       );
     }
@@ -67,6 +70,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           departure={sortedDeparturesRight[i]}
           size={rightColumnCount}
           withSeparator
+          isFirst={i === 0}
         />,
       );
     }
@@ -74,21 +78,21 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
 
   return (
     <div className="monitor-container">
-      <div className="left grid">
+      <div className={cx('grid', isMultiDisplay ? 'multi-display' : '')}>
         {isMultiDisplay && <div className="title">{leftTitle}</div>}
-        <div>{t('lineId')}</div>
-        <div>{t('destination')}</div>
-        <div className="time">{t('departureTime')}</div>
+        <div className={cx('header', 'line')}>{t('lineId')}</div>
+        <div className={cx('header', 'destination')}>{t('destination')}</div>
+        <div className={cx('header', 'time')}>{t('departureTime')}</div>
         {leftColumn}
       </div>
       {rightColumnCount > 0 && (
         <>
           <div className="divider" />
-          <div className="right grid">
+          <div className={cx('grid', isMultiDisplay ? 'multi-display' : '')}>
             {isMultiDisplay && <div className="title">{rightTitle}</div>}
-            <div>{t('lineId')}</div>
-            <div>{t('destination')}</div>
-            <div className="time">{t('departureTime')}</div>
+            <div className={cx('header', 'line')}>{t('lineId')}</div>
+            <div className={cx('header', 'destination')}>{t('destination')}</div>
+            <div className={cx('header', 'time')}>{t('departureTime')}</div>
             {rightColumn}
           </div>
         </>

@@ -25,9 +25,9 @@ interface Props {
 }
 
 const TitleItem = props => {
-  const [newTitleLeft, setNewTitleLeft] = useState('');
+  const [titleLeft, setTitleLeft] = useState('');
   const [changedLeft, setChangedLeft] = useState(false);
-  const [newTitleRight, setNewTitleRight] = useState('');
+  const [titleRight, setTitleRight] = useState('');
   const [changedRight, setChangedRight] = useState(false);
   const { cardInfo, side, updateCardInfo, leftItemsHeader, rightItemsHeader } =
     props;
@@ -55,23 +55,23 @@ const TitleItem = props => {
       typeof event.target.selectionStart === 'number' &&
       event.target.selectionStart === 0 &&
       event.target.selectionEnd === event.target.value.length &&
-      event.target.value === (side === 'left' ? newTitleLeft : newTitleRight)
+      event.target.value === (side === 'left' ? titleLeft : titleRight)
     ) {
       if (backspace.concat(space).includes(key)) {
         if (side === 'left') {
-          setNewTitleLeft('');
+          setTitleLeft('');
           setChangedLeft(true);
         } else {
-          setNewTitleRight('');
+          setTitleRight('');
           setChangedRight(true);
         }
       } else if (key.length === 1) {
         event.target.value = key;
         if (side === 'left') {
-          setNewTitleLeft(key);
+          setTitleLeft(key);
           setChangedLeft(true);
         } else {
-          setNewTitleRight(key);
+          setTitleRight(key);
           setChangedRight(true);
         }
       }
@@ -80,10 +80,10 @@ const TitleItem = props => {
 
     if (key && backspace.includes(key)) {
       if (side === 'left') {
-        setNewTitleLeft(newTitleLeft.slice(0, -1));
+        setTitleLeft(titleLeft.slice(0, -1));
         setChangedLeft(true);
       } else {
-        setNewTitleRight(newTitleRight.slice(0, -1));
+        setTitleRight(titleRight.slice(0, -1));
         setChangedRight(true);
       }
       return false;
@@ -92,10 +92,10 @@ const TitleItem = props => {
     if (!key || !enter.includes(key)) {
       if (key.length === 1) {
         if (side === 'left') {
-          setNewTitleLeft(newTitleLeft.concat(key));
+          setTitleLeft(titleLeft.concat(key));
           setChangedLeft(true);
         } else {
-          setNewTitleRight(newTitleRight ? newTitleRight.concat(key) : key);
+          setTitleRight(titleRight ? titleRight.concat(key) : key);
           setChangedRight(true);
         }
       }
@@ -107,7 +107,7 @@ const TitleItem = props => {
       updateCardInfo(
         cardInfo.id,
         `title-${side}`,
-        side === 'left' ? newTitleLeft : newTitleRight ? newTitleRight : '',
+        side === 'left' ? titleLeft : titleRight ? titleRight : '',
       );
       if (side === 'left') {
         setChangedLeft(false);
@@ -118,8 +118,8 @@ const TitleItem = props => {
     return true;
   };
 
-  const valueLeft = changedLeft ? newTitleLeft : props.titleLeft;
-  const valueRight = changedRight ? newTitleRight : props.titleRight;
+  const valueLeft = changedLeft ? titleLeft : props.titleLeft;
+  const valueRight = changedRight ? titleRight : props.titleRight;
 
   return (
     <>
@@ -147,12 +147,12 @@ const TitleItem = props => {
 };
 
 const StopListPlaceHolder = props => {
-  const { title } = props;
+  const { text } = props;
   return (
     <ul className="stops">
       <li className="stop">
         <div className="stop-row-container placeholder">
-          <div className="placeholder-no-stops">{title ? title : ''}</div>
+          <div className="placeholder-no-stops">{text ? text : ''}</div>
         </div>
       </li>
     </ul>
@@ -187,7 +187,7 @@ const StopList = props => {
         />
       )}
       {showStopTitles && leftItems.length === 0 && (
-        <StopListPlaceHolder title={leftItemsPlaceHolder} />
+        <StopListPlaceHolder text={leftItemsPlaceHolder} />
       )}
       <div>
         <ul className="stops">
@@ -218,7 +218,7 @@ const StopList = props => {
         />
       )}
       {showStopTitles && rightItems.length === 0 && (
-        <StopListPlaceHolder title={rightItemsPlaceHolder} />
+        <StopListPlaceHolder text={rightItemsPlaceHolder} />
       )}
       <div>
         <ul className="stops">

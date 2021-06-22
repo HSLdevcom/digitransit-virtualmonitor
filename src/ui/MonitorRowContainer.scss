@@ -17,24 +17,57 @@
     display: grid;
     justify-content: space-between;
     grid-template-columns: 1fr 2fr 1fr;
-    grid-template-rows: 50px auto;
+    grid-template-rows: 35px 10px auto;
+    &.multi-display {
+      grid-template-rows: 75px 35px 10px auto;
+    }
 
-    div {
-      font-size: 24px;
+    .title {
       display: flex;
       align-items: center;
+      font-size: 32px;
+      justify-content: center;
+      grid-column: span 4;
+      grid-row: span 1;
+    }
 
-      &.title {
-        font-size: 28px;
-        justify-content: center;
-        grid-column-start: 1;
-        grid-column-end: 4;
-        grid-row-start: 1;
-        grid-row-end: 1;
+    .header {
+      font-size: 28px;
+
+      &.line {
+        grid-column: span 1;
+      }
+
+      &.destination {
+        grid-column: span 2;
       }
 
       &.time {
-        justify-content: flex-end;
+        grid-column: span 1;
+        text-align: right;
+      }
+    }
+
+    .row {
+      &.line {
+        grid-column: span 1;
+      }
+
+      &.destination-two-rows {
+        grid-column: span 2;
+        span {
+          position: relative;
+          top: -30px;
+          font-size: 0.5em;
+          &::before {
+            content: "\A";
+            white-space: pre;
+          }
+        }
+      }
+
+      &.time {
+        grid-column: span 1;
       }
     }
   }
@@ -46,9 +79,11 @@
 }
 
 .separator {
-  grid-column: span 3;
+  grid-column: span 4;
   border-top: 5px dotted #fff;
-  height: 0;
+  &.first {
+    border-top: 5px solid #fff;
+  }
 }
 
 .departure-time {

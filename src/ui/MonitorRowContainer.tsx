@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow from './MonitorRow';
 import './MonitorRowContainer.scss';
-import cx from 'classnames'; 
+import cx from 'classnames';
 
 interface IProps {
   departuresLeft: any;
@@ -91,7 +91,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           <div className={cx('grid', isMultiDisplay ? 'multi-display' : '')}>
             {isMultiDisplay && <div className="title">{rightTitle}</div>}
             <div className={cx('header', 'line')}>{t('lineId')}</div>
-            <div className={cx('header', 'destination')}>{t('destination')}</div>
+            <div className={cx('header', 'destination')}>
+              {t('destination')}
+            </div>
             <div className={cx('header', 'time')}>{t('departureTime')}</div>
             {rightColumn}
           </div>

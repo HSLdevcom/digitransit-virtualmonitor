@@ -52,7 +52,6 @@ const MonitorRow: FC<IProps> = ({
     ? destination.substring(destination.indexOf(' via') + 1)
     : '';
 
-  console.log('departure:', departure);
   return (
     <>
       {withSeparator && (

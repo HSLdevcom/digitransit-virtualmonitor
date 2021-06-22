@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import arrayMove from 'array-move';
 import { v4 as uuid } from 'uuid';
@@ -94,6 +94,16 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);
+  useEffect(() => {
+    const hash: any = location.search.split('cont=');
+    if (hash[1]) {
+      monitorAPI.get(hash[1]).then((r: any) => {
+        if (r?.cards?.length) {
+          setStopCardList(r.cards);
+        }
+      });
+    }
+  }, []);
 
   const openPreview = () => {
     setOpen(true);
@@ -205,7 +215,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       contenthash: hash(stopCardList, {
         algorithm: 'md5',
         encoding: 'base64',
-      }).replace('/', '-'),
+      }).replaceAll('/', '-'),
     };
     monitorAPI.create(newCard).then(res => {
       setRedirect(true);

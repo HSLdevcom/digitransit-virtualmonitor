@@ -4,6 +4,7 @@ import Icon from './Icon';
 import isEqual from 'lodash/isEqual';
 import './LayoutModal.scss';
 import Modal from 'react-modal';
+import { withTranslation, WithTranslation } from 'react-i18next';
 Modal.setAppElement('#root');
 
 interface Option {
@@ -138,25 +139,27 @@ const layouts = [
   },
 ];
 
-const LayoutModal: FC<Props> = (props: Props) => {
-  const [selected, setSelected] = useState(props.option);
+const LayoutModal: FC<Props & WithTranslation> = ({isOpen, option, onClose, t}) => {
+  const [selected, setSelected] = useState(option);
   const handleClose = () => {
-    props.onClose(selected);
+    onClose(selected);
   };
   const onClick = option => {
     setSelected(option);
   };
   return (
     <Modal
-      isOpen={props.isOpen}
-      onRequestClose={() => props.onClose(selected)}
+      isOpen={isOpen}
+      onRequestClose={() => onClose(selected)}
       portalClassName="modal"
     >
+      <div className="layout-modal-content-container">
+      <h2 className="layout-modal-header">{t('layoutModalHeader')}</h2>
       <div>
         {layouts.map(l => {
           return (
             <div className="row">
-              <span className="header"> {l.label}</span>
+              <h3 className="row-header"> {l.label}</h3>
               <div className="options">
                 {l.options.map(option => {
                   return (
@@ -178,13 +181,17 @@ const LayoutModal: FC<Props> = (props: Props) => {
             </div>
           );
         })}
-        <button className="close-button" onClick={handleClose}>
-          {' '}
-          Sulje{' '}
-        </button>
+        
+      </div>
+      <div className="button-container" >
+      <button className="close-button" onClick={handleClose}>
+        {' '}
+        Sulje{' '}
+      </button>
+      </div>
       </div>
     </Modal>
   );
 };
 
-export default LayoutModal;
+export default withTranslation('translations')(LayoutModal);

@@ -48,7 +48,6 @@
     "react-modal": "^3.11.2",
     "react-moment": "^0.7.9",
     "react-promise": "^2.1.0",
-    "react-router-breadcrumbs-hoc": "^4.0.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "react-select": "^4.3.1",

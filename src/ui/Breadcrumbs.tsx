@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import './Breadcrubms.scss';
+import './Breadcrumbs.scss';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import i18n from '../i18n';

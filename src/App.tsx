@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import Breadcrumbs from './ui/Breadcrumbs';
 import IndexPage from './ui/IndexPage';
 import Banner from './ui/Banner';
 import ConfigurationDisplay from './ui/ConfigurationDisplay';
@@ -67,7 +68,6 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
       uri: monitorConfig.uri,
       cache: new InMemoryCache(),
     });
-
     let helpPageUrlParamText = '';
     let helpPageurlMultipleStopsText = '';
     let helpPageUrlParamFindText = '';
@@ -102,6 +102,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
                   <Banner config={monitorConfig} />
+                  <Breadcrumbs />
                   <CreateViewPage config={monitorConfig} />
                 </>
               )}
@@ -121,6 +122,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
                   <Banner config={monitorConfig} />
+                  <Breadcrumbs />
                   <HelpPage
                     client={client}
                     urlParamUsageText={helpPageUrlParamText}
@@ -193,6 +195,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
                   <Banner config={monitorConfig} />
+                  <Breadcrumbs/>
                   <IndexPage />
                 </>
               )}

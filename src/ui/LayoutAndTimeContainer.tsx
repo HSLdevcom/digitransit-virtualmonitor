@@ -35,7 +35,6 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
     orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;
   const layouts = [];
   layoutRows.forEach(row => layouts.push(...row.options));
-  console.log(layoutRows, layouts);
 
   let layout = layouts.find(l => l.value === cardInfo.layout.toString());
   if (!layout) {

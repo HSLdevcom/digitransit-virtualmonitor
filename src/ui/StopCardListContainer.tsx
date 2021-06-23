@@ -107,7 +107,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         if (r?.cards?.length) {
           setStopCardList(r.cards);
           if (r.languages) {
-            setLanguages(r.languages)
+            setLanguages(r.languages);
           }
         }
       });

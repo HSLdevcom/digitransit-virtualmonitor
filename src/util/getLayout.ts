@@ -33,6 +33,6 @@ export const getLayout = (layout: number) => {
     case 16:
       return [18, 0, false];
     case 17:
-      return [30, 0, false];
+      return [18, 0, false];
   }
 };

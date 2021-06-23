@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import { verticalLayouts, horizontalLayouts } from './Layouts';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 import './LayoutAndTimeContainer.scss';
@@ -9,109 +10,8 @@ import { ICardInfo } from './CardInfo';
 interface IProps {
   cardInfo: ICardInfo;
   updateCardInfo: (cardId: number, type: string, value: string) => void;
+  orientation: string;
 }
-
-const layouts = [
-  {
-    value: '1',
-    label: (
-      <>
-        <Icon img="layout1" height={36} width={64} />
-        <span className="label">4</span>
-      </>
-    ),
-  },
-  {
-    value: '2',
-    label: (
-      <>
-        <Icon img="layout2" height={36} width={64} />
-        <span className="label">8</span>
-      </>
-    ),
-  },
-  {
-    value: '3',
-    label: (
-      <>
-        <Icon img="layout3" height={36} width={64} />
-        <span className="label">12</span>
-      </>
-    ),
-  },
-  {
-    value: '4',
-    label: (
-      <>
-        <Icon img="layout4" height={36} width={64} />
-        <span className="label">4+4</span>
-      </>
-    ),
-  },
-  {
-    value: '5',
-    label: (
-      <>
-        <Icon img="layout5" height={36} width={64} />
-        <span className="label">8+8</span>
-      </>
-    ),
-  },
-  {
-    value: '6',
-    label: (
-      <>
-        <Icon img="layout6" height={36} width={64} />
-        <span className="label">12+12</span>
-      </>
-    ),
-  },
-  {
-    value: '7',
-    label: (
-      <>
-        <Icon img="layout7" height={36} width={64} />
-        <span className="label">4+8</span>
-      </>
-    ),
-  },
-  {
-    value: '8',
-    label: (
-      <>
-        <Icon img="layout8" height={36} width={64} />
-        <span className="label">8+12</span>
-      </>
-    ),
-  },
-  {
-    value: '9',
-    label: (
-      <>
-        <Icon img="layout9" height={36} width={64} />
-        <span className="label">4+4</span>
-      </>
-    ),
-  },
-  {
-    value: '10',
-    label: (
-      <>
-        <Icon img="layout10" height={36} width={64} />
-        <span className="label">8+8</span>
-      </>
-    ),
-  },
-  {
-    value: '11',
-    label: (
-      <>
-        <Icon img="layout11" height={36} width={64} />
-        <span className="label">12+12</span>
-      </>
-    ),
-  },
-];
 
 const durations = [
   { value: '3', label: '3s' },
@@ -126,13 +26,20 @@ const durations = [
 const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
   cardInfo,
   updateCardInfo,
+  orientation,
 }) => {
   const placeHolder = durations.find(
     duration => duration.value === cardInfo.duration.toString(),
   ).label;
-  const layout = layouts.find(
-    layout => layout.value === cardInfo.layout.toString(),
-  );
+  const layoutRows =
+    orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;
+  const layouts = [];
+  layoutRows.forEach(row => layouts.push(...row.options));
+
+  let layout = layouts.find(l => l.value === cardInfo.layout.toString());
+  if (!layout) {
+    layout = layouts[0];
+  }
   const layoutButton = layout.label;
 
   const [isOpen, changeOpen] = useState(false);
@@ -153,7 +60,6 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
       updateCardInfo(cardInfo.id, 'duration', option.value);
     }
   };
-
   return (
     <div className="layout-and-time-container">
       <div role="button" onClick={setOpen}>
@@ -170,7 +76,12 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
           handleChange={handleChange}
         />
       </div>
-      <LayoutModal isOpen={isOpen} option={layout} onClose={getLayout} />
+      <LayoutModal
+        orientation={orientation}
+        isOpen={isOpen}
+        option={layout || layouts[0]}
+        onClose={getLayout}
+      />
     </div>
   );
 };

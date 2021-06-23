@@ -52,7 +52,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
                     return (
                       <div
                         className={cx(
-                          'label',
+                          'option',
                           isEqual(option.value, selected.value)
                             ? 'label-selected'
                             : '',

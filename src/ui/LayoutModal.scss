@@ -38,10 +38,10 @@
 
     .options {
       display: flex;
-      .label:last-child {
+      .option:last-child {
         margin-right: 0;
       }
-      .label {
+      .option {
         display: flex;
         flex-direction: column;
         border: 1px solid #ddd;
@@ -62,7 +62,7 @@
           left: 7px;
         }
 
-        .label-text {
+        .label {
           display: flex;
           justify-content: center;
           position: relative;

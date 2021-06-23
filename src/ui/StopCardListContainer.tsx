@@ -106,6 +106,9 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       monitorAPI.get(hash[1]).then((r: any) => {
         if (r?.cards?.length) {
           setStopCardList(r.cards);
+          if (r.languages) {
+            setLanguages(r.languages)
+          }
         }
       });
     }

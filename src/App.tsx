@@ -195,7 +195,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
                   <Banner config={monitorConfig} />
-                  <Breadcrumbs/>
+                  <Breadcrumbs />
                   <IndexPage />
                 </>
               )}

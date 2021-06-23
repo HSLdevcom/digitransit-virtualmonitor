@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { gql, QueryResult, useQuery } from '@apollo/client';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
 import Logo from './logo/Logo';
@@ -110,6 +110,7 @@ interface IView {
   layout: number;
   duration: number;
 }
+
 const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
   const departures = [];
   stop.stoptimesForPatterns.forEach(stoptimeList => {
@@ -117,6 +118,51 @@ const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
       departures.push(...stoptimeList.stoptimes);
     }
   });
+  return departures;
+};
+
+const loopStops = (data, stops) => {
+  const departures: Array<IDeparture> = [];
+  data.stops.forEach(stop => {
+    let routesToHide: Array<string> = stops
+      .find(s => {
+        return s.gtfsId === stop.gtfsId;
+      })
+      ?.hiddenRoutes.map(route => route.code);
+    if (!routesToHide || !routesToHide[0]) {
+      routesToHide = [];
+    }
+    const stoptimes: Array<any> = stops.find(s => {
+      return s.gtfsId === stop.gtfsId;
+    })?.stoptimes;
+    departures.push(...getDeparturesWithoutHiddenRoutes(stop, routesToHide));
+  });
+  return departures;
+};
+
+const loopStations = (data, stops) => {
+  const departures: Array<IDeparture> = [];
+  data.stations
+    .filter(s => s)
+    .forEach(station => {
+      const routes = [];
+      station.stops.forEach(stop => routes.push(...stop.routes));
+      let routesToHide = stops
+        .find(s => {
+          return s.gtfsId === station.gtfsId;
+        })
+        ?.hiddenRoutes.map(route => route.code);
+      if (!routesToHide || !routesToHide[0]) {
+        routesToHide = [];
+      }
+      const stationWithRoutes = {
+        ...station,
+        routes: routes,
+      };
+      departures.push(
+        ...getDeparturesWithoutHiddenRoutes(stationWithRoutes, routesToHide),
+      );
+    });
   return departures;
 };
 interface IProps {
@@ -127,110 +173,192 @@ interface IProps {
   readonly time?: EpochMilliseconds;
 }
 const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
-  const [monitorData, setMonitorData] = useState([]);
   const [skip, setSkip] = useState(false);
-  const [stopDepartures, setStopDepartures] = useState([]);
-  const [stationDepartures, setStationDepartures] = useState([]);
+  const [stopDataLeft, setStopDataLeft] = useState([]);
+  const [stopDataRight, setStopDataRight] = useState([]);
+  const [stationDataLeft, setStationDataLeft] = useState([]);
+  const [stationDataRight, setStationDataRight] = useState([]);
+  const [stopDeparturesLeft, setStopDeparturesLeft] = useState([]);
+  const [stopDeparturesRight, setStopDeparturesRight] = useState([]);
+  const [stationDeparturesLeft, setStationDeparturesLeft] = useState([]);
+  const [stationDeparturesRight, setStationDeparturesRight] = useState([]);
   const [stopsFetched, setStopsFetched] = useState(false);
   const [stationsFetched, setStationsFetched] = useState(false);
 
-  const stationIds = [];
-  const stopIds = [];
   // Don't poll on preview
   const pollInterval = noPolling ? 0 : 30000;
-  view.columns.left.stops.forEach(stop =>
+  const isMultiDisplay = getLayout(view.layout)[2];
+
+  const stopIdsLeft = [];
+  const stopIdsRight = [];
+  const stationIdsLeft = [];
+  const stationIdsRight = [];
+
+  view.columns.left.stops.forEach(stop => {
     stop.locationType === 'STOP'
-      ? stopIds.push(stop.gtfsId)
-      : stationIds.push(stop.gtfsId),
-  );
-  const { loading, error, data, previousData } = useQuery(GET_DEPARTURES, {
-    variables: { ids: stopIds, numberOfDepartures: 24 },
+      ? stopIdsLeft.push(stop.gtfsId)
+      : stationIdsLeft.push(stop.gtfsId);
+  });
+
+  if (isMultiDisplay) {
+    view.columns.right.stops.forEach(stop => {
+      stop.locationType === 'STOP'
+        ? stopIdsRight.push(stop.gtfsId)
+        : stationIdsRight.push(stop.gtfsId);
+    });
+  }
+
+  const stopStateLeft = useQuery(GET_DEPARTURES, {
+    variables: { ids: stopIdsLeft, numberOfDepartures: 24 },
     pollInterval: pollInterval,
     skip: skip,
   });
-  const stationState = useQuery(GET_DEPARTURES_FOR_STATIONS, {
-    variables: { ids: stationIds, numberOfDepartures: 24 },
+
+  const stationStateLeft = useQuery(GET_DEPARTURES_FOR_STATIONS, {
+    variables: { ids: stationIdsLeft, numberOfDepartures: 24 },
     pollInterval: pollInterval,
     skip: skip,
   });
+
+  const stopStateRight = useQuery(GET_DEPARTURES, {
+    variables: { ids: stopIdsRight, numberOfDepartures: 24 },
+    pollInterval: pollInterval,
+    skip: !isMultiDisplay || skip,
+  });
+
+  const stationStateRight = useQuery(GET_DEPARTURES_FOR_STATIONS, {
+    variables: { ids: stationIdsRight, numberOfDepartures: 24 },
+    pollInterval: pollInterval,
+    skip: !isMultiDisplay || skip,
+  });
+
   useEffect(() => {
-    if (monitorData[index]?.stations) {
+    if (stopDataLeft[index]?.stops) {
       setSkip(true);
     }
-  }, [monitorData]);
+  }, [stopDataLeft]);
+
   useEffect(() => {
-    if (stationState.previousData?.stations) {
-      const foo = monitorData;
-      foo[index] = stationState.previousData;
-      setMonitorData(foo);
+    if (stopDataRight[index]?.stops) {
+      setSkip(true);
+    }
+  }, [stopDataRight]);
+
+  useEffect(() => {
+    if (stationDataLeft[index]?.stations) {
+      setSkip(true);
+    }
+  }, [stationDataLeft]);
+
+  useEffect(() => {
+    if (stationDataRight[index]?.stations) {
+      setSkip(true);
+    }
+  }, [stationDataRight]);
+
+  useEffect(() => {
+    if (stopStateLeft.previousData?.stations) {
+      const currentData = stopDataLeft;
+      currentData[index] = stopStateLeft.previousData;
+      setStopDataLeft(currentData);
       setTimeout(() => setSkip(false), pollInterval);
     }
-  }, [stationState.previousData]);
+  }, [stopStateLeft?.previousData]);
+
   useEffect(() => {
-    if (data?.stops) {
-      const departures: Array<IDeparture> = [];
-      const stops = view.columns.left.stops;
-      data.stops.forEach(stop => {
-        let routesToHide: Array<string> = stops
-          .find(s => {
-            return s.gtfsId === stop.gtfsId;
-          })
-          ?.hiddenRoutes.map(route => route.code);
-        if (!routesToHide[0]) {
-          routesToHide = [];
-        }
-        departures.push(
-          ...getDeparturesWithoutHiddenRoutes(stop, routesToHide),
-        );
-      });
-      setStopDepartures(departures);
+    if (isMultiDisplay && stopStateRight.previousData?.stations) {
+      const currentData = stopDataRight;
+      currentData[index] = stopStateRight.previousData;
+      setStopDataRight(currentData);
+      setTimeout(() => setSkip(false), pollInterval);
+    }
+  }, [stopStateRight?.previousData]);
+
+  useEffect(() => {
+    if (stationStateLeft.previousData?.stations) {
+      const currentData = stationDataLeft;
+      currentData[index] = stationStateLeft.previousData;
+      setStationDataLeft(currentData);
+      setTimeout(() => setSkip(false), pollInterval);
+    }
+  }, [stationStateLeft?.previousData]);
+
+  useEffect(() => {
+    if (isMultiDisplay && stationStateRight.previousData?.stations) {
+      const currentData = stationDataRight;
+      currentData[index] = stationStateRight.previousData;
+      setStationDataRight(currentData);
+      setTimeout(() => setSkip(false), pollInterval);
+    }
+  }, [stationStateRight?.previousData]);
+
+  useEffect(() => {
+    if (stopStateLeft.data?.stops) {
+      const departures: Array<IDeparture> = loopStops(
+        stopStateLeft.data,
+        view.columns.left.stops,
+      );
+      setStopDeparturesLeft(departures);
+      setStopsFetched(!isMultiDisplay ? true : false);
+    }
+    if (!stopIdsLeft.length) {
+      setStopsFetched(!isMultiDisplay ? true : false);
+    }
+  }, [stopStateLeft]);
+
+  useEffect(() => {
+    if (isMultiDisplay && stopStateRight.data?.stops) {
+      const departures: Array<IDeparture> = loopStops(
+        stopStateRight.data,
+        view.columns.right.stops,
+      );
+      setStopDeparturesRight(departures);
       setStopsFetched(true);
     }
-    if (!stopIds.length) {
+    if (isMultiDisplay && !stopIdsRight.length) {
       setStopsFetched(true);
     }
-  }, [data]);
+  }, [stopStateRight]);
+
   useEffect(() => {
-    if (stationState.data?.stations) {
-      const stops = view.columns.left.stops;
-      const departures: Array<IDeparture> = [];
-      stationState.data.stations
-        .filter(s => s)
-        .forEach(station => {
-          const routes = [];
-          station.stops.forEach(stop => routes.push(...stop.routes));
-          let routesToHide = stops
-            .find(s => {
-              return s.gtfsId === station.gtfsId;
-            })
-            ?.hiddenRoutes.map(route => route.code);
-          if (!routesToHide) {
-            routesToHide = [];
-          }
-          const stationWithRoutes = {
-            ...station,
-            routes: routes,
-          };
-          departures.push(
-            ...getDeparturesWithoutHiddenRoutes(
-              stationWithRoutes,
-              routesToHide,
-            ),
-          );
-        });
-      setStationDepartures(departures);
+    if (stationStateLeft.data?.stations) {
+      const departures: Array<IDeparture> = loopStations(
+        stationStateLeft.data,
+        view.columns.left.stops,
+      );
+      setStationDeparturesLeft(departures);
+      setStationsFetched(isMultiDisplay ? false : true);
+    }
+    if (!stationIdsLeft.length) {
+      setStationsFetched(isMultiDisplay ? false : true);
+    }
+  }, [stationStateLeft]);
+
+  useEffect(() => {
+    if (isMultiDisplay && stationStateRight.data?.stations) {
+      const departures: Array<IDeparture> = loopStations(
+        stationStateRight.data,
+        view.columns.right.stops,
+      );
+      setStationDeparturesRight(departures);
       setStationsFetched(true);
     }
-    if (!stationIds.length) {
-      setStopsFetched(true);
+    if (isMultiDisplay && !stationIdsRight.length) {
+      setStationsFetched(true);
     }
-  }, [stationState]);
+  }, [stationStateRight]);
+
+  const loading = !isMultiDisplay
+    ? stopStateLeft.loading || stationStateLeft.loading
+    : stopStateLeft.loading ||
+      stopStateRight.loading ||
+      stationStateLeft.loading ||
+      stationStateRight.loading;
 
   if (loading) {
     return <div>LOADING</div>;
   }
   const currentTime = time ? time : new Date().getTime();
-  const isMultiDisplay = getLayout(view.layout)[2];
   return (
     <div className="main-content-container">
       <Titlebar>
@@ -253,7 +381,8 @@ const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
       </Titlebar>
       {stationsFetched && stopsFetched && (
         <MonitorRowContainer
-          departures={[...stopDepartures, ...stationDepartures]}
+          departuresLeft={[...stopDeparturesLeft, ...stationDeparturesLeft]}
+          departuresRight={[...stopDeparturesRight, ...stationDeparturesRight]}
           layout={getLayout(view.layout)}
           leftTitle={view.columns.left.title}
           rightTitle={view.columns.right.title}

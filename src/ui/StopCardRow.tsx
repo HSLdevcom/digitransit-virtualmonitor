@@ -340,11 +340,11 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
       </div>
       <StopListContainer
         stops={columns}
-        cardId={cardInfo.id}
-        layout={cardInfo.layout}
         onStopDelete={onStopDelete}
         onStopMove={onStopMove}
         setStops={setStops}
+        cardInfo={cardInfo}
+        updateCardInfo={updateCardInfo}
       />
     </div>
   );

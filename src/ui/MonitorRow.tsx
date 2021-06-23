@@ -18,9 +18,15 @@ interface IProps {
   departure: IDeparture;
   size: number;
   withSeparator: boolean;
+  isFirst?: boolean;
 }
 
-const MonitorRow: FC<IProps> = ({ departure, size, withSeparator }) => {
+const MonitorRow: FC<IProps> = ({
+  departure,
+  size,
+  withSeparator,
+  isFirst = false,
+}) => {
   let className;
   switch (size) {
     case 4:
@@ -33,14 +39,32 @@ const MonitorRow: FC<IProps> = ({ departure, size, withSeparator }) => {
       className = 'small';
       break;
   }
+  const destination =
+    departure?.headsign && departure?.headsign.endsWith(' via')
+      ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
+      : departure?.headsign;
+
+  const splitDestination = destination && destination.includes(' via');
+  const destinationWithoutVia = splitDestination
+    ? destination.substring(0, destination.indexOf(' via'))
+    : destination;
+  const viaDestination = splitDestination
+    ? destination.substring(destination.indexOf(' via') + 1)
+    : '';
+
   return (
     <>
-      <div className="separator"></div>
-      <div className={cx('short-name', className)}>
-        {departure?.trip.route.shortName}
+      {withSeparator && (
+        <div className={cx('separator', isFirst ? 'first' : '')}></div>
+      )}
+      <div className={cx('row', 'line', className)}>
+        {departure?.trip?.route.shortName}
       </div>
-      <div className={cx('headsign', className)}>{departure?.headsign}</div>
-      <div className={cx('departure-time', className)}>
+      <div className={cx('row', 'destination-two-rows', className)}>
+        {destinationWithoutVia}
+        <span className="via">{viaDestination}&nbsp;</span>
+      </div>
+      <div className={cx('row', 'time', className)}>
         {getStartTimeWithColon(departure?.realtimeDeparture)}
       </div>
     </>

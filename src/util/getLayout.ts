@@ -22,5 +22,17 @@ export const getLayout = (layout: number) => {
       return [8, 8, true];
     case 11:
       return [12, 12, true];
+    case 12:
+      return [8, 0, false];
+    case 13:
+      return [12, 0, false];
+    case 14:
+      return [24, 0, false];
+    case 15:
+      return [10, 0, false];
+    case 16:
+      return [18, 0, false];
+    case 17:
+      return [18, 0, false];
   }
 };

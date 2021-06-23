@@ -22,7 +22,9 @@ import { ReactComponent as MoveUp } from './icons/move-up.svg';
 import { ReactComponent as MoveBothDown } from './icons/move-both-down.svg';
 import { ReactComponent as MoveBothUp } from './icons/move-both-up.svg';
 import { ReactComponent as MoveDivider } from './icons/move-divider.svg';
-
+import { ReactComponent as Rectangle } from './icons/rectangle.svg';
+import { ReactComponent as RectangleSelected } from './icons/rectangle-selected.svg';
+import { ReactComponent as Checkbox } from './icons/checkbox.svg';
 export interface IIconMapProps {
   color?: string;
   fill?: string;
@@ -65,6 +67,9 @@ const IconMap = (style: IIconMapProps) => {
     'move-both-down': <MoveBothDown style={style} />,
     'move-both-up': <MoveBothUp style={style} />,
     'move-divider': <MoveDivider style={style} />,
+    rectangle: <Rectangle style={style} />,
+    'rectangle-selected': <RectangleSelected style={style} />,
+    checkbox: <Checkbox style={style} />,
   };
 };
 /**

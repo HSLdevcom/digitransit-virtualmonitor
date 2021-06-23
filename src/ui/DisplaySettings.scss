@@ -1,0 +1,72 @@
+.display-settings-container {
+  display: flex;
+  margin: 26px 0 0 60px;
+  width: 780px;
+  justify-content: space-between;
+  font-family: 'Roboto';
+}
+
+.display-language-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  .language-alert {
+    position: absolute;
+    color: red;
+    right: 0;
+    font-size: 0.813rem;
+  }
+  .language-controls {
+    padding: 0 10px;
+    margin-top: 6px;
+    height: 44px;
+    display: flex;
+    border-radius: 5px;
+    background-color: white;
+    align-items: center;
+    div {
+      margin-right: 10px;
+    }
+    .option-checkbox-container {
+      margin-left: 10px;
+      width: 20px;
+      height:20px;
+      
+    }
+  }
+}
+.orientation-header,
+.language-header {
+  margin-left: 8px
+}
+
+.display-orientation-container {
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  
+  .orientation-controls {
+    height: 44px;
+    display: flex;
+    margin-top: 6px;
+    .orientation-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      border: none;
+      background-color: white;
+      border-radius: 0 5px 5px 0;
+      div {
+        margin-left: 8px;
+      }
+    }
+    .orientation-button:not(.selected) {
+      cursor: pointer;
+    }
+  }
+  .orientation-button:first-child {
+    border-right: 1px solid #ddd;
+    border-radius: 5px 0 0 5px;
+  }
+}

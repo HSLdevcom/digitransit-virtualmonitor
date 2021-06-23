@@ -82,6 +82,7 @@ const GET_STATION = gql`
 `;
 
 interface IProps {
+  readonly orientation: string;
   readonly feedIds: Array<string>;
   readonly cardsCount: number;
   readonly cardInfo: ICardInfo;
@@ -109,6 +110,7 @@ interface IProps {
 }
 
 const StopCardRow: FC<IProps & WithTranslation> = ({
+  orientation,
   feedIds,
   cardsCount,
   cardInfo,
@@ -331,6 +333,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
           />
         </div>
         <LayoutAndTimeContainer
+          orientation={orientation}
           cardInfo={cardInfo}
           updateCardInfo={updateCardInfo}
         />

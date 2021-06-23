@@ -3,67 +3,104 @@ import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow from './MonitorRow';
 import './MonitorRowContainer.scss';
+import cx from 'classnames';
 
 interface IProps {
-  departures: any;
+  departuresLeft: any;
+  departuresRight: any;
   layout: any;
   leftTitle: string;
   rightTitle: string;
+  isPreview: boolean;
+  isLandscape: boolean;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
-  departures,
+  departuresLeft,
+  departuresRight,
   layout,
   leftTitle,
   rightTitle,
+  isPreview,
+  isLandscape,
   t,
 }) => {
-  const sortedDepartures = departures.sort(
+  const sortedDeparturesLeft = departuresLeft.sort(
     (a, b) =>
       a.realtimeDeparture + a.serviceDay - (b.realtimeDeparture + b.serviceDay),
   );
+
+  const sortedDeparturesRight =
+    departuresRight && departuresRight.length > 0
+      ? departuresRight.sort(
+          (a, b) =>
+            a.realtimeDeparture +
+            a.serviceDay -
+            (b.realtimeDeparture + b.serviceDay),
+        )
+      : [];
+
   const [leftColumnCount, rightColumnCount, isMultiDisplay] = layout;
 
-  const leftColumn = [],
-    rightColumn = [];
+  const leftColumn = [];
+  const rightColumn = [];
 
   for (let i = 0; i < leftColumnCount; i++) {
     leftColumn.push(
       <MonitorRow
-        departure={sortedDepartures[i]}
+        departure={sortedDeparturesLeft[i]}
         size={leftColumnCount}
         withSeparator
+        isFirst={i === 0}
       />,
     );
   }
 
-  for (let i = leftColumnCount; i < leftColumnCount + rightColumnCount; i++) {
-    rightColumn.push(
-      <MonitorRow
-        departure={sortedDepartures[i]}
-        size={rightColumnCount}
-        withSeparator
-      />,
-    );
+  if (isLandscape) {
+    if (!isMultiDisplay) {
+      for (let i = leftColumnCount; i < leftColumnCount + rightColumnCount; i++) {
+        rightColumn.push(
+          <MonitorRow
+            departure={sortedDeparturesLeft[i]}
+            size={rightColumnCount}
+            withSeparator
+            isFirst={i === leftColumnCount}
+          />,
+        );
+      }
+    } else {
+      for (let i = 0; i < rightColumnCount; i++) {
+        rightColumn.push(
+          <MonitorRow
+            departure={sortedDeparturesRight[i]}
+            size={rightColumnCount}
+            withSeparator
+            isFirst={i === 0}
+          />,
+        );
+      }
+    }
   }
 
   return (
     <div className="monitor-container">
-      <div className="left grid">
+      <div className={cx('grid', isMultiDisplay ? 'multi-display' : '')}>
         {isMultiDisplay && <div className="title">{leftTitle}</div>}
-        <div>{t('lineId')}</div>
-        <div>{t('destination')}</div>
-        <div className="time">{t('departureTime')}</div>
+        <div className={cx('header', 'line')}>{t('lineId')}</div>
+        <div className={cx('header', 'destination')}>{t('destination')}</div>
+        <div className={cx('header', 'time')}>{t('departureTime')}</div>
         {leftColumn}
       </div>
-      {rightColumnCount > 0 && (
+      {isLandscape && rightColumnCount > 0 && (
         <>
           <div className="divider" />
-          <div className="right grid">
+          <div className={cx('grid', isMultiDisplay ? 'multi-display' : '')}>
             {isMultiDisplay && <div className="title">{rightTitle}</div>}
-            <div>{t('lineId')}</div>
-            <div>{t('destination')}</div>
-            <div className="time">{t('departureTime')}</div>
+            <div className={cx('header', 'line')}>{t('lineId')}</div>
+            <div className={cx('header', 'destination')}>
+              {t('destination')}
+            </div>
+            <div className={cx('header', 'time')}>{t('departureTime')}</div>
             {rightColumn}
           </div>
         </>

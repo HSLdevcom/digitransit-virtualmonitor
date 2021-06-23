@@ -8,6 +8,7 @@ import NysseLogo from './NysseLogo';
 interface ICommonProps {
   readonly monitorConfig?: any;
   readonly isPreview?: boolean;
+  readonly isLandscape?: boolean;
 }
 
 class Logo extends React.Component<ICommonProps> {
@@ -22,25 +23,25 @@ class Logo extends React.Component<ICommonProps> {
       switch (feedId) {
         case 'tampere':
           return (
-            <div id={'title-logo'}>
+            <div className={'title-logo'}>
               <NysseLogo style={{ height: isPreview ? '2.5em' : '5em' }} />
             </div>
           );
         case 'hsl':
           return (
-            <div id={'title-logo'}>
+            <div className={'title-logo'}>
               <HslLogo style={{ height: isPreview ? '2em' : '4em' }} />
             </div>
           );
         case 'matka':
           return (
-            <div id={'title-logo'}>
+            <div className={'title-logo'}>
               <MatkaLogo style={{ maxHeight: isPreview ? '2em' : '4em' }} />
             </div>
           );
         case 'linkki':
           return (
-            <div id={'title-logo'}>
+            <div className={'title-logo'}>
               <LinkkiLogo style={{ maxHeight: isPreview ? '2em' : '4em' }} />
             </div>
           );

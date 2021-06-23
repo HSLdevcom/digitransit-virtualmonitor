@@ -1,11 +1,11 @@
 import * as React from 'react';
 
-import './Titlebar.css';
+import './Titlebar.scss';
 
 export interface ITitlebarProps {
   readonly children: React.ReactNode;
 }
 
 export default (props: ITitlebarProps) => (
-  <div id={'title-bar'}>{props.children}</div>
+  <div className="title-bar">{props.children}</div>
 );

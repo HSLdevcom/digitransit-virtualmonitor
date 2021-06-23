@@ -6,10 +6,16 @@ interface IProps {
   currentTime?: EpochMilliseconds;
   updateInterval?: Milliseconds;
   isPreview?: boolean;
+  isLandscape?: boolean;
 }
 
-const TitlebarTime: FC<IProps> = ({ currentTime, updateInterval, isPreview = false }) => (
-  <div id={'title-time'} style={{ fontSize: isPreview ? 'min(2vw, 2em)' : 'min(4vw, 4em)' }}>
+const TitlebarTime: FC<IProps> = ({
+  currentTime,
+  updateInterval,
+  isPreview = false,
+  isLandscape = false,
+}) => (
+  <div className="title-time">
     <AutoMoment currentTime={currentTime} updateInterval={updateInterval} />
   </div>
 );

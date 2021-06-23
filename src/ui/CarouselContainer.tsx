@@ -32,9 +32,16 @@ interface IProps {
   noPolling?: boolean;
   time?: EpochMilliseconds;
   isPreview?: boolean;
+  isLandscape?: boolean;
 }
 
-const CarouselContainer: FC<IProps> = ({ views, noPolling, time, isPreview = false }) => {
+const CarouselContainer: FC<IProps> = ({
+  views,
+  noPolling,
+  time,
+  isPreview = false,
+  isLandscape = true,
+}) => {
   const len = views.length;
   const [current, setCurrent] = useState(0);
   useEffect(() => {
@@ -52,6 +59,7 @@ const CarouselContainer: FC<IProps> = ({ views, noPolling, time, isPreview = fal
       noPolling={noPolling}
       time={time}
       isPreview={isPreview}
+      isLandscape={isLandscape}
     />
   );
 };

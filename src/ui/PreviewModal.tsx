@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import Modal from 'react-modal';
 import CarouselContainer from './CarouselContainer';
 import Icon from './Icon';
+import cx from 'classnames';
 
 import './PreviewModal.scss';
 Modal.setAppElement('#root');
@@ -35,6 +36,7 @@ interface Props {
   view: IView;
   isOpen: boolean;
   onClose: (boolean) => void;
+  isLandscape: boolean;
 }
 const PreviewModal: FC<Props> = (props: Props) => {
   const currentMillis = new Date().getTime();
@@ -43,7 +45,7 @@ const PreviewModal: FC<Props> = (props: Props) => {
       <Modal
         isOpen={props.isOpen}
         onRequestClose={() => props.onClose(false)}
-        portalClassName="preview"
+        portalClassName={cx('preview', !props.isLandscape ? 'portrait' : '')}
       >
         <div className="title-and-close">
           <div className="title">Esikatselu</div>
@@ -61,6 +63,7 @@ const PreviewModal: FC<Props> = (props: Props) => {
             noPolling
             time={currentMillis}
             isPreview
+            isLandscape={props.isLandscape}
           />
         </div>
       </Modal>

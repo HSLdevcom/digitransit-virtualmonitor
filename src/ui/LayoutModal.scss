@@ -10,17 +10,20 @@
     margin-right: -50%;
     transform: translate(-50%, 0);
   }
+
   .layout-modal-header {
     margin: 0 0 34px 0;
     font-size: 1.5rem;
     font-weight: 500;
   }
+
   .layout-modal-content-container {
     font-family: 'Roboto';
     margin: 45px 0 0 60px;
     display: flex;
     flex-direction: column;
     max-width: 560px;
+
     .row-header {
       font-weight: normal;
       margin: 28px 0 10px;
@@ -38,9 +41,11 @@
 
     .options {
       display: flex;
+
       .option:last-child {
         margin-right: 0;
       }
+
       .option {
         display: flex;
         flex-direction: column;
@@ -51,10 +56,11 @@
           border: 1px solid transparent;
           box-shadow: 0 0 0 2px #333;
         }
+
         height: 140px;
         width: 180px;
         margin-right: 10px;
-        
+
 
         svg {
           position: relative;
@@ -71,9 +77,11 @@
       }
     }
   }
+
   .button-container {
     display: flex;
     justify-content: center;
+
     .close-button {
       font-size: 1.125em;
       font-style: normal;

@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { gql, useLazyQuery } from '@apollo/client';
+import { IColumn, IStop } from '../util/Interfaces';
 import Icon from './Icon';
 import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
@@ -86,7 +87,7 @@ interface IProps {
   readonly feedIds: Array<string>;
   readonly cardsCount: number;
   readonly cardInfo: ICardInfo;
-  readonly columns: any;
+  readonly columns: Array<IColumn>;
   readonly onCardDelete?: (id: number) => void;
   readonly onCardMove?: (oldIndex: number, newIndex: number) => void;
   readonly onStopDelete?: (
@@ -98,7 +99,7 @@ interface IProps {
   readonly setStops?: (
     cardId: number,
     side: string,
-    stops: any,
+    stops: Array<IStop>,
     reorder: boolean,
     gtfsIdForHidden: string,
   ) => void;

@@ -5,7 +5,6 @@ interface IHelpPageProps {
   urlMultipleStopsText?: string;
   urlParamFindText?: string;
   urlParamFindAltText?: string;
-  client: any;
   content?: string;
 }
 

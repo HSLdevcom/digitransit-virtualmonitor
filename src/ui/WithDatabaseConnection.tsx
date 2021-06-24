@@ -1,17 +1,37 @@
 import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
+import { ISides } from '../util/Interfaces';
 import CarouselContainer from './CarouselContainer';
 
+interface Iv {
+  columns: ISides;
+  duration: number;
+  id: number;
+  layout: number;
+  title: string;
+  cards?: any;
+  contenthash?: string;
+}
+interface IState {
+  view: Iv;
+}
+interface ILocation {
+  hash: string;
+  key: string;
+  pathname: string;
+  search: string;
+  state: IState;
+}
 interface IProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  readonly location?: any;
+  readonly location?: ILocation;
 }
 const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const [view, setView] = useState({});
   const [fetched, setFetched] = useState(false);
   useEffect(() => {
     if (!location?.state?.view?.cards) {
-      const hash: any = location.search.split('cont=');
+      const hash: Array<string> = location.search.split('cont=');
       monitorAPI.get(hash[1]).then(r => {
         setFetched(true);
         setView(r);

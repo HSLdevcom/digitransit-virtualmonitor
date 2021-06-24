@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import { IColumn, IStop } from '../util/Interfaces';
 import Icon from './Icon';
 import StopRow from './StopRow';
 import { v4 as uuid } from 'uuid';
@@ -9,7 +10,7 @@ import { getLayout } from '../util/getLayout';
 
 interface Props {
   side?: string;
-  stops: any;
+  stops: Array<IColumn>;
   cardId: number;
   layout: number;
   onStopDelete?: (cardId: number, side: string, gtfsId: string) => void;
@@ -17,7 +18,7 @@ interface Props {
   setStops?: (
     cardId: number,
     side: string,
-    stops: any,
+    stops: Array<IStop>,
     reorder: boolean,
     gtfsIdForHidden: string,
   ) => void;

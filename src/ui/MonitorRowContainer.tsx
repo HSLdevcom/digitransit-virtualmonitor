@@ -3,10 +3,28 @@ import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow from './MonitorRow';
 import './MonitorRowContainer.scss';
+interface IRouteShortName {
+  shortName: string;
+}
+interface ITrip {
+  gtfsId: string;
+  route: IRouteShortName;
+}
+interface IDeparture {
+  arrivalDelay: number;
+  departureDelay: number;
+  headsign: string;
+  realtimeArrival: number;
+  realtimeDeparture: number;
+  scheduledArrival: number;
+  scheduledDeparture: number;
+  serviceDay: number;
+  trip: ITrip;
+}
 
 interface IProps {
-  departures: any;
-  layout: any;
+  departures: Array<IDeparture>;
+  layout: Array<any>;
   leftTitle: string;
   rightTitle: string;
 }

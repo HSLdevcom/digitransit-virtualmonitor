@@ -43,6 +43,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
     return (
       <ContentContainer>
         <StopCardListContainer
+          languages={languages}
           defaultStopCardList={[defaultStopCard]}
           feedIds={props.config.feedIds}
         />
@@ -66,6 +67,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
   return (
     <ContentContainer>
       <StopCardListDataContainer
+        languages={languages}
         stopIds={stopIds}
         stationIds={stationIds}
         stopCardList={stopCardList}

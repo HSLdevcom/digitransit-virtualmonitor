@@ -3,7 +3,6 @@ import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
 import { useQuery } from '@apollo/client';
 import StopCardListContainer from './StopCardListContainer';
 import { sortBy, uniqBy } from 'lodash';
-import { printIntrospectionSchema } from 'graphql';
 import { withTranslation, WithTranslation } from 'react-i18next';
 
 interface IProps {
@@ -11,6 +10,7 @@ interface IProps {
   feedIds: Array<string>;
   stopIds: Array<string>;
   stationIds: Array<string>;
+  languages: Array<string>;
 }
 
 const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
@@ -18,10 +18,10 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
   stopCardList,
   stopIds,
   stationIds,
+  languages,
   t,
 }) => {
   const [cardList, setCardList] = useState(stopCardList);
-  const [loading, setLoading] = useState(true);
   const stops = useQuery(GET_STOP, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
@@ -126,7 +126,7 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
     return <div>LOADING</div>;
   }
   return (
-    <StopCardListContainer feedIds={feedIds} defaultStopCardList={cardList} />
+    <StopCardListContainer languages={languages} feedIds={feedIds} defaultStopCardList={cardList} />
   );
 };
 

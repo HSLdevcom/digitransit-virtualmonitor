@@ -6,6 +6,11 @@
   align-items: center;
   height: 8em;
   padding: 0.75em 1.5em 1em 1.5em;
+
+  &.preview {
+    height: 36px;
+    padding: 0 10px 0 0;
+  }
 }
 
 .title-logo {

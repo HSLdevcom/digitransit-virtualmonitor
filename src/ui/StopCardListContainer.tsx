@@ -268,7 +268,12 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   return (
     <>
       {isOpen && (
-        <PreviewModal view={cards} isOpen={isOpen} onClose={closePreview} isLandscape={true}/>
+        <PreviewModal
+          view={cards}
+          isOpen={isOpen}
+          onClose={closePreview}
+          isLandscape={orientation === 'horizontal' ? true : false}
+        />
       )}
       <DisplaySettings
         orientation={orientation}

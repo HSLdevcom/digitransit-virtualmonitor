@@ -10,17 +10,31 @@
   flex: 1;
   font-family: 'Roboto', Arial, Georgia, serif;
   color: #fff;
-
+  // border: 2px solid red;
+  &.preview {
+    height: 302px;
+    &.portrait {
+      height: 522px;
+    }
+  }
   .grid {
+    // border: 2px dashed white;
     margin: 0 15px;
     flex: 1;
     display: grid;
     justify-content: space-between;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr 4fr 1fr;
     grid-template-rows: 35px 10px auto;
-
+    &.preview {
+      grid-template-rows: 25px 5px auto;
+      // border: 2px dashed goldenrod;
+    }
     &.multi-display {
       grid-template-rows: 75px 35px 10px auto;
+      &.preview {
+        grid-template-rows: 35px 25px 5px auto;
+        //  border: 2px dashed greenyellow;
+      }
     }
 
     .title {
@@ -28,19 +42,25 @@
       align-items: center;
       font-size: 32px;
       justify-content: center;
-      grid-column: span 4;
+      grid-column: span 6;
       grid-row: span 1;
+      &.preview {
+        font-size: 24px;
+      }
     }
 
     .header {
       font-size: 28px;
+      &.preview {
+        font-size: 16px;
+      }
 
       &.line {
         grid-column: span 1;
       }
 
       &.destination {
-        grid-column: span 2;
+        grid-column: span 4;
       }
 
       &.time {
@@ -50,17 +70,27 @@
     }
 
     .row {
+      overflow: hidden;
+      justify-content: center;
+      align-items: center;
       &.line {
         grid-column: span 1;
       }
 
-      &.destination-two-rows {
-        grid-column: span 2;
+      &.destination, &.destination-two-rows {
+        grid-column: span 4;
 
+        &.portrait {
+          &.medium {
+            height: 46px;
+            span {
+              font-size: 1rem;
+              top: -10px;
+            }
+          } 
+        }
         span {
           position: relative;
-          top: -30px;
-          font-size: 0.5em;
 
           &::before {
             content: "\A";
@@ -71,25 +101,36 @@
 
       &.time {
         grid-column: span 1;
+        text-align: right;
       }
     }
   }
 }
 
 .divider {
-  width: 5px;
   background-color: white;
-}
+  width: 5px;
 
-.separator {
-  grid-column: span 4;
-  border-top: 5px dotted #fff;
-
-  &.first {
-    border-top: 5px solid #fff;
+  &.preview {
+    width: 2px;
   }
 }
 
-.departure-time {
-  justify-content: flex-end;
+.separator {
+  grid-column: span 6;
+  border-top: 5px dotted #fff;
+  height: 5px;
+
+  &.first {
+    border-top: 5px solid #fff;
+    &.preview {
+      border-top: 2px solid #fff;
+      height: 2px;
+    }
+  }
+
+  &.preview {
+    border-top: 2px dotted #fff;
+    height: 2px;
+  }
 }

@@ -19,6 +19,9 @@ interface IProps {
   size: number;
   withSeparator: boolean;
   isFirst?: boolean;
+  isLandscape?: boolean;
+  isPreview?: boolean;
+  isOneLiner?: boolean;
 }
 
 const MonitorRow: FC<IProps> = ({
@@ -26,10 +29,16 @@ const MonitorRow: FC<IProps> = ({
   size,
   withSeparator,
   isFirst = false,
+  isLandscape = true,
+  isPreview = false,
+  isOneLiner = true,
 }) => {
   let className;
   switch (size) {
     case 4:
+      className = 'x-large';
+      break;
+    case 6:
       className = 'large';
       break;
     case 8:
@@ -38,13 +47,16 @@ const MonitorRow: FC<IProps> = ({
     case 12:
       className = 'small';
       break;
+    case 24:
+      className = 'x-small';
+      break;
   }
   const destination =
     departure?.headsign && departure?.headsign.endsWith(' via')
       ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
       : departure?.headsign;
 
-  const splitDestination = destination && destination.includes(' via');
+  const splitDestination = destination && destination.includes(' via') && !isOneLiner;
   const destinationWithoutVia = splitDestination
     ? destination.substring(0, destination.indexOf(' via'))
     : destination;
@@ -52,19 +64,27 @@ const MonitorRow: FC<IProps> = ({
     ? destination.substring(destination.indexOf(' via') + 1)
     : '';
 
+  
   return (
     <>
       {withSeparator && (
-        <div className={cx('separator', isFirst ? 'first' : '')}></div>
+        <div className={cx('separator', isFirst ? 'first' : '', isPreview ? 'preview' : '')}></div>
       )}
-      <div className={cx('row', 'line', className)}>
+      <div className={cx('row', 'line', className, isPreview ? 'preview' : '')}>
         {departure?.trip?.route.shortName}
       </div>
-      <div className={cx('row', 'destination-two-rows', className)}>
-        {destinationWithoutVia}
-        <span className="via">{viaDestination}&nbsp;</span>
-      </div>
-      <div className={cx('row', 'time', className)}>
+      {isPreview && !isOneLiner && (
+        <div className={cx('row', 'destination-two-rows', className, isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>
+          {destinationWithoutVia}
+          <span className="via">{viaDestination}&nbsp;</span>
+        </div>
+      )}
+      {isPreview && isOneLiner && (
+        <div className={cx('row', 'destination', className, isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>
+          {destination}
+        </div>
+      )}
+      <div className={cx('row', 'time', className, isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>
         {getStartTimeWithColon(departure?.realtimeDeparture)}
       </div>
     </>

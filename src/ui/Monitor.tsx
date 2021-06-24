@@ -371,7 +371,7 @@ const Monitor: FC<IProps> = ({
   const currentTime = time ? time : new Date().getTime();
   return (
     <div className="main-content-container">
-      <Titlebar>
+      <Titlebar isPreview isLandscape>
         <Logo monitorConfig={config} isPreview isLandscape />
         {!isMultiDisplay && <div className="title-text">{view.title}</div>}
         <TitlebarTime

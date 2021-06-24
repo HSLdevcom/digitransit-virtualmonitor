@@ -40,18 +40,43 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         )
       : [];
 
-  const [leftColumnCount, rightColumnCount, isMultiDisplay] = layout;
+  const getCorrectSize = (leftColumnCount, rowNo, sizes) => {
+    if (sizes) {
+      if (sizes.length === 2) {
+        return rowNo <= sizes[0] ? sizes[0] : sizes[1];
+      }
+      if (sizes.length === 3) {
+        if (rowNo <= sizes[0]) {
+          return sizes[0] * 2;
+        } else if (rowNo <= sizes[0] + sizes[1]) {
+          return sizes[1] * 2;
+        } else {
+          return sizes[2] * 2;
+        }
+      }
+    }
+    return leftColumnCount;
+  };
+
+  const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
+    layout;
 
   const leftColumn = [];
   const rightColumn = [];
+
+  let isOneLiner = sortedDeparturesLeft.slice(0, leftColumnCount).every(d => d.headsign.includes(' via') && d.headsign.length <= 28);
+  console.log('isOneLiner:', isOneLiner);
 
   for (let i = 0; i < leftColumnCount; i++) {
     leftColumn.push(
       <MonitorRow
         departure={sortedDeparturesLeft[i]}
-        size={leftColumnCount}
+        size={getCorrectSize(leftColumnCount, i + 1, differSize)}
         withSeparator
         isFirst={i === 0}
+        isLandscape={isLandscape}
+        isPreview={isPreview}
+        isOneLiner={isOneLiner}
       />,
     );
   }
@@ -65,6 +90,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             size={rightColumnCount}
             withSeparator
             isFirst={i === leftColumnCount}
+            isLandscape={isLandscape}
+            isPreview={isPreview}
           />,
         );
       }
@@ -76,6 +103,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             size={rightColumnCount}
             withSeparator
             isFirst={i === 0}
+            isLandscape={isLandscape}
+            isPreview={isPreview}
           />,
         );
       }
@@ -83,24 +112,24 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   }
 
   return (
-    <div className="monitor-container">
-      <div className={cx('grid', isMultiDisplay ? 'multi-display' : '')}>
-        {isMultiDisplay && <div className="title">{leftTitle}</div>}
-        <div className={cx('header', 'line')}>{t('lineId')}</div>
-        <div className={cx('header', 'destination')}>{t('destination')}</div>
-        <div className={cx('header', 'time')}>{t('departureTime')}</div>
+    <div className={cx('monitor-container', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>
+      <div className={cx('grid', isMultiDisplay ? 'multi-display' : '', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>
+        {isMultiDisplay && <div className={cx('title', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>{leftTitle}</div>}
+        <div className={cx('header', 'line', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>{t('lineId')}</div>
+        <div className={cx('header', 'destination', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>{t('destination')}</div>
+        <div className={cx('header', 'time', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>{t('departureTime')}</div>
         {leftColumn}
       </div>
       {isLandscape && rightColumnCount > 0 && (
         <>
-          <div className="divider" />
-          <div className={cx('grid', isMultiDisplay ? 'multi-display' : '')}>
-            {isMultiDisplay && <div className="title">{rightTitle}</div>}
-            <div className={cx('header', 'line')}>{t('lineId')}</div>
-            <div className={cx('header', 'destination')}>
+          <div className={cx('divider', isPreview ? 'preview' : '')} />
+          <div className={cx('grid', isMultiDisplay ? 'multi-display' : '', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>
+            {isMultiDisplay && <div className={cx('title', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>{rightTitle}</div>}
+            <div className={cx('header', 'line', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>{t('lineId')}</div>
+            <div className={cx('header', 'destination', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>
               {t('destination')}
             </div>
-            <div className={cx('header', 'time')}>{t('departureTime')}</div>
+            <div className={cx('header', 'time', isPreview ? 'preview' : '', !isLandscape ? 'portrait' : '')}>{t('departureTime')}</div>
             {rightColumn}
           </div>
         </>

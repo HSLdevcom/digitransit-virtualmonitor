@@ -1,9 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import {
-  composeInitialProps,
-  WithTranslation,
-  withTranslation,
-} from 'react-i18next';
+import { WithTranslation, withTranslation } from 'react-i18next';
 import { gql, useLazyQuery } from '@apollo/client';
 import { IColumn, IStop } from '../util/Interfaces';
 import Icon from './Icon';

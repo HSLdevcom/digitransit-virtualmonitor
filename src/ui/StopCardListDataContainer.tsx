@@ -126,7 +126,11 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
     return <div>LOADING</div>;
   }
   return (
-    <StopCardListContainer languages={languages} feedIds={feedIds} defaultStopCardList={cardList} />
+    <StopCardListContainer
+      languages={languages}
+      feedIds={feedIds}
+      defaultStopCardList={cardList}
+    />
   );
 };
 

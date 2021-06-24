@@ -17,15 +17,12 @@ interface IProps {
 const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
   const [stopCardList, setStopCardList] = useState(null);
   const [languages, setLanguages] = useState(['fi']);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const hash: any = location.search.split('cont=');
     if (hash[1]) {
-      setLoading(true);
       monitorAPI.get(hash[1]).then((r: any) => {
         if (r?.cards?.length) {
-          setLoading(false);
           setStopCardList(r.cards);
           if (r.languages) {
             setLanguages(r.languages);

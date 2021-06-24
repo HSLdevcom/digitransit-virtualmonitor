@@ -6,7 +6,7 @@ interface IStopCode {
 }
 
 const StopCode: React.FunctionComponent<IStopCode> = ({ code }) => {
-  return code && <span className="stop-code">{code}</span>;
+  return (code && <span className="stop-code">{code}</span>) || null;
 };
 
 export default StopCode;

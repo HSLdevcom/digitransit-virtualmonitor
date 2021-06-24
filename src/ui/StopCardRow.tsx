@@ -1,7 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import {
+  composeInitialProps,
+  WithTranslation,
+  withTranslation,
+} from 'react-i18next';
 import { gql, useLazyQuery } from '@apollo/client';
 import Icon from './Icon';
+import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
 import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
 import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
@@ -21,65 +26,6 @@ const getGTFSId = id => {
   }
   return undefined;
 };
-
-const GET_STOP = gql`
-  query stopQuery($ids: [String]) {
-    stop: stops(ids: $ids) {
-      id
-      name
-      code
-      desc
-      gtfsId
-      platformCode
-      locationType
-      stoptimesForPatterns {
-        pattern {
-          code
-          headsign
-          route {
-            shortName
-            gtfsId
-          }
-        }
-      }
-      routes {
-        shortName
-        gtfsId
-      }
-    }
-  }
-`;
-
-const GET_STATION = gql`
-  query stationQuery($ids: [String]) {
-    station: stations(ids: $ids) {
-      id
-      name
-      code
-      desc
-      gtfsId
-      platformCode
-      locationType
-      stops {
-        desc
-        stoptimesForPatterns {
-          pattern {
-            code
-            headsign
-            route {
-              shortName
-              gtfsId
-            }
-          }
-        }
-        routes {
-          shortName
-          gtfsId
-        }
-      }
-    }
-  }
-`;
 
 interface IProps {
   readonly orientation: string;

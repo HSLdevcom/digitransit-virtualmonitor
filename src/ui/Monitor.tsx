@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
+import { IView } from '../util/Interfaces';
 import { gql, QueryResult, useQuery } from '@apollo/client';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
@@ -87,29 +88,6 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
     }
   }
 `;
-
-interface IStop {
-  code: string;
-  desc: string;
-  gtfsId: string;
-  locationType: string;
-  name: string;
-  hiddenRoutes: Array<any>;
-}
-interface ISides {
-  stops: Array<IStop>;
-  title: string;
-}
-interface IColumn {
-  left: ISides;
-  right: ISides;
-}
-interface IView {
-  columns: IColumn;
-  title: string;
-  layout: number;
-  duration: number;
-}
 
 const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
   const departures = [];

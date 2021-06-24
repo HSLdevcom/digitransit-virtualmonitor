@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { IMonitorConfig } from '../App';
 import StopCardListContainer from './StopCardListContainer';
 import ContentContainer from './ContentContainer';
 import monitorAPI from '../api';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { defaultStopCard } from '../util/stopCardUtil';
-import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
-import { useQuery } from '@apollo/client';
 import StopCardListDataContainer from './StopCardListDataContainer';
 
+interface IConfigWithFeedIs extends IMonitorConfig {
+  feedIds?: Array<string>;
+}
 interface IProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  config: any;
+  config: IConfigWithFeedIs;
 }
 
 const CreateViewPage: React.FC<IProps & WithTranslation> = props => {

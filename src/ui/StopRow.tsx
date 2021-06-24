@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import { IHiddenRoute, IPattern } from '../util/Interfaces';
 import StopRoutesModal from './StopRoutesModal';
 import StopCode from './StopCode';
 import Icon from './Icon';
@@ -9,10 +10,10 @@ import { getLayout } from '../util/getLayout';
 
 interface IStopInfoPlus extends IStopInfo {
   cardId?: number;
-  hiddenRoutes?: any;
+  hiddenRoutes?: Array<IHiddenRoute>;
   layout: number;
   locality?: string;
-  patterns: Array<any>;
+  patterns: Array<IPattern>;
 }
 
 interface IProps {
@@ -24,7 +25,7 @@ interface IProps {
   readonly setStops?: (
     cardId: number,
     side: string,
-    stops: any,
+    stops: IStopInfoPlus,
     reorder: boolean,
     gtfsIdForHidden: string,
   ) => void;

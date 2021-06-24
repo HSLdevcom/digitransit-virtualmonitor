@@ -124,7 +124,6 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
                   <Banner config={monitorConfig} />
                   <Breadcrumbs />
                   <HelpPage
-                    client={client}
                     urlParamUsageText={helpPageUrlParamText}
                     urlMultipleStopsText={helpPageurlMultipleStopsText}
                     urlParamFindText={helpPageUrlParamFindText}

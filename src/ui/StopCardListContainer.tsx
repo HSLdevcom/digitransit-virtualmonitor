@@ -1,3 +1,4 @@
+import { IStop } from '../util/Interfaces';
 import React, { FC, useEffect, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import arrayMove from 'array-move';
@@ -124,7 +125,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   const setStops = (
     cardId: number,
     side: string,
-    stops: any,
+    stops: Array<IStop>,
     reorder: boolean,
     gtfsIdForHidden: string,
   ) => {

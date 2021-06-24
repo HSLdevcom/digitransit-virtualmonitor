@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC, useState } from 'react';
 import './StopRoutesModal.scss';
 import './StopCode.scss';
@@ -9,17 +8,22 @@ import { v4 as uuid } from 'uuid';
 import Modal from 'react-modal';
 Modal.setAppElement('#root');
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface Route {
-  // route: any;
+interface IRoute {
+  gtfsID?: string;
+  shortName?: string;
+}
+interface IPattern {
+  code: string;
+  headsign: string;
+  route: IRoute;
 }
 
 interface Props {
   showModal: boolean;
-  routes: any; //Route[];
+  routes: IPattern[];
   stop: IStopInfo;
-  closeModal: (route: Route[]) => void;
-  hiddenRoutes?: any;
+  closeModal: (route: IRoute[]) => void;
+  hiddenRoutes?: Array<IPattern & IRoute>;
 }
 
 const StopRoutesModal: FC<Props & WithTranslation> = (

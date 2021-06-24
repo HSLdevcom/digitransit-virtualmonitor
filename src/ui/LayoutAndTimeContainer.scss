@@ -13,6 +13,11 @@
     justify-content: flex-start;
     align-items: center;
 
+    svg {
+      height: 36px !important;
+      width: 64px !important;
+    }
+
     .label {
       margin-left: 10px;
       font-size: 15px;

@@ -1,5 +1,5 @@
 .stopcards {
-  padding-top: 30px;
+  padding-top: 26px;
   padding-left: 60px;
   margin-block-start: 0;
   margin-block-end: 0;
@@ -39,6 +39,14 @@
 
     span {
       color: #fff;
+    }
+  }
+
+  &:disabled {
+    cursor: unset;
+
+    span {
+      color: #ccc;
     }
   }
 

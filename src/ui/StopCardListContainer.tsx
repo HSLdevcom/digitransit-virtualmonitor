@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
 import { IStop } from '../util/Interfaces';
+import React, { FC, useEffect, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import arrayMove from 'array-move';
 import { v4 as uuid } from 'uuid';
@@ -9,6 +9,7 @@ import { ICardInfo } from './CardInfo';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
+import DisplaySettings from './DisplaySettings';
 import './StopCardListContainer.scss';
 
 interface IProps {
@@ -21,6 +22,7 @@ const StopCardItem = ({
   index,
   totalCount,
   feedIds,
+  orientation,
 }) => {
   const cardInfo: ICardInfo = {
     feedIds: feedIds,
@@ -35,6 +37,7 @@ const StopCardItem = ({
     <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
       <StopCardRow
         feedIds={feedIds}
+        orientation={orientation}
         cardsCount={totalCount}
         cardInfo={cardInfo}
         columns={item.columns}
@@ -49,12 +52,13 @@ const StopCardItem = ({
   );
 };
 
-const StopCardList = ({ feedIds, items }) => {
+const StopCardList = ({ orientation, feedIds, items }) => {
   return (
     <ul className="stopcards">
       {items.map((item, index) => {
         return (
           <StopCardItem
+            orientation={orientation}
             feedIds={feedIds}
             key={uuid()}
             index={index}
@@ -92,9 +96,24 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   t,
 }) => {
   const [stopCardList, setStopCardList] = useState([defaultStopCard(t)]);
+  const [languages, setLanguages] = useState(['fi']);
+  const [orientation, setOrientation] = useState('horizontal');
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);
+  useEffect(() => {
+    const hash: any = location.search.split('cont=');
+    if (hash[1]) {
+      monitorAPI.get(hash[1]).then((r: any) => {
+        if (r?.cards?.length) {
+          setStopCardList(r.cards);
+          if (r.languages) {
+            setLanguages(r.languages);
+          }
+        }
+      });
+    }
+  }, []);
 
   const openPreview = () => {
     setOpen(true);
@@ -188,6 +207,20 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     }
   };
 
+  const handleLanguageChange = (language: string) => {
+    if (!languages.includes(language)) {
+      setLanguages(languages.concat(language));
+    } else {
+      const langs = languages.slice();
+      langs.splice(languages.indexOf(language), 1);
+      setLanguages(langs);
+    }
+  };
+
+  const handleOrientation = (orientation: string) => {
+    setOrientation(orientation);
+  };
+
   const modifiedStopCardList = stopCardList.map(card => {
     return {
       ...card,
@@ -200,13 +233,19 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     };
   });
 
+  const createButtonsDisabled = () => {
+    return !(languages.length > 0);
+  };
+
   const createMonitor = () => {
+    const languageArray = ['fi', 'sv', 'en'];
     const newCard = {
       cards: stopCardList,
+      languages: languageArray.filter(lan => languages.includes(lan)),
       contenthash: hash(stopCardList, {
         algorithm: 'md5',
         encoding: 'base64',
-      }).replace('/', '-'),
+      }).replaceAll('/', '-'),
     };
     monitorAPI.create(newCard).then(res => {
       setRedirect(true);
@@ -232,15 +271,33 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       {isOpen && (
         <PreviewModal view={cards} isOpen={isOpen} onClose={closePreview} />
       )}
-      <StopCardList feedIds={feedIds} items={modifiedStopCardList} />
+      <DisplaySettings
+        orientation={orientation}
+        handleOrientation={handleOrientation}
+        languages={languages}
+        handleChange={handleLanguageChange}
+      />
+      <StopCardList
+        orientation={orientation}
+        feedIds={feedIds}
+        items={modifiedStopCardList}
+      />
       <div className="buttons">
         <button className="button" onClick={addNew}>
           <span>{t('prepareDisplay')}</span>
         </button>
-        <button className="button" onClick={openPreview}>
+        <button
+          disabled={createButtonsDisabled()}
+          className="button"
+          onClick={openPreview}
+        >
           <span>{t('previewView')}</span>
         </button>
-        <button className="button" onClick={createMonitor}>
+        <button
+          disabled={createButtonsDisabled()}
+          className="button"
+          onClick={createMonitor}
+        >
           <span>{t('displayEditorStaticLink')}</span>
         </button>
       </div>

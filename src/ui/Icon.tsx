@@ -16,6 +16,12 @@ import { ReactComponent as Layout8 } from './icons/layout8.svg';
 import { ReactComponent as Layout9 } from './icons/layout9.svg';
 import { ReactComponent as Layout10 } from './icons/layout10.svg';
 import { ReactComponent as Layout11 } from './icons/layout11.svg';
+import { ReactComponent as Layout12 } from './icons/layout12.svg';
+import { ReactComponent as Layout13 } from './icons/layout13.svg';
+import { ReactComponent as Layout14 } from './icons/layout14.svg';
+import { ReactComponent as Layout15 } from './icons/layout15.svg';
+import { ReactComponent as Layout16 } from './icons/layout16.svg';
+import { ReactComponent as Layout17 } from './icons/layout17.svg';
 import { ReactComponent as StopBus } from './icons/stop-bus.svg';
 import { ReactComponent as MoveDown } from './icons/move-down.svg';
 import { ReactComponent as MoveUp } from './icons/move-up.svg';
@@ -61,6 +67,12 @@ const IconMap = (style: IIconMapProps) => {
     layout9: <Layout9 style={style} />,
     layout10: <Layout10 style={style} />,
     layout11: <Layout11 style={style} />,
+    layout12: <Layout12 style={style} />,
+    layout13: <Layout13 style={style} />,
+    layout14: <Layout14 style={style} />,
+    layout15: <Layout15 style={style} />,
+    layout16: <Layout16 style={style} />,
+    layout17: <Layout16 style={style} />,
     'stop-bus': <StopBus style={style} />,
     'move-down': <MoveDown style={style} />,
     'move-up': <MoveUp style={style} />,

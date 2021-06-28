@@ -32,6 +32,11 @@ const LayoutModal: FC<Props & WithTranslation> = ({
   const onClick = option => {
     setSelected(option);
   };
+  const verticalHeight = {
+    content: {
+      width: '640px',
+    },
+  };
   const layouts =
     orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;
   return (
@@ -39,10 +44,11 @@ const LayoutModal: FC<Props & WithTranslation> = ({
       isOpen={isOpen}
       onRequestClose={() => onClose(selected)}
       portalClassName="modal"
+      style={orientation === 'vertical' ? verticalHeight : ''}
     >
       <div className="layout-modal-content-container">
         <h2 className="layout-modal-header">{t('layoutModalHeader')}</h2>
-        <div>
+        <div className="layouts">
           {layouts.map(l => {
             return (
               <div className="row">
@@ -53,6 +59,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
                       <div
                         className={cx(
                           'option',
+                          orientation === 'vertical' ? 'vertical' : '',
                           isEqual(option.value, selected.value)
                             ? 'label-selected'
                             : '',

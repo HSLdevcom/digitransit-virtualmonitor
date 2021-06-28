@@ -27,7 +27,8 @@
       font-size: 1.125rem;
     }
   }
-
+.layouts {
+  margin-top: -31px;
   .row {
     .header {
       padding-bottom: 20px;
@@ -38,23 +39,37 @@
 
     .options {
       display: flex;
+
       .option:last-child {
         margin-right: 0;
       }
+
       .option {
         display: flex;
         flex-direction: column;
         border: 1px solid #ddd;
         border-radius: 4px;
 
+        &.vertical {
+          height: 210px;
+          width: 110px;
+          margin-right: 12px;
+
+          svg {
+            top: 10px;
+            left: 10px;
+          }
+        }
+
         &.label-selected {
           border: 1px solid transparent;
           box-shadow: 0 0 0 2px #333;
         }
+
         height: 140px;
         width: 180px;
         margin-right: 10px;
-        
+
 
         svg {
           position: relative;
@@ -67,10 +82,12 @@
           justify-content: center;
           position: relative;
           margin-top: 20px;
+          margin-bottom: 10px;
         }
       }
     }
   }
+}
   .button-container {
     display: flex;
     justify-content: center;

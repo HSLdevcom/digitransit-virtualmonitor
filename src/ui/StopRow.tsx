@@ -74,7 +74,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
           />
         )}
         <div className="stop-bottom-row">
-          {stop.desc && <div className="address">{stop.desc}</div>}
+          {stop.locality && <div className="address">{stop.locality}</div>}
           <StopCode code={stop.code} />
           <div className="hidden-choices" role="button" onClick={handleClick}>
             {!stop.hiddenRoutes.length && t('hiddenNoChoices')}

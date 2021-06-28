@@ -30,6 +30,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
   props: Props & WithTranslation,
 ) => {
   const [hiddenRoutes, setHiddenRoutes] = useState(props.hiddenRoutes);
+  const hiddenCodes = hiddenRoutes.map(r => r.code);
   const text = props.t('showHidden');
   const handleCheck = (e, route) => {
     const target = e.target;
@@ -39,7 +40,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
       setHiddenRoutes(routes);
     } else if (value) {
       setHiddenRoutes([...hiddenRoutes, route]);
-    } else if (hiddenRoutes.includes(route)) {
+    } else if (hiddenCodes.includes(route.code)) {
       setHiddenRoutes(
         hiddenRoutes.filter(r => {
           return r.code !== route.code;
@@ -62,7 +63,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     if (!route) {
       return hiddenRoutes.length === props.routes.length;
     }
-    return hiddenRoutes.includes(route);
+
+    const hiddenCodes = hiddenRoutes.map(r => r.code);
+    return hiddenCodes.includes(route.code);
   };
   return (
     <Modal

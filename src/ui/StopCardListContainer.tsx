@@ -11,9 +11,11 @@ import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import './StopCardListContainer.scss';
-
+import { defaultStopCard } from '../util/stopCardUtil';
 interface IProps {
   feedIds: Array<string>;
+  defaultStopCardList: any;
+  languages: Array<string>;
 }
 
 const StopCardItem = ({
@@ -72,48 +74,18 @@ const StopCardList = ({ orientation, feedIds, items }) => {
   );
 };
 
-const defaultStopCard = t => ({
-  id: 1,
-  title: t('viewEditorName'),
-  columns: {
-    left: {
-      inUse: true,
-      title: t('sideLeft'),
-      stops: [],
-    },
-    right: {
-      inUse: false,
-      title: t('sideRight'),
-      stops: [],
-    },
-  },
-  layout: 2,
-  duration: 5,
-});
-
 const StopCardListContainer: FC<IProps & WithTranslation> = ({
   feedIds,
   t,
+  defaultStopCardList,
+  ...props
 }) => {
-  const [stopCardList, setStopCardList] = useState([defaultStopCard(t)]);
-  const [languages, setLanguages] = useState(['fi']);
+  const [stopCardList, setStopCardList] = useState(defaultStopCardList);
+  const [languages, setLanguages] = useState(props.languages);
   const [orientation, setOrientation] = useState('horizontal');
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);
-  useEffect(() => {
-    const hash: any = location.search.split('cont=');
-    if (hash[1]) {
-      monitorAPI.get(hash[1]).then((r: any) => {
-        if (r?.cards?.length) {
-          setStopCardList(r.cards);
-          if (r.languages) {
-            setLanguages(r.languages);
-          }
-        }
-      });
-    }
-  }, []);
 
   const openPreview = () => {
     setOpen(true);
@@ -239,8 +211,33 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
 
   const createMonitor = () => {
     const languageArray = ['fi', 'sv', 'en'];
+    const cardArray = stopCardList.slice();
+    cardArray.forEach(card => {
+      card.columns.left.stops = card.columns.left.stops.map(stop => {
+        return {
+          gtfsId: stop.gtfsId,
+          locationType: stop.locationType,
+          hiddenRoutes: stop.hiddenRoutes?.map(hr => {
+            return {
+              code: hr.code,
+            };
+          }),
+        };
+      });
+      card.columns.right.stops = card.columns.right.stops.map(stop => {
+        return {
+          gtfsId: stop.gtfsId,
+          locationType: stop.locationType,
+          hiddenRoutes: stop.hiddenRoutes?.map(hr => {
+            return {
+              code: hr.code,
+            };
+          }),
+        };
+      });
+    });
     const newCard = {
-      cards: stopCardList,
+      cards: cardArray,
       languages: languageArray.filter(lan => languages.includes(lan)),
       contenthash: hash(stopCardList, {
         algorithm: 'md5',

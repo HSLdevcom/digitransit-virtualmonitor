@@ -55,6 +55,13 @@
           border: 1px solid #ddd;
           border-radius: 4px;
 
+
+        svg {
+          position: relative;
+          top: 10px;
+          left: 7px;
+        }
+
           &.vertical {
             height: 210px;
             width: 110px;
@@ -75,11 +82,7 @@
           width: 180px;
           margin-right: 10px;
 
-          svg {
-            position: relative;
-            top: 10px;
-            left: 7px;
-          }
+
 
           .label {
             display: flex;

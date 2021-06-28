@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import { IStop } from '../util/Interfaces';
 import Icon from './Icon';
 import StopRow from './StopRow';
 import { v4 as uuid } from 'uuid';
@@ -16,7 +17,7 @@ interface Props {
   setStops?: (
     cardId: number,
     side: string,
-    stops: any,
+    stops: Array<IStop>,
     reorder: boolean,
     gtfsIdForHidden: string,
   ) => void;

@@ -29,7 +29,6 @@ const LayoutModal: FC<Props & WithTranslation> = ({
   const handleClose = () => {
     onClose(selected);
   };
-  console.log(' Option ', option);
   const onClick = option => {
     setSelected(option);
   };

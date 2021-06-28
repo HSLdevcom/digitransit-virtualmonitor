@@ -1,10 +1,13 @@
 import * as React from 'react';
+import { IMonitorConfig } from '../App';
 import StopCardListContainer from './StopCardListContainer';
 import ContentContainer from './ContentContainer';
 
+interface IConfigWithFeedIs extends IMonitorConfig {
+  feedIds?: Array<string>;
+}
 interface IProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  config: any;
+  config: IConfigWithFeedIs;
 }
 
 const CreateViewPage: React.FC<IProps> = props => {

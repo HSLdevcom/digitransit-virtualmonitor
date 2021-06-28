@@ -5,13 +5,17 @@ import Select from 'react-select';
 import Icon from './Icon';
 import './Dropdown.scss';
 
+interface IOption {
+  value: string;
+  label: string;
+}
 interface IProps {
   readonly name: string;
   readonly indicatorColor?: string;
   readonly isSearchable?: boolean;
   readonly options?: Array<Option>;
   readonly placeholder?: string | JSX.Element;
-  readonly handleChange?: (option: any) => void;
+  readonly handleChange?: (option: IOption) => void;
 }
 
 interface Option {

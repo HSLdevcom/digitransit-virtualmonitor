@@ -1,31 +1,8 @@
 import React, { FC, useState, useEffect } from 'react';
 import { getConfig } from '../util/getConfig';
+import { IView } from '../util/Interfaces';
 import Monitor from './Monitor';
 import { EpochMilliseconds } from '../time';
-
-interface IStop {
-  code: string;
-  desc: string;
-  gtfsId: string;
-  locationType: string;
-  name: string;
-  hiddenRoutes: Array<any>;
-}
-interface ISides {
-  stops: Array<IStop>;
-  title: string;
-}
-interface IColumn {
-  left: ISides;
-  right: ISides;
-}
-
-interface IView {
-  columns: IColumn;
-  title: string;
-  layout: number;
-  duration: number;
-}
 
 interface IProps {
   views: Array<IView>;

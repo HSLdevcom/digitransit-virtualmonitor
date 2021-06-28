@@ -33,7 +33,7 @@
     letter-spacing: -0.02em;
     color: #007ac9;
   }
-  
+
   &:last-child {
     background: #007ac9;
 
@@ -41,8 +41,10 @@
       color: #fff;
     }
   }
+
   &:disabled {
     cursor: unset;
+
     span {
       color: #ccc;
     }

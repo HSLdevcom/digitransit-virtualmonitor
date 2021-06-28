@@ -10,17 +10,20 @@
     margin-right: -50%;
     transform: translate(-50%, 0);
   }
+
   .layout-modal-header {
     margin: 0 0 34px 0;
     font-size: 1.5rem;
     font-weight: 500;
   }
+
   .layout-modal-content-container {
     font-family: 'Roboto';
     margin: 45px 0 0 60px;
     display: flex;
     flex-direction: column;
     max-width: 560px;
+
     .row-header {
       font-weight: normal;
       margin: 28px 0 10px;
@@ -28,52 +31,72 @@
     }
   }
 
-  .row {
-    .header {
-      padding-bottom: 20px;
-      display: flex;
-      align-items: end;
-      flex-flow: column;
-    }
+  .layouts {
+    margin-top: -31px;
 
-    .options {
-      display: flex;
-      .option:last-child {
-        margin-right: 0;
-      }
-      .option {
+    .row {
+      .header {
+        padding-bottom: 20px;
         display: flex;
-        flex-direction: column;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        align-items: end;
+        flex-flow: column;
+      }
 
-        &.label-selected {
-          border: 1px solid transparent;
-          box-shadow: 0 0 0 2px #333;
-        }
-        height: 140px;
-        width: 180px;
-        margin-right: 10px;
-        
+      .options {
+        display: flex;
 
-        svg {
-          position: relative;
-          top: 10px;
-          left: 7px;
+        .option:last-child {
+          margin-right: 0;
         }
 
-        .label {
+        .option {
           display: flex;
-          justify-content: center;
-          position: relative;
-          margin-top: 20px;
+          flex-direction: column;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+
+          &.vertical {
+            height: 210px;
+            width: 110px;
+            margin-right: 12px;
+
+            svg {
+              top: 10px;
+              left: 10px;
+            }
+          }
+
+          &.label-selected {
+            border: 1px solid transparent;
+            box-shadow: 0 0 0 2px #333;
+          }
+
+          height: 140px;
+          width: 180px;
+          margin-right: 10px;
+
+          svg {
+            position: relative;
+            top: 10px;
+            left: 7px;
+          }
+
+          .label {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            margin-top: 20px;
+            margin-bottom: 10px;
+          }
         }
       }
     }
   }
+
   .button-container {
     display: flex;
     justify-content: center;
+
     .close-button {
       font-size: 1.125em;
       font-style: normal;

@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
+import { IHiddenRoute } from '../util/Interfaces';
 import CarouselContainer from './CarouselContainer';
 import Icon from './Icon';
 import cx from 'classnames';
@@ -12,8 +13,7 @@ interface IStop {
   gtfsId: string;
   locationType: string;
   name: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  hiddenRoutes: Array<any>;
+  hiddenRoutes: Array<IHiddenRoute>;
 }
 interface ISides {
   stops: Array<IStop>;

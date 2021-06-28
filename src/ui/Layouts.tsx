@@ -125,13 +125,13 @@ export const horizontalLayouts = [
 
 export const verticalLayouts = [
   {
-    label: 'Yksijakoinen',
+    label: 'Yksinkertainen',
     options: [
       {
         value: '12',
         label: (
           <>
-            <Icon img="layout1" height={90} width={160} />
+            <Icon img="layout12" height={160} width={90} />
             <span className="label">8</span>
           </>
         ),
@@ -140,7 +140,7 @@ export const verticalLayouts = [
         value: '13',
         label: (
           <>
-            <Icon img="layout1" height={90} width={160} />
+            <Icon img="layout13" height={180} width={90} />
             <span className="label">12</span>
           </>
         ),
@@ -149,7 +149,16 @@ export const verticalLayouts = [
         value: '14',
         label: (
           <>
-            <Icon img="layout1" height={90} width={160} />
+            <Icon img="layout14" height={180} width={90} />
+            <span className="label">16</span>
+          </>
+        ),
+      },
+      {
+        value: '15',
+        label: (
+          <>
+            <Icon img="layout15" height={160} width={90} />
             <span className="label">24</span>
           </>
         ),
@@ -157,23 +166,14 @@ export const verticalLayouts = [
     ],
   },
   {
-    label: 'Yksijakoinen yhdistelmä',
+    label: 'Tiivistyvä',
     options: [
-      {
-        value: '15',
-        label: (
-          <>
-            <Icon img="layout1" height={90} width={160} />
-            <span className="label">4+6</span>
-          </>
-        ),
-      },
       {
         value: '16',
         label: (
           <>
-            <Icon img="layout1" height={90} width={160} />
-            <span className="label">6+12</span>
+            <Icon img="layout16" height={160} width={90} />
+            <span className="label">4+6</span>
           </>
         ),
       },
@@ -181,11 +181,20 @@ export const verticalLayouts = [
         value: '17',
         label: (
           <>
+            <Icon img="layout17" height={160} width={90} />
+            <span className="label">6+12</span>
+          </>
+        ),
+      },
+      /*{
+        value: '17',
+        label: (
+          <>
             <Icon img="layout1" height={90} width={160} />
             <span className="label">2+4+12</span>
           </>
         ),
-      },
+      },*/
     ],
   },
 ];

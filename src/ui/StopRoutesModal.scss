@@ -1,13 +1,26 @@
 .modal-stop-routes {
+  h2 {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    margin-bottom: 21px;
+    color: #333;
+  }
+
   .ReactModal__Overlay {
     z-index: 10;
   }
 
   .ReactModal__Content {
-    width: 500px;
-    height: 300px;
-    left: 20vw !important;
-    top: 20vw !important;
+    width: 620px;
+    height: 800px;
+    overflow-x: hidden !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-right: -50%;
+    margin-bottom: -50%;
+    transform: translate(-50%, -50%);
   }
 
   .close {
@@ -15,19 +28,124 @@
     right: 10px;
   }
 
-  .title {
-    font-size: 22px;
-    padding-bottom: 20px;
-    padding-left: 50px;
+  .title-container {
+    margin-bottom: 22px;
+
+    .title {
+      font-size: 22px;
+      padding-bottom: 20px;
+      padding-left: 25%;
+    }
+
+    .stop {
+      font-size: 20px;
+      padding-right: 8px;
+    }
   }
 
-  .stop {
-    font-size: 20px;
-    padding-left: 150px;
-    padding-right: 8px;
+  .route-rows {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 245px;
+
+    .row {
+      padding-top: 10px;
+      display: flex;
+
+      .all {
+        margin-bottom: 5px;
+        margin-left: 8px;
+      }
+
+      .bus {
+        padding-right: 10px;
+        padding-left: 10px;
+      }
+
+      .route-number {
+        font-family: Gotham XNarrow;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 22px;
+        color: #333;
+        min-width: 60px;
+      }
+
+      .destination {
+        display: flex;
+        justify-content: flex-start;
+      }
+    }
   }
 
-  .row {
-    padding-top: 10px;
+  .button-container {
+    &.less {
+      top: 600px;
+    }
+
+    position: absolute;
+    top: 684px;
+    background: white;
+    width: 100%;
+    height: calc(100% - 707px);
+  }
+
+  .divider {
+    border: 1px solid #ddd;
+    width: calc(100% - 2px);
+    margin-top: 25px;
+  }
+
+  .divider-routes {
+    border: 1px solid #ddd;
+    width: calc(100% - 2px);
+  }
+
+  .timeshift {
+    p {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 15px;
+      line-height: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .show-departures-over {
+      font-style: normal;
+      font-weight: normal;
+      font-size: 15px;
+      line-height: 18px;
+      color: #333;
+    }
+
+    .dd-select .dd__control {
+      width: 100px;
+      position: absolute;
+      bottom: -12px;
+      right: 277px;
+    }
+  }
+
+  .show-settings {
+    display: flex;
+    flex-direction: column;
+
+    .setting {
+      display: flex;
+      flex-direction: column;
+
+      .option-checkbox-container {
+        padding-top: 10px;
+      }
+
+      .setting-text {
+        margin-left: 48px;
+        position: relative;
+        top: -23px;
+      }
+    }
   }
 }

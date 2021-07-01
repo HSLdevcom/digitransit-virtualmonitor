@@ -15,6 +15,19 @@
     position: relative;
     margin-right: 2em;
 
+    &.bigger {
+      margin-bottom: 10px;
+      margin-right: 40px;
+      margin-top: 1px;
+
+      label {
+        height: 30px;
+        width: 30px;
+        bottom: -11px;
+        border-radius: 7px;
+      }
+    }
+
     &.large {
       margin-right: 1em;
       margin-bottom: 1em;

@@ -31,6 +31,13 @@ import { ReactComponent as MoveDivider } from './icons/move-divider.svg';
 import { ReactComponent as Rectangle } from './icons/rectangle.svg';
 import { ReactComponent as RectangleSelected } from './icons/rectangle-selected.svg';
 import { ReactComponent as Checkbox } from './icons/checkbox.svg';
+import { ReactComponent as Settings } from './icons/settings.svg';
+import { ReactComponent as Clock } from './icons/clock.svg';
+import { ReactComponent as Bus } from './icons/bus-filled.svg';
+import { ReactComponent as Tram } from './icons/tram-filled.svg';
+import { ReactComponent as Train } from './icons/train-filled.svg';
+import { ReactComponent as Metro } from './icons/metro-filled.svg';
+
 export interface IIconMapProps {
   color?: string;
   fill?: string;
@@ -82,6 +89,12 @@ const IconMap = (style: IIconMapProps) => {
     rectangle: <Rectangle style={style} />,
     'rectangle-selected': <RectangleSelected style={style} />,
     checkbox: <Checkbox style={style} />,
+    settings: <Settings style={style} />,
+    clock: <Clock style={style} />,
+    bus: <Bus style={style} />,
+    tram: <Tram style={style} />,
+    train: <Train style={style} />,
+    subway: <Metro style={style} />,
   };
 };
 /**

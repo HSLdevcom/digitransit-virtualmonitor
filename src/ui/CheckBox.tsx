@@ -10,6 +10,8 @@ interface IProps {
   disabled?: boolean;
   onChange: (option: string) => void;
   name: string;
+  width?: number;
+  height?: number;
 }
 
 const Checkbox: FC<IProps> = ({
@@ -17,13 +19,15 @@ const Checkbox: FC<IProps> = ({
   disabled = false,
   onChange,
   name,
+  width = 20,
+  height = 20,
 }) => {
   const id = uniqueId('input-');
   return (
     <div className={cx('option-checkbox-container')}>
       <div
         aria-checked={checked}
-        className={cx('option-checkbox')}
+        className={cx('option-checkbox', width > 20 ? 'bigger' : '')}
         onKeyPress={e =>
           !disabled && isKeyboardSelectionEvent(e) && onChange(name)
         }
@@ -31,7 +35,7 @@ const Checkbox: FC<IProps> = ({
         tabIndex={disabled ? -1 : 0}
       >
         <label className={cx({ checked, disabled })} htmlFor={id}>
-          {checked && <Icon img="checkbox" width={20} height={20} />}
+          {checked && <Icon img="checkbox" width={width} height={height} />}
           <input
             aria-label={name}
             checked={checked}

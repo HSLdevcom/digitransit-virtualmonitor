@@ -10,6 +10,7 @@ export const GET_STOP = gql`
       gtfsId
       platformCode
       locationType
+      vehicleMode
       stoptimesForPatterns {
         pattern {
           code
@@ -38,6 +39,7 @@ export const GET_STATION = gql`
       gtfsId
       platformCode
       locationType
+      vehicleMode
       stops {
         desc
         stoptimesForPatterns {

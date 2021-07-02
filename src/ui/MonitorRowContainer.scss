@@ -211,7 +211,7 @@
             font-size: 1.1rem;
 
             &.destination-two-rows {
-              font-size: 1.4vw;
+              font-size: 1.5rem;
 
               &.no-via {
                 position: relative;
@@ -219,7 +219,7 @@
               }
 
               span {
-                font-size: 1vw;
+                font-size: 1rem;
               }
             }
           }
@@ -340,7 +340,7 @@
   grid-column: span 3;
   background-color: white;
   color: #007ac9;
-  font-size: 2.5vw;
+  font-size: 2rem;
   display: flex;
   position: relative;
   justify-content: center;

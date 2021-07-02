@@ -118,11 +118,9 @@ const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
 const loopStops = (data, stops) => {
   const departures: Array<IDeparture> = [];
   data.stops.forEach(stop => {
-    let routesToHide: Array<string> = stops
-      .find(s => {
-        return s.gtfsId === stop.gtfsId;
-      })
-      ?.hiddenRoutes.map(route => route.code);
+    let routesToHide: Array<string> = stops.find(s => {
+      return s.gtfsId === stop.gtfsId;
+    })?.settings?.hiddenRoutes;
     if (!routesToHide || !routesToHide[0]) {
       routesToHide = [];
     }
@@ -141,11 +139,9 @@ const loopStations = (data, stops) => {
     .forEach(station => {
       const routes = [];
       station.stops.forEach(stop => routes.push(...stop.routes));
-      let routesToHide = stops
-        .find(s => {
-          return s.gtfsId === station.gtfsId;
-        })
-        ?.hiddenRoutes.map(route => route.code);
+      let routesToHide = stops.find(s => {
+        return s.gtfsId === station.gtfsId;
+      })?.settings.hiddenRoutes;
       if (!routesToHide || !routesToHide[0]) {
         routesToHide = [];
       }

@@ -25,6 +25,7 @@ export interface IStopInfo {
   gtfsId: StopId;
   platformCode: string;
   routes: Array<any>;
+  vehicleMode?: string;
 }
 
 export interface IStopInfoResponse {

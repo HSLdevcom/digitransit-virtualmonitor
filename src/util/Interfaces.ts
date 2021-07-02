@@ -4,7 +4,13 @@ export interface IStop {
   gtfsId: string;
   locationType: string;
   name: string;
+  settings: ISettings;
+}
+export interface ISettings {
   hiddenRoutes: Array<IHiddenRoute>;
+  showStopNumber: boolean;
+  showEndOfLine: boolean;
+  timeShift: number;
 }
 
 export interface IHiddenRoute {

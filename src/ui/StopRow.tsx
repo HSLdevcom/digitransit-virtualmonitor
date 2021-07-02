@@ -1,6 +1,7 @@
+import cx from 'classnames';
 import React, { FC, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { IHiddenRoute, IPattern } from '../util/Interfaces';
+import { IHiddenRoute, IPattern, ISettings } from '../util/Interfaces';
 import StopRoutesModal from './StopRoutesModal';
 import StopCode from './StopCode';
 import Icon from './Icon';
@@ -10,7 +11,7 @@ import { getLayout } from '../util/getLayout';
 
 interface IStopInfoPlus extends IStopInfo {
   cardId?: number;
-  hiddenRoutes?: Array<IHiddenRoute>;
+  settings?: ISettings;
   layout: number;
   locality?: string;
   patterns: Array<IPattern>;
@@ -40,10 +41,10 @@ const StopRow: FC<IProps & WithTranslation> = ({
   t,
 }) => {
   const [showModal, changeOpen] = useState(false);
-  const saveHiddenRoutes = routes => {
+  const saveHiddenRoutes = settings => {
     const newStop = {
       ...stop,
-      hiddenRoutes: routes,
+      settings: settings,
     };
     setStops(stop.cardId, side, newStop, false, stop.gtfsId);
     changeOpen(false);
@@ -60,13 +61,46 @@ const StopRow: FC<IProps & WithTranslation> = ({
       <div className="stop-row-main">
         <div className="stop-upper-row">
           {stop.name}
-          <div className="hidden-routes" onClick={handleClick}>
-            {t('hiddenRoutes')}
+          <div className="settings">
+            <span onClick={handleClick}>
+              {' '}
+              <Icon img="settings" />
+            </span>
+          </div>
+          <div
+            className={cx(
+              'hidden-routes',
+              stop.settings?.timeShift > 0 &&
+                stop.settings?.hiddenRoutes.length > 0
+                ? 'clock-and-routes'
+                : '',
+            )}
+          >
+            {stop.settings?.timeShift > 0 && (
+              <div className="clock">
+                <Icon img="clock" width={14} height={14} />
+                <span>
+                  {' '}
+                  {stop.settings.timeShift.toString().concat(' min')}{' '}
+                </span>
+              </div>
+            )}
+            {stop.settings?.hiddenRoutes.length > 0 && (
+              <>
+                {t('hiddenRoutes')}
+                <span>
+                  {stop.settings.hiddenRoutes.length
+                    .toString()
+                    .concat(' / ')
+                    .concat(stop.patterns.length.toString())}
+                </span>
+              </>
+            )}
           </div>
         </div>
         {showModal && (
           <StopRoutesModal
-            hiddenRoutes={stop.hiddenRoutes}
+            hiddenRoutes={stop.settings}
             closeModal={saveHiddenRoutes}
             showModal={showModal}
             stop={stop}
@@ -74,19 +108,8 @@ const StopRow: FC<IProps & WithTranslation> = ({
           />
         )}
         <div className="stop-bottom-row">
-          {stop.desc && <div className="address">{stop.locality}</div>}
+          {stop.locality && <div className="address">{stop.locality}</div>}
           <StopCode code={stop.code} />
-          <div className="hidden-choices" role="button" onClick={handleClick}>
-            {!stop.hiddenRoutes.length && t('hiddenNoChoices')}
-            {stop.hiddenRoutes.length > 0 && (
-              <span>
-                {stop.hiddenRoutes.length
-                  .toString()
-                  .concat(' / ')
-                  .concat(stop.patterns.length.toString())}
-              </span>
-            )}
-          </div>
         </div>
       </div>
       <div

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
-import { IHiddenRoute } from '../util/Interfaces';
+import { IHiddenRoute, ISettings } from '../util/Interfaces';
 import CarouselContainer from './CarouselContainer';
 import Icon from './Icon';
 
@@ -12,7 +12,7 @@ interface IStop {
   gtfsId: string;
   locationType: string;
   name: string;
-  hiddenRoutes: Array<IHiddenRoute>;
+  settings: ISettings;
 }
 interface ISides {
   stops: Array<IStop>;

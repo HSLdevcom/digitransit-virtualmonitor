@@ -44,8 +44,10 @@
       flex: 1;
       text-align: right;
 
-      &:hover {
-        cursor: pointer;
+      svg {
+        position: absolute;
+        top: 30px;
+        right: 67px;
       }
     }
   }
@@ -60,11 +62,46 @@
       margin-bottom: 2px;
       display: flex;
 
+      .settings {
+        svg {
+          position: absolute;
+          left: 633px;
+          padding-top: 5px;
+          cursor: pointer;
+        }
+      }
+
       .hidden-routes {
-        flex: 1;
+        .clock {
+          svg {
+            padding-right: 3px;
+          }
+
+          display: flex;
+          align-items: center;
+          position: relative;
+        }
+
+        &.clock-and-routes {
+          padding-top: 0;
+          padding-bottom: 10px;
+
+          svg {
+            padding-bottom: 5px;
+          }
+
+          .clock {
+            margin-left: 100px;
+          }
+        }
+
+        flex: 1 1;
         text-align: right;
-        color: #007ac9;
-        cursor: pointer;
+        color: #666;
+        right: 100px;
+        position: absolute;
+        font-size: 13px;
+        padding-top: 10px;
       }
     }
   }

@@ -217,22 +217,14 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         return {
           gtfsId: stop.gtfsId,
           locationType: stop.locationType,
-          hiddenRoutes: stop.hiddenRoutes?.map(hr => {
-            return {
-              code: hr.code,
-            };
-          }),
+          settings: stop.settings,
         };
       });
       card.columns.right.stops = card.columns.right.stops.map(stop => {
         return {
           gtfsId: stop.gtfsId,
           locationType: stop.locationType,
-          hiddenRoutes: stop.hiddenRoutes?.map(hr => {
-            return {
-              code: hr.code,
-            };
-          }),
+          settings: stop.settings,
         };
       });
     });

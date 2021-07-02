@@ -6,7 +6,7 @@ export type Minutes = number;
 export type Seconds = number;
 export type Milliseconds = number;
 export type EpochMilliseconds = Milliseconds;
-export type EpochSecondsLocal = Milliseconds;
+export type EpochSecondsLocal = Seconds;
 
 export interface ITimeOfDay {
   hours: Hours;
@@ -51,9 +51,13 @@ export const formatDate = date => {
   return newDate.charAt(0).toUpperCase() + newDate.slice(1);
 };
 
+export const getCurrentSeconds = () => {
+  return Number(DateTime.now().toSeconds().toFixed(0));
+};
+
 export const setDate = daysToAdd => {
   const newDate = new Date();
   newDate.setDate(newDate.getDate() + daysToAdd);
   newDate.setHours(0, 0, 0, 0);
   return newDate;
-}
+};

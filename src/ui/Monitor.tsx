@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { IView } from '../util/Interfaces';
-import { gql, QueryResult, useQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
 import Logo from './logo/Logo';
@@ -8,7 +8,7 @@ import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
 import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
-import { EpochMilliseconds } from '../time';
+import { getCurrentSeconds, EpochMilliseconds } from '../time';
 
 const GET_DEPARTURES = gql`
   query GetDepartures($ids: [String!]!, $numberOfDepartures: Int!) {
@@ -105,11 +105,21 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
   }
 `;
 
-const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
+const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes, timeshift) => {
   const departures = [];
+  const currentSeconds = getCurrentSeconds();
   stop.stoptimesForPatterns.forEach(stoptimeList => {
     if (!hiddenRoutes.includes(stoptimeList.pattern.code)) {
-      departures.push(...stoptimeList.stoptimes);
+      if (timeshift > 0) {
+        departures.push(
+          ...stoptimeList.stoptimes.filter(
+            s =>
+              s.serviceDay + s.realtimeDeparture >= currentSeconds + timeshift,
+          ),
+        );
+      } else {
+        departures.push(...stoptimeList.stoptimes);
+      }
     }
   });
   return departures;
@@ -118,16 +128,16 @@ const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes) => {
 const loopStops = (data, stops) => {
   const departures: Array<IDeparture> = [];
   data.stops.forEach(stop => {
-    let routesToHide: Array<string> = stops.find(s => {
+    const settings = stops.find(s => {
       return s.gtfsId === stop.gtfsId;
-    })?.settings?.hiddenRoutes;
-    if (!routesToHide || !routesToHide[0]) {
-      routesToHide = [];
-    }
-    const stoptimes: Array<any> = stops.find(s => {
-      return s.gtfsId === stop.gtfsId;
-    })?.stoptimes;
-    departures.push(...getDeparturesWithoutHiddenRoutes(stop, routesToHide));
+    })?.settings;
+
+    const routesToHide = settings ? settings.hiddenRoutes : [];
+    const timeshift = settings ? Number(settings.timeShift) : 0;
+
+    departures.push(
+      ...getDeparturesWithoutHiddenRoutes(stop, routesToHide, timeshift * 60),
+    );
   });
   return departures;
 };
@@ -139,18 +149,25 @@ const loopStations = (data, stops) => {
     .forEach(station => {
       const routes = [];
       station.stops.forEach(stop => routes.push(...stop.routes));
-      let routesToHide = stops.find(s => {
-        return s.gtfsId === station.gtfsId;
-      })?.settings.hiddenRoutes;
-      if (!routesToHide || !routesToHide[0]) {
-        routesToHide = [];
-      }
+
       const stationWithRoutes = {
         ...station,
         routes: routes,
       };
+
+      const settings = stops.find(s => {
+        return s.gtfsId === station.gtfsId;
+      })?.settings;
+
+      const routesToHide = settings ? settings.hiddenRoutes : [];
+      const timeshift = settings ? Number(settings.timeShift) : 0;
+
       departures.push(
-        ...getDeparturesWithoutHiddenRoutes(stationWithRoutes, routesToHide),
+        ...getDeparturesWithoutHiddenRoutes(
+          stationWithRoutes,
+          routesToHide,
+          timeshift * 60,
+        ),
       );
     });
   return departures;

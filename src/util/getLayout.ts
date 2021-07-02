@@ -27,12 +27,12 @@ export const getLayout = (layout: number) => {
     case 13:
       return [12, 0, false];
     case 14:
-      return [24, 0, false];
+      return [16, 0, false];
     case 15:
-      return [10, 0, false];
+      return [24, 0, false];
     case 16:
-      return [18, 0, false];
+      return [10, 0, false, [4, 6]];
     case 17:
-      return [18, 0, false];
+      return [18, 0, false, [6, 12]];
   }
 };

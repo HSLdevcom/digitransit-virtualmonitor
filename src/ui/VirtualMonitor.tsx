@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import AutoMoment from './AutoMoment';
 import Logo from './logo/Logo';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
@@ -14,7 +13,7 @@ const VirtualMonitor = (props: IVirtualMonitorProps) => (
   <div style={{ color: 'white', display: 'flex', flexDirection: 'column' }}>
     <Titlebar>
       <Logo />
-      <div id={'title-text'}>{props.title || ''}</div>
+      <div className="title-text">{props.title || ''}</div>
       <TitlebarTime />
     </Titlebar>
     {props.children}

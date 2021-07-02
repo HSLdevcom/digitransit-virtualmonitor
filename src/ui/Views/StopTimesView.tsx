@@ -155,7 +155,7 @@ const StopTimesView: React.SFC<ICombinedStopTimesViewProps> = (
       <Titlebar>
         <Logo monitorConfig={monitorConfig} />
         <div
-          id={'title-text'}
+          className="title-text"
           style={{
             fontSize: 'min(4vw, 4em)',
             justifyContent: 'center',

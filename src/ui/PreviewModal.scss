@@ -1,14 +1,118 @@
 .preview {
   .ReactModal__Content {
     position: absolute;
-    top: 78px !important;
-    padding: 25px !important;
+    width: 700px !important;
+    height: 470px !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-right: -50%;
+    margin-bottom: -50%;
+    transform: translate(-50%, -50%);
+    padding: 0 !important;
+    background: #000 !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+    border-radius: 5px !important;
+    overflow: hidden !important;
 
-    .close {
-      position: absolute;
-      right: 0;
+    &.portrait {
+      width: 470px !important;
+      height: 700px !important;
+      left: 485px !important;
+      top: 105px !important;
+    }
+
+    .title-and-close {
+      position: relative;
+      width: 640px;
+      height: 75px;
+      top: 29px;
+      left: 30px;
+
+      .title {
+        position: relative;
+        font-family: 'Roboto', Arial, Helvetica, sans-serif;
+        font-size: 24px;
+        line-height: 29px;
+        letter-spacing: -0.02em;
+        color: #fff;
+        width: 540px;
+      }
+
+      .close {
+        height: 15px;
+        width: 15px;
+        position: relative;
+        left: 622.5px;
+        top: -28.5px;
+      }
+    }
+
+    .carouselContainer {
+      position: relative;
+      overflow: hidden;
       top: 0;
-      padding: 10px;
+      left: 30px;
+      width: 640px;
+      height: 370px;
+
+      &.portrait {
+        left: 30px;
+        width: 370px;
+        height: 640px;
+      }
+    }
+  }
+
+  &.portrait {
+    .ReactModal__Content {
+      position: absolute;
+      width: 470px !important;
+      height: 700px !important;
+      top: 50% !important;
+      left: 50% !important;
+      margin-right: -50%;
+      margin-bottom: -50%;
+      transform: translate(-50%, -50%);
+      padding: 0 !important;
+      background: #000 !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+      border-radius: 5px !important;
+      overflow: hidden !important;
+
+      .title-and-close {
+        position: relative;
+        width: 405px;
+        height: 75px;
+        top: 29px;
+        left: 30px;
+
+        .title {
+          position: relative;
+          font-family: 'Roboto', Arial, Helvetica, sans-serif;
+          font-size: 24px;
+          line-height: 29px;
+          letter-spacing: -0.02em;
+          color: #fff;
+          width: 540px;
+        }
+
+        .close {
+          height: 15px;
+          width: 15px;
+          position: relative;
+          left: 390px;
+          top: -28.5px;
+        }
+      }
+
+      .carouselContainer {
+        position: relative;
+        overflow: hidden;
+        top: 0;
+        left: 30px;
+        width: 405px;
+        height: 590px;
+      }
     }
   }
 }

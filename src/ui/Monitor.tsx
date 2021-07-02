@@ -27,6 +27,11 @@ const GET_DEPARTURES = gql`
           }
         }
         stoptimes {
+          stop {
+            gtfsId
+          }
+          realtime
+          pickupType
           serviceDay
           scheduledArrival
           realtimeArrival
@@ -39,6 +44,9 @@ const GET_DEPARTURES = gql`
             gtfsId
             route {
               shortName
+            }
+            stops {
+              gtfsId
             }
           }
         }
@@ -69,6 +77,11 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
           }
         }
         stoptimes {
+          stop {
+            gtfsId
+          }
+          realtime
+          pickupType
           serviceDay
           scheduledArrival
           realtimeArrival
@@ -81,6 +94,9 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
             gtfsId
             route {
               shortName
+            }
+            stops {
+              gtfsId
             }
           }
         }
@@ -104,7 +120,7 @@ const loopStops = (data, stops) => {
   data.stops.forEach(stop => {
     let routesToHide: Array<string> = stops.find(s => {
       return s.gtfsId === stop.gtfsId;
-    })?.settings.hiddenRoutes;
+    })?.settings?.hiddenRoutes;
     if (!routesToHide || !routesToHide[0]) {
       routesToHide = [];
     }
@@ -145,8 +161,18 @@ interface IProps {
   readonly noPolling?: boolean;
   readonly index: number;
   readonly time?: EpochMilliseconds;
+  readonly isPreview: boolean;
+  readonly isLandscape: boolean;
 }
-const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
+const Monitor: FC<IProps> = ({
+  view,
+  index,
+  config,
+  noPolling,
+  time,
+  isPreview,
+  isLandscape,
+}) => {
   const [skip, setSkip] = useState(false);
   const [stopDataLeft, setStopDataLeft] = useState([]);
   const [stopDataRight, setStopDataRight] = useState([]);
@@ -335,22 +361,20 @@ const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
   const currentTime = time ? time : new Date().getTime();
   return (
     <div className="main-content-container">
-      <Titlebar>
-        <Logo monitorConfig={config} />
-        {!isMultiDisplay && (
-          <div
-            id={'title-text'}
-            style={{
-              fontSize: 'min(4vw, 4em)',
-              justifyContent: 'center',
-            }}
-          >
-            {view.title}
+      <Titlebar isPreview isLandscape>
+        <Logo monitorConfig={config} isPreview isLandscape />
+        {!isMultiDisplay && <div className="title-text">{view.title}</div>}
+        {isMultiDisplay && (
+          <div className="multi-display-titles">
+            <div className="left-title">{view.columns.left.title}</div>
+            <div className="right-title">{view.columns.right.title}</div>
           </div>
         )}
         <TitlebarTime
           currentTime={currentTime}
           updateInterval={noPolling ? 0 : 20000}
+          isPreview
+          isLandscape
         />
       </Titlebar>
       {stationsFetched && stopsFetched && (
@@ -358,8 +382,10 @@ const Monitor: FC<IProps> = ({ view, index, config, noPolling, time }) => {
           departuresLeft={[...stopDeparturesLeft, ...stationDeparturesLeft]}
           departuresRight={[...stopDeparturesRight, ...stationDeparturesRight]}
           layout={getLayout(view.layout)}
-          leftTitle={view.columns.left.title}
-          rightTitle={view.columns.right.title}
+          // leftTitle={view.columns.left.title}
+          // rightTitle={view.columns.right.title}
+          isPreview={isPreview}
+          isLandscape={isLandscape}
         />
       )}
     </div>

@@ -1,4 +1,4 @@
-import React, { ClassAttributes, FC, useState } from 'react';
+import React, { FC } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import './DisplaySettings.scss';
 import Icon from './Icon';
@@ -9,7 +9,7 @@ interface IProps {
   languages: Array<string>;
   orientation: string;
   handleChange: (language: string) => void;
-  handleOrientation: (language: string) => void;
+  handleOrientation: (orientation: string) => void;
 }
 
 const DisplaySettings: FC<IProps & WithTranslation> = ({

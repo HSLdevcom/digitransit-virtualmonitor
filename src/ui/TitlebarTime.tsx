@@ -5,11 +5,20 @@ import { EpochMilliseconds, Milliseconds } from '../time';
 interface IProps {
   currentTime?: EpochMilliseconds;
   updateInterval?: Milliseconds;
+  isPreview?: boolean;
+  isLandscape?: boolean;
 }
 
-const TitlebarTime: FC<IProps> = ({ currentTime, updateInterval }) => (
-  <div id={'title-time'} style={{ fontSize: 'min(4vw, 4em)' }}>
-    <AutoMoment currentTime={currentTime} updateInterval={updateInterval} />
+const TitlebarTime: FC<IProps> = ({
+  currentTime,
+  updateInterval,
+  isPreview = false,
+  isLandscape = false,
+}) => (
+  <div className="title-time-container">
+    <div className="title-time">
+      <AutoMoment currentTime={currentTime} updateInterval={updateInterval} />
+    </div>
   </div>
 );
 

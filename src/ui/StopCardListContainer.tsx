@@ -1,5 +1,5 @@
 import { IStop } from '../util/Interfaces';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import arrayMove from 'array-move';
 import { v4 as uuid } from 'uuid';
@@ -11,6 +11,8 @@ import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import './StopCardListContainer.scss';
+import { getLayout } from '../util/getLayout';
+
 import { defaultStopCard } from '../util/stopCardUtil';
 interface IProps {
   feedIds: Array<string>;
@@ -157,6 +159,19 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       stopCardList[cardIndex].columns['right'].title = value;
       stopCardList[cardIndex].columns['right'].inUse = true;
     } else if (type === 'layout') {
+      if (
+        getLayout(stopCardList[cardIndex].layout)[2] &&
+        !getLayout(Number(value))[2]
+      ) {
+        stopCardList[cardIndex].columns.left.stops = stopCardList[
+          cardIndex
+        ].columns.left.stops.concat(
+          stopCardList[cardIndex].columns.right.stops,
+        );
+        stopCardList[cardIndex].columns.right.stops = [];
+        stopCardList[cardIndex].columns.left.title = t('sideLeft');
+        stopCardList[cardIndex].columns.right.title = t('sideRight');
+      }
       stopCardList[cardIndex].layout = Number(value);
     } else if (type === 'duration') {
       stopCardList[cardIndex].duration = Number(value);
@@ -191,6 +206,13 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
 
   const handleOrientation = (orientation: string) => {
     setOrientation(orientation);
+    stopCardList.forEach(card =>
+      updateCardInfo(
+        card.id,
+        'layout',
+        orientation === 'horizontal' ? '2' : '12',
+      ),
+    );
   };
 
   const modifiedStopCardList = stopCardList.map(card => {
@@ -255,10 +277,16 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   const cards = {
     cards: stopCardList,
   };
+
   return (
     <>
       {isOpen && (
-        <PreviewModal view={cards} isOpen={isOpen} onClose={closePreview} />
+        <PreviewModal
+          view={cards}
+          isOpen={isOpen}
+          onClose={closePreview}
+          isLandscape={orientation === 'horizontal' ? true : false}
+        />
       )}
       <DisplaySettings
         orientation={orientation}

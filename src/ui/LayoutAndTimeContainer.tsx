@@ -67,14 +67,16 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
           {layoutButton}
         </button>
       </div>
-      <div>
-        <Dropdown
-          name="duration"
-          isSearchable={false}
-          options={durations}
-          placeholder={placeHolder}
-          handleChange={handleChange}
-        />
+      <div className="duration">
+        {cardInfo.possibleToMove && (
+          <Dropdown
+            name="duration"
+            isSearchable={false}
+            options={durations}
+            placeholder={placeHolder}
+            handleChange={handleChange}
+          />
+        )}
       </div>
       <LayoutModal
         orientation={orientation}

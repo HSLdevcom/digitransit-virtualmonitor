@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 export type DaySeconds = number;
 export type Hours = number;
 export type Minutes = number;
@@ -32,11 +34,26 @@ export const formatTime = (
     options.showSeconds ? `:${doubleDigit(timeOfDay.seconds)}` : ''
   }`;
 
-export const getStartTimeWithColon = time => {
+export const getDepartureTime = (time, isRealtime) => {
   const hours = `0${Math.floor((time / 60 / 60) % 24)}`.slice(-2);
   const mins = `0${Math.floor(time / 60) % 60}`.slice(-2);
   if (hours !== 'aN' || mins !== 'aN') {
-    return `${hours}:${mins}`;
+    if (isRealtime) {
+      return `${hours}:${mins}`;
+    }
+    return `~${hours}:${mins}`;
   }
   return null;
 };
+
+export const formatDate = date => {
+  const newDate = DateTime.fromISO(date.toISOString()).setLocale('fi').toFormat('EEEE d.M.yyyy');
+  return newDate.charAt(0).toUpperCase() + newDate.slice(1);
+};
+
+export const setDate = daysToAdd => {
+  const newDate = new Date();
+  newDate.setDate(newDate.getDate() + daysToAdd);
+  newDate.setHours(0, 0, 0, 0);
+  return newDate;
+}

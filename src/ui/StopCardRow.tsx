@@ -314,7 +314,9 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
       <div className="headers">
         <div className="stop">{t('prepareStop')}</div>
         <div className="layout">{t('layout')}</div>
-        <div className="duration">{t('duration')}</div>
+        <div className="duration">
+          {cardInfo.possibleToMove ? t('duration') : ''}
+        </div>
       </div>
       <div className="search-stop-with-layout-and-time">
         <div className="search-stop">

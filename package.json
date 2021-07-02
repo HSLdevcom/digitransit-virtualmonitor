@@ -33,6 +33,7 @@
     "i18next": "^19.8.4",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
+    "luxon": "^1.27.0",
     "module-alias": "^2.2.2",
     "moment": "^2.29.1",
     "object-hash": "^2.2.0",

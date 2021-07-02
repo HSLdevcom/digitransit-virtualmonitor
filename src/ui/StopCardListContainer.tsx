@@ -11,6 +11,7 @@ import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import './StopCardListContainer.scss';
+import { getLayout } from '../util/getLayout';
 
 interface IProps {
   feedIds: Array<string>;
@@ -185,6 +186,19 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       stopCardList[cardIndex].columns['right'].title = value;
       stopCardList[cardIndex].columns['right'].inUse = true;
     } else if (type === 'layout') {
+      if (
+        getLayout(stopCardList[cardIndex].layout)[2] &&
+        !getLayout(Number(value))[2]
+      ) {
+        stopCardList[cardIndex].columns.left.stops = stopCardList[
+          cardIndex
+        ].columns.left.stops.concat(
+          stopCardList[cardIndex].columns.right.stops,
+        );
+        stopCardList[cardIndex].columns.right.stops = [];
+        stopCardList[cardIndex].columns.left.title = t('sideLeft');
+        stopCardList[cardIndex].columns.right.title = t('sideRight');
+      }
       stopCardList[cardIndex].layout = Number(value);
     } else if (type === 'duration') {
       stopCardList[cardIndex].duration = Number(value);
@@ -219,6 +233,13 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
 
   const handleOrientation = (orientation: string) => {
     setOrientation(orientation);
+    stopCardList.forEach(card =>
+      updateCardInfo(
+        card.id,
+        'layout',
+        orientation === 'horizontal' ? '2' : '12',
+      ),
+    );
   };
 
   const modifiedStopCardList = stopCardList.map(card => {
@@ -266,6 +287,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   const cards = {
     cards: stopCardList,
   };
+
   return (
     <>
       {isOpen && (

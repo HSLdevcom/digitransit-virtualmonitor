@@ -1,11 +1,13 @@
 .preview {
-
   .ReactModal__Content {
     position: absolute;
     width: 700px !important;
     height: 470px !important;
-    left: 370px !important;
-    top: 220px !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-right: -50%;
+    margin-bottom: -50%;
+    transform: translate(-50%, -50%);
     padding: 0 !important;
     background: #000 !important;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
@@ -62,13 +64,15 @@
   }
 
   &.portrait {
-
     .ReactModal__Content {
       position: absolute;
       width: 470px !important;
       height: 700px !important;
-      left: 485px !important;
-      top: 105px !important;
+      top: 50% !important;
+      left: 50% !important;
+      margin-right: -50%;
+      margin-bottom: -50%;
+      transform: translate(-50%, -50%);
       padding: 0 !important;
       background: #000 !important;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
@@ -81,7 +85,7 @@
         height: 75px;
         top: 29px;
         left: 30px;
-  
+
         .title {
           position: relative;
           font-family: 'Roboto', Arial, Helvetica, sans-serif;
@@ -91,7 +95,7 @@
           color: #fff;
           width: 540px;
         }
-  
+
         .close {
           height: 15px;
           width: 15px;
@@ -100,9 +104,8 @@
           top: -28.5px;
         }
       }
-  
+
       .carouselContainer {
-        border: 1px solid yellow;
         position: relative;
         overflow: hidden;
         top: 0;

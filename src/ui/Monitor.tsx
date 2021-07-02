@@ -27,6 +27,11 @@ const GET_DEPARTURES = gql`
           }
         }
         stoptimes {
+          stop {
+            gtfsId
+          }
+          realtime
+          pickupType
           serviceDay
           scheduledArrival
           realtimeArrival
@@ -39,6 +44,9 @@ const GET_DEPARTURES = gql`
             gtfsId
             route {
               shortName
+            }
+            stops {
+              gtfsId
             }
           }
         }
@@ -69,6 +77,11 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
           }
         }
         stoptimes {
+          stop {
+            gtfsId
+          }
+          realtime
+          pickupType
           serviceDay
           scheduledArrival
           realtimeArrival
@@ -81,6 +94,9 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
             gtfsId
             route {
               shortName
+            }
+            stops {
+              gtfsId
             }
           }
         }
@@ -352,6 +368,12 @@ const Monitor: FC<IProps> = ({
       <Titlebar isPreview isLandscape>
         <Logo monitorConfig={config} isPreview isLandscape />
         {!isMultiDisplay && <div className="title-text">{view.title}</div>}
+        {isMultiDisplay && (
+          <div className="multi-display-titles">
+            <div className="left-title">{view.columns.left.title}</div>
+            <div className="right-title">{view.columns.right.title}</div>
+          </div>
+        )}
         <TitlebarTime
           currentTime={currentTime}
           updateInterval={noPolling ? 0 : 20000}
@@ -364,8 +386,8 @@ const Monitor: FC<IProps> = ({
           departuresLeft={[...stopDeparturesLeft, ...stationDeparturesLeft]}
           departuresRight={[...stopDeparturesRight, ...stationDeparturesRight]}
           layout={getLayout(view.layout)}
-          leftTitle={view.columns.left.title}
-          rightTitle={view.columns.right.title}
+          // leftTitle={view.columns.left.title}
+          // rightTitle={view.columns.right.title}
           isPreview={isPreview}
           isLandscape={isLandscape}
         />

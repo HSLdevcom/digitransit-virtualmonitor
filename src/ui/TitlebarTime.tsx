@@ -15,8 +15,10 @@ const TitlebarTime: FC<IProps> = ({
   isPreview = false,
   isLandscape = false,
 }) => (
-  <div className="title-time">
-    <AutoMoment currentTime={currentTime} updateInterval={updateInterval} />
+  <div className="title-time-container">
+    <div className="title-time">
+      <AutoMoment currentTime={currentTime} updateInterval={updateInterval} />
+    </div>
   </div>
 );
 

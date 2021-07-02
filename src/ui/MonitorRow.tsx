@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { getDepartureTime } from '../time';
-//import './MonitorRow.scss';
 import cx from 'classnames';
 import { WithTranslation, withTranslation } from 'react-i18next';
 

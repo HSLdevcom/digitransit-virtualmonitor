@@ -22,6 +22,14 @@ export interface IDeparture {
   pickupType: string;
   stop: IStop;
 }
+interface IAlertDescriptionTextTranslation {
+  text: string;
+}
+interface IAlert {
+  alertDescriptionTextTranslations: Array<IAlertDescriptionTextTranslation>;
+  alertHeaderText: string;
+  alertSeverityLevel: string;
+}
 interface IProps {
   departure: IDeparture;
   size: number;
@@ -33,6 +41,7 @@ interface IProps {
   withTwoColumns?: boolean;
   isTighten?: boolean;
   dayForDivider?: string;
+  alerts?: Array<IAlert>;
 }
 
 const MonitorRow: FC<IProps & WithTranslation> = ({
@@ -46,6 +55,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   withTwoColumns = false,
   isTighten = false,
   dayForDivider,
+  alerts,
   t,
 }) => {
   const destination =
@@ -121,6 +131,43 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             )}
           >
             <span>{dayForDivider}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+  if (alerts) {
+    return (
+      <div
+        className={cx('grid-row', rowCount, withTwoColumns ? 'two-cols' : '')}
+      >
+        <div
+          className={cx(
+            'grid-cols-day-divider',
+            rowCount,
+            withTwoColumns ? 'two-cols' : '',
+          )}
+        >
+          {withSeparator && (
+            <div
+              className={cx(
+                'separator',
+                isFirst ? 'first' : '',
+                isPreview ? 'preview' : '',
+                rowCount,
+              )}
+            ></div>
+          )}
+          <div
+            className={cx(
+              'alert-row',
+              isPreview ? 'preview' : '',
+              rowCount,
+              !isLandscape ? 'portrait' : '',
+              withTwoColumns ? 'two-cols' : '',
+            )}
+          >
+            <span>{alerts[0].alertHeaderText}</span>
           </div>
         </div>
       </div>

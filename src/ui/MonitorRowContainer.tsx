@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow from './MonitorRow';
 import './MonitorRowContainer.scss';
@@ -34,6 +34,27 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         a.serviceDay -
         (b.realtimeDeparture + b.serviceDay),
     );
+
+  const ale = sortedDeparturesLeft.reduce((arr, alert) => {
+    const alerts = alert?.trip?.route?.alerts;
+    if (alerts) {
+      alerts.forEach(a => {
+        let i = 0;
+        let found = false;
+        while (i < arr.length) {
+          if (arr[i]?.alertHeaderText === a.alertHeaderText) {
+            found = true;
+            break;
+          }
+          i++;
+        }
+        if (!found) {
+          arr.push(a);
+        }
+      });
+    }
+    return arr;
+  }, []);
 
   const sortedDeparturesRight =
     departuresRight && departuresRight.length > 0
@@ -144,10 +165,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const withTwoColumns = isLandscape && rightColumnCount > 0;
 
   for (let i = 0; i < leftColumnCount; i++) {
+    const showAlerts = i === leftColumnCount - 1 && ale.length > 0;
     leftColumn.push(
       <MonitorRow
         departure={
-          i !== (nextDayDepartureIndexLeft || currentDayDepartureIndexLeft)
+          i !== (nextDayDepartureIndexLeft || currentDayDepartureIndexLeft) ||
+          !showAlerts
             ? sortedDeparturesLeft[i]
             : null
         }
@@ -158,6 +181,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         isPreview={isPreview}
         isOneLiner={isOneLiner && !withTwoColumns}
         withTwoColumns={withTwoColumns}
+        alerts={showAlerts ? ale : undefined}
         dayForDivider={
           i === nextDayDepartureIndexLeft
             ? formatDate(nextDay)

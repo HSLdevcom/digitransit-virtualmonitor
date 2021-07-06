@@ -336,6 +336,73 @@
   }
 }
 
+.alert-row {
+  grid-column: span 3;
+  font-size: 2rem;
+  display: flex;
+  position: relative;
+  justify-content: center;
+
+  &.preview {
+    &.rows4 {
+      top: -17px;
+      font-size: 2.4rem;
+      height: 77.5px !important;
+
+      &.two-cols {
+        font-size: 2rem;
+      }
+
+      span {
+        position: relative;
+        top: 15px;
+      }
+    }
+
+    &.rows8 {
+      top: -5px;
+      font-size: 1.4rem;
+      height: 38.75px !important;
+
+      &.portrait {
+        height: 66.25px !important;
+      }
+
+      span {
+        position: relative;
+        top: 7px;
+      }
+    }
+
+    &.rows12 {
+      top: -3px;
+      font-size: 1.1rem;
+      height: 25.8px !important;
+
+      &.portrait {
+        height: 44.15px !important;
+      }
+
+      span {
+        position: relative;
+        top: 3px;
+      }
+    }
+
+    &.rows16 {
+      &.portrait {
+        height: 33.125px !important;
+      }
+    }
+
+    &.rows24 {
+      &.portrait {
+        height: 22.08px !important;
+      }
+    }
+  }
+}
+
 .day-row {
   grid-column: span 3;
   background-color: white;

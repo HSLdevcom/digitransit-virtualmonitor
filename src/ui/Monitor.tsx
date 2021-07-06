@@ -16,6 +16,13 @@ const GET_DEPARTURES = gql`
       name
       gtfsId
       routes {
+        alerts {
+          alertSeverityLevel
+          alertHeaderText
+          alertDescriptionTextTranslations {
+            text
+          }
+        }
         longName
         id
       }
@@ -44,6 +51,13 @@ const GET_DEPARTURES = gql`
             gtfsId
             route {
               shortName
+              alerts {
+                alertSeverityLevel
+                alertHeaderText
+                alertDescriptionTextTranslations {
+                  text
+                }
+              }
             }
             stops {
               gtfsId
@@ -61,11 +75,26 @@ const GET_DEPARTURES_FOR_STATIONS = gql`
       name
       gtfsId
       routes {
+        alerts {
+          alertSeverityLevel
+          alertHeaderText
+          alertDescriptionTextTranslations {
+            text
+          }
+        }
+
         longName
         id
       }
       stops {
         routes {
+          alerts {
+            alertSeverityLevel
+            alertHeaderText
+            alertDescriptionTextTranslations {
+              text
+            }
+          }
           gtfsId
         }
       }

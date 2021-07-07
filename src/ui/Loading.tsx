@@ -8,7 +8,7 @@ interface IProps {
 const Loading: FC<IProps> = props => (
   <div
     className={cx(
-      'foo',
+      'loading-container',
       props.monitor && !props.isPreview
         ? 'monitor'
         : props.monitor && props.isPreview

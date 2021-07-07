@@ -41,7 +41,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
 
   const monitor = fetched ? view : location?.state?.view.cards;
   if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
-    return <div>loading..</div>;
+    return null;
   }
   return <CarouselContainer views={monitor.cards} />;
 };

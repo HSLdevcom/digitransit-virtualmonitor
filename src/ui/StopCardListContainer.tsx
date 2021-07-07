@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import { IStop } from '../util/Interfaces';
 import React, { FC, useState } from 'react';
 import StopCardRow from './StopCardRow';
@@ -300,8 +301,8 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         items={modifiedStopCardList}
       />
       <div className="buttons">
-        <button className="button" onClick={addNew}>
-          <span>{t('prepareDisplay')}</span>
+        <button className={cx('button', 'prepare')} onClick={addNew}>
+          <span>{t('prepareDisplay')} </span>
         </button>
         <button
           disabled={createButtonsDisabled()}

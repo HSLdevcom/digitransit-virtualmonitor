@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { IView } from '../util/Interfaces';
 import { gql, useQuery } from '@apollo/client';
+import Loading from './Loading';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
 import Logo from './logo/Logo';
@@ -402,7 +403,7 @@ const Monitor: FC<IProps> = ({
       stationStateRight.loading;
 
   if (loading) {
-    return <div>LOADING</div>;
+    return <Loading monitor isPreview={isPreview} />;
   }
   const currentTime = time ? time : new Date().getTime();
   return (

@@ -63,6 +63,11 @@
       display: flex;
 
       .settings {
+        &.east-west {
+          svg {
+            left: 588px;
+          }
+        }
         svg {
           position: absolute;
           left: 633px;
@@ -72,6 +77,9 @@
       }
 
       .hidden-routes {
+        &.east-west {
+          right: 148px;
+        }
         .clock {
           svg {
             padding-right: 3px;

@@ -15,6 +15,10 @@
 }
 
 .button {
+  &.prepare {
+    margin-right: 180px;
+  }
+
   display: flex;
   flex-direction: row;
   justify-content: center;

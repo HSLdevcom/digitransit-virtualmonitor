@@ -34,7 +34,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
 
   const hash: any = location.search.split('cont=');
   if (hash[1] && !stopCardList) {
-    return <div>Loading...</div>;
+    return null;
   }
   if (!hash[1]) {
     return (

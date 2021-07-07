@@ -52,7 +52,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
   const handleClick = () => {
     changeOpen(true);
   };
-
+  const isEastWest = stop.layout > 8 && stop.layout < 12;
   return (
     <div className="stop-row-container">
       <div className="stop-row-stop icon">
@@ -61,7 +61,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
       <div className="stop-row-main">
         <div className="stop-upper-row">
           {stop.name}
-          <div className="settings">
+          <div className={cx("settings", isEastWest && 'east-west')}>
             <span onClick={handleClick}>
               {' '}
               <Icon img="settings" />
@@ -70,6 +70,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
           <div
             className={cx(
               'hidden-routes',
+              isEastWest && 'east-west',
               stop.settings?.timeShift > 0 &&
                 stop.settings?.hiddenRoutes.length > 0
                 ? 'clock-and-routes'

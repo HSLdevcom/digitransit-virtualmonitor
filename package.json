@@ -46,6 +46,7 @@
     "react-burger-menu": "^3.0.6",
     "react-dom": "^16.14.0",
     "react-i18next": "^11.8.5",
+    "react-loader-spinner": "^4.0.0",
     "react-modal": "^3.11.2",
     "react-moment": "^0.7.9",
     "react-promise": "^2.1.0",

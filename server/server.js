@@ -13,6 +13,32 @@ var http = require('http');
  */
 
 var port = normalizePort(process.env.PORT || '3001');
+
+const gtfs = require('gtfs');
+const config = {
+  agencies: [
+    {
+      url: 'https://infopalvelut.storage.hsldev.com/gtfs/hsl.zip',
+      exclude: [
+        'shapes',
+        'agency',
+        'stop_times',
+        'routes',
+        'trips',
+        'stops',
+      ]
+    }
+  ]
+};
+
+gtfs.import(config)
+.then(() => {
+  console.log('Import Successful');
+  console.log(gtfs.getTranslations().then(s => console.log(s)));
+})
+.catch(err => {
+  console.error(err);
+});
 app.set('port', port);
 
 /**
@@ -32,6 +58,8 @@ server.on('listening', onListening);
 /**
  * Normalize a port into a number, string, or false.
  */
+
+
 
 function normalizePort(val) {
   var port = parseInt(val, 10);

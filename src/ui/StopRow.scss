@@ -10,7 +10,7 @@
   padding: 10px 0;
 
   &.placeholder {
-    margin: 0;
+    margin: 8px 0 0 0;
     padding: 0;
     border: none;
     position: relative;
@@ -68,6 +68,7 @@
             left: 588px;
           }
         }
+
         svg {
           position: absolute;
           left: 633px;
@@ -80,6 +81,7 @@
         &.east-west {
           right: 148px;
         }
+
         .clock {
           svg {
             padding-right: 3px;

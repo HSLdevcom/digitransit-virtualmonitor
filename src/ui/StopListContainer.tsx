@@ -22,20 +22,40 @@ interface Props {
     gtfsIdForHidden: string,
   ) => void;
   cardInfo: ICardInfo;
-  updateCardInfo?: (cardId: number, type: string, value: string) => void;
+  updateCardInfo?: (
+    cardId: number,
+    type: string,
+    value: string,
+    lang?: string,
+  ) => void;
+  languages: Array<string>;
 }
 
 const TitleItem = props => {
   const [titleLeft, setTitleLeft] = useState('');
+  const [titleLang, setTitleLang] = useState('');
   const [changedLeft, setChangedLeft] = useState(false);
   const [titleRight, setTitleRight] = useState('');
   const [changedRight, setChangedRight] = useState(false);
-  const { cardInfo, side, updateCardInfo, leftItemsHeader, rightItemsHeader } =
-    props;
-
-  const onBlur = (event: any, side: string) => {
+  const [focus, setFocus] = useState(false);
+  const {
+    cardInfo,
+    side,
+    updateCardInfo,
+    leftItemsHeader,
+    rightItemsHeader,
+    languages,
+  } = props;
+  const onBlur = (event: any, side: string, lang) => {
+    setFocus(false);
     if (event && updateCardInfo) {
-      updateCardInfo(cardInfo.id, `title-${side}`, event.target.value);
+      updateCardInfo(
+        cardInfo.id,
+        `title-${side}`,
+        event.target.value,
+        titleLang,
+      );
+      setTitleLang(lang);
       if (side === 'left') {
         setChangedLeft(false);
       } else {
@@ -44,11 +64,11 @@ const TitleItem = props => {
     }
   };
 
-  const isKeyboardSelectionEvent = (event: any, side: string) => {
+  const isKeyboardSelectionEvent = (event: any, side: string, lang: string) => {
     const backspace = [8, 'Backspace'];
     const space = [13, ' ', 'Spacebar'];
     const enter = [32, 'Enter'];
-
+    setTitleLang(lang);
     const key = (event && (event.key || event.which || event.keyCode)) || '';
 
     if (
@@ -109,6 +129,7 @@ const TitleItem = props => {
         cardInfo.id,
         `title-${side}`,
         side === 'left' ? titleLeft : titleRight ? titleRight : '',
+        titleLang,
       );
       if (side === 'left') {
         setChangedLeft(false);
@@ -121,29 +142,102 @@ const TitleItem = props => {
 
   const valueLeft = changedLeft ? titleLeft : props.titleLeft;
   const valueRight = changedRight ? titleRight : props.titleRight;
-
   return (
-    <>
-      <div className="header">
-        {side === 'left' ? leftItemsHeader : rightItemsHeader}
-      </div>
-      <div className={cx('stop-list-title', side)}>
-        <input
-          className={`input-${side}`}
-          id={`stop-list-title-input-${side}`}
-          onClick={e => onClick(e)}
-          onKeyDown={e => isKeyboardSelectionEvent(e, side)}
-          onBlur={e => !isKeyboardSelectionEvent(e, side) && onBlur(e, side)}
-          value={side === 'left' ? valueLeft : valueRight}
-        />
-        <div
-          role="button"
-          onClick={() => focusToInput(`stop-list-title-input-${side}`)}
-        >
-          <Icon img="edit" color={'#007ac9'} width={20} height={20} />
-        </div>
-      </div>
-    </>
+    <div className="east-west-inputs">
+      {props.languages?.includes('fi') && (
+        <>
+          <div className="header">
+            {side === 'left'
+              ? leftItemsHeader.concat(' - FI ')
+              : rightItemsHeader.concat(' - FI ')}
+          </div>
+          <div className={cx('stop-list-title', side)}>
+            <input
+              className={`input-${side}`}
+              id={`stop-list-title-input-${side}-fi`}
+              onClick={e => onClick(e)}
+              onFocus={() => setFocus(true)}
+              onKeyDown={e => isKeyboardSelectionEvent(e, side, 'fi')}
+              onBlur={e =>
+                !isKeyboardSelectionEvent(e, side, 'fi') &&
+                onBlur(e, side, 'fi')
+              }
+              value={side === 'left' ? valueLeft['fi'] : valueRight['fi']}
+            />
+            {!focus && (
+              <div
+                role="button"
+                onClick={() => focusToInput(`stop-list-title-input-${side}-fi`)}
+              >
+                <Icon img="edit" color={'#007ac9'} width={20} height={20} />
+              </div>
+            )}
+          </div>
+        </>
+      )}
+      {props.languages?.includes('sv') && (
+        <>
+          <div className="header">
+            {side === 'left'
+              ? leftItemsHeader.concat(' - SV ')
+              : rightItemsHeader.concat(' - SV ')}
+          </div>
+          <div className={cx('stop-list-title', side)}>
+            <input
+              className={`input-${side}`}
+              id={`stop-list-title-input-${side}-sv`}
+              onClick={e => onClick(e)}
+              onFocus={() => setFocus(true)}
+              onKeyDown={e => isKeyboardSelectionEvent(e, side, 'sv')}
+              onBlur={e =>
+                !isKeyboardSelectionEvent(e, side, 'sv') &&
+                onBlur(e, side, 'sv')
+              }
+              value={side === 'left' ? valueLeft['sv'] : valueRight['sv']}
+            />
+            {!focus && (
+              <div
+                role="button"
+                onClick={() => focusToInput(`stop-list-title-input-${side}-sv`)}
+              >
+                <Icon img="edit" color={'#007ac9'} width={20} height={20} />
+              </div>
+            )}
+          </div>
+        </>
+      )}
+      {props.languages?.includes('en') && (
+        <>
+          <div className="header">
+            {side === 'left'
+              ? leftItemsHeader.concat(' - EN ')
+              : rightItemsHeader.concat(' - EN ')}
+          </div>
+          <div className={cx('stop-list-title', side)}>
+            <input
+              className={`input-${side}`}
+              id={`stop-list-title-input-${side}-en`}
+              onClick={e => onClick(e)}
+              onFocus={() => setFocus(true)}
+              onKeyDown={e => isKeyboardSelectionEvent(e, side, 'en')}
+              onBlur={e =>
+                !isKeyboardSelectionEvent(e, side, 'en') &&
+                onBlur(e, side, 'en')
+              }
+              value={side === 'left' ? valueLeft['en'] : valueRight['en']}
+            />
+            {!focus && (
+              <div
+                role="button"
+                onClick={() => focusToInput(`stop-list-title-input-${side}-en`)}
+              >
+                <Icon img="edit" color={'#007ac9'} width={20} height={20} />
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 
@@ -172,6 +266,7 @@ const StopList = props => {
     rightItemsHeader,
     cardInfo,
     updateCardInfo,
+    languages,
   } = props;
 
   const showStopTitles = getLayout(cardInfo.layout)[2];
@@ -185,6 +280,7 @@ const StopList = props => {
           leftItemsHeader={leftItemsHeader}
           cardInfo={cardInfo}
           updateCardInfo={updateCardInfo}
+          languages={languages}
         />
       )}
       {showStopTitles && leftItems.length === 0 && (
@@ -216,6 +312,7 @@ const StopList = props => {
           rightItemsHeader={rightItemsHeader}
           cardInfo={cardInfo}
           updateCardInfo={updateCardInfo}
+          languages={languages}
         />
       )}
       {showStopTitles && rightItems.length === 0 && (
@@ -287,6 +384,7 @@ const StopListContainer: FC<Props & WithTranslation> = props => {
         setStops={props.setStops}
         cardInfo={props.cardInfo}
         updateCardInfo={props.updateCardInfo}
+        languages={props.languages}
       />
     </div>
   );

@@ -410,11 +410,13 @@ const Monitor: FC<IProps> = ({
     <div className="main-content-container">
       <Titlebar isPreview isLandscape>
         <Logo monitorConfig={config} isPreview isLandscape />
-        {!isMultiDisplay && <div className="title-text">{view.title}</div>}
+        {!isMultiDisplay && (
+          <div className="title-text">{view.title['fi']}</div>
+        )}
         {isMultiDisplay && (
           <div className="multi-display-titles">
-            <div className="left-title">{view.columns.left.title}</div>
-            <div className="right-title">{view.columns.right.title}</div>
+            <div className="left-title">{view.columns.left.title['fi']}</div>
+            <div className="right-title">{view.columns.right.title['fi']}</div>
           </div>
         )}
         <TitlebarTime

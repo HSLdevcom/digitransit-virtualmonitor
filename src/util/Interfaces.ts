@@ -31,7 +31,7 @@ export interface IPattern {
 
 export interface ISides {
   stops: Array<IStop>;
-  title: string;
+  title: ITitle;
 }
 export interface IColumn {
   left: ISides;
@@ -40,7 +40,7 @@ export interface IColumn {
 
 export interface IView {
   columns: IColumn;
-  title: string;
+  title: ITitle;
   layout: number;
   duration: number;
 }
@@ -53,4 +53,10 @@ export interface IMonitorConfig {
   urlMultipleStopsText?: string;
   urlParamFindText?: string;
   urlParamFindAltText?: string;
+}
+
+export interface ITitle {
+  fi: string;
+  sv: string;
+  en: string;
 }

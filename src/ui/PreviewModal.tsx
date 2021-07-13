@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
-import { IHiddenRoute, ISettings } from '../util/Interfaces';
+import { ISettings, ITitle } from '../util/Interfaces';
 import CarouselContainer from './CarouselContainer';
 import Icon from './Icon';
 import cx from 'classnames';
@@ -17,14 +17,14 @@ interface IStop {
 }
 interface ISides {
   stops: Array<IStop>;
-  title: string;
+  title: ITitle;
 }
 interface IColumn {
   left: ISides;
   right: ISides;
 }
 interface ICard {
-  title: string;
+  title: ITitle;
   layout: number;
   duration: number;
   columns: IColumn;

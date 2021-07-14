@@ -1,15 +1,15 @@
 export const defaultStopCard = t => ({
   id: 1,
-  title: t('viewEditorName'),
+  title: { fi: t('viewEditorName'), sv: '', en: '' },
   columns: {
     left: {
       inUse: true,
-      title: t('sideLeft'),
+      title: { fi: t('sideLeft'), sv: '', en: '' },
       stops: [],
     },
     right: {
       inUse: false,
-      title: t('sideRight'),
+      title: { fi: t('sideRight'), sv: '', en: '' },
       stops: [],
     },
   },

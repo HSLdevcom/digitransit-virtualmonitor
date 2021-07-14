@@ -14,7 +14,7 @@
 
   .title-with-icons {
     display: flex;
-    max-height: 80px;
+    height: 80px;
     width: 720px;
     border-bottom: 1px solid #ddd;
 
@@ -22,8 +22,8 @@
       display: flex;
       height: 40px;
       position: relative;
-      left: 385px;
       top: 20px;
+      margin-left: auto;
 
       .delete {
         cursor: pointer;
@@ -88,31 +88,44 @@
     }
   }
 
-  .stop-list-title {
-    &.left,
-    &.right {
-      display: flex;
-      flex-direction: row;
-
-      .input-left,
-      .input-right {
-        font-size: 21px;
-        line-height: 24px;
-        letter-spacing: -0.3px;
-        width: 130px;
-        border: none;
-
-        &:focus {
-          outline: none;
-        }
+  .east-west-inputs {
+    display: flex;
+    flex-flow: row;
+    align-items: flex-end;
+    .stop-list-title-input {
+      width: 500px;
+      .header {
+        padding-bottom: 16px;
       }
 
-      svg {
-        position: relative;
-        top: 2px;
-        display: flex;
-        justify-content: center;
-        align-content: center;
+      .stop-list-title {
+        &.left,
+        &.right {
+          display: flex;
+          flex-direction: row;
+          position: relative;
+
+          .input-left,
+          .input-right {
+            font-size: 21px;
+            line-height: 24px;
+            letter-spacing: -0.3px;
+            width: 130px;
+            border: none;
+
+            &:focus {
+              outline: auto #007ac9;
+            }
+          }
+
+          svg {
+            position: relative;
+            top: 2px;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+          }
+        }
       }
     }
   }
@@ -149,5 +162,6 @@
     line-height: 24px;
     letter-spacing: -0.3px;
     color: #666;
+    min-width: 106px;
   }
 }

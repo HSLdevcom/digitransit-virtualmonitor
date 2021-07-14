@@ -28,6 +28,7 @@ const StopCardItem = ({
   totalCount,
   feedIds,
   orientation,
+  languages,
 }) => {
   const cardInfo: ICardInfo = {
     feedIds: feedIds,
@@ -52,12 +53,13 @@ const StopCardItem = ({
         onStopDelete={item.onStopDelete}
         onStopMove={item.onStopMove}
         updateCardInfo={item.updateCardInfo}
+        languages={languages}
       />
     </li>
   );
 };
 
-const StopCardList = ({ orientation, feedIds, items }) => {
+const StopCardList = ({ orientation, feedIds, items, languages }) => {
   return (
     <ul className="stopcards">
       {items.map((item, index) => {
@@ -70,6 +72,7 @@ const StopCardList = ({ orientation, feedIds, items }) => {
             value={item}
             totalCount={items.length}
             possibleToMove={items.length > 1}
+            languages={languages}
           />
         );
       })}
@@ -150,14 +153,56 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     }
   };
 
-  const updateCardInfo = (cardId: number, type: string, value: string) => {
+  const updateCardInfo = (
+    cardId: number,
+    type: string,
+    value: string,
+    lang = '',
+  ) => {
     const cardIndex = stopCardList.findIndex(card => card.id === cardId);
     if (type === 'title') {
-      stopCardList[cardIndex].title = value;
+      if (!stopCardList[cardIndex].title) {
+        const title = {
+          fi: '',
+          sv: '',
+          en: '',
+        };
+        title[lang] = value;
+        stopCardList[cardIndex].title = title;
+      } else {
+        stopCardList[cardIndex].title[lang] = value;
+      }
     } else if (type === 'title-left') {
-      stopCardList[cardIndex].columns['left'].title = value;
+      if (
+        !stopCardList[cardIndex].columns['left'].title ||
+        typeof stopCardList[cardIndex].columns['left'].title === 'string'
+      ) {
+        const leftTitle = {
+          fi: '',
+          sv: '',
+          en: '',
+        };
+        leftTitle[lang] = value;
+        stopCardList[cardIndex].columns['left'].title = leftTitle;
+      } else {
+        stopCardList[cardIndex].columns['left'].title[lang] = value;
+      }
     } else if (type === 'title-right') {
-      stopCardList[cardIndex].columns['right'].title = value;
+      if (
+        !stopCardList[cardIndex].columns['right'].title ||
+        typeof stopCardList[cardIndex].columns['right'].title === 'string'
+      ) {
+        const rightTitle = {
+          fi: '',
+          sv: '',
+          en: '',
+        };
+        rightTitle[lang] = value;
+        stopCardList[cardIndex].columns['right'].title = rightTitle;
+      } else {
+        stopCardList[cardIndex].columns['right'].title[lang] = value;
+      }
+
       stopCardList[cardIndex].columns['right'].inUse = true;
     } else if (type === 'layout') {
       if (
@@ -170,8 +215,8 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           stopCardList[cardIndex].columns.right.stops,
         );
         stopCardList[cardIndex].columns.right.stops = [];
-        stopCardList[cardIndex].columns.left.title = t('sideLeft');
-        stopCardList[cardIndex].columns.right.title = t('sideRight');
+        stopCardList[cardIndex].columns.left.title[lang] = t('sideLeft');
+        stopCardList[cardIndex].columns.right.title[lang] = t('sideRight');
       }
       stopCardList[cardIndex].layout = Number(value);
     } else if (type === 'duration') {
@@ -299,6 +344,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         orientation={orientation}
         feedIds={feedIds}
         items={modifiedStopCardList}
+        languages={languages}
       />
       <div className="buttons">
         <button className={cx('button', 'prepare')} onClick={addNew}>

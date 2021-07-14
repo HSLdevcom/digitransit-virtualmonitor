@@ -61,7 +61,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
       <div className="stop-row-main">
         <div className="stop-upper-row">
           {stop.name}
-          <div className={cx("settings", isEastWest && 'east-west')}>
+          <div className={cx('settings', isEastWest && 'east-west')}>
             <span onClick={handleClick}>
               {' '}
               <Icon img="settings" />

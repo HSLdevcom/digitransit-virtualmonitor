@@ -50,6 +50,7 @@ interface IProps {
     type: string,
     value: string,
   ) => void;
+  languages: Array<string>;
 }
 
 const StopCardRow: FC<IProps & WithTranslation> = ({
@@ -64,6 +65,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   onStopMove,
   setStops,
   updateCardInfo,
+  languages,
   t,
 }) => {
   const [getStop, stopState] = useLazyQuery(GET_STOP);
@@ -160,16 +162,40 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   const lang = t('languageCode');
   const isFirst = cardInfo.index === 0;
   const isLast = cardInfo.index === cardsCount - 1;
-
+  const isEastWest = cardInfo.layout >= 9 && cardInfo.layout <= 11;
   return (
     <div className="stopcard-row-container">
       <div className="title-with-icons">
-        <StopViewTitleEditor
-          id={cardInfo.id}
-          layout={cardInfo.layout}
-          title={cardInfo.title}
-          updateCardInfo={updateCardInfo}
-        />
+        {languages.includes('fi') && (
+          <StopViewTitleEditor
+            id={cardInfo.id}
+            layout={cardInfo.layout}
+            title={cardInfo.title}
+            updateCardInfo={updateCardInfo}
+            lang={'fi'}
+          />
+        )}
+        {languages.includes('sv') &&
+          (!isEastWest || !languages.includes('fi')) && (
+            <StopViewTitleEditor
+              id={cardInfo.id}
+              layout={cardInfo.layout}
+              title={cardInfo.title}
+              updateCardInfo={updateCardInfo}
+              lang={'sv'}
+            />
+          )}
+        {languages.includes('en') &&
+          (!isEastWest ||
+            (!languages.includes('fi') && !languages.includes('sv'))) && (
+            <StopViewTitleEditor
+              id={cardInfo.id}
+              layout={cardInfo.layout}
+              title={cardInfo.title}
+              updateCardInfo={updateCardInfo}
+              lang={'en'}
+            />
+          )}
         <div className="icons">
           {cardsCount > 1 && (
             <div
@@ -290,6 +316,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         setStops={setStops}
         cardInfo={cardInfo}
         updateCardInfo={updateCardInfo}
+        languages={languages}
       />
     </div>
   );

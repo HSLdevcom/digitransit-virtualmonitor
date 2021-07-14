@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { IStop } from '../util/Interfaces';
 import Icon from './Icon';
+import StopListTitleInput from './StopListTitleInput';
 import StopRow from './StopRow';
 import { v4 as uuid } from 'uuid';
 import cx from 'classnames';
@@ -22,128 +23,86 @@ interface Props {
     gtfsIdForHidden: string,
   ) => void;
   cardInfo: ICardInfo;
-  updateCardInfo?: (cardId: number, type: string, value: string) => void;
+  updateCardInfo?: (
+    cardId: number,
+    type: string,
+    value: string,
+    lang?: string,
+  ) => void;
+  languages: Array<string>;
 }
 
 const TitleItem = props => {
   const [titleLeft, setTitleLeft] = useState('');
+  const [titleLang, setTitleLang] = useState('');
   const [changedLeft, setChangedLeft] = useState(false);
   const [titleRight, setTitleRight] = useState('');
   const [changedRight, setChangedRight] = useState(false);
-  const { cardInfo, side, updateCardInfo, leftItemsHeader, rightItemsHeader } =
-    props;
+  const [focus, setFocus] = useState(false);
+  const {
+    cardInfo,
+    side,
+    updateCardInfo,
+    leftItemsHeader,
+    rightItemsHeader,
+    languages,
+  } = props;
 
-  const onBlur = (event: any, side: string) => {
-    if (event && updateCardInfo) {
-      updateCardInfo(cardInfo.id, `title-${side}`, event.target.value);
-      if (side === 'left') {
-        setChangedLeft(false);
-      } else {
-        setChangedRight(false);
-      }
+  const setTitle = (
+    side: string,
+    changed: boolean,
+    title: string = undefined,
+  ) => {
+    if (title) {
+      side === 'left' ? setTitleLeft(title) : setTitleRight(title);
     }
-  };
-
-  const isKeyboardSelectionEvent = (event: any, side: string) => {
-    const backspace = [8, 'Backspace'];
-    const space = [13, ' ', 'Spacebar'];
-    const enter = [32, 'Enter'];
-
-    const key = (event && (event.key || event.which || event.keyCode)) || '';
-
-    if (
-      key &&
-      typeof event.target.selectionStart === 'number' &&
-      event.target.selectionStart === 0 &&
-      event.target.selectionEnd === event.target.value.length &&
-      event.target.value === (side === 'left' ? titleLeft : titleRight)
-    ) {
-      if (backspace.concat(space).includes(key)) {
-        if (side === 'left') {
-          setTitleLeft('');
-          setChangedLeft(true);
-        } else {
-          setTitleRight('');
-          setChangedRight(true);
-        }
-      } else if (key.length === 1) {
-        event.target.value = key;
-        if (side === 'left') {
-          setTitleLeft(key);
-          setChangedLeft(true);
-        } else {
-          setTitleRight(key);
-          setChangedRight(true);
-        }
-      }
-      return false;
-    }
-
-    if (key && backspace.includes(key)) {
-      if (side === 'left') {
-        setTitleLeft(titleLeft.slice(0, -1));
-        setChangedLeft(true);
-      } else {
-        setTitleRight(titleRight.slice(0, -1));
-        setChangedRight(true);
-      }
-      return false;
-    }
-
-    if (!key || !enter.includes(key)) {
-      if (key.length === 1) {
-        if (side === 'left') {
-          setTitleLeft(titleLeft.concat(key));
-          setChangedLeft(true);
-        } else {
-          setTitleRight(titleRight ? titleRight.concat(key) : key);
-          setChangedRight(true);
-        }
-      }
-      return false;
-    }
-
-    event.preventDefault();
-    if (updateCardInfo) {
-      updateCardInfo(
-        cardInfo.id,
-        `title-${side}`,
-        side === 'left' ? titleLeft : titleRight ? titleRight : '',
-      );
-      if (side === 'left') {
-        setChangedLeft(false);
-      } else {
-        setChangedRight(false);
-      }
-    }
-    return true;
+    side === 'left' ? setChangedLeft(changed) : setChangedRight(changed);
   };
 
   const valueLeft = changedLeft ? titleLeft : props.titleLeft;
   const valueRight = changedRight ? titleRight : props.titleRight;
-
   return (
-    <>
-      <div className="header">
-        {side === 'left' ? leftItemsHeader : rightItemsHeader}
-      </div>
-      <div className={cx('stop-list-title', side)}>
-        <input
-          className={`input-${side}`}
-          id={`stop-list-title-input-${side}`}
-          onClick={e => onClick(e)}
-          onKeyDown={e => isKeyboardSelectionEvent(e, side)}
-          onBlur={e => !isKeyboardSelectionEvent(e, side) && onBlur(e, side)}
+    <div className="east-west-inputs">
+      {props.languages?.includes('fi') && (
+        <StopListTitleInput
+          lang="fi"
+          side={side}
+          titleLeft={titleLeft}
+          titleRight={titleRight}
+          updateCardInfo={updateCardInfo}
+          cardInfoId={cardInfo.id}
+          setTitle={setTitle}
+          itemsHeader={side == 'left' ? leftItemsHeader : rightItemsHeader}
           value={side === 'left' ? valueLeft : valueRight}
         />
-        <div
-          role="button"
-          onClick={() => focusToInput(`stop-list-title-input-${side}`)}
-        >
-          <Icon img="edit" color={'#007ac9'} width={20} height={20} />
-        </div>
-      </div>
-    </>
+      )}
+      {props.languages?.includes('sv') && (
+        <StopListTitleInput
+          lang="sv"
+          side={side}
+          titleLeft={titleLeft}
+          titleRight={titleRight}
+          updateCardInfo={updateCardInfo}
+          cardInfoId={cardInfo.id}
+          setTitle={setTitle}
+          itemsHeader={side == 'left' ? leftItemsHeader : rightItemsHeader}
+          value={side === 'left' ? valueLeft : valueRight}
+        />
+      )}
+      {props.languages?.includes('en') && (
+        <StopListTitleInput
+          lang="en"
+          side={side}
+          titleLeft={titleLeft}
+          titleRight={titleRight}
+          updateCardInfo={updateCardInfo}
+          cardInfoId={cardInfo.id}
+          setTitle={setTitle}
+          itemsHeader={side == 'left' ? leftItemsHeader : rightItemsHeader}
+          value={side === 'left' ? valueLeft : valueRight}
+        />
+      )}
+    </div>
   );
 };
 
@@ -172,6 +131,7 @@ const StopList = props => {
     rightItemsHeader,
     cardInfo,
     updateCardInfo,
+    languages,
   } = props;
 
   const showStopTitles = getLayout(cardInfo.layout)[2];
@@ -185,6 +145,7 @@ const StopList = props => {
           leftItemsHeader={leftItemsHeader}
           cardInfo={cardInfo}
           updateCardInfo={updateCardInfo}
+          languages={languages}
         />
       )}
       {showStopTitles && leftItems.length === 0 && (
@@ -216,6 +177,7 @@ const StopList = props => {
           rightItemsHeader={rightItemsHeader}
           cardInfo={cardInfo}
           updateCardInfo={updateCardInfo}
+          languages={languages}
         />
       )}
       {showStopTitles && rightItems.length === 0 && (
@@ -287,6 +249,7 @@ const StopListContainer: FC<Props & WithTranslation> = props => {
         setStops={props.setStops}
         cardInfo={props.cardInfo}
         updateCardInfo={props.updateCardInfo}
+        languages={props.languages}
       />
     </div>
   );

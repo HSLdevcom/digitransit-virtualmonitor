@@ -132,7 +132,7 @@ function StopListTitleInput(props: {
     return true;
   };
   return (
-    <>
+    <div className="stop-list-title-input">
       <div className="header">
         {props.itemsHeader.concat(' - ').concat(props.lang.toUpperCase())}
       </div>
@@ -159,7 +159,7 @@ function StopListTitleInput(props: {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

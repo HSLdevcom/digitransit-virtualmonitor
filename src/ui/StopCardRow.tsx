@@ -175,24 +175,27 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             lang={'fi'}
           />
         )}
-        {languages.includes('sv') && !isEastWest && (
-          <StopViewTitleEditor
-            id={cardInfo.id}
-            layout={cardInfo.layout}
-            title={cardInfo.title}
-            updateCardInfo={updateCardInfo}
-            lang={'sv'}
-          />
-        )}
-        {languages.includes('en') && !isEastWest && (
-          <StopViewTitleEditor
-            id={cardInfo.id}
-            layout={cardInfo.layout}
-            title={cardInfo.title}
-            updateCardInfo={updateCardInfo}
-            lang={'en'}
-          />
-        )}
+        {languages.includes('sv') &&
+          (!isEastWest || !languages.includes('fi')) && (
+            <StopViewTitleEditor
+              id={cardInfo.id}
+              layout={cardInfo.layout}
+              title={cardInfo.title}
+              updateCardInfo={updateCardInfo}
+              lang={'sv'}
+            />
+          )}
+        {languages.includes('en') &&
+          (!isEastWest ||
+            (!languages.includes('fi') && !languages.includes('sv'))) && (
+            <StopViewTitleEditor
+              id={cardInfo.id}
+              layout={cardInfo.layout}
+              title={cardInfo.title}
+              updateCardInfo={updateCardInfo}
+              lang={'en'}
+            />
+          )}
         <div className="icons">
           {cardsCount > 1 && (
             <div

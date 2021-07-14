@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { IStop } from '../util/Interfaces';
 import Icon from './Icon';
+import StopListTitleInput from './StopListTitleInput';
 import StopRow from './StopRow';
 import { v4 as uuid } from 'uuid';
 import cx from 'classnames';
@@ -46,98 +47,16 @@ const TitleItem = props => {
     rightItemsHeader,
     languages,
   } = props;
-  const onBlur = (event: any, side: string, lang) => {
-    setFocus(false);
-    if (event && updateCardInfo) {
-      updateCardInfo(
-        cardInfo.id,
-        `title-${side}`,
-        event.target.value,
-        titleLang,
-      );
-      setTitleLang(lang);
-      if (side === 'left') {
-        setChangedLeft(false);
-      } else {
-        setChangedRight(false);
-      }
-    }
-  };
 
-  const isKeyboardSelectionEvent = (event: any, side: string, lang: string) => {
-    const backspace = [8, 'Backspace'];
-    const space = [13, ' ', 'Spacebar'];
-    const enter = [32, 'Enter'];
-    setTitleLang(lang);
-    const key = (event && (event.key || event.which || event.keyCode)) || '';
-
-    if (
-      key &&
-      typeof event.target.selectionStart === 'number' &&
-      event.target.selectionStart === 0 &&
-      event.target.selectionEnd === event.target.value.length &&
-      event.target.value === (side === 'left' ? titleLeft : titleRight)
-    ) {
-      if (backspace.concat(space).includes(key)) {
-        if (side === 'left') {
-          setTitleLeft('');
-          setChangedLeft(true);
-        } else {
-          setTitleRight('');
-          setChangedRight(true);
-        }
-      } else if (key.length === 1) {
-        event.target.value = key;
-        if (side === 'left') {
-          setTitleLeft(key);
-          setChangedLeft(true);
-        } else {
-          setTitleRight(key);
-          setChangedRight(true);
-        }
-      }
-      return false;
+  const setTitle = (
+    side: string,
+    changed: boolean,
+    title: string = undefined,
+  ) => {
+    if (title) {
+      side === 'left' ? setTitleLeft(title) : setTitleRight(title);
     }
-
-    if (key && backspace.includes(key)) {
-      if (side === 'left') {
-        setTitleLeft(titleLeft.slice(0, -1));
-        setChangedLeft(true);
-      } else {
-        setTitleRight(titleRight.slice(0, -1));
-        setChangedRight(true);
-      }
-      return false;
-    }
-
-    if (!key || !enter.includes(key)) {
-      if (key.length === 1) {
-        if (side === 'left') {
-          setTitleLeft(titleLeft.concat(key));
-          setChangedLeft(true);
-        } else {
-          setTitleRight(titleRight ? titleRight.concat(key) : key);
-          setChangedRight(true);
-        }
-      }
-      return false;
-    }
-
-    event.preventDefault();
-    if (updateCardInfo) {
-      updateCardInfo(
-        cardInfo.id,
-        `title-${side}`,
-        side === 'left' ? titleLeft : titleRight ? titleRight : '',
-        titleLang,
-      );
-      if (side === 'left') {
-        setChangedLeft(false);
-      } else {
-        setChangedRight(false);
-      }
-    }
-    return true;
+    side === 'left' ? setChangedLeft(changed) : setChangedRight(changed);
   };
 
   const valueLeft = changedLeft ? titleLeft : props.titleLeft;
@@ -145,97 +64,43 @@ const TitleItem = props => {
   return (
     <div className="east-west-inputs">
       {props.languages?.includes('fi') && (
-        <>
-          <div className="header">
-            {side === 'left'
-              ? leftItemsHeader.concat(' - FI ')
-              : rightItemsHeader.concat(' - FI ')}
-          </div>
-          <div className={cx('stop-list-title', side)}>
-            <input
-              className={`input-${side}`}
-              id={`stop-list-title-input-${side}-fi`}
-              onClick={e => onClick(e)}
-              onFocus={() => setFocus(true)}
-              onKeyDown={e => isKeyboardSelectionEvent(e, side, 'fi')}
-              onBlur={e =>
-                !isKeyboardSelectionEvent(e, side, 'fi') &&
-                onBlur(e, side, 'fi')
-              }
-              value={side === 'left' ? valueLeft['fi'] : valueRight['fi']}
-            />
-            {!focus && (
-              <div
-                role="button"
-                onClick={() => focusToInput(`stop-list-title-input-${side}-fi`)}
-              >
-                <Icon img="edit" color={'#007ac9'} width={20} height={20} />
-              </div>
-            )}
-          </div>
-        </>
+        <StopListTitleInput
+          lang="fi"
+          side={side}
+          titleLeft={titleLeft}
+          titleRight={titleRight}
+          updateCardInfo={updateCardInfo}
+          cardInfoId={cardInfo.id}
+          setTitle={setTitle}
+          itemsHeader={side == 'left' ? leftItemsHeader : rightItemsHeader}
+          value={side === 'left' ? valueLeft : valueRight}
+        />
       )}
       {props.languages?.includes('sv') && (
-        <>
-          <div className="header">
-            {side === 'left'
-              ? leftItemsHeader.concat(' - SV ')
-              : rightItemsHeader.concat(' - SV ')}
-          </div>
-          <div className={cx('stop-list-title', side)}>
-            <input
-              className={`input-${side}`}
-              id={`stop-list-title-input-${side}-sv`}
-              onClick={e => onClick(e)}
-              onFocus={() => setFocus(true)}
-              onKeyDown={e => isKeyboardSelectionEvent(e, side, 'sv')}
-              onBlur={e =>
-                !isKeyboardSelectionEvent(e, side, 'sv') &&
-                onBlur(e, side, 'sv')
-              }
-              value={side === 'left' ? valueLeft['sv'] : valueRight['sv']}
-            />
-            {!focus && (
-              <div
-                role="button"
-                onClick={() => focusToInput(`stop-list-title-input-${side}-sv`)}
-              >
-                <Icon img="edit" color={'#007ac9'} width={20} height={20} />
-              </div>
-            )}
-          </div>
-        </>
+        <StopListTitleInput
+          lang="sv"
+          side={side}
+          titleLeft={titleLeft}
+          titleRight={titleRight}
+          updateCardInfo={updateCardInfo}
+          cardInfoId={cardInfo.id}
+          setTitle={setTitle}
+          itemsHeader={side == 'left' ? leftItemsHeader : rightItemsHeader}
+          value={side === 'left' ? valueLeft : valueRight}
+        />
       )}
       {props.languages?.includes('en') && (
-        <>
-          <div className="header">
-            {side === 'left'
-              ? leftItemsHeader.concat(' - EN ')
-              : rightItemsHeader.concat(' - EN ')}
-          </div>
-          <div className={cx('stop-list-title', side)}>
-            <input
-              className={`input-${side}`}
-              id={`stop-list-title-input-${side}-en`}
-              onClick={e => onClick(e)}
-              onFocus={() => setFocus(true)}
-              onKeyDown={e => isKeyboardSelectionEvent(e, side, 'en')}
-              onBlur={e =>
-                !isKeyboardSelectionEvent(e, side, 'en') &&
-                onBlur(e, side, 'en')
-              }
-              value={side === 'left' ? valueLeft['en'] : valueRight['en']}
-            />
-            {!focus && (
-              <div
-                role="button"
-                onClick={() => focusToInput(`stop-list-title-input-${side}-en`)}
-              >
-                <Icon img="edit" color={'#007ac9'} width={20} height={20} />
-              </div>
-            )}
-          </div>
-        </>
+        <StopListTitleInput
+          lang="en"
+          side={side}
+          titleLeft={titleLeft}
+          titleRight={titleRight}
+          updateCardInfo={updateCardInfo}
+          cardInfoId={cardInfo.id}
+          setTitle={setTitle}
+          itemsHeader={side == 'left' ? leftItemsHeader : rightItemsHeader}
+          value={side === 'left' ? valueLeft : valueRight}
+        />
       )}
     </div>
   );

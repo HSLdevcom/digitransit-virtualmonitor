@@ -34,7 +34,6 @@ const config = {
 gtfs.import(config)
 .then(() => {
   console.log('Import Successful');
-  console.log(gtfs.getTranslations().then(s => console.log(s)));
 })
 .catch(err => {
   console.error(err);

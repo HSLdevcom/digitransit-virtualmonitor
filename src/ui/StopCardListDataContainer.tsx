@@ -1,5 +1,4 @@
 import React, { useEffect, FC, useState } from 'react';
-import Loader from 'react-loader-spinner';
 import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
 import { useQuery } from '@apollo/client';
 import Loading from './Loading';

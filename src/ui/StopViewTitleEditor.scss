@@ -11,6 +11,11 @@
   display: flex;
 
   .stop-title-input {
+    &.east-west {
+      &:focus {
+        outline: none;
+      }
+    }
     font-size: 21px;
     font-style: normal;
     font-weight: 400;

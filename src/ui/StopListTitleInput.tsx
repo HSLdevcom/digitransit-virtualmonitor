@@ -78,6 +78,7 @@ function StopListTitleInput(props: {
           setChangedRight(true);
         }
       }
+      event.preventDefault();
       return false;
     }
 

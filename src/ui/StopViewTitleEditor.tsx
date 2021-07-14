@@ -1,3 +1,4 @@
+import cx from 'classnames';
 import React, { FC, useState } from 'react';
 import './StopViewTitleEditor.scss';
 import { ITitle } from '../util/Interfaces';
@@ -121,7 +122,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
         )}
         {getLayout(layout)[2] && (
           <input
-            className="stop-title-input"
+            className={cx('stop-title-input', 'east-west')}
             id={`stop-title-input${id}-${lang}`}
             value={layoutTitle}
             readOnly

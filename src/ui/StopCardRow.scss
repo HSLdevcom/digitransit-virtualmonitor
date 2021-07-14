@@ -14,7 +14,7 @@
 
   .title-with-icons {
     display: flex;
-    max-height: 80px;
+    height: 80px;
     width: 720px;
     border-bottom: 1px solid #ddd;
 
@@ -22,8 +22,8 @@
       display: flex;
       height: 40px;
       position: relative;
-      left: 385px;
       top: 20px;
+      margin-left: auto;
 
       .delete {
         cursor: pointer;

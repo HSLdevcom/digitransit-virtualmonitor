@@ -1,5 +1,12 @@
+@import '../index.scss';
+
 .option-checkbox-container {
   display: flex;
+
+  > span {
+    font-weight: normal;
+    user-select: none;
+  }
 
   &.large {
     max-height: 55px;
@@ -14,6 +21,54 @@
   .option-checkbox {
     position: relative;
     margin-right: 2em;
+
+    label {
+      height: 20px;
+      width: 20px;
+      border: 1px solid #78909c;
+      border-radius: 4px;
+      background-color: #fff;
+      cursor: pointer;
+      position: absolute;
+      left: 0;
+
+      &:hover {
+        border: 1px solid #007ac9;
+      }
+
+      &.checked {
+        border: #007ac9 1px solid;
+
+        &::before {
+          color: #007ac9;
+          font-family: $font-family;
+          font-size: 1.25em;
+          font-weight: 500;
+          line-height: 1;
+          margin-left: 0.1em;
+          margin-top: 0.2em;
+          transform: rotateY(15deg);
+        }
+
+        &.disabled::before {
+          color: #ccc;
+        }
+      }
+
+      span > svg {
+        color: #007ac9;
+      }
+
+      &.disabled {
+        background: #ddd;
+        cursor: not-allowed;
+        pointer-events: none;
+
+        span > svg {
+          color: #888;
+        }
+      }
+    }
 
     &.bigger {
       margin-bottom: 10px;
@@ -49,54 +104,6 @@
       }
     }
 
-    label {
-      height: 20px;
-      width: 20px;
-      border: 1px solid #78909c;
-      border-radius: 4px;
-      background-color: #fff;
-      cursor: pointer;
-      position: absolute;
-      left: 0;
-
-      &:hover {
-        border: 1px solid #007ac9;
-      }
-
-      &.checked {
-        border: #007ac9 1px solid;
-
-        &::before {
-          color: #007ac9;
-          font-family: 'Roboto';
-          font-size: 1.25em;
-          font-weight: 500;
-          line-height: 1;
-          margin-left: 0.1em;
-          margin-top: 0.2em;
-          transform: rotateY(15deg);
-        }
-
-        &.disabled::before {
-          color: #ccc;
-        }
-      }
-
-      span > svg {
-        color: #007ac9;
-      }
-
-      &.disabled {
-        background: #ddd;
-        cursor: not-allowed;
-        pointer-events: none;
-
-        span > svg {
-          color: #888;
-        }
-      }
-    }
-
     input[type='checkbox'] {
       height: 20px;
       left: 0;
@@ -105,11 +112,6 @@
       visibility: hidden;
       width: 20px;
     }
-  }
-
-  > span {
-    font-weight: normal;
-    user-select: none;
   }
 
   .checkmark {

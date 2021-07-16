@@ -9,7 +9,6 @@ interface IProps {
   noPolling?: boolean;
   time?: EpochMilliseconds;
   isPreview?: boolean;
-  isLandscape?: boolean;
 }
 
 const CarouselContainer: FC<IProps> = ({
@@ -17,7 +16,6 @@ const CarouselContainer: FC<IProps> = ({
   noPolling,
   time,
   isPreview = false,
-  isLandscape = true,
 }) => {
   const len = views.length;
   const [current, setCurrent] = useState(0);
@@ -28,15 +26,19 @@ const CarouselContainer: FC<IProps> = ({
     return () => clearTimeout(id);
   }, [current]);
   const config = getConfig();
+
+  const newView = {
+    ...views[current],
+  };
+
   return (
     <Monitor
-      view={views[current]}
+      view={newView}
       index={current}
       config={config}
       noPolling={noPolling}
       time={time}
       isPreview={isPreview}
-      isLandscape={isLandscape}
     />
   );
 };

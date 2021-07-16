@@ -237,8 +237,6 @@ const Monitor: FC<IProps> = ({
   const [stopDeparturesRight, setStopDeparturesRight] = useState([]);
   const [stationDeparturesLeft, setStationDeparturesLeft] = useState([]);
   const [stationDeparturesRight, setStationDeparturesRight] = useState([]);
-  const [stopsFetched, setStopsFetched] = useState(false);
-  const [stationsFetched, setStationsFetched] = useState(false);
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
@@ -360,10 +358,6 @@ const Monitor: FC<IProps> = ({
         view.columns.left.stops,
       );
       setStopDeparturesLeft(departures);
-      setStopsFetched(!isMultiDisplay ? true : false);
-    }
-    if (!stopIdsLeft.length) {
-      setStopsFetched(!isMultiDisplay ? true : false);
     }
   }, [stopStateLeft]);
 
@@ -374,10 +368,6 @@ const Monitor: FC<IProps> = ({
         view.columns.right.stops,
       );
       setStopDeparturesRight(departures);
-      setStopsFetched(true);
-    }
-    if (isMultiDisplay && !stopIdsRight.length) {
-      setStopsFetched(true);
     }
   }, [stopStateRight]);
 
@@ -388,10 +378,6 @@ const Monitor: FC<IProps> = ({
         view.columns.left.stops,
       );
       setStationDeparturesLeft(departures);
-      setStationsFetched(isMultiDisplay ? false : true);
-    }
-    if (!stationIdsLeft.length) {
-      setStationsFetched(isMultiDisplay ? false : true);
     }
   }, [stationStateLeft]);
 
@@ -402,10 +388,6 @@ const Monitor: FC<IProps> = ({
         view.columns.right.stops,
       );
       setStationDeparturesRight(departures);
-      setStationsFetched(true);
-    }
-    if (isMultiDisplay && !stationIdsRight.length) {
-      setStationsFetched(true);
     }
   }, [stationStateRight]);
 
@@ -482,16 +464,14 @@ const Monitor: FC<IProps> = ({
           forcedLayout={forcedLayout}
         />
       </Titlebar>
-      {stationsFetched && stopsFetched && (
-        <MonitorRowContainer
-          departuresLeft={[...stopDeparturesLeft, ...stationDeparturesLeft]}
-          departuresRight={[...stopDeparturesRight, ...stationDeparturesRight]}
-          layout={getLayout(view.layout)}
-          isPreview={isPreview}
-          isLandscape={isLandscapeByLayout}
-          forcedLayout={forcedLayout}
-        />
-      )}
+      <MonitorRowContainer
+        departuresLeft={[...stopDeparturesLeft, ...stationDeparturesLeft]}
+        departuresRight={[...stopDeparturesRight, ...stationDeparturesRight]}
+        layout={getLayout(view.layout)}
+        isPreview={isPreview}
+        isLandscape={isLandscapeByLayout}
+        forcedLayout={forcedLayout}
+      />
     </div>
   );
 };

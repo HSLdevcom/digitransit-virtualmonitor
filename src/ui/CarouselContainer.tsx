@@ -27,8 +27,10 @@ const CarouselContainer: FC<IProps> = ({
   }, [current]);
   const config = getConfig();
 
+  //for debug purposes
   const newView = {
     ...views[current],
+    //layout: 1,
   };
 
   return (

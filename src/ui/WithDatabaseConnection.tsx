@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
-import { ISides } from '../util/Interfaces';
+import { ISides, ITitle } from '../util/Interfaces';
 import CarouselContainer from './CarouselContainer';
 import TranslationContainer from './TranslationContainer';
 
@@ -9,7 +9,7 @@ interface Iv {
   duration: number;
   id: number;
   layout: number;
-  title: string;
+  title: ITitle;
   cards?: any;
   contenthash?: string;
 }

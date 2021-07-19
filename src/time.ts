@@ -34,14 +34,11 @@ export const formatTime = (
     options.showSeconds ? `:${doubleDigit(timeOfDay.seconds)}` : ''
   }`;
 
-export const getDepartureTime = (time, isRealtime) => {
+export const getDepartureTime = time => {
   const hours = `0${Math.floor((time / 60 / 60) % 24)}`.slice(-2);
   const mins = `0${Math.floor(time / 60) % 60}`.slice(-2);
   if (hours !== 'aN' || mins !== 'aN') {
-    if (isRealtime) {
-      return `${hours}:${mins}`;
-    }
-    return `~${hours}:${mins}`;
+    return `${hours}:${mins}`;
   }
   return null;
 };

@@ -6,19 +6,19 @@ import './Titlebar.scss';
 export interface ITitlebarProps {
   readonly isPreview?: boolean;
   readonly isLandscape?: boolean;
+  readonly forcedLayout?: string;
   readonly children: React.ReactNode;
 }
 
 export default (props: ITitlebarProps) => {
-  const isPreview = props.isPreview || false;
-  const isLandscape = props.isLandscape || true;
+  let orientation = props.isLandscape ? '' : 'portrait';
+  if (props.forcedLayout) {
+    orientation =
+      props.forcedLayout === 'landscape' ? 'forcedLandscape' : 'forcedPortrait';
+  }
   return (
     <div
-      className={cx(
-        'title-bar',
-        isPreview ? 'preview' : '',
-        !isLandscape ? 'portrait' : '',
-      )}
+      className={cx('title-bar', props.isPreview ? 'preview' : '', orientation)}
     >
       {props.children}
     </div>

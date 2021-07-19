@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
+import cx from 'classnames';
 import { IView } from '../util/Interfaces';
 import { gql, useQuery } from '@apollo/client';
 import Loading from './Loading';
@@ -202,6 +203,15 @@ const loopStations = (data, stops) => {
     });
   return departures;
 };
+
+const getWindowDimensions = () => {
+  const { innerWidth: width, innerHeight: height } = window;
+  return {
+    width,
+    height,
+  };
+};
+
 interface IProps {
   readonly view: IView;
   readonly departuress: Array<any>;
@@ -210,7 +220,6 @@ interface IProps {
   readonly index: number;
   readonly time?: EpochMilliseconds;
   readonly isPreview: boolean;
-  readonly isLandscape: boolean;
 }
 const Monitor: FC<IProps> = ({
   view,
@@ -220,7 +229,6 @@ const Monitor: FC<IProps> = ({
   noPolling,
   time,
   isPreview,
-  isLandscape,
 }) => {
   const [skip, setSkip] = useState(true);
   const [stopDataLeft, setStopDataLeft] = useState([]);
@@ -236,6 +244,9 @@ const Monitor: FC<IProps> = ({
 
   const [translations, setTranslations] = useState([]);
 
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions(),
+  );
   // Don't poll on preview
   const pollInterval = 0;
   const isMultiDisplay = getLayout(view.layout)[2];
@@ -282,6 +293,10 @@ const Monitor: FC<IProps> = ({
     pollInterval: pollInterval,
     skip: !isMultiDisplay || skip,
   });
+
+  useEffect(() => {
+    setWindowDimensions(getWindowDimensions());
+  }, []);
 
   useEffect(() => {
     if (stopDataLeft[index]?.stops) {
@@ -350,10 +365,6 @@ const Monitor: FC<IProps> = ({
         view.columns.left.stops,
       );
       setStopDeparturesLeft(departures);
-      setStopsFetched(!isMultiDisplay ? true : false);
-    }
-    if (!stopIdsLeft.length) {
-      setStopsFetched(!isMultiDisplay ? true : false);
     }
   }, [stopStateLeft]);
 
@@ -364,10 +375,6 @@ const Monitor: FC<IProps> = ({
         view.columns.right.stops,
       );
       setStopDeparturesRight(departures);
-      setStopsFetched(true);
-    }
-    if (isMultiDisplay && !stopIdsRight.length) {
-      setStopsFetched(true);
     }
   }, [stopStateRight]);
 
@@ -378,10 +385,6 @@ const Monitor: FC<IProps> = ({
         view.columns.left.stops,
       );
       setStationDeparturesLeft(departures);
-      setStationsFetched(isMultiDisplay ? false : true);
-    }
-    if (!stationIdsLeft.length) {
-      setStationsFetched(isMultiDisplay ? false : true);
     }
   }, [stationStateLeft]);
 
@@ -392,10 +395,6 @@ const Monitor: FC<IProps> = ({
         view.columns.right.stops,
       );
       setStationDeparturesRight(departures);
-      setStationsFetched(true);
-    }
-    if (isMultiDisplay && !stationIdsRight.length) {
-      setStationsFetched(true);
     }
   }, [stationStateRight]);
 
@@ -410,35 +409,76 @@ const Monitor: FC<IProps> = ({
     return <Loading monitor isPreview={isPreview} />;
   }
   const currentTime = time ? time : new Date().getTime();
+
+  let forcedLayout = undefined;
+
+  let windowHeight = windowDimensions.height;
+  let windowWidth = windowDimensions.width;
+
+  if (!isPreview && windowWidth >= windowHeight && view.layout > 11) {
+    forcedLayout = 'portrait';
+    windowWidth = windowHeight / 1.775;
+  }
+  if (!isPreview && windowHeight >= windowWidth && view.layout <= 11) {
+    forcedLayout = 'landscape';
+    windowHeight = windowWidth / 1.775;
+  }
+  const dimensions = {
+    '--height': `${Number(windowHeight).toFixed(0)}px`,
+    '--width': `${Number(windowWidth).toFixed(0)}px`,
+  } as React.CSSProperties;
+
+  const isLandscapeByLayout = view.layout <= 11;
+
   return (
-    <div className="main-content-container">
-      <Titlebar isPreview isLandscape>
-        <Logo monitorConfig={config} isPreview isLandscape />
-        {!isMultiDisplay && <div className="title-text">{view.title}</div>}
+    <div
+      style={dimensions}
+      className={cx(
+        'main-content-container',
+        isPreview ? 'preview' : 'full',
+        isLandscapeByLayout ? '' : 'portrait',
+        forcedLayout && forcedLayout === 'landscape' ? 'forced-landscape' : '',
+        forcedLayout && forcedLayout === 'portrait' ? 'forced-portrait' : '',
+      )}
+    >
+      <Titlebar
+        isPreview={isPreview}
+        isLandscape={isLandscapeByLayout}
+        forcedLayout={forcedLayout}
+      >
+        <Logo
+          monitorConfig={config}
+          isPreview={isPreview}
+          isLandscape={isLandscapeByLayout}
+          forcedLayout={forcedLayout}
+        />
+        {!isMultiDisplay && (
+          <div className={cx('title-text', isPreview ? 'preview' : '')}>
+            {view.title['fi']}
+          </div>
+        )}
         {isMultiDisplay && (
           <div className="multi-display-titles">
-            <div className="left-title">{view.columns.left.title}</div>
-            <div className="right-title">{view.columns.right.title}</div>
+            <div className="left-title">{view.columns.left.title['fi']}</div>
+            <div className="right-title">{view.columns.right.title['fi']}</div>
           </div>
         )}
         <TitlebarTime
           currentTime={currentTime}
           updateInterval={noPolling ? 0 : 20000}
-          isPreview
-          isLandscape
+          isPreview={isPreview}
+          isLandscape={isLandscapeByLayout}
+          forcedLayout={forcedLayout}
         />
       </Titlebar>
-      {departuress && (
-        <MonitorRowContainer
-          departuresLeft={departuress[0]}
-          departuresRight={departuress[1]}
-          layout={getLayout(view.layout)}
-          // leftTitle={view.columns.left.title}
-          // rightTitle={view.columns.right.title}
-          isPreview={isPreview}
-          isLandscape={isLandscape}
-        />
-      )}
+      <MonitorRowContainer
+        departuresLeft={departuress[0]}
+        departuresRight={departuress[1]}
+        layout={getLayout(view.layout)}
+        isPreview={isPreview}
+        isLandscape={isLandscapeByLayout}
+        forcedLayout={forcedLayout}
+      />
     </div>
   );
 };

@@ -11,7 +11,6 @@ interface IProps {
   noPolling?: boolean;
   time?: EpochMilliseconds;
   isPreview?: boolean;
-  isLandscape?: boolean;
 }
 
 const CarouselContainer: FC<IProps> = ({
@@ -21,7 +20,6 @@ const CarouselContainer: FC<IProps> = ({
   noPolling,
   time,
   isPreview = false,
-  isLandscape = true,
 }) => {
   const len = views.length;
   const [current, setCurrent] = useState(0);
@@ -34,6 +32,12 @@ const CarouselContainer: FC<IProps> = ({
   const config = getConfig();
   const departures = [[...stationDepartures[current][0], ...stopDepartures[current][0]], [...stationDepartures[current][1], ...stopDepartures[current][1]]]
   console.log(departures)
+
+    //for debug purposes
+    const newView = {
+      ...views[current],
+      //layout: 1,
+    };
   return (
     <Monitor
       view={views[current]}
@@ -43,7 +47,6 @@ const CarouselContainer: FC<IProps> = ({
       noPolling={noPolling}
       time={time}
       isPreview={isPreview}
-      isLandscape={isLandscape}
     />
   );
 };

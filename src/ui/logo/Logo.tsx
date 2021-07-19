@@ -1,4 +1,5 @@
 import * as React from 'react';
+import cx from 'classnames';
 
 import HslLogo from './HslLogo';
 import LinkkiLogo from './LinkkiLogo';
@@ -9,12 +10,17 @@ interface ICommonProps {
   readonly monitorConfig?: any;
   readonly isPreview?: boolean;
   readonly isLandscape?: boolean;
+  readonly forcedLayout?: string;
 }
 
 class Logo extends React.Component<ICommonProps> {
   public render() {
     const monitorConfig = (this.props as ICommonProps).monitorConfig;
     const isPreview = (this.props as ICommonProps).isPreview ? (this.props as ICommonProps).isPreview : false;
+    const isLandscape = (this.props as ICommonProps).isLandscape ? (this.props as ICommonProps).isLandscape : false;
+    const forcedLayout = (this.props as ICommonProps).forcedLayout ? (this.props as ICommonProps).forcedLayout : undefined;
+
+    let logo = undefined;
 
     if (monitorConfig) {
       const feedIds = monitorConfig.feedIds;
@@ -22,34 +28,35 @@ class Logo extends React.Component<ICommonProps> {
 
       switch (feedId) {
         case 'tampere':
-          return (
-            <div className={'title-logo'}>
-              <NysseLogo style={{ height: isPreview ? '2.5em' : '5em' }} />
-            </div>
-          );
+          logo = <NysseLogo />;
+          break;
         case 'hsl':
-          return (
-            <div className={'title-logo'}>
-              <HslLogo style={{ height: isPreview ? '2em' : '4em' }} />
-            </div>
-          );
+          logo = <HslLogo />;
+          break;
         case 'matka':
-          return (
-            <div className={'title-logo'}>
-              <MatkaLogo style={{ maxHeight: isPreview ? '2em' : '4em' }} />
-            </div>
-          );
+          logo = <MatkaLogo />;
+          break;
         case 'linkki':
-          return (
-            <div className={'title-logo'}>
-              <LinkkiLogo style={{ maxHeight: isPreview ? '2em' : '4em' }} />
-            </div>
-          );
+          logo = <LinkkiLogo />;
+          break;
         default:
-          return null;
+          break;
       }
     }
-
+    if (logo) {
+      if (!forcedLayout) {
+        return (
+          <div className={cx('title-logo', isPreview ? 'preview' : '', isLandscape ? '' : 'portrait')}>
+            {logo}
+          </div>
+        );
+      }
+      return (
+        <div className={forcedLayout === 'landscape' ? 'title-logo-forced-landscape' : 'title-logo-forced-portrait'}>
+          {logo}
+        </div>
+      );
+    }
     return null;
   }
 }

@@ -10,7 +10,7 @@ import { IApolloClientContextType } from './ApolloClientsContextCreator';
 import App from './App';
 import { loona, virtualMonitorClient } from './graphQL/virtualMonitorClient';
 import i18n from './i18n';
-import './index.css';
+import './index.scss';
 import { default as config } from './monitorConfig.js';
 import NtpSyncComponent from './ntp/NtpSyncComponent';
 import registerServiceWorker from './registerServiceWorker';

@@ -1,3 +1,5 @@
+@import '../index';
+
 .modal {
   .ReactModal__Overlay {
     z-index: 10;
@@ -18,7 +20,7 @@
   }
 
   .layout-modal-content-container {
-    font-family: 'Roboto';
+    font-family: $font-family;
     margin: 45px 0 0 60px;
     display: flex;
     flex-direction: column;
@@ -44,10 +46,6 @@
 
       .options {
         display: flex;
-
-        .option:last-child {
-          margin-right: 0;
-        }
 
         .option {
           display: flex;
@@ -88,6 +86,10 @@
             margin-top: 20px;
             margin-bottom: 10px;
           }
+        }
+
+        .option:last-child {
+          margin-right: 0;
         }
       }
     }

@@ -14,7 +14,7 @@
 
   .title-with-icons {
     display: flex;
-    max-height: 80px;
+    height: 80px;
     width: 720px;
     border-bottom: 1px solid #ddd;
 
@@ -22,8 +22,8 @@
       display: flex;
       height: 40px;
       position: relative;
-      left: 385px;
       top: 20px;
+      margin-left: auto;
 
       .delete {
         cursor: pointer;
@@ -70,6 +70,18 @@
     }
   }
 
+  .header {
+    position: relative;
+    margin-top: 16px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 24px;
+    letter-spacing: -0.3px;
+    color: #666;
+    min-width: 106px;
+  }
+
   .headers {
     display: flex;
     margin-top: 22px;
@@ -88,35 +100,6 @@
     }
   }
 
-  .stop-list-title {
-    &.left,
-    &.right {
-      display: flex;
-      flex-direction: row;
-
-      .input-left,
-      .input-right {
-        font-size: 21px;
-        line-height: 24px;
-        letter-spacing: -0.3px;
-        width: 130px;
-        border: none;
-
-        &:focus {
-          outline: none;
-        }
-      }
-
-      svg {
-        position: relative;
-        top: 2px;
-        display: flex;
-        justify-content: center;
-        align-content: center;
-      }
-    }
-  }
-
   .search-stop-with-layout-and-time {
     display: flex;
     margin-top: 5px;
@@ -125,12 +108,56 @@
       width: 380px;
       margin-right: 40px;
 
+      div[class^='styles_autosuggest-input-icon'] svg {
+        fill: #888;
+      }
+
       input[class^='styles_input'] {
         border: 1px solid #888;
       }
+    }
+  }
 
-      div[class^='styles_autosuggest-input-icon'] svg {
-        fill: #888;
+  .east-west-inputs {
+    display: flex;
+    flex-flow: row;
+    align-items: flex-end;
+
+    .stop-list-title-input {
+      width: 500px;
+
+      .header {
+        padding-bottom: 16px;
+      }
+
+      .stop-list-title {
+        &.left,
+        &.right {
+          display: flex;
+          flex-direction: row;
+          position: relative;
+
+          .input-left,
+          .input-right {
+            font-size: 21px;
+            line-height: 24px;
+            letter-spacing: -0.3px;
+            width: 130px;
+            border: none;
+
+            &:focus {
+              outline: auto #007ac9;
+            }
+          }
+
+          svg {
+            position: relative;
+            top: 2px;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+          }
+        }
       }
     }
   }
@@ -138,16 +165,5 @@
   .stop-list {
     position: relative;
     list-style-type: none;
-  }
-
-  .header {
-    position: relative;
-    margin-top: 16px;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 13px;
-    line-height: 24px;
-    letter-spacing: -0.3px;
-    color: #666;
   }
 }

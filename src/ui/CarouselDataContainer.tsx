@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import { GET_STOP_DEPARTURES, GET_STATION_DEPARTURES } from '../queries/departureQueries';
 import CarouselContainer from './CarouselContainer';
 import { IView } from '../util/Interfaces';
-import { getStopsAndStationsFromViews } from '../util/monitorUtils';
+import { getStopsAndStationsFromViews, getDeparturesWithoutHiddenRoutes } from '../util/monitorUtils';
 
 interface IProps {
   views: Array<IView>;
@@ -12,8 +12,8 @@ interface IProps {
 const CarouselDataContainer : FC<IProps> = ({views}) => {
   const pollInterval = 10000;
   const [stopIds, stationIds] = getStopsAndStationsFromViews(views);
-  const [stopDepartures, setStopDepartures] = useState([])
-  const [stationDepartures, setStationDepartures] = useState([])
+  const [stopDepartures, setStopDepartures] = useState([[[],[]]])
+  const [stationDepartures, setStationDepartures] = useState([[[],[]]])
   const [stopsFetched, setStopsFetched] = useState(stopIds.length < 1)
   const [stationsFetched, setStationsFetched] = useState(stationIds.length < 1)
 

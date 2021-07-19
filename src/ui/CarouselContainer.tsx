@@ -31,13 +31,6 @@ const CarouselContainer: FC<IProps> = ({
   }, [current]);
   const config = getConfig();
   const departures = [[...stationDepartures[current][0], ...stopDepartures[current][0]], [...stationDepartures[current][1], ...stopDepartures[current][1]]]
-  console.log(departures)
-
-    //for debug purposes
-    const newView = {
-      ...views[current],
-      //layout: 1,
-    };
   return (
     <Monitor
       view={views[current]}

@@ -20,7 +20,7 @@ export const getMaxAmountOfDeparturesForLayout = layout => {
 }
 
 
-const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes, timeshift) => {
+export const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes, timeshift) => {
   const departures = [];
   const currentSeconds = getCurrentSeconds();
   stop.stoptimesForPatterns.forEach(stoptimeList => {

@@ -59,6 +59,7 @@ const monitorAPI = {
         headers: {
           accepts: 'application/json',
         }})
+        .then(result => result.json())
         .then(result => resolve(result))
         .catch(err => {
           reject(err);

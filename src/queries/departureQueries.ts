@@ -1,0 +1,124 @@
+import { gql } from '@apollo/client';
+
+export const GET_STOP_DEPARTURES = gql`
+  query GetDepartures($ids: [String!]!, $numberOfDepartures: Int!) {
+    stops: stops(ids: $ids) {
+      name
+      gtfsId
+      routes {
+        alerts {
+          alertSeverityLevel
+          alertHeaderText
+          alertDescriptionTextTranslations {
+            text
+          }
+        }
+        longName
+        id
+      }
+      stoptimesForPatterns(numberOfDepartures: $numberOfDepartures) {
+        pattern {
+          code
+          route {
+            gtfsId
+          }
+        }
+        stoptimes {
+          stop {
+            gtfsId
+          }
+          realtime
+          pickupType
+          serviceDay
+          scheduledArrival
+          realtimeArrival
+          arrivalDelay
+          scheduledDeparture
+          realtimeDeparture
+          departureDelay
+          headsign
+          trip {
+            gtfsId
+            route {
+              shortName
+              alerts {
+                alertSeverityLevel
+                alertHeaderText
+                alertDescriptionTextTranslations {
+                  text
+                }
+              }
+            }
+            stops {
+              gtfsId
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const GET_STATION_DEPARTURES = gql`
+  query GetDeparturesForStations($ids: [String!]!, $numberOfDepartures: Int!) {
+    stations: stations(ids: $ids) {
+      name
+      gtfsId
+      routes {
+        alerts {
+          alertSeverityLevel
+          alertHeaderText
+          alertDescriptionTextTranslations {
+            text
+          }
+        }
+        longName
+        id
+      }
+      stops {
+        routes {
+          alerts {
+            alertSeverityLevel
+            alertHeaderText
+            alertDescriptionTextTranslations {
+              text
+            }
+          }
+          gtfsId
+        }
+      }
+      stoptimesForPatterns(numberOfDepartures: $numberOfDepartures) {
+        pattern {
+          code
+          route {
+            gtfsId
+          }
+        }
+        stoptimes {
+          stop {
+            gtfsId
+          }
+          realtime
+          pickupType
+          serviceDay
+          scheduledArrival
+          realtimeArrival
+          arrivalDelay
+          scheduledDeparture
+          realtimeDeparture
+          departureDelay
+          headsign
+          trip {
+            gtfsId
+            route {
+              shortName
+            }
+            stops {
+              gtfsId
+            }
+          }
+        }
+      }
+    }
+  }
+`;

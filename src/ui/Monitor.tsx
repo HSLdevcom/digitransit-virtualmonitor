@@ -204,6 +204,7 @@ const loopStations = (data, stops) => {
 };
 interface IProps {
   readonly view: IView;
+  readonly departuress: Array<any>;
   readonly config: IMonitorConfig;
   readonly noPolling?: boolean;
   readonly index: number;
@@ -213,6 +214,7 @@ interface IProps {
 }
 const Monitor: FC<IProps> = ({
   view,
+  departuress,
   index,
   config,
   noPolling,
@@ -220,7 +222,7 @@ const Monitor: FC<IProps> = ({
   isPreview,
   isLandscape,
 }) => {
-  const [skip, setSkip] = useState(false);
+  const [skip, setSkip] = useState(true);
   const [stopDataLeft, setStopDataLeft] = useState([]);
   const [stopDataRight, setStopDataRight] = useState([]);
   const [stationDataLeft, setStationDataLeft] = useState([]);
@@ -232,8 +234,10 @@ const Monitor: FC<IProps> = ({
   const [stopsFetched, setStopsFetched] = useState(false);
   const [stationsFetched, setStationsFetched] = useState(false);
 
+  const [translations, setTranslations] = useState([]);
+
   // Don't poll on preview
-  const pollInterval = noPolling ? 0 : 30000;
+  const pollInterval = 0;
   const isMultiDisplay = getLayout(view.layout)[2];
 
   const stopIdsLeft = [];
@@ -424,10 +428,10 @@ const Monitor: FC<IProps> = ({
           isLandscape
         />
       </Titlebar>
-      {stationsFetched && stopsFetched && (
+      {departuress && (
         <MonitorRowContainer
-          departuresLeft={[...stopDeparturesLeft, ...stationDeparturesLeft]}
-          departuresRight={[...stopDeparturesRight, ...stationDeparturesRight]}
+          departuresLeft={departuress[0]}
+          departuresRight={departuress[1]}
           layout={getLayout(view.layout)}
           // leftTitle={view.columns.left.title}
           // rightTitle={view.columns.right.title}

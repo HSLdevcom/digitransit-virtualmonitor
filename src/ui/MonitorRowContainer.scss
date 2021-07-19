@@ -1,21 +1,22 @@
 @use "sass:map";
+@use "sass:math";
 
 @import '../index';
 
 @function strip-unit($number) {
   @if type-of($number) == 'number' and not unitless($number) {
-    @return $number / ($number * 0 + 1);
+    @return math.div($number, $number * 0 + 1);
   }
 
   @return $number;
 }
 
 @function font-size-by-width($size) {
-  @return calc(calc(#{strip-unit($size)} / 100) * #{var(--width)});
+  @return calc(calc(#{strip-unit($size)} * 0.01) * #{var(--width)});
 }
 
 @function font-size-by-width-two-cols($size) {
-  @return calc(calc(#{strip-unit($size)} / 100) * calc(#{var(--width)} / 2));
+  @return calc(calc(#{strip-unit($size)} * 0.01) * calc(#{var(--width)} * 0.5));
 }
 
 $header-height: 10vh;

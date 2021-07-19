@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow from './MonitorRow';
 import './MonitorRowContainer.scss';
@@ -10,22 +10,23 @@ interface IProps {
   departuresLeft: any;
   departuresRight: any;
   layout: any;
-  // leftTitle: string;
-  // rightTitle: string;
   isPreview: boolean;
   isLandscape: boolean;
+  forcedLayout?: string;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   departuresLeft,
   departuresRight,
   layout,
-  // leftTitle,
-  // rightTitle,
   isPreview,
   isLandscape,
+  forcedLayout,
   t,
 }) => {
+  const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
+    layout;
+
   const sortedDeparturesLeft = departuresLeft
     .filter(d => d)
     .sort(
@@ -35,7 +36,10 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         (b.realtimeDeparture + b.serviceDay),
     );
 
-  const ale = sortedDeparturesLeft.reduce((arr, alert) => {
+  /* [{ alertHeaderText: 'Pyöriä saa kuljettaa Tuusulan busseissa kesällä 15.8. asti. Pyörän voi ottaa mukaan busseihin 641, 642, 643, 665, 961, 963 ja 975N. hsl.fi/pyoratuusula', alertSeverityLevel: 'INFO', alertDescriptionTextTranslations: [
+    {language: 'fi', text: 'Suomeksi'},{language: 'sv', text: 'På svenska'},{language: 'en', text: 'In english'}]
+  }]; */
+  const routeAlerts = sortedDeparturesLeft.reduce((arr, alert) => {
     const alerts = alert?.trip?.route?.alerts;
     if (alerts) {
       alerts.forEach(a => {
@@ -77,17 +81,14 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     return leftColumnCount;
   };
 
-  const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
-    layout;
-
   const leftColumn = [];
   const rightColumn = [];
 
   const currentDay = setDate(0);
   const nextDay = setDate(1);
 
-  let currentDayDepartureIndexLeft = -1;
-  let nextDayDepartureIndexLeft = sortedDeparturesLeft
+  const currentDayDepartureIndexLeft = -1;
+  const nextDayDepartureIndexLeft = sortedDeparturesLeft
     .slice(0, leftColumnCount)
     .findIndex(departure => departure.serviceDay === nextDay.getTime() / 1000);
 
@@ -98,21 +99,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     .slice(0, leftColumnCount)
     .filter(departure => departure.serviceDay === nextDay.getTime() / 1000);
 
-  let rowCountLeft = currentDayDeparturesLeft.length;
-  if (nextDayDeparturesLeft.length !== 0) {
-    rowCountLeft += nextDayDeparturesLeft.length + 1;
+  if (nextDayDepartureIndexLeft !== -1) {
+    sortedDeparturesLeft.splice(nextDayDepartureIndexLeft, 0, null);
   }
 
-  if (nextDayDepartureIndexLeft !== -1) {
-    if (rowCountLeft < leftColumnCount || rightColumnCount !== 0) {
-      nextDayDepartureIndexLeft +=
-        currentDayDeparturesLeft.length === 0 ? 0 : 1;
-      if (currentDayDeparturesLeft.length > 0) {
-        currentDayDepartureIndexLeft = 0;
-        sortedDeparturesLeft.splice(0, 0, null);
-      }
-    }
-    sortedDeparturesLeft.splice(nextDayDepartureIndexLeft, 0, null);
+  if (routeAlerts.length > 0) {
+    sortedDeparturesLeft.splice(leftColumnCount - 1, 0, null);
   }
 
   let currentDayDepartureIndexRight = -1;
@@ -148,6 +140,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   ) {
     currentDayDepartureIndexRight = 0;
     sortedDeparturesRight.splice(0, 0, null);
+  } else if (
+    currentDayDeparturesLeft.length > 0 &&
+    currentDayDeparturesRight.length === 0
+  ) {
+    currentDayDepartureIndexRight = 0;
+    sortedDeparturesRight.splice(0, 0, null);
   }
 
   const isOneLiner =
@@ -165,33 +163,100 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const withTwoColumns = isLandscape && rightColumnCount > 0;
 
   for (let i = 0; i < leftColumnCount; i++) {
-    const showAlerts = i === leftColumnCount - 1 && ale.length > 0;
+    let tightenPosition = '';
+    if (isTighten && i < differSize[0]) {
+      tightenPosition = !forcedLayout
+        ? 'tighten-begin'
+        : 'tighten-begin-forced';
+    } else if (isTighten && i >= differSize[0]) {
+      tightenPosition = !forcedLayout ? 'tighten-end' : 'tighten-end-forced';
+    }
+    let showAlerts = false;
+    if (routeAlerts.length > 0) {
+      if (
+        (leftColumnCount !== 12 && i === leftColumnCount - 1) ||
+        (leftColumnCount === 12 && i === leftColumnCount - 2) ||
+        (leftColumnCount === 16 && i === leftColumnCount - 3) ||
+        (leftColumnCount === 24 && i === leftColumnCount - 4)
+      ) {
+        showAlerts = true;
+      }
+      if (
+        withTwoColumns &&
+        leftColumnCount === 8 &&
+        i === leftColumnCount - 2
+      ) {
+        showAlerts = true;
+      }
+      if (isTighten && leftColumnCount === 18 && i === leftColumnCount - 2) {
+        showAlerts = true;
+      }
+    }
+
+    let alertRowSpan = 1;
+    if (leftColumnCount === 12 && i === leftColumnCount - 2) {
+      alertRowSpan = 2;
+    } else if (
+      isTighten &&
+      leftColumnCount === 18 &&
+      i === leftColumnCount - 2
+    ) {
+      alertRowSpan = 2;
+    } else if (leftColumnCount === 16 && i === leftColumnCount - 3) {
+      alertRowSpan = 3;
+    } else if (
+      withTwoColumns &&
+      leftColumnCount === 8 &&
+      i === leftColumnCount - 2
+    ) {
+      alertRowSpan = 3;
+    } else if (leftColumnCount === 24 && i === leftColumnCount - 4) {
+      alertRowSpan = 4;
+    }
+
     leftColumn.push(
       <MonitorRow
         departure={
-          i !== (nextDayDepartureIndexLeft || currentDayDepartureIndexLeft) ||
-          !showAlerts
+          i !== nextDayDepartureIndexLeft || !showAlerts
             ? sortedDeparturesLeft[i]
             : null
         }
         size={getCorrectSize(leftColumnCount, i + 1, differSize)}
         withSeparator
-        isFirst={i === 0}
+        isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
         isLandscape={isLandscape}
         isPreview={isPreview}
         isOneLiner={isOneLiner && !withTwoColumns}
         withTwoColumns={withTwoColumns}
-        alerts={showAlerts ? ale : undefined}
+        alerts={showAlerts ? routeAlerts : undefined}
+        alertRows={alertRowSpan}
         dayForDivider={
-          i === nextDayDepartureIndexLeft
-            ? formatDate(nextDay)
-            : i === currentDayDepartureIndexLeft
-            ? formatDate(currentDay)
-            : undefined
+          i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
         }
-        isTighten={isTighten}
+        tightenPosition={tightenPosition}
       />,
     );
+    if (routeAlerts.length > 0) {
+      if (leftColumnCount === 12 && i === leftColumnCount - 2) {
+        i += 1;
+      } else if (
+        isTighten &&
+        leftColumnCount === 18 &&
+        i === leftColumnCount - 2
+      ) {
+        i += 1;
+      } else if (leftColumnCount === 16 && i === leftColumnCount - 3) {
+        i += 2;
+      } else if (
+        withTwoColumns &&
+        leftColumnCount === 8 &&
+        i === leftColumnCount - 2
+      ) {
+        i += 2;
+      } else if (leftColumnCount === 24 && i === leftColumnCount - 4) {
+        i += 3;
+      }
+    }
   }
 
   if (isLandscape) {
@@ -208,7 +273,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             }
             size={rightColumnCount}
             withSeparator
-            isFirst={i === leftColumnCount}
+            isFirst={
+              i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
+            }
             isLandscape={isLandscape}
             isPreview={isPreview}
             isOneLiner={isOneLiner && !withTwoColumns && rightColumnCount > 4}
@@ -231,7 +298,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             }
             size={rightColumnCount}
             withSeparator
-            isFirst={i === 0}
+            isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             isLandscape={isLandscape}
             isPreview={isPreview}
             isOneLiner={isOneLiner && !withTwoColumns && rightColumnCount > 4}
@@ -249,12 +316,25 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     }
   }
 
+  const leftColumnStyle = { '--rows': leftColumnCount } as React.CSSProperties;
+  const rightColumnStyle = {
+    '--rows': rightColumnCount,
+  } as React.CSSProperties;
+
+  const tightenBeginStyle = {
+    '--rows': differSize ? differSize[0] : leftColumnCount,
+  } as React.CSSProperties;
+  const tightenEndingStyle = {
+    '--rows': differSize ? differSize[1] : leftColumnCount,
+  } as React.CSSProperties;
   return (
     <div
       className={cx(
         'monitor-container',
         isPreview ? 'preview' : '',
         !isLandscape ? 'portrait' : '',
+        forcedLayout && forcedLayout === 'landscape' ? 'forced-landscape' : '',
+        forcedLayout && forcedLayout === 'portrait' ? 'forced-portrait' : '',
       )}
     >
       <div
@@ -270,6 +350,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             withTwoColumns ? 'two-cols' : '',
             isPreview ? 'preview' : '',
             !isLandscape ? 'portrait' : '',
+            forcedLayout && forcedLayout === 'landscape'
+              ? 'forced-landscape'
+              : '',
+            forcedLayout && forcedLayout === 'portrait'
+              ? 'forced-portrait'
+              : '',
           )}
         >
           <div
@@ -305,10 +391,19 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         </div>
         {!isTighten && (
           <div
+            style={leftColumnStyle}
             className={cx(
               'grid-rows',
               isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
+              `rows${leftColumnCount}`,
+              withTwoColumns ? 'two-cols' : '',
+              forcedLayout && forcedLayout === 'landscape'
+                ? 'forced-landscape'
+                : '',
+              forcedLayout && forcedLayout === 'portrait'
+                ? 'forced-portrait'
+                : '',
             )}
           >
             {leftColumn}
@@ -317,21 +412,23 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         {isTighten && (
           <>
             <div
+              style={tightenBeginStyle}
               className={cx(
                 'grid-rows',
-                'tighten',
+                !forcedLayout ? 'tighten-begin' : 'tighten-begin-forced',
                 isPreview ? 'preview' : '',
-                !isLandscape ? 'portrait' : '',
+                `rows${differSize[0]}`,
               )}
             >
               {leftColumn.slice(0, differSize[0])}
             </div>
             <div
+              style={tightenEndingStyle}
               className={cx(
                 'grid-rows',
-                'tighten',
+                !forcedLayout ? 'tighten-end' : 'tighten-end-forced',
                 isPreview ? 'preview' : '',
-                !isLandscape ? 'portrait' : '',
+                `rows${differSize[1]}`,
               )}
             >
               {leftColumn.slice(differSize[0])}
@@ -355,6 +452,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 withTwoColumns ? 'two-cols' : '',
                 isPreview ? 'preview' : '',
                 !isLandscape ? 'portrait' : '',
+                forcedLayout && forcedLayout === 'landscape'
+                  ? 'forced-landscape'
+                  : '',
+                forcedLayout && forcedLayout === 'portrait'
+                  ? 'forced-portrait'
+                  : '',
               )}
             >
               <div
@@ -389,10 +492,19 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               </div>
             </div>
             <div
+              style={rightColumnStyle}
               className={cx(
                 'grid-rows',
                 isPreview ? 'preview' : '',
                 !isLandscape ? 'portrait' : '',
+                `rows${rightColumnCount}`,
+                withTwoColumns ? 'two-cols' : '',
+                forcedLayout && forcedLayout === 'landscape'
+                  ? 'forced-landscape'
+                  : '',
+                forcedLayout && forcedLayout === 'portrait'
+                  ? 'forced-portrait'
+                  : '',
               )}
             >
               {rightColumn}

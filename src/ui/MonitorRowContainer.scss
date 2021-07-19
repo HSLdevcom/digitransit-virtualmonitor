@@ -1,21 +1,95 @@
+@use "sass:map";
+
+@import '../index';
+
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+
+@function font-size-by-width($size) {
+  @return calc(calc(#{strip-unit($size)} / 100) * #{var(--width)});
+}
+
+@function font-size-by-width-two-cols($size) {
+  @return calc(calc(#{strip-unit($size)} / 100) * calc(#{var(--width)} / 2));
+}
+
+$header-height: 10vh;
+$header-height-padding: 15px;
+$preview-container-height: 365px;
+$preview-container-height-portrait: 590px;
+$preview-container-height-portrait-tighten: 285px;
+$preview-container-width: 640px;
+$preview-container-width-portrait: 405px;
+$preview-grid-rows-height-portrait-tighten: 266px;
+$preview-grid-rows-margin: 15px;
+$preview-grid-divider: 2px;
+
+$font-by-row: ('4': 6.25vw, '4via': 4.531vw, '8': 5.5vw, '12': 3.5vw, '12via': 2.5vw, '8p': 7.407vw, '8pvia': 4.938vw,  '12p': 7.407vw, '16p': 4.938vw, '16pvia': 3.4568vw, '24p': 4.25vw, '24pvia': 2.75vw, '4t': 6.5vw, '4tvia': 5.5vw, '6t': 5vw, '6tvia': 3.5vw, '12t': 4vw, '12tvia': 2.75vw);
+$font-by-row-two-cols: ('4': 6.25vw, '4via': 5.5vw, '8': 7vw, '12': 6.5vw);
+$preview-font-by-row: ('4': 32px, '4via': 20px, '4x': 44px, '8': 24px, '8via': 18px, '12': 18px, '12via': 14px, '8p': 30px, '8pvia': 20px, '12p': 30px, '16p': 20px, '16pvia': 14px, '24p': 14px, '24pvia': 11px, '4t': 24px, '4tvia': 18px, '4tx': 28px, '6t': 24px, '12t': 16px, '12tvia': 13px);
+$preview-font-by-row-two-cols: ('4': 20px, '4via': 16px, '4x': 26px, '8': 21px, '12': 18px);
+
 .main-content-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background-color: #007ac9;
+  background-color: #0057a2;
+  overflow: hidden;
+
+  &.full {
+    height: 100vh;
+  }
+
+  &.forced-landscape,
+  &.forced-portrait {
+    height: calc(1px * var(--height));
+    width: calc(1px * var(--width));
+  }
+
+  &.forced-portrait {
+    margin-left: 50vw !important;
+    transform: translate(-50%, 0);
+  }
+
+  &.forced-landscape {
+    margin-top: 50vh !important;
+    transform: translate(0, -50%);
+  }
+
+  &.preview {
+    height: $preview-container-height;
+
+    &.portrait {
+      height: $preview-container-height-portrait;
+    }
+  }
 }
 
 .monitor-container {
   display: flex;
-  flex: 1;
-  font-family: 'Roboto', Arial, Georgia, serif;
+  flex-direction: row;
   color: #fff;
-  // border: 2px solid red;
+  height: calc(90vh - (2 * #{$header-height-padding}));
+
+  &.forced-landscape {
+    height: calc(0.9 * #{var(--height)} - (2 * #{$header-height-padding}));
+  }
+
+  &.forced-portrait {
+    height: calc(0.95 * #{var(--height)} - (2 * #{$header-height-padding}));
+  }
+
+  &.portrait {
+    height: calc(95vh - (2 * #{$header-height-padding}));
+  }
+
   &.preview {
-    height: 304px;
+    height: calc(calc(0.9 * #{$preview-container-height}) - (2 * #{$header-height-padding}));
 
     &.portrait {
-      height: 524px;
+      height: calc(calc(0.95 * #{$preview-container-height-portrait}) - (2 * #{$header-height-padding}));
     }
   }
 
@@ -27,16 +101,42 @@
     }
 
     .grid-headers {
-      margin: 0 15px;
+      font-family: $font-family;
+      margin: 0 $preview-grid-rows-margin;
       flex: 1;
       display: grid;
       justify-content: space-between;
       grid-template-columns: 1fr 3fr 1fr;
-      grid-template-rows: 35px 10px;
       grid-row: span 1;
+      height: 5vh !important;
+      font-size: 4.5vh;
+      overflow: hidden;
+
+      &.forced-landscape {
+        height: calc(0.05 * #{var(--height)}) !important;
+        font-size: calc(0.045 * #{var(--height)});
+      }
+
+      &.forced-portrait {
+        height: calc(0.035 * #{var(--height)}) !important;
+        font-size: calc(0.03 * #{var(--height)});
+      }
+
+      &.portrait {
+        height: 3.5vh !important;
+        font-size: 3vh;
+      }
 
       &.preview {
-        grid-template-rows: 16px 5px;
+        font-family: $font-family;
+        height: calc(0.05 * #{$preview-container-height}) !important;
+        font-size: calc(0.045 * #{$preview-container-height});
+
+        &.portrait {
+          font-family: $font-family;
+          height: calc(0.035 * #{$preview-container-height-portrait}) !important;
+          font-size: calc(0.03 * #{$preview-container-height-portrait});
+        }
       }
     }
 
@@ -47,22 +147,333 @@
     }
 
     .grid-rows {
-      // border: 2px dashed white;
-      margin: 2px 15px;
-      flex: 1;
+      font-family: $font-family;
+      margin: 0 $preview-grid-rows-margin;
       display: grid;
       justify-content: space-between;
       grid-template-columns: 1fr 3fr 1fr;
-      grid-template-rows: auto;
+      grid-template-rows: repeat(var(--rows), calc(calc(85vh - (2 * #{$header-height-padding})) / var(--rows)));
+      font-size: font-size-by-width(7vw);
 
-      &.preview {
-        height: 310px;
+      &.forced-landscape {
+        grid-template-rows: repeat(var(--rows), calc(calc(calc(0.85 * #{var(--height)}) - (2 * #{$header-height-padding})) / var(--rows)));
+      }
+
+      &.forced-portrait {
+        grid-template-rows: repeat(var(--rows), calc(calc(calc(0.915 * #{var(--height)}) - (2 * #{$header-height-padding})) / var(--rows)));
+      }
+
+      &.portrait {
+        grid-template-rows: repeat(var(--rows), calc(calc(91.5vh - (2 * #{$header-height-padding})) / var(--rows)));
+      }
+
+      &.rows4 {
+        font-size: font-size-by-width(map-get($font-by-row, '4'));
+
+        span.via {
+          font-size: font-size-by-width(map-get($font-by-row, '4via'));
+          position: relative;
+          top: calc(-0.63 * #{font-size-by-width(map-get($font-by-row, '4via'))});
+
+          &::before {
+            content: "\A";
+            white-space: pre;
+          }
+        }
+
+        &.two-cols {
+          font-size: font-size-by-width-two-cols(map-get($font-by-row-two-cols, '4'));
+
+          .line,
+          .time {
+            font-size: font-size-by-width-two-cols(map-get($font-by-row-two-cols, '4x'));
+          }
+
+          span.via {
+            font-size: font-size-by-width-two-cols(map-get($font-by-row-two-cols, '4via'));
+            position: relative;
+            top: calc(-0.25 * #{font-size-by-width-two-cols(map-get($font-by-row-two-cols, '4via'))});
+
+            &::before {
+              content: "\A";
+              white-space: pre;
+            }
+          }
+        }
+      }
+
+      &.rows8 {
+        font-size: font-size-by-width(map-get($font-by-row, '8'));
 
         &.portrait {
-          height: 530px;
+          font-size: font-size-by-width(map-get($font-by-row, '8p'));
 
-          &.tighten {
-            height: 260px;
+          span.via {
+            font-size: font-size-by-width(map-get($font-by-row, '8pvia'));
+            position: relative;
+            top: calc(-0.63 * #{font-size-by-width(map-get($font-by-row, '8pvia'))});
+
+            &::before {
+              content: "\A";
+              white-space: pre;
+            }
+          }
+        }
+
+        &.two-cols {
+          font-size: font-size-by-width-two-cols(map-get($font-by-row-two-cols, '8'));
+        }
+      }
+
+      &.rows12 {
+        font-size: font-size-by-width(map-get($font-by-row, '12'));
+
+        span.via {
+          font-size: font-size-by-width(map-get($font-by-row, '12via'));
+
+          &::before {
+            content: " ";
+            white-space: pre;
+          }
+        }
+
+        &.portrait {
+          font-size: font-size-by-width(map-get($font-by-row, '12p'));
+        }
+
+        &.two-cols {
+          font-size: font-size-by-width-two-cols(map-get($font-by-row-two-cols, '12'));
+        }
+      }
+
+      &.rows16 {
+        font-size: font-size-by-width(map-get($font-by-row, '16p'));
+
+        span.via {
+          font-size: font-size-by-width(map-get($font-by-row, '16pvia'));
+          position: relative;
+          top: calc(-0.7 * #{font-size-by-width(map-get($font-by-row, '16pvia'))});
+
+          &::before {
+            content: "\A";
+            white-space: pre;
+          }
+        }
+      }
+
+      &.rows24 {
+        font-size: font-size-by-width(map-get($font-by-row, '24p'));
+
+        span.via {
+          font-size: font-size-by-width(map-get($font-by-row, '24pvia'));
+        }
+      }
+
+      &.tighten-begin,
+      &.tighten-end,
+      &.tighten-begin-forced,
+      &.tighten-end-forced {
+        grid-template-rows: repeat(var(--rows), calc(calc(calc(91.5vh - (2 * #{$header-height-padding})) / 2) / var(--rows)));
+
+        &.rows4 {
+          font-size: font-size-by-width(map-get($font-by-row, '4t'));
+
+          .line,
+          .time {
+            font-size: font-size-by-width(map-get($font-by-row, '4tx'));
+          }
+
+          span.via {
+            position: relative;
+            top: calc(-0.25 * #{font-size-by-width(map-get($font-by-row, '4tvia'))});
+            font-size: font-size-by-width(map-get($font-by-row, '4tvia'));
+
+            &::before {
+              content: "\A";
+              white-space: pre;
+            }
+          }
+        }
+
+        &.rows6 {
+          font-size: font-size-by-width(map-get($font-by-row, '6t'));
+
+          span.via {
+            position: relative;
+            top: calc(-0.25 * #{font-size-by-width(map-get($font-by-row, '6tvia'))});
+            font-size: font-size-by-width(map-get($font-by-row, '6tvia'));
+
+            &::before {
+              content: "\A";
+              white-space: pre;
+            }
+          }
+        }
+
+        &.rows12 {
+          font-size: font-size-by-width(map-get($font-by-row, '12t'));
+
+          span.via {
+            font-size: font-size-by-width(map-get($font-by-row, '12tvia'));
+
+            &::before {
+              content: " ";
+              white-space: pre;
+            }
+          }
+        }
+      }
+
+      /* PREVIEW */
+      &.preview {
+        grid-template-rows: repeat(var(--rows), calc(calc(calc(0.85 * #{$preview-container-height}) - (2 * #{$header-height-padding})) / var(--rows)));
+
+        &.portrait {
+          grid-template-rows: repeat(var(--rows), calc(calc(calc(0.915 * #{$preview-container-height-portrait}) - (2 * #{$header-height-padding})) / var(--rows)));
+        }
+
+        &.tighten-begin,
+        &.tighten-end {
+          grid-template-rows: repeat(var(--rows), calc(calc(calc(calc(0.915 * #{$preview-container-height-portrait}) - (2 * #{$header-height-padding})) / 2) / var(--rows)));
+
+          &.rows4 {
+            font-size: map-get($preview-font-by-row, '4t');
+
+            .line,
+            .time {
+              font-size: map-get($preview-font-by-row, '4tx');
+            }
+
+            span.via {
+              position: relative;
+              top: calc(-0.63 * #{map-get($preview-font-by-row, '4tvia')});
+              font-size: map-get($preview-font-by-row, '4tvia');
+
+              &::before {
+                content: "\A";
+                white-space: pre;
+              }
+            }
+          }
+
+          &.rows6 {
+            font-size: map-get($preview-font-by-row, '6t');
+          }
+
+          &.rows12 {
+            font-size: map-get($preview-font-by-row, '12t');
+
+            span.via {
+              font-size: map-get($preview-font-by-row, '12tvia');
+            }
+          }
+        }
+
+        &.rows4 {
+          font-size: map-get($preview-font-by-row, '4');
+
+          .line,
+          .time {
+            font-size: map-get($preview-font-by-row, '4x');
+          }
+
+          span.via {
+            font-size: map-get($preview-font-by-row, '4via');
+            position: relative;
+            top: -10px;
+
+            &::before {
+              content: "\A";
+              white-space: pre;
+            }
+          }
+
+          &.two-cols {
+            font-size: map-get($preview-font-by-row-two-cols, '4');
+
+            .line,
+            .time {
+              font-size: map-get($preview-font-by-row-two-cols, '4x');
+            }
+
+            span.via {
+              font-size: map-get($preview-font-by-row-two-cols, '4via');
+
+              &::before {
+                content: "\A";
+                white-space: pre;
+              }
+            }
+          }
+        }
+
+        &.rows8 {
+          font-size: map-get($preview-font-by-row, '8');
+
+          span.via {
+            font-size: map-get($preview-font-by-row, '4via');
+          }
+
+          &.portrait {
+            font-size: map-get($preview-font-by-row, '8p');
+
+            span.via {
+              font-size: map-get($preview-font-by-row, '8pvia');
+              position: relative;
+              top: calc(-0.63 * #{map-get($preview-font-by-row, '8pvia')});
+
+              &::before {
+                content: "\A";
+                white-space: pre;
+              }
+            }
+          }
+
+          &.two-cols {
+            font-size: map-get($preview-font-by-row-two-cols, '8');
+          }
+        }
+
+        &.rows12 {
+          font-size: map-get($preview-font-by-row, '12');
+
+          span.via {
+            font-size: map-get($preview-font-by-row, '12via');
+          }
+
+          &.portrait {
+            font-size: map-get($preview-font-by-row, '12p');
+          }
+
+          &.two-cols {
+            font-size: map-get($preview-font-by-row-two-cols, '12');
+          }
+        }
+
+        &.rows16 {
+          font-size: map-get($preview-font-by-row, '16p');
+
+          span.via {
+            font-size: map-get($preview-font-by-row, '16pvia');
+
+            span.via {
+              position: relative;
+              top: calc(-0.7 * #{map-get($preview-font-by-row, '16pvia')});
+              font-size: map-get($preview-font-by-row, '16pvia');
+
+              &::before {
+                content: "\A";
+                white-space: pre;
+              }
+            }
+          }
+        }
+
+        &.rows24 {
+          font-size: map-get($preview-font-by-row, '24p');
+
+          span.via {
+            font-size: map-get($preview-font-by-row, '24pvia');
           }
         }
       }
@@ -72,251 +483,66 @@
       grid-column: span 5;
       grid-row: span 1;
 
-      &.rows4 {
-        height: 77.5px !important;
+      &.alert,
+      &.alert-two-cols {
+        position: relative;
+        left: calc(-1 * #{$preview-grid-rows-margin});
+        width: calc(100% + calc(2 * #{$preview-grid-rows-margin}));
+        z-index: 1000;
 
-        &.tighten {
-          height: 65px !important;
+        &.preview {
+          height: calc(#{$preview-grid-rows-height-portrait-tighten} / var(--rows));
+        }
+
+        &.two-rows {
+          grid-row: span 2;
+        }
+
+        &.three-rows {
+          grid-row: span 3;
+        }
+
+        &.four-rows {
+          grid-row: span 4;
         }
       }
 
-      &.rows6 {
-        height: 51.6px !important;
-
-        &.tighten {
-          height: 43.3px !important;
-        }
+      &.alert-two-cols {
+        width: calc(200% + calc(4 * #{$preview-grid-rows-margin}) + 25px);
       }
-
-      &.rows8 {
-        height: 38.75px !important;
-
-        &.portrait {
-          height: 66.25px !important;
-        }
-      }
-
-      &.rows12 {
-        height: 25.8px !important;
-
-        &.portrait {
-          height: 44.15px !important;
-        }
-
-        &.tighten {
-          height: 21.6px !important;
-        }
-      }
-
-      &.rows16 {
-        &.portrait {
-          height: 33.125px !important;
-        }
-      }
-
-      &.rows24 {
-        &.portrait {
-          height: 22.08px !important;
-        }
-      }
-    }
-
-    .grid-cols-day-divider {
-      display: grid;
-      justify-content: center;
-      grid-template-columns: 1fr 1fr 1fr;
     }
 
     .grid-cols {
       display: grid;
       justify-content: center;
+      align-content: flex-start;
       grid-template-columns: 1fr 3fr 1fr;
+      height: calc(calc(85vh - (2 * #{$header-height-padding})) / var(--rows));
 
-      &.rows6 {
-        &.portrait {
-          grid-template-columns: 1fr 4fr 1fr;
-
-          &.tighten {
-            grid-template-columns: 1fr 3fr 1fr;
-          }
-        }
+      &.alert-row {
+        display: block;
+        position: relative;
+        border-top: 2px solid white;
+        color: white;
+        background: red;
+        height: --moz-available;          /* WebKit-based browsers will ignore this. */
+        height: --webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+        height: stretch;
+        padding: 0 $preview-grid-rows-margin;
       }
 
-      &.rows8 {
-        grid-template-columns: 1fr 6fr 1fr;
-
-        &.portrait {
-          grid-template-columns: 1fr 3fr 1fr;
-        }
-      }
-
-      &.rows12,
-      &.rows16,
-      &.rows24 {
-        grid-template-columns: 1fr 8fr 1fr;
-
-        &.portrait {
-          grid-template-columns: 1fr 5fr 1fr;
-
-          &.tighten {
-            grid-template-columns: 1fr 3fr 1fr;
-          }
-        }
-      }
-
-      &.two-cols {
-        grid-template-columns: 1fr 3fr 1fr;
+      &.day-row {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        color: #0057a2;
+        background: white;
       }
     }
 
     .grid-col {
-      overflow: hidden;
-      justify-content: center;
-      align-items: center;
-
-      &.preview {
-        &.rows4 {
-          font-size: 2.4rem;
-
-          &.destination,
-          &.destination-two-rows {
-            font-size: 2rem;
-
-            span {
-              font-size: 1rem;
-            }
-          }
-
-          &.destination-one-row {
-            font-size: 2.4rem;
-
-            &.no-via {
-              text-overflow: ellipsis;
-            }
-          }
-
-          &.tighten {
-            font-size: 1.8rem;
-
-            &.destination {
-              font-size: 1.8rem;
-            }
-
-            &.time {
-              font-size: 1.5rem;
-            }
-          }
-
-          &.two-cols {
-            font-size: 1.1rem;
-
-            &.destination-two-rows {
-              font-size: 1.5rem;
-
-              &.no-via {
-                position: relative;
-                top: 7px;
-              }
-
-              span {
-                font-size: 1rem;
-              }
-            }
-          }
-        }
-
-        &.rows6 {
-          &.portrait {
-            font-size: 1.5rem;
-          }
-        }
-
-        &.rows8 {
-          font-size: 1.5rem;
-
-          &.destination-one-row {
-            &.no-via {
-              position: relative;
-              top: 6px;
-              font-size: 1.1rem;
-              height: 34px;
-            }
-
-            span {
-              font-size: 1.2rem;
-            }
-          }
-
-          &.portrait {
-            font-size: 1.5rem;
-          }
-
-          &.two-cols {
-            &.line,
-            &.time {
-              font-size: 1.15rem;
-            }
-
-            &.destination-two-rows {
-              &.no-via {
-                position: relative;
-                top: 7px;
-                font-size: 1.05rem;
-                height: 34px;
-              }
-
-              position: relative;
-              top: -1px;
-              font-size: 1rem;
-
-              span {
-                font-size: 0.75rem;
-              }
-            }
-          }
-        }
-
-        &.rows12 {
-          font-size: 1.1rem;
-
-          &.portrait {
-            font-size: 1rem;
-          }
-        }
-      }
-
-      &.line {
-        display: flex;
-        justify-content: flex-start;
-      }
-
-      &.destination {
-        span {
-          display: flex;
-          vertical-align: bottom;
-          position: relative;
-
-          &::before {
-            content: " ";
-            white-space: pre;
-          }
-        }
-      }
-
-      &.destination-two-rows {
-        span {
-          display: flex;
-
-          &::before {
-            content: "\A";
-            white-space: pre;
-          }
-        }
-      }
-
       &.time {
-        display: flex;
-        justify-content: flex-end;
+        text-align: right;
       }
     }
   }
@@ -327,155 +553,31 @@
   width: 5px;
   margin-left: 10px;
   margin-right: 10px;
+  height: 98%;
 
   &.preview {
+    position: absolute;
+    left: 315px;
+    height: 80%;
     width: 2px;
-    margin-left: 5px;
-    margin-right: 5px;
-    height: 98%;
+    margin-left: 4px;
+    margin-right: 4px;
   }
 }
 
-.alert-row {
-  grid-column: span 3;
-  font-size: 2rem;
-  display: flex;
-  position: relative;
-  justify-content: center;
-
-  &.preview {
-    &.rows4 {
-      top: -17px;
-      font-size: 2.4rem;
-      height: 77.5px !important;
-
-      &.two-cols {
-        font-size: 2rem;
-      }
-
-      span {
-        position: relative;
-        top: 15px;
-      }
-    }
-
-    &.rows8 {
-      top: -5px;
-      font-size: 1.4rem;
-      height: 38.75px !important;
-
-      &.portrait {
-        height: 66.25px !important;
-      }
-
-      span {
-        position: relative;
-        top: 7px;
-      }
-    }
-
-    &.rows12 {
-      top: -3px;
-      font-size: 1.1rem;
-      height: 25.8px !important;
-
-      &.portrait {
-        height: 44.15px !important;
-      }
-
-      span {
-        position: relative;
-        top: 3px;
-      }
-    }
-
-    &.rows16 {
-      &.portrait {
-        height: 33.125px !important;
-      }
-    }
-
-    &.rows24 {
-      &.portrait {
-        height: 22.08px !important;
-      }
-    }
-  }
-}
-
-.day-row {
-  grid-column: span 3;
-  background-color: white;
-  color: #007ac9;
-  font-size: 2rem;
-  display: flex;
-  position: relative;
-  justify-content: center;
-
-  &.preview {
-    &.rows4 {
-      top: -17px;
-      font-size: 2.4rem;
-      height: 77.5px !important;
-
-      &.two-cols {
-        font-size: 2rem;
-      }
-
-      span {
-        position: relative;
-        top: 15px;
-      }
-    }
-
-    &.rows8 {
-      top: -5px;
-      font-size: 1.4rem;
-      height: 38.75px !important;
-
-      &.portrait {
-        height: 66.25px !important;
-      }
-
-      span {
-        position: relative;
-        top: 7px;
-      }
-    }
-
-    &.rows12 {
-      top: -3px;
-      font-size: 1.1rem;
-      height: 25.8px !important;
-
-      &.portrait {
-        height: 44.15px !important;
-      }
-
-      span {
-        position: relative;
-        top: 3px;
-      }
-    }
-
-    &.rows16 {
-      &.portrait {
-        height: 33.125px !important;
-      }
-    }
-
-    &.rows24 {
-      &.portrait {
-        height: 22.08px !important;
-      }
-    }
-  }
+.line-letter {
+  text-transform: lowercase;
+  font-variant: small-caps;
 }
 
 .separator {
-  border-top: 5px dotted #fff;
-  height: 5px;
+  border-top: calc(0.4 * 1vh) dotted #fff;
+  height: calc(0.4 * 1vh);
   grid-column: span 5;
+
+  &.first {
+    border-top: calc(0.2 * 1vh) solid #fff;
+  }
 
   &.rows8 {
     grid-column: span 8;
@@ -485,97 +587,21 @@
     }
   }
 
-  &.first {
-    border-top: 5px solid #fff;
-
-    &.preview {
-      border-top: 2px solid #fff;
-      height: 2px;
-
-      &.rows4 {
-        margin-bottom: 0.9rem;
-
-        &.portrait {
-          &.tighten {
-            margin-bottom: 0.8rem;
-          }
-        }
-      }
-
-      &.rows6 {
-        &.portrait {
-          &.tighten {
-            margin-bottom: 0.3rem;
-          }
-        }
-      }
-
-      &.rows8 {
-        margin-bottom: 0.1rem;
-
-        &.portrait {
-          margin-bottom: 0.9rem;
-        }
-      }
-
-      &.rows12 {
-        &.portrait {
-          margin-bottom: 0.6rem;
-        }
-      }
-
-      &.rows16 {
-        &.portrait {
-          margin-bottom: 0.3rem;
-        }
-      }
-    }
-  }
-
   &.preview {
     border-top: 2px dotted #fff;
     height: 2px;
 
-    &.rows4 {
-      margin-bottom: 0.9rem;
-
-      &.portrait {
-        &.tighten {
-          margin-bottom: 0.8rem;
-        }
-      }
+    &.first {
+      border-top: 2px solid #fff;
     }
+  }
+}
 
-    &.rows6 {
-      &.portrait {
-        &.tighten {
-          margin-bottom: 0.3rem;
-        }
-      }
-    }
+.tilde {
+  color: #0057a2;
+  font-size: smaller;
 
-    &.rows8 {
-      margin-bottom: 0.1rem;
-
-      &.portrait {
-        margin-bottom: 0.9rem;
-      }
-    }
-
-    &.rows12 {
-      &.portrait {
-        margin-bottom: 0.6rem;
-
-        &.tighten {
-          margin-bottom: -0.1rem;
-        }
-      }
-    }
-
-    &.rows16 {
-      &.portrait {
-        margin-bottom: 0.3rem;
-      }
-    }
+  &.show {
+    color: #fff;
   }
 }

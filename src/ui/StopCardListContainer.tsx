@@ -212,7 +212,9 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         stopCardList[cardIndex].columns.left.stops = stopCardList[
           cardIndex
         ].columns.left.stops.concat(
-          stopCardList[cardIndex].columns.right.stops,
+          stopCardList[cardIndex].columns.right.stops.filter(rs =>
+            stopCardList[cardIndex].columns.left.stops.includes(rs.gtfsId),
+          ),
         );
         stopCardList[cardIndex].columns.right.stops = [];
         stopCardList[cardIndex].columns.left.title[lang] = t('sideLeft');

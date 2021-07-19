@@ -1,9 +1,11 @@
+@import '../index.scss';
+
 .display-settings-container {
   display: flex;
   margin: 26px 0 0 60px;
   width: 780px;
   justify-content: space-between;
-  font-family: 'Roboto';
+  font-family: $font-family;
 }
 
 .display-language-container {
@@ -68,13 +70,13 @@
       }
     }
 
+    .orientation-button:first-child {
+      border-right: 1px solid #ddd;
+      border-radius: 5px 0 0 5px;
+    }
+
     .orientation-button:not(.selected) {
       cursor: pointer;
     }
-  }
-
-  .orientation-button:first-child {
-    border-right: 1px solid #ddd;
-    border-radius: 5px 0 0 5px;
   }
 }

@@ -63,17 +63,17 @@
       display: flex;
 
       .settings {
-        &.east-west {
-          svg {
-            left: 588px;
-          }
-        }
-
         svg {
           position: absolute;
           left: 633px;
           padding-top: 5px;
           cursor: pointer;
+        }
+
+        &.east-west {
+          svg {
+            left: 588px;
+          }
         }
       }
 

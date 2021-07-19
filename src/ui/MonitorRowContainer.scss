@@ -3,20 +3,20 @@
 
 @import '../index';
 
+$size: 1000px;
+
 @function strip-unit($number) {
   @if type-of($number) == 'number' and not unitless($number) {
-    @return math.div($number, $number * 0 + 1);
+    @return math.div($number , $number * 0 + 1);
   }
-
-  @return $number;
+  @return 1px;
 }
 
-@function font-size-by-width($size) {
-  @return calc(calc(math.div(#{strip-unit($size)}, 100)) * #{var(--width)});
+@function font-size-by-width($size: 1000px) {
+  @return calc(#{strip-unit($size)} / 100 * var(--width));
 }
-
-@function font-size-by-width-two-cols($size) {
-  @return calc(calc(math.div(#{strip-unit($size)}, 100)) * calc(math.div(#{var(--width)}, 2)));
+@function font-size-by-width-two-cols($size: 1000px) {
+  @return calc(#{strip-unit($size)} / 100 * var(--width) / 2);
 }
 
 $header-height: 10vh;

@@ -59,6 +59,7 @@ const PreviewModal: FC<Props> = (props: Props) => {
         </div>
         <div className="carouselContainer">
           <CarouselContainer
+            languages={['fi', 'sv']}
             views={props.view.cards}
             noPolling
             time={currentMillis}

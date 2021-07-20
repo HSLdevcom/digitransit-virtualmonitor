@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
 import CarouselContainer from './CarouselContainer';
+import CarouselDataContainer from './CarouselDataContainer';
 import TranslationContainer from './TranslationContainer';
 
 interface Iv {
@@ -44,7 +45,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
     return null;
   }
-  return <TranslationContainer views={monitor.cards} />;
+  return <CarouselDataContainer views={monitor.cards} languages={monitor.languages} />;
 };
 
 export default WithDatabaseConnection;

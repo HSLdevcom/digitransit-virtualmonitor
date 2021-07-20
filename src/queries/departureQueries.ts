@@ -5,6 +5,9 @@ export const GET_STOP_DEPARTURES = gql`
     stops: stops(ids: $ids) {
       name
       gtfsId
+      patterns {
+        headsign
+      }
       routes {
         alerts {
           alertSeverityLevel
@@ -77,6 +80,9 @@ export const GET_STATION_DEPARTURES = gql`
       }
       stops {
         routes {
+          patterns {
+            headsign
+          }
           alerts {
             alertSeverityLevel
             alertHeaderText
@@ -111,6 +117,7 @@ export const GET_STATION_DEPARTURES = gql`
           trip {
             gtfsId
             route {
+              gtfsId
               shortName
             }
             stops {

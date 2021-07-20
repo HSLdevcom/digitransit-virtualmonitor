@@ -35,6 +35,7 @@ interface IProps {
   departure: IDeparture;
   size: number;
   withSeparator: boolean;
+  translations: any;
   isFirst?: boolean;
   isLandscape?: boolean;
   isPreview?: boolean;
@@ -67,16 +68,23 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   isPreview = false,
   isOneLiner = true,
   withTwoColumns = false,
+  translations,
   tightenPosition,
   dayForDivider,
   alerts,
   alertRows = 1,
   t,
 }) => {
-  const destination =
+  //const translatedHeadsign = translations.find(t => t.translation === departure.headsign)
+  const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')
       ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
       : departure?.headsign;
+
+  const d = translations.find(t => t.trans_id === departureDestination)
+  const destination = d ? d.translation : departureDestination;
+  console.log(translations)
+
 
   const splitDestination = destination && destination.includes(' via');
 

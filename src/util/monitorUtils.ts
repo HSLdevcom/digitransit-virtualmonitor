@@ -19,7 +19,6 @@ export const getMaxAmountOfDeparturesForLayout = layout => {
 
 }
 
-
 export const getDeparturesWithoutHiddenRoutes = (stop, hiddenRoutes, timeshift) => {
   const departures = [];
   const currentSeconds = getCurrentSeconds();

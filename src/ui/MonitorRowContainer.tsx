@@ -9,6 +9,7 @@ import { formatDate, setDate } from '../time';
 interface IProps {
   departuresLeft: any;
   departuresRight: any;
+  translatedStrings: any;
   layout: any;
   isPreview: boolean;
   isLandscape: boolean;
@@ -18,6 +19,7 @@ interface IProps {
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   departuresLeft,
   departuresRight,
+  translatedStrings,
   layout,
   isPreview,
   isLandscape,
@@ -221,6 +223,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             ? sortedDeparturesLeft[i]
             : null
         }
+        translations={translatedStrings}
         size={getCorrectSize(leftColumnCount, i + 1, differSize)}
         withSeparator
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
@@ -272,6 +275,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
             }
             size={rightColumnCount}
+            translations={translatedStrings}
             withSeparator
             isFirst={
               i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
@@ -297,6 +301,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 : null
             }
             size={rightColumnCount}
+            translations={translatedStrings}
             withSeparator
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             isLandscape={isLandscape}

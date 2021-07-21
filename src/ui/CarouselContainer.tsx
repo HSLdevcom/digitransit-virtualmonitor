@@ -36,17 +36,16 @@ const CarouselContainer: FC<IProps> = ({
         const nextLan = (language + 1) % languages.length;
         setLanguage(nextLan);
       }
-      setCurrent(next)
+      setCurrent(next);
     }, time);
     return () => clearTimeout(id);
   }, [current]);
   const index = current % views.length;
   const config = getConfig();
-  const departures = 
-    [
-      [...stationDepartures[index][0], ...stopDepartures[index][0]],
-      [...stationDepartures[index][1], ...stopDepartures[index][1]]
-    ];
+  const departures = [
+    [...stationDepartures[index][0], ...stopDepartures[index][0]],
+    [...stationDepartures[index][1], ...stopDepartures[index][1]],
+  ];
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   return (
     <Monitor

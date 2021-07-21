@@ -55,17 +55,18 @@ const monitorAPI = {
 
   getTranslations(ids) {
     return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/translations/${ids.join()}`,{
+      fetch(`${baseAPI}/translations/${ids.join()}`, {
         headers: {
           accepts: 'application/json',
-        }})
+        },
+      })
         .then(result => result.json())
         .then(result => resolve(result))
         .catch(err => {
           reject(err);
         });
-    })
-  }
+    });
+  },
 };
 
 export default monitorAPI;

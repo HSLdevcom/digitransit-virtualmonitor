@@ -45,7 +45,12 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
     return null;
   }
-  return <CarouselDataContainer views={monitor.cards} languages={monitor.languages} />;
+  return (
+    <CarouselDataContainer
+      views={monitor.cards}
+      languages={monitor.languages}
+    />
+  );
 };
 
 export default WithDatabaseConnection;

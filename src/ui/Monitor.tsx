@@ -38,7 +38,6 @@ const Monitor: FC<IProps> = ({
   time,
   isPreview,
 }) => {
-
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
@@ -99,8 +98,12 @@ const Monitor: FC<IProps> = ({
         )}
         {isMultiDisplay && (
           <div className="multi-display-titles">
-            <div className="left-title">{view.columns.left.title[currentLang]}</div>
-            <div className="right-title">{view.columns.right.title[currentLang]}</div>
+            <div className="left-title">
+              {view.columns.left.title[currentLang]}
+            </div>
+            <div className="right-title">
+              {view.columns.right.title[currentLang]}
+            </div>
           </div>
         )}
         <TitlebarTime

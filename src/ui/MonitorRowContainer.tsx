@@ -10,7 +10,7 @@ interface IProps {
   departuresLeft: any;
   departuresRight: any;
   translatedStrings: any;
-  currentLang: string,
+  currentLang: string;
   layout: any;
   isPreview: boolean;
   isLandscape: boolean;
@@ -376,7 +376,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               !isLandscape ? 'portrait' : '',
             )}
           >
-            {t('lineId', {lng: currentLang})}
+            {t('lineId', { lng: currentLang })}
           </div>
           <div
             className={cx(
@@ -386,7 +386,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               !isLandscape ? 'portrait' : '',
             )}
           >
-            {t('destination', {lng: currentLang})}
+            {t('destination', { lng: currentLang })}
           </div>
           <div
             className={cx(
@@ -396,7 +396,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               !isLandscape ? 'portrait' : '',
             )}
           >
-            {t('departureTime', {lng: currentLang})}
+            {t('departureTime', { lng: currentLang })}
           </div>
         </div>
         {!isTighten && (

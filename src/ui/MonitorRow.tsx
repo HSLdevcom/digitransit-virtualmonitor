@@ -25,14 +25,17 @@ export interface IDeparture {
 }
 interface IAlertDescriptionTextTranslation {
   text: string;
+  language?: string;
 }
 interface IAlert {
   alertDescriptionTextTranslations: Array<IAlertDescriptionTextTranslation>;
+  alertHeaderTextTranslations: Array<IAlertDescriptionTextTranslation>;
   alertHeaderText: string;
   alertSeverityLevel: string;
 }
 interface IProps {
   departure: IDeparture;
+  currentLang: string;
   size: number;
   withSeparator: boolean;
   translations: any;
@@ -63,6 +66,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   departure,
   size,
   withSeparator,
+  currentLang,
   isFirst = false,
   isLandscape = true,
   isPreview = false,
@@ -81,9 +85,8 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
       ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
       : departure?.headsign;
 
-  const d = translations.find(t => t.trans_id === departureDestination)
+  const d = translations.find(t => t.trans_id === departureDestination?.split(' via')[0])
   const destination = d ? d.translation : departureDestination;
-  console.log(translations)
 
 
   const splitDestination = destination && destination.includes(' via');
@@ -172,7 +175,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           className={cx('grid-cols', 'alert-row', isPreview ? 'preview' : '')}
         >
           <span className={cx(!isLandscape ? 'portrait' : '')}>
-            {alerts[0].alertHeaderText}
+            {alerts[0].alertHeaderTextTranslations.find(a => a.language === currentLang).text}
           </span>
         </div>
       </div>

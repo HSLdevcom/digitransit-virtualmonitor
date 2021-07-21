@@ -15,9 +15,13 @@ interface IProps {
 
 const CarouselDataContainer : FC<IProps> = ({views, languages}) => {
   const pollInterval = 10000;
+  const emptyDepartureArrays = [];
+  for (let i = 0; i < views.length; i++) {
+    emptyDepartureArrays.push([[],[]]);
+  }
   const [stopIds, stationIds] = getStopsAndStationsFromViews(views);
-  const [stopDepartures, setStopDepartures] = useState([[[],[]]])
-  const [stationDepartures, setStationDepartures] = useState([[[],[]]])
+  const [stopDepartures, setStopDepartures] = useState(emptyDepartureArrays)
+  const [stationDepartures, setStationDepartures] = useState(emptyDepartureArrays)
   const [stopsFetched, setStopsFetched] = useState(stopIds.length < 1)
   const [stationsFetched, setStationsFetched] = useState(stationIds.length < 1)
   const [translationIds, setTranslationIds] = useState([]);
@@ -37,20 +41,17 @@ const CarouselDataContainer : FC<IProps> = ({views, languages}) => {
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
       const copy = [];
+      const stringsToTranslate = [];
       views.forEach((view, i) => {
         Object.keys(view.columns).forEach(column => {
           const departureArray = [];
           stops.forEach(stop => {
-            
             const stopIndex = view.columns[column].stops.map(stop => stop.gtfsId).indexOf(stop.gtfsId);
             if (stopIndex >= 0) {
-              console.log(stop)
-              const stringsToTranslate = [];
+              
               stop.patterns.forEach(r => {
                 stringsToTranslate.push(r.headsign);
               })
-              setTranslationIds(translationIds.concat(stringsToTranslate));
-              //setTranslationIds(translationIds.concat(stop.routes.map(r => [...r.patterns.map(x => x.headsign)])))
               const { hiddenRoutes, timeshift } = view.columns[column].stops[stopIndex].settings;
               departureArray.push(...getDeparturesWithoutHiddenRoutes(stop, hiddenRoutes, timeshift));
             }
@@ -60,6 +61,7 @@ const CarouselDataContainer : FC<IProps> = ({views, languages}) => {
           copy[i][colIndex] = departureArray;
         })
       })
+      setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(copy);
       setStopsFetched(true)
     }
@@ -70,13 +72,18 @@ const CarouselDataContainer : FC<IProps> = ({views, languages}) => {
     if (stations?.length > 0) {
       console.log("REFETCH STATIONS")
       const copy = [];
+      const stringsToTranslate = [];
       views.forEach((view, i) => {
         Object.keys(view.columns).forEach(column => {
           const departureArray = [];
           stations.forEach(stop => {
             const stopIndex = view.columns[column].stops.map(stop => stop.gtfsId).indexOf(stop.gtfsId);
             if (stopIndex >= 0) {
-              setTranslationIds(translationIds.concat(stop.routes.map(r => r.pattern.headsign)))
+              stop.stops.forEach(s => {
+                s.routes.forEach(r => {
+                  stringsToTranslate.push(...r.patterns.map(p => p.headsign));
+                })
+              })
               const { hiddenRoutes, timeshift } = view.columns[column].stops[stopIndex].settings;
               departureArray.push(...getDeparturesWithoutHiddenRoutes(stop, hiddenRoutes, timeshift));
             }
@@ -86,11 +93,11 @@ const CarouselDataContainer : FC<IProps> = ({views, languages}) => {
           copy[i][colIndex] = departureArray;
         })
       })
+      setTranslationIds(translationIds.concat(stringsToTranslate));
       setStationDepartures(copy);
       setStationsFetched(true)
     }
   }, [stationsState])
-  console.log("RENDER")
   if (!stopsFetched || !stationsFetched) {
     return <Loading />
   }

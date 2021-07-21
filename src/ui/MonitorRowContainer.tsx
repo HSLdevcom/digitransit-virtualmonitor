@@ -10,6 +10,7 @@ interface IProps {
   departuresLeft: any;
   departuresRight: any;
   translatedStrings: any;
+  currentLang: string,
   layout: any;
   isPreview: boolean;
   isLandscape: boolean;
@@ -20,6 +21,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   departuresLeft,
   departuresRight,
   translatedStrings,
+  currentLang,
   layout,
   isPreview,
   isLandscape,
@@ -231,6 +233,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         isPreview={isPreview}
         isOneLiner={isOneLiner && !withTwoColumns}
         withTwoColumns={withTwoColumns}
+        currentLang={currentLang}
         alerts={showAlerts ? routeAlerts : undefined}
         alertRows={alertRowSpan}
         dayForDivider={
@@ -275,6 +278,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
             }
             size={rightColumnCount}
+            currentLang={currentLang}
             translations={translatedStrings}
             withSeparator
             isFirst={
@@ -301,6 +305,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 : null
             }
             size={rightColumnCount}
+            currentLang={currentLang}
             translations={translatedStrings}
             withSeparator
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
@@ -371,7 +376,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               !isLandscape ? 'portrait' : '',
             )}
           >
-            {t('lineId')}
+            {t('lineId', {lng: currentLang})}
           </div>
           <div
             className={cx(
@@ -381,7 +386,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               !isLandscape ? 'portrait' : '',
             )}
           >
-            {t('destination')}
+            {t('destination', {lng: currentLang})}
           </div>
           <div
             className={cx(
@@ -391,7 +396,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               !isLandscape ? 'portrait' : '',
             )}
           >
-            {t('departureTime')}
+            {t('departureTime', {lng: currentLang})}
           </div>
         </div>
         {!isTighten && (

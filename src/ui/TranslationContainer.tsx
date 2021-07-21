@@ -15,8 +15,6 @@ const TranslationContainer : FC<IProps> = ({languages, translationIds, views, st
   const [translations, setTranslations] = useState([]);
   useEffect(() => {
     if (translationIds.length > 0) {
-      const ids = translationIds.map(s => s?.split(':')[1])
-      console.log(ids)
       monitorAPI.getTranslations(translationIds).then((t:Array<any>) => {
         setTranslations(t)
       })

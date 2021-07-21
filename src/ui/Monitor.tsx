@@ -21,6 +21,7 @@ const getWindowDimensions = () => {
 interface IProps {
   readonly view: IView;
   readonly departures: Array<any>;
+  currentLang: string;
   readonly translatedStrings: Array<any>;
   readonly config: IMonitorConfig;
   readonly noPolling?: boolean;
@@ -31,6 +32,7 @@ const Monitor: FC<IProps> = ({
   view,
   departures,
   translatedStrings,
+  currentLang,
   config,
   noPolling,
   time,
@@ -92,13 +94,13 @@ const Monitor: FC<IProps> = ({
         />
         {!isMultiDisplay && (
           <div className={cx('title-text', isPreview ? 'preview' : '')}>
-            {view.title['fi']}
+            {view.title[currentLang]}
           </div>
         )}
         {isMultiDisplay && (
           <div className="multi-display-titles">
-            <div className="left-title">{view.columns.left.title['fi']}</div>
-            <div className="right-title">{view.columns.right.title['fi']}</div>
+            <div className="left-title">{view.columns.left.title[currentLang]}</div>
+            <div className="right-title">{view.columns.right.title[currentLang]}</div>
           </div>
         )}
         <TitlebarTime
@@ -112,6 +114,7 @@ const Monitor: FC<IProps> = ({
       <MonitorRowContainer
         departuresLeft={departures[0]}
         departuresRight={departures[1]}
+        currentLang={currentLang}
         translatedStrings={translatedStrings}
         layout={getLayout(view.layout)}
         isPreview={isPreview}

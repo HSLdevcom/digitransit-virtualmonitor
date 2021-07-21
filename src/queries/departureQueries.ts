@@ -12,6 +12,10 @@ export const GET_STOP_DEPARTURES = gql`
         alerts {
           alertSeverityLevel
           alertHeaderText
+          alertHeaderTextTranslations {
+            text
+            language
+          }
           alertDescriptionTextTranslations {
             text
           }
@@ -47,6 +51,10 @@ export const GET_STOP_DEPARTURES = gql`
               alerts {
                 alertSeverityLevel
                 alertHeaderText
+                alertHeaderTextTranslations {
+                  text
+                  language
+                }
                 alertDescriptionTextTranslations {
                   text
                 }
@@ -67,10 +75,19 @@ export const GET_STATION_DEPARTURES = gql`
     stations: stations(ids: $ids) {
       name
       gtfsId
+      stops {
+        patterns {
+          headsign
+        }
+      }
       routes {
         alerts {
           alertSeverityLevel
           alertHeaderText
+          alertHeaderTextTranslations {
+            text
+            language
+          }
           alertDescriptionTextTranslations {
             text
           }
@@ -86,6 +103,10 @@ export const GET_STATION_DEPARTURES = gql`
           alerts {
             alertSeverityLevel
             alertHeaderText
+            alertHeaderTextTranslations {
+              text
+              language
+            }
             alertDescriptionTextTranslations {
               text
             }

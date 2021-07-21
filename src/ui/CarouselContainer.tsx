@@ -25,32 +25,35 @@ const CarouselContainer: FC<IProps> = ({
   time,
   isPreview = false,
 }) => {
-  const len = views.length;
+  const len = views.length * languages.length;
   const [current, setCurrent] = useState(0);
   const [language, setLanguage] = useState(0);
   useEffect(() => {
     const next = (current + 1) % len;
-    const time = views[current].duration * 1000;
-    const id = setTimeout(() => setCurrent(next), time);
+    const time = views[current % views.length].duration * 1000;
+    const id = setTimeout(() => {
+      if (next % views.length === 0) {
+        const nextLan = (language + 1) % languages.length;
+        setLanguage(nextLan);
+      }
+      setCurrent(next)
+    }, time);
     return () => clearTimeout(id);
   }, [current]);
-
-  useEffect(() => {
-    const next = (language + 1) % languages.length;
-    const timeout = setTimeout(() => setLanguage(next), 3000)
-    return () => clearTimeout(timeout);
-  }, [language])
+  const index = current % views.length;
   const config = getConfig();
   const departures = 
     [
-      [...stationDepartures[current][0], ...stopDepartures[current][0]],
-      [...stationDepartures[current][1], ...stopDepartures[current][1]]
+      [...stationDepartures[index][0], ...stopDepartures[index][0]],
+      [...stationDepartures[index][1], ...stopDepartures[index][1]]
     ];
+  const lan = languages[language] === 'en' ? 'fi' : languages[language];
   return (
     <Monitor
-      view={views[current]}
+      view={views[index]}
+      currentLang={languages[language]}
       departures={departures}
-      translatedStrings={translations.filter(t => t.lang !== languages[language])}
+      translatedStrings={translations.filter(t => t.lang === lan)}
       config={config}
       noPolling={noPolling}
       time={time}

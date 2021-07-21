@@ -20,6 +20,13 @@ const config = {
     {
       url: 'https://infopalvelut.storage.hsldev.com/gtfs/hsl.zip',
       exclude: [
+        'attributions',
+        'calendar_dates',
+        'calendar',
+        'fare_attributes',
+        'fare_rules',
+        'feed_info',
+        'transfers',
         'shapes',
         'agency',
         'stop_times',

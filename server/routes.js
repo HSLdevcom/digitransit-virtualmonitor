@@ -17,12 +17,8 @@ router.put('/monitor', (req, res) => {
 });
 
 router.get('/translations/:recordIds', (req, res) => {
-
   const ids = req.params.recordIds.split(',');
-
-  console.log(ids)
   getTranslations({trans_id: ids}).then(t => {
-    console.log(t)
     res.json(t);
   })
 });

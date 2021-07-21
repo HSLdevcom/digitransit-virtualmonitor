@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { getDepartureTime } from '../time';
 import cx from 'classnames';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import { ITranslation } from './TranslationContainer';
 //import useFitText from "use-fit-text";
 
 interface IRoute {
@@ -40,7 +41,7 @@ interface IProps {
   currentLang: string;
   size: number;
   withSeparator: boolean;
-  translations: any;
+  translations: Array<ITranslation>;
   isFirst?: boolean;
   isLandscape?: boolean;
   isPreview?: boolean;

@@ -2,13 +2,21 @@ import React, { FC, useEffect, useState } from 'react';
 import { IView } from '../util/Interfaces';
 import CarouselContainer from './CarouselContainer';
 import monitorAPI from '../api';
+import { IDeparture } from './MonitorRow';
 
 interface IProps {
   views: Array<IView>;
+  preview?: boolean;
   languages: Array<string>;
-  translationIds: any;
-  stationDepartures: any;
-  stopDepartures: any;
+  translationIds: Array<string>;
+  stationDepartures: Array<Array<Array<IDeparture>>>;
+  stopDepartures: Array<Array<Array<IDeparture>>>;
+}
+
+export interface ITranslation {
+  trans_id: string;
+  lang: string;
+  translation: string;
 }
 
 const TranslationContainer: FC<IProps> = ({
@@ -17,11 +25,12 @@ const TranslationContainer: FC<IProps> = ({
   views,
   stationDepartures,
   stopDepartures,
+  preview,
 }) => {
   const [translations, setTranslations] = useState([]);
   useEffect(() => {
     if (translationIds.length > 0) {
-      monitorAPI.getTranslations(translationIds).then((t: Array<any>) => {
+      monitorAPI.getTranslations(translationIds).then((t: Array<ITranslation>) => {
         setTranslations(t);
       });
     }
@@ -33,6 +42,7 @@ const TranslationContainer: FC<IProps> = ({
       translations={translations}
       stationDepartures={stationDepartures}
       stopDepartures={stopDepartures}
+      isPreview={preview}
     />
   );
 };

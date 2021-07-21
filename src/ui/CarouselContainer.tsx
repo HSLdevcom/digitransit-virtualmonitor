@@ -3,13 +3,15 @@ import { getConfig } from '../util/getConfig';
 import { IView } from '../util/Interfaces';
 import Monitor from './Monitor';
 import { EpochMilliseconds } from '../time';
+import { IDeparture } from './MonitorRow';
+import { ITranslation } from './TranslationContainer';
 
 interface IProps {
   views: Array<IView>;
   languages: Array<string>;
-  stopDepartures?: Array<any>;
-  stationDepartures?: Array<any>;
-  translations?: Array<any>;
+  stationDepartures: Array<Array<Array<IDeparture>>>;
+  stopDepartures: Array<Array<Array<IDeparture>>>;
+  translations?: Array<ITranslation>;
   noPolling?: boolean;
   time?: EpochMilliseconds;
   isPreview?: boolean;

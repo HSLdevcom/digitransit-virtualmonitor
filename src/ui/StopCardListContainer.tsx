@@ -331,6 +331,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       {isOpen && (
         <PreviewModal
           view={cards}
+          languages={languages}
           isOpen={isOpen}
           onClose={closePreview}
           isLandscape={orientation === 'horizontal' ? true : false}

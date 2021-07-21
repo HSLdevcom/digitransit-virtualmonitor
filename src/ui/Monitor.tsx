@@ -9,6 +9,7 @@ import { getLayout } from '../util/getLayout';
 import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
 import { getCurrentSeconds, EpochMilliseconds } from '../time';
+import { ITranslation } from './TranslationContainer';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -20,9 +21,9 @@ const getWindowDimensions = () => {
 
 interface IProps {
   readonly view: IView;
-  readonly departures: Array<any>;
+  readonly departures: Array<Array<IDeparture>>;
   currentLang: string;
-  readonly translatedStrings: Array<any>;
+  readonly translatedStrings: Array<ITranslation>;
   readonly config: IMonitorConfig;
   readonly noPolling?: boolean;
   readonly time?: EpochMilliseconds;

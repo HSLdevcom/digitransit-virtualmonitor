@@ -5,6 +5,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 //import useFitText from "use-fit-text";
 
 interface IRoute {
+  alerts: any;
   shortName: string;
 }
 
@@ -16,6 +17,7 @@ interface ITrip {
   stops: Array<IStop>;
 }
 export interface IDeparture {
+  serviceDay: number;
   trip: ITrip;
   headsign: string;
   realtimeDeparture: number;

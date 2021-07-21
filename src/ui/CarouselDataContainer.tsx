@@ -17,13 +17,18 @@ import { uniq } from 'lodash';
 interface IProps {
   views: Array<IView>;
   languages: Array<string>;
+  preview?: boolean;
 }
 
-const CarouselDataContainer: FC<IProps> = ({ views, languages }) => {
-  const pollInterval = 10000;
+const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
+  const pollInterval = preview ? 0 : 30000;
   const emptyDepartureArrays = [];
   for (let i = 0; i < views.length; i++) {
     emptyDepartureArrays.push([[], []]);
+  }
+  const defaultSettings = {
+    hiddenRoutes: [],
+    timeshift: 0,
   }
   const [stopIds, stationIds] = getStopsAndStationsFromViews(views);
   const [stopDepartures, setStopDepartures] = useState(emptyDepartureArrays);
@@ -61,7 +66,7 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages }) => {
                 stringsToTranslate.push(r.headsign);
               });
               const { hiddenRoutes, timeshift } =
-                view.columns[column].stops[stopIndex].settings;
+                view.columns[column].stops[stopIndex].settings ? view.columns[column].stops[stopIndex].settings : defaultSettings;
               departureArray.push(
                 ...getDeparturesWithoutHiddenRoutes(
                   stop,
@@ -102,7 +107,7 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages }) => {
                 });
               });
               const { hiddenRoutes, timeshift } =
-                view.columns[column].stops[stopIndex].settings;
+                view.columns[column].stops[stopIndex].settings ? view.columns[column].stops[stopIndex].settings : defaultSettings;
               departureArray.push(
                 ...getDeparturesWithoutHiddenRoutes(
                   stop,
@@ -132,6 +137,7 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages }) => {
       stopDepartures={stopDepartures}
       stationDepartures={stationDepartures}
       views={views}
+      preview={preview}
     />
   );
 };

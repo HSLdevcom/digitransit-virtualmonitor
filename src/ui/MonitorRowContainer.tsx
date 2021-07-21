@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import MonitorRow from './MonitorRow';
+import MonitorRow, { IDeparture } from './MonitorRow';
 import './MonitorRowContainer.scss';
 import cx from 'classnames';
 import { formatDate, setDate } from '../time';
+import { ITranslation } from './TranslationContainer';
 
 interface IProps {
-  departuresLeft: any;
-  departuresRight: any;
-  translatedStrings: any;
+  departuresLeft: Array<IDeparture>;
+  departuresRight: Array<IDeparture>;
+  translatedStrings: Array<ITranslation>;
   currentLang: string;
   layout: any;
   isPreview: boolean;
@@ -131,7 +132,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   if (currentDayDepartureIndexRight !== -1) {
     if (rowCountRight < rightColumnCount || rightColumnCount !== 0) {
       nextDayDepartureIndexRight +=
-        nextDayDepartureIndexRight.length === 0 ? 0 : 1;
+      sortedDeparturesRight.length === 0 ? 0 : 1;
       if (currentDayDeparturesRight.length > 0) {
         currentDayDepartureIndexRight = 0;
         sortedDeparturesRight.splice(0, 0, null);

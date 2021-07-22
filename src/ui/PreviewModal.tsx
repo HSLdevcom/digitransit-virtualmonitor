@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
 import { ISettings, ITitle } from '../util/Interfaces';
-import CarouselContainer from './CarouselContainer';
+import CarouselDataContainer from './CarouselDataContainer';
 import Icon from './Icon';
 import cx from 'classnames';
 
@@ -34,6 +34,7 @@ interface IView {
 }
 interface Props {
   view: IView;
+  languages: Array<string>;
   isOpen: boolean;
   onClose: (boolean) => void;
   isLandscape: boolean;
@@ -58,11 +59,10 @@ const PreviewModal: FC<Props> = (props: Props) => {
           </div>
         </div>
         <div className="carouselContainer">
-          <CarouselContainer
+          <CarouselDataContainer
+            languages={props.languages}
             views={props.view.cards}
-            noPolling
-            time={currentMillis}
-            isPreview
+            preview
           />
         </div>
       </Modal>

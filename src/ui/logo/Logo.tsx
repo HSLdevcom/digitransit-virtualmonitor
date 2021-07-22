@@ -16,9 +16,15 @@ interface ICommonProps {
 class Logo extends React.Component<ICommonProps> {
   public render() {
     const monitorConfig = (this.props as ICommonProps).monitorConfig;
-    const isPreview = (this.props as ICommonProps).isPreview ? (this.props as ICommonProps).isPreview : false;
-    const isLandscape = (this.props as ICommonProps).isLandscape ? (this.props as ICommonProps).isLandscape : false;
-    const forcedLayout = (this.props as ICommonProps).forcedLayout ? (this.props as ICommonProps).forcedLayout : undefined;
+    const isPreview = (this.props as ICommonProps).isPreview
+      ? (this.props as ICommonProps).isPreview
+      : false;
+    const isLandscape = (this.props as ICommonProps).isLandscape
+      ? (this.props as ICommonProps).isLandscape
+      : false;
+    const forcedLayout = (this.props as ICommonProps).forcedLayout
+      ? (this.props as ICommonProps).forcedLayout
+      : undefined;
 
     let logo = undefined;
 
@@ -46,13 +52,25 @@ class Logo extends React.Component<ICommonProps> {
     if (logo) {
       if (!forcedLayout) {
         return (
-          <div className={cx('title-logo', isPreview ? 'preview' : '', isLandscape ? '' : 'portrait')}>
+          <div
+            className={cx(
+              'title-logo',
+              isPreview ? 'preview' : '',
+              isLandscape ? '' : 'portrait',
+            )}
+          >
             {logo}
           </div>
         );
       }
       return (
-        <div className={forcedLayout === 'landscape' ? 'title-logo-forced-landscape' : 'title-logo-forced-portrait'}>
+        <div
+          className={
+            forcedLayout === 'landscape'
+              ? 'title-logo-forced-landscape'
+              : 'title-logo-forced-portrait'
+          }
+        >
           {logo}
         </div>
       );

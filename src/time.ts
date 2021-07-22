@@ -44,7 +44,9 @@ export const getDepartureTime = time => {
 };
 
 export const formatDate = date => {
-  const newDate = DateTime.fromISO(date.toISOString()).setLocale('fi').toFormat('EEEE d.M.yyyy');
+  const newDate = DateTime.fromISO(date.toISOString())
+    .setLocale('fi')
+    .toFormat('EEEE d.M.yyyy');
   return newDate.charAt(0).toUpperCase() + newDate.slice(1);
 };
 

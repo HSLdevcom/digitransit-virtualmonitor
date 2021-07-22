@@ -1,4 +1,5 @@
 const express = require('express');
+const { getTranslations, getTranslations3 } = require('gtfs');
 const router = express.Router();
 
 const monitorService = require('./monitorService');
@@ -15,12 +16,11 @@ router.put('/monitor', (req, res) => {
   monitorService.create(req, res);
 });
 
-// router.post('/hero', (req, res) => {
-//   heroesService.update(req, res);
-// });
-
-router.delete('/hero/:id', (req, res) => {
-  monitorService.destroy(req, res);
+router.get('/translations/:recordIds', (req, res) => {
+  const ids = req.params.recordIds.split(',');
+  getTranslations({trans_id: ids}).then(t => {
+    res.json(t);
+  })
 });
 
 module.exports = router;

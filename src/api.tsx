@@ -1,3 +1,5 @@
+import { resolve } from '@loona/react';
+
 const baseAPI = '/api';
 
 const monitorAPI = {
@@ -51,35 +53,20 @@ const monitorAPI = {
     });
   },
 
-  // update(hero) {
-  //   return new Promise((resolve, reject) => {
-  //     fetch(`${baseAPI}/hero`, {
-  //       method: 'POST',
-  //       body: JSON.stringify(hero),
-  //       headers: {
-  //         Accept: 'application/json',
-  //         'Content-Type': 'application/json'
-  //       }
-  //     })
-  //       .then(result => {
-  //         resolve(result);
-  //       })
-  //       .catch(err => {
-  //         reject(err);
-  //       });
-  //   });
-  // },
-
-  // destroy(hero) {
-  //   return new Promise((resolve, reject) => {
-  //     fetch(`${baseAPI}/hero/${hero.id}`, { method: 'DELETE' })
-  //       .then(response => response.json())
-  //       .then(json => resolve(json))
-  //       .catch(err => {
-  //         reject(err);
-  //       });
-  //   });
-  // }
+  getTranslations(ids) {
+    return new Promise((resolve, reject) => {
+      fetch(`${baseAPI}/translations/${ids.join()}`, {
+        headers: {
+          accepts: 'application/json',
+        },
+      })
+        .then(result => result.json())
+        .then(result => resolve(result))
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
 };
 
 export default monitorAPI;

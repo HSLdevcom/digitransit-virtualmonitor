@@ -2,9 +2,11 @@ import React, { FC } from 'react';
 import { getDepartureTime } from '../time';
 import cx from 'classnames';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import { ITranslation } from './TranslationContainer';
 //import useFitText from "use-fit-text";
 
 interface IRoute {
+  alerts: any;
   shortName: string;
 }
 
@@ -16,6 +18,7 @@ interface ITrip {
   stops: Array<IStop>;
 }
 export interface IDeparture {
+  serviceDay: number;
   trip: ITrip;
   headsign: string;
   realtimeDeparture: number;
@@ -25,16 +28,20 @@ export interface IDeparture {
 }
 interface IAlertDescriptionTextTranslation {
   text: string;
+  language?: string;
 }
 interface IAlert {
   alertDescriptionTextTranslations: Array<IAlertDescriptionTextTranslation>;
+  alertHeaderTextTranslations: Array<IAlertDescriptionTextTranslation>;
   alertHeaderText: string;
   alertSeverityLevel: string;
 }
 interface IProps {
   departure: IDeparture;
+  currentLang: string;
   size: number;
   withSeparator: boolean;
+  translations: Array<ITranslation>;
   isFirst?: boolean;
   isLandscape?: boolean;
   isPreview?: boolean;
@@ -62,21 +69,29 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   departure,
   size,
   withSeparator,
+  currentLang,
   isFirst = false,
   isLandscape = true,
   isPreview = false,
   isOneLiner = true,
   withTwoColumns = false,
+  translations,
   tightenPosition,
   dayForDivider,
   alerts,
   alertRows = 1,
   t,
 }) => {
-  const destination =
+  //const translatedHeadsign = translations.find(t => t.translation === departure.headsign)
+  const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')
       ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
       : departure?.headsign;
+
+  const d = translations.find(
+    t => t.trans_id === departureDestination?.split(' via')[0],
+  );
+  const destination = d ? d.translation : departureDestination;
 
   const splitDestination = destination && destination.includes(' via');
 
@@ -164,7 +179,11 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           className={cx('grid-cols', 'alert-row', isPreview ? 'preview' : '')}
         >
           <span className={cx(!isLandscape ? 'portrait' : '')}>
-            {alerts[0].alertHeaderText}
+            {
+              alerts[0].alertHeaderTextTranslations.find(
+                a => a.language === currentLang,
+              ).text
+            }
           </span>
         </div>
       </div>

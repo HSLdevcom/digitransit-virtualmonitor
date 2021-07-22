@@ -1,14 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import MonitorRow from './MonitorRow';
+import MonitorRow, { IDeparture } from './MonitorRow';
 import './MonitorRowContainer.scss';
 import cx from 'classnames';
 import { formatDate, setDate } from '../time';
+import { ITranslation } from './TranslationContainer';
 
 interface IProps {
-  departuresLeft: any;
-  departuresRight: any;
+  departuresLeft: Array<IDeparture>;
+  departuresRight: Array<IDeparture>;
+  translatedStrings: Array<ITranslation>;
+  currentLang: string;
   layout: any;
   isPreview: boolean;
   isLandscape: boolean;
@@ -18,6 +21,8 @@ interface IProps {
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   departuresLeft,
   departuresRight,
+  translatedStrings,
+  currentLang,
   layout,
   isPreview,
   isLandscape,
@@ -126,8 +131,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
 
   if (currentDayDepartureIndexRight !== -1) {
     if (rowCountRight < rightColumnCount || rightColumnCount !== 0) {
-      nextDayDepartureIndexRight +=
-        nextDayDepartureIndexRight.length === 0 ? 0 : 1;
+      nextDayDepartureIndexRight += sortedDeparturesRight.length === 0 ? 0 : 1;
       if (currentDayDeparturesRight.length > 0) {
         currentDayDepartureIndexRight = 0;
         sortedDeparturesRight.splice(0, 0, null);
@@ -221,6 +225,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             ? sortedDeparturesLeft[i]
             : null
         }
+        translations={translatedStrings}
         size={getCorrectSize(leftColumnCount, i + 1, differSize)}
         withSeparator
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
@@ -228,6 +233,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         isPreview={isPreview}
         isOneLiner={isOneLiner && !withTwoColumns}
         withTwoColumns={withTwoColumns}
+        currentLang={currentLang}
         alerts={showAlerts ? routeAlerts : undefined}
         alertRows={alertRowSpan}
         dayForDivider={
@@ -272,6 +278,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
             }
             size={rightColumnCount}
+            currentLang={currentLang}
+            translations={translatedStrings}
             withSeparator
             isFirst={
               i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
@@ -297,6 +305,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 : null
             }
             size={rightColumnCount}
+            currentLang={currentLang}
+            translations={translatedStrings}
             withSeparator
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             isLandscape={isLandscape}
@@ -366,7 +376,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               !isLandscape ? 'portrait' : '',
             )}
           >
-            {t('lineId')}
+            {t('lineId', { lng: currentLang })}
           </div>
           <div
             className={cx(
@@ -376,7 +386,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               !isLandscape ? 'portrait' : '',
             )}
           >
-            {t('destination')}
+            {t('destination', { lng: currentLang })}
           </div>
           <div
             className={cx(
@@ -386,7 +396,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               !isLandscape ? 'portrait' : '',
             )}
           >
-            {t('departureTime')}
+            {t('departureTime', { lng: currentLang })}
           </div>
         </div>
         {!isTighten && (
@@ -468,7 +478,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   !isLandscape ? 'portrait' : '',
                 )}
               >
-                {t('lineId')}
+                {t('lineId', { lng: currentLang })}
               </div>
               <div
                 className={cx(
@@ -478,7 +488,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   !isLandscape ? 'portrait' : '',
                 )}
               >
-                {t('destination')}
+                {t('destination', { lng: currentLang })}
               </div>
               <div
                 className={cx(
@@ -488,7 +498,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   !isLandscape ? 'portrait' : '',
                 )}
               >
-                {t('departureTime')}
+                {t('departureTime', { lng: currentLang })}
               </div>
             </div>
             <div

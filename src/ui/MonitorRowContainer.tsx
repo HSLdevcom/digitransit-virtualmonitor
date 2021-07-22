@@ -478,7 +478,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   !isLandscape ? 'portrait' : '',
                 )}
               >
-                {t('lineId')}
+                {t('lineId', { lng: currentLang })}
               </div>
               <div
                 className={cx(
@@ -488,7 +488,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   !isLandscape ? 'portrait' : '',
                 )}
               >
-                {t('destination')}
+                {t('destination', { lng: currentLang })}
               </div>
               <div
                 className={cx(
@@ -498,7 +498,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   !isLandscape ? 'portrait' : '',
                 )}
               >
-                {t('departureTime')}
+                {t('departureTime', { lng: currentLang })}
               </div>
             </div>
             <div

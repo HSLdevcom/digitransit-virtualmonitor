@@ -47,7 +47,7 @@ export const createDepartureArray = (views, stops, isStation = false) => {
   const defaultSettings = {
     hiddenRoutes: [],
     timeshift: 0,
-  }
+  };
   const departures = [];
   const stringsToTranslate = [];
   views.forEach((view, i) => {
@@ -59,24 +59,23 @@ export const createDepartureArray = (views, stops, isStation = false) => {
           .indexOf(stop.gtfsId);
         if (stopIndex >= 0) {
           if (isStation) {
-          stop.stops.forEach(s => {
-                      s.routes.forEach(r => {
-                        stringsToTranslate.push(...r.patterns.map(p => p.headsign));
-                      });
-                    });
-      } else {
-          stop.patterns.forEach(r => {
-            stringsToTranslate.push(r.headsign);
-          });
-        }
-          const { hiddenRoutes, timeshift } =
-            view.columns[column].stops[stopIndex].settings ? view.columns[column].stops[stopIndex].settings : defaultSettings;
+            stop.stops.forEach(s => {
+              s.routes.forEach(r => {
+                stringsToTranslate.push(...r.patterns.map(p => p.headsign));
+              });
+            });
+          } else {
+            stop.patterns.forEach(r => {
+              stringsToTranslate.push(r.headsign);
+            });
+          }
+          const { hiddenRoutes, timeshift } = view.columns[column].stops[
+            stopIndex
+          ].settings
+            ? view.columns[column].stops[stopIndex].settings
+            : defaultSettings;
           departureArray.push(
-            ...getDeparturesWithoutHiddenRoutes(
-              stop,
-              hiddenRoutes,
-              timeshift,
-            ),
+            ...getDeparturesWithoutHiddenRoutes(stop, hiddenRoutes, timeshift),
           );
         }
       });
@@ -84,6 +83,6 @@ export const createDepartureArray = (views, stops, isStation = false) => {
       departures[i] = departures[i] ? departures[i] : [[], []];
       departures[i][colIndex] = departureArray;
     });
-  })
+  });
   return [stringsToTranslate, departures];
 };

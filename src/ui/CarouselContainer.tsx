@@ -9,8 +9,8 @@ import { ITranslation } from './TranslationContainer';
 interface IProps {
   views: Array<IView>;
   languages: Array<string>;
-  stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card 
-  stopDepartures: Array<Array<Array<IDeparture>>>;    // and the final one for the actual departures
+  stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card
+  stopDepartures: Array<Array<Array<IDeparture>>>; // and the final one for the actual departures
   translations?: Array<ITranslation>;
   noPolling?: boolean;
   time?: EpochMilliseconds;

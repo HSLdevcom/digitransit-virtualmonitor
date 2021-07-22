@@ -7,8 +7,7 @@ import {
 import { IView } from '../util/Interfaces';
 import {
   getStopsAndStationsFromViews,
-  getDeparturesWithoutHiddenRoutes,
-  createDepartureArray
+  createDepartureArray,
 } from '../util/monitorUtils';
 import TranslationContainer from './TranslationContainer';
 import Loading from './Loading';
@@ -51,7 +50,10 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   useEffect(() => {
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
-      const [stringsToTranslate, newDepartureArray] = createDepartureArray(views, stops);
+      const [stringsToTranslate, newDepartureArray] = createDepartureArray(
+        views,
+        stops,
+      );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(newDepartureArray);
       setStopsFetched(true);
@@ -61,7 +63,11 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   useEffect(() => {
     const stations = stationsState?.data?.stations;
     if (stations?.length > 0) {
-      const [stringsToTranslate, newDepartureArray ] = createDepartureArray(views, stations, true);
+      const [stringsToTranslate, newDepartureArray] = createDepartureArray(
+        views,
+        stations,
+        true,
+      );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStationDepartures(newDepartureArray);
       setStationsFetched(true);

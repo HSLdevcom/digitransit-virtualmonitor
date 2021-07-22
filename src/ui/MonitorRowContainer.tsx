@@ -131,8 +131,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
 
   if (currentDayDepartureIndexRight !== -1) {
     if (rowCountRight < rightColumnCount || rightColumnCount !== 0) {
-      nextDayDepartureIndexRight +=
-      sortedDeparturesRight.length === 0 ? 0 : 1;
+      nextDayDepartureIndexRight += sortedDeparturesRight.length === 0 ? 0 : 1;
       if (currentDayDeparturesRight.length > 0) {
         currentDayDepartureIndexRight = 0;
         sortedDeparturesRight.splice(0, 0, null);

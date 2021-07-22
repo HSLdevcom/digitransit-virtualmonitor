@@ -30,9 +30,11 @@ const TranslationContainer: FC<IProps> = ({
   const [translations, setTranslations] = useState([]);
   useEffect(() => {
     if (translationIds.length > 0) {
-      monitorAPI.getTranslations(translationIds).then((t: Array<ITranslation>) => {
-        setTranslations(t);
-      });
+      monitorAPI
+        .getTranslations(translationIds)
+        .then((t: Array<ITranslation>) => {
+          setTranslations(t);
+        });
     }
   }, []);
   return (

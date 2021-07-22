@@ -45,7 +45,7 @@ const UserMonitors: React.FC<IProps & WithTranslation> = props => {
   const monitors = Array.isArray(views)
     ? views.map(view => {
         return (
-          <UserMonitorCard cards={view.cards} contentHash={view.contenthash} />
+          <UserMonitorCard cards={view.cards} languages={view.languages} contentHash={view.contenthash} />
         );
       })
     : [];

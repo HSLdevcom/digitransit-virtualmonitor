@@ -63,7 +63,6 @@ const PreviewModal: FC<Props> = (props: Props) => {
             noPolling
             time={currentMillis}
             isPreview
-            isLandscape={props.isLandscape}
           />
         </div>
       </Modal>

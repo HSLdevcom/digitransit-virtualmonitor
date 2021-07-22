@@ -11,6 +11,10 @@ router.get('/monitor/:id', (req, res) => {
   monitorService.get(req, res);
 });
 
+router.get('/usermonitors/:id',(req, res) => {
+  monitorService.getMonitorsForUser(req, res);
+});
+
 router.put('/monitor', (req, res) => {
   monitorService.create(req, res);
 });

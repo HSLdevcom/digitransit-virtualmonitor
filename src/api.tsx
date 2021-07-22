@@ -34,6 +34,23 @@ const monitorAPI = {
     });
   },
 
+  getMonitorsForUser(id) {
+    return new Promise((resolve, reject) => {
+      fetch(`${baseAPI}/usermonitors/${id}`, {
+        headers: {
+          // Accept: 'application/json',
+          // 'Content-Type': 'application/json'
+          accepts: 'application/json',
+        },
+      })
+          .then(result => result.json())
+          .then(json => resolve(json))
+          .catch(err => {
+            reject(err);
+          });
+    });
+  },
+
   create(monitor) {
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/monitor`, {

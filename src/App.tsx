@@ -11,6 +11,7 @@ import DisplayEditor from './ui/DisplayEditor';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import HelpPage from './ui/HelpPage';
 import QuickDisplay from './ui/QuickDisplay';
+import UserMonitors from './ui/UserMonitors';
 import StopTimesView from './ui/Views/StopTimesView';
 import CreateViewPage from './ui/CreateViewPage';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
@@ -112,6 +113,20 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               component={QuickDisplay}
             />
             <Route path={'/view'} component={WithDatabaseConnection} />
+            <Route
+              path={'/user/:id/monitors'}
+              component={({
+                match: {
+                  params: {},
+                },
+              }: RouteComponentProps<IMonitorConfig>) => (
+                <>
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs />
+                  <UserMonitors />
+                </>
+              )}
+            />
             <Route
               path={'/help'}
               // eslint-disable-next-line no-empty-pattern

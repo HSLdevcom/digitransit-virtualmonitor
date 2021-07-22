@@ -283,6 +283,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     cardArray.forEach(card => {
       card.columns.left.stops = card.columns.left.stops.map(stop => {
         return {
+          name: stop.name,
           gtfsId: stop.gtfsId,
           locationType: stop.locationType,
           settings: stop.settings,
@@ -290,6 +291,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       });
       card.columns.right.stops = card.columns.right.stops.map(stop => {
         return {
+          name: stop.name,
           gtfsId: stop.gtfsId,
           locationType: stop.locationType,
           settings: stop.settings,

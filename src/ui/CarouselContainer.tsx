@@ -9,8 +9,8 @@ import { ITranslation } from './TranslationContainer';
 interface IProps {
   views: Array<IView>;
   languages: Array<string>;
-  stationDepartures: Array<Array<Array<IDeparture>>>;
-  stopDepartures: Array<Array<Array<IDeparture>>>;
+  stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card 
+  stopDepartures: Array<Array<Array<IDeparture>>>;    // and the final one for the actual departures
   translations?: Array<ITranslation>;
   noPolling?: boolean;
   time?: EpochMilliseconds;
@@ -49,9 +49,13 @@ const CarouselContainer: FC<IProps> = ({
     [...stationDepartures[index][1], ...stopDepartures[index][1]],
   ];
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
+  const newView = {
+    ...views[index],
+    //layout: 1,
+  };
   return (
     <Monitor
-      view={views[index]}
+      view={newView}
       currentLang={languages[language]}
       departures={departures}
       translatedStrings={translations.filter(t => t.lang === lan)}

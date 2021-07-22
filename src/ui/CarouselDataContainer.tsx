@@ -4,11 +4,11 @@ import {
   GET_STOP_DEPARTURES,
   GET_STATION_DEPARTURES,
 } from '../queries/departureQueries';
-import CarouselContainer from './CarouselContainer';
 import { IView } from '../util/Interfaces';
 import {
   getStopsAndStationsFromViews,
   getDeparturesWithoutHiddenRoutes,
+  createDepartureArray
 } from '../util/monitorUtils';
 import TranslationContainer from './TranslationContainer';
 import Loading from './Loading';
@@ -23,13 +23,11 @@ interface IProps {
 const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   const pollInterval = preview ? 0 : 30000;
   const emptyDepartureArrays = [];
+
   for (let i = 0; i < views.length; i++) {
     emptyDepartureArrays.push([[], []]);
   }
-  const defaultSettings = {
-    hiddenRoutes: [],
-    timeshift: 0,
-  }
+
   const [stopIds, stationIds] = getStopsAndStationsFromViews(views);
   const [stopDepartures, setStopDepartures] = useState(emptyDepartureArrays);
   const [stationDepartures, setStationDepartures] =
@@ -49,40 +47,13 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
     pollInterval: pollInterval,
     skip: stopIds.length < 1,
   });
+
   useEffect(() => {
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
-      const copy = [];
-      const stringsToTranslate = [];
-      views.forEach((view, i) => {
-        Object.keys(view.columns).forEach(column => {
-          const departureArray = [];
-          stops.forEach(stop => {
-            const stopIndex = view.columns[column].stops
-              .map(stop => stop.gtfsId)
-              .indexOf(stop.gtfsId);
-            if (stopIndex >= 0) {
-              stop.patterns.forEach(r => {
-                stringsToTranslate.push(r.headsign);
-              });
-              const { hiddenRoutes, timeshift } =
-                view.columns[column].stops[stopIndex].settings ? view.columns[column].stops[stopIndex].settings : defaultSettings;
-              departureArray.push(
-                ...getDeparturesWithoutHiddenRoutes(
-                  stop,
-                  hiddenRoutes,
-                  timeshift,
-                ),
-              );
-            }
-          });
-          const colIndex = column === 'left' ? 0 : 1;
-          copy[i] = copy[i] ? copy[i] : [[], []];
-          copy[i][colIndex] = departureArray;
-        });
-      });
+      const [stringsToTranslate, newDepartureArray] = createDepartureArray(views, stops);
       setTranslationIds(translationIds.concat(stringsToTranslate));
-      setStopDepartures(copy);
+      setStopDepartures(newDepartureArray);
       setStopsFetched(true);
     }
   }, [stopsState]);
@@ -90,40 +61,9 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   useEffect(() => {
     const stations = stationsState?.data?.stations;
     if (stations?.length > 0) {
-      console.log('REFETCH STATIONS');
-      const copy = [];
-      const stringsToTranslate = [];
-      views.forEach((view, i) => {
-        Object.keys(view.columns).forEach(column => {
-          const departureArray = [];
-          stations.forEach(stop => {
-            const stopIndex = view.columns[column].stops
-              .map(stop => stop.gtfsId)
-              .indexOf(stop.gtfsId);
-            if (stopIndex >= 0) {
-              stop.stops.forEach(s => {
-                s.routes.forEach(r => {
-                  stringsToTranslate.push(...r.patterns.map(p => p.headsign));
-                });
-              });
-              const { hiddenRoutes, timeshift } =
-                view.columns[column].stops[stopIndex].settings ? view.columns[column].stops[stopIndex].settings : defaultSettings;
-              departureArray.push(
-                ...getDeparturesWithoutHiddenRoutes(
-                  stop,
-                  hiddenRoutes,
-                  timeshift,
-                ),
-              );
-            }
-          });
-          const colIndex = column === 'left' ? 0 : 1;
-          copy[i] = copy[i] ? copy[i] : [[], []];
-          copy[i][colIndex] = departureArray;
-        });
-      });
+      const [stringsToTranslate, newDepartureArray ] = createDepartureArray(views, stations, true);
       setTranslationIds(translationIds.concat(stringsToTranslate));
-      setStationDepartures(copy);
+      setStationDepartures(newDepartureArray);
       setStationsFetched(true);
     }
   }, [stationsState]);

@@ -345,6 +345,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         !isLandscape ? 'portrait' : '',
         forcedLayout && forcedLayout === 'landscape' ? 'forced-landscape' : '',
         forcedLayout && forcedLayout === 'portrait' ? 'forced-portrait' : '',
+        withTwoColumns ? 'two-cols' : '',
       )}
     >
       <div

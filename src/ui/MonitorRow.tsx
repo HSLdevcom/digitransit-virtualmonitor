@@ -192,6 +192,19 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   const departureTime = getDepartureTime(departure?.realtimeDeparture);
   return (
+    <>
+    {withSeparator && (
+      <div
+        className={cx(
+          'separator',
+          isFirst ? 'first' : '',
+          isPreview ? 'preview' : '',
+          rowCount,
+          !isLandscape ? 'portrait' : '',
+          tightenPosition ? tightenPosition : '',
+        )}
+      ></div>
+    )}
     <div
       className={cx(
         'grid-row',
@@ -202,28 +215,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         tightenPosition ? tightenPosition : '',
       )}
     >
-      <div
-        className={cx(
-          'grid-cols',
-          rowCount,
-          isPreview ? 'preview' : '',
-          withTwoColumns ? 'two-cols' : '',
-          !isLandscape ? 'portrait' : '',
-          tightenPosition ? tightenPosition : '',
-        )}
-      >
-        {withSeparator && (
-          <div
-            className={cx(
-              'separator',
-              isFirst ? 'first' : '',
-              isPreview ? 'preview' : '',
-              rowCount,
-              !isLandscape ? 'portrait' : '',
-              tightenPosition ? tightenPosition : '',
-            )}
-          ></div>
-        )}
         <div
           className={cx(
             'grid-col',
@@ -337,8 +328,8 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           </span>
           {departureTime}
         </div>
-      </div>
     </div>
+    </>
   );
 };
 

@@ -1,5 +1,8 @@
-@import 'MonitorRowContainer';
-
+$preview-container-height-portrait: 590px;
+$preview-container-width-portrait: 405px;
+$preview-grid-rows-height-portrait-tighten: 266px;
+$preview-container-width: 640px;
+$preview-container-height: 365px;
 .title-bar {
   display: flex;
   flex-direction: row;

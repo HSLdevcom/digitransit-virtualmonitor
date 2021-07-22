@@ -1,5 +1,8 @@
 FROM node:10.15.3-alpine as build
 
+RUN apk update
+RUN apk add git
+
 WORKDIR /app
 ADD . ./
 #Make the port 3000 available to the world outside this container 

@@ -65,6 +65,55 @@ const monitorService = {
       res.status(500).send(e);
     }
   },
+  getMonitorsForUser: async function get(req, res) {
+    try {
+      // <QueryItems>
+      console.log(`Querying a monitor`);
+      console.log(req.params.id);
+      // query to return all items
+      const querySpec = {
+        query: "SELECT c.monitors from c WHERE c.id = @id",
+        parameters: [
+          {
+            name: "@id",
+            value:  req.params.id,
+          }
+        ],
+      };
+      // read all items in the Items container
+      const { resources: items } = await container.items
+          .query(querySpec)
+          .fetchAll();
+      let monitors;
+      items.forEach(item => {
+        monitors = item.monitors;
+      });
+      if (!items.length) {
+        res.json({});
+      } else {
+        const queryS = {
+          query: "SELECT * from c WHERE ARRAY_CONTAINS (@hashes, c.contenthash)",
+              parameters: [
+            {
+              name: "@hashes",
+              value:  monitors
+            }
+          ],
+        };
+        const { resources: items } = await container.items
+            .query(queryS)
+            .fetchAll();
+        if (!items.length) {
+          res.json({});
+        } else {
+          res.json(items);
+        }
+      }
+    } catch (e) {
+      console.log(e)
+      res.status(500).send(e);
+    }
+  },
   create: async function create(req, res) {
     try {
       // <QueryItems>

@@ -24,6 +24,9 @@ const Breadcrumbs: FC<WithTranslation> = props => {
     case 'help':
       crumb = props.t('breadCrumbsHelp');
       break;
+    case 'user':
+      crumb = 'Omat pysäkkinäytöt';
+      break;
     default:
       crumb = null;
   }

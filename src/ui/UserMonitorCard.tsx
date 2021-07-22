@@ -10,6 +10,7 @@ import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 interface IProps {
   cards: any;
+  languages: Array<string>;
   contentHash: string;
 }
 
@@ -94,6 +95,7 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
     <div className={'card'}>
       {isOpen && (
         <PreviewModal
+          languages={props.languages}
           view={view}
           isOpen={isOpen}
           onClose={onClose}

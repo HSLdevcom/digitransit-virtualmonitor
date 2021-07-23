@@ -27,14 +27,27 @@ const TranslationContainer: FC<IProps> = ({
   stopDepartures,
   preview,
 }) => {
+  const getTranslations = () => {
+    return monitorAPI
+      .getTranslations(translationIds)
+      .then((t: Array<ITranslation>) => {
+        setTranslations(t);
+      });
+  };
   const [translations, setTranslations] = useState([]);
+  const [initialFetch, setInitialFetch] = useState(false);
+  const onceADay = 60 * 60 * 24 * 1000;
+  if (!initialFetch) {
+    getTranslations();
+    setInitialFetch(true);
+  }
   useEffect(() => {
     if (translationIds.length > 0) {
-      monitorAPI
-        .getTranslations(translationIds)
-        .then((t: Array<ITranslation>) => {
-          setTranslations(t);
-        });
+      const intervalId = setInterval(() => {
+        const d = new Date();
+        getTranslations();
+      }, onceADay);
+      return () => clearInterval(intervalId); //This is important
     }
   }, []);
   return (

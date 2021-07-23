@@ -10,6 +10,7 @@
     "@azure/cosmos": "3.5.2",
     "body-parser": "^1.17.2",
     "cookie-parser": "^1.4.3",
+    "cron": "^1.8.2",
     "express": "^4.15.3",
     "gtfs": "https://github.com/HSLdevcom/node-gtfs.git",
     "morgan": "^1.8.2",

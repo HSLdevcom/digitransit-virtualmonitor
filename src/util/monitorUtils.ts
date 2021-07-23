@@ -19,15 +19,31 @@ export const getStopsAndStationsFromViews = views => {
 
 export const getMaxAmountOfDeparturesForLayout = layout => {};
 
-export const getDeparturesWithoutHiddenRoutes = (
+export const filterDepartures = (
   stop,
   hiddenRoutes,
   timeshift,
+  showEndOfLine = false,
 ) => {
   const departures = [];
+  const arrivalDepartures = [];
   const currentSeconds = getCurrentSeconds();
+
+  if (!showEndOfLine && stop.stoptimesForPatterns) {
+    stop.stoptimesForPatterns.forEach(stp =>
+      stp.stoptimes.forEach(s => {
+        if (s.pickupType === 'NONE') {
+          arrivalDepartures.push(stp.pattern.code);
+        }
+        return s.pickupType !== 'NONE';
+      }),
+    );
+  }
   stop.stoptimesForPatterns.forEach(stoptimeList => {
-    if (!hiddenRoutes.includes(stoptimeList.pattern.code)) {
+    if (
+      !hiddenRoutes.includes(stoptimeList.pattern.code) &&
+      !arrivalDepartures.includes(stoptimeList.pattern.code)
+    ) {
       if (timeshift > 0) {
         departures.push(
           ...stoptimeList.stoptimes.filter(
@@ -69,13 +85,13 @@ export const createDepartureArray = (views, stops, isStation = false) => {
               stringsToTranslate.push(r.headsign);
             });
           }
-          const { hiddenRoutes, timeshift } = view.columns[column].stops[
-            stopIndex
-          ].settings
+          const { hiddenRoutes, timeshift, showEndOfLine } = view.columns[
+            column
+          ].stops[stopIndex].settings
             ? view.columns[column].stops[stopIndex].settings
             : defaultSettings;
           departureArray.push(
-            ...getDeparturesWithoutHiddenRoutes(stop, hiddenRoutes, timeshift),
+            ...filterDepartures(stop, hiddenRoutes, timeshift, showEndOfLine),
           );
         }
       });

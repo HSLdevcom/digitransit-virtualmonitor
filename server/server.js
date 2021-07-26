@@ -7,6 +7,7 @@
 var app = require('./app');
 var debug = require('debug')('express-react:server');
 var http = require('http');
+var CronJob = require('cron').CronJob;
 
 /**
  * Get port from environment and store in Express.
@@ -37,14 +38,32 @@ const config = {
     }
   ]
 };
-
 gtfs.import(config)
-.then(() => {
-  console.log('Import Successful');
-})
-.catch(err => {
-  console.error(err);
-});
+    .then(() => {
+      console.log('Import Successful');
+    })
+    .catch(err => {
+      console.error(err);
+    })
+
+
+var job = new CronJob(
+    '00 00 00 * * *',
+function () {
+  const d = new Date();
+  console.log('IMPORT STARTING AT ', d)
+  gtfs.import(config)
+  .then(() => {
+    console.log('Import Successful');
+  })
+    .catch(err => {
+      console.error(err);
+    })},
+null,
+
+);
+job.start();
+
 app.set('port', port);
 
 /**

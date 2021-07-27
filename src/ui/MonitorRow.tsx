@@ -131,9 +131,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   if (departure === null && dayForDivider) {
     return (
-      <div
-        className={cx('grid-row', rowCount, withTwoColumns ? 'two-cols' : '')}
-      >
+      <div className={cx('grid-row', withTwoColumns ? 'two-cols' : '')}>
         <div className={cx('grid-cols', 'day-row')}>
           <span>{dayForDivider}</span>
         </div>
@@ -160,7 +158,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
       <div
         className={cx(
           'grid-row',
-          rowCount,
           !withTwoColumns ? 'alert' : 'alert-two-cols',
           alertRowClass,
         )}
@@ -182,31 +179,11 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   return (
     <>
       {withSeparator && (
-        <div
-          className={cx(
-            'separator',
-            isFirst ? 'first' : '',
-            rowCount,
-            !isLandscape ? 'portrait' : '',
-          )}
-        ></div>
+        <div className={cx('separator', isFirst ? 'first' : '')}></div>
       )}
-      <div
-        className={cx(
-          'grid-row',
-          rowCount,
-          !isLandscape ? 'portrait' : '',
-          withTwoColumns ? 'two-cols' : '',
-        )}
-      >
+      <div className={cx('grid-row', withTwoColumns ? 'two-cols' : '')}>
         <div
-          className={cx(
-            'grid-col',
-            rowCount,
-            withTwoColumns ? 'two-cols' : '',
-            !isLandscape ? 'portrait' : '',
-            'line',
-          )}
+          className={cx('grid-col', withTwoColumns ? 'two-cols' : '', 'line')}
         >
           {line[0]}
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}
@@ -215,8 +192,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           <div
             className={cx(
               'grid-col',
-              rowCount,
-              !isLandscape ? 'portrait' : '',
               withTwoColumns ? 'two-cols' : '',
               'destination-one-row',
               'no-via',
@@ -229,8 +204,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           <div
             className={cx(
               'grid-col',
-              rowCount,
-              !isLandscape ? 'portrait' : '',
               withTwoColumns ? 'two-cols' : '',
               'destination-one-row',
             )}
@@ -251,8 +224,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           <div
             className={cx(
               'grid-col',
-              rowCount,
-              !isLandscape ? 'portrait' : '',
               withTwoColumns ? 'two-cols' : '',
               'destination',
             )}
@@ -269,26 +240,13 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           </div>
         )}
         {isOneLiner && splitDestination && (
-          <div
-            className={cx(
-              'grid-col',
-              rowCount,
-              !isLandscape ? 'portrait' : '',
-              'destination-one-row',
-            )}
-          >
+          <div className={cx('grid-col', 'destination-one-row')}>
             {destinationWithoutVia}
             {/* <div className="via">{viaDestination}</div> */}
           </div>
         )}
         <div
-          className={cx(
-            'grid-col',
-            rowCount,
-            !isLandscape ? 'portrait' : '',
-            withTwoColumns ? 'two-cols' : '',
-            'time',
-          )}
+          className={cx('grid-col', withTwoColumns ? 'two-cols' : '', 'time')}
         >
           <span
             className={cx(

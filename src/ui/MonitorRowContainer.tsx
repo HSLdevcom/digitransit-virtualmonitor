@@ -15,7 +15,6 @@ interface IProps {
   layout: any;
   isPreview: boolean;
   isLandscape: boolean;
-  forcedLayout?: string;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -26,7 +25,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   layout,
   isPreview,
   isLandscape,
-  forcedLayout,
   t,
 }) => {
   const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
@@ -333,8 +331,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         'monitor-container',
         isPreview ? 'preview' : '',
         !isLandscape ? 'portrait' : '',
-        forcedLayout && forcedLayout === 'landscape' ? 'forced-landscape' : '',
-        forcedLayout && forcedLayout === 'portrait' ? 'forced-portrait' : '',
         withTwoColumns ? 'two-cols' : '',
       )}
     >
@@ -351,12 +347,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             withTwoColumns ? 'two-cols' : '',
             isPreview ? 'preview' : '',
             !isLandscape ? 'portrait' : '',
-            forcedLayout && forcedLayout === 'landscape'
-              ? 'forced-landscape'
-              : '',
-            forcedLayout && forcedLayout === 'portrait'
-              ? 'forced-portrait'
-              : '',
           )}
         >
           <div
@@ -399,12 +389,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               !isLandscape ? 'portrait' : '',
               `rows${leftColumnCount}`,
               withTwoColumns ? 'two-cols' : '',
-              forcedLayout && forcedLayout === 'landscape'
-                ? 'forced-landscape'
-                : '',
-              forcedLayout && forcedLayout === 'portrait'
-                ? 'forced-portrait'
-                : '',
             )}
           >
             {leftColumn}
@@ -416,7 +400,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               style={tightenBeginStyle}
               className={cx(
                 'grid-rows',
-                'portrait-upper',
+                'portrait tightened',
                 isPreview ? 'preview' : '',
                 `rows${differSize[0]}`,
               )}
@@ -427,7 +411,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               style={tightenEndingStyle}
               className={cx(
                 'grid-rows',
-                'portrait-lower',
+                'portrait tightened',
                 isPreview ? 'preview' : '',
                 `rows${differSize[1]}`,
               )}
@@ -453,12 +437,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 withTwoColumns ? 'two-cols' : '',
                 isPreview ? 'preview' : '',
                 !isLandscape ? 'portrait' : '',
-                forcedLayout && forcedLayout === 'landscape'
-                  ? 'forced-landscape'
-                  : '',
-                forcedLayout && forcedLayout === 'portrait'
-                  ? 'forced-portrait'
-                  : '',
               )}
             >
               <div
@@ -500,12 +478,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 !isLandscape ? 'portrait' : '',
                 `rows${rightColumnCount}`,
                 withTwoColumns ? 'two-cols' : '',
-                forcedLayout && forcedLayout === 'landscape'
-                  ? 'forced-landscape'
-                  : '',
-                forcedLayout && forcedLayout === 'portrait'
-                  ? 'forced-portrait'
-                  : '',
               )}
             >
               {rightColumn}

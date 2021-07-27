@@ -87,9 +87,20 @@ $preview-grid-divider: 2px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    &.portrait-upper,
-    &.portrait-lower {
+    &.portrait {
       height: 50%;
+      &.tightened {
+        .rows4 {
+          font-size: calc((#{var(--height)} - 30vh) / 10);
+        }
+        .rows6 {
+          font-size: calc((#{var(--height)} - 30vh) / 16);
+        }
+        .rows12 {
+          font-size: calc((#{var(--height)} - 30vh) / 26);
+        }
+      }
+      
     }
     &.portrait {
       &.rows16 {

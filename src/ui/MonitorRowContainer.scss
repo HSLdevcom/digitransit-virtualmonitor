@@ -98,6 +98,49 @@ $preview-grid-divider: 2px;
         }
       }
     }
+    &.portrait {
+      height: calc(95% - 30px);
+      .rows8, .rows12 {
+        .grid-row {
+          grid-template-columns: 75px 1fr 80px;
+          font-size: 25px;
+        }
+      }
+      .rows16 {
+        .grid-row {
+          grid-template-columns: 75px 1fr 80px;
+          font-size: 20px;
+        }
+      }
+      .rows24 {
+        .grid-row {
+          grid-template-columns: 75px 1fr 80px;
+          font-size: 15px;
+        }
+      }
+      .grid-rows.tightened {
+        height: calc(50% - 12.5px);
+        &.rows6 {
+          .grid-row {
+            font-size: 25px;
+            grid-template-columns: 75px 1fr 95px;
+          }
+        }
+        &.rows4 {
+          .grid-row {
+            grid-template-columns: 75px 1fr 95px;
+            font-size: 30px;
+          }
+        }
+        &.rows12 {
+          .grid-row {
+            grid-template-columns: 75px 1fr 95px;
+            font-size: 16px;
+          }
+        }
+      }
+      
+    }
   }
 }
 

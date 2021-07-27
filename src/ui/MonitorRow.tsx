@@ -98,8 +98,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     ? destination.substring(destination.indexOf(' via') + 1)
     : '';
 
-  const rowCount = `rows${size}`;
-
   if (departure?.pickupType === 'NONE') {
     const lastStop = departure?.trip?.stops.slice(-1).pop().gtfsId;
     if (departure.stop.gtfsId === lastStop) {

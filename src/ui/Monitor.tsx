@@ -53,12 +53,6 @@ const Monitor: FC<IProps> = ({
   let windowHeight = windowDimensions.height;
   let windowWidth = windowDimensions.width;
 
-  if (!isPreview && windowWidth >= windowHeight && view.layout > 11) {
-    windowWidth = windowHeight / 1.775;
-  }
-  if (!isPreview && windowHeight >= windowWidth && view.layout <= 11) {
-    windowHeight = windowWidth / 1.775;
-  }
   const dimensions = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,

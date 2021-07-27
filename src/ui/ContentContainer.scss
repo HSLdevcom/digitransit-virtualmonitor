@@ -1,5 +1,9 @@
 .content-wrapper {
-  width: 99%;
+  &.front-page {
+  height: 497px;
+  }
+
+  width: 100%;
   background: #f2f5f7;
   position: absolute;
   top: 300px;

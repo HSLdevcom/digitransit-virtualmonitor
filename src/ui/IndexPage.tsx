@@ -13,7 +13,7 @@ function IndexPage(props: WithTranslation) {
 
   return (
     <div id={'stop-search'} className={'index'}>
-      <ContentContainer>
+      <ContentContainer longContainer>
         <div className="left">
           <h1 className="title">{title}</h1>
           <div className={'welcome'}>

@@ -129,10 +129,8 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   if (departure === null && dayForDivider) {
     return (
-      <div className={cx('grid-row', withTwoColumns ? 'two-cols' : '')}>
-        <div className={cx('grid-cols', 'day-row')}>
-          <span>{dayForDivider}</span>
-        </div>
+      <div className={cx('grid-row day', withTwoColumns ? 'two-cols' : '')}>
+        <div className="day-row">{dayForDivider}</div>
       </div>
     );
   }
@@ -153,13 +151,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         break;
     }
     return (
-      <div
-        className={cx(
-          'grid-row',
-          !withTwoColumns ? 'alert' : 'alert-two-cols',
-          alertRowClass,
-        )}
-      >
+      <div className={cx('grid-row', 'alert', alertRowClass)}>
         <div className={cx('grid-cols', 'alert-row')}>
           <span className={cx(!isLandscape ? 'portrait' : '')}>
             {

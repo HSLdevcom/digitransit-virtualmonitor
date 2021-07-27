@@ -50,8 +50,8 @@ const Monitor: FC<IProps> = ({
 
   const currentTime = time ? time : new Date().getTime();
 
-  let windowHeight = windowDimensions.height;
-  let windowWidth = windowDimensions.width;
+  const windowHeight = windowDimensions.height;
+  const windowWidth = windowDimensions.width;
 
   const dimensions = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,

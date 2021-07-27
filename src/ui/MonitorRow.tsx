@@ -47,7 +47,6 @@ interface IProps {
   isPreview?: boolean;
   isOneLiner?: boolean;
   withTwoColumns?: boolean;
-  tightenPosition?: string;
   dayForDivider?: string;
   alerts?: Array<IAlert>;
   alertRows?: number;
@@ -76,7 +75,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   isOneLiner = true,
   withTwoColumns = false,
   translations,
-  tightenPosition,
   dayForDivider,
   alerts,
   alertRows = 1,
@@ -127,7 +125,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     }
   }
 
-  if (!isLandscape && size === 12 && !tightenPosition) {
+  if (!isLandscape && size === 12) {
     viaDestination = '';
   }
 
@@ -201,7 +199,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           isPreview ? 'preview' : '',
           rowCount,
           !isLandscape ? 'portrait' : '',
-          tightenPosition ? tightenPosition : '',
         )}
       ></div>
     )}
@@ -212,7 +209,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         isPreview ? 'preview' : '',
         !isLandscape ? 'portrait' : '',
         withTwoColumns ? 'two-cols' : '',
-        tightenPosition ? tightenPosition : '',
       )}
     >
         <div
@@ -222,7 +218,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             isPreview ? 'preview' : '',
             withTwoColumns ? 'two-cols' : '',
             !isLandscape ? 'portrait' : '',
-            tightenPosition ? tightenPosition : '',
             'line',
           )}
         >
@@ -237,7 +232,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
               isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
               withTwoColumns ? 'two-cols' : '',
-              tightenPosition ? tightenPosition : '',
               'destination-one-row',
               'no-via',
             )}
@@ -253,12 +247,11 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
               isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
               withTwoColumns ? 'two-cols' : '',
-              tightenPosition ? tightenPosition : '',
-              'destination-two-rows',
+              'destination-one-row',
             )}
           >
             {destinationWithoutVia}
-            <span
+            {/* <div
               className={cx(
                 'via',
                 isLandscape ? rowCount : '',
@@ -266,7 +259,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
               )}
             >
               {viaDestination}
-            </span>
+            </div> */}
           </div>
         )}
         {isOneLiner && !splitDestination && (
@@ -277,7 +270,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
               isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
               withTwoColumns ? 'two-cols' : '',
-              tightenPosition ? tightenPosition : '',
               'destination',
             )}
           >
@@ -287,7 +279,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             {destination && destination.includes(' via') && (
               <>
                 {destinationWithoutVia}
-                <span className="via">{viaDestination}</span>
+                <div className="via">{viaDestination}</div>
               </>
             )}
           </div>
@@ -299,12 +291,11 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
               rowCount,
               isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
-              tightenPosition ? tightenPosition : '',
               'destination-one-row',
             )}
           >
             {destinationWithoutVia}
-            <span className="via">{viaDestination}</span>
+            {/* <div className="via">{viaDestination}</div> */}
           </div>
         )}
         <div
@@ -314,7 +305,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             isPreview ? 'preview' : '',
             !isLandscape ? 'portrait' : '',
             withTwoColumns ? 'two-cols' : '',
-            tightenPosition ? tightenPosition : '',
             'time',
           )}
         >

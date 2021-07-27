@@ -92,7 +92,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const currentDay = setDate(0);
   const nextDay = setDate(1);
 
-  const currentDayDepartureIndexLeft = -1;
   const nextDayDepartureIndexLeft = sortedDeparturesLeft
     .slice(0, leftColumnCount)
     .findIndex(departure => departure.serviceDay === nextDay.getTime() / 1000);
@@ -167,14 +166,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const withTwoColumns = isLandscape && rightColumnCount > 0;
 
   for (let i = 0; i < leftColumnCount; i++) {
-    let tightenPosition = '';
-    if (isTighten && i < differSize[0]) {
-      tightenPosition = !forcedLayout
-        ? 'tighten-begin'
-        : 'tighten-begin-forced';
-    } else if (isTighten && i >= differSize[0]) {
-      tightenPosition = !forcedLayout ? 'tighten-end' : 'tighten-end-forced';
-    }
     let showAlerts = false;
     if (routeAlerts.length > 0) {
       if (
@@ -213,7 +204,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       leftColumnCount === 8 &&
       i === leftColumnCount - 2
     ) {
-      alertRowSpan = 3;
+      alertRowSpan = 2;
     } else if (leftColumnCount === 24 && i === leftColumnCount - 4) {
       alertRowSpan = 4;
     }
@@ -239,7 +230,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         dayForDivider={
           i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
         }
-        tightenPosition={tightenPosition}
       />,
     );
     if (routeAlerts.length > 0) {
@@ -426,7 +416,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               style={tightenBeginStyle}
               className={cx(
                 'grid-rows',
-                !forcedLayout ? 'tighten-begin' : 'tighten-begin-forced',
+                'portrait-upper',
                 isPreview ? 'preview' : '',
                 `rows${differSize[0]}`,
               )}
@@ -437,7 +427,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               style={tightenEndingStyle}
               className={cx(
                 'grid-rows',
-                !forcedLayout ? 'tighten-end' : 'tighten-end-forced',
+                'portrait-lower',
                 isPreview ? 'preview' : '',
                 `rows${differSize[1]}`,
               )}

@@ -49,9 +49,10 @@ const CarouselContainer: FC<IProps> = ({
     [...stationDepartures[index][1], ...stopDepartures[index][1]],
   ];
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
+  // for easy testing of different layouts
   const newView = {
     ...views[index],
-    layout: 17,
+    //layout: 17,
   };
   return (
     <Monitor

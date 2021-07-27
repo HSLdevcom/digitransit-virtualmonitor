@@ -335,38 +335,14 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           !isLandscape ? 'portrait' : '',
         )}
       >
-        <div
-          className={cx(
-            'grid-headers',
-            withTwoColumns ? 'two-cols' : '',
-            !isLandscape ? 'portrait' : '',
-          )}
-        >
-          <div
-            className={cx(
-              'grid-header',
-              'line',
-              !isLandscape ? 'portrait' : '',
-            )}
-          >
+        <div className="grid-headers">
+          <div className={cx('grid-header', 'line')}>
             {t('lineId', { lng: currentLang })}
           </div>
-          <div
-            className={cx(
-              'grid-header',
-              'destination',
-              !isLandscape ? 'portrait' : '',
-            )}
-          >
+          <div className={cx('grid-header', 'destination')}>
             {t('destination', { lng: currentLang })}
           </div>
-          <div
-            className={cx(
-              'grid-header',
-              'time',
-              !isLandscape ? 'portrait' : '',
-            )}
-          >
+          <div className={cx('grid-header', 'time')}>
             {t('departureTime', { lng: currentLang })}
           </div>
         </div>
@@ -411,45 +387,17 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       {isLandscape && rightColumnCount > 0 && (
         <>
           <div className="divider" />
-          <div
-            className={cx(
-              'grid',
-              withTwoColumns ? 'two-cols' : '',
-              !isLandscape ? 'portrait' : '',
-            )}
-          >
+          <div className={cx('grid', withTwoColumns ? 'two-cols' : '')}>
             <div
-              className={cx(
-                'grid-headers',
-                withTwoColumns ? 'two-cols' : '',
-                !isLandscape ? 'portrait' : '',
-              )}
+              className={cx('grid-headers', withTwoColumns ? 'two-cols' : '')}
             >
-              <div
-                className={cx(
-                  'grid-header',
-                  'line',
-                  !isLandscape ? 'portrait' : '',
-                )}
-              >
+              <div className={cx('grid-header', 'line')}>
                 {t('lineId', { lng: currentLang })}
               </div>
-              <div
-                className={cx(
-                  'grid-header',
-                  'destination',
-                  !isLandscape ? 'portrait' : '',
-                )}
-              >
+              <div className={cx('grid-header', 'destination')}>
                 {t('destination', { lng: currentLang })}
               </div>
-              <div
-                className={cx(
-                  'grid-header',
-                  'time',
-                  !isLandscape ? 'portrait' : '',
-                )}
-              >
+              <div className={cx('grid-header', 'time')}>
                 {t('departureTime', { lng: currentLang })}
               </div>
             </div>
@@ -457,7 +405,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               style={rightColumnStyle}
               className={cx(
                 'grid-rows',
-                !isLandscape ? 'portrait' : '',
                 `rows${rightColumnCount}`,
                 withTwoColumns ? 'two-cols' : '',
               )}

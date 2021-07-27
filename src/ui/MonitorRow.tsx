@@ -182,38 +182,20 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         <div className={cx('separator', isFirst ? 'first' : '')}></div>
       )}
       <div className={cx('grid-row', withTwoColumns ? 'two-cols' : '')}>
-        <div
-          className={cx('grid-col', withTwoColumns ? 'two-cols' : '', 'line')}
-        >
+        <div className="grid-col line">
           {line[0]}
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}
         </div>
         {!isOneLiner && viaDestination.length === 0 && (
-          <div
-            className={cx(
-              'grid-col',
-              withTwoColumns ? 'two-cols' : '',
-              'destination-one-row',
-              'no-via',
-            )}
-          >
-            {destinationWithoutVia}
-          </div>
+          <div className="grid-col destination">{destinationWithoutVia}</div>
         )}
         {!isOneLiner && viaDestination.length > 0 && (
-          <div
-            className={cx(
-              'grid-col',
-              withTwoColumns ? 'two-cols' : '',
-              'destination-one-row',
-            )}
-          >
+          <div className="grid-col destination">
             {destinationWithoutVia}
             {/* <div
               className={cx(
                 'via',
                 isLandscape ? rowCount : '',
-                withTwoColumns ? 'two-cols' : '',
               )}
             >
               {viaDestination}
@@ -221,13 +203,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           </div>
         )}
         {isOneLiner && !splitDestination && (
-          <div
-            className={cx(
-              'grid-col',
-              withTwoColumns ? 'two-cols' : '',
-              'destination',
-            )}
-          >
+          <div className={cx('grid-col', 'destination')}>
             {destination &&
               !destination.includes(' via') &&
               destinationWithoutVia}
@@ -245,9 +221,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             {/* <div className="via">{viaDestination}</div> */}
           </div>
         )}
-        <div
-          className={cx('grid-col', withTwoColumns ? 'two-cols' : '', 'time')}
-        >
+        <div className={cx('grid-col', 'time')}>
           <span
             className={cx(
               'tilde',

@@ -44,7 +44,6 @@ interface IProps {
   translations: Array<ITranslation>;
   isFirst?: boolean;
   isLandscape?: boolean;
-  isPreview?: boolean;
   isOneLiner?: boolean;
   withTwoColumns?: boolean;
   dayForDivider?: string;
@@ -71,7 +70,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   currentLang,
   isFirst = false,
   isLandscape = true,
-  isPreview = false,
   isOneLiner = true,
   withTwoColumns = false,
   translations,
@@ -134,12 +132,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   if (departure === null && dayForDivider) {
     return (
       <div
-        className={cx(
-          'grid-row',
-          rowCount,
-          isPreview ? 'preview' : '',
-          withTwoColumns ? 'two-cols' : '',
-        )}
+        className={cx('grid-row', rowCount, withTwoColumns ? 'two-cols' : '')}
       >
         <div className={cx('grid-cols', 'day-row')}>
           <span>{dayForDivider}</span>
@@ -168,14 +161,11 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         className={cx(
           'grid-row',
           rowCount,
-          isPreview ? 'preview' : '',
           !withTwoColumns ? 'alert' : 'alert-two-cols',
           alertRowClass,
         )}
       >
-        <div
-          className={cx('grid-cols', 'alert-row', isPreview ? 'preview' : '')}
-        >
+        <div className={cx('grid-cols', 'alert-row')}>
           <span className={cx(!isLandscape ? 'portrait' : '')}>
             {
               alerts[0].alertHeaderTextTranslations.find(
@@ -196,7 +186,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           className={cx(
             'separator',
             isFirst ? 'first' : '',
-            isPreview ? 'preview' : '',
             rowCount,
             !isLandscape ? 'portrait' : '',
           )}
@@ -206,7 +195,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         className={cx(
           'grid-row',
           rowCount,
-          isPreview ? 'preview' : '',
           !isLandscape ? 'portrait' : '',
           withTwoColumns ? 'two-cols' : '',
         )}
@@ -215,7 +203,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           className={cx(
             'grid-col',
             rowCount,
-            isPreview ? 'preview' : '',
             withTwoColumns ? 'two-cols' : '',
             !isLandscape ? 'portrait' : '',
             'line',
@@ -229,7 +216,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             className={cx(
               'grid-col',
               rowCount,
-              isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
               withTwoColumns ? 'two-cols' : '',
               'destination-one-row',
@@ -244,7 +230,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             className={cx(
               'grid-col',
               rowCount,
-              isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
               withTwoColumns ? 'two-cols' : '',
               'destination-one-row',
@@ -267,7 +252,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             className={cx(
               'grid-col',
               rowCount,
-              isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
               withTwoColumns ? 'two-cols' : '',
               'destination',
@@ -289,7 +273,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             className={cx(
               'grid-col',
               rowCount,
-              isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
               'destination-one-row',
             )}
@@ -302,7 +285,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           className={cx(
             'grid-col',
             rowCount,
-            isPreview ? 'preview' : '',
             !isLandscape ? 'portrait' : '',
             withTwoColumns ? 'two-cols' : '',
             'time',

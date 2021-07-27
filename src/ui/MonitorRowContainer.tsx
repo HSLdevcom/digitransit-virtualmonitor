@@ -13,7 +13,6 @@ interface IProps {
   translatedStrings: Array<ITranslation>;
   currentLang: string;
   layout: any;
-  isPreview: boolean;
   isLandscape: boolean;
 }
 
@@ -23,7 +22,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   translatedStrings,
   currentLang,
   layout,
-  isPreview,
   isLandscape,
   t,
 }) => {
@@ -219,7 +217,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         withSeparator
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
         isLandscape={isLandscape}
-        isPreview={isPreview}
         isOneLiner={isOneLiner && !withTwoColumns}
         withTwoColumns={withTwoColumns}
         currentLang={currentLang}
@@ -273,7 +270,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
             }
             isLandscape={isLandscape}
-            isPreview={isPreview}
             isOneLiner={isOneLiner && !withTwoColumns && rightColumnCount > 4}
             withTwoColumns={withTwoColumns}
             dayForDivider={
@@ -298,7 +294,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             withSeparator
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             isLandscape={isLandscape}
-            isPreview={isPreview}
             isOneLiner={isOneLiner && !withTwoColumns && rightColumnCount > 4}
             withTwoColumns={withTwoColumns}
             dayForDivider={
@@ -329,7 +324,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     <div
       className={cx(
         'monitor-container',
-        isPreview ? 'preview' : '',
         !isLandscape ? 'portrait' : '',
         withTwoColumns ? 'two-cols' : '',
       )}
@@ -345,7 +339,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           className={cx(
             'grid-headers',
             withTwoColumns ? 'two-cols' : '',
-            isPreview ? 'preview' : '',
             !isLandscape ? 'portrait' : '',
           )}
         >
@@ -353,7 +346,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             className={cx(
               'grid-header',
               'line',
-              isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
             )}
           >
@@ -363,7 +355,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             className={cx(
               'grid-header',
               'destination',
-              isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
             )}
           >
@@ -373,7 +364,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             className={cx(
               'grid-header',
               'time',
-              isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
             )}
           >
@@ -385,7 +375,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             style={leftColumnStyle}
             className={cx(
               'grid-rows',
-              isPreview ? 'preview' : '',
               !isLandscape ? 'portrait' : '',
               `rows${leftColumnCount}`,
               withTwoColumns ? 'two-cols' : '',
@@ -401,7 +390,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               className={cx(
                 'grid-rows',
                 'portrait tightened',
-                isPreview ? 'preview' : '',
                 `rows${differSize[0]}`,
               )}
             >
@@ -412,7 +400,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               className={cx(
                 'grid-rows',
                 'portrait tightened',
-                isPreview ? 'preview' : '',
                 `rows${differSize[1]}`,
               )}
             >
@@ -423,7 +410,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       </div>
       {isLandscape && rightColumnCount > 0 && (
         <>
-          <div className={cx('divider', isPreview ? 'preview' : '')} />
+          <div className="divider" />
           <div
             className={cx(
               'grid',
@@ -435,7 +422,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               className={cx(
                 'grid-headers',
                 withTwoColumns ? 'two-cols' : '',
-                isPreview ? 'preview' : '',
                 !isLandscape ? 'portrait' : '',
               )}
             >
@@ -443,7 +429,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 className={cx(
                   'grid-header',
                   'line',
-                  isPreview ? 'preview' : '',
                   !isLandscape ? 'portrait' : '',
                 )}
               >
@@ -453,7 +438,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 className={cx(
                   'grid-header',
                   'destination',
-                  isPreview ? 'preview' : '',
                   !isLandscape ? 'portrait' : '',
                 )}
               >
@@ -463,7 +447,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 className={cx(
                   'grid-header',
                   'time',
-                  isPreview ? 'preview' : '',
                   !isLandscape ? 'portrait' : '',
                 )}
               >
@@ -474,7 +457,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               style={rightColumnStyle}
               className={cx(
                 'grid-rows',
-                isPreview ? 'preview' : '',
                 !isLandscape ? 'portrait' : '',
                 `rows${rightColumnCount}`,
                 withTwoColumns ? 'two-cols' : '',

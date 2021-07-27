@@ -109,7 +109,6 @@ const Monitor: FC<IProps> = ({
         currentLang={currentLang}
         translatedStrings={translatedStrings}
         layout={getLayout(view.layout)}
-        isPreview={isPreview}
         isLandscape={isLandscapeByLayout}
       />
     </div>

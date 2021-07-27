@@ -75,10 +75,7 @@ const Monitor: FC<IProps> = ({
         isLandscapeByLayout ? '' : 'portrait',
       )}
     >
-      <Titlebar
-        isPreview={isPreview}
-        isLandscape={isLandscapeByLayout}
-      >
+      <Titlebar isPreview={isPreview} isLandscape={isLandscapeByLayout}>
         <Logo
           monitorConfig={config}
           isPreview={isPreview}

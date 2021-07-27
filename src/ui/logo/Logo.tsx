@@ -46,17 +46,17 @@ class Logo extends React.Component<ICommonProps> {
       }
     }
     if (logo) {
-        return (
-          <div
-            className={cx(
-              'title-logo',
-              isPreview ? 'preview' : '',
-              isLandscape ? '' : 'portrait',
-            )}
-          >
-            {logo}
-          </div>
-        );
+      return (
+        <div
+          className={cx(
+            'title-logo',
+            isPreview ? 'preview' : '',
+            isLandscape ? '' : 'portrait',
+          )}
+        >
+          {logo}
+        </div>
+      );
     }
     return null;
   }

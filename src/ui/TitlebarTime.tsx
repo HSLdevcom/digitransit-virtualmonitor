@@ -16,22 +16,19 @@ const TitlebarTime: FC<IProps> = ({
   isPreview = false,
   isLandscape = false,
 }) => {
-    return (
-      <div
-        className={cx(
-          'title-time-container',
-          isPreview ? 'preview' : '',
-          isLandscape ? '' : 'portrait',
-        )}
-      >
-        <div className="title-time">
-          <AutoMoment
-            currentTime={currentTime}
-            updateInterval={updateInterval}
-          />
-        </div>
+  return (
+    <div
+      className={cx(
+        'title-time-container',
+        isPreview ? 'preview' : '',
+        isLandscape ? '' : 'portrait',
+      )}
+    >
+      <div className="title-time">
+        <AutoMoment currentTime={currentTime} updateInterval={updateInterval} />
       </div>
-    );
+    </div>
+  );
 };
 
 export default TitlebarTime;

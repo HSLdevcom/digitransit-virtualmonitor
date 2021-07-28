@@ -14,19 +14,21 @@ $preview-container-height: 365px;
   overflow: hidden;
   font-size: 4.5vw;
 
-  &.forcedLandscape {
-    font-size: calc(0.045 * #{var(--width)});
-    height: calc(0.1 * #{var(--height)}) !important;
-  }
-
-  &.forcedPortrait {
-    font-size: calc(0.05 * #{var(--width)});
-    height: calc(0.05 * #{var(--height)}) !important;
-  }
-
   &.portrait {
     font-size: 5vw;
     height: 5vh !important;
+    .title-time-container {
+      font-size: min(5vw, 70px);
+      margin-top: 10px;
+    }
+    .title-text {
+      font-size: min(5vw, 80px);
+    }
+    .title-logo {
+      #logo {
+        width: min(16vw, 330px) !important;
+      }
+    }
   }
 
   &.preview {
@@ -37,15 +39,6 @@ $preview-container-height: 365px;
       font-size: calc(0.05 * #{$preview-container-width-portrait});
       height: calc(0.05 * #{$preview-container-height-portrait}) !important;
     }
-  }
-}
-
-.title-logo-forced-landscape,
-.title-logo-forced-portrait {
-  min-width: calc(0.16 * #{var(--width)}) !important;
-
-  #logo {
-    width: calc(0.16 * #{var(--width)}) !important;
   }
 }
 
@@ -70,14 +63,6 @@ $preview-container-height: 365px;
     #logo {
       width: calc(0.16 * #{$preview-container-width}) !important;
     }
-
-    &.portrait {
-      min-width: calc(0.1815 * #{$preview-container-width}) !important;
-
-      #logo {
-        width: calc(0.1815 * #{$preview-container-width}) !important;
-      }
-    }
   }
 }
 
@@ -90,6 +75,7 @@ $preview-container-height: 365px;
   flex-wrap: wrap;
   margin: 0 2vw;
   font-weight: bold;
+  font-size: min(5vw, 100px);
   color: #fff;
 
   &.preview {
@@ -128,19 +114,7 @@ $preview-container-height: 365px;
 
   &.preview {
     min-width: calc(0.16 * #{$preview-container-width}) !important;
-
-    &.portrait {
-      min-width: 75px !important;
-    }
   }
-}
-
-.title-time-container-forced-landscape,
-.title-time-container-forced-portrait {
-  min-width: calc(0.16 * #{var(--width)}) !important;
-  display: flex;
-  flex: 0;
-  justify-content: flex-end;
 }
 
 .title-time {

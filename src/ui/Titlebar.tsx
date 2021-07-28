@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { FC } from 'react';
 import cx from 'classnames';
 
 import './Titlebar.scss';
@@ -6,16 +6,17 @@ import './Titlebar.scss';
 export interface ITitlebarProps {
   readonly isPreview?: boolean;
   readonly isLandscape?: boolean;
-  readonly children: React.ReactNode;
+  readonly children?: React.ReactNode;
 }
 
-export default (props: ITitlebarProps) => {
-  const orientation = props.isLandscape ? '' : 'portrait';
+const Titlebar : FC<ITitlebarProps> = ({ isPreview, isLandscape, children }) => {
   return (
     <div
-      className={cx('title-bar', props.isPreview ? 'preview' : '', orientation)}
+      className={cx('title-bar', { preview: isPreview, portrait: !isLandscape })}
     >
-      {props.children}
+      {children}
     </div>
   );
 };
+
+export default Titlebar

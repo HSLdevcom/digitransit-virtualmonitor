@@ -182,14 +182,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         {!isOneLiner && viaDestination.length > 0 && (
           <div className="grid-col destination">
             {destinationWithoutVia}
-            {/* <div
-              className={cx(
-                'via',
-                isLandscape ? rowCount : '',
-              )}
-            >
-              {viaDestination}
-            </div> */}
+            {/* <div className="via">{viaDestination}</div> */}
           </div>
         )}
         {isOneLiner && !splitDestination && (
@@ -212,13 +205,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           </div>
         )}
         <div className={cx('grid-col', 'time')}>
-          <span
-            className={cx('tilde', {
-              show: departure?.realtime && departureTime !== null,
-            })}
-          >
-            ~
-          </span>
+          {departure?.realtime && departureTime !== null && (
+            <span className={cx('tilde')}>~</span>
+          )}
           {departureTime}
         </div>
       </div>

@@ -299,8 +299,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             dayForDivider={
               i === nextDayDepartureIndexRight
                 ? formatDate(nextDay)
-                : i === currentDayDepartureIndexRight
-                ? formatDate(currentDay)
                 : undefined
             }
           />,
@@ -324,15 +322,19 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     <div
       className={cx(
         'monitor-container',
-        !isLandscape ? 'portrait' : '',
-        withTwoColumns ? 'two-cols' : '',
+        {
+        'portrait': !isLandscape,
+        'two-cols': withTwoColumns,
+        }
       )}
     >
       <div
         className={cx(
           'grid',
-          withTwoColumns ? 'two-cols' : '',
-          !isLandscape ? 'portrait' : '',
+          {
+            'portrait': !isLandscape,
+            'two-cols': withTwoColumns,
+            }
         )}
       >
         <div className="grid-headers">
@@ -351,9 +353,11 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             style={leftColumnStyle}
             className={cx(
               'grid-rows',
-              !isLandscape ? 'portrait' : '',
               `rows${leftColumnCount}`,
-              withTwoColumns ? 'two-cols' : '',
+              {
+                'portrait': !isLandscape,
+                'two-cols': withTwoColumns,
+                }
             )}
           >
             {leftColumn}
@@ -387,9 +391,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       {isLandscape && rightColumnCount > 0 && (
         <>
           <div className="divider" />
-          <div className={cx('grid', withTwoColumns ? 'two-cols' : '')}>
+          <div className={cx('grid', { 'two-cols': withTwoColumns })}>
             <div
-              className={cx('grid-headers', withTwoColumns ? 'two-cols' : '')}
+              className={cx('grid-headers', { 'two-cols': withTwoColumns })}
             >
               <div className={cx('grid-header', 'line')}>
                 {t('lineId', { lng: currentLang })}
@@ -406,7 +410,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               className={cx(
                 'grid-rows',
                 `rows${rightColumnCount}`,
-                withTwoColumns ? 'two-cols' : '',
+                { 'two-cols': withTwoColumns }
               )}
             >
               {rightColumn}

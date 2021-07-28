@@ -129,7 +129,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   if (departure === null && dayForDivider) {
     return (
-      <div className={cx('grid-row day', withTwoColumns ? 'two-cols' : '')}>
+      <div className={cx('grid-row day', { 'two-cols': withTwoColumns })}>
         <div className="day-row">{dayForDivider}</div>
       </div>
     );
@@ -153,7 +153,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     return (
       <div className={cx('grid-row', 'alert', alertRowClass)}>
         <div className={cx('grid-cols', 'alert-row')}>
-          <span className={cx(!isLandscape ? 'portrait' : '')}>
+          <span className={cx({ 'portrait': !isLandscape })}>
             {
               alerts[0].alertHeaderTextTranslations.find(
                 a => a.language === currentLang,
@@ -169,9 +169,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   return (
     <>
       {withSeparator && (
-        <div className={cx('separator', isFirst ? 'first' : '')}></div>
+        <div className={cx('separator', {'first': isFirst})}></div>
       )}
-      <div className={cx('grid-row', withTwoColumns ? 'two-cols' : '')}>
+      <div className={cx('grid-row', { 'two-cols': withTwoColumns })}>
         <div className="grid-col line">
           {line[0]}
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}
@@ -215,7 +215,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           <span
             className={cx(
               'tilde',
-              !departure?.realtime && departureTime !== null ? 'show' : '',
+              {'show': departure?.realtime && departureTime !== null}
             )}
           >
             ~

@@ -153,7 +153,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     return (
       <div className={cx('grid-row', 'alert', alertRowClass)}>
         <div className={cx('grid-cols', 'alert-row')}>
-          <span className={cx({ 'portrait': !isLandscape })}>
+          <span className={cx({ portrait: !isLandscape })}>
             {
               alerts[0].alertHeaderTextTranslations.find(
                 a => a.language === currentLang,
@@ -169,7 +169,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   return (
     <>
       {withSeparator && (
-        <div className={cx('separator', {'first': isFirst})}></div>
+        <div className={cx('separator', { first: isFirst })}></div>
       )}
       <div className={cx('grid-row', { 'two-cols': withTwoColumns })}>
         <div className="grid-col line">
@@ -213,10 +213,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         )}
         <div className={cx('grid-col', 'time')}>
           <span
-            className={cx(
-              'tilde',
-              {'show': departure?.realtime && departureTime !== null}
-            )}
+            className={cx('tilde', {
+              show: departure?.realtime && departureTime !== null,
+            })}
           >
             ~
           </span>

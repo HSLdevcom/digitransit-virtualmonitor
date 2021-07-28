@@ -8,7 +8,7 @@ import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
 import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
-import { getCurrentSeconds, EpochMilliseconds } from '../time';
+import { EpochMilliseconds } from '../time';
 import { ITranslation } from './TranslationContainer';
 
 const getWindowDimensions = () => {
@@ -46,6 +46,9 @@ const Monitor: FC<IProps> = ({
 
   useEffect(() => {
     setWindowDimensions(getWindowDimensions());
+    window.addEventListener('resize', () => {
+      setWindowDimensions(getWindowDimensions());
+    });
   }, []);
 
   const currentTime = time ? time : new Date().getTime();
@@ -63,11 +66,10 @@ const Monitor: FC<IProps> = ({
   return (
     <div
       style={dimensions}
-      className={cx(
-        'main-content-container',
-        isPreview ? 'preview' : 'full',
-        isLandscapeByLayout ? '' : 'portrait',
-      )}
+      className={cx('main-content-container', {
+        preview: isPreview,
+        portrait: !isLandscapeByLayout,
+      })}
     >
       <Titlebar isPreview={isPreview} isLandscape={isLandscapeByLayout}>
         <Logo
@@ -76,7 +78,7 @@ const Monitor: FC<IProps> = ({
           isLandscape={isLandscapeByLayout}
         />
         {!isMultiDisplay && (
-          <div className={cx('title-text', isPreview ? 'preview' : '')}>
+          <div className={cx('title-text', { preview: isPreview })}>
             {view.title[currentLang]}
           </div>
         )}

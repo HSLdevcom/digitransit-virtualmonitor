@@ -9,14 +9,17 @@ export interface ITitlebarProps {
   readonly children?: React.ReactNode;
 }
 
-const Titlebar : FC<ITitlebarProps> = ({ isPreview, isLandscape, children }) => {
+const Titlebar: FC<ITitlebarProps> = ({ isPreview, isLandscape, children }) => {
   return (
     <div
-      className={cx('title-bar', { preview: isPreview, portrait: !isLandscape })}
+      className={cx('title-bar', {
+        preview: isPreview,
+        portrait: !isLandscape,
+      })}
     >
       {children}
     </div>
   );
 };
 
-export default Titlebar
+export default Titlebar;

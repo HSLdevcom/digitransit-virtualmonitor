@@ -104,7 +104,7 @@ const Monitor: FC<IProps> = ({
         departuresRight={departures[1]}
         currentLang={currentLang}
         translatedStrings={translatedStrings}
-        layout={getLayout(view.layout)}
+        layout={view.layout}
         isLandscape={isLandscapeByLayout}
       />
     </div>

@@ -5,6 +5,7 @@ import MonitorRow, { IDeparture } from './MonitorRow';
 import './MonitorRowContainer.scss';
 import cx from 'classnames';
 import { formatDate, setDate } from '../time';
+import { getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
 
 interface IProps {
@@ -26,7 +27,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   t,
 }) => {
   const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
-    layout;
+    getLayout(layout);
 
   const sortedDeparturesLeft = departuresLeft
     .filter(d => d)
@@ -147,16 +148,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     sortedDeparturesRight.splice(0, 0, null);
   }
 
-  const isOneLiner =
-    ((isLandscape && leftColumnCount !== 4) ||
-      (!isLandscape && leftColumnCount !== 8)) &&
-    (leftColumnCount > 4 ||
-      rightColumnCount > 4 ||
-      sortedDeparturesLeft
-        .slice(0, leftColumnCount)
-        .filter(d => d)
-        .every(d => d.headsign?.includes(' via') && d.headsign?.length <= 32));
-
   const isTighten = differSize !== undefined;
 
   const withTwoColumns = isLandscape && rightColumnCount > 0;
@@ -217,7 +208,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         withSeparator
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
         isLandscape={isLandscape}
-        showVia={isOneLiner && !withTwoColumns}
+        showVia={layout < 4 || leftColumnCount === 4}
         withTwoColumns={withTwoColumns}
         currentLang={currentLang}
         alerts={showAlerts ? routeAlerts : undefined}
@@ -270,7 +261,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
             }
             isLandscape={isLandscape}
-            showVia={isOneLiner && !withTwoColumns && rightColumnCount > 4}
+            showVia={rightColumnCount === 4}
             withTwoColumns={withTwoColumns}
             dayForDivider={
               i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
@@ -294,7 +285,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             withSeparator
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             isLandscape={isLandscape}
-            showVia={isOneLiner && !withTwoColumns && rightColumnCount > 4}
+            showVia={rightColumnCount === 4}
             withTwoColumns={withTwoColumns}
             dayForDivider={
               i === nextDayDepartureIndexRight ? formatDate(nextDay) : undefined

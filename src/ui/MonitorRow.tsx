@@ -162,8 +162,8 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}
         </div>
         <div className="grid-col destination">
-          {destination}
-          <div className="via-destination">{viaDestination}</div>
+          <div>{destination}</div>
+          {showVia && (<div className="via-destination">{viaDestination}</div>)}
         </div>
         <div className={cx('grid-col', 'time')}>
           {departure?.realtime && departureTime !== null && (

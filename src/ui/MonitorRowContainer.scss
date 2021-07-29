@@ -190,6 +190,9 @@ $preview-grid-divider: 2px;
       &.tightened {
         height: 50%;
         &.rows4 {
+          .grid-col {
+            align-self: flex-start;
+          }
           font-size: calc((#{var(--height)} - 30vh) / 10);
         }
         &.rows6 {
@@ -202,6 +205,9 @@ $preview-grid-divider: 2px;
     }
     &.rows4 {
       .grid-row {
+        .grid-col {
+          align-self: flex-start;
+        }
         grid-template-columns: 20% 1fr 30vw;
         &.alert {
           font-size: calc((#{var(--height)} - 30vh) / 8);
@@ -257,7 +263,7 @@ $preview-grid-divider: 2px;
       grid-template-columns: 20% 1fr 300px;
       flex: 1;
       .grid-col {
-        align-self: flex-start;
+        align-self: center;
         &.time {
           text-align: end;
         }

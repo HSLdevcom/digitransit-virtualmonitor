@@ -263,9 +263,15 @@ $preview-grid-divider: 2px;
         }
       }
       .destination, .destination-one-row {
-        text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        mask-image: linear-gradient(
+          to left,
+          transparent,
+          rgba(0, 0, 0, 0.2) 5px,
+          rgba(0, 0, 0, 1) 25px,
+          rgba(0, 0, 0, 1)
+        );
         .via-destination {
           font-size: smaller;
         }

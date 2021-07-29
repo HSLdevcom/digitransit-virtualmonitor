@@ -217,7 +217,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         withSeparator
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
         isLandscape={isLandscape}
-        isOneLiner={isOneLiner && !withTwoColumns}
+        showVia={isOneLiner && !withTwoColumns}
         withTwoColumns={withTwoColumns}
         currentLang={currentLang}
         alerts={showAlerts ? routeAlerts : undefined}
@@ -270,7 +270,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
             }
             isLandscape={isLandscape}
-            isOneLiner={isOneLiner && !withTwoColumns && rightColumnCount > 4}
+            showVia={isOneLiner && !withTwoColumns && rightColumnCount > 4}
             withTwoColumns={withTwoColumns}
             dayForDivider={
               i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
@@ -294,7 +294,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             withSeparator
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             isLandscape={isLandscape}
-            isOneLiner={isOneLiner && !withTwoColumns && rightColumnCount > 4}
+            showVia={isOneLiner && !withTwoColumns && rightColumnCount > 4}
             withTwoColumns={withTwoColumns}
             dayForDivider={
               i === nextDayDepartureIndexRight ? formatDate(nextDay) : undefined

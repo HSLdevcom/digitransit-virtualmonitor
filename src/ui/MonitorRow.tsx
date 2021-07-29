@@ -87,14 +87,11 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const d = translations.find(
     t => t.trans_id === departureDestination?.split(' via')[0],
   );
-  const destination = d ? d.translation : departureDestination;
+  let destination = d ? d.translation : departureDestination;
 
   const splitDestination =
     departureDestination && departureDestination.includes(' via');
 
-  let destinationWithoutVia = splitDestination
-    ? departureDestination.substring(0, departureDestination.indexOf(' via'))
-    : destination;
   let viaDestination = splitDestination
     ? departureDestination.substring(departureDestination.indexOf(' via') + 1)
     : '';
@@ -109,28 +106,8 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   if (departure?.pickupType === 'NONE') {
     const lastStop = departure?.trip?.stops.slice(-1).pop().gtfsId;
     if (departure.stop.gtfsId === lastStop) {
-      destinationWithoutVia = t('endStopArrive');
-      viaDestination = t('endStopTerminus');
-      if (isLandscape) {
-        destinationWithoutVia = destinationWithoutVia
-          .concat('/')
-          .concat(viaDestination);
-        viaDestination = '';
-      }
+      destination = `${t('endStopArrive')}/${t('endStopTerminus')}`;
     }
-  }
-
-  if (isLandscape) {
-    if (size != 4 && withTwoColumns) {
-      viaDestination = '';
-    }
-    if (size == 8 && !withTwoColumns) {
-      viaDestination = '';
-    }
-  }
-
-  if (!isLandscape && size === 12) {
-    viaDestination = '';
   }
 
   const line = processLine(departure?.trip?.route.shortName);

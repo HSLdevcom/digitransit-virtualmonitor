@@ -44,10 +44,8 @@ interface IProps {
   translations: Array<ITranslation>;
   isFirst?: boolean;
   isLandscape?: boolean;
-  isPreview?: boolean;
   isOneLiner?: boolean;
   withTwoColumns?: boolean;
-  tightenPosition?: string;
   dayForDivider?: string;
   alerts?: Array<IAlert>;
   alertRows?: number;
@@ -72,11 +70,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   currentLang,
   isFirst = false,
   isLandscape = true,
-  isPreview = false,
   isOneLiner = true,
   withTwoColumns = false,
   translations,
-  tightenPosition,
   dayForDivider,
   alerts,
   alertRows = 1,
@@ -102,8 +98,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     ? destination.substring(destination.indexOf(' via') + 1)
     : '';
 
-  const rowCount = `rows${size}`;
-
   if (departure?.pickupType === 'NONE') {
     const lastStop = departure?.trip?.stops.slice(-1).pop().gtfsId;
     if (departure.stop.gtfsId === lastStop) {
@@ -127,7 +121,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     }
   }
 
-  if (!isLandscape && size === 12 && !tightenPosition) {
+  if (!isLandscape && size === 12) {
     viaDestination = '';
   }
 
@@ -135,17 +129,8 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   if (departure === null && dayForDivider) {
     return (
-      <div
-        className={cx(
-          'grid-row',
-          rowCount,
-          isPreview ? 'preview' : '',
-          withTwoColumns ? 'two-cols' : '',
-        )}
-      >
-        <div className={cx('grid-cols', 'day-row')}>
-          <span>{dayForDivider}</span>
-        </div>
+      <div className={cx('grid-row day', { 'two-cols': withTwoColumns })}>
+        <div className="day-row">{dayForDivider}</div>
       </div>
     );
   }
@@ -166,19 +151,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         break;
     }
     return (
-      <div
-        className={cx(
-          'grid-row',
-          rowCount,
-          isPreview ? 'preview' : '',
-          !withTwoColumns ? 'alert' : 'alert-two-cols',
-          alertRowClass,
-        )}
-      >
-        <div
-          className={cx('grid-cols', 'alert-row', isPreview ? 'preview' : '')}
-        >
-          <span className={cx(!isLandscape ? 'portrait' : '')}>
+      <div className={cx('grid-row', 'alert', alertRowClass)}>
+        <div className={cx('grid-cols', 'alert-row')}>
+          <span className={cx({ portrait: !isLandscape })}>
             {
               alerts[0].alertHeaderTextTranslations.find(
                 a => a.language === currentLang,
@@ -192,153 +167,51 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   const departureTime = getDepartureTime(departure?.realtimeDeparture);
   return (
-    <div
-      className={cx(
-        'grid-row',
-        rowCount,
-        isPreview ? 'preview' : '',
-        !isLandscape ? 'portrait' : '',
-        withTwoColumns ? 'two-cols' : '',
-        tightenPosition ? tightenPosition : '',
+    <>
+      {withSeparator && (
+        <div className={cx('separator', { first: isFirst })}></div>
       )}
-    >
-      <div
-        className={cx(
-          'grid-cols',
-          rowCount,
-          isPreview ? 'preview' : '',
-          withTwoColumns ? 'two-cols' : '',
-          !isLandscape ? 'portrait' : '',
-          tightenPosition ? tightenPosition : '',
-        )}
-      >
-        {withSeparator && (
-          <div
-            className={cx(
-              'separator',
-              isFirst ? 'first' : '',
-              isPreview ? 'preview' : '',
-              rowCount,
-              !isLandscape ? 'portrait' : '',
-              tightenPosition ? tightenPosition : '',
-            )}
-          ></div>
-        )}
-        <div
-          className={cx(
-            'grid-col',
-            rowCount,
-            isPreview ? 'preview' : '',
-            withTwoColumns ? 'two-cols' : '',
-            !isLandscape ? 'portrait' : '',
-            tightenPosition ? tightenPosition : '',
-            'line',
-          )}
-        >
+      <div className={cx('grid-row', { 'two-cols': withTwoColumns })}>
+        <div className="grid-col line">
           {line[0]}
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}
         </div>
         {!isOneLiner && viaDestination.length === 0 && (
-          <div
-            className={cx(
-              'grid-col',
-              rowCount,
-              isPreview ? 'preview' : '',
-              !isLandscape ? 'portrait' : '',
-              withTwoColumns ? 'two-cols' : '',
-              tightenPosition ? tightenPosition : '',
-              'destination-one-row',
-              'no-via',
-            )}
-          >
-            {destinationWithoutVia}
-          </div>
+          <div className="grid-col destination">{destinationWithoutVia}</div>
         )}
         {!isOneLiner && viaDestination.length > 0 && (
-          <div
-            className={cx(
-              'grid-col',
-              rowCount,
-              isPreview ? 'preview' : '',
-              !isLandscape ? 'portrait' : '',
-              withTwoColumns ? 'two-cols' : '',
-              tightenPosition ? tightenPosition : '',
-              'destination-two-rows',
-            )}
-          >
+          <div className="grid-col destination">
             {destinationWithoutVia}
-            <span
-              className={cx(
-                'via',
-                isLandscape ? rowCount : '',
-                withTwoColumns ? 'two-cols' : '',
-              )}
-            >
-              {viaDestination}
-            </span>
+            {/* <div className="via">{viaDestination}</div> */}
           </div>
         )}
         {isOneLiner && !splitDestination && (
-          <div
-            className={cx(
-              'grid-col',
-              rowCount,
-              isPreview ? 'preview' : '',
-              !isLandscape ? 'portrait' : '',
-              withTwoColumns ? 'two-cols' : '',
-              tightenPosition ? tightenPosition : '',
-              'destination',
-            )}
-          >
+          <div className={cx('grid-col', 'destination')}>
             {destination &&
               !destination.includes(' via') &&
               destinationWithoutVia}
             {destination && destination.includes(' via') && (
               <>
                 {destinationWithoutVia}
-                <span className="via">{viaDestination}</span>
+                <div className="via">{viaDestination}</div>
               </>
             )}
           </div>
         )}
         {isOneLiner && splitDestination && (
-          <div
-            className={cx(
-              'grid-col',
-              rowCount,
-              isPreview ? 'preview' : '',
-              !isLandscape ? 'portrait' : '',
-              tightenPosition ? tightenPosition : '',
-              'destination-one-row',
-            )}
-          >
+          <div className={cx('grid-col', 'destination-one-row')}>
             {destinationWithoutVia}
-            <span className="via">{viaDestination}</span>
+            {/* <div className="via">{viaDestination}</div> */}
           </div>
         )}
-        <div
-          className={cx(
-            'grid-col',
-            rowCount,
-            isPreview ? 'preview' : '',
-            !isLandscape ? 'portrait' : '',
-            withTwoColumns ? 'two-cols' : '',
-            tightenPosition ? tightenPosition : '',
-            'time',
+        <div className={cx('grid-col', 'time')}>
+          {departure?.realtime && departureTime !== null && (
+            <span className={cx('tilde')}>~</span>
           )}
-        >
-          <span
-            className={cx(
-              'tilde',
-              !departure?.realtime && departureTime !== null ? 'show' : '',
-            )}
-          >
-            ~
-          </span>
           {departureTime}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -13,9 +13,7 @@ interface IProps {
   translatedStrings: Array<ITranslation>;
   currentLang: string;
   layout: any;
-  isPreview: boolean;
   isLandscape: boolean;
-  forcedLayout?: string;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -24,9 +22,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   translatedStrings,
   currentLang,
   layout,
-  isPreview,
   isLandscape,
-  forcedLayout,
   t,
 }) => {
   const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
@@ -92,7 +88,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const currentDay = setDate(0);
   const nextDay = setDate(1);
 
-  const currentDayDepartureIndexLeft = -1;
   const nextDayDepartureIndexLeft = sortedDeparturesLeft
     .slice(0, leftColumnCount)
     .findIndex(departure => departure.serviceDay === nextDay.getTime() / 1000);
@@ -167,14 +162,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const withTwoColumns = isLandscape && rightColumnCount > 0;
 
   for (let i = 0; i < leftColumnCount; i++) {
-    let tightenPosition = '';
-    if (isTighten && i < differSize[0]) {
-      tightenPosition = !forcedLayout
-        ? 'tighten-begin'
-        : 'tighten-begin-forced';
-    } else if (isTighten && i >= differSize[0]) {
-      tightenPosition = !forcedLayout ? 'tighten-end' : 'tighten-end-forced';
-    }
     let showAlerts = false;
     if (routeAlerts.length > 0) {
       if (
@@ -213,7 +200,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       leftColumnCount === 8 &&
       i === leftColumnCount - 2
     ) {
-      alertRowSpan = 3;
+      alertRowSpan = 2;
     } else if (leftColumnCount === 24 && i === leftColumnCount - 4) {
       alertRowSpan = 4;
     }
@@ -230,7 +217,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         withSeparator
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
         isLandscape={isLandscape}
-        isPreview={isPreview}
         isOneLiner={isOneLiner && !withTwoColumns}
         withTwoColumns={withTwoColumns}
         currentLang={currentLang}
@@ -239,7 +225,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         dayForDivider={
           i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
         }
-        tightenPosition={tightenPosition}
       />,
     );
     if (routeAlerts.length > 0) {
@@ -285,7 +270,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
             }
             isLandscape={isLandscape}
-            isPreview={isPreview}
             isOneLiner={isOneLiner && !withTwoColumns && rightColumnCount > 4}
             withTwoColumns={withTwoColumns}
             dayForDivider={
@@ -310,15 +294,10 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             withSeparator
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             isLandscape={isLandscape}
-            isPreview={isPreview}
             isOneLiner={isOneLiner && !withTwoColumns && rightColumnCount > 4}
             withTwoColumns={withTwoColumns}
             dayForDivider={
-              i === nextDayDepartureIndexRight
-                ? formatDate(nextDay)
-                : i === currentDayDepartureIndexRight
-                ? formatDate(currentDay)
-                : undefined
+              i === nextDayDepartureIndexRight ? formatDate(nextDay) : undefined
             }
           />,
         );
@@ -339,82 +318,35 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   } as React.CSSProperties;
   return (
     <div
-      className={cx(
-        'monitor-container',
-        isPreview ? 'preview' : '',
-        !isLandscape ? 'portrait' : '',
-        forcedLayout && forcedLayout === 'landscape' ? 'forced-landscape' : '',
-        forcedLayout && forcedLayout === 'portrait' ? 'forced-portrait' : '',
-      )}
+      className={cx('monitor-container', {
+        portrait: !isLandscape,
+        'two-cols': withTwoColumns,
+      })}
     >
       <div
-        className={cx(
-          'grid',
-          withTwoColumns ? 'two-cols' : '',
-          !isLandscape ? 'portrait' : '',
-        )}
+        className={cx('grid', {
+          portrait: !isLandscape,
+          'two-cols': withTwoColumns,
+        })}
       >
-        <div
-          className={cx(
-            'grid-headers',
-            withTwoColumns ? 'two-cols' : '',
-            isPreview ? 'preview' : '',
-            !isLandscape ? 'portrait' : '',
-            forcedLayout && forcedLayout === 'landscape'
-              ? 'forced-landscape'
-              : '',
-            forcedLayout && forcedLayout === 'portrait'
-              ? 'forced-portrait'
-              : '',
-          )}
-        >
-          <div
-            className={cx(
-              'grid-header',
-              'line',
-              isPreview ? 'preview' : '',
-              !isLandscape ? 'portrait' : '',
-            )}
-          >
+        <div className="grid-headers">
+          <div className={cx('grid-header', 'line')}>
             {t('lineId', { lng: currentLang })}
           </div>
-          <div
-            className={cx(
-              'grid-header',
-              'destination',
-              isPreview ? 'preview' : '',
-              !isLandscape ? 'portrait' : '',
-            )}
-          >
+          <div className={cx('grid-header', 'destination')}>
             {t('destination', { lng: currentLang })}
           </div>
-          <div
-            className={cx(
-              'grid-header',
-              'time',
-              isPreview ? 'preview' : '',
-              !isLandscape ? 'portrait' : '',
-            )}
-          >
+          <div className={cx('grid-header', 'time')}>
             {t('departureTime', { lng: currentLang })}
           </div>
         </div>
         {!isTighten && (
           <div
             style={leftColumnStyle}
-            className={cx(
-              'grid-rows',
-              isPreview ? 'preview' : '',
-              !isLandscape ? 'portrait' : '',
-              `rows${leftColumnCount}`,
-              withTwoColumns ? 'two-cols' : '',
-              forcedLayout && forcedLayout === 'landscape'
-                ? 'forced-landscape'
-                : '',
-              forcedLayout && forcedLayout === 'portrait'
-                ? 'forced-portrait'
-                : '',
-            )}
+            className={cx('grid-rows', `rows${leftColumnCount}`, {
+              portrait: !isLandscape,
+              'two-cols': withTwoColumns,
+            })}
           >
             {leftColumn}
           </div>
@@ -425,8 +357,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               style={tightenBeginStyle}
               className={cx(
                 'grid-rows',
-                !forcedLayout ? 'tighten-begin' : 'tighten-begin-forced',
-                isPreview ? 'preview' : '',
+                'portrait tightened',
                 `rows${differSize[0]}`,
               )}
             >
@@ -436,8 +367,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               style={tightenEndingStyle}
               className={cx(
                 'grid-rows',
-                !forcedLayout ? 'tighten-end' : 'tighten-end-forced',
-                isPreview ? 'preview' : '',
+                'portrait tightened',
                 `rows${differSize[1]}`,
               )}
             >
@@ -448,74 +378,24 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       </div>
       {isLandscape && rightColumnCount > 0 && (
         <>
-          <div className={cx('divider', isPreview ? 'preview' : '')} />
-          <div
-            className={cx(
-              'grid',
-              withTwoColumns ? 'two-cols' : '',
-              !isLandscape ? 'portrait' : '',
-            )}
-          >
-            <div
-              className={cx(
-                'grid-headers',
-                withTwoColumns ? 'two-cols' : '',
-                isPreview ? 'preview' : '',
-                !isLandscape ? 'portrait' : '',
-                forcedLayout && forcedLayout === 'landscape'
-                  ? 'forced-landscape'
-                  : '',
-                forcedLayout && forcedLayout === 'portrait'
-                  ? 'forced-portrait'
-                  : '',
-              )}
-            >
-              <div
-                className={cx(
-                  'grid-header',
-                  'line',
-                  isPreview ? 'preview' : '',
-                  !isLandscape ? 'portrait' : '',
-                )}
-              >
+          <div className="divider" />
+          <div className={cx('grid', { 'two-cols': withTwoColumns })}>
+            <div className={cx('grid-headers', { 'two-cols': withTwoColumns })}>
+              <div className={cx('grid-header', 'line')}>
                 {t('lineId', { lng: currentLang })}
               </div>
-              <div
-                className={cx(
-                  'grid-header',
-                  'destination',
-                  isPreview ? 'preview' : '',
-                  !isLandscape ? 'portrait' : '',
-                )}
-              >
+              <div className={cx('grid-header', 'destination')}>
                 {t('destination', { lng: currentLang })}
               </div>
-              <div
-                className={cx(
-                  'grid-header',
-                  'time',
-                  isPreview ? 'preview' : '',
-                  !isLandscape ? 'portrait' : '',
-                )}
-              >
+              <div className={cx('grid-header', 'time')}>
                 {t('departureTime', { lng: currentLang })}
               </div>
             </div>
             <div
               style={rightColumnStyle}
-              className={cx(
-                'grid-rows',
-                isPreview ? 'preview' : '',
-                !isLandscape ? 'portrait' : '',
-                `rows${rightColumnCount}`,
-                withTwoColumns ? 'two-cols' : '',
-                forcedLayout && forcedLayout === 'landscape'
-                  ? 'forced-landscape'
-                  : '',
-                forcedLayout && forcedLayout === 'portrait'
-                  ? 'forced-portrait'
-                  : '',
-              )}
+              className={cx('grid-rows', `rows${rightColumnCount}`, {
+                'two-cols': withTwoColumns,
+              })}
             >
               {rightColumn}
             </div>

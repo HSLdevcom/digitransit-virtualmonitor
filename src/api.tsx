@@ -45,11 +45,11 @@ const monitorAPI = {
           accepts: 'application/json',
         },
       })
-          .then(result => result.json())
-          .then(json => resolve(json))
-          .catch(err => {
-            reject(err);
-          });
+        .then(result => result.json())
+        .then(json => resolve(json))
+        .catch(err => {
+          reject(err);
+        });
     });
   },
 

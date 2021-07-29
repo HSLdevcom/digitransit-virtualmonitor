@@ -8,7 +8,7 @@ import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
 import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
-import { getCurrentSeconds, EpochMilliseconds } from '../time';
+import { EpochMilliseconds } from '../time';
 import { ITranslation } from './TranslationContainer';
 
 const getWindowDimensions = () => {
@@ -46,23 +46,16 @@ const Monitor: FC<IProps> = ({
 
   useEffect(() => {
     setWindowDimensions(getWindowDimensions());
+    window.addEventListener('resize', () => {
+      setWindowDimensions(getWindowDimensions());
+    });
   }, []);
 
   const currentTime = time ? time : new Date().getTime();
 
-  let forcedLayout = undefined;
+  const windowHeight = windowDimensions.height;
+  const windowWidth = windowDimensions.width;
 
-  let windowHeight = windowDimensions.height;
-  let windowWidth = windowDimensions.width;
-
-  if (!isPreview && windowWidth >= windowHeight && view.layout > 11) {
-    forcedLayout = 'portrait';
-    windowWidth = windowHeight / 1.775;
-  }
-  if (!isPreview && windowHeight >= windowWidth && view.layout <= 11) {
-    forcedLayout = 'landscape';
-    windowHeight = windowWidth / 1.775;
-  }
   const dimensions = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,
@@ -73,27 +66,19 @@ const Monitor: FC<IProps> = ({
   return (
     <div
       style={dimensions}
-      className={cx(
-        'main-content-container',
-        isPreview ? 'preview' : 'full',
-        isLandscapeByLayout ? '' : 'portrait',
-        forcedLayout && forcedLayout === 'landscape' ? 'forced-landscape' : '',
-        forcedLayout && forcedLayout === 'portrait' ? 'forced-portrait' : '',
-      )}
+      className={cx('main-content-container', {
+        preview: isPreview,
+        portrait: !isLandscapeByLayout,
+      })}
     >
-      <Titlebar
-        isPreview={isPreview}
-        isLandscape={isLandscapeByLayout}
-        forcedLayout={forcedLayout}
-      >
+      <Titlebar isPreview={isPreview} isLandscape={isLandscapeByLayout}>
         <Logo
           monitorConfig={config}
           isPreview={isPreview}
           isLandscape={isLandscapeByLayout}
-          forcedLayout={forcedLayout}
         />
         {!isMultiDisplay && (
-          <div className={cx('title-text', isPreview ? 'preview' : '')}>
+          <div className={cx('title-text', { preview: isPreview })}>
             {view.title[currentLang]}
           </div>
         )}
@@ -112,7 +97,6 @@ const Monitor: FC<IProps> = ({
           updateInterval={noPolling ? 0 : 20000}
           isPreview={isPreview}
           isLandscape={isLandscapeByLayout}
-          forcedLayout={forcedLayout}
         />
       </Titlebar>
       <MonitorRowContainer
@@ -121,9 +105,7 @@ const Monitor: FC<IProps> = ({
         currentLang={currentLang}
         translatedStrings={translatedStrings}
         layout={getLayout(view.layout)}
-        isPreview={isPreview}
         isLandscape={isLandscapeByLayout}
-        forcedLayout={forcedLayout}
       />
     </div>
   );

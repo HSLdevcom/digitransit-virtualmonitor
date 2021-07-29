@@ -4,6 +4,7 @@ import {
   GET_STOP_DEPARTURES,
   GET_STATION_DEPARTURES,
 } from '../queries/departureQueries';
+import { getLayout } from '../util/getLayout';
 import { IView } from '../util/Interfaces';
 import {
   getStopsAndStationsFromViews,
@@ -26,7 +27,17 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   for (let i = 0; i < views.length; i++) {
     emptyDepartureArrays.push([[], []]);
   }
-
+  const layOuts = views.map(v => {
+    const lay = getLayout(v.layout);
+    const r1 = lay[0];
+    const r2 = lay[1];
+    if (typeof r1 === 'number' && typeof r2 === 'number') {
+      return r1 + r2;
+    }
+    return null;
+  });
+  // eslint-disable-next-line prefer-spread
+  const largest = Math.max.apply(Math, layOuts);
   const [stopIds, stationIds] = getStopsAndStationsFromViews(views);
   const [stopDepartures, setStopDepartures] = useState(emptyDepartureArrays);
   const [stationDepartures, setStationDepartures] =
@@ -36,13 +47,13 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   const [translationIds, setTranslationIds] = useState([]);
 
   const stationsState = useQuery(GET_STATION_DEPARTURES, {
-    variables: { ids: stationIds, numberOfDepartures: 24 },
+    variables: { ids: stationIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stationIds.length < 1,
   });
 
   const stopsState = useQuery(GET_STOP_DEPARTURES, {
-    variables: { ids: stopIds, numberOfDepartures: 24 },
+    variables: { ids: stopIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stopIds.length < 1,
   });

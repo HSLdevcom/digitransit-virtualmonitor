@@ -36,8 +36,24 @@ $preview-container-height: 365px;
     height: calc(0.1 * #{$preview-container-height}) !important;
 
     &.portrait {
+      .title-text {
+        font-size: 25px !important;
+      }
+      .title-time-container {
+        font-size: 25px;
+      }
       font-size: calc(0.05 * #{$preview-container-width-portrait});
       height: calc(0.05 * #{$preview-container-height-portrait}) !important;
+    }
+  }
+}
+.banner {
+  .title-logo {
+    &.portrait {
+      #logo {
+        width: 140px !important;
+        margin-top: 10px;
+      }
     }
   }
 }
@@ -63,6 +79,9 @@ $preview-container-height: 365px;
     #logo {
       width: calc(0.16 * #{$preview-container-width}) !important;
     }
+    &.portrait {
+      width: calc(0.10 * #{$preview-container-width}) !important;
+    }
   }
 }
 
@@ -77,8 +96,10 @@ $preview-container-height: 365px;
   font-weight: bold;
   font-size: min(5vw, 100px);
   color: #fff;
+  text-align: center;
 
   &.preview {
+    font-size: 35px !important;
     margin: 0 calc(0.02 * #{$preview-container-width});
   }
 }

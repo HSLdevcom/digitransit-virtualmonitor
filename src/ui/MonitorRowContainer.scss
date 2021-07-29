@@ -1,549 +1,254 @@
-@use "sass:map";
-@use "sass:math";
 
-@import '../index';
-
-$size: 1000px;
-
-@function strip-unit($number) {
-  @if type-of($number) == 'number' and not unitless($number) {
-    @return math.div($number , $number * 0 + 1);
-  }
-  @return 1px;
-}
-
-@function font-size-by-width($size: 1000px) {
-  @return calc(#{strip-unit($size)} / 100 * var(--width));
-}
-@function font-size-by-width-two-cols($size: 1000px) {
-  @return calc(#{strip-unit($size)} / 100 * var(--width) / 2);
-}
-
-$header-height: 10vh;
-$header-height-padding: 15px;
+$preview-container-width: 640px;
 $preview-container-height: 365px;
 $preview-container-height-portrait: 590px;
 $preview-container-height-portrait-tighten: 285px;
-$preview-container-width: 640px;
+
 $preview-container-width-portrait: 405px;
 $preview-grid-rows-height-portrait-tighten: 266px;
 $preview-grid-rows-margin: 15px;
 $preview-grid-divider: 2px;
 
-$font-by-row: ('4': 6.25vw, '4via': 4.531vw, '8': 5.5vw, '12': 3.5vw, '12via': 2.5vw, '8p': 7.407vw, '8pvia': 4.938vw,  '12p': 7.407vw, '16p': 4.938vw, '16pvia': 3.4568vw, '24p': 4.25vw, '24pvia': 2.75vw, '4t': 6.5vw, '4tvia': 5.5vw, '6t': 5vw, '6tvia': 3.5vw, '12t': 4vw, '12tvia': 2.75vw);
-$font-by-row-two-cols: ('4': 6.25vw, '4via': 5.5vw, '8': 7vw, '12': 6.5vw);
-$preview-font-by-row: ('4': 32px, '4via': 20px, '4x': 44px, '8': 24px, '8via': 18px, '12': 18px, '12via': 14px, '8p': 30px, '8pvia': 20px, '12p': 30px, '16p': 20px, '16pvia': 14px, '24p': 14px, '24pvia': 11px, '4t': 24px, '4tvia': 18px, '4tx': 28px, '6t': 24px, '12t': 16px, '12tvia': 13px);
-$preview-font-by-row-two-cols: ('4': 20px, '4via': 16px, '4x': 26px, '8': 21px, '12': 18px);
-
-.main-content-container {
-  background-color: #0057a2;
-  overflow: hidden;
-
-  &.full {
-    height: 100vh;
+.main-content-container.preview {
+  font-family: 'Roboto';
+  .divider {
+    min-width: 2px;
+    margin: 0 3px;
   }
-
-  &.forced-landscape,
-  &.forced-portrait {
-    height: calc(1px * var(--height));
-    width: calc(1px * var(--width));
+  .separator {
+    border-top: 1px dotted #fff;
   }
-
-  &.forced-portrait {
-    margin-left: 50vw !important;
-    transform: translate(-50%, 0);
+  .grid.two-cols {
+    margin: 0 5px;
   }
+  .monitor-container {
+    height: calc(90% - 30px);
+    .grid-rows {
+      height: calc(100% - 25px);
+      .grid-row{
+        &.alert {
+          &.two-rows {
+            padding-bottom: 2px;
+          }
 
-  &.forced-landscape {
-    margin-top: 50vh !important;
-    transform: translate(0, -50%);
-  }
+          &.three-rows {
+            padding-bottom: 3px;
+          }
 
-  &.preview {
-    height: $preview-container-height;
-
+          &.four-rows {
+            padding-bottom: 4px;
+          }
+        }
+      }
+      &.rows4 {
+        .grid-row {
+          font-size: 50px;
+          grid-template-columns: 120px 1fr 160px;
+          &.alert {
+            font-size: 30px;
+          }
+        }
+      } 
+      &.rows4.two-cols {
+        .grid-row {
+          font-size: 30px;
+          grid-template-columns: 60px 1fr 100px;
+        }
+      }
+      &.rows8 {
+        .grid-row {
+          font-size: 24px;
+          grid-template-columns: 120px 1fr 160px;
+          &.alert {
+            font-size: 20px;
+          }
+        }
+      }
+      &.rows8.two-cols {
+        .grid-row {
+          grid-template-columns: 60px 1fr 80px;
+        }
+      }
+      &.rows12 {
+        .grid-row {
+          font-size: 17px;
+          grid-template-columns: 120px 1fr 160px;
+          &.alert {
+            font-size: 17px;
+          }
+        }
+      }
+      &.rows12.two-cols {
+        .grid-row {
+          font-size: 17px;
+          grid-template-columns: 50px 1fr 60px;
+          &.alert {
+            font-size: 17px;
+          }
+        }
+      }          
+    }
+    .grid {
+      height: 100%;
+      .grid-headers {
+        height: 25px;
+        .grid-header {
+          font-size: 1em;
+        }
+      }
+    }
     &.portrait {
-      height: $preview-container-height-portrait;
+      height: calc(95% - 30px);
+      .rows8, .rows12 {
+        .grid-row {
+          grid-template-columns: 75px 1fr 80px;
+          font-size: 25px;
+        }
+      }
+      .rows16 {
+        .grid-row {
+          grid-template-columns: 75px 1fr 80px;
+          font-size: 20px;
+        }
+      }
+      .rows24 {
+        .grid-row {
+          grid-template-columns: 75px 1fr 80px;
+          font-size: 15px;
+        }
+      }
+      .grid-rows.tightened {
+        height: calc(50% - 12.5px);
+        &.rows6 {
+          .grid-row {
+            font-size: 25px;
+            grid-template-columns: 75px 1fr 95px;
+          }
+        }
+        &.rows4 {
+          .grid-row {
+            grid-template-columns: 75px 1fr 95px;
+            font-size: 30px;
+          }
+        }
+        &.rows12 {
+          .grid-row {
+            grid-template-columns: 75px 1fr 95px;
+            font-size: 16px;
+          }
+        }
+      }
+      
     }
   }
 }
 
-.monitor-container {
-  display: flex;
-  flex-direction: row;
+.main-content-container {
+  background-color: #0057a2;
   color: #fff;
-  height: calc(90vh - (2 * #{$header-height-padding}));
-
-  &.forced-landscape {
-    height: calc(0.9 * #{var(--height)} - (2 * #{$header-height-padding}));
-  }
-
-  &.forced-portrait {
-    height: calc(0.95 * #{var(--height)} - (2 * #{$header-height-padding}));
-  }
-
-  &.portrait {
-    height: calc(95vh - (2 * #{$header-height-padding}));
-  }
-
-  &.preview {
-    height: calc(calc(0.9 * #{$preview-container-height}) - (2 * #{$header-height-padding}));
-
-    &.portrait {
-      height: calc(calc(0.95 * #{$preview-container-height-portrait}) - (2 * #{$header-height-padding}));
-    }
-  }
-
-  .grid {
-    width: 100%;
-
+  height: 100%;
+  .monitor-container {
+    height: calc(100% - 10vh - 30px); // 100% - height of logo bar
     &.two-cols {
-      width: calc(50%);
+      display: flex;
+      .grid {
+        width: calc(50% - 12.5px);
+      }
     }
-
-    .grid-headers {
-      font-family: $font-family;
-      margin: 0 $preview-grid-rows-margin;
-      flex: 1;
-      display: grid;
-      justify-content: space-between;
-      grid-template-columns: 1fr 3fr 1fr;
-      grid-row: span 1;
-      height: 5vh !important;
-      font-size: 4.5vh;
-      overflow: hidden;
-
-      &.forced-landscape {
-        height: calc(0.05 * #{var(--height)}) !important;
-        font-size: calc(0.045 * #{var(--height)});
-      }
-
-      &.forced-portrait {
-        height: calc(0.035 * #{var(--height)}) !important;
-        font-size: calc(0.03 * #{var(--height)});
-      }
-
+    .grid {
+      margin: 0 15px;
+      height: calc(100% - 5vh); // 100% - height of table headers
       &.portrait {
-        height: 3.5vh !important;
-        font-size: 3vh;
-      }
-
-      &.preview {
-        font-family: $font-family;
-        height: calc(0.05 * #{$preview-container-height}) !important;
-        font-size: calc(0.045 * #{$preview-container-height});
-
-        &.portrait {
-          font-family: $font-family;
-          height: calc(0.035 * #{$preview-container-height-portrait}) !important;
-          font-size: calc(0.03 * #{$preview-container-height-portrait});
-        }
-      }
-    }
-
-    .grid-header {
-      &.time {
-        text-align: right;
-      }
-    }
-
-    .grid-rows {
-      font-family: $font-family;
-      margin: 0 $preview-grid-rows-margin;
-      display: grid;
-      justify-content: space-between;
-      grid-template-columns: 1fr 3fr 1fr;
-      grid-template-rows: repeat(var(--rows), calc(calc(85vh - (2 * #{$header-height-padding})) / var(--rows)));
-      font-size: font-size-by-width(7vw);
-
-      &.forced-landscape {
-        grid-template-rows: repeat(var(--rows), calc(calc(calc(0.85 * #{var(--height)}) - (2 * #{$header-height-padding})) / var(--rows)));
-      }
-
-      &.forced-portrait {
-        grid-template-rows: repeat(var(--rows), calc(calc(calc(0.915 * #{var(--height)}) - (2 * #{$header-height-padding})) / var(--rows)));
-      }
-
-      &.portrait {
-        grid-template-rows: repeat(var(--rows), calc(calc(91.5vh - (2 * #{$header-height-padding})) / var(--rows)));
-      }
-
-      &.rows4 {
-        font-size: font-size-by-width(map-get($font-by-row, '4'));
-
-        span.via {
-          font-size: font-size-by-width(map-get($font-by-row, '4via'));
-          position: relative;
-          top: calc(-0.63 * #{font-size-by-width(map-get($font-by-row, '4via'))});
-
-          &::before {
-            content: "\A";
-            white-space: pre;
-          }
-        }
-
-        &.two-cols {
-          font-size: font-size-by-width-two-cols(map-get($font-by-row-two-cols, '4'));
-
-          .line,
-          .time {
-            font-size: font-size-by-width-two-cols(map-get($font-by-row-two-cols, '4x'));
-          }
-
-          span.via {
-            font-size: font-size-by-width-two-cols(map-get($font-by-row-two-cols, '4via'));
-            position: relative;
-            top: calc(-0.25 * #{font-size-by-width-two-cols(map-get($font-by-row-two-cols, '4via'))});
-
-            &::before {
-              content: "\A";
-              white-space: pre;
-            }
-          }
-        }
-      }
-
-      &.rows8 {
-        font-size: font-size-by-width(map-get($font-by-row, '8'));
-
-        &.portrait {
-          font-size: font-size-by-width(map-get($font-by-row, '8p'));
-
-          span.via {
-            font-size: font-size-by-width(map-get($font-by-row, '8pvia'));
-            position: relative;
-            top: calc(-0.63 * #{font-size-by-width(map-get($font-by-row, '8pvia'))});
-
-            &::before {
-              content: "\A";
-              white-space: pre;
-            }
-          }
-        }
-
-        &.two-cols {
-          font-size: font-size-by-width-two-cols(map-get($font-by-row-two-cols, '8'));
-        }
-      }
-
-      &.rows12 {
-        font-size: font-size-by-width(map-get($font-by-row, '12'));
-
-        span.via {
-          font-size: font-size-by-width(map-get($font-by-row, '12via'));
-
-          &::before {
-            content: " ";
-            white-space: pre;
-          }
-        }
-
-        &.portrait {
-          font-size: font-size-by-width(map-get($font-by-row, '12p'));
-        }
-
-        &.two-cols {
-          font-size: font-size-by-width-two-cols(map-get($font-by-row-two-cols, '12'));
-        }
-      }
-
-      &.rows16 {
-        font-size: font-size-by-width(map-get($font-by-row, '16p'));
-
-        span.via {
-          font-size: font-size-by-width(map-get($font-by-row, '16pvia'));
-          position: relative;
-          top: calc(-0.7 * #{font-size-by-width(map-get($font-by-row, '16pvia'))});
-
-          &::before {
-            content: "\A";
-            white-space: pre;
-          }
-        }
-      }
-
-      &.rows24 {
-        font-size: font-size-by-width(map-get($font-by-row, '24p'));
-
-        span.via {
-          font-size: font-size-by-width(map-get($font-by-row, '24pvia'));
-        }
-      }
-
-      &.tighten-begin,
-      &.tighten-end,
-      &.tighten-begin-forced,
-      &.tighten-end-forced {
-        grid-template-rows: repeat(var(--rows), calc(calc(calc(91.5vh - (2 * #{$header-height-padding})) / 2) / var(--rows)));
-
-        &.rows4 {
-          font-size: font-size-by-width(map-get($font-by-row, '4t'));
-
-          .line,
-          .time {
-            font-size: font-size-by-width(map-get($font-by-row, '4tx'));
-          }
-
-          span.via {
-            position: relative;
-            top: calc(-0.25 * #{font-size-by-width(map-get($font-by-row, '4tvia'))});
-            font-size: font-size-by-width(map-get($font-by-row, '4tvia'));
-
-            &::before {
-              content: "\A";
-              white-space: pre;
-            }
-          }
-        }
-
-        &.rows6 {
-          font-size: font-size-by-width(map-get($font-by-row, '6t'));
-
-          span.via {
-            position: relative;
-            top: calc(-0.25 * #{font-size-by-width(map-get($font-by-row, '6tvia'))});
-            font-size: font-size-by-width(map-get($font-by-row, '6tvia'));
-
-            &::before {
-              content: "\A";
-              white-space: pre;
-            }
-          }
-        }
-
-        &.rows12 {
-          font-size: font-size-by-width(map-get($font-by-row, '12t'));
-
-          span.via {
-            font-size: font-size-by-width(map-get($font-by-row, '12tvia'));
-
-            &::before {
-              content: " ";
-              white-space: pre;
-            }
-          }
-        }
-      }
-
-      /* PREVIEW */
-      &.preview {
-        grid-template-rows: repeat(var(--rows), calc(calc(calc(0.85 * #{$preview-container-height}) - (2 * #{$header-height-padding})) / var(--rows)));
-
-        &.portrait {
-          grid-template-rows: repeat(var(--rows), calc(calc(calc(0.915 * #{$preview-container-height-portrait}) - (2 * #{$header-height-padding})) / var(--rows)));
-        }
-
-        &.tighten-begin,
-        &.tighten-end {
-          grid-template-rows: repeat(var(--rows), calc(calc(calc(calc(0.915 * #{$preview-container-height-portrait}) - (2 * #{$header-height-padding})) / 2) / var(--rows)));
-
-          &.rows4 {
-            font-size: map-get($preview-font-by-row, '4t');
-
-            .line,
-            .time {
-              font-size: map-get($preview-font-by-row, '4tx');
-            }
-
-            span.via {
-              position: relative;
-              top: calc(-0.63 * #{map-get($preview-font-by-row, '4tvia')});
-              font-size: map-get($preview-font-by-row, '4tvia');
-
-              &::before {
-                content: "\A";
-                white-space: pre;
-              }
-            }
-          }
-
-          &.rows6 {
-            font-size: map-get($preview-font-by-row, '6t');
-          }
-
-          &.rows12 {
-            font-size: map-get($preview-font-by-row, '12t');
-
-            span.via {
-              font-size: map-get($preview-font-by-row, '12tvia');
-            }
-          }
-        }
-
-        &.rows4 {
-          font-size: map-get($preview-font-by-row, '4');
-
-          .line,
-          .time {
-            font-size: map-get($preview-font-by-row, '4x');
-          }
-
-          span.via {
-            font-size: map-get($preview-font-by-row, '4via');
-            position: relative;
-            top: -10px;
-
-            &::before {
-              content: "\A";
-              white-space: pre;
-            }
-          }
-
-          &.two-cols {
-            font-size: map-get($preview-font-by-row-two-cols, '4');
-
-            .line,
-            .time {
-              font-size: map-get($preview-font-by-row-two-cols, '4x');
-            }
-
-            span.via {
-              font-size: map-get($preview-font-by-row-two-cols, '4via');
-
-              &::before {
-                content: "\A";
-                white-space: pre;
-              }
-            }
-          }
-        }
-
-        &.rows8 {
-          font-size: map-get($preview-font-by-row, '8');
-
-          span.via {
-            font-size: map-get($preview-font-by-row, '4via');
-          }
-
-          &.portrait {
-            font-size: map-get($preview-font-by-row, '8p');
-
-            span.via {
-              font-size: map-get($preview-font-by-row, '8pvia');
-              position: relative;
-              top: calc(-0.63 * #{map-get($preview-font-by-row, '8pvia')});
-
-              &::before {
-                content: "\A";
-                white-space: pre;
-              }
-            }
-          }
-
-          &.two-cols {
-            font-size: map-get($preview-font-by-row-two-cols, '8');
-          }
-        }
-
-        &.rows12 {
-          font-size: map-get($preview-font-by-row, '12');
-
-          span.via {
-            font-size: map-get($preview-font-by-row, '12via');
-          }
-
-          &.portrait {
-            font-size: map-get($preview-font-by-row, '12p');
-          }
-
-          &.two-cols {
-            font-size: map-get($preview-font-by-row-two-cols, '12');
-          }
-        }
-
-        &.rows16 {
-          font-size: map-get($preview-font-by-row, '16p');
-
-          span.via {
-            font-size: map-get($preview-font-by-row, '16pvia');
-
-            span.via {
-              position: relative;
-              top: calc(-0.7 * #{map-get($preview-font-by-row, '16pvia')});
-              font-size: map-get($preview-font-by-row, '16pvia');
-
-              &::before {
-                content: "\A";
-                white-space: pre;
-              }
-            }
-          }
-        }
-
-        &.rows24 {
-          font-size: map-get($preview-font-by-row, '24p');
-
-          span.via {
-            font-size: map-get($preview-font-by-row, '24pvia');
-          }
-        }
-      }
-    }
-
-    .grid-row {
-      grid-column: span 5;
-      grid-row: span 1;
-
-      &.alert,
-      &.alert-two-cols {
-        position: relative;
-        left: calc(-1 * #{$preview-grid-rows-margin});
-        width: calc(100% + calc(2 * #{$preview-grid-rows-margin}));
-        z-index: 1000;
-
-        &.preview {
-          height: calc(#{$preview-grid-rows-height-portrait-tighten} / var(--rows));
-        }
-
-        &.two-rows {
-          grid-row: span 2;
-        }
-
-        &.three-rows {
-          grid-row: span 3;
-        }
-
-        &.four-rows {
-          grid-row: span 4;
-        }
-      }
-
-      &.alert-two-cols {
-        width: calc(200% + calc(4 * #{$preview-grid-rows-margin}) + 25px);
-      }
-    }
-
-    .grid-cols {
-      display: grid;
-      justify-content: center;
-      align-content: flex-start;
-      grid-template-columns: 1fr 3fr 1fr;
-      height: calc(calc(85vh - (2 * #{$header-height-padding})) / var(--rows));
-
-      &.alert-row {
-        display: block;
-        position: relative;
-        border-top: 2px solid white;
-        color: white;
-        background: red;
-        height: --moz-available;          /* WebKit-based browsers will ignore this. */
-        height: --webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
-        height: stretch;
-        padding: 0 $preview-grid-rows-margin;
-      }
-
-      &.day-row {
-        display: flex;
         height: 100%;
-        align-items: center;
-        color: #0057a2;
-        background: white;
       }
     }
-
-    .grid-col {
+  }
+  .grid-headers {
+    display: grid;
+    grid-template-columns: 20% 1fr 20%;
+    height: 5vh;
+    .grid-header {
+      align-self: center;
+      font-size: 4vh;
+      &.line {
+        width: 20%;
+      }
       &.time {
-        text-align: right;
+        width: fit-content;
+      }
+      &.destination {
+        flex: 1;
+      }
+    }
+  }
+  .grid-rows {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    &.portrait {
+      &.tightened {
+        height: 50%;
+        &.rows4 {
+          font-size: calc((#{var(--height)} - 30vh) / 10);
+        }
+        &.rows6 {
+          font-size: calc((#{var(--height)} - 30vh) / 16);
+        }
+        &.rows12 {
+          font-size: calc((#{var(--height)} - 30vh) / 26);
+        }
+      }
+    }
+    &.rows4 {
+      .grid-row {
+        grid-template-columns: 20% 1fr 30vw;
+        &.alert {
+          font-size: calc((#{var(--height)} - 30vh) / 8);
+        }
+      }
+      font-size: calc((#{var(--height)} - 30vh) / 6);
+    }
+    &.rows4.two-cols {
+      .grid-row {
+        grid-template-columns: 20% 1fr 15vw;
+      }
+      font-size: calc((#{var(--height)} - 30vh) / 10);
+    }
+    &.rows12.two-cols {
+      .grid-row {
+        grid-template-columns: 20% 1fr 12vw;
+      }
+    }
+    &.rows8 {
+      font-size: calc((#{var(--height)} - 30vh) / 10);
+    }
+    &.rows12 {
+      font-size: calc((#{var(--height)} - 30vh) / 14);
+    }
+    &.portrait {
+      &.rows16 {
+        font-size: calc((#{var(--height)} - 30vh) / 18);
+      }
+      &.rows24 {
+        font-size: calc((#{var(--height)} - 30vh) / 26);
+      }
+    }
+    .grid-row {
+      height: 100%;
+      display: grid;
+      grid-template-columns: 20% 1fr 300px;
+      flex: 1;
+      .grid-col {
+        align-self: center;
+        &.time {
+          text-align: end;
+        }
+      }
+      .destination, .destination-one-row {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
     }
   }
@@ -551,58 +256,79 @@ $preview-font-by-row-two-cols: ('4': 20px, '4via': 16px, '4x': 26px, '8': 21px, 
 
 .divider {
   background-color: white;
-  width: 5px;
+  min-width: 5px;
   margin-left: 10px;
   margin-right: 10px;
   height: 98%;
-
-  &.preview {
-    position: absolute;
-    left: 315px;
-    height: 80%;
-    width: 2px;
-    margin-left: 4px;
-    margin-right: 4px;
-  }
 }
-
-.line-letter {
-  text-transform: lowercase;
-  font-variant: small-caps;
-}
-
 .separator {
+  width: 100%;
   border-top: calc(0.4 * 1vh) dotted #fff;
-  height: calc(0.4 * 1vh);
-  grid-column: span 5;
-
+  height: 0;
   &.first {
     border-top: calc(0.2 * 1vh) solid #fff;
   }
-
-  &.rows8 {
-    grid-column: span 8;
-
-    &.portrait {
-      grid-column: span 5;
-    }
-  }
-
-  &.preview {
-    border-top: 2px dotted #fff;
-    height: 2px;
-
-    &.first {
-      border-top: 2px solid #fff;
-    }
+}
+.grid-rows.two-cols {
+  .grid-row.alert {
+    width: calc(200% + calc(4 * #{$preview-grid-rows-margin}) + 25px);
   }
 }
+    .grid-row {
+      &.alert {
+        display: block !important;
+        position: relative;
+        left: calc(-1 * #{$preview-grid-rows-margin});
+        width: calc(100% + calc(2 * #{$preview-grid-rows-margin}));
+        z-index: 1000;
+        background-color: red;
+        padding-bottom: calc(0.4 * 1vh);
+        overflow: hidden;
+        &.rows12 {
+          font-size: calc((#{var(--height)} - 30vh) / 14);
+        }
+        &.two-rows {
+          flex: 2 1 0;
+          padding-bottom: calc(2 * 0.4 * 1vh);
+        }
 
-.tilde {
-  color: #0057a2;
-  font-size: smaller;
+        &.three-rows {
+          flex: 3 1 0;
+          padding-bottom: calc(3 * 0.4 * 1vh);
+        }
 
-  &.show {
-    color: #fff;
-  }
-}
+        &.four-rows {
+          flex: 4 1 0;
+          padding-bottom: calc(4 * 0.4 * 1vh);
+        }
+      }
+    }
+
+    .grid-cols {
+      display: flex;
+      justify-content: center;
+      &.alert-row {
+        display: block;
+        position: relative;
+        border-top: 2px solid white;
+        color: white;
+        background: red;
+        padding: 0 $preview-grid-rows-margin;
+      }
+    }
+    .grid-row.day {
+      display: flex !important;
+      .day-row {
+        width: 100%;
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        color: #0057a2;
+        background: white;
+      }
+    }
+    .tilde {
+      color: #fff;
+      font-size: smaller;
+    }

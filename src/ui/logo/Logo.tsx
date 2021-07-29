@@ -10,7 +10,6 @@ interface ICommonProps {
   readonly monitorConfig?: any;
   readonly isPreview?: boolean;
   readonly isLandscape?: boolean;
-  readonly forcedLayout?: string;
 }
 
 class Logo extends React.Component<ICommonProps> {
@@ -22,9 +21,6 @@ class Logo extends React.Component<ICommonProps> {
     const isLandscape = (this.props as ICommonProps).isLandscape
       ? (this.props as ICommonProps).isLandscape
       : false;
-    const forcedLayout = (this.props as ICommonProps).forcedLayout
-      ? (this.props as ICommonProps).forcedLayout
-      : undefined;
 
     let logo = undefined;
 
@@ -50,26 +46,13 @@ class Logo extends React.Component<ICommonProps> {
       }
     }
     if (logo) {
-      if (!forcedLayout) {
-        return (
-          <div
-            className={cx(
-              'title-logo',
-              isPreview ? 'preview' : '',
-              isLandscape ? '' : 'portrait',
-            )}
-          >
-            {logo}
-          </div>
-        );
-      }
       return (
         <div
-          className={
-            forcedLayout === 'landscape'
-              ? 'title-logo-forced-landscape'
-              : 'title-logo-forced-portrait'
-          }
+          className={cx(
+            'title-logo',
+            isPreview ? 'preview' : '',
+            isLandscape ? '' : 'portrait',
+          )}
         >
           {logo}
         </div>

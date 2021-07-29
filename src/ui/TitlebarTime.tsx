@@ -8,7 +8,6 @@ interface IProps {
   updateInterval?: Milliseconds;
   isPreview?: boolean;
   isLandscape?: boolean;
-  forcedLayout?: string;
 }
 
 const TitlebarTime: FC<IProps> = ({
@@ -16,33 +15,14 @@ const TitlebarTime: FC<IProps> = ({
   updateInterval,
   isPreview = false,
   isLandscape = false,
-  forcedLayout = undefined,
 }) => {
-  if (!forcedLayout) {
-    return (
-      <div
-        className={cx(
-          'title-time-container',
-          isPreview ? 'preview' : '',
-          isLandscape ? '' : 'portrait',
-        )}
-      >
-        <div className="title-time">
-          <AutoMoment
-            currentTime={currentTime}
-            updateInterval={updateInterval}
-          />
-        </div>
-      </div>
-    );
-  }
   return (
     <div
-      className={
-        forcedLayout === 'landscape'
-          ? 'title-time-container-forced-landscape'
-          : 'title-time-container-forced-portrait'
-      }
+      className={cx(
+        'title-time-container',
+        isPreview ? 'preview' : '',
+        isLandscape ? '' : 'portrait',
+      )}
     >
       <div className="title-time">
         <AutoMoment currentTime={currentTime} updateInterval={updateInterval} />

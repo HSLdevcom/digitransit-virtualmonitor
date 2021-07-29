@@ -1,5 +1,8 @@
-@import 'MonitorRowContainer';
-
+$preview-container-height-portrait: 590px;
+$preview-container-width-portrait: 405px;
+$preview-grid-rows-height-portrait-tighten: 266px;
+$preview-container-width: 640px;
+$preview-container-height: 365px;
 .title-bar {
   display: flex;
   flex-direction: row;
@@ -11,19 +14,21 @@
   overflow: hidden;
   font-size: 4.5vw;
 
-  &.forcedLandscape {
-    font-size: calc(0.045 * #{var(--width)});
-    height: calc(0.1 * #{var(--height)}) !important;
-  }
-
-  &.forcedPortrait {
-    font-size: calc(0.05 * #{var(--width)});
-    height: calc(0.05 * #{var(--height)}) !important;
-  }
-
   &.portrait {
     font-size: 5vw;
     height: 5vh !important;
+    .title-time-container {
+      font-size: min(5vw, 70px);
+      margin-top: 10px;
+    }
+    .title-text {
+      font-size: min(5vw, 80px);
+    }
+    .title-logo {
+      #logo {
+        width: min(16vw, 330px) !important;
+      }
+    }
   }
 
   &.preview {
@@ -36,133 +41,107 @@
     }
   }
 }
-
-.title-logo-forced-landscape,
-.title-logo-forced-portrait {
-  min-width: calc(0.16 * #{var(--width)}) !important;
-
-  #logo {
-    width: calc(0.16 * #{var(--width)}) !important;
-  }
-}
 .banner {
   .title-logo {
     &.portrait {
       #logo {
         width: 140px !important;
         margin-top: 10px;
+      }
+    }
   }
 }
-}
-}
+
 .title-logo {
-min-width: 16vw !important;
-
-#logo {
-width: 16vw !important;
-}
-
-&.portrait {
-min-width: 16vw !important;
-
-#logo {
-  width: 16vw !important;
-}
-}
-
-&.preview {
-min-width: calc(0.16 * #{$preview-container-width}) !important;
-
-#logo {
-  width: calc(0.16 * #{$preview-container-width}) !important;
-}
-
-&.portrait {
-  min-width: calc(0.1815 * #{$preview-container-width}) !important;
+  min-width: 16vw !important;
 
   #logo {
-    width: calc(0.1815 * #{$preview-container-width}) !important;
+    width: 16vw !important;
   }
-}
-}
+
+  &.portrait {
+    min-width: 16vw !important;
+
+    #logo {
+      width: 16vw !important;
+    }
+  }
+
+  &.preview {
+    min-width: calc(0.16 * #{$preview-container-width}) !important;
+
+    #logo {
+      width: calc(0.16 * #{$preview-container-width}) !important;
+    }
+  }
 }
 
 .title-text {
-font-family: 'Roboto', Arial, Georgia, serif;
-display: flex;
-flex: 1;
-flex-direction: row;
-justify-content: center;
-flex-wrap: wrap;
-margin: 0 2vw;
-font-weight: bold;
-color: #fff;
+  font-family: 'Roboto', Arial, Georgia, serif;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 2vw;
+  font-weight: bold;
+  font-size: min(5vw, 100px);
+  color: #fff;
 
-&.preview {
-margin: 0 calc(0.02 * #{$preview-container-width});
-}
+  &.preview {
+    font-size: 35px;
+    margin: 0 calc(0.02 * #{$preview-container-width});
+  }
 }
 
 .multi-display-titles {
-font-family: 'Roboto', Arial, Georgia, serif;
-display: grid;
-grid-template-columns: 1fr 1fr;
-margin-right: 0.5em;
-margin-left: 0.5em;
-font-weight: bold;
-color: #fff;
-width: 100%;
+  font-family: 'Roboto', Arial, Georgia, serif;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-right: 0.5em;
+  margin-left: 0.5em;
+  font-weight: bold;
+  color: #fff;
+  width: 100%;
 }
 
 .left-title {
-text-align: left;
+  text-align: left;
 }
 
 .right-title {
-text-align: right;
+  text-align: right;
 }
 
 .title-text-stop {
-display: flex;
+  display: flex;
 }
 
 .title-time-container {
-min-width: 16vw !important;
-display: flex;
-flex: 0;
-justify-content: flex-end;
+  min-width: 16vw !important;
+  display: flex;
+  flex: 0;
+  justify-content: flex-end;
 
-&.preview {
-min-width: calc(0.16 * #{$preview-container-width}) !important;
-
-&.portrait {
-  min-width: 75px !important;
-}
-}
-}
-
-.title-time-container-forced-landscape,
-.title-time-container-forced-portrait {
-min-width: calc(0.16 * #{var(--width)}) !important;
-display: flex;
-flex: 0;
-justify-content: flex-end;
+  &.preview {
+    min-width: calc(0.16 * #{$preview-container-width}) !important;
+  }
 }
 
 .title-time {
-font-family: 'Roboto', Arial, Georgia, serif;
-display: flex;
-flex: 0;
-flex-direction: row;
-justify-content: center;
-align-items: center;
-font-weight: bold;
-border-radius: 0.2em;
-background-color: white;
-color: rgb(0, 115, 201);
+  font-family: 'Roboto', Arial, Georgia, serif;
+  display: flex;
+  flex: 0;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  border-radius: 0.2em;
+  background-color: white;
+  color: rgb(0, 115, 201);
 
-time {
-margin-left: 0.25em;
-margin-right: 0.25em;
-}
+  time {
+    margin-left: 0.25em;
+    margin-right: 0.25em;
+  }
 }

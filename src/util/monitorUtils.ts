@@ -58,6 +58,24 @@ export const filterDepartures = (
   });
   return departures;
 };
+const getTranslationStringsForStop = stop => {
+  const stringsToTranslate = [];
+  stop.stoptimesForPatterns.forEach(stopTimeForPattern => {
+    let headsign = stopTimeForPattern.stoptimes[0].headsign;
+    if (headsign?.includes(' via ')) {
+      const destinations = headsign.split(' via ');
+      stringsToTranslate.push(...destinations);
+    } else if (headsign?.endsWith(' via')) {
+      headsign = headsign.substring(0, headsign.indexOf(' via'));
+      stringsToTranslate.push(headsign);
+    } else {
+      if (headsign) {
+        stringsToTranslate.push(headsign);
+      }
+    }
+  });
+  return stringsToTranslate;
+};
 
 export const createDepartureArray = (views, stops, isStation = false) => {
   const defaultSettings = {
@@ -76,14 +94,10 @@ export const createDepartureArray = (views, stops, isStation = false) => {
         if (stopIndex >= 0) {
           if (isStation) {
             stop.stops.forEach(s => {
-              s.routes.forEach(r => {
-                stringsToTranslate.push(...r.patterns.map(p => p.headsign));
-              });
+              stringsToTranslate.push(...getTranslationStringsForStop(s));
             });
           } else {
-            stop.patterns.forEach(r => {
-              stringsToTranslate.push(r.headsign);
-            });
+            stringsToTranslate.push(...getTranslationStringsForStop(stop));
           }
           const { hiddenRoutes, timeshift, showEndOfLine } = view.columns[
             column

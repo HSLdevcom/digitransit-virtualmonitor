@@ -44,7 +44,7 @@ interface IProps {
   translations: Array<ITranslation>;
   isFirst?: boolean;
   isLandscape?: boolean;
-  isOneLiner?: boolean;
+  showVia?: boolean;
   withTwoColumns?: boolean;
   dayForDivider?: string;
   alerts?: Array<IAlert>;
@@ -70,7 +70,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   currentLang,
   isFirst = false,
   isLandscape = true,
-  isOneLiner = true,
+  showVia = true,
   withTwoColumns = false,
   translations,
   dayForDivider,
@@ -89,14 +89,22 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   );
   const destination = d ? d.translation : departureDestination;
 
-  const splitDestination = destination && destination.includes(' via');
+  const splitDestination =
+    departureDestination && departureDestination.includes(' via');
 
   let destinationWithoutVia = splitDestination
-    ? destination.substring(0, destination.indexOf(' via'))
+    ? departureDestination.substring(0, departureDestination.indexOf(' via'))
     : destination;
   let viaDestination = splitDestination
-    ? destination.substring(destination.indexOf(' via') + 1)
+    ? departureDestination.substring(departureDestination.indexOf(' via') + 1)
     : '';
+  if (splitDestination) {
+    viaDestination = `via ${
+      translations.find(
+        t => t.trans_id === viaDestination.substring(4, viaDestination.length),
+      )?.translation
+    }`;
+  }
 
   if (departure?.pickupType === 'NONE') {
     const lastStop = departure?.trip?.stops.slice(-1).pop().gtfsId;
@@ -176,34 +184,10 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           {line[0]}
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}
         </div>
-        {!isOneLiner && viaDestination.length === 0 && (
-          <div className="grid-col destination">{destinationWithoutVia}</div>
-        )}
-        {!isOneLiner && viaDestination.length > 0 && (
-          <div className="grid-col destination">
-            {destinationWithoutVia}
-            {/* <div className="via">{viaDestination}</div> */}
-          </div>
-        )}
-        {isOneLiner && !splitDestination && (
-          <div className={cx('grid-col', 'destination')}>
-            {destination &&
-              !destination.includes(' via') &&
-              destinationWithoutVia}
-            {destination && destination.includes(' via') && (
-              <>
-                {destinationWithoutVia}
-                <div className="via">{viaDestination}</div>
-              </>
-            )}
-          </div>
-        )}
-        {isOneLiner && splitDestination && (
-          <div className={cx('grid-col', 'destination-one-row')}>
-            {destinationWithoutVia}
-            {/* <div className="via">{viaDestination}</div> */}
-          </div>
-        )}
+        <div className="grid-col destination">
+          {destination}
+          <div className="via-destination">{viaDestination}</div>
+        </div>
         <div className={cx('grid-col', 'time')}>
           {departure?.realtime && departureTime !== null && (
             <span className={cx('tilde')}>~</span>

@@ -249,6 +249,9 @@ $preview-grid-divider: 2px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        .via-destination {
+          font-size: 16px;
+        }
       }
     }
   }

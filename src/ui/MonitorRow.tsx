@@ -3,7 +3,6 @@ import { getDepartureTime } from '../time';
 import cx from 'classnames';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { ITranslation } from './TranslationContainer';
-//import useFitText from "use-fit-text";
 
 interface IRoute {
   alerts: any;
@@ -74,7 +73,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   alertRows = 1,
   t,
 }) => {
-  //const translatedHeadsign = translations.find(t => t.translation === departure.headsign)
   const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')
       ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))

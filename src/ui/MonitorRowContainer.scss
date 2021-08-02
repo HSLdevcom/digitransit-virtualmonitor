@@ -30,7 +30,6 @@ $preview-grid-divider: 2px;
           &.two-rows {
             padding-bottom: 2px;
           }
-
           &.three-rows {
             padding-bottom: 3px;
           }
@@ -47,6 +46,9 @@ $preview-grid-divider: 2px;
           &.alert {
             font-size: 30px;
           }
+        }
+        .destination {
+          font-size: 30px;
         }
       } 
       &.rows4.two-cols {
@@ -190,6 +192,9 @@ $preview-grid-divider: 2px;
       &.tightened {
         height: 50%;
         &.rows4 {
+          .grid-col {
+            align-self: flex-start;
+          }
           font-size: calc((#{var(--height)} - 30vh) / 10);
         }
         &.rows6 {
@@ -202,12 +207,18 @@ $preview-grid-divider: 2px;
     }
     &.rows4 {
       .grid-row {
+        .grid-col {
+          align-self: flex-start;
+        }
         grid-template-columns: 20% 1fr 30vw;
         &.alert {
           font-size: calc((#{var(--height)} - 30vh) / 8);
         }
       }
       font-size: calc((#{var(--height)} - 30vh) / 6);
+      .destination {
+        font-size: calc((#{var(--height)} - 30vh) / 9);
+      }
     }
     &.rows4.two-cols {
       .grid-row {
@@ -222,11 +233,41 @@ $preview-grid-divider: 2px;
     }
     &.rows8 {
       font-size: calc((#{var(--height)} - 30vh) / 10);
+      .destination {
+        display: flex;
+        align-items: baseline;
+        .via-destination {
+          padding-left: 15px;
+        }
+      }
     }
     &.rows12 {
       font-size: calc((#{var(--height)} - 30vh) / 14);
+      .destination {
+        display: flex;
+        align-items: baseline;
+        .via-destination {
+          padding-left: 15px;
+        }
+      }
     }
     &.portrait {
+      &.tightened {
+        &.rows4 {
+          .destination {
+            font-size: calc((#{var(--height)} - 30vh) / 15);
+          }
+        }
+      }
+      &.rows8 {
+        .destination {
+          font-size: calc((#{var(--height)} - 30vh) / 15);
+          display: block;
+          .via-destination {
+            padding: 0;
+          }
+        }
+      }
       &.rows16 {
         font-size: calc((#{var(--height)} - 30vh) / 18);
       }
@@ -246,9 +287,18 @@ $preview-grid-divider: 2px;
         }
       }
       .destination, .destination-one-row {
-        text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+        mask-image: linear-gradient(
+          to left,
+          transparent,
+          rgba(0, 0, 0, 0.2) 5px,
+          rgba(0, 0, 0, 1) 25px,
+          rgba(0, 0, 0, 1)
+        );
+        .via-destination {
+          font-size: smaller;
+        }
       }
     }
   }

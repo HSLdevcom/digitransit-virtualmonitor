@@ -1,4 +1,6 @@
-export const getLayout = (layout: number) => {
+export const getLayout = (
+  layout: number,
+): [number, number, boolean, Array<any>?] => {
   switch (layout) {
     case 1:
       return [4, 0, false];

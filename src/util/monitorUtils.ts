@@ -59,6 +59,7 @@ export const filterDepartures = (
   return departures;
 };
 const getTranslationStringsForStop = stop => {
+  console.log(stop);
   const stringsToTranslate = [];
   stop.stoptimesForPatterns.forEach(stopTimeForPattern => {
     let headsign = stopTimeForPattern.stoptimes[0].headsign;
@@ -94,7 +95,7 @@ export const createDepartureArray = (views, stops, isStation = false) => {
         if (stopIndex >= 0) {
           if (isStation) {
             stop.stops.forEach(s => {
-              stringsToTranslate.push(...getTranslationStringsForStop(s));
+              stringsToTranslate.push(...getTranslationStringsForStop(stop));
             });
           } else {
             stringsToTranslate.push(...getTranslationStringsForStop(stop));

@@ -39,8 +39,6 @@ interface IAlert {
 interface IProps {
   departure: IDeparture;
   currentLang: string;
-  size: number;
-  withSeparator: boolean;
   translations: Array<ITranslation>;
   isFirst?: boolean;
   isLandscape?: boolean;
@@ -65,8 +63,6 @@ const processLine = inputText => {
 
 const MonitorRow: FC<IProps & WithTranslation> = ({
   departure,
-  size,
-  withSeparator,
   currentLang,
   isFirst = false,
   isLandscape = true,
@@ -153,9 +149,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const departureTime = getDepartureTime(departure?.realtimeDeparture);
   return (
     <>
-      {withSeparator && (
-        <div className={cx('separator', { first: isFirst })}></div>
-      )}
+      <div className={cx('separator', { first: isFirst })}></div>
       <div className={cx('grid-row', { 'two-cols': withTwoColumns })}>
         <div className="grid-col line">
           {line[0]}
@@ -163,7 +157,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         </div>
         <div className="grid-col destination">
           <div>{destination}</div>
-          {showVia && (<div className="via-destination">{viaDestination}</div>)}
+          {showVia && <div className="via-destination">{viaDestination}</div>}
         </div>
         <div className={cx('grid-col', 'time')}>
           {departure?.realtime && departureTime !== null && (

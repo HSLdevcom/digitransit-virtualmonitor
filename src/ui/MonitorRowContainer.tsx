@@ -74,15 +74,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           )
       : [];
 
-  const getCorrectSize = (leftColumnCount, rowNo, sizes) => {
-    if (sizes) {
-      if (sizes.length === 2) {
-        return rowNo <= sizes[0] ? sizes[0] : sizes[1];
-      }
-    }
-    return leftColumnCount;
-  };
-
   const leftColumn = [];
   const rightColumn = [];
 
@@ -195,7 +186,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     } else if (leftColumnCount === 24 && i === leftColumnCount - 4) {
       alertRowSpan = 4;
     }
-
     leftColumn.push(
       <MonitorRow
         departure={
@@ -204,11 +194,14 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             : null
         }
         translations={translatedStrings}
-        size={getCorrectSize(leftColumnCount, i + 1, differSize)}
-        withSeparator
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
         isLandscape={isLandscape}
-        showVia={layout < 4 || leftColumnCount === 4}
+        showVia={
+          layout < 4 ||
+          layout === 12 ||
+          (layout === 16 && i < 4) ||
+          leftColumnCount === 4
+        }
         withTwoColumns={withTwoColumns}
         currentLang={currentLang}
         alerts={showAlerts ? routeAlerts : undefined}
@@ -253,10 +246,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             departure={
               i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
             }
-            size={rightColumnCount}
             currentLang={currentLang}
             translations={translatedStrings}
-            withSeparator
             isFirst={
               i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
             }
@@ -279,10 +270,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 ? sortedDeparturesRight[i]
                 : null
             }
-            size={rightColumnCount}
             currentLang={currentLang}
             translations={translatedStrings}
-            withSeparator
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             isLandscape={isLandscape}
             showVia={rightColumnCount === 4}

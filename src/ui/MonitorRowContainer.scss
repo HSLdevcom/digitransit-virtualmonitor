@@ -30,7 +30,6 @@ $preview-grid-divider: 2px;
           &.two-rows {
             padding-bottom: 2px;
           }
-
           &.three-rows {
             padding-bottom: 3px;
           }
@@ -47,6 +46,9 @@ $preview-grid-divider: 2px;
           &.alert {
             font-size: 30px;
           }
+        }
+        .destination {
+          font-size: 30px;
         }
       } 
       &.rows4.two-cols {
@@ -250,6 +252,22 @@ $preview-grid-divider: 2px;
       }
     }
     &.portrait {
+      &.tightened {
+        &.rows4 {
+          .destination {
+            font-size: calc((#{var(--height)} - 30vh) / 15);
+          }
+        }
+      }
+      &.rows8 {
+        .destination {
+          font-size: calc((#{var(--height)} - 30vh) / 15);
+          display: block;
+          .via-destination {
+            padding: 0;
+          }
+        }
+      }
       &.rows16 {
         font-size: calc((#{var(--height)} - 30vh) / 18);
       }

@@ -34,7 +34,12 @@ export const formatTime = (
     options.showSeconds ? `:${doubleDigit(timeOfDay.seconds)}` : ''
   }`;
 
-export const getDepartureTime = time => {
+export const getDepartureTime = (time, minutesThreshold) => {
+  const secondsFromMidnight = new Date().setHours(0,0,0,0)
+  console.log((time-(getCurrentSeconds()- (secondsFromMidnight / 1000) )))
+  if ((time-(getCurrentSeconds()- (secondsFromMidnight / 1000) )) < minutesThreshold) {
+    return Math.floor((time-(getCurrentSeconds()- (secondsFromMidnight / 1000) )) / 60);
+  }
   const hours = `0${Math.floor((time / 60 / 60) % 24)}`.slice(-2);
   const mins = `0${Math.floor(time / 60) % 60}`.slice(-2);
   if (hours !== 'aN' || mins !== 'aN') {

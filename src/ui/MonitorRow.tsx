@@ -11,6 +11,8 @@ interface IRoute {
 
 interface IStop {
   gtfsId: string;
+  code: string;
+  platformCode: string;
 }
 interface ITrip {
   route: IRoute;
@@ -46,6 +48,7 @@ interface IProps {
   dayForDivider?: string;
   alerts?: Array<IAlert>;
   alertRows?: number;
+  showStopCode: boolean;
 }
 
 const processLine = inputText => {
@@ -67,6 +70,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   isLandscape = true,
   showVia = true,
   withTwoColumns = false,
+  showStopCode,
   translations,
   dayForDivider,
   alerts,
@@ -144,7 +148,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     );
   }
 
-  const departureTime = getDepartureTime(departure?.realtimeDeparture);
+  const departureTime = getDepartureTime(departure?.realtimeDeparture, 600);
   return (
     <>
       <div className={cx('separator', { first: isFirst })}></div>
@@ -157,6 +161,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           <div>{destination}</div>
           {showVia && <div className="via-destination">{viaDestination}</div>}
         </div>
+        {showStopCode && <div className="grid-col">{departure?.stop?.platformCode || departure?.stop?.code}</div>}
         <div className={cx('grid-col', 'time')}>
           {departure?.realtime && departureTime !== null && (
             <span className={cx('tilde')}>~</span>

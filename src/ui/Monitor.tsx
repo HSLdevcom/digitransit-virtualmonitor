@@ -106,6 +106,7 @@ const Monitor: FC<IProps> = ({
         translatedStrings={translatedStrings}
         layout={view.layout}
         isLandscape={isLandscapeByLayout}
+        showStopCode={view.showStopCode}
       />
     </div>
   );

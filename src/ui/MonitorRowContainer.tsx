@@ -15,11 +15,13 @@ interface IProps {
   currentLang: string;
   layout: any;
   isLandscape: boolean;
+  showStopCode: boolean;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   departuresLeft,
   departuresRight,
+  showStopCode,
   translatedStrings,
   currentLang,
   layout,
@@ -203,6 +205,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           leftColumnCount === 4
         }
         withTwoColumns={withTwoColumns}
+        showStopCode={showStopCode}
         currentLang={currentLang}
         alerts={showAlerts ? routeAlerts : undefined}
         alertRows={alertRowSpan}
@@ -251,6 +254,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             isFirst={
               i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
             }
+            showStopCode={showStopCode}
             isLandscape={isLandscape}
             showVia={rightColumnCount === 4}
             withTwoColumns={withTwoColumns}
@@ -271,6 +275,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 : null
             }
             currentLang={currentLang}
+            showStopCode={showStopCode}
             translations={translatedStrings}
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             isLandscape={isLandscape}
@@ -296,6 +301,26 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const tightenEndingStyle = {
     '--rows': differSize ? differSize[1] : leftColumnCount,
   } as React.CSSProperties;
+
+  const headers = columns => (
+    <div className={cx("grid-headers", `rows${isTighten ? differSize[0] : columns}`, { tightened: isTighten, portrait: !isLandscape, 'with-stop-code': showStopCode, 'two-cols': withTwoColumns })}>
+      <div className="grid-row">
+        <div className={cx('grid-header', 'line')}>
+          {t('lineId', { lng: currentLang })}
+        </div>
+        <div className={cx('grid-header', 'destination')}>
+          {t('destination', { lng: currentLang })}
+        </div>
+        {showStopCode && (
+          <div className={cx('grid-header', 'platform-code')}>plt</div>
+        )}
+        <div className={cx('grid-header', 'time')}>
+          {t('departureTime', { lng: currentLang })}
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div
       className={cx('monitor-container', {
@@ -309,23 +334,14 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           'two-cols': withTwoColumns,
         })}
       >
-        <div className="grid-headers">
-          <div className={cx('grid-header', 'line')}>
-            {t('lineId', { lng: currentLang })}
-          </div>
-          <div className={cx('grid-header', 'destination')}>
-            {t('destination', { lng: currentLang })}
-          </div>
-          <div className={cx('grid-header', 'time')}>
-            {t('departureTime', { lng: currentLang })}
-          </div>
-        </div>
+        {headers(leftColumnCount)}
         {!isTighten && (
           <div
             style={leftColumnStyle}
             className={cx('grid-rows', `rows${leftColumnCount}`, {
               portrait: !isLandscape,
               'two-cols': withTwoColumns,
+              'with-stop-code': showStopCode,
             })}
           >
             {leftColumn}
@@ -339,6 +355,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 'grid-rows',
                 'portrait tightened',
                 `rows${differSize[0]}`,
+                {
+                  'with-stop-code': showStopCode,
+                },
               )}
             >
               {leftColumn.slice(0, differSize[0])}
@@ -349,6 +368,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 'grid-rows',
                 'portrait tightened',
                 `rows${differSize[1]}`,
+                {
+                  'with-stop-code': showStopCode,
+                },
               )}
             >
               {leftColumn.slice(differSize[0])}
@@ -360,21 +382,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         <>
           <div className="divider" />
           <div className={cx('grid', { 'two-cols': withTwoColumns })}>
-            <div className={cx('grid-headers', { 'two-cols': withTwoColumns })}>
-              <div className={cx('grid-header', 'line')}>
-                {t('lineId', { lng: currentLang })}
-              </div>
-              <div className={cx('grid-header', 'destination')}>
-                {t('destination', { lng: currentLang })}
-              </div>
-              <div className={cx('grid-header', 'time')}>
-                {t('departureTime', { lng: currentLang })}
-              </div>
-            </div>
+              {headers(rightColumnCount)}
             <div
               style={rightColumnStyle}
               className={cx('grid-rows', `rows${rightColumnCount}`, {
                 'two-cols': withTwoColumns,
+                'with-stop-code': showStopCode
               })}
             >
               {rightColumn}

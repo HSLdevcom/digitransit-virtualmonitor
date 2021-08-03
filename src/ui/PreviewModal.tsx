@@ -28,6 +28,7 @@ interface ICard {
   layout: number;
   duration: number;
   columns: IColumn;
+  showStopCode: boolean;
 }
 interface IView {
   cards: Array<ICard>;

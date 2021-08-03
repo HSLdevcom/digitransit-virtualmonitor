@@ -9,6 +9,43 @@ $preview-grid-rows-height-portrait-tighten: 266px;
 $preview-grid-rows-margin: 15px;
 $preview-grid-divider: 2px;
 
+.rows4.with-stop-code > .grid-row {
+  grid-template-columns: 20vh 1fr 15vh 40vh !important;
+}
+.rows8.with-stop-code > .grid-row {
+  grid-template-columns: 20vh 1fr 15vh 25vh !important;
+}
+.rows12.with-stop-code > .grid-row {
+  grid-template-columns: 20vh 1fr 15vh 20vh !important;
+}
+.rows4.two-cols.with-stop-code > .grid-row {
+  grid-template-columns: 20vh 1fr 12vh 20vh !important;
+}
+.rows8.two-cols.with-stop-code > .grid-row {
+  grid-template-columns: 20vh 1fr 15vh 22vh !important;
+}
+.rows12.two-cols.with-stop-code > .grid-row {
+  grid-template-columns: 17vh 1fr 12vh 18vh !important;
+}
+.rows8.portrait.with-stop-code > .grid-row {
+  grid-template-columns: 12vh 1fr 12vh 22vh !important;
+}
+.rows12.portrait.with-stop-code > .grid-row {
+  grid-template-columns: 12vh 1fr 11vh 17vh !important;
+}
+.rows16.portrait.with-stop-code > .grid-row {
+  grid-template-columns: 12vh 1fr 10vh 15vh !important;
+}
+.rows24.portrait.with-stop-code > .grid-row {
+  grid-template-columns: 12vh 1fr 8vh 14vh !important;
+}
+.rows4.portrait.tightened.with-stop-code > .grid-row {
+  grid-template-columns: 12vh 1fr 13vh 22vh !important;
+}
+.rows6.portrait.tightened.with-stop-code > .grid-row {
+  grid-template-columns: 12vh 1fr 16vh 19vh !important;
+}
+
 .main-content-container.preview {
   font-family: 'Roboto';
   .divider {
@@ -147,6 +184,8 @@ $preview-grid-divider: 2px;
 
 .main-content-container {
   background-color: #0057a2;
+  font-family: 'Roboto';
+  letter-spacing: -0.5px;
   color: #fff;
   height: 100%;
   .monitor-container {
@@ -166,20 +205,22 @@ $preview-grid-divider: 2px;
     }
   }
   .grid-headers {
-    display: grid;
-    grid-template-columns: 20% 1fr 20%;
-    height: 5vh;
-    .grid-header {
-      align-self: center;
-      font-size: 4vh;
-      &.line {
-        width: 20%;
-      }
-      &.time {
-        width: fit-content;
-      }
-      &.destination {
-        flex: 1;
+    .grid-row {
+      display: grid;
+      grid-template-columns: 20% 1fr 20%;
+      height: 5vh;
+      .grid-header {
+        align-self: center;
+        font-size: 3.5vh;
+        &.line {
+          width: 20%;
+        }
+        &.time {
+          width: fit-content;
+        }
+        &.destination {
+          flex: 1;
+        }
       }
     }
   }
@@ -331,7 +372,6 @@ $preview-grid-divider: 2px;
         left: calc(-1 * #{$preview-grid-rows-margin});
         width: calc(100% + calc(2 * #{$preview-grid-rows-margin}));
         z-index: 1000;
-        background-color: red;
         padding-bottom: calc(0.4 * 1vh);
         overflow: hidden;
         &.rows12 {

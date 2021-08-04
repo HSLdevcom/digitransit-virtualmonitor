@@ -13,14 +13,16 @@
   }
 
   .ReactModal__Content {
-    width: 620px;
-    height: 800px;
+    width: 720px;
+    height: 970px;
     overflow-x: hidden !important;
     top: 50% !important;
     left: 50% !important;
     margin-right: -50%;
     margin-bottom: -50%;
     transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
   }
 
   .close {
@@ -34,7 +36,6 @@
     .title {
       font-size: 22px;
       padding-bottom: 20px;
-      padding-left: 25%;
     }
 
     .stop {
@@ -42,90 +43,97 @@
       padding-right: 8px;
     }
   }
-
-  .route-rows {
-    display: flex;
-    flex-direction: column;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    max-height: 245px;
-
-    .row {
-      padding-top: 10px;
+  .modal {
+    padding-top: 45px;
+    width: 600px;
+    font-family: $font-family;
+    margin: 0;
+    .route-rows {
       display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 380px;
 
-      .all {
-        margin-bottom: 5px;
-        margin-left: 8px;
-      }
-
-      .bus {
-        padding-right: 10px;
-        padding-left: 10px;
-      }
-
-      .route-number {
-        font-family: Gotham XNarrow, Arial, Georgia, serif;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 18px;
-        line-height: 22px;
-        color: #333;
-        min-width: 60px;
-      }
-
-      .destination {
+      .row {
+        min-height: 30px;
         display: flex;
-        justify-content: flex-start;
+        align-items: center;
+        margin: 10px 0;
+        .option-checkbox-container {
+          width: 40px;
+        }
+
+        .all {
+          margin-bottom: 5px;
+          margin-left: 8px;
+        }
+
+        .bus {
+          padding-right: 10px;
+          padding-left: 10px;
+          display: flex;
+        }
+
+        .route-number {
+          font-style: normal;
+          font-weight: bold;
+          font-size: 18px;
+          line-height: 22px;
+          color: #333;
+          min-width: 60px;
+        }
+
+        .destination {
+          display: flex;
+          justify-content: flex-start;
+        }
       }
     }
-  }
 
-  .button-container {
-    &.less {
-      top: 600px;
+    .button-container {
+
+      background: white;
+      width: 100%;
+      margin-top: 30px;
+      .btn {
+        height: 40px;
+        width: 240px;
+        border: none;
+      }
     }
 
-    position: absolute;
-    top: 684px;
-    background: white;
-    width: 100%;
-    height: calc(100% - 707px);
-  }
-
-  .divider {
-    border: 1px solid #ddd;
-    width: calc(100% - 2px);
-    margin-top: 25px;
-  }
-
-  .divider-routes {
-    border: 1px solid #ddd;
-    width: calc(100% - 2px);
-  }
-
-  .timeshift {
-    p {
-      font-style: normal;
-      font-weight: normal;
-      font-size: 15px;
-      line-height: 18px;
-      letter-spacing: -0.02em;
+    .divider {
+      border: 1px solid #ddd;
+      margin-top: 25px;
     }
 
-    .show-departures-over {
-      font-style: normal;
-      font-weight: normal;
-      font-size: 15px;
-      line-height: 18px;
-      color: #333;
+    .divider-routes {
+      border: 1px solid #ddd;
     }
 
-    .dd-select .dd__control {
-      width: 100px;
-      position: absolute;
-      bottom: -12px;
-      right: 277px;
+    .timeshift {
+      p {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15px;
+        line-height: 18px;
+        letter-spacing: -0.02em;
+      }
+
+      .show-departures-over {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 18px;
+        color: #333;
+        display: flex;
+        align-items: center;
+      }
+
+      .dd-select {
+        width: 100px;
+      }
     }
   }
 
@@ -135,16 +143,18 @@
 
     .setting {
       display: flex;
-      flex-direction: column;
+      height: 30px;
+      margin: 5px 0;
+      label {
+        bottom: 5px;
+      }
 
       .option-checkbox-container {
         padding-top: 10px;
       }
 
       .setting-text {
-        margin-left: 48px;
-        position: relative;
-        top: -23px;
+        margin-left: 20px;
       }
     }
   }

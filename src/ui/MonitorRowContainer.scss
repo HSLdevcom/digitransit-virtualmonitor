@@ -12,18 +12,18 @@ $preview-grid-divider: 2px;
 
 
 .main-content-container.preview {
-  .divider {
-    min-width: 2px;
-    margin: 0 3px;
-  }
-  .separator {
-    border-top: 1px dotted #fff;
-  }
   .grid.two-cols {
     margin: 0 5px;
   }
   .monitor-container {
     height: calc(90% - 30px);
+    .divider {
+      min-width: 2px;
+      margin: 0 3px;
+    }
+    .separator {
+      border-top: 1px dotted #fff;
+    }
     .grid-rows {
       height: calc(100% - 25px);
       .grid-row{
@@ -37,30 +37,6 @@ $preview-grid-divider: 2px;
 
           &.four-rows {
             padding-bottom: 4px;
-          }
-        }
-      }
-      &.rows4 {
-        .grid-row {
-          font-size: 50px;
-          &.alert {
-            font-size: 30px;
-          }
-        }
-        .destination {
-          font-size: 30px;
-        }
-      } 
-      &.rows4.two-cols {
-        .grid-row {
-          font-size: 30px;
-        }
-      }
-      &.rows8 {
-        .grid-row {
-          font-size: 24px;
-          &.alert {
-            font-size: 20px;
           }
         }
       }
@@ -78,18 +54,12 @@ $preview-grid-divider: 2px;
       .grid-headers {
         height: 25px;
         .grid-header {
-          font-size: 1em;
+          font-size: 16px;
         }
       }
     }
     &.portrait {
       height: calc(95% - 30px);
-      .rows8, .rows12 {
-        .grid-row {
-          grid-template-columns: 75px 1fr 80px;
-          font-size: 25px;
-        }
-      }
       .rows16 {
         .grid-row {
           grid-template-columns: 75px 1fr 80px;
@@ -135,6 +105,21 @@ $preview-grid-divider: 2px;
   color: #fff;
   height: 100%;
   .monitor-container {
+    .divider {
+      background-color: white;
+      min-width: 5px;
+      margin-left: 10px;
+      margin-right: 10px;
+      height: 98%;
+    }
+    .separator {
+      width: 100%;
+      border-top: calc(0.4 * 1vh) dotted #fff;
+      height: 0;
+      &.first {
+        border-top: calc(0.2 * 1vh) solid #fff;
+      }
+    }
     height: calc(100% - 10vh - 30px); // 100% - height of logo bar
     &.two-cols {
       display: flex;
@@ -162,14 +147,8 @@ $preview-grid-divider: 2px;
       .grid-header {
         align-self: center;
         font-size: 3.5vh;
-        &.line {
-          width: 20%;
-        }
         &.time {
           text-align: end;
-        }
-        &.destination {
-          flex: 1;
         }
       }
     }
@@ -282,21 +261,6 @@ $preview-grid-divider: 2px;
   }
 }
 
-.divider {
-  background-color: white;
-  min-width: 5px;
-  margin-left: 10px;
-  margin-right: 10px;
-  height: 98%;
-}
-.separator {
-  width: 100%;
-  border-top: calc(0.4 * 1vh) dotted #fff;
-  height: 0;
-  &.first {
-    border-top: calc(0.2 * 1vh) solid #fff;
-  }
-}
 .grid-rows.two-cols {
   .grid-row.alert {
     width: calc(200% + calc(4 * #{$preview-grid-rows-margin}) + 25px);

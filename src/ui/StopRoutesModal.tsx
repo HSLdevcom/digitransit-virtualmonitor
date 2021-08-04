@@ -139,6 +139,8 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               height={30}
             />{' '}
             <span className="setting-text">Pysäkkinumero</span>
+            </div>
+            <div className="setting">
             <Checkbox
               checked={settings.showEndOfLine}
               onChange={checkShowSetting}
@@ -153,16 +155,16 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
         <div className="timeshift">
           <h2> {props.t('timeShift')}</h2>
           <p>{props.t('timeShiftDescription')}</p>
-          <span className="show-departures-over">
+          <div className="show-departures-over">
             {props.t('timeShiftShow')}
-          </span>
-          <Dropdown
-            name="duration"
-            isSearchable={false}
-            options={durations}
-            placeholder={settings.timeShift.toString().concat(' min')}
-            handleChange={handleTimeShift}
-          />
+            <Dropdown
+              name="duration"
+              isSearchable={false}
+              options={durations}
+              placeholder={settings.timeShift.toString().concat(' min')}
+              handleChange={handleTimeShift}
+            />
+          </div>
         </div>
         <div className="divider" />
         <h2>
@@ -195,11 +197,11 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                   width={30}
                   height={30}
                 />
-                <span className="bus">
+                <div className="bus">
                   <Icon img={vehicleMode} />
-                </span>{' '}
-                <span className="route-number"> {route.shortName}</span>{' '}
-                <span className="destination">{pattern.headsign}</span>
+                </div>{' '}
+                <div className="route-number"> {route.shortName}</div>{' '}
+                <div className="destination">{pattern.headsign}</div>
               </div>
             );
           })}

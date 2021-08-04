@@ -9,45 +9,9 @@ $preview-grid-rows-height-portrait-tighten: 266px;
 $preview-grid-rows-margin: 15px;
 $preview-grid-divider: 2px;
 
-.rows4.with-stop-code > .grid-row {
-  grid-template-columns: 20vh 1fr 15vh 40vh !important;
-}
-.rows8.with-stop-code > .grid-row {
-  grid-template-columns: 20vh 1fr 15vh 25vh !important;
-}
-.rows12.with-stop-code > .grid-row {
-  grid-template-columns: 20vh 1fr 15vh 20vh !important;
-}
-.rows4.two-cols.with-stop-code > .grid-row {
-  grid-template-columns: 20vh 1fr 12vh 20vh !important;
-}
-.rows8.two-cols.with-stop-code > .grid-row {
-  grid-template-columns: 20vh 1fr 15vh 22vh !important;
-}
-.rows12.two-cols.with-stop-code > .grid-row {
-  grid-template-columns: 17vh 1fr 12vh 18vh !important;
-}
-.rows8.portrait.with-stop-code > .grid-row {
-  grid-template-columns: 12vh 1fr 12vh 22vh !important;
-}
-.rows12.portrait.with-stop-code > .grid-row {
-  grid-template-columns: 12vh 1fr 11vh 17vh !important;
-}
-.rows16.portrait.with-stop-code > .grid-row {
-  grid-template-columns: 12vh 1fr 10vh 15vh !important;
-}
-.rows24.portrait.with-stop-code > .grid-row {
-  grid-template-columns: 12vh 1fr 8vh 14vh !important;
-}
-.rows4.portrait.tightened.with-stop-code > .grid-row {
-  grid-template-columns: 12vh 1fr 13vh 22vh !important;
-}
-.rows6.portrait.tightened.with-stop-code > .grid-row {
-  grid-template-columns: 12vh 1fr 16vh 19vh !important;
-}
+
 
 .main-content-container.preview {
-  font-family: 'Roboto';
   .divider {
     min-width: 2px;
     margin: 0 3px;
@@ -79,7 +43,6 @@ $preview-grid-divider: 2px;
       &.rows4 {
         .grid-row {
           font-size: 50px;
-          grid-template-columns: 120px 1fr 160px;
           &.alert {
             font-size: 30px;
           }
@@ -91,36 +54,19 @@ $preview-grid-divider: 2px;
       &.rows4.two-cols {
         .grid-row {
           font-size: 30px;
-          grid-template-columns: 60px 1fr 100px;
         }
       }
       &.rows8 {
         .grid-row {
           font-size: 24px;
-          grid-template-columns: 120px 1fr 160px;
           &.alert {
             font-size: 20px;
           }
         }
       }
-      &.rows8.two-cols {
-        .grid-row {
-          grid-template-columns: 60px 1fr 80px;
-        }
-      }
       &.rows12 {
         .grid-row {
           font-size: 17px;
-          grid-template-columns: 120px 1fr 160px;
-          &.alert {
-            font-size: 17px;
-          }
-        }
-      }
-      &.rows12.two-cols {
-        .grid-row {
-          font-size: 17px;
-          grid-template-columns: 50px 1fr 60px;
           &.alert {
             font-size: 17px;
           }
@@ -183,8 +129,8 @@ $preview-grid-divider: 2px;
 }
 
 .main-content-container {
-  background-color: #0057a2;
-  font-family: 'Roboto';
+  background-color: $background-color;
+  font-family: $font-family-narrow;
   letter-spacing: -0.5px;
   color: #fff;
   height: 100%;
@@ -207,7 +153,6 @@ $preview-grid-divider: 2px;
   .grid-headers {
     .grid-row {
       display: grid;
-      grid-template-columns: 20% 1fr 20%;
       height: 5vh;
       .grid-header {
         align-self: center;
@@ -251,7 +196,6 @@ $preview-grid-divider: 2px;
         .grid-col {
           align-self: flex-start;
         }
-        grid-template-columns: 20% 1fr 30vw;
         &.alert {
           font-size: calc((#{var(--height)} - 30vh) / 8);
         }
@@ -262,15 +206,7 @@ $preview-grid-divider: 2px;
       }
     }
     &.rows4.two-cols {
-      .grid-row {
-        grid-template-columns: 20% 1fr 15vw;
-      }
       font-size: calc((#{var(--height)} - 30vh) / 10);
-    }
-    &.rows12.two-cols {
-      .grid-row {
-        grid-template-columns: 20% 1fr 12vw;
-      }
     }
     &.rows8 {
       font-size: calc((#{var(--height)} - 30vh) / 10);
@@ -319,7 +255,6 @@ $preview-grid-divider: 2px;
     .grid-row {
       height: 100%;
       display: grid;
-      grid-template-columns: 20% 1fr 300px;
       flex: 1;
       .grid-col {
         align-self: center;
@@ -402,7 +337,7 @@ $preview-grid-divider: 2px;
         position: relative;
         border-top: 2px solid white;
         color: white;
-        background: red;
+        background: $background-color;
         padding: 0 $preview-grid-rows-margin;
       }
     }
@@ -414,7 +349,7 @@ $preview-grid-divider: 2px;
         height: 100%;
         align-items: center;
         justify-content: center;
-        color: #0057a2;
+        color: $background-color;
         background: white;
       }
     }

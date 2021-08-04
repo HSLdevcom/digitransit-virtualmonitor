@@ -36,9 +36,9 @@ export const formatTime = (
 
 export const getDepartureTime = (time, minutesThreshold) => {
   const secondsFromMidnight = new Date().setHours(0,0,0,0)
-  console.log((time-(getCurrentSeconds()- (secondsFromMidnight / 1000) )))
   if ((time-(getCurrentSeconds()- (secondsFromMidnight / 1000) )) < minutesThreshold) {
-    return Math.floor((time-(getCurrentSeconds()- (secondsFromMidnight / 1000) )) / 60);
+    const diffInMinutes = Math.floor((time-(getCurrentSeconds()- (secondsFromMidnight / 1000) )) / 60);
+    return diffInMinutes < 0 ? 0 : diffInMinutes;
   }
   const hours = `0${Math.floor((time / 60 / 60) % 24)}`.slice(-2);
   const mins = `0${Math.floor(time / 60) % 60}`.slice(-2);

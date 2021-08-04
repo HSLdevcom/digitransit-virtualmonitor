@@ -2,7 +2,6 @@
 import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow, { IDeparture } from './MonitorRow';
-import './MonitorRowContainer.scss';
 import cx from 'classnames';
 import { formatDate, setDate } from '../time';
 import { getLayout } from '../util/getLayout';
@@ -312,7 +311,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           {t('destination', { lng: currentLang })}
         </div>
         {showStopCode && (
-          <div className={cx('grid-header', 'platform-code')}>plt</div>
+          <div className={cx('grid-header', 'platform-code')}>{t('platform/stop', {lng: currentLang})}</div>
         )}
         <div className={cx('grid-header', 'time')}>
           {t('departureTime', { lng: currentLang })}

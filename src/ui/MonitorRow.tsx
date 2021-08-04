@@ -94,11 +94,12 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     ? departureDestination.substring(departureDestination.indexOf(' via') + 1)
     : '';
   if (splitDestination) {
-    viaDestination = `via ${
-      translations.find(
-        t => t.trans_id === viaDestination.substring(4, viaDestination.length),
-      )?.translation
-    }`;
+    const t = translations.find(
+      t => t.trans_id === viaDestination.substring(4, viaDestination.length),
+    )?.translation
+    if (t) {
+      viaDestination = `via ${t}`;
+    }  
   }
 
   if (departure?.pickupType === 'NONE') {

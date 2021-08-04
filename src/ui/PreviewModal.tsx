@@ -5,7 +5,6 @@ import CarouselDataContainer from './CarouselDataContainer';
 import Icon from './Icon';
 import cx from 'classnames';
 
-import './PreviewModal.scss';
 Modal.setAppElement('#root');
 interface IStop {
   code: string;

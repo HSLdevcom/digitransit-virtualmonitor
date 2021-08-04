@@ -52,7 +52,7 @@ const CarouselContainer: FC<IProps> = ({
   // for easy testing of different layouts
   const newView = {
     ...views[index],
-    //layout: 7,
+    layout: 1,
     //showStopCode: true,
   };
   return (

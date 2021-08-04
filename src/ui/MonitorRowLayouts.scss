@@ -1,23 +1,43 @@
+.rows4 > .grid-row {
+  grid-template-columns: 21vh 1fr 36vh;
+  font-size: calc((#{var(--height)} - 30vh) / 10);
+  .len1, .len2 {
+    font-size: calc((#{var(--height)} - 30vh) / 4.5);
+  }
+}
+.rows8 > .grid-row {
+  grid-template-columns: 21vh 1fr 25vh;
+}
+.rows12 > .grid-row {
+  grid-template-columns: 18vh 1fr 17vh;
+}
 .rows4.with-stop-code > .grid-row {
-  grid-template-columns: 20vh 1fr 15vh 40vh;
+  grid-template-columns: 20vh 1fr 20vh 36vh;
 }
 .rows8.with-stop-code > .grid-row {
-  grid-template-columns: 20vh 1fr 15vh 25vh;
+  grid-template-columns: 20vh 1fr 20vh 25vh;
 }
 .rows12.with-stop-code > .grid-row {
   grid-template-columns: 20vh 1fr 15vh 20vh;
 }
 .rows4.two-cols.with-stop-code > .grid-row {
-  grid-template-columns: 20vh 1fr 12vh 20vh;
+  grid-template-columns: 20vh 1fr 20vh 22vh;
 }
 .rows8.two-cols.with-stop-code > .grid-row {
-  grid-template-columns: 20vh 1fr 15vh 22vh;
+  grid-template-columns: 18vh 1fr 20vh 22vh;
 }
 .rows12.two-cols.with-stop-code > .grid-row {
-  grid-template-columns: 17vh 1fr 12vh 18vh;
+  grid-template-columns: 17vh 1fr 13vh 18vh;
 }
 .rows8.portrait.with-stop-code > .grid-row {
-  grid-template-columns: 12vh 1fr 12vh 22vh;
+  grid-template-columns: 12vh 1fr 12vh 17vh;
+  font-size: calc((#{var(--height)} - 30vh) / 15);
+  .len1, .len2 {
+    font-size: calc((#{var(--height)} - 30vh) / 8);
+  }
+  .grid-col {
+    align-self: flex-start;
+  }
 }
 .rows12.portrait.with-stop-code > .grid-row {
   grid-template-columns: 12vh 1fr 11vh 17vh;
@@ -29,19 +49,14 @@
   grid-template-columns: 12vh 1fr 8vh 14vh;
 }
 .rows4.portrait.tightened.with-stop-code > .grid-row {
-  grid-template-columns: 12vh 1fr 13vh 22vh;
+  grid-template-columns: 12vh 1fr 13vh 15vh;
+  .len1, .len2 {
+    font-size: calc((#{var(--height)} - 30vh) / 8);
+  }
+  font-size: calc((#{var(--height)} - 30vh) / 15);
 }
 .rows6.portrait.tightened.with-stop-code > .grid-row {
-  grid-template-columns: 12vh 1fr 16vh 19vh;
-}
-.rows4 > .grid-row {
-  grid-template-columns: 21vh 1fr 36vh;
-}
-.rows8 > .grid-row {
-  grid-template-columns: 21vh 1fr 25vh;
-}
-.rows12 > .grid-row {
-  grid-template-columns: 18vh 1fr 17vh;
+  grid-template-columns: 12vh 1fr 13vh 15vh;
 }
 .rows4.two-cols > .grid-row {
   grid-template-columns: 21vh 1fr 23vh;

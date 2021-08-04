@@ -131,7 +131,7 @@ $preview-grid-divider: 2px;
 .main-content-container {
   background-color: $background-color;
   font-family: $font-family-narrow;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.2px;
   color: #fff;
   height: 100%;
   .monitor-container {
@@ -151,6 +151,11 @@ $preview-grid-divider: 2px;
     }
   }
   .grid-headers {
+    &.rows16, &.rows24 {
+      .grid-row > .grid-header{
+        font-size: 2.8vh;
+      }
+    }
     .grid-row {
       display: grid;
       height: 5vh;
@@ -161,7 +166,7 @@ $preview-grid-divider: 2px;
           width: 20%;
         }
         &.time {
-          width: fit-content;
+          text-align: end;
         }
         &.destination {
           flex: 1;
@@ -201,9 +206,6 @@ $preview-grid-divider: 2px;
         }
       }
       font-size: calc((#{var(--height)} - 30vh) / 6);
-      .destination {
-        font-size: calc((#{var(--height)} - 30vh) / 9);
-      }
     }
     &.rows4.two-cols {
       font-size: calc((#{var(--height)} - 30vh) / 10);
@@ -238,7 +240,6 @@ $preview-grid-divider: 2px;
       }
       &.rows8 {
         .destination {
-          font-size: calc((#{var(--height)} - 30vh) / 15);
           display: block;
           .via-destination {
             padding: 0;
@@ -260,6 +261,7 @@ $preview-grid-divider: 2px;
         align-self: center;
         &.time {
           text-align: end;
+          font-family: $font-family;
         }
       }
       .destination, .destination-one-row {
@@ -339,6 +341,7 @@ $preview-grid-divider: 2px;
         color: white;
         background: $background-color;
         padding: 0 $preview-grid-rows-margin;
+        height: 100%;
       }
     }
     .grid-row.day {

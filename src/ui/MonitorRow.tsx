@@ -148,13 +148,16 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
       </div>
     );
   }
+  const lineLen = departure?.trip?.route.shortName.length;
+  const stopCode = departure?.stop?.platformCode || departure?.stop?.code
+  const stopCodeLen = stopCode?.length;
 
-  const departureTime = getDepartureTime(departure?.realtimeDeparture, 600);
+  const departureTime = getDepartureTime(departure?.realtimeDeparture, 300.01);
   return (
     <>
       <div className={cx('separator', { first: isFirst })}></div>
       <div className={cx('grid-row', { 'two-cols': withTwoColumns })}>
-        <div className="grid-col line">
+        <div className={cx("grid-col line", `len${lineLen}`)}>
           {line[0]}
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}
         </div>
@@ -162,8 +165,8 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           <div>{destination}</div>
           {showVia && <div className="via-destination">{viaDestination}</div>}
         </div>
-        {showStopCode && <div className="grid-col">{departure?.stop?.platformCode || departure?.stop?.code}</div>}
-        <div className={cx('grid-col', 'time')}>
+        {showStopCode && <div className={cx("grid-col", `len${stopCodeLen}`)}>{stopCode}</div>}
+        <div className={cx('grid-col', 'time', `len${departureTime?.length}`)}>
           {departure?.realtime && departureTime !== null && (
             <span className={cx('tilde')}>~</span>
           )}

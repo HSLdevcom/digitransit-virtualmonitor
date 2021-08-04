@@ -3,7 +3,6 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import ContentContainer from './ContentContainer';
 import NysseLaptop from './icons/nysse-reittiopas.jpg';
-import './IndexPage.scss';
 
 function IndexPage(props: WithTranslation) {
   const title = props.t('title');

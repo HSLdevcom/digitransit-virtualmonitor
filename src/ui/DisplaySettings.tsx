@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import './DisplaySettings.scss';
 import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';

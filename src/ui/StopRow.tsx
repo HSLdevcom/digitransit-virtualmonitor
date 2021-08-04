@@ -6,7 +6,6 @@ import StopRoutesModal from './StopRoutesModal';
 import StopCode from './StopCode';
 import Icon from './Icon';
 import { IStopInfo } from './StopInfoRetriever';
-import './StopRow.scss';
 import { getLayout } from '../util/getLayout';
 
 interface IStopInfoPlus extends IStopInfo {

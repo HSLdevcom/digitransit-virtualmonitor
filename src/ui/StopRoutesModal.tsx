@@ -1,7 +1,5 @@
 import cx from 'classnames';
 import React, { FC, useState } from 'react';
-import './StopRoutesModal.scss';
-import './StopCode.scss';
 import Button from './Button';
 import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';

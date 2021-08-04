@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import './Button.scss';
 
 interface IProps {
   text: string;

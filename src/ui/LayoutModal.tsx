@@ -2,7 +2,6 @@ import React, { ClassAttributes, FC, useState } from 'react';
 import cx from 'classnames';
 import { horizontalLayouts, verticalLayouts } from './Layouts';
 import isEqual from 'lodash/isEqual';
-import './LayoutModal.scss';
 import Modal from 'react-modal';
 import { withTranslation, WithTranslation } from 'react-i18next';
 Modal.setAppElement('#root');

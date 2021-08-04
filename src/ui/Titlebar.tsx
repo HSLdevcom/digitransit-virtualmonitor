@@ -1,8 +1,5 @@
 import React, { FC } from 'react';
 import cx from 'classnames';
-
-import './Titlebar.scss';
-
 export interface ITitlebarProps {
   readonly isPreview?: boolean;
   readonly isLandscape?: boolean;

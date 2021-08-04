@@ -4,7 +4,6 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { Redirect } from 'react-router-dom';
 import { GET_STOP } from '../queries/stopStationQueries';
 import { IColumn } from '../util/Interfaces';
-import './UserMonitorCard.scss';
 import Button from './Button';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';

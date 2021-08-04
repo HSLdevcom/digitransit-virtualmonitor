@@ -11,7 +11,6 @@ import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
-import './StopCardListContainer.scss';
 import { getLayout } from '../util/getLayout';
 
 import { defaultStopCard } from '../util/stopCardUtil';

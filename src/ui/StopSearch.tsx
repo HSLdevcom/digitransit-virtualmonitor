@@ -7,7 +7,6 @@ import StopsByNameRetriever, {
   IStopsByNameResponse,
   IStopWithName,
 } from './StopsByNameRetriever';
-import './StopSearch.scss';
 
 type IProps = {
   readonly children?: (stops: ReadonlyArray<IStopWithName>) => React.ReactNode;

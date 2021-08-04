@@ -1,5 +1,4 @@
 import * as React from 'react';
-import './Banner.scss';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { IMonitorConfig } from '../App';

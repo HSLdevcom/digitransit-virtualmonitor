@@ -396,8 +396,10 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       ) : (
         <div className="grid no-departures-container">
           {headers(leftColumnCount, leftStops)}
-          <div className="no-departures-text">
-            {t('no-departures', { lng: currentLang })}
+          <div className="no-departures-text-container">
+            <div className="no-departures-text">
+              {t('no-departures', { lng: currentLang })}
+            </div>
           </div>
         </div>
       )}

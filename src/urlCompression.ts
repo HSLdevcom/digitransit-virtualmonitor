@@ -1,5 +1,6 @@
 import { deflate, inflate } from 'zlib';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 const createUrlCompression = <T extends object>(
   dictionary: Buffer = new Buffer(''),
 ) => ({

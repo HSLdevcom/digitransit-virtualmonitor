@@ -14,6 +14,7 @@ const View = ({ t, view }: { view: IViewBase } & WithTranslation) => {
 
   switch (type) {
     case 'stopTimes':
+      // eslint-disable-next-line no-case-declarations
       const { displayedRoutes, pierColumnTitle, stops }: IStopTimesView =
         view as IStopTimesView;
 

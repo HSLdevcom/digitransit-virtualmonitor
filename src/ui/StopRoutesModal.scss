@@ -43,11 +43,13 @@
       padding-right: 8px;
     }
   }
+
   .modal {
     padding-top: 45px;
     width: 600px;
     font-family: $font-family;
     margin: 0;
+
     .route-rows {
       display: flex;
       flex-direction: column;
@@ -60,6 +62,7 @@
         display: flex;
         align-items: center;
         margin: 10px 0;
+
         .option-checkbox-container {
           width: 40px;
         }
@@ -92,10 +95,10 @@
     }
 
     .button-container {
-
       background: white;
       width: 100%;
       margin-top: 30px;
+
       .btn {
         height: 40px;
         width: 240px;
@@ -145,6 +148,7 @@
       display: flex;
       height: 30px;
       margin: 5px 0;
+
       label {
         bottom: 5px;
       }

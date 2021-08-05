@@ -120,7 +120,7 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
           </button>
           <div
             className="delete-icon"
-            onClick={() => console.log('TODO: DELETE')}
+            // onClick={() => {/*TODO*/}}
           >
             <Icon img="delete" color={'#007AC9'} />
           </div>

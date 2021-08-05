@@ -1,34 +1,36 @@
 .card {
-
   width: 720px;
-  background-color: #ffffff;
+  background-color: #fff;
   margin: 20px;
 
   .main-container {
     height: 80px;
     width: 100%;
     display: flex;
-    border-bottom: 1px solid #dddddd;
+    border-bottom: 1px solid #ddd;
+
     .layout-img {
       margin-right: 320px;
       margin-top: 22px;
       margin-left: 33px;
     }
-    .delete-icon{
+
+    .delete-icon {
       cursor: pointer;
       width: 50px;
       padding-top: 8px;
       text-align: center;
-      border-left: 1px solid #dddddd;
+      border-left: 1px solid #ddd;
       margin-left: 4px;
       height: 40px;
       padding-left: 10px;
     }
-    .control-buttons {
 
+    .control-buttons {
       display: flex;
       width: 10px;
       margin-top: 22px;
+
       .button {
         display: flex;
         flex-direction: row;
@@ -42,22 +44,21 @@
         border-radius: 40px;
         cursor: pointer;
         margin-right: 4px;
-        color: #007AC9;
-
+        color: #007ac9;
       }
     }
   }
 
   .cards {
     .card:not(:first-child) {
-      border-top: 1px solid #dddddd;
+      border-top: 1px solid #ddd;
       width: 80%;
       right: 0;
       position: relative;
     }
+
     .card-item {
       .card-container {
-
         display: flex;
         padding-top: 19px;
 
@@ -75,13 +76,12 @@
             font-size: 15px;
             line-height: 24px;
             letter-spacing: -0.03em;
-            color: #333333;
-
+            color: #333;
           }
 
           .stop-list {
-
-            ul, li {
+            ul,
+            li {
               list-style: disc inside none;
             }
 
@@ -90,7 +90,7 @@
             font-size: 15px;
             line-height: 18px;
             letter-spacing: -0.03em;
-            color: #333333;
+            color: #333;
           }
         }
       }

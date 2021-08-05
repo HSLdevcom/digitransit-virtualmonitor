@@ -16,7 +16,6 @@ interface IProps {
   currentLang: string;
   layout: any;
   isLandscape: boolean;
-  showStopCode: boolean;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -24,7 +23,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   departuresRight,
   rightStops,
   leftStops,
-  showStopCode,
   translatedStrings,
   currentLang,
   layout,
@@ -311,27 +309,39 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       if (s.settings?.showStopNumber) {
         withStopCode = true;
       }
-    })
-    
+    });
+
     return (
-    <div className={cx("grid-headers", `rows${isTighten ? differSize[0] : columns}`, { tightened: isTighten, portrait: !isLandscape, 'two-cols': withTwoColumns })}>
-      <div className={cx("grid-row", {'with-stop-code': withStopCode})}>
-        <div className={cx('grid-header', 'line')}>
-          {t('lineId', { lng: currentLang })}
-        </div>
-        <div className={cx('grid-header', 'destination')}>
-          {t('destination', { lng: currentLang })}
-        </div>
-        {withStopCode && (
-          <div className={cx('grid-header', 'platform-code')}>{t('platform/stop', {lng: currentLang})}</div>
+      <div
+        className={cx(
+          'grid-headers',
+          `rows${isTighten ? differSize[0] : columns}`,
+          {
+            tightened: isTighten,
+            portrait: !isLandscape,
+            'two-cols': withTwoColumns,
+          },
         )}
-        <div className={cx('grid-header', 'time')}>
-          {t('departureTime', { lng: currentLang })}
+      >
+        <div className={cx('grid-row', { 'with-stop-code': withStopCode })}>
+          <div className={cx('grid-header', 'line')}>
+            {t('lineId', { lng: currentLang })}
+          </div>
+          <div className={cx('grid-header', 'destination')}>
+            {t('destination', { lng: currentLang })}
+          </div>
+          {withStopCode && (
+            <div className={cx('grid-header', 'platform-code')}>
+              {t('platform/stop', { lng: currentLang })}
+            </div>
+          )}
+          <div className={cx('grid-header', 'time')}>
+            {t('departureTime', { lng: currentLang })}
+          </div>
         </div>
       </div>
-    </div>
-  )};
-  console.log(isMultiDisplay)
+    );
+  };
   return (
     <div
       className={cx('monitor-container', {
@@ -386,7 +396,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         <>
           <div className="divider" />
           <div className={cx('grid', { 'two-cols': withTwoColumns })}>
-              {headers(rightColumnCount, isMultiDisplay ? rightStops : leftStops)}
+            {headers(rightColumnCount, isMultiDisplay ? rightStops : leftStops)}
             <div
               style={rightColumnStyle}
               className={cx('grid-rows', `rows${rightColumnCount}`, {

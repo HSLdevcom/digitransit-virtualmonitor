@@ -1,6 +1,7 @@
-$font-family: 'Roboto', Arial, Georgia, serif;
+$font-family: 'Roboto', arial, georgia, serif;
 
-body, html {
+body,
+html {
   height: 100%;
 }
 
@@ -8,13 +9,16 @@ body {
   padding: 0;
   margin: 0;
 }
+
 ul {
   padding-inline-start: 0;
 }
+
 #root {
   height: 100%;
   font-family: $font-family;
 }
+
 .App {
   height: 100%;
 }

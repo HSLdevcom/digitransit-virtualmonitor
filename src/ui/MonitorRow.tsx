@@ -41,7 +41,7 @@ interface IProps {
   departure: IDeparture;
   currentLang: string;
   translations: Array<ITranslation>;
-  stops: Array<any>
+  stops: Array<any>;
   isFirst?: boolean;
   isLandscape?: boolean;
   showVia?: boolean;
@@ -97,10 +97,10 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   if (splitDestination) {
     const t = translations.find(
       t => t.trans_id === viaDestination.substring(4, viaDestination.length),
-    )?.translation
+    )?.translation;
     if (t) {
       viaDestination = `via ${t}`;
-    }  
+    }
   }
 
   if (departure?.pickupType === 'NONE') {
@@ -150,7 +150,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     );
   }
   const lineLen = departure?.trip?.route.shortName.length;
-  const stopCode = departure?.stop?.platformCode || departure?.stop?.code
+  const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
   const stopCodeLen = stopCode?.length;
 
   const departureTime = getDepartureTime(departure?.realtimeDeparture, 300.01);
@@ -159,8 +159,13 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   return (
     <>
       <div className={cx('separator', { first: isFirst })}></div>
-      <div className={cx('grid-row', { 'two-cols': withTwoColumns, 'with-stop-code': showStopCode })}>
-        <div className={cx("grid-col line", `len${lineLen}`)}>
+      <div
+        className={cx('grid-row', {
+          'two-cols': withTwoColumns,
+          'with-stop-code': showStopCode,
+        })}
+      >
+        <div className={cx('grid-col line', `len${lineLen}`)}>
           {line[0]}
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}
         </div>
@@ -168,7 +173,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           <div>{destination}</div>
           {showVia && <div className="via-destination">{viaDestination}</div>}
         </div>
-        {showStopCode && <div className={cx("grid-col", `len${stopCodeLen}`)}>{stopCode}</div>}
+        {showStopCode && (
+          <div className={cx('grid-col', `len${stopCodeLen}`)}>{stopCode}</div>
+        )}
         <div className={cx('grid-col', 'time', `len${departureTime?.length}`)}>
           {departure?.realtime && departureTime !== null && (
             <span className={cx('tilde')}>~</span>

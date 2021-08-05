@@ -139,8 +139,8 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               height={30}
             />{' '}
             <span className="setting-text">Pysäkkinumero</span>
-            </div>
-            <div className="setting">
+          </div>
+          <div className="setting">
             <Checkbox
               checked={settings.showEndOfLine}
               onChange={checkShowSetting}

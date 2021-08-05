@@ -51,7 +51,7 @@ i18n.init({
         languageCode: 'en',
         layoutModalHeader: 'Valitse asettelutapa',
         lineId: 'Line',
-       'platform/stop': 'plat/stop',
+        'platform/stop': 'plat/stop',
         save: 'Save',
         station: 'Station',
         stopsText: 'Stops',

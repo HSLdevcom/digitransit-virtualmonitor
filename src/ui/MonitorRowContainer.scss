@@ -17,6 +17,12 @@ $preview-grid-divider: 2px;
   .monitor-container {
     height: calc(90% - 30px);
 
+    .no-departures-container {
+      .no-departures-text {
+        font-size: 40px;
+      }
+    }
+
     .divider {
       min-width: 2px;
       margin: 0 3px;
@@ -76,6 +82,26 @@ $preview-grid-divider: 2px;
   height: 100%;
 
   .monitor-container {
+    .no-departures-container {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+
+      .no-departures-text-container {
+        border-top: calc(0.2 * 1vh) solid #fff;
+        display: flex;
+        text-align: center;
+        flex: 1;
+        align-self: center;
+        align-items: center;
+
+        .no-departures-text {
+          width: 100%;
+          font-size: calc((#{var(--height)} - 30vh) / 7);
+        }
+      }
+    }
+
     .divider {
       background-color: white;
       min-width: 5px;

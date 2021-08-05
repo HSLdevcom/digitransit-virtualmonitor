@@ -349,63 +349,87 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         'two-cols': withTwoColumns,
       })}
     >
-      <div
-        className={cx('grid', {
-          portrait: !isLandscape,
-          'two-cols': withTwoColumns,
-        })}
-      >
-        {headers(leftColumnCount, leftStops)}
-        {!isTighten && (
-          <div
-            style={leftColumnStyle}
-            className={cx('grid-rows', `rows${leftColumnCount}`, {
-              portrait: !isLandscape,
-              'two-cols': withTwoColumns,
-            })}
-          >
-            {leftColumn}
-          </div>
-        )}
-        {isTighten && (
-          <>
+      {departuresLeft.length > 0 ? (
+        <div
+          className={cx('grid', {
+            portrait: !isLandscape,
+            'two-cols': withTwoColumns,
+          })}
+        >
+          {headers(leftColumnCount, leftStops)}
+          {!isTighten && (
             <div
-              style={tightenBeginStyle}
-              className={cx(
-                'grid-rows',
-                'portrait tightened',
-                `rows${differSize[0]}`,
-              )}
-            >
-              {leftColumn.slice(0, differSize[0])}
-            </div>
-            <div
-              style={tightenEndingStyle}
-              className={cx(
-                'grid-rows',
-                'portrait tightened',
-                `rows${differSize[1]}`,
-              )}
-            >
-              {leftColumn.slice(differSize[0])}
-            </div>
-          </>
-        )}
-      </div>
-      {isLandscape && rightColumnCount > 0 && (
-        <>
-          <div className="divider" />
-          <div className={cx('grid', { 'two-cols': withTwoColumns })}>
-            {headers(rightColumnCount, isMultiDisplay ? rightStops : leftStops)}
-            <div
-              style={rightColumnStyle}
-              className={cx('grid-rows', `rows${rightColumnCount}`, {
+              style={leftColumnStyle}
+              className={cx('grid-rows', `rows${leftColumnCount}`, {
+                portrait: !isLandscape,
                 'two-cols': withTwoColumns,
               })}
             >
-              {rightColumn}
+              {leftColumn}
             </div>
+          )}
+          {isTighten && (
+            <>
+              <div
+                style={tightenBeginStyle}
+                className={cx(
+                  'grid-rows',
+                  'portrait tightened',
+                  `rows${differSize[0]}`,
+                )}
+              >
+                {leftColumn.slice(0, differSize[0])}
+              </div>
+              <div
+                style={tightenEndingStyle}
+                className={cx(
+                  'grid-rows',
+                  'portrait tightened',
+                  `rows${differSize[1]}`,
+                )}
+              >
+                {leftColumn.slice(differSize[0])}
+              </div>
+            </>
+          )}
+        </div>
+      ) : (
+        <div className="grid no-departures-container">
+          {headers(leftColumnCount, leftStops)}
+          <div className="no-departures-text">
+            {t('no-departures', { lng: currentLang })}
           </div>
+        </div>
+      )}
+
+      {isLandscape && rightColumnCount > 0 && (
+        <>
+          <div className="divider" />
+          {!isMultiDisplay || departuresRight.length > 0 ? (
+            <div className={cx('grid', { 'two-cols': withTwoColumns })}>
+              {headers(
+                rightColumnCount,
+                isMultiDisplay ? rightStops : leftStops,
+              )}
+              <div
+                style={rightColumnStyle}
+                className={cx('grid-rows', `rows${rightColumnCount}`, {
+                  'two-cols': withTwoColumns,
+                })}
+              >
+                {rightColumn}
+              </div>
+            </div>
+          ) : (
+            <div className="grid no-departures-container">
+              {headers(leftColumnCount, leftStops)}
+              <div className="no-departures-text-container">
+                <div className="no-departures-text">
+                  {t('no-departures', { lng: currentLang })}
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

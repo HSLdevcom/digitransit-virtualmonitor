@@ -11,6 +11,8 @@ interface IRoute {
 
 interface IStop {
   gtfsId: string;
+  code: string;
+  platformCode: string;
 }
 interface ITrip {
   route: IRoute;
@@ -39,6 +41,7 @@ interface IProps {
   departure: IDeparture;
   currentLang: string;
   translations: Array<ITranslation>;
+  stops: Array<any>;
   isFirst?: boolean;
   isLandscape?: boolean;
   showVia?: boolean;
@@ -46,6 +49,7 @@ interface IProps {
   dayForDivider?: string;
   alerts?: Array<IAlert>;
   alertRows?: number;
+  //showStopCode: boolean;
 }
 
 const processLine = inputText => {
@@ -67,6 +71,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   isLandscape = true,
   showVia = true,
   withTwoColumns = false,
+  stops,
   translations,
   dayForDivider,
   alerts,
@@ -90,11 +95,12 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     ? departureDestination.substring(departureDestination.indexOf(' via') + 1)
     : '';
   if (splitDestination) {
-    viaDestination = `via ${
-      translations.find(
-        t => t.trans_id === viaDestination.substring(4, viaDestination.length),
-      )?.translation
-    }`;
+    const t = translations.find(
+      t => t.trans_id === viaDestination.substring(4, viaDestination.length),
+    )?.translation;
+    if (t) {
+      viaDestination = `via ${t}`;
+    }
   }
 
   if (departure?.pickupType === 'NONE') {
@@ -143,13 +149,23 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
       </div>
     );
   }
+  const lineLen = departure?.trip?.route.shortName.length;
+  const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
+  const stopCodeLen = stopCode?.length;
 
-  const departureTime = getDepartureTime(departure?.realtimeDeparture);
+  const departureTime = getDepartureTime(departure?.realtimeDeparture, 300.01);
+  const stopSettings = stops.find(s => s.gtfsId === departure.stop.gtfsId);
+  const showStopCode = stopSettings?.settings?.showStopNumber;
   return (
     <>
       <div className={cx('separator', { first: isFirst })}></div>
-      <div className={cx('grid-row', { 'two-cols': withTwoColumns })}>
-        <div className="grid-col line">
+      <div
+        className={cx('grid-row', {
+          'two-cols': withTwoColumns,
+          'with-stop-code': showStopCode,
+        })}
+      >
+        <div className={cx('grid-col line', `len${lineLen}`)}>
           {line[0]}
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}
         </div>
@@ -157,7 +173,10 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           <div>{destination}</div>
           {showVia && <div className="via-destination">{viaDestination}</div>}
         </div>
-        <div className={cx('grid-col', 'time')}>
+        {showStopCode && (
+          <div className={cx('grid-col', `len${stopCodeLen}`)}>{stopCode}</div>
+        )}
+        <div className={cx('grid-col', 'time', `len${departureTime?.length}`)}>
           {departure?.realtime && departureTime !== null && (
             <span className={cx('tilde')}>~</span>
           )}

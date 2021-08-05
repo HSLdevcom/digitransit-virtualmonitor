@@ -42,6 +42,7 @@ export interface IView {
   columns: IColumn;
   title: ITitle;
   layout: number;
+  showStopCode: boolean;
   duration: number;
 }
 

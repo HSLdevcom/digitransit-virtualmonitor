@@ -1,6 +1,5 @@
 import cx from 'classnames';
 import React, { FC, useState } from 'react';
-import './StopViewTitleEditor.scss';
 import { ITitle } from '../util/Interfaces';
 import Icon from './Icon';
 import { WithTranslation, withTranslation } from 'react-i18next';

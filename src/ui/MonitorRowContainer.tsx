@@ -2,7 +2,6 @@
 import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow, { IDeparture } from './MonitorRow';
-import './MonitorRowContainer.scss';
 import cx from 'classnames';
 import { formatDate, setDate } from '../time';
 import { getLayout } from '../util/getLayout';
@@ -11,6 +10,8 @@ import { ITranslation } from './TranslationContainer';
 interface IProps {
   departuresLeft: Array<IDeparture>;
   departuresRight: Array<IDeparture>;
+  rightStops: Array<any>;
+  leftStops: Array<any>;
   translatedStrings: Array<ITranslation>;
   currentLang: string;
   layout: any;
@@ -20,6 +21,8 @@ interface IProps {
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   departuresLeft,
   departuresRight,
+  rightStops,
+  leftStops,
   translatedStrings,
   currentLang,
   layout,
@@ -203,6 +206,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           leftColumnCount === 4
         }
         withTwoColumns={withTwoColumns}
+        stops={leftStops}
         currentLang={currentLang}
         alerts={showAlerts ? routeAlerts : undefined}
         alertRows={alertRowSpan}
@@ -251,6 +255,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             isFirst={
               i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
             }
+            stops={leftStops}
             isLandscape={isLandscape}
             showVia={rightColumnCount === 4}
             withTwoColumns={withTwoColumns}
@@ -271,6 +276,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 : null
             }
             currentLang={currentLang}
+            stops={rightStops}
             translations={translatedStrings}
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             isLandscape={isLandscape}
@@ -296,6 +302,46 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const tightenEndingStyle = {
     '--rows': differSize ? differSize[1] : leftColumnCount,
   } as React.CSSProperties;
+
+  const headers = (columns, stops) => {
+    let withStopCode = false;
+    stops.forEach(s => {
+      if (s.settings?.showStopNumber) {
+        withStopCode = true;
+      }
+    });
+
+    return (
+      <div
+        className={cx(
+          'grid-headers',
+          `rows${isTighten ? differSize[0] : columns}`,
+          {
+            tightened: isTighten,
+            portrait: !isLandscape,
+            'two-cols': withTwoColumns,
+          },
+        )}
+      >
+        <div className={cx('grid-row', { 'with-stop-code': withStopCode })}>
+          <div className={cx('grid-header', 'line')}>
+            {t('lineId', { lng: currentLang })}
+          </div>
+          <div className={cx('grid-header', 'destination')}>
+            {t('destination', { lng: currentLang })}
+          </div>
+          {withStopCode && (
+            <div className={cx('grid-header', 'platform-code')}>
+              {t('platform/stop', { lng: currentLang })}
+            </div>
+          )}
+          <div className={cx('grid-header', 'time')}>
+            {t('departureTime', { lng: currentLang })}
+          </div>
+        </div>
+      </div>
+    );
+  };
   return (
     <div
       className={cx('monitor-container', {
@@ -309,17 +355,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           'two-cols': withTwoColumns,
         })}
       >
-        <div className="grid-headers">
-          <div className={cx('grid-header', 'line')}>
-            {t('lineId', { lng: currentLang })}
-          </div>
-          <div className={cx('grid-header', 'destination')}>
-            {t('destination', { lng: currentLang })}
-          </div>
-          <div className={cx('grid-header', 'time')}>
-            {t('departureTime', { lng: currentLang })}
-          </div>
-        </div>
+        {headers(leftColumnCount, leftStops)}
         {!isTighten && (
           <div
             style={leftColumnStyle}
@@ -360,17 +396,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         <>
           <div className="divider" />
           <div className={cx('grid', { 'two-cols': withTwoColumns })}>
-            <div className={cx('grid-headers', { 'two-cols': withTwoColumns })}>
-              <div className={cx('grid-header', 'line')}>
-                {t('lineId', { lng: currentLang })}
-              </div>
-              <div className={cx('grid-header', 'destination')}>
-                {t('destination', { lng: currentLang })}
-              </div>
-              <div className={cx('grid-header', 'time')}>
-                {t('departureTime', { lng: currentLang })}
-              </div>
-            </div>
+            {headers(rightColumnCount, isMultiDisplay ? rightStops : leftStops)}
             <div
               style={rightColumnStyle}
               className={cx('grid-rows', `rows${rightColumnCount}`, {

@@ -12,7 +12,6 @@ import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import { ICardInfo } from './CardInfo';
 import cx from 'classnames';
-import './StopCardRow.scss';
 
 const getGTFSId = id => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {

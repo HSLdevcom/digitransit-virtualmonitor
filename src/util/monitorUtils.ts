@@ -17,8 +17,6 @@ export const getStopsAndStationsFromViews = views => {
   return [stopIds, stationIds];
 };
 
-export const getMaxAmountOfDeparturesForLayout = layout => {};
-
 export const filterDepartures = (
   stop,
   hiddenRoutes,
@@ -59,7 +57,6 @@ export const filterDepartures = (
   return departures;
 };
 const getTranslationStringsForStop = stop => {
-  console.log(stop);
   const stringsToTranslate = [];
   stop.stoptimesForPatterns.forEach(stopTimeForPattern => {
     let headsign = stopTimeForPattern.stoptimes[0].headsign;

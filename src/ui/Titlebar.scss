@@ -3,6 +3,7 @@ $preview-container-width-portrait: 405px;
 $preview-grid-rows-height-portrait-tighten: 266px;
 $preview-container-width: 640px;
 $preview-container-height: 365px;
+
 .title-bar {
   display: flex;
   flex-direction: row;
@@ -17,13 +18,16 @@ $preview-container-height: 365px;
   &.portrait {
     font-size: 5vw;
     height: 5vh !important;
+
     .title-time-container {
       font-size: min(5vw, 70px);
       margin-top: 10px;
     }
+
     .title-text {
       font-size: min(5vw, 80px);
     }
+
     .title-logo {
       #logo {
         width: min(16vw, 330px) !important;
@@ -39,14 +43,17 @@ $preview-container-height: 365px;
       .title-text {
         font-size: 25px !important;
       }
+
       .title-time-container {
         font-size: 25px;
       }
+
       font-size: calc(0.05 * #{$preview-container-width-portrait});
       height: calc(0.05 * #{$preview-container-height-portrait}) !important;
     }
   }
 }
+
 .banner {
   .title-logo {
     &.portrait {
@@ -79,8 +86,9 @@ $preview-container-height: 365px;
     #logo {
       width: calc(0.16 * #{$preview-container-width}) !important;
     }
+
     &.portrait {
-      width: calc(0.10 * #{$preview-container-width}) !important;
+      width: calc(0.1 * #{$preview-container-width}) !important;
     }
   }
 }

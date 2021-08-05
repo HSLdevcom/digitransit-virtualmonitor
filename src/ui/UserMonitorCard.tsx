@@ -4,7 +4,6 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { Redirect } from 'react-router-dom';
 import { GET_STOP } from '../queries/stopStationQueries';
 import { IColumn } from '../util/Interfaces';
-import './UserMonitorCard.scss';
 import Button from './Button';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
@@ -121,7 +120,7 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
           </button>
           <div
             className="delete-icon"
-            onClick={() => console.log('TODO: DELETE')}
+            // onClick={() => {/*TODO*/}}
           >
             <Icon img="delete" color={'#007AC9'} />
           </div>

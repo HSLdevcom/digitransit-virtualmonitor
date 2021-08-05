@@ -2,8 +2,6 @@ import React, { FC, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { verticalLayouts, horizontalLayouts } from './Layouts';
 import Dropdown from './Dropdown';
-import Icon from './Icon';
-import './LayoutAndTimeContainer.scss';
 import LayoutModal from './LayoutModal';
 import { ICardInfo } from './CardInfo';
 

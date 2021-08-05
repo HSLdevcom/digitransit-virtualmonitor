@@ -3,9 +3,6 @@ import { QueryResult } from 'react-apollo';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps /* , withRouter */ } from 'react-router';
 import { Link } from 'react-router-dom';
-
-import './StopSelector.scss';
-
 import { IStopRenderFunc } from './StopList';
 import StopsByNameRetriever, {
   IStopsByNameQuery,

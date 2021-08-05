@@ -1,6 +1,5 @@
 import cx from 'classnames';
 import React, { FC } from 'react';
-import './Loading.scss';
 interface IProps {
   monitor?: boolean;
   isPreview?: boolean;

@@ -1,6 +1,4 @@
 import React from 'react';
-import './StopCode.scss';
-
 interface IStopCode {
   readonly code: string;
 }

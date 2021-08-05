@@ -11,8 +11,6 @@ import LatLonEditor from './LatLonEditor';
 import ViewCarouselElementEditor from './ViewCarouselElementEditor';
 import { ApolloClientsContext } from '../VirtualMonitorApolloClients';
 
-import './DisplayEditor.scss';
-
 interface IDisplayEditorProps {
   readonly configuration?: IConfiguration;
   readonly display?: IDisplay;

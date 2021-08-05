@@ -1,6 +1,5 @@
 import cx from 'classnames';
 import React from 'react';
-import './ContentContainer.scss';
 interface Props {
   children: React.ReactNode;
   longContainer?: boolean;

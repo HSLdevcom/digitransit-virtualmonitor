@@ -3,7 +3,6 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import cx from 'classnames';
 import Select from 'react-select';
 import Icon from './Icon';
-import './Dropdown.scss';
 
 interface IOption {
   value: string;

@@ -3,7 +3,6 @@ import uniqueId from 'lodash/uniqueId';
 import React, { FC } from 'react';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import Icon from './Icon';
-import './CheckBox.scss';
 
 interface IProps {
   checked: boolean;

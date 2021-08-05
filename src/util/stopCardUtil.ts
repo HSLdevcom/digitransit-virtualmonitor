@@ -1,7 +1,6 @@
 export const defaultStopCard = t => ({
   id: 1,
   title: { fi: t('viewEditorName'), sv: '', en: '' },
-  showStopCode: true,
   columns: {
     left: {
       inUse: true,

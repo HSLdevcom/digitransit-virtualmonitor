@@ -102,6 +102,8 @@ const Monitor: FC<IProps> = ({
       <MonitorRowContainer
         departuresLeft={departures[0]}
         departuresRight={departures[1]}
+        rightStops={view.columns.right.stops}
+        leftStops={view.columns.left.stops}
         currentLang={currentLang}
         translatedStrings={translatedStrings}
         layout={view.layout}

@@ -41,6 +41,7 @@ interface IProps {
   departure: IDeparture;
   currentLang: string;
   translations: Array<ITranslation>;
+  stops: Array<any>
   isFirst?: boolean;
   isLandscape?: boolean;
   showVia?: boolean;
@@ -48,7 +49,7 @@ interface IProps {
   dayForDivider?: string;
   alerts?: Array<IAlert>;
   alertRows?: number;
-  showStopCode: boolean;
+  //showStopCode: boolean;
 }
 
 const processLine = inputText => {
@@ -70,7 +71,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   isLandscape = true,
   showVia = true,
   withTwoColumns = false,
-  showStopCode,
+  stops,
   translations,
   dayForDivider,
   alerts,
@@ -153,10 +154,12 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const stopCodeLen = stopCode?.length;
 
   const departureTime = getDepartureTime(departure?.realtimeDeparture, 300.01);
+  const stopSettings = stops.find(s => s.gtfsId === departure.stop.gtfsId);
+  const showStopCode = stopSettings?.settings?.showStopNumber;
   return (
     <>
       <div className={cx('separator', { first: isFirst })}></div>
-      <div className={cx('grid-row', { 'two-cols': withTwoColumns })}>
+      <div className={cx('grid-row', { 'two-cols': withTwoColumns, 'with-stop-code': showStopCode })}>
         <div className={cx("grid-col line", `len${lineLen}`)}>
           {line[0]}
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}

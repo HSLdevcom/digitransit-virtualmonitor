@@ -97,7 +97,7 @@ $preview-grid-divider: 2px;
   .grid-headers {
     &.rows16, &.rows24 {
       .grid-row > .grid-header{
-        font-size: 2.8vh;
+        font-size: 2.5vh;
       }
     }
     .grid-row {
@@ -105,7 +105,7 @@ $preview-grid-divider: 2px;
       height: 5vh;
       .grid-header {
         align-self: center;
-        font-size: 3.5vh;
+        font-size: 3.2vh;
         &.time {
           text-align: end;
         }

@@ -35,6 +35,9 @@ export const GET_STOP_DEPARTURES = gql`
             gtfsId
             code
             platformCode
+            parentStation {
+              gtfsId
+            }
           }
           realtime
           pickupType
@@ -128,6 +131,9 @@ export const GET_STATION_DEPARTURES = gql`
             gtfsId
             code
             platformCode
+            parentStation {
+              gtfsId
+            }
           }
           realtime
           pickupType

@@ -13,6 +13,7 @@ interface IStop {
   gtfsId: string;
   code: string;
   platformCode: string;
+  parentStation: any;
 }
 interface ITrip {
   route: IRoute;
@@ -154,7 +155,10 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const stopCodeLen = stopCode?.length;
 
   const departureTime = getDepartureTime(departure?.realtimeDeparture, 300.01);
-  const stopSettings = stops.find(s => s.gtfsId === departure.stop.gtfsId);
+  const stopSettings = stops.find(s => {
+    const gtfsID = departure.stop.parentStation ? departure.stop.parentStation.gtfsId : departure.stop.gtfsId
+    return s.gtfsId === gtfsID;
+  });
   const showStopCode = stopSettings?.settings?.showStopNumber;
   return (
     <>

@@ -1,11 +1,18 @@
 .banner {
-  position: absolute;
   top: 0;
   left: 0;
   background: #007ac9;
   min-width: 100%;
   z-index: 2;
   height: 70px;
+  .title-logo {
+    #logo {
+      width: 215px !important;
+    }
+    div {
+      padding: 5px;
+    }
+  }
 
   .lang-section {
     border-bottom: 1px solid #ddd;

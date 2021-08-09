@@ -17,7 +17,7 @@ const Banner: React.FC<Props & WithTranslation> = (
   };
   return (
     <div className="banner">
-      <Logo monitorConfig={props.config} />
+      <Logo isLandscape monitorConfig={props.config} />
       <Menu
         right
         width="400px"

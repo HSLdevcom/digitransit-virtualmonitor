@@ -156,7 +156,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   } else if (leftColumnCount === 10) {
     alertRowSpan = 2;
   }
-  console.log(leftColumnCount)
   let leftColumnCountWithAlerts = leftColumnCount;
   if (routeAlerts.length > 0) {
     leftColumnCountWithAlerts -= alertRowSpan;
@@ -165,9 +164,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     leftColumn.push(
       <MonitorRow
         departure={
-          i !== nextDayDepartureIndexLeft
-            ? sortedDeparturesLeft[i]
-            : null
+          i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
         }
         translations={translatedStrings}
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
@@ -200,7 +197,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             }
             translations={translatedStrings}
             isFirst={
-              i === leftColumnCountWithAlerts || i - 1 === nextDayDepartureIndexLeft
+              i === leftColumnCountWithAlerts ||
+              i - 1 === nextDayDepartureIndexLeft
             }
             stops={leftStops}
             showVia={rightColumnCount === 4}

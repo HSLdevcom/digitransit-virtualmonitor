@@ -23,18 +23,23 @@ const getAnimationHeight = () => {
   const alertContainer = document.getElementsByClassName('alert');
   const alert = document.getElementsByClassName('alert-text');
   return -1 * (alert[0]?.clientHeight - alertContainer[0]?.clientHeight);
-}
+};
 
-const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alerts, currentLang }) => {
-  const [animationHeight, setAnimationHeight] = useState(0)
+const MonitorAlertRow: FC<IProps> = ({
+  alertRows,
+  isLandscape,
+  alerts,
+  currentLang,
+}) => {
+  const [animationHeight, setAnimationHeight] = useState(0);
   const [update, setUpdate] = useState(false);
   useEffect(() => {
-    setAnimationHeight(getAnimationHeight())
-    window.addEventListener('resize', () => {
-      setAnimationHeight(getAnimationHeight())
+    setAnimationHeight(getAnimationHeight());
+    window.addEventListener('resize', () => {
+      setAnimationHeight(getAnimationHeight());
       setUpdate(true);
-      setTimeout(() => setUpdate(false), 100) // force keyframes to use the new value by rerendering
-    })
+      setTimeout(() => setUpdate(false), 100); // force keyframes to use the new value by rerendering
+    });
   }, []);
   let alertRowClass = '';
   switch (alertRows) {
@@ -57,7 +62,12 @@ const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alerts, currentLa
   return (
     <div style={style} className={cx('grid-row', 'alert', alertRowClass)}>
       <div className={cx('grid-cols', 'alert-row')}>
-        <div className={cx('alert-text', { animated: animationHeight < 0 && !update, portrait: !isLandscape })}>
+        <div
+          className={cx('alert-text', {
+            animated: animationHeight < 0 && !update,
+            portrait: !isLandscape,
+          })}
+        >
           {
             alerts[0].alertDescriptionTextTranslations.find(
               a => a.language === currentLang,

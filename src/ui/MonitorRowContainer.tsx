@@ -146,14 +146,17 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   if (leftColumnCount === 12) {
     alertRowSpan = 2;
   } else if (leftColumnCount === 18) {
-    alertRowSpan = 2;
+    alertRowSpan = 3;
   } else if (leftColumnCount === 16) {
     alertRowSpan = 3;
   } else if (leftColumnCount === 8) {
     alertRowSpan = 2;
   } else if (leftColumnCount === 24) {
     alertRowSpan = 4;
+  } else if (leftColumnCount === 10) {
+    alertRowSpan = 2;
   }
+  console.log(leftColumnCount)
   let leftColumnCountWithAlerts = leftColumnCount;
   if (routeAlerts.length > 0) {
     leftColumnCountWithAlerts -= alertRowSpan;

@@ -283,9 +283,9 @@ $preview-grid-divider: 2px;
       //-webkit-transform: translateY(-100%);
       transform: translateY(-100%);
       
-      -moz-animation: alert-animation 5s linear infinite;
-      -webkit-animation: alert-animation 5s linear infinite;
-      animation: alert-animation 5s cubic-bezier(.77,.1,.36,.95) infinite;
+      -moz-animation: alert-animation 7s cubic-bezier(.77,.1,.36,.95) infinite;
+      -webkit-animation: alert-animation 7s cubic-bezier(.77,.1,.36,.95) infinite;
+      animation: alert-animation 7s cubic-bezier(.77,.1,.36,.95) infinite;
     }
 
     &.rows12 {

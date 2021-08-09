@@ -62,6 +62,7 @@ export const GET_STOP_DEPARTURES = gql`
                 }
                 alertDescriptionTextTranslations {
                   text
+                  language
                 }
               }
             }
@@ -95,6 +96,7 @@ export const GET_STATION_DEPARTURES = gql`
           }
           alertDescriptionTextTranslations {
             text
+            language
           }
         }
         longName

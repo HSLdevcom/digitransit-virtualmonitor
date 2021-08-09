@@ -255,7 +255,7 @@ $preview-grid-divider: 2px;
 
         .via-destination {
           font-size: smaller;
-          white-space: pre-wrap;
+          white-space: pre;
         }
       }
     }
@@ -268,6 +268,7 @@ $preview-grid-divider: 2px;
   }
 }
 
+
 .grid-row {
   &.alert {
     display: block !important;
@@ -277,6 +278,15 @@ $preview-grid-divider: 2px;
     z-index: 1000;
     padding-bottom: calc(0.4 * 1vh);
     overflow: hidden;
+    .animated {
+      //-moz-transform: translateY(-100%);
+      //-webkit-transform: translateY(-100%);
+      transform: translateY(-100%);
+      
+      -moz-animation: alert-animation 5s linear infinite;
+      -webkit-animation: alert-animation 5s linear infinite;
+      animation: alert-animation 5s cubic-bezier(.77,.1,.36,.95) infinite;
+    }
 
     &.rows12 {
       font-size: calc((#{var(--height)} - 30vh) / 14);
@@ -296,6 +306,31 @@ $preview-grid-divider: 2px;
       flex: 4 1 0;
       padding-bottom: calc(4 * 0.4 * 1vh);
     }
+  }
+}
+
+/* for Firefox */
+@-moz-keyframes alert-animation {
+  from { -moz-transform: translateY(0); }
+  to { -moz-transform: translateY(calc(#{var(--animationHeight)})); }
+}
+
+/* for Chrome */
+@-webkit-keyframes alert-animation {
+  from { -webkit-transform: translateY(0); }
+  to { -webkit-transform: translateY(calc(#{var(--animationHeight)})); }
+}
+
+@keyframes alert-animation {
+  from {
+    -moz-transform: translateY(0);
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  to {
+    -moz-transform: translateY(calc(#{var(--animationHeight)}));
+    -webkit-transform: translateY(calc(#{var(--animationHeight)}));
+    transform: translateY(calc(#{var(--animationHeight)}));
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import cx from 'classnames';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
@@ -19,8 +19,23 @@ interface IProps {
   alerts: Array<IAlert>;
   currentLang: string;
 }
+const getAnimationHeight = () => {
+  const alertContainer = document.getElementsByClassName('alert');
+  const alert = document.getElementsByClassName('alert-text');
+  return -1 * (alert[0]?.clientHeight - alertContainer[0]?.clientHeight);
+}
 
 const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alerts, currentLang }) => {
+  const [animationHeight, setAnimationHeight] = useState(0)
+  const [update, setUpdate] = useState(false);
+  useEffect(() => {
+    setAnimationHeight(getAnimationHeight())
+    window.addEventListener('resize', () => {
+      setAnimationHeight(getAnimationHeight())
+      setUpdate(true);
+      setTimeout(() => setUpdate(false), 100) // force keyframes to use the new value by rerendering
+    })
+  }, []);
   let alertRowClass = '';
   switch (alertRows) {
     case 2:
@@ -36,16 +51,19 @@ const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alerts, currentLa
       alertRowClass = '';
       break;
   }
+  const style = {
+    '--animationHeight': `${Number(animationHeight).toFixed(0)}px`,
+  } as React.CSSProperties;
   return (
-    <div className={cx('grid-row', 'alert', alertRowClass)}>
+    <div style={style} className={cx('grid-row', 'alert', alertRowClass)}>
       <div className={cx('grid-cols', 'alert-row')}>
-        <span className={cx({ portrait: !isLandscape })}>
+        <div className={cx('alert-text', { animated: animationHeight < 0 && !update, portrait: !isLandscape })}>
           {
-            alerts[0].alertHeaderTextTranslations.find(
+            alerts[0].alertDescriptionTextTranslations.find(
               a => a.language === currentLang,
             ).text
           }
-        </span>
+        </div>
       </div>
     </div>
   );

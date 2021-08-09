@@ -21,7 +21,7 @@ interface IProps {
 }
 
 const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
-  const pollInterval = preview ? 0 : 30000;
+  const pollInterval = 30000;
   const emptyDepartureArrays = [];
 
   for (let i = 0; i < views.length; i++) {

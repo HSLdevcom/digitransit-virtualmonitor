@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { formatDate, setDate } from '../time';
 import { getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
+import MonitorAlertRow from './MonitorAlertRow';
 
 interface IProps {
   departuresLeft: Array<IDeparture>;
@@ -98,10 +99,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     sortedDeparturesLeft.splice(nextDayDepartureIndexLeft, 0, null);
   }
 
-  if (routeAlerts.length > 0) {
-    sortedDeparturesLeft.splice(leftColumnCount - 1, 0, null);
-  }
-
   let currentDayDepartureIndexRight = -1;
   let nextDayDepartureIndexRight = sortedDeparturesRight
     .slice(0, rightColumnCount)
@@ -145,60 +142,32 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const isTighten = differSize !== undefined;
 
   const withTwoColumns = isLandscape && rightColumnCount > 0;
-
-  for (let i = 0; i < leftColumnCount; i++) {
-    let showAlerts = false;
-    if (routeAlerts.length > 0) {
-      if (
-        (leftColumnCount !== 12 && i === leftColumnCount - 1) ||
-        (leftColumnCount === 12 && i === leftColumnCount - 2) ||
-        (leftColumnCount === 16 && i === leftColumnCount - 3) ||
-        (leftColumnCount === 24 && i === leftColumnCount - 4)
-      ) {
-        showAlerts = true;
-      }
-      if (
-        withTwoColumns &&
-        leftColumnCount === 8 &&
-        i === leftColumnCount - 2
-      ) {
-        showAlerts = true;
-      }
-      if (isTighten && leftColumnCount === 18 && i === leftColumnCount - 2) {
-        showAlerts = true;
-      }
-    }
-
-    let alertRowSpan = 1;
-    if (leftColumnCount === 12 && i === leftColumnCount - 2) {
-      alertRowSpan = 2;
-    } else if (
-      isTighten &&
-      leftColumnCount === 18 &&
-      i === leftColumnCount - 2
-    ) {
-      alertRowSpan = 2;
-    } else if (leftColumnCount === 16 && i === leftColumnCount - 3) {
-      alertRowSpan = 3;
-    } else if (
-      withTwoColumns &&
-      leftColumnCount === 8 &&
-      i === leftColumnCount - 2
-    ) {
-      alertRowSpan = 2;
-    } else if (leftColumnCount === 24 && i === leftColumnCount - 4) {
-      alertRowSpan = 4;
-    }
+  let alertRowSpan = 1;
+  if (leftColumnCount === 12) {
+    alertRowSpan = 2;
+  } else if (leftColumnCount === 18) {
+    alertRowSpan = 3;
+  } else if (leftColumnCount === 16) {
+    alertRowSpan = 3;
+  } else if (leftColumnCount === 8) {
+    alertRowSpan = 2;
+  } else if (leftColumnCount === 24) {
+    alertRowSpan = 4;
+  } else if (leftColumnCount === 10) {
+    alertRowSpan = 2;
+  }
+  let leftColumnCountWithAlerts = leftColumnCount;
+  if (routeAlerts.length > 0) {
+    leftColumnCountWithAlerts -= alertRowSpan;
+  }
+  for (let i = 0; i < leftColumnCountWithAlerts; i++) {
     leftColumn.push(
       <MonitorRow
         departure={
-          i !== nextDayDepartureIndexLeft || !showAlerts
-            ? sortedDeparturesLeft[i]
-            : null
+          i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
         }
         translations={translatedStrings}
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
-        isLandscape={isLandscape}
         showVia={
           layout < 4 ||
           layout === 12 ||
@@ -207,42 +176,18 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         }
         withTwoColumns={withTwoColumns}
         stops={leftStops}
-        currentLang={currentLang}
-        alerts={showAlerts ? routeAlerts : undefined}
-        alertRows={alertRowSpan}
         dayForDivider={
           i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
         }
       />,
     );
-    if (routeAlerts.length > 0) {
-      if (leftColumnCount === 12 && i === leftColumnCount - 2) {
-        i += 1;
-      } else if (
-        isTighten &&
-        leftColumnCount === 18 &&
-        i === leftColumnCount - 2
-      ) {
-        i += 1;
-      } else if (leftColumnCount === 16 && i === leftColumnCount - 3) {
-        i += 2;
-      } else if (
-        withTwoColumns &&
-        leftColumnCount === 8 &&
-        i === leftColumnCount - 2
-      ) {
-        i += 2;
-      } else if (leftColumnCount === 24 && i === leftColumnCount - 4) {
-        i += 3;
-      }
-    }
   }
 
   if (isLandscape) {
     if (!isMultiDisplay) {
       for (
-        let i = leftColumnCount;
-        i < leftColumnCount + rightColumnCount;
+        let i = leftColumnCountWithAlerts;
+        i < leftColumnCountWithAlerts + rightColumnCount;
         i++
       ) {
         rightColumn.push(
@@ -250,13 +195,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             departure={
               i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
             }
-            currentLang={currentLang}
             translations={translatedStrings}
             isFirst={
-              i === leftColumnCount || i - 1 === nextDayDepartureIndexLeft
+              i === leftColumnCountWithAlerts ||
+              i - 1 === nextDayDepartureIndexLeft
             }
             stops={leftStops}
-            isLandscape={isLandscape}
             showVia={rightColumnCount === 4}
             withTwoColumns={withTwoColumns}
             dayForDivider={
@@ -275,11 +219,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 ? sortedDeparturesRight[i]
                 : null
             }
-            currentLang={currentLang}
             stops={rightStops}
             translations={translatedStrings}
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
-            isLandscape={isLandscape}
             showVia={rightColumnCount === 4}
             withTwoColumns={withTwoColumns}
             dayForDivider={
@@ -289,6 +231,16 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         );
       }
     }
+  }
+  if (routeAlerts.length > 0) {
+    leftColumn.push(
+      <MonitorAlertRow
+        alerts={routeAlerts}
+        alertRows={alertRowSpan}
+        currentLang={currentLang}
+        isLandscape={isLandscape}
+      />,
+    );
   }
 
   const leftColumnStyle = { '--rows': leftColumnCount } as React.CSSProperties;

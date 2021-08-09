@@ -17,7 +17,7 @@ $preview-grid-divider: 2px;
   .monitor-container {
     height: calc(90% - 30px);
 
-    .no-departures-container {
+    .no-departures-container > .no-departures-text-container {
       .no-departures-text {
         font-size: 40px;
       }
@@ -172,10 +172,6 @@ $preview-grid-divider: 2px;
       &.rows8 {
         .destination {
           display: block;
-
-          .via-destination {
-            padding: 0;
-          }
         }
       }
 
@@ -218,10 +214,6 @@ $preview-grid-divider: 2px;
       .destination {
         display: flex;
         align-items: baseline;
-
-        .via-destination {
-          padding-left: 15px;
-        }
       }
     }
 
@@ -231,10 +223,6 @@ $preview-grid-divider: 2px;
       .destination {
         display: flex;
         align-items: baseline;
-
-        .via-destination {
-          padding-left: 15px;
-        }
       }
     }
 
@@ -267,6 +255,7 @@ $preview-grid-divider: 2px;
 
         .via-destination {
           font-size: smaller;
+          white-space: pre;
         }
       }
     }
@@ -289,6 +278,15 @@ $preview-grid-divider: 2px;
     padding-bottom: calc(0.4 * 1vh);
     overflow: hidden;
 
+    .animated {
+      //-moz-transform: translateY(-100%);
+      //-webkit-transform: translateY(-100%);
+      transform: translateY(-100%);
+      -moz-animation: alert-animation 7s cubic-bezier(0.77, 0.1, 0.36, 0.95) infinite;
+      -webkit-animation: alert-animation 7s cubic-bezier(0.77, 0.1, 0.36, 0.95) infinite;
+      animation: alert-animation 7s cubic-bezier(0.77, 0.1, 0.36, 0.95) infinite;
+    }
+
     &.rows12 {
       font-size: calc((#{var(--height)} - 30vh) / 14);
     }
@@ -307,6 +305,32 @@ $preview-grid-divider: 2px;
       flex: 4 1 0;
       padding-bottom: calc(4 * 0.4 * 1vh);
     }
+  }
+}
+
+/* for Firefox */
+@-moz-keyframes alert-animation {
+  from { -moz-transform: translateY(0); }
+  to { -moz-transform: translateY(calc(#{var(--animationHeight)})); }
+}
+
+/* for Chrome */
+@-webkit-keyframes alert-animation {
+  from { -webkit-transform: translateY(0); }
+  to { -webkit-transform: translateY(calc(#{var(--animationHeight)})); }
+}
+
+@keyframes alert-animation {
+  from {
+    -moz-transform: translateY(0);
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  to {
+    -moz-transform: translateY(calc(#{var(--animationHeight)}));
+    -webkit-transform: translateY(calc(#{var(--animationHeight)}));
+    transform: translateY(calc(#{var(--animationHeight)}));
   }
 }
 

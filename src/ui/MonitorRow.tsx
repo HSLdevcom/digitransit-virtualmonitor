@@ -28,29 +28,15 @@ export interface IDeparture {
   pickupType: string;
   stop: IStop;
 }
-interface IAlertDescriptionTextTranslation {
-  text: string;
-  language?: string;
-}
-interface IAlert {
-  alertDescriptionTextTranslations: Array<IAlertDescriptionTextTranslation>;
-  alertHeaderTextTranslations: Array<IAlertDescriptionTextTranslation>;
-  alertHeaderText: string;
-  alertSeverityLevel: string;
-}
+
 interface IProps {
   departure: IDeparture;
-  currentLang: string;
   translations: Array<ITranslation>;
   stops: Array<any>;
   isFirst?: boolean;
-  isLandscape?: boolean;
   showVia?: boolean;
   withTwoColumns?: boolean;
   dayForDivider?: string;
-  alerts?: Array<IAlert>;
-  alertRows?: number;
-  //showStopCode: boolean;
 }
 
 const processLine = inputText => {
@@ -67,16 +53,12 @@ const processLine = inputText => {
 
 const MonitorRow: FC<IProps & WithTranslation> = ({
   departure,
-  currentLang,
   isFirst = false,
-  isLandscape = true,
   showVia = true,
   withTwoColumns = false,
   stops,
   translations,
   dayForDivider,
-  alerts,
-  alertRows = 1,
   t,
 }) => {
   const departureDestination =
@@ -100,10 +82,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
       t => t.trans_id === viaDestination.substring(4, viaDestination.length),
     )?.translation;
     if (t) {
-      viaDestination = `via ${t}`;
+      viaDestination = ` via ${t}`;
     }
   }
-
   if (departure?.pickupType === 'NONE') {
     const lastStop = departure?.trip?.stops.slice(-1).pop().gtfsId;
     if (departure.stop.gtfsId === lastStop) {
@@ -120,36 +101,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
       </div>
     );
   }
-  if (alerts) {
-    let alertRowClass = '';
-    switch (alertRows) {
-      case 2:
-        alertRowClass = 'two-rows';
-        break;
-      case 3:
-        alertRowClass = 'three-rows';
-        break;
-      case 4:
-        alertRowClass = 'four-rows';
-        break;
-      default:
-        alertRowClass = '';
-        break;
-    }
-    return (
-      <div className={cx('grid-row', 'alert', alertRowClass)}>
-        <div className={cx('grid-cols', 'alert-row')}>
-          <span className={cx({ portrait: !isLandscape })}>
-            {
-              alerts[0].alertHeaderTextTranslations.find(
-                a => a.language === currentLang,
-              ).text
-            }
-          </span>
-        </div>
-      </div>
-    );
-  }
+
   const lineLen = departure?.trip?.route.shortName.length;
   const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
   const stopCodeLen = stopCode?.length;

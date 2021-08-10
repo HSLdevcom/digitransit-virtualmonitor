@@ -10,7 +10,7 @@ interface IProps {
 const getAnimationHeight = () => {
   const alertContainer = document.getElementsByClassName('alert');
   const alert = document.getElementsByClassName('alert-text');
-  return -1 * (alert[0]?.clientHeight - alertContainer[0]?.clientHeight);
+  return -1 * (alert[0]?.scrollWidth - alertContainer[0]?.clientWidth);
 };
 
 const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alert }) => {
@@ -24,6 +24,10 @@ const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alert }) => {
       setTimeout(() => setUpdate(false), 100); // force keyframes to use the new value by rerendering
     });
   }, []);
+  useEffect(() => {
+    setUpdate(true)
+    setTimeout(() => setUpdate(false), 100);
+  }, [alert])
   let alertRowClass = '';
   switch (alertRows) {
     case 2:

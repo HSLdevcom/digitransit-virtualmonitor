@@ -12,7 +12,7 @@ import {
 } from '../util/monitorUtils';
 import TranslationContainer from './TranslationContainer';
 import Loading from './Loading';
-import { uniq } from 'lodash';
+import { uniq, uniqBy } from 'lodash';
 
 interface IProps {
   views: Array<IView>;
@@ -45,8 +45,7 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   const [stopsFetched, setStopsFetched] = useState(stopIds.length < 1);
   const [stationsFetched, setStationsFetched] = useState(stationIds.length < 1);
   const [translationIds, setTranslationIds] = useState([]);
-  const [stopAlerts, setStopAlerts] = useState([]);
-  const [stationAlerts, setStationAlerts] = useState([]);
+  const [alerts, setAlerts] = useState([]);
 
   const stationsState = useQuery(GET_STATION_DEPARTURES, {
     variables: { ids: stationIds, numberOfDepartures: largest },
@@ -69,7 +68,8 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
       );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(newDepartureArray);
-      setStopAlerts(a);
+      const arr = alerts.concat(a)
+      setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStopsFetched(true);
     }
   }, [stopsState]);
@@ -84,7 +84,8 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
       );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStationDepartures(newDepartureArray);
-      setStationAlerts(a);
+      const arr = alerts.concat(a)
+      setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStationsFetched(true);
     }
   }, [stationsState]);
@@ -92,11 +93,6 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   if (!stopsFetched || !stationsFetched) {
     return <Loading />;
   }
-  const alerts = [];
-  stopAlerts.forEach((arr, i) => {
-    alerts.push([...arr, ...stationAlerts[i]]);
-  })
-  console.log(alerts)
   return (
     <TranslationContainer
       languages={languages}

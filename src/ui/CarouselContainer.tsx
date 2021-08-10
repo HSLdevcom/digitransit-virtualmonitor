@@ -36,19 +36,28 @@ const CarouselContainer: FC<IProps> = ({
   useEffect(() => {
     const next = (current + 1) % len;
     const time = views[current % views.length].duration * 1000;
+    if (len === 1) {
+
+    }
     const id = setTimeout(() => {
       if (next % views.length === 0) {
         const nextLan = (language + 1) % languages.length;
         setLanguage(nextLan);
       }
-      if (next % len === 0) {
-        setAlert(alert + 1);
-      }
-      console.log(next, len);
       setCurrent(next);
     }, time);
     return () => clearTimeout(id);
   }, [current]);
+
+  useEffect(() => {
+    const len = alerts.length * languages.length;
+    const next = (alert + 1) % len;
+    const to = setTimeout(() => {
+      setAlert(next);
+    }, 20000)
+    return () => clearTimeout(to);
+  }, [alert])
+
   const index = current % views.length;
   const config = getConfig();
   const departures = [
@@ -61,6 +70,7 @@ const CarouselContainer: FC<IProps> = ({
     ...views[index],
     //layout: 12,
   };
+
   return (
     <Monitor
       view={newView}
@@ -68,7 +78,9 @@ const CarouselContainer: FC<IProps> = ({
       departures={departures}
       translatedStrings={translations.filter(t => t.lang === lan)}
       config={config}
-      alert={alert}
+      alert={alerts[Math.floor(alert / languages.length)].alertDescriptionTextTranslations.find(
+        a => a.language === languages[alert % languages.length],
+      ).text}
       noPolling={noPolling}
       time={time}
       isPreview={preview}

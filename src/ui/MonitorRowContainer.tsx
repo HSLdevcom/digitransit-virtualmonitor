@@ -17,7 +17,7 @@ interface IProps {
   currentLang: string;
   layout: any;
   isLandscape: boolean;
-  alert: number;
+  alert: any;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -47,26 +47,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   /* [{ alertHeaderText: 'Pyöriä saa kuljettaa Tuusulan busseissa kesällä 15.8. asti. Pyörän voi ottaa mukaan busseihin 641, 642, 643, 665, 961, 963 ja 975N. hsl.fi/pyoratuusula', alertSeverityLevel: 'INFO', alertDescriptionTextTranslations: [
     {language: 'fi', text: 'Suomeksi'},{language: 'sv', text: 'På svenska'},{language: 'en', text: 'In english'}]
   }]; */
-  const routeAlerts = sortedDeparturesLeft.reduce((arr, alert) => {
-    const alerts = alert?.trip?.route?.alerts;
-    if (alerts) {
-      alerts.forEach(a => {
-        let i = 0;
-        let found = false;
-        while (i < arr.length) {
-          if (arr[i]?.alertHeaderText === a.alertHeaderText) {
-            found = true;
-            break;
-          }
-          i++;
-        }
-        if (!found) {
-          arr.push(a);
-        }
-      });
-    }
-    return arr;
-  }, []);
   const sortedDeparturesRight =
     departuresRight && departuresRight.length > 0
       ? departuresRight
@@ -151,14 +131,14 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   } else if (leftColumnCount === 16) {
     alertRowSpan = 3;
   } else if (leftColumnCount === 8) {
-    alertRowSpan = 2;
+    alertRowSpan = 1;
   } else if (leftColumnCount === 24) {
     alertRowSpan = 4;
   } else if (leftColumnCount === 10) {
     alertRowSpan = 2;
   }
   let leftColumnCountWithAlerts = leftColumnCount;
-  if (routeAlerts.length > 0) {
+  if (alert) {
     leftColumnCountWithAlerts -= alertRowSpan;
   }
   for (let i = 0; i < leftColumnCountWithAlerts; i++) {
@@ -233,13 +213,13 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       }
     }
   }
-  if (routeAlerts.length > 0) {
-    const alertText = routeAlerts[0].alertDescriptionTextTranslations.find(
-      a => a.language === currentLang,
-    ).text
+  if (alert) {
+    // const alertText = alert.alertDescriptionTextTranslations.find(
+    //   a => a.language === currentLang,
+    // ).text
     leftColumn.push(
       <MonitorAlertRow
-        alert={alertText}
+        alert={alert}
         alertRows={alertRowSpan}
         currentLang={currentLang}
         isLandscape={isLandscape}

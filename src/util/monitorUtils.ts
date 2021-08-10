@@ -85,7 +85,6 @@ export const createDepartureArray = (views, stops, isStation = false) => {
   const stringsToTranslate = [];
   const alerts = [];
   views.forEach((view, i) => {
-    const alertArray = [];
     Object.keys(view.columns).forEach(column => {
       const departureArray = [];
       stops.forEach(stop => {
@@ -96,13 +95,13 @@ export const createDepartureArray = (views, stops, isStation = false) => {
           if (isStation) {
             stop.stops.forEach(s => {
               stringsToTranslate.push(...getTranslationStringsForStop(stop));
-              alertArray.push(...s.alerts);
-              s.routes.forEach(r => alertArray.push(...r.alerts))
+              alerts.push(...s.alerts);
+              s.routes.forEach(r => alerts.push(...r.alerts))
             });
           } else {
             stringsToTranslate.push(...getTranslationStringsForStop(stop));
-            alertArray.push(...stop.alerts);
-            stop.routes.forEach(r => alertArray.push(...r.alerts))
+            alerts.push(...stop.alerts);
+            stop.routes.forEach(r => alerts.push(...r.alerts))
           }
           const { hiddenRoutes, timeshift, showEndOfLine } = view.columns[
             column
@@ -118,8 +117,6 @@ export const createDepartureArray = (views, stops, isStation = false) => {
       departures[i] = departures[i] ? departures[i] : [[], []];
       departures[i][colIndex] = departureArray;
     });
-    alerts.push(uniqBy(alertArray, a => a.alertHeaderText));
   });
-  console.log(alerts)
-  return [stringsToTranslate, departures, alerts];
+  return [stringsToTranslate, departures, uniqBy(alerts, a => a.alertHeaderText)];
 };

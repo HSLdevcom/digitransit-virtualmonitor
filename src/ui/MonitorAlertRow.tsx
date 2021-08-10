@@ -1,22 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import cx from 'classnames';
-import { WithTranslation, withTranslation } from 'react-i18next';
-
-interface IAlertDescriptionTextTranslation {
-  text: string;
-  language?: string;
-}
-interface IAlert {
-  alertDescriptionTextTranslations: Array<IAlertDescriptionTextTranslation>;
-  alertHeaderTextTranslations: Array<IAlertDescriptionTextTranslation>;
-  alertHeaderText: string;
-  alertSeverityLevel: string;
-}
 
 interface IProps {
   isLandscape: boolean;
   alertRows: number;
-  alerts: Array<IAlert>;
+  alert: string;
   currentLang: string;
 }
 const getAnimationHeight = () => {
@@ -25,12 +13,7 @@ const getAnimationHeight = () => {
   return -1 * (alert[0]?.clientHeight - alertContainer[0]?.clientHeight);
 };
 
-const MonitorAlertRow: FC<IProps> = ({
-  alertRows,
-  isLandscape,
-  alerts,
-  currentLang,
-}) => {
+const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alert }) => {
   const [animationHeight, setAnimationHeight] = useState(0);
   const [update, setUpdate] = useState(false);
   useEffect(() => {
@@ -68,11 +51,7 @@ const MonitorAlertRow: FC<IProps> = ({
             portrait: !isLandscape,
           })}
         >
-          {
-            alerts[0].alertDescriptionTextTranslations.find(
-              a => a.language === currentLang,
-            ).text
-          }
+          {alert}
         </div>
       </div>
     </div>

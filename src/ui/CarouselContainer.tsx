@@ -12,9 +12,10 @@ interface IProps {
   stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card
   stopDepartures: Array<Array<Array<IDeparture>>>; // and the final one for the actual departures
   translations?: Array<ITranslation>;
+  alerts: any;
   noPolling?: boolean;
   time?: EpochMilliseconds;
-  isPreview?: boolean;
+  preview?: boolean;
 }
 
 const CarouselContainer: FC<IProps> = ({
@@ -24,12 +25,14 @@ const CarouselContainer: FC<IProps> = ({
   languages,
   translations,
   noPolling,
+  alerts,
   time,
-  isPreview = false,
+  preview = false,
 }) => {
   const len = views.length * languages.length;
   const [current, setCurrent] = useState(0);
   const [language, setLanguage] = useState(0);
+  const [alert, setAlert] = useState(0);
   useEffect(() => {
     const next = (current + 1) % len;
     const time = views[current % views.length].duration * 1000;
@@ -38,6 +41,10 @@ const CarouselContainer: FC<IProps> = ({
         const nextLan = (language + 1) % languages.length;
         setLanguage(nextLan);
       }
+      if (next % len === 0) {
+        setAlert(alert + 1);
+      }
+      console.log(next, len);
       setCurrent(next);
     }, time);
     return () => clearTimeout(id);
@@ -61,9 +68,10 @@ const CarouselContainer: FC<IProps> = ({
       departures={departures}
       translatedStrings={translations.filter(t => t.lang === lan)}
       config={config}
+      alert={alert}
       noPolling={noPolling}
       time={time}
-      isPreview={isPreview}
+      isPreview={preview}
     />
   );
 };

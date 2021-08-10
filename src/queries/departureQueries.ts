@@ -8,6 +8,18 @@ export const GET_STOP_DEPARTURES = gql`
       patterns {
         headsign
       }
+      alerts {
+        alertSeverityLevel
+        alertHeaderText
+        alertHeaderTextTranslations {
+          text
+          language
+        }
+        alertDescriptionTextTranslations {
+          text
+          language
+        }
+      }
       routes {
         alerts {
           alertSeverityLevel
@@ -18,6 +30,7 @@ export const GET_STOP_DEPARTURES = gql`
           }
           alertDescriptionTextTranslations {
             text
+            language
           }
         }
         longName
@@ -53,18 +66,6 @@ export const GET_STOP_DEPARTURES = gql`
             gtfsId
             route {
               shortName
-              alerts {
-                alertSeverityLevel
-                alertHeaderText
-                alertHeaderTextTranslations {
-                  text
-                  language
-                }
-                alertDescriptionTextTranslations {
-                  text
-                  language
-                }
-              }
             }
             stops {
               gtfsId
@@ -85,8 +86,23 @@ export const GET_STATION_DEPARTURES = gql`
         patterns {
           headsign
         }
-      }
-      routes {
+        routes {
+          alerts {
+            alertSeverityLevel
+            alertHeaderText
+            alertHeaderTextTranslations {
+              text
+              language
+            }
+            alertDescriptionTextTranslations {
+              text
+              language
+            }
+          }
+          longName
+          id
+        }
+        gtfsId
         alerts {
           alertSeverityLevel
           alertHeaderText
@@ -98,27 +114,6 @@ export const GET_STATION_DEPARTURES = gql`
             text
             language
           }
-        }
-        longName
-        id
-      }
-      stops {
-        routes {
-          patterns {
-            headsign
-          }
-          alerts {
-            alertSeverityLevel
-            alertHeaderText
-            alertHeaderTextTranslations {
-              text
-              language
-            }
-            alertDescriptionTextTranslations {
-              text
-            }
-          }
-          gtfsId
         }
       }
       stoptimesForPatterns(numberOfDepartures: $numberOfDepartures) {

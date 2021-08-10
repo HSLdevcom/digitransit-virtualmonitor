@@ -22,6 +22,7 @@ interface ITrip {
 export interface IDeparture {
   serviceDay: number;
   trip: ITrip;
+  route: any;
   headsign: string;
   realtimeDeparture: number;
   realtime: boolean;
@@ -93,7 +94,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   }
 
   const line = processLine(departure?.trip?.route.shortName);
-
+  if (destination.indexOf(' via') !== -1) {
+    destination = destination.substring(0, destination.indexOf(' via'));
+  }
   if (departure === null && dayForDivider) {
     return (
       <div className={cx('grid-row day', { 'two-cols': withTwoColumns })}>

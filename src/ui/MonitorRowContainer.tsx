@@ -17,6 +17,7 @@ interface IProps {
   currentLang: string;
   layout: any;
   isLandscape: boolean;
+  alert: number;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -28,6 +29,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   currentLang,
   layout,
   isLandscape,
+  alert,
   t,
 }) => {
   const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
@@ -65,7 +67,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     }
     return arr;
   }, []);
-
   const sortedDeparturesRight =
     departuresRight && departuresRight.length > 0
       ? departuresRight
@@ -233,9 +234,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     }
   }
   if (routeAlerts.length > 0) {
+    const alertText = routeAlerts[0].alertDescriptionTextTranslations.find(
+      a => a.language === currentLang,
+    ).text
     leftColumn.push(
       <MonitorAlertRow
-        alerts={routeAlerts}
+        alert={alertText}
         alertRows={alertRowSpan}
         currentLang={currentLang}
         isLandscape={isLandscape}

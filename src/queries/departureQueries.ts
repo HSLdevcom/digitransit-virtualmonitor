@@ -61,6 +61,7 @@ export const GET_STOP_DEPARTURES = gql`
           scheduledDeparture
           realtimeDeparture
           departureDelay
+          realtimeState
           headsign
           trip {
             gtfsId
@@ -140,6 +141,7 @@ export const GET_STATION_DEPARTURES = gql`
           arrivalDelay
           scheduledDeparture
           realtimeDeparture
+          realtimeState
           departureDelay
           headsign
           trip {

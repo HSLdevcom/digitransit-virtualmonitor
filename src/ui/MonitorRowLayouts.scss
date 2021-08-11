@@ -4,7 +4,7 @@
 
   .len1,
   .len2 {
-    font-size: calc((#{var(--height)} - 30vh) / 4.7);
+    font-size: calc((#{var(--height)} - 30vh) / 5.2);
   }
 
   &.alert {
@@ -22,6 +22,7 @@
 }
 
 .rows12 > .grid-row {
+  font-size: calc((#{var(--height)} - 30vh) / 14);
   grid-template-columns: 17vh 1fr 20vh;
 }
 
@@ -58,6 +59,7 @@
 }
 
 .rows12.portrait > .grid-row {
+  font-size: calc((#{var(--height)} - 30vh) / 18);
   grid-template-columns: 12vh 1fr 17vh;
 }
 
@@ -77,6 +79,10 @@
   grid-template-columns: 12vh 1fr 13vh 15vh;
 }
 
+.rows12.portrait.tightened > .grid-row {
+  font-size: calc((#{var(--height)} - 30vh) / 26);
+}
+
 .rows6.portrait.tightened > .grid-row.with-stop-code {
   grid-template-columns: 12vh 1fr 13vh 15vh;
 }
@@ -93,6 +99,7 @@
 }
 
 .rows6.portrait > .grid-row {
+  font-size: calc((#{var(--height)} - 30vh) / 16);
   grid-template-columns: 12vh 1fr 15vh;
 }
 

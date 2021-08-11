@@ -21,6 +21,7 @@ const getWindowDimensions = () => {
 
 interface IProps {
   alert: number;
+  alertState: number;
   readonly view: IView;
   readonly departures: Array<Array<IDeparture>>;
   currentLang: string;
@@ -40,6 +41,7 @@ const Monitor: FC<IProps> = ({
   time,
   isPreview,
   alert,
+  alertState,
 }) => {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
@@ -111,6 +113,7 @@ const Monitor: FC<IProps> = ({
         layout={view.layout}
         isLandscape={isLandscapeByLayout}
         alert={alert}
+        alertState={alertState}
       />
     </div>
   );

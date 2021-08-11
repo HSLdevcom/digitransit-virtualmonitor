@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { getDepartureTime } from '../time';
 import cx from 'classnames';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { ITranslation } from './TranslationContainer';
+import Icon from './Icon';
 
 interface IRoute {
   alerts: any;
@@ -20,6 +21,7 @@ interface ITrip {
   stops: Array<IStop>;
 }
 export interface IDeparture {
+  realtimeState: string;
   serviceDay: number;
   trip: ITrip;
   route: any;
@@ -31,13 +33,16 @@ export interface IDeparture {
 }
 
 interface IProps {
+  isTwoRow: boolean;
   departure: IDeparture;
   translations: Array<ITranslation>;
   stops: Array<any>;
   isFirst?: boolean;
   showVia?: boolean;
   withTwoColumns?: boolean;
+  alertState: number;
   dayForDivider?: string;
+  currentLang: string;
 }
 
 const processLine = inputText => {
@@ -57,11 +62,16 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   isFirst = false,
   showVia = true,
   withTwoColumns = false,
+  alertState,
+  isTwoRow,
+  currentLang,
   stops,
   translations,
   dayForDivider,
   t,
 }) => {
+  const isCancelled = departure?.realtimeState === 'CANCELED';
+
   const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')
       ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
@@ -117,13 +127,21 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     return s.gtfsId === gtfsID;
   });
   const showStopCode = stopSettings?.settings?.showStopNumber;
+  const asd = (
+    <>
+      <div>{destination}</div>
+      {showVia && <div className="via-destination">{viaDestination}</div>}
+    </>
+  );
   return (
     <>
       <div className={cx('separator', { first: isFirst })}></div>
       <div
         className={cx('grid-row', {
           'two-cols': withTwoColumns,
+          'two-rows': isTwoRow,
           'with-stop-code': showStopCode,
+          'is-cancelled': isCancelled,
         })}
       >
         <div className={cx('grid-col line', `len${lineLen}`)}>
@@ -131,14 +149,45 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           {line.length > 1 && <span className="line-letter">{line[1]}</span>}
         </div>
         <div className="grid-col destination">
-          <div>{destination}</div>
-          {showVia && <div className="via-destination">{viaDestination}</div>}
+          {alertState && isCancelled ? (
+            isTwoRow ? (
+              <>
+                <div>{destination}</div>
+                <div className="via-destination">
+                  {isCancelled && <Icon img={'alert'} />}
+                  {t('cancelled', { lng: currentLang })}
+                </div>
+              </>
+            ) : (
+              <>
+                <Icon img={'alert'} />
+                <div>{t('cancelled', { lng: currentLang })}</div>
+              </>
+            )
+          ) : isTwoRow ? (
+            <>
+              <div>{destination}</div>
+              <div className="via-destination">
+                {isCancelled && <Icon img={'alert'} />}
+                {viaDestination ||
+                  (isCancelled && t('cancelled', { lng: currentLang }))}
+              </div>
+            </>
+          ) : (
+            <>
+              {isCancelled && <Icon img={'alert'} />}
+              <div>{destination}</div>
+              {showVia && (
+                <div className="via-destination">{viaDestination}</div>
+              )}
+            </>
+          )}
         </div>
         {showStopCode && (
           <div className={cx('grid-col', `len${stopCodeLen}`)}>{stopCode}</div>
         )}
         <div className={cx('grid-col', 'time', `len${departureTime?.length}`)}>
-          {departure?.realtime && departureTime !== null && (
+          {departure?.realtime && !isCancelled && departureTime !== null && (
             <span className={cx('tilde')}>~</span>
           )}
           {departureTime}

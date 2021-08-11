@@ -37,6 +37,7 @@ import { ReactComponent as Bus } from './icons/bus-filled.svg';
 import { ReactComponent as Tram } from './icons/tram-filled.svg';
 import { ReactComponent as Train } from './icons/train-filled.svg';
 import { ReactComponent as Metro } from './icons/metro-filled.svg';
+import { ReactComponent as Alert } from './icons/alert.svg';
 
 export interface IIconMapProps {
   color?: string;
@@ -57,6 +58,7 @@ export interface ICustomInputProps {
 
 const IconMap = (style: IIconMapProps) => {
   return {
+    alert: <Alert style={style} />,
     'arrow-down': <ArrowDown style={style} />,
     check: <Check style={style} />,
     close: <Close style={style} />,

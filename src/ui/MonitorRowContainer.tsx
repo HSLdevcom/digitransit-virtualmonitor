@@ -18,6 +18,7 @@ interface IProps {
   layout: any;
   isLandscape: boolean;
   alert: any;
+  alertState: number;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -30,6 +31,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   layout,
   isLandscape,
   alert,
+  alertState,
   t,
 }) => {
   const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
@@ -44,9 +46,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         (b.realtimeDeparture + b.serviceDay),
     );
 
-  /* [{ alertHeaderText: 'Pyöriä saa kuljettaa Tuusulan busseissa kesällä 15.8. asti. Pyörän voi ottaa mukaan busseihin 641, 642, 643, 665, 961, 963 ja 975N. hsl.fi/pyoratuusula', alertSeverityLevel: 'INFO', alertDescriptionTextTranslations: [
-    {language: 'fi', text: 'Suomeksi'},{language: 'sv', text: 'På svenska'},{language: 'en', text: 'In english'}]
-  }]; */
   const sortedDeparturesRight =
     departuresRight && departuresRight.length > 0
       ? departuresRight
@@ -124,17 +123,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
 
   const withTwoColumns = isLandscape && rightColumnCount > 0;
   let alertRowSpan = 1;
-  if (leftColumnCount === 12) {
+  if (leftColumnCount === 8 && rightColumnCount === 12) {
     alertRowSpan = 2;
-  } else if (leftColumnCount === 18) {
-    alertRowSpan = 3;
-  } else if (leftColumnCount === 16) {
-    alertRowSpan = 3;
-  } else if (leftColumnCount === 8) {
-    alertRowSpan = 1;
-  } else if (leftColumnCount === 24) {
-    alertRowSpan = 4;
-  } else if (leftColumnCount === 10) {
+  } else if (leftColumnCount > 8) {
     alertRowSpan = 2;
   }
   let leftColumnCountWithAlerts = leftColumnCount;
@@ -155,8 +146,13 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           (layout === 16 && i < 4) ||
           leftColumnCount === 4
         }
+        isTwoRow={
+          leftColumnCount === 4 || layout === 12 || (layout === 16 && i < 4)
+        }
         withTwoColumns={withTwoColumns}
+        alertState={alertState}
         stops={leftStops}
+        currentLang={currentLang}
         dayForDivider={
           i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
         }
@@ -181,12 +177,15 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               i === leftColumnCountWithAlerts ||
               i - 1 === nextDayDepartureIndexLeft
             }
+            isTwoRow={rightColumnCount === 4 || layout === 12}
             stops={leftStops}
             showVia={rightColumnCount === 4}
             withTwoColumns={withTwoColumns}
+            alertState={alertState}
             dayForDivider={
               i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
             }
+            currentLang={currentLang}
           />,
         );
       }
@@ -200,23 +199,23 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 ? sortedDeparturesRight[i]
                 : null
             }
+            isTwoRow={rightColumnCount === 4 || layout === 12}
             stops={rightStops}
             translations={translatedStrings}
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             showVia={rightColumnCount === 4}
             withTwoColumns={withTwoColumns}
+            alertState={alertState}
             dayForDivider={
               i === nextDayDepartureIndexRight ? formatDate(nextDay) : undefined
             }
+            currentLang={currentLang}
           />,
         );
       }
     }
   }
   if (alert) {
-    // const alertText = alert.alertDescriptionTextTranslations.find(
-    //   a => a.language === currentLang,
-    // ).text
     leftColumn.push(
       <MonitorAlertRow
         alert={alert}

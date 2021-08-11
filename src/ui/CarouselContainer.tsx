@@ -29,21 +29,21 @@ const CarouselContainer: FC<IProps> = ({
   time,
   preview = false,
 }) => {
-  const len = views.length * languages.length;
+  const len = views.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
+  const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
   const [alert, setAlert] = useState(0);
   useEffect(() => {
     const next = (current + 1) % len;
-    const time = views[current % views.length].duration * 1000;
-    if (len === 1) {
-
-    }
+    const time =
+      (views[Math.floor(current / 2) % views.length].duration * 1000) / 2;
     const id = setTimeout(() => {
-      if (next % views.length === 0) {
+      if ((next / 2) % views.length === 0) {
         const nextLan = (language + 1) % languages.length;
         setLanguage(nextLan);
       }
+      setAlertState(current % 2);
       setCurrent(next);
     }, time);
     return () => clearTimeout(id);
@@ -54,11 +54,11 @@ const CarouselContainer: FC<IProps> = ({
     const next = (alert + 1) % len;
     const to = setTimeout(() => {
       setAlert(next);
-    }, 20000)
+    }, 20000);
     return () => clearTimeout(to);
-  }, [alert])
+  }, [alert]);
 
-  const index = current % views.length;
+  const index = Math.floor(current / 2) % views.length;
   const config = getConfig();
   const departures = [
     [...stationDepartures[index][0], ...stopDepartures[index][0]],
@@ -68,7 +68,7 @@ const CarouselContainer: FC<IProps> = ({
   // for easy testing of different layouts
   const newView = {
     ...views[index],
-    //layout: 12,
+    //layout: 17,
   };
 
   return (
@@ -78,12 +78,17 @@ const CarouselContainer: FC<IProps> = ({
       departures={departures}
       translatedStrings={translations.filter(t => t.lang === lan)}
       config={config}
-      alert={alerts[Math.floor(alert / languages.length)].alertDescriptionTextTranslations.find(
-        a => a.language === languages[alert % languages.length],
-      ).text}
+      alert={
+        alerts[
+          Math.floor(alert / languages.length)
+        ]?.alertDescriptionTextTranslations.find(
+          a => a.language === languages[alert % languages.length],
+        ).text
+      }
       noPolling={noPolling}
       time={time}
       isPreview={preview}
+      alertState={alertState}
     />
   );
 };

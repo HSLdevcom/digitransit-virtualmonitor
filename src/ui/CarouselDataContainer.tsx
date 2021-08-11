@@ -68,7 +68,7 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
       );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(newDepartureArray);
-      const arr = alerts.concat(a)
+      const arr = alerts.concat(a);
       setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStopsFetched(true);
     }
@@ -84,7 +84,7 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
       );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStationDepartures(newDepartureArray);
-      const arr = alerts.concat(a)
+      const arr = alerts.concat(a);
       setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStationsFetched(true);
     }

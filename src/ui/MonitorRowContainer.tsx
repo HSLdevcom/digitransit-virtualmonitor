@@ -46,9 +46,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         (b.realtimeDeparture + b.serviceDay),
     );
 
-  /* [{ alertHeaderText: 'Pyöriä saa kuljettaa Tuusulan busseissa kesällä 15.8. asti. Pyörän voi ottaa mukaan busseihin 641, 642, 643, 665, 961, 963 ja 975N. hsl.fi/pyoratuusula', alertSeverityLevel: 'INFO', alertDescriptionTextTranslations: [
-    {language: 'fi', text: 'Suomeksi'},{language: 'sv', text: 'På svenska'},{language: 'en', text: 'In english'}]
-  }]; */
   const sortedDeparturesRight =
     departuresRight && departuresRight.length > 0
       ? departuresRight

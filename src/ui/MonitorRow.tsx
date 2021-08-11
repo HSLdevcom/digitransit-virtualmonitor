@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { getDepartureTime } from '../time';
 import cx from 'classnames';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -127,12 +127,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     return s.gtfsId === gtfsID;
   });
   const showStopCode = stopSettings?.settings?.showStopNumber;
-  const asd = (
-    <>
-      <div>{destination}</div>
-      {showVia && <div className="via-destination">{viaDestination}</div>}
-    </>
-  );
+
   return (
     <>
       <div className={cx('separator', { first: isFirst })}></div>

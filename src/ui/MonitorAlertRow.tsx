@@ -25,6 +25,7 @@ const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alert }) => {
     });
   }, []);
   useEffect(() => {
+    setAnimationHeight(getAnimationHeight());
     setUpdate(true)
     setTimeout(() => setUpdate(false), 100);
   }, [alert])

@@ -12,9 +12,10 @@ interface IProps {
   stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card
   stopDepartures: Array<Array<Array<IDeparture>>>; // and the final one for the actual departures
   translations?: Array<ITranslation>;
+  alerts: any;
   noPolling?: boolean;
   time?: EpochMilliseconds;
-  isPreview?: boolean;
+  preview?: boolean;
 }
 
 const CarouselContainer: FC<IProps> = ({
@@ -24,15 +25,20 @@ const CarouselContainer: FC<IProps> = ({
   languages,
   translations,
   noPolling,
+  alerts,
   time,
-  isPreview = false,
+  preview = false,
 }) => {
   const len = views.length * languages.length;
   const [current, setCurrent] = useState(0);
   const [language, setLanguage] = useState(0);
+  const [alert, setAlert] = useState(0);
   useEffect(() => {
     const next = (current + 1) % len;
     const time = views[current % views.length].duration * 1000;
+    if (len === 1) {
+
+    }
     const id = setTimeout(() => {
       if (next % views.length === 0) {
         const nextLan = (language + 1) % languages.length;
@@ -42,6 +48,16 @@ const CarouselContainer: FC<IProps> = ({
     }, time);
     return () => clearTimeout(id);
   }, [current]);
+
+  useEffect(() => {
+    const len = alerts.length * languages.length;
+    const next = (alert + 1) % len;
+    const to = setTimeout(() => {
+      setAlert(next);
+    }, 20000)
+    return () => clearTimeout(to);
+  }, [alert])
+
   const index = current % views.length;
   const config = getConfig();
   const departures = [
@@ -54,6 +70,7 @@ const CarouselContainer: FC<IProps> = ({
     ...views[index],
     //layout: 12,
   };
+
   return (
     <Monitor
       view={newView}
@@ -61,9 +78,12 @@ const CarouselContainer: FC<IProps> = ({
       departures={departures}
       translatedStrings={translations.filter(t => t.lang === lan)}
       config={config}
+      alert={alerts[Math.floor(alert / languages.length)].alertDescriptionTextTranslations.find(
+        a => a.language === languages[alert % languages.length],
+      ).text}
       noPolling={noPolling}
       time={time}
-      isPreview={isPreview}
+      isPreview={preview}
     />
   );
 };

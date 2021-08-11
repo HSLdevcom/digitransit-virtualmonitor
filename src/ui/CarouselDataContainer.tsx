@@ -12,7 +12,7 @@ import {
 } from '../util/monitorUtils';
 import TranslationContainer from './TranslationContainer';
 import Loading from './Loading';
-import { uniq } from 'lodash';
+import { uniq, uniqBy } from 'lodash';
 
 interface IProps {
   views: Array<IView>;
@@ -36,8 +36,8 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
     }
     return null;
   });
-  // eslint-disable-next-line prefer-spread
-  const largest = Math.max.apply(Math, layOuts);
+
+  const largest = Math.max(...layOuts);
   const [stopIds, stationIds] = getStopsAndStationsFromViews(views);
   const [stopDepartures, setStopDepartures] = useState(emptyDepartureArrays);
   const [stationDepartures, setStationDepartures] =
@@ -45,6 +45,7 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   const [stopsFetched, setStopsFetched] = useState(stopIds.length < 1);
   const [stationsFetched, setStationsFetched] = useState(stationIds.length < 1);
   const [translationIds, setTranslationIds] = useState([]);
+  const [alerts, setAlerts] = useState([]);
 
   const stationsState = useQuery(GET_STATION_DEPARTURES, {
     variables: { ids: stationIds, numberOfDepartures: largest },
@@ -61,12 +62,14 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   useEffect(() => {
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
-      const [stringsToTranslate, newDepartureArray] = createDepartureArray(
+      const [stringsToTranslate, newDepartureArray, a] = createDepartureArray(
         views,
         stops,
       );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(newDepartureArray);
+      const arr = alerts.concat(a)
+      setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStopsFetched(true);
     }
   }, [stopsState]);
@@ -74,16 +77,19 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   useEffect(() => {
     const stations = stationsState?.data?.stations;
     if (stations?.length > 0) {
-      const [stringsToTranslate, newDepartureArray] = createDepartureArray(
+      const [stringsToTranslate, newDepartureArray, a] = createDepartureArray(
         views,
         stations,
         true,
       );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStationDepartures(newDepartureArray);
+      const arr = alerts.concat(a)
+      setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStationsFetched(true);
     }
   }, [stationsState]);
+
   if (!stopsFetched || !stationsFetched) {
     return <Loading />;
   }
@@ -93,6 +99,7 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
       translationIds={uniq(translationIds)}
       stopDepartures={stopDepartures}
       stationDepartures={stationDepartures}
+      alerts={alerts}
       views={views}
       preview={preview}
     />

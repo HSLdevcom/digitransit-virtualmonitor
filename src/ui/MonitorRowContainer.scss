@@ -277,14 +277,17 @@ $preview-grid-divider: 2px;
     z-index: 1000;
     padding-bottom: calc(0.4 * 1vh);
     overflow: hidden;
-
+    .alert-text {
+      white-space: nowrap;
+    }
     .animated {
       //-moz-transform: translateY(-100%);
       //-webkit-transform: translateY(-100%);
-      transform: translateY(-100%);
-      -moz-animation: alert-animation 7s cubic-bezier(0.77, 0.1, 0.36, 0.95) infinite;
-      -webkit-animation: alert-animation 7s cubic-bezier(0.77, 0.1, 0.36, 0.95) infinite;
-      animation: alert-animation 7s cubic-bezier(0.77, 0.1, 0.36, 0.95) infinite;
+      //transform: translateY(-100%);
+      -moz-animation: alert-animation 15s cubic-bezier(.32,.07,.69,.92) 2s 1;
+      -webkit-animation: alert-animation 15s cubic-bezier(.32,.07,.69,.92) 2s 1;
+      animation: alert-animation 15s cubic-bezier(.32,.07,.69,.92) 2s 1;
+      animation-fill-mode: forwards;
     }
 
     &.rows12 {
@@ -309,28 +312,28 @@ $preview-grid-divider: 2px;
 }
 
 /* for Firefox */
-@-moz-keyframes alert-animation {
-  from { -moz-transform: translateY(0); }
-  to { -moz-transform: translateY(calc(#{var(--animationHeight)})); }
-}
+// @-moz-keyframes alert-animation {
+//   from { -moz-transform: translateY(0); }
+//   to { -moz-transform: translateY(calc(#{var(--animationHeight)})); }
+// }
 
-/* for Chrome */
-@-webkit-keyframes alert-animation {
-  from { -webkit-transform: translateY(0); }
-  to { -webkit-transform: translateY(calc(#{var(--animationHeight)})); }
-}
+// /* for Chrome */
+// @-webkit-keyframes alert-animation {
+//   from { -webkit-transform: translateY(0); }
+//   to { -webkit-transform: translateY(calc(#{var(--animationHeight)})); }
+// }
 
 @keyframes alert-animation {
   from {
-    -moz-transform: translateY(0);
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
+    -moz-transform: translateX(0);
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
   }
 
   to {
-    -moz-transform: translateY(calc(#{var(--animationHeight)}));
-    -webkit-transform: translateY(calc(#{var(--animationHeight)}));
-    transform: translateY(calc(#{var(--animationHeight)}));
+    -moz-transform: translateX(calc(#{var(--animationHeight)} - 1vh));
+    -webkit-transform: translateX(calc(#{var(--animationHeight)} - 1vh));
+    transform: translateX(calc(#{var(--animationHeight)} - 1vh));
   }
 }
 

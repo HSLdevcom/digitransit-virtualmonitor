@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { IView } from '../util/Interfaces';
+import { IAlert, IView } from '../util/Interfaces';
 import CarouselContainer from './CarouselContainer';
 import monitorAPI from '../api';
 import { IDeparture } from './MonitorRow';
@@ -11,6 +11,7 @@ interface IProps {
   translationIds: Array<string>;
   stationDepartures: Array<Array<Array<IDeparture>>>;
   stopDepartures: Array<Array<Array<IDeparture>>>;
+  alerts: Array<Array<IAlert>>;
 }
 
 export interface ITranslation {
@@ -22,10 +23,7 @@ export interface ITranslation {
 const TranslationContainer: FC<IProps> = ({
   languages,
   translationIds,
-  views,
-  stationDepartures,
-  stopDepartures,
-  preview,
+  ...rest
 }) => {
   const getTranslations = () => {
     return monitorAPI
@@ -53,11 +51,8 @@ const TranslationContainer: FC<IProps> = ({
   return (
     <CarouselContainer
       languages={languages}
-      views={views}
       translations={translations}
-      stationDepartures={stationDepartures}
-      stopDepartures={stopDepartures}
-      isPreview={preview}
+      {...rest}
     />
   );
 };

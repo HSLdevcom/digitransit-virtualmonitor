@@ -1,4 +1,5 @@
 import { getCurrentSeconds } from '../time';
+import { uniqBy } from 'lodash';
 
 export const getStopsAndStationsFromViews = views => {
   const stopIds = [];
@@ -82,6 +83,7 @@ export const createDepartureArray = (views, stops, isStation = false) => {
   };
   const departures = [];
   const stringsToTranslate = [];
+  const alerts = [];
   views.forEach((view, i) => {
     Object.keys(view.columns).forEach(column => {
       const departureArray = [];
@@ -93,9 +95,13 @@ export const createDepartureArray = (views, stops, isStation = false) => {
           if (isStation) {
             stop.stops.forEach(s => {
               stringsToTranslate.push(...getTranslationStringsForStop(stop));
+              alerts.push(...s.alerts);
+              s.routes.forEach(r => alerts.push(...r.alerts))
             });
           } else {
             stringsToTranslate.push(...getTranslationStringsForStop(stop));
+            alerts.push(...stop.alerts);
+            stop.routes.forEach(r => alerts.push(...r.alerts))
           }
           const { hiddenRoutes, timeshift, showEndOfLine } = view.columns[
             column
@@ -112,5 +118,5 @@ export const createDepartureArray = (views, stops, isStation = false) => {
       departures[i][colIndex] = departureArray;
     });
   });
-  return [stringsToTranslate, departures];
+  return [stringsToTranslate, departures, uniqBy(alerts, a => a.alertHeaderText)];
 };

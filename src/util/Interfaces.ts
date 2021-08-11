@@ -46,6 +46,17 @@ export interface IView {
   duration: number;
 }
 
+export interface IAlertDescriptionTextTranslation {
+  text: string;
+  language?: string;
+}
+export interface IAlert {
+  alertDescriptionTextTranslations: Array<IAlertDescriptionTextTranslation>;
+  alertHeaderTextTranslations: Array<IAlertDescriptionTextTranslation>;
+  alertHeaderText: string;
+  alertSeverityLevel: string;
+}
+
 export interface IMonitorConfig {
   // feedIds?: Array<string>;
   uri?: string;

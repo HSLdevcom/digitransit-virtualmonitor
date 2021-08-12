@@ -49,22 +49,20 @@
 
         &.up-and-down {
           .container {
-            width: 30px;
+
+            width: 50px;
             height: 40px;
           }
-
-          div {
-            position: relative;
-            left: 5px;
-
-            &:first-child {
-              top: 0;
+          .move-divider {
+            display: flex;
+            justify-content: center;
+            div {
+              border-top: 1px solid #ddd;
+              width: 24px;
             }
-
-            &:nth-child(2),
-            &:nth-child(3) {
-              top: -15px;
-            }
+          }
+          .move-down {
+            margin-top: 3px;
           }
         }
       }

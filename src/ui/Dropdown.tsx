@@ -20,12 +20,12 @@ interface IProps {
 interface Option {
   label: string | JSX.Element;
   options?: Array<NestedOption>;
-  value?: string;
+  value?: number;
 }
 
 interface NestedOption {
   label: string | JSX.Element;
-  value: string;
+  value: number;
 }
 
 const Dropdown: FC<IProps & WithTranslation> = ({

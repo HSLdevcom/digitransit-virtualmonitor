@@ -105,7 +105,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   const line = processLine(departure?.trip?.route.shortName);
   if (destination?.indexOf(' via') !== -1) {
-    destination = destination.substring(0, destination.indexOf(' via'));
+    destination = destination?.substring(0, destination.indexOf(' via'));
   }
   if (departure === null && dayForDivider) {
     return (

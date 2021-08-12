@@ -103,17 +103,17 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
   };
 
   const durations = [
-    { value: '0', label: '0 min' },
-    { value: '1', label: '1 min' },
-    { value: '2', label: '2 min' },
-    { value: '3', label: '3 min' },
-    { value: '4', label: '4 min' },
-    { value: '5', label: '5 min' },
-    { value: '6', label: '6 min' },
-    { value: '7', label: '7 min' },
-    { value: '8', label: '8 min' },
-    { value: '9', label: '9 min' },
-    { value: '10', label: '10 min' },
+    { value: 0, label: '0 min' },
+    { value: 1, label: '1 min' },
+    { value: 2, label: '2 min' },
+    { value: 3, label: '3 min' },
+    { value: 4, label: '4 min' },
+    { value: 5, label: '5 min' },
+    { value: 6, label: '6 min' },
+    { value: 7, label: '7 min' },
+    { value: 8, label: '8 min' },
+    { value: 9, label: '9 min' },
+    { value: 10, label: '10 min' },
   ];
   const vehicleMode = props.stop.vehicleMode
     ? props.stop.vehicleMode.toLowerCase()

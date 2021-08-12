@@ -1,26 +1,17 @@
 import cx from 'classnames';
 import React, { FC } from 'react';
+import Icon from './Icon';
 interface IProps {
-  monitor?: boolean;
+  white?: boolean;
   isPreview?: boolean;
 }
 const Loading: FC<IProps> = props => (
   <div
     className={cx(
-      'loading-container',
-      props.monitor && !props.isPreview
-        ? 'monitor'
-        : props.monitor && props.isPreview
-        ? 'preview'
-        : '',
+      'loading-container', {white: props.white}
     )}
   >
-    <div className="lds-ring">
-      <div className={cx(props.isPreview && 'preview')}></div>
-      <div className={cx(props.isPreview && 'preview')}></div>
-      <div className={cx(props.isPreview && 'preview')}></div>
-      <div className={cx(props.isPreview && 'preview')}></div>
-    </div>
+    <Icon img='spinner' />
   </div>
 );
 

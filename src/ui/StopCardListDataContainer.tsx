@@ -123,11 +123,10 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
     }
   }, [stations]);
 
-  if (stations.loading || stops.loading) {
-    return <Loading />;
-  }
+  const loading = stations.loading || stops.loading;
   return (
     <StopCardListContainer
+      loading={loading}
       languages={languages}
       feedIds={feedIds}
       defaultStopCardList={cardList}

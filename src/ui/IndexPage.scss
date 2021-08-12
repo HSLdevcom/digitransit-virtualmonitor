@@ -1,7 +1,8 @@
 
 .index {
+  display: flex;
   .left {
-    width: 50%;
+    flex: 1;
     color: #333;
 
     .button-container {
@@ -48,16 +49,8 @@
   }
 
   .right {
-    top: 0;
-    position: absolute;
-    right: 0;
-    height: 100%;
-    width: 50%;
 
     .desktop-img {
-      position: absolute;
-      top: 0;
-      right: 0;
       width: 720px;
       height: 497px;
       max-height: 500px;

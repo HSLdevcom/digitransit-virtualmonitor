@@ -14,10 +14,12 @@ import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getLayout';
 
 import { defaultStopCard } from '../util/stopCardUtil';
+import Loading from './Loading';
 interface IProps {
   feedIds: Array<string>;
   defaultStopCardList: any;
   languages: Array<string>;
+  loading?: boolean;
 }
 
 const StopCardItem = ({
@@ -83,6 +85,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   feedIds,
   t,
   defaultStopCardList,
+  loading = false,
   ...props
 }) => {
   const [stopCardList, setStopCardList] = useState(defaultStopCardList);
@@ -326,9 +329,16 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   const cards = {
     cards: stopCardList,
   };
+  if (loading) {
+    return (
+      <div className="stop-card-list-container">
+    <Loading white />
+    </div>
+    )
+  }
 
   return (
-    <>
+    <div className="stop-card-list-container">
       {isOpen && (
         <PreviewModal
           view={cards}
@@ -369,7 +379,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           <span>{t('displayEditorStaticLink')}</span>
         </button>
       </div>
-    </>
+    </div>
   );
 };
 

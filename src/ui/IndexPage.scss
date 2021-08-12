@@ -1,6 +1,7 @@
 
 .index {
   display: flex;
+
   .left {
     flex: 1;
     color: #333;
@@ -49,7 +50,6 @@
   }
 
   .right {
-
     .desktop-img {
       width: 720px;
       height: 497px;

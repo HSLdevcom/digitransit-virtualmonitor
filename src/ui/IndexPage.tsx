@@ -11,8 +11,8 @@ function IndexPage(props: WithTranslation) {
   const t3 = props.t('frontPageParagraph3');
 
   return (
-      <ContentContainer longContainer>
-        <div className="index">
+    <ContentContainer longContainer>
+      <div className="index">
         <div className="left">
           <h1 className="title">{title}</h1>
           <div className={'welcome'}>
@@ -34,8 +34,8 @@ function IndexPage(props: WithTranslation) {
         <div className="right">
           <img className={'desktop-img'} src={NysseLaptop} alt="" />
         </div>
-        </div>
-      </ContentContainer>
+      </div>
+    </ContentContainer>
   );
 }
 

@@ -119,7 +119,11 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
   const stopCodeLen = stopCode?.length;
 
-  const departureTime = getDepartureTime(departure?.realtimeDeparture, 600, departure?.serviceDay);
+  const departureTime = getDepartureTime(
+    departure?.realtimeDeparture,
+    600,
+    departure?.serviceDay,
+  );
   const stopSettings = stops.find(s => {
     const gtfsID = departure?.stop?.parentStation
       ? departure?.stop.parentStation.gtfsId

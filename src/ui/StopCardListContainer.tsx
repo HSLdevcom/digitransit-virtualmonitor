@@ -332,9 +332,9 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   if (loading) {
     return (
       <div className="stop-card-list-container">
-    <Loading white />
-    </div>
-    )
+        <Loading white />
+      </div>
+    );
   }
 
   return (

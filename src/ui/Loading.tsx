@@ -6,12 +6,8 @@ interface IProps {
   isPreview?: boolean;
 }
 const Loading: FC<IProps> = props => (
-  <div
-    className={cx(
-      'loading-container', {white: props.white}
-    )}
-  >
-    <Icon img='spinner' />
+  <div className={cx('loading-container', { white: props.white })}>
+    <Icon img="spinner" />
   </div>
 );
 

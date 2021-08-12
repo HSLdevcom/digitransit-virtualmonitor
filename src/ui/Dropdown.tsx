@@ -48,7 +48,8 @@ const Dropdown: FC<IProps & WithTranslation> = ({
   return (
     <Select
       className={cx(
-        'dd-select', name,
+        'dd-select',
+        name,
         {
           withMinWidth: !placeholder,
         },

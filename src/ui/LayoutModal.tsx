@@ -4,7 +4,7 @@ import { horizontalLayouts, verticalLayouts } from './Layouts';
 import isEqual from 'lodash/isEqual';
 import Modal from 'react-modal';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import {v4 as uuid }  from 'uuid';
+import { v4 as uuid } from 'uuid';
 Modal.setAppElement('#root');
 
 interface Option {

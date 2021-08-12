@@ -45,11 +45,12 @@ export const filterDepartures = (
     ) {
       if (timeshift > 0) {
         departures.push(
-          ...stoptimeList.stoptimes.filter(
-            s =>{
-              return s.serviceDay + s.realtimeDeparture >= currentSeconds + (parseInt(timeshift) * 60)
-            }
-          ),
+          ...stoptimeList.stoptimes.filter(s => {
+            return (
+              s.serviceDay + s.realtimeDeparture >=
+              currentSeconds + parseInt(timeshift) * 60
+            );
+          }),
         );
       } else {
         departures.push(...stoptimeList.stoptimes);

@@ -253,7 +253,9 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                       height={16}
                     />
                   </div>
-                  <div className="move-divider"><div></div></div>
+                  <div className="move-divider">
+                    <div></div>
+                  </div>
                   <div
                     onClick={() =>
                       onCardMove(cardInfo.index, cardInfo.index + 1)

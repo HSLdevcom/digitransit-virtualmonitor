@@ -5,7 +5,7 @@ import Icon from './Icon';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { focusToInput, onClick } from './InputUtils';
 import { getLayout } from '../util/getLayout';
-import { isKeyboardSelectionEvent } from '../util/browser'; 
+import { isKeyboardSelectionEvent } from '../util/browser';
 interface IProps {
   id: number;
   layout: number;
@@ -45,8 +45,8 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   }
 
   const onChange = e => {
-    setNewTitle({...newTitle, [lang]: e.target.value})
-  }
+    setNewTitle({ ...newTitle, [lang]: e.target.value });
+  };
 
   const titleDescription = t('stoptitle')
     .concat(' - ')

@@ -3,7 +3,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 interface IProps {
   languages: Array<string>;

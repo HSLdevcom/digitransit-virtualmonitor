@@ -43,12 +43,10 @@ export const filterDepartures = (
       !hiddenRoutes.includes(stoptimeList.pattern.code) &&
       !arrivalDepartures.includes(stoptimeList.pattern.code)
     ) {
-      console.log(timeshift, currentSeconds)
       if (timeshift > 0) {
         departures.push(
           ...stoptimeList.stoptimes.filter(
             s =>{
-              console.log(s.serviceDay + s.realtimeDeparture)
               return s.serviceDay + s.realtimeDeparture >= currentSeconds + (parseInt(timeshift) * 60)
             }
           ),

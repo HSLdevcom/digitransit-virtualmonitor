@@ -38,6 +38,7 @@ import { ReactComponent as Tram } from './icons/tram-filled.svg';
 import { ReactComponent as Train } from './icons/train-filled.svg';
 import { ReactComponent as Metro } from './icons/metro-filled.svg';
 import { ReactComponent as Alert } from './icons/alert.svg';
+import { ReactComponent as Spinner } from './icons/spinner.svg';
 
 export interface IIconMapProps {
   color?: string;
@@ -92,6 +93,7 @@ const IconMap = (style: IIconMapProps) => {
     'rectangle-selected': <RectangleSelected style={style} />,
     checkbox: <Checkbox style={style} />,
     settings: <Settings style={style} />,
+    spinner: <Spinner style={style} />,
     clock: <Clock style={style} />,
     bus: <Bus style={style} />,
     tram: <Tram style={style} />,

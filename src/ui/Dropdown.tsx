@@ -3,6 +3,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import cx from 'classnames';
 import Select from 'react-select';
 import Icon from './Icon';
+import { v4 as uuid } from 'uuid';
 
 interface IOption {
   value: string;
@@ -20,12 +21,12 @@ interface IProps {
 interface Option {
   label: string | JSX.Element;
   options?: Array<NestedOption>;
-  value?: string;
+  value?: number;
 }
 
 interface NestedOption {
   label: string | JSX.Element;
-  value: string;
+  value: number;
 }
 
 const Dropdown: FC<IProps & WithTranslation> = ({
@@ -48,14 +49,12 @@ const Dropdown: FC<IProps & WithTranslation> = ({
     <Select
       className={cx(
         'dd-select',
+        name,
         {
           withMinWidth: !placeholder,
         },
         {
           withWidth: placeholder,
-        },
-        {
-          duration: name === 'duration',
         },
       )}
       classNamePrefix={'dd'}
@@ -63,7 +62,7 @@ const Dropdown: FC<IProps & WithTranslation> = ({
         DropdownIndicator: () => ddIndicator,
         IndicatorSeparator: () => null,
       }}
-      inputId={`aria-input-${name}`}
+      inputId={uuid()}
       isSearchable={isSearchable ? isSearchable : false}
       name={name}
       options={options}

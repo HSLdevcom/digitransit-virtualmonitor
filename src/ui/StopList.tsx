@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { v4 as uuid } from 'uuid';
 
 import { IStopWithName } from './StopsByNameRetriever';
 
@@ -16,7 +17,7 @@ const StopList: React.StatelessComponent<IProps> = ({
 }: Required<IProps>) => (
   <ul>
     {stops.map((stop: IStopWithName) => (
-      <li key={stop.gtfsId}>{stopRenderer(stop)}</li>
+      <li key={uuid()}>{stopRenderer(stop)}</li>
     ))}
   </ul>
 );

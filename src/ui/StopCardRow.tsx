@@ -12,6 +12,7 @@ import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import { ICardInfo } from './CardInfo';
 import cx from 'classnames';
+import { v4 as uuid } from 'uuid';
 
 const getGTFSId = id => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -252,18 +253,14 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                       height={16}
                     />
                   </div>
-                  <div>
-                    <Icon
-                      img="move-divider"
-                      color={'#DDDDDD'}
-                      width={24}
-                      height={1}
-                    />
+                  <div className="move-divider">
+                    <div></div>
                   </div>
                   <div
                     onClick={() =>
                       onCardMove(cardInfo.index, cardInfo.index + 1)
                     }
+                    className="move-down"
                   >
                     <Icon
                       img="move-down"
@@ -291,7 +288,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             appElement={'root'}
             searchContext={setSearchContextWithFeedIds(feedIds)}
             icon="search"
-            id="search"
+            id={'search'}
             placeholder={'autosuggestPlaceHolder'}
             value=""
             onSelect={onSelect}

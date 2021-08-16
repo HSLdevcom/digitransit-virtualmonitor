@@ -5,6 +5,7 @@ import Icon from './Icon';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { focusToInput, onClick } from './InputUtils';
 import { getLayout } from '../util/getLayout';
+import { isKeyboardSelectionEvent } from '../util/browser';
 interface IProps {
   id: number;
   layout: number;
@@ -30,73 +31,23 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
     getLayout(layout)[2] ? t('layout') : title,
   );
   const [isFocus, setisFocus] = useState(false);
-  const [changed, setChanged] = useState(false);
+
   const onBlur = event => {
     setisFocus(false);
     if (updateCardInfo) {
       updateCardInfo(id, 'title', event.target.value, lang);
-      setChanged(true);
     }
-  };
-
-  const isKeyboardSelectionEvent = event => {
-    const backspace = [8, 'Backspace'];
-    const space = [13, ' ', 'Spacebar'];
-    const enter = [32, 'Enter'];
-
-    const key = (event && (event.key || event.which || event.keyCode)) || '';
-
-    if (
-      key &&
-      typeof event.target.selectionStart === 'number' &&
-      event.target.selectionStart === 0 &&
-      event.target.selectionEnd === event.target.value.length &&
-      event.target.value === newTitle[lang]
-    ) {
-      if (backspace.concat(space).includes(key)) {
-        const nTitle = { ...title, [lang]: '' };
-        setNewTitle(nTitle);
-        setChanged(true);
-      } else if (key.length === 1) {
-        setNewTitle({ ...newTitle, [lang]: key });
-        setChanged(true);
-      }
-      return false;
-    }
-
-    if (key && backspace.includes(key)) {
-      setNewTitle({ ...newTitle, [lang]: newTitle[lang].slice(0, -1) });
-      setChanged(true);
-      return false;
-    }
-
-    if (!key || !enter.includes(key)) {
-      if (key.length === 1) {
-        setNewTitle({
-          ...newTitle,
-          [lang]: newTitle[lang] ? newTitle[lang].concat(key) : key,
-        });
-        setChanged(true);
-      }
-      return false;
-    }
-
-    event.preventDefault();
-    if (updateCardInfo) {
-      const ntitle: ITitle = {
-        ...title,
-        [lang]: newTitle,
-      };
-      updateCardInfo(id, 'title', ntitle[lang]);
-      setChanged(false);
-    }
-    return true;
   };
   const layoutTitle = t('layoutEastWest');
 
   function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
     setisFocus(true);
   }
+
+  const onChange = e => {
+    setNewTitle({ ...newTitle, [lang]: e.target.value });
+  };
+
   const titleDescription = t('stoptitle')
     .concat(' - ')
     .concat(lang.toUpperCase());
@@ -111,12 +62,13 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
             className="stop-title-input"
             id={`stop-title-input${id}-${lang}`}
             onClick={e => onClick(e)}
+            onChange={e => onChange(e)}
             onKeyDown={e => isKeyboardSelectionEvent(e)}
             onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
             onFocus={e => {
               handleFocus(e);
             }}
-            value={changed ? newTitle[lang] : title[lang]}
+            value={newTitle[lang]}
           />
         )}
         {getLayout(layout)[2] && (

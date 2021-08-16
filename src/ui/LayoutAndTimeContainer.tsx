@@ -12,13 +12,13 @@ interface IProps {
 }
 
 const durations = [
-  { value: '3', label: '3s' },
-  { value: '5', label: '5s' },
-  { value: '10', label: '10s' },
-  { value: '15', label: '15s' },
-  { value: '20', label: '20s' },
-  { value: '25', label: '25s' },
-  { value: '30', label: '30s' },
+  { value: 3, label: '3s' },
+  { value: 5, label: '5s' },
+  { value: 10, label: '10s' },
+  { value: 15, label: '15s' },
+  { value: 20, label: '20s' },
+  { value: 25, label: '25s' },
+  { value: 30, label: '30s' },
 ];
 
 const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
@@ -27,7 +27,7 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
   orientation,
 }) => {
   const placeHolder = durations.find(
-    duration => duration.value === cardInfo.duration.toString(),
+    duration => duration.value === cardInfo.duration,
   ).label;
   const layoutRows =
     orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;

@@ -3,6 +3,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';
+import { v4 as uuid } from 'uuid';
 
 interface IProps {
   languages: Array<string>;
@@ -70,14 +71,14 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
         <div className="language-controls">
           {options.map(option => {
             return (
-              <>
+              <React.Fragment key={uuid()}>
                 <Checkbox
                   name={option}
                   checked={isChecked(option)}
                   onChange={handleChange}
                 />
                 <div>{t(option)}</div>
-              </>
+              </React.Fragment>
             );
           })}
         </div>

@@ -45,10 +45,12 @@ export const filterDepartures = (
     ) {
       if (timeshift > 0) {
         departures.push(
-          ...stoptimeList.stoptimes.filter(
-            s =>
-              s.serviceDay + s.realtimeDeparture >= currentSeconds + timeshift,
-          ),
+          ...stoptimeList.stoptimes.filter(s => {
+            return (
+              s.serviceDay + s.realtimeDeparture >=
+              currentSeconds + parseInt(timeshift) * 60
+            );
+          }),
         );
       } else {
         departures.push(...stoptimeList.stoptimes);
@@ -103,13 +105,13 @@ export const createDepartureArray = (views, stops, isStation = false) => {
             alerts.push(...stop.alerts);
             stop.routes.forEach(r => alerts.push(...r.alerts));
           }
-          const { hiddenRoutes, timeshift, showEndOfLine } = view.columns[
+          const { hiddenRoutes, timeShift, showEndOfLine } = view.columns[
             column
           ].stops[stopIndex].settings
             ? view.columns[column].stops[stopIndex].settings
             : defaultSettings;
           departureArray.push(
-            ...filterDepartures(stop, hiddenRoutes, timeshift, showEndOfLine),
+            ...filterDepartures(stop, hiddenRoutes, timeShift, showEndOfLine),
           );
         }
       });

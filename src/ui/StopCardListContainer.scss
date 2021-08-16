@@ -5,6 +5,12 @@
   margin-block-end: 0;
 }
 
+.stop-card-list-container {
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
 .buttons {
   display: flex;
   width: 780px;

@@ -21,4 +21,6 @@ ul {
 
 .App {
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }

@@ -105,7 +105,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   const line = processLine(departure?.trip?.route.shortName);
   if (destination?.indexOf(' via') !== -1) {
-    destination = destination.substring(0, destination.indexOf(' via'));
+    destination = destination?.substring(0, destination.indexOf(' via'));
   }
   if (departure === null && dayForDivider) {
     return (
@@ -119,7 +119,11 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
   const stopCodeLen = stopCode?.length;
 
-  const departureTime = getDepartureTime(departure?.realtimeDeparture, 600);
+  const departureTime = getDepartureTime(
+    departure?.realtimeDeparture,
+    600,
+    departure?.serviceDay,
+  );
   const stopSettings = stops.find(s => {
     const gtfsID = departure?.stop?.parentStation
       ? departure?.stop.parentStation.gtfsId

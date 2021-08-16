@@ -38,3 +38,14 @@ export const getLayout = (
       return [18, 0, false, [6, 12]];
   }
 };
+
+export const getAlertRowSpanForLayout = (layout) => {
+  const [leftColumnCount, rightColumnCount] = getLayout(layout);
+  let alertRowSpan = 1;
+  if (leftColumnCount === 8 && rightColumnCount === 12) {
+    alertRowSpan = 2;
+  } else if (leftColumnCount > 10) {
+    alertRowSpan = 2;
+  }
+  return alertRowSpan;
+} 

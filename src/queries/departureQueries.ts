@@ -36,7 +36,7 @@ export const GET_STOP_DEPARTURES = gql`
         longName
         id
       }
-      stoptimesForPatterns(numberOfDepartures: $numberOfDepartures) {
+      stoptimesForPatterns(numberOfDepartures: $numberOfDepartures, omitCanceled: false) {
         pattern {
           code
           route {
@@ -117,7 +117,7 @@ export const GET_STATION_DEPARTURES = gql`
           }
         }
       }
-      stoptimesForPatterns(numberOfDepartures: $numberOfDepartures) {
+      stoptimesForPatterns(numberOfDepartures: $numberOfDepartures, omitCanceled: false) {
         pattern {
           code
           route {

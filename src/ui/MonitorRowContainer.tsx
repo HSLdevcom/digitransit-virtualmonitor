@@ -4,7 +4,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow, { IDeparture } from './MonitorRow';
 import cx from 'classnames';
 import { formatDate, setDate } from '../time';
-import { getLayout } from '../util/getLayout';
+import { getAlertRowSpanForLayout, getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
 import MonitorAlertRow from './MonitorAlertRow';
 
@@ -17,8 +17,8 @@ interface IProps {
   currentLang: string;
   layout: any;
   isLandscape: boolean;
-  alert: any;
   alertState: number;
+  alertComponent: any;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -30,8 +30,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   currentLang,
   layout,
   isLandscape,
-  alert,
   alertState,
+  alertComponent,
   t,
 }) => {
   const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
@@ -122,14 +122,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const isTighten = differSize !== undefined;
 
   const withTwoColumns = isLandscape && rightColumnCount > 0;
-  let alertRowSpan = 1;
-  if (leftColumnCount === 8 && rightColumnCount === 12) {
-    alertRowSpan = 2;
-  } else if (leftColumnCount > 8) {
-    alertRowSpan = 2;
-  }
+  const alertRowSpan = getAlertRowSpanForLayout(layout);
   let leftColumnCountWithAlerts = leftColumnCount;
-  if (alert) {
+  if (alertComponent) {
     leftColumnCountWithAlerts -= alertRowSpan;
   }
   for (let i = 0; i < leftColumnCountWithAlerts; i++) {
@@ -215,16 +210,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       }
     }
   }
-  if (alert) {
-    leftColumn.push(
-      <MonitorAlertRow
-        alert={alert}
-        alertRows={alertRowSpan}
-        currentLang={currentLang}
-        isLandscape={isLandscape}
-      />,
-    );
-  }
+
 
   const leftColumnStyle = { '--rows': leftColumnCount } as React.CSSProperties;
   const rightColumnStyle = {
@@ -300,7 +286,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 'two-cols': withTwoColumns,
               })}
             >
-              {leftColumn}
+              {leftColumn}{alertComponent}
             </div>
           )}
           {isTighten && (
@@ -323,7 +309,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   `rows${differSize[1]}`,
                 )}
               >
-                {leftColumn.slice(differSize[0])}
+                {leftColumn.slice(differSize[0])}{alertComponent}
               </div>
             </>
           )}

@@ -43,7 +43,6 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
               height={32}
               width={32}
             />
-            <div> {t('horizontal')}</div>
           </button>
           <button
             className={cx('orientation-button', {
@@ -59,7 +58,6 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
               height={32}
               width={32}
             />
-            <div>{t('vertical')}</div>
           </button>
         </div>
       </div>
@@ -77,7 +75,7 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
                   checked={isChecked(option)}
                   onChange={handleChange}
                 />
-                <div>{t(option)}</div>
+                <div>{option.toUpperCase()}</div>
               </React.Fragment>
             );
           })}

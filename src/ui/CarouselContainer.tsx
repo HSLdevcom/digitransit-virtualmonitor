@@ -5,6 +5,8 @@ import Monitor from './Monitor';
 import { EpochMilliseconds } from '../time';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
+import MonitorAlertRow from './MonitorAlertRow';
+import { getAlertRowSpanForLayout } from '../util/getLayout';
 
 interface IProps {
   views: Array<IView>;
@@ -56,7 +58,7 @@ const CarouselContainer: FC<IProps> = ({
       setAlert(next);
     }, 20000);
     return () => clearTimeout(to);
-  }, [alert]);
+  }, [alert, alerts, languages]);
 
   const index = Math.floor(current / 2) % views.length;
   const config = getConfig();
@@ -70,6 +72,24 @@ const CarouselContainer: FC<IProps> = ({
     ...views[index],
     //layout: 17,
   };
+  const a = alerts[
+    Math.floor(alert / languages.length)
+  ]?.alertDescriptionTextTranslations.find(
+    a => a.language === languages[alert % languages.length],
+  ).text
+  const alertRowSpan = getAlertRowSpanForLayout(newView.layout);
+  let alertComponent;
+  if (a) {
+    alertComponent = (
+      <MonitorAlertRow
+        alert={a}
+        alertRows={alertRowSpan}
+        alertCount={alerts.length * languages.length}
+        currentLang={languages[language]}
+        isLandscape={false}
+      />
+    );
+  }
 
   return (
     <Monitor
@@ -78,17 +98,11 @@ const CarouselContainer: FC<IProps> = ({
       departures={departures}
       translatedStrings={translations.filter(t => t.lang === lan)}
       config={config}
-      alert={
-        alerts[
-          Math.floor(alert / languages.length)
-        ]?.alertDescriptionTextTranslations.find(
-          a => a.language === languages[alert % languages.length],
-        ).text
-      }
       noPolling={noPolling}
       time={time}
       isPreview={preview}
       alertState={alertState}
+      alertComponent={alertComponent}
     />
   );
 };

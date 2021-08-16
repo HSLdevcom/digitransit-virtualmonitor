@@ -39,7 +39,7 @@ export const getDepartureTime = (time, minutesThreshold, serviceDay) => {
   if (
     time - (getCurrentSeconds() - secondsFromMidnight / 1000) <
       minutesThreshold &&
-    serviceDay > DateTime.now().ts
+    serviceDay * 1000 < DateTime.now().ts
   ) {
     const diffInMinutes = Math.floor(
       (time - (getCurrentSeconds() - secondsFromMidnight / 1000)) / 60,

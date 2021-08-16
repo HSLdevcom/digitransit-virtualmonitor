@@ -113,7 +113,7 @@ $preview-grid-divider: 2px;
 
     .separator {
       width: 100%;
-      border-top: calc(0.4 * 1vh) dotted #fff;
+      border-top: calc(0.3 * 1vh) dotted #fff;
       height: 0;
 
       &.first {
@@ -311,9 +311,9 @@ $preview-grid-divider: 2px;
   }
 
   to {
-    -moz-transform: translateX(calc(#{var(--animationHeight)} - 1vh));
-    -webkit-transform: translateX(calc(#{var(--animationHeight)} - 1vh));
-    transform: translateX(calc(#{var(--animationHeight)} - 1vh));
+    -moz-transform: translateX(calc(#{var(--animationHeight)} - 2vh));
+    -webkit-transform: translateX(calc(#{var(--animationHeight)} - 2vh));
+    transform: translateX(calc(#{var(--animationHeight)} - 2vh));
   }
 }
 

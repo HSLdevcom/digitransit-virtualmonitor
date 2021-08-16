@@ -4,6 +4,7 @@ import cx from 'classnames';
 interface IProps {
   isLandscape: boolean;
   alertRows: number;
+  alertCount: number;
   alert: string;
   currentLang: string;
 }
@@ -13,9 +14,10 @@ const getAnimationHeight = () => {
   return -1 * (alert[0]?.scrollWidth - alertContainer[0]?.clientWidth);
 };
 
-const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alert }) => {
+const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alert, alertCount }) => {
   const [animationHeight, setAnimationHeight] = useState(0);
   const [update, setUpdate] = useState(false);
+  const [loop, setLoop] = useState(false);
   useEffect(() => {
     setAnimationHeight(getAnimationHeight());
     window.addEventListener('resize', () => {
@@ -24,6 +26,14 @@ const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alert }) => {
       setTimeout(() => setUpdate(false), 100); // force keyframes to use the new value by rerendering
     });
   }, []);
+  useEffect(() => {
+    if (alertCount === 1) {
+      setLoop(true);
+      setUpdate(true);
+      setTimeout(() => setUpdate(false), 100);
+      setTimeout(() => setLoop(false), 20000);
+    }
+  }, [alertCount, loop]);
   useEffect(() => {
     setAnimationHeight(getAnimationHeight());
     setUpdate(true);

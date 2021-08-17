@@ -4,9 +4,8 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow, { IDeparture } from './MonitorRow';
 import cx from 'classnames';
 import { formatDate, setDate } from '../time';
-import { getAlertRowSpanForLayout, getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
-import MonitorAlertRow from './MonitorAlertRow';
 
 interface IProps {
   departuresLeft: Array<IDeparture>;
@@ -19,6 +18,7 @@ interface IProps {
   isLandscape: boolean;
   alertState: number;
   alertComponent: any;
+  alertRowSpan: number,
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -32,9 +32,10 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   isLandscape,
   alertState,
   alertComponent,
+  alertRowSpan,
   t,
 }) => {
-  const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
+  const {leftColumnCount, rightColumnCount, isMultiDisplay, tighten} =
     getLayout(layout);
 
   const sortedDeparturesLeft = departuresLeft
@@ -119,10 +120,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     sortedDeparturesRight.splice(0, 0, null);
   }
 
-  const isTighten = differSize !== undefined;
+  const isTighten = tighten !== undefined;
 
   const withTwoColumns = isLandscape && rightColumnCount > 0;
-  const alertRowSpan = getAlertRowSpanForLayout(layout);
   let leftColumnCountWithAlerts = leftColumnCount;
   if (alertComponent) {
     leftColumnCountWithAlerts -= alertRowSpan;
@@ -218,10 +218,10 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   } as React.CSSProperties;
 
   const tightenBeginStyle = {
-    '--rows': differSize ? differSize[0] : leftColumnCount,
+    '--rows': tighten ? tighten[0] : leftColumnCount,
   } as React.CSSProperties;
   const tightenEndingStyle = {
-    '--rows': differSize ? differSize[1] : leftColumnCount,
+    '--rows': tighten ? tighten[1] : leftColumnCount,
   } as React.CSSProperties;
 
   const headers = (columns, stops) => {
@@ -236,7 +236,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       <div
         className={cx(
           'grid-headers',
-          `rows${isTighten ? differSize[0] : columns}`,
+          `rows${isTighten ? tighten[0] : columns}`,
           {
             tightened: isTighten,
             portrait: !isLandscape,
@@ -296,20 +296,20 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 className={cx(
                   'grid-rows',
                   'portrait tightened',
-                  `rows${differSize[0]}`,
+                  `rows${tighten[0]}`,
                 )}
               >
-                {leftColumn.slice(0, differSize[0])}
+                {leftColumn.slice(0, tighten[0])}
               </div>
               <div
                 style={tightenEndingStyle}
                 className={cx(
                   'grid-rows',
                   'portrait tightened',
-                  `rows${differSize[1]}`,
+                  `rows${tighten[1]}`,
                 )}
               >
-                {leftColumn.slice(differSize[0])}{alertComponent}
+                {leftColumn.slice(tighten[0])}{alertComponent}
               </div>
             </>
           )}

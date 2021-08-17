@@ -27,8 +27,9 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   lang,
   t,
 }) => {
+  const {isMultiDisplay} = getLayout(layout);
   const [newTitle, setNewTitle] = useState(
-    getLayout(layout)[2] ? t('layout') : title,
+    isMultiDisplay ? t('layout') : title,
   );
   const [isFocus, setisFocus] = useState(false);
 
@@ -54,10 +55,10 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   return (
     <div className="stop-title">
       <p className="description">
-        {getLayout(layout)[2] ? t('layout') : titleDescription}
+        {isMultiDisplay ? t('layout') : titleDescription}
       </p>
       <div className="stop-title-input-container">
-        {!getLayout(layout)[2] && (
+        {!isMultiDisplay && (
           <input
             className="stop-title-input"
             id={`stop-title-input${id}-${lang}`}
@@ -71,7 +72,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
             value={newTitle[lang]}
           />
         )}
-        {getLayout(layout)[2] && (
+        {isMultiDisplay && (
           <input
             className={cx('stop-title-input', 'east-west')}
             id={`stop-title-input${id}-${lang}`}
@@ -79,7 +80,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
             readOnly
           />
         )}
-        {!getLayout(layout)[2] && !isFocus && (
+        {!isMultiDisplay && !isFocus && (
           <div
             role="button"
             onClick={() => focusToInput(`stop-title-input${id}-${lang}`)}

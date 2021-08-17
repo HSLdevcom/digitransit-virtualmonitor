@@ -134,7 +134,7 @@ const StopList = props => {
     languages,
   } = props;
 
-  const showStopTitles = getLayout(cardInfo.layout)[2];
+  const showStopTitles = getLayout(cardInfo.layout).isMultiDisplay;
 
   return (
     <div>

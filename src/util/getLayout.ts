@@ -1,51 +1,130 @@
+interface ILayout {
+  leftColumnCount: number;
+  rightColumnCount: number;
+  isMultiDisplay?: boolean;
+  isPortrait?: boolean;
+  tighten?: Array<number>;
+}
+
 export const getLayout = (
   layout: number,
-): [number, number, boolean, Array<any>?] => {
+): ILayout => {
   switch (layout) {
     case 1:
-      return [4, 0, false];
+      return {
+        leftColumnCount: 4,
+        rightColumnCount: 0,
+      };
     case 2:
-      return [8, 0, false];
+      return {
+        leftColumnCount: 8,
+        rightColumnCount: 0,
+      };
     case 3:
-      return [12, 0, false];
+      return {
+        leftColumnCount: 12,
+        rightColumnCount: 0,
+      };
     case 4:
-      return [4, 4, false];
+      return {
+        leftColumnCount: 4,
+        rightColumnCount: 4,
+      };
     case 5:
-      return [8, 8, false];
+      return {
+        leftColumnCount: 8,
+        rightColumnCount: 8,
+      };
     case 6:
-      return [12, 12, false];
+      return {
+        leftColumnCount: 12,
+        rightColumnCount: 12,
+      };
     case 7:
-      return [4, 8, false];
+      return {
+        leftColumnCount: 4,
+        rightColumnCount: 8,
+      };
     case 8:
-      return [8, 12, false];
+      return {
+        leftColumnCount: 8,
+        rightColumnCount: 12,
+      };
     case 9:
-      return [4, 4, true];
+      return {
+        leftColumnCount: 4,
+        rightColumnCount: 4,
+        isMultiDisplay: true,
+      };
     case 10:
-      return [8, 8, true];
+      return {
+        leftColumnCount: 8,
+        rightColumnCount: 8,
+        isMultiDisplay: true,
+      };
     case 11:
-      return [12, 12, true];
+      return {
+        leftColumnCount: 12,
+        rightColumnCount: 12,
+        isMultiDisplay: true,
+      };
     case 12:
-      return [8, 0, false];
+      return {
+        leftColumnCount: 8,
+        rightColumnCount: 0,
+        isMultiDisplay: false,
+        isPortrait: true
+      };
     case 13:
-      return [12, 0, false];
+      return {
+        leftColumnCount: 12,
+        rightColumnCount: 0,
+        isMultiDisplay: false,
+        isPortrait: true
+      };
     case 14:
-      return [16, 0, false];
+      return {
+        leftColumnCount: 16,
+        rightColumnCount: 0,
+        isMultiDisplay: false,
+        isPortrait: true
+      };
     case 15:
-      return [24, 0, false];
+      return {
+        leftColumnCount: 24,
+        rightColumnCount: 0,
+        isMultiDisplay: false,
+        isPortrait: true
+      };
     case 16:
-      return [10, 0, false, [4, 6]];
+      return {
+        leftColumnCount: 10,
+        rightColumnCount: 0,
+        isMultiDisplay: false,
+        isPortrait: true,
+        tighten: [4, 6],
+      };
     case 17:
-      return [18, 0, false, [6, 12]];
+      return {
+        leftColumnCount: 18,
+        rightColumnCount: 0,
+        isMultiDisplay: false,
+        isPortrait: true,
+        tighten: [6, 12],
+      };
   }
 };
 
-export const getAlertRowSpanForLayout = (layout) => {
-  const [leftColumnCount, rightColumnCount] = getLayout(layout);
-  let alertRowSpan = 1;
-  if (leftColumnCount === 8 && rightColumnCount === 12) {
-    alertRowSpan = 2;
-  } else if (leftColumnCount > 10) {
-    alertRowSpan = 2;
-  }
-  return alertRowSpan;
+export const getAlertRowSpanForLayouts = (views, current) => {
+  const alertRowSpans = views.map(view => {
+    const {leftColumnCount, rightColumnCount} = getLayout(view.layout);
+    let alertRowSpan = 1;
+    if (leftColumnCount === 8 && rightColumnCount === 12) {
+      alertRowSpan = 2;
+    } else if (leftColumnCount > 10) {
+      alertRowSpan = 2;
+    }
+    return alertRowSpan;
+  })
+  return Math.max(...alertRowSpans);
 } 

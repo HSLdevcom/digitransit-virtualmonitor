@@ -6,7 +6,7 @@ import { EpochMilliseconds } from '../time';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorAlertRow from './MonitorAlertRow';
-import { getAlertRowSpanForLayout } from '../util/getLayout';
+import { getAlertRowSpanForLayouts } from '../util/getLayout';
 
 interface IProps {
   views: Array<IView>;
@@ -77,7 +77,7 @@ const CarouselContainer: FC<IProps> = ({
   ]?.alertDescriptionTextTranslations.find(
     a => a.language === languages[alert % languages.length],
   ).text
-  const alertRowSpan = getAlertRowSpanForLayout(newView.layout);
+  const alertRowSpan = getAlertRowSpanForLayouts(views, newView);
   let alertComponent;
   if (a) {
     alertComponent = (
@@ -103,6 +103,7 @@ const CarouselContainer: FC<IProps> = ({
       isPreview={preview}
       alertState={alertState}
       alertComponent={alertComponent}
+      alertRowSpan={alertRowSpan}
     />
   );
 };

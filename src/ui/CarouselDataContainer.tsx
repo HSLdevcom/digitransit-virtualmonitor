@@ -28,14 +28,10 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
     emptyDepartureArrays.push([[], []]);
   }
   const layOuts = views.map(v => {
-    const lay = getLayout(v.layout);
-    const r1 = lay[0];
-    const r2 = lay[1];
-    if (typeof r1 === 'number' && typeof r2 === 'number') {
-      return r1 + r2;
-    }
-    return null;
-  });
+    const { leftColumnCount, rightColumnCount } = getLayout(v.layout);
+    return leftColumnCount + rightColumnCount;
+  })
+
 
   const largest = Math.max(...layOuts);
   const [stopIds, stationIds] = getStopsAndStationsFromViews(views);

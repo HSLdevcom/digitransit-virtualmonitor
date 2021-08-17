@@ -124,7 +124,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
 
   const withTwoColumns = isLandscape && rightColumnCount > 0;
   let leftColumnCountWithAlerts = leftColumnCount;
-  if (alertComponent) {
+  if (alertComponent && layout < 12) {
     leftColumnCountWithAlerts -= alertRowSpan;
   }
   for (let i = 0; i < leftColumnCountWithAlerts; i++) {
@@ -322,6 +322,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               {t('no-departures', { lng: currentLang })}
             </div>
           </div>
+          {alertComponent}
         </div>
       )}
 

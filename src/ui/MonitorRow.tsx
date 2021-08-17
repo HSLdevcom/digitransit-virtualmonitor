@@ -109,9 +109,10 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   }
   if (departure === null && dayForDivider) {
     return (
+      <div className="row-with-separator">
       <div className={cx('grid-row day', { 'two-cols': withTwoColumns })}>
         <div className="day-row">{dayForDivider}</div>
-      </div>
+      </div></div>
     );
   }
 
@@ -133,8 +134,8 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const showStopCode = stopSettings?.settings?.showStopNumber;
 
   return (
-    <>
-      <div className={cx('separator', { first: isFirst })}></div>
+
+    <div className="row-with-separator"><div className={cx('separator', { first: isFirst })}></div>
       <div
         className={cx('grid-row', {
           'two-cols': withTwoColumns,
@@ -192,7 +193,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           {departureTime}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

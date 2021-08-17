@@ -58,6 +58,8 @@ const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alert, alertCount
     '--animationHeight': `${Number(animationHeight).toFixed(0)}px`,
   } as React.CSSProperties;
   return (
+    <div className={cx("row-with-separator alert", alertRowClass)}>
+    <div className="separator"></div>
     <div style={style} className={cx('grid-row', 'alert', alertRowClass)}>
       <div className={cx('grid-cols', 'alert-row')}>
         <div
@@ -69,7 +71,7 @@ const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alert, alertCount
           {alert}
         </div>
       </div>
-    </div>
+    </div></div>
   );
 };
 

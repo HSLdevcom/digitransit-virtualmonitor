@@ -209,8 +209,8 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       stopCardList[cardIndex].columns['right'].inUse = true;
     } else if (type === 'layout') {
       if (
-        getLayout(stopCardList[cardIndex].layout)[2] &&
-        !getLayout(Number(value))[2]
+        getLayout(stopCardList[cardIndex].layout).isMultiDisplay &&
+        !getLayout(Number(value)).isMultiDisplay
       ) {
         stopCardList[cardIndex].columns.left.stops = stopCardList[
           cardIndex

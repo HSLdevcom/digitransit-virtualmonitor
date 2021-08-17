@@ -30,6 +30,9 @@ interface IProps {
     gtfsIdForHidden: string,
   ) => void;
 }
+const getStopIcon = (stop) => {
+  return stop.locationType === 'STATION' && stop.vehicleMode ? stop.vehicleMode?.toLowerCase() : 'stop-bus';
+}
 
 const StopRow: FC<IProps & WithTranslation> = ({
   side,
@@ -55,7 +58,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
   return (
     <div className="stop-row-container">
       <div className="stop-row-stop icon">
-        <Icon img="stop-bus" color={'#007ac9'} />
+        <Icon img={getStopIcon(stop)} color={'#007ac9'} height={32} width={32} />
       </div>
       <div className="stop-row-main">
         <div className="stop-upper-row">

@@ -97,7 +97,7 @@ const IconMap = (style: IIconMapProps) => {
     clock: <Clock style={style} />,
     bus: <Bus style={style} />,
     tram: <Tram style={style} />,
-    train: <Train style={style} />,
+    rail: <Train style={style} />,
     subway: <Metro style={style} />,
   };
 };

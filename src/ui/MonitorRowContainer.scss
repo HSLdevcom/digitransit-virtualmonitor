@@ -186,6 +186,9 @@ $preview-grid-divider: 2px;
 
       &.tightened {
         height: 50%;
+        .row-with-separator.alert {
+          height: calc(100% / 4);
+        }
       }
       .row-with-separator.alert {
         position: absolute;

@@ -83,7 +83,7 @@ const CarouselContainer: FC<IProps> = ({
     alertComponent = (
       <MonitorAlertRow
         alert={a}
-        alertRows={alertSpan}
+        alertRows={1}
         alertCount={alerts.length * languages.length}
         currentLang={languages[language]}
         isLandscape={false}

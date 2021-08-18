@@ -1,8 +1,10 @@
-const express = require('express');
-const { getTranslations, getTranslations3 } = require('gtfs');
+//const express = require('express');
+import express from 'express';
+import { getTranslations, getTranslations3 } from 'gtfs';
 const router = express.Router();
 
-const monitorService = require('./monitorService');
+import monitorService from './monitorService.js';
+//const monitorService = require('./monitorService');
 
 router.get('/monitors', (req, res) => {
   monitorService.getAll(req, res);
@@ -27,4 +29,5 @@ router.get('/translations/:recordIds', (req, res) => {
   })
 });
 
-module.exports = router;
+//module.exports = router;
+export default router;

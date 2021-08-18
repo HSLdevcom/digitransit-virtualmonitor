@@ -5,4 +5,4 @@ const config = {
     containerId: process.env.APPSETTING_DB_CONTAINER || 'X',
     partitionKey: { kind:  'Hash', paths: ['/contenthash'] }
 };
-module.exports = config;
+export default config;

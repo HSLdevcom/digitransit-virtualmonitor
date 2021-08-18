@@ -27,7 +27,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   lang,
   t,
 }) => {
-  const {isMultiDisplay} = getLayout(layout);
+  const { isMultiDisplay } = getLayout(layout);
   const [newTitle, setNewTitle] = useState(
     isMultiDisplay ? t('layout') : title,
   );

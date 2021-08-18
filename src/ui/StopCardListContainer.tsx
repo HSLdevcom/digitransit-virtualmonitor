@@ -91,7 +91,9 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
 }) => {
   const [stopCardList, setStopCardList] = useState(defaultStopCardList);
   const [languages, setLanguages] = useState(props.languages);
-  const [orientation, setOrientation] = useState(defaultStopCardList[0].layout > 11 ? 'vertical' : 'horizontal');
+  const [orientation, setOrientation] = useState(
+    defaultStopCardList[0].layout > 11 ? 'vertical' : 'horizontal',
+  );
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);

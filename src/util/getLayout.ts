@@ -7,9 +7,7 @@ interface ILayout {
   alertSpan?: number;
 }
 
-export const getLayout = (
-  layout: number,
-): ILayout => {
+export const getLayout = (layout: number): ILayout => {
   switch (layout) {
     case 1:
       return {
@@ -102,7 +100,7 @@ export const getLayout = (
         rightColumnCount: 0,
         isMultiDisplay: false,
         isPortrait: true,
-        alertSpan: 2,
+        alertSpan: 1,
       };
     case 15:
       return {
@@ -110,7 +108,7 @@ export const getLayout = (
         rightColumnCount: 0,
         isMultiDisplay: false,
         isPortrait: true,
-        alertSpan: 3,
+        alertSpan: 1,
       };
     case 16:
       return {
@@ -119,7 +117,7 @@ export const getLayout = (
         isMultiDisplay: false,
         isPortrait: true,
         tighten: [4, 6],
-        alertSpan: 2,
+        alertSpan: 1,
       };
     case 17:
       return {
@@ -128,7 +126,7 @@ export const getLayout = (
         isMultiDisplay: false,
         isPortrait: true,
         tighten: [6, 12],
-        alertSpan: 3,
+        alertSpan: 1,
       };
   }
 };
@@ -143,6 +141,6 @@ export const getAlertRowSpanForLayouts = (views, current) => {
       alertRowSpan = 2;
     }
     return alertRowSpan;
-  })
+  });
   return Math.max(...alertRowSpans);
-} 
+};

@@ -30,8 +30,7 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   const layOuts = views.map(v => {
     const { leftColumnCount, rightColumnCount } = getLayout(v.layout);
     return leftColumnCount + rightColumnCount;
-  })
-
+  });
 
   const largest = Math.max(...layOuts);
   const [stopIds, stationIds] = getStopsAndStationsFromViews(views);

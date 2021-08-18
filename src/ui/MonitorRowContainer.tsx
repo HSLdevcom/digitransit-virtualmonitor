@@ -6,6 +6,7 @@ import cx from 'classnames';
 import { formatDate, setDate } from '../time';
 import { getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
+import { v4 as uuid } from 'uuid';
 
 interface IProps {
   departuresLeft: Array<IDeparture>;
@@ -18,7 +19,7 @@ interface IProps {
   isLandscape: boolean;
   alertState: number;
   alertComponent: any;
-  alertRowSpan: number,
+  alertRowSpan: number;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -35,7 +36,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   alertRowSpan,
   t,
 }) => {
-  const {leftColumnCount, rightColumnCount, isMultiDisplay, tighten} =
+  const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
     getLayout(layout);
 
   const sortedDeparturesLeft = departuresLeft
@@ -130,6 +131,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   for (let i = 0; i < leftColumnCountWithAlerts; i++) {
     leftColumn.push(
       <MonitorRow
+        key={uuid()}
         departure={
           i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
         }
@@ -164,6 +166,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       ) {
         rightColumn.push(
           <MonitorRow
+            key={uuid()}
             departure={
               i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
             }
@@ -188,6 +191,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       for (let i = 0; i < rightColumnCount; i++) {
         rightColumn.push(
           <MonitorRow
+            key={uuid()}
             departure={
               i !==
               (nextDayDepartureIndexRight || currentDayDepartureIndexRight)
@@ -210,19 +214,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       }
     }
   }
-
-
-  const leftColumnStyle = { '--rows': leftColumnCount } as React.CSSProperties;
-  const rightColumnStyle = {
-    '--rows': rightColumnCount,
-  } as React.CSSProperties;
-
-  const tightenBeginStyle = {
-    '--rows': tighten ? tighten[0] : leftColumnCount,
-  } as React.CSSProperties;
-  const tightenEndingStyle = {
-    '--rows': tighten ? tighten[1] : leftColumnCount,
-  } as React.CSSProperties;
 
   const headers = (columns, stops) => {
     let withStopCode = false;
@@ -278,41 +269,30 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           })}
         >
           {headers(leftColumnCount, leftStops)}
-          {!isTighten && (
+          {isTighten && (
             <div
-              style={leftColumnStyle}
-              className={cx('grid-rows', `rows${leftColumnCount}`, {
-                portrait: !isLandscape,
-                'two-cols': withTwoColumns,
-              })}
+              className={cx(
+                'grid-rows portrait tightened',
+                `rows${tighten[0]}`,
+              )}
             >
-              {leftColumn}{alertComponent}
+              {leftColumn.slice(0, tighten[0])}
             </div>
           )}
-          {isTighten && (
-            <>
-              <div
-                style={tightenBeginStyle}
-                className={cx(
-                  'grid-rows',
-                  'portrait tightened',
-                  `rows${tighten[0]}`,
-                )}
-              >
-                {leftColumn.slice(0, tighten[0])}
-              </div>
-              <div
-                style={tightenEndingStyle}
-                className={cx(
-                  'grid-rows',
-                  'portrait tightened',
-                  `rows${tighten[1]}`,
-                )}
-              >
-                {leftColumn.slice(tighten[0])}{alertComponent}
-              </div>
-            </>
-          )}
+          <div
+            className={cx(
+              'grid-rows',
+              `rows${isTighten ? tighten[1] : leftColumnCount}`,
+              {
+                portrait: !isLandscape,
+                'two-cols': withTwoColumns,
+                tightened: isTighten,
+              },
+            )}
+          >
+            {isTighten ? leftColumn.slice(tighten[0]) : leftColumn}
+            {alertComponent}
+          </div>
         </div>
       ) : (
         <div className="grid no-departures-container">
@@ -336,7 +316,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 isMultiDisplay ? rightStops : leftStops,
               )}
               <div
-                style={rightColumnStyle}
                 className={cx('grid-rows', `rows${rightColumnCount}`, {
                   'two-cols': withTwoColumns,
                 })}

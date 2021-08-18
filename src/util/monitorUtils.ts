@@ -117,7 +117,10 @@ export const createDepartureArray = (views, stops, isStation = false) => {
       });
       const colIndex = column === 'left' ? 0 : 1;
       departures[i] = departures[i] ? departures[i] : [[], []];
-      departures[i][colIndex] = uniqBy(departureArray, departure => departure.trip.gtfsId);
+      departures[i][colIndex] = uniqBy(
+        departureArray,
+        departure => departure.trip.gtfsId,
+      );
     });
   });
   return [

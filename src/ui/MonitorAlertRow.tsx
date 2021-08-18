@@ -1,12 +1,10 @@
 import React, { FC, useEffect, useState } from 'react';
 import cx from 'classnames';
+import { clear } from 'console';
 
 interface IProps {
-  isLandscape: boolean;
-  alertRows: number;
   alertCount: number;
   alert: string;
-  currentLang: string;
 }
 const getAnimationHeight = () => {
   const alertContainer = document.getElementsByClassName('alert');
@@ -14,65 +12,56 @@ const getAnimationHeight = () => {
   return -1 * (alert[0]?.scrollWidth - alertContainer[0]?.clientWidth);
 };
 
-const MonitorAlertRow: FC<IProps> = ({ alertRows, isLandscape, alert, alertCount }) => {
+const MonitorAlertRow: FC<IProps> = ({ alert, alertCount }) => {
   const [animationHeight, setAnimationHeight] = useState(0);
   const [update, setUpdate] = useState(false);
   const [loop, setLoop] = useState(false);
   useEffect(() => {
     setAnimationHeight(getAnimationHeight());
+    let to;
     window.addEventListener('resize', () => {
       setAnimationHeight(getAnimationHeight());
       setUpdate(true);
-      setTimeout(() => setUpdate(false), 100); // force keyframes to use the new value by rerendering
+      to = setTimeout(() => setUpdate(false), 100); // force keyframes to use the new value by rerendering
     });
+    return () => clearTimeout(to);
   }, []);
   useEffect(() => {
+    let to1, to2;
     if (alertCount === 1) {
       setLoop(true);
       setUpdate(true);
-      setTimeout(() => setUpdate(false), 100);
-      setTimeout(() => setLoop(false), 20000);
+      to1 = setTimeout(() => setUpdate(false), 100);
+      to2 = setTimeout(() => setLoop(false), 20000);
     }
+    return () => {
+      clearTimeout(to1);
+      clearTimeout(to2);
+    };
   }, [alertCount, loop]);
   useEffect(() => {
     setAnimationHeight(getAnimationHeight());
     setUpdate(true);
-    setTimeout(() => setUpdate(false), 100);
+    const to = setTimeout(() => setUpdate(false), 100);
+    return () => clearTimeout(to);
   }, [alert]);
-  let alertRowClass = '';
-  switch (alertRows) {
-    case 2:
-      alertRowClass = 'two-rows';
-      break;
-    case 3:
-      alertRowClass = 'three-rows';
-      break;
-    case 4:
-      alertRowClass = 'four-rows';
-      break;
-    default:
-      alertRowClass = '';
-      break;
-  }
+
   const style = {
     '--animationHeight': `${Number(animationHeight).toFixed(0)}px`,
   } as React.CSSProperties;
   return (
-    <div className={cx("row-with-separator alert", alertRowClass)}>
-    <div className="separator"></div>
-    <div style={style} className={cx('grid-row', 'alert', alertRowClass)}>
+    <div style={style} className={cx('grid-row', 'alert')}>
       <div className={cx('grid-cols', 'alert-row')}>
         <div
           className={cx('alert-text', {
             animated: animationHeight < 0 && !update,
-            portrait: !isLandscape,
           })}
         >
           {alert}
         </div>
       </div>
-    </div></div>
+    </div>
   );
 };
 
-export default MonitorAlertRow;
+export default React.memo(MonitorAlertRow);

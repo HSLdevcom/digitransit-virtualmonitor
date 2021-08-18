@@ -30,10 +30,10 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
             setLanguages(r.languages);
           }
         }
-        setLoading(false)
+        setLoading(false);
       });
     } else {
-      setLoading(false)
+      setLoading(false);
     }
   }, []);
 
@@ -67,7 +67,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
     );
   });
   if (loading) {
-    return <Loading white/>
+    return <Loading white />;
   }
   return (
     <ContentContainer>

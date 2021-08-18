@@ -20,6 +20,7 @@ interface IProps {
   defaultStopCardList: any;
   languages: Array<string>;
   loading?: boolean;
+  vertical?: boolean;
 }
 
 const StopCardItem = ({
@@ -90,7 +91,9 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
 }) => {
   const [stopCardList, setStopCardList] = useState(defaultStopCardList);
   const [languages, setLanguages] = useState(props.languages);
-  const [orientation, setOrientation] = useState('horizontal');
+  const [orientation, setOrientation] = useState(
+    defaultStopCardList[0].layout > 11 ? 'vertical' : 'horizontal',
+  );
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);
@@ -208,8 +211,8 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       stopCardList[cardIndex].columns['right'].inUse = true;
     } else if (type === 'layout') {
       if (
-        getLayout(stopCardList[cardIndex].layout)[2] &&
-        !getLayout(Number(value))[2]
+        getLayout(stopCardList[cardIndex].layout).isMultiDisplay &&
+        !getLayout(Number(value)).isMultiDisplay
       ) {
         stopCardList[cardIndex].columns.left.stops = stopCardList[
           cardIndex

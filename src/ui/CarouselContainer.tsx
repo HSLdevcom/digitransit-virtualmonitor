@@ -5,6 +5,9 @@ import Monitor from './Monitor';
 import { EpochMilliseconds } from '../time';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
+import MonitorAlertRow from './MonitorAlertRow';
+import { getAlertRowSpanForLayouts, getLayout } from '../util/getLayout';
+import cx from 'classnames';
 
 interface IProps {
   views: Array<IView>;
@@ -52,11 +55,11 @@ const CarouselContainer: FC<IProps> = ({
   useEffect(() => {
     const len = alerts.length * languages.length;
     const next = (alert + 1) % len;
-    const to = setTimeout(() => {
+    const to = setInterval(() => {
       setAlert(next);
     }, 20000);
-    return () => clearTimeout(to);
-  }, [alert]);
+    return () => clearInterval(to);
+  }, [alert, alerts, languages]);
 
   const index = Math.floor(current / 2) % views.length;
   const config = getConfig();
@@ -68,8 +71,42 @@ const CarouselContainer: FC<IProps> = ({
   // for easy testing of different layouts
   const newView = {
     ...views[index],
-    //layout: 17,
+    //layout: 13,
   };
+  const a = alerts[
+    Math.floor(alert / languages.length)
+  ]?.alertDescriptionTextTranslations.find(
+    a => a.language === languages[alert % languages.length],
+  ).text;
+  const { alertSpan } = getLayout(newView.layout);
+  let alertComponent;
+  let alertRowClass = '';
+  switch (alertSpan) {
+    case 2:
+      alertRowClass = 'two-rows';
+      break;
+    case 3:
+      alertRowClass = 'three-rows';
+      break;
+    case 4:
+      alertRowClass = 'four-rows';
+      break;
+    default:
+      alertRowClass = '';
+      break;
+  }
+  if (a) {
+    alertComponent = (
+      <div className={cx('row-with-separator alert', alertRowClass)}>
+        <div className="separator"></div>
+        <MonitorAlertRow
+          key={a}
+          alert={a}
+          alertCount={alerts.length * languages.length}
+        />
+      </div>
+    );
+  }
 
   return (
     <Monitor
@@ -78,17 +115,12 @@ const CarouselContainer: FC<IProps> = ({
       departures={departures}
       translatedStrings={translations.filter(t => t.lang === lan)}
       config={config}
-      alert={
-        alerts[
-          Math.floor(alert / languages.length)
-        ]?.alertDescriptionTextTranslations.find(
-          a => a.language === languages[alert % languages.length],
-        ).text
-      }
       noPolling={noPolling}
       time={time}
       isPreview={preview}
       alertState={alertState}
+      alertComponent={alertComponent}
+      alertRowSpan={alertSpan}
     />
   );
 };

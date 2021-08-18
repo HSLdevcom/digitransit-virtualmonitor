@@ -20,7 +20,6 @@ const getWindowDimensions = () => {
 };
 
 interface IProps {
-  alert: number;
   alertState: number;
   readonly view: IView;
   readonly departures: Array<Array<IDeparture>>;
@@ -30,6 +29,8 @@ interface IProps {
   readonly noPolling?: boolean;
   readonly time?: EpochMilliseconds;
   readonly isPreview: boolean;
+  alertComponent: any;
+  alertRowSpan: number;
 }
 const Monitor: FC<IProps> = ({
   view,
@@ -40,13 +41,14 @@ const Monitor: FC<IProps> = ({
   noPolling,
   time,
   isPreview,
-  alert,
   alertState,
+  alertComponent,
+  alertRowSpan,
 }) => {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
-  const isMultiDisplay = getLayout(view.layout)[2];
+  const { isMultiDisplay } = getLayout(view.layout);
 
   useEffect(() => {
     setWindowDimensions(getWindowDimensions());
@@ -112,8 +114,9 @@ const Monitor: FC<IProps> = ({
         translatedStrings={translatedStrings}
         layout={view.layout}
         isLandscape={isLandscapeByLayout}
-        alert={alert}
         alertState={alertState}
+        alertComponent={alertComponent}
+        alertRowSpan={alertRowSpan}
       />
     </div>
   );

@@ -6,6 +6,7 @@ import monitorAPI from '../api';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
+import Loading from './Loading';
 
 interface IConfigWithFeedIs extends IMonitorConfig {
   feedIds?: Array<string>;
@@ -17,6 +18,7 @@ interface IProps {
 const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
   const [stopCardList, setStopCardList] = useState(null);
   const [languages, setLanguages] = useState(['fi']);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const hash: any = location.search.split('cont=');
@@ -28,7 +30,10 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
             setLanguages(r.languages);
           }
         }
+        setLoading(false);
       });
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -61,6 +66,9 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
         : stationIds.push(s.gtfsId),
     );
   });
+  if (loading) {
+    return <Loading white />;
+  }
   return (
     <ContentContainer>
       <StopCardListDataContainer
@@ -69,6 +77,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
         stationIds={stationIds}
         stopCardList={stopCardList}
         feedIds={props.config.feedIds}
+        loading={loading}
       />
     </ContentContainer>
   );

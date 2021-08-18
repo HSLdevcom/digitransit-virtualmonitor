@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { formatDate, setDate } from '../time';
 import { getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
-import MonitorAlertRow from './MonitorAlertRow';
+import { v4 as uuid } from 'uuid';
 
 interface IProps {
   departuresLeft: Array<IDeparture>;
@@ -17,8 +17,9 @@ interface IProps {
   currentLang: string;
   layout: any;
   isLandscape: boolean;
-  alert: any;
   alertState: number;
+  alertComponent: any;
+  alertRowSpan: number;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -30,11 +31,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   currentLang,
   layout,
   isLandscape,
-  alert,
   alertState,
+  alertComponent,
+  alertRowSpan,
   t,
 }) => {
-  const [leftColumnCount, rightColumnCount, isMultiDisplay, differSize] =
+  const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
     getLayout(layout);
 
   const sortedDeparturesLeft = departuresLeft
@@ -119,22 +121,17 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     sortedDeparturesRight.splice(0, 0, null);
   }
 
-  const isTighten = differSize !== undefined;
+  const isTighten = tighten !== undefined;
 
   const withTwoColumns = isLandscape && rightColumnCount > 0;
-  let alertRowSpan = 1;
-  if (leftColumnCount === 8 && rightColumnCount === 12) {
-    alertRowSpan = 2;
-  } else if (leftColumnCount > 8) {
-    alertRowSpan = 2;
-  }
   let leftColumnCountWithAlerts = leftColumnCount;
-  if (alert) {
+  if (alertComponent && layout < 12) {
     leftColumnCountWithAlerts -= alertRowSpan;
   }
   for (let i = 0; i < leftColumnCountWithAlerts; i++) {
     leftColumn.push(
       <MonitorRow
+        key={uuid()}
         departure={
           i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
         }
@@ -169,6 +166,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       ) {
         rightColumn.push(
           <MonitorRow
+            key={uuid()}
             departure={
               i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
             }
@@ -193,6 +191,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       for (let i = 0; i < rightColumnCount; i++) {
         rightColumn.push(
           <MonitorRow
+            key={uuid()}
             departure={
               i !==
               (nextDayDepartureIndexRight || currentDayDepartureIndexRight)
@@ -215,28 +214,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       }
     }
   }
-  if (alert) {
-    leftColumn.push(
-      <MonitorAlertRow
-        alert={alert}
-        alertRows={alertRowSpan}
-        currentLang={currentLang}
-        isLandscape={isLandscape}
-      />,
-    );
-  }
-
-  const leftColumnStyle = { '--rows': leftColumnCount } as React.CSSProperties;
-  const rightColumnStyle = {
-    '--rows': rightColumnCount,
-  } as React.CSSProperties;
-
-  const tightenBeginStyle = {
-    '--rows': differSize ? differSize[0] : leftColumnCount,
-  } as React.CSSProperties;
-  const tightenEndingStyle = {
-    '--rows': differSize ? differSize[1] : leftColumnCount,
-  } as React.CSSProperties;
 
   const headers = (columns, stops) => {
     let withStopCode = false;
@@ -250,7 +227,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       <div
         className={cx(
           'grid-headers',
-          `rows${isTighten ? differSize[0] : columns}`,
+          `rows${isTighten ? tighten[0] : columns}`,
           {
             tightened: isTighten,
             portrait: !isLandscape,
@@ -292,41 +269,30 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           })}
         >
           {headers(leftColumnCount, leftStops)}
-          {!isTighten && (
+          {isTighten && (
             <div
-              style={leftColumnStyle}
-              className={cx('grid-rows', `rows${leftColumnCount}`, {
-                portrait: !isLandscape,
-                'two-cols': withTwoColumns,
-              })}
+              className={cx(
+                'grid-rows portrait tightened',
+                `rows${tighten[0]}`,
+              )}
             >
-              {leftColumn}
+              {leftColumn.slice(0, tighten[0])}
             </div>
           )}
-          {isTighten && (
-            <>
-              <div
-                style={tightenBeginStyle}
-                className={cx(
-                  'grid-rows',
-                  'portrait tightened',
-                  `rows${differSize[0]}`,
-                )}
-              >
-                {leftColumn.slice(0, differSize[0])}
-              </div>
-              <div
-                style={tightenEndingStyle}
-                className={cx(
-                  'grid-rows',
-                  'portrait tightened',
-                  `rows${differSize[1]}`,
-                )}
-              >
-                {leftColumn.slice(differSize[0])}
-              </div>
-            </>
-          )}
+          <div
+            className={cx(
+              'grid-rows',
+              `rows${isTighten ? tighten[1] : leftColumnCount}`,
+              {
+                portrait: !isLandscape,
+                'two-cols': withTwoColumns,
+                tightened: isTighten,
+              },
+            )}
+          >
+            {isTighten ? leftColumn.slice(tighten[0]) : leftColumn}
+            {alertComponent}
+          </div>
         </div>
       ) : (
         <div className="grid no-departures-container">
@@ -336,6 +302,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               {t('no-departures', { lng: currentLang })}
             </div>
           </div>
+          {alertComponent}
         </div>
       )}
 
@@ -349,7 +316,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 isMultiDisplay ? rightStops : leftStops,
               )}
               <div
-                style={rightColumnStyle}
                 className={cx('grid-rows', `rows${rightColumnCount}`, {
                   'two-cols': withTwoColumns,
                 })}

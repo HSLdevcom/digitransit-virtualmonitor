@@ -1,61 +1,3 @@
-// const newItem = {
-//     contenthash: "abc1231",
-//     monitors: [
-//         {
-//             id: 1,
-//             title: "Foo",
-//             stops: [
-//                 {
-//                     code: "H0132",
-//                     desc: "Mannerheimintie",
-//                     gtfsId: "HSL:1180444",
-//                     hiddenRoutes: [
-//                         {
-//                             __typename: "Route",
-//                             shortName: "8H",
-//                             gtfsId: "HSL:1008H"
-//                         }
-//                     ],
-//                     name: "Kuusitie",
-//                     platformCode: null
-//                 }
-//             ],
-//             layout: 2,
-//             time: 5
-//         },
-//         {
-//             id: 2,
-//             title: "Bar",
-//             stops: [
-//                 {
-//                     code: "H1501",
-//                     desc: "Neulastie",
-//                     gtfsId: "HSL:1333105",
-//                     hiddenRoutes: [
-//                         {
-//                             __typename: "Route",
-//                             shortName: "39N",
-//                             gtfsId: "HSL:1039N"
-//                         }
-//                     ],
-//                     name: "Neulastie",
-//                     platformCode: null
-//                 },
-//                 {
-//                     __typename: "Stop",
-//                     name: "Hesperian puisto",
-//                     code: "H1909",
-//                     desc: "Mannerheimintie",
-//                     gtfsId: "HSL:1130206",
-//                     platformCode: null,
-//                     hiddenRoutes: []
-//                 }
-//             ],
-//             layout: 2,
-//             time: 5
-//         }
-//     ]
-// };
 import express from 'express';
 import path from 'path';
 import logger from 'morgan';
@@ -86,12 +28,7 @@ app.set('views', path.join(import.meta.url, 'views'));
 app.set('view engine', 'pug');
 
 app.use('/api', index);
-// app.get('*', (req, res) => {
-//   res.sendFile(path.join(__dirname, '../build', 'index.html'));
-// });
-// app.get('*', (req, res) => {
-//   res.sendFile("build/index.html", { root: root });
-// });
+
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build', 'index.html'))
   //res.end()

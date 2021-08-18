@@ -15,7 +15,6 @@ import index from './routes.js';
 const app = express();
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,10 +23,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(import.meta.url, '../build')));
 
 // view engine setup
-app.set('views', path.join(import.meta.url, 'views'));
+app.set('views', path.join(import.meta.url, '../views'));
 app.set('view engine', 'pug');
 
 app.use('/api', index);
+app.get('/favicon.ico', (req, res) => res.status(200)) 
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../build', 'index.html'))
@@ -37,7 +37,7 @@ app.get('*', (req, res) => {
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
-  //err.status = 404;
+  err.status = 404;
   next(err);
 });
 
@@ -49,7 +49,10 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', {
+    message: err.message,
+    error: err
+  });
 });
 
 //module.exports = app;

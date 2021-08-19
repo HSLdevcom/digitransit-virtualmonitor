@@ -129,7 +129,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     leftColumnCountWithAlerts -= alertRowSpan;
   }
   for (let i = 0; i < leftColumnCountWithAlerts; i++) {
-    const departure = i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null;
+    const departure =
+      i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null;
     leftColumn.push(
       <MonitorRow
         key={departure ? departure.trip.gtfsId : uuid()}

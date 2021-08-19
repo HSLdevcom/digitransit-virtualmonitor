@@ -268,7 +268,6 @@ $preview-grid-divider: 2px;
       height: 100%;
       display: grid;
 
-
       .grid-col {
         align-self: center;
 
@@ -317,11 +316,13 @@ $preview-grid-divider: 2px;
     }
   }
 }
+
 .portrait {
   .grid-row.alert {
     font-size: calc((#{var(--height)} - 30vh) / 14) !important;
   }
 }
+
 .grid-row {
   &.alert {
     flex: 1;
@@ -360,7 +361,6 @@ $preview-grid-divider: 2px;
     transform: translateX(calc(#{var(--animationHeight)} - 2vh));
     //-webkit-transform: translateX(-200%);
     //transform: translateX(calc(-200%));
-
   }
 }
 

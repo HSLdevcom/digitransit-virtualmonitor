@@ -22,15 +22,15 @@ const MonitorAlertRow: FC<IProps> = ({ alerts, alertCount, languages }) => {
     window.addEventListener('resize', () => {
       setAnimationHeight(getAnimationHeight());
       to = setTimeout(() => setUpdate(false), 100);
-    })
+    });
     return () => clearTimeout(to);
-  }, [])
+  }, []);
   useEffect(() => {
     setAnimationHeight(getAnimationHeight());
     setUpdate(true);
     const to = setTimeout(() => setUpdate(false), 100);
     return () => clearTimeout(to);
-  }, [curr])
+  }, [curr]);
   useEffect(() => {
     setUpdate(true);
     const to = setTimeout(() => setUpdate(false), 100);
@@ -52,7 +52,9 @@ const MonitorAlertRow: FC<IProps> = ({ alerts, alertCount, languages }) => {
           className={cx('alert-text', {
             animated: !update,
           })}
-          onAnimationEnd={() => {setTimeout(() => setCurr((curr+1) % alertCount ), 2000)}}
+          onAnimationEnd={() => {
+            setTimeout(() => setCurr((curr + 1) % alertCount), 2000);
+          }}
         >
           {a}
         </div>

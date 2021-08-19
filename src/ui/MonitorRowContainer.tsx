@@ -129,12 +129,11 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     leftColumnCountWithAlerts -= alertRowSpan;
   }
   for (let i = 0; i < leftColumnCountWithAlerts; i++) {
+    const departure = i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null;
     leftColumn.push(
       <MonitorRow
-        key={uuid()}
-        departure={
-          i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
-        }
+        key={departure ? departure.trip.gtfsId : uuid()}
+        departure={departure}
         translations={translatedStrings}
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
         showVia={

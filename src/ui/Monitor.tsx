@@ -61,7 +61,6 @@ const Monitor: FC<IProps> = ({
 
   const windowHeight = windowDimensions.height;
   const windowWidth = windowDimensions.width;
-
   const dimensions = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,

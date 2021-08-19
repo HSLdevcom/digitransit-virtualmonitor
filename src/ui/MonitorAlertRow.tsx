@@ -4,7 +4,8 @@ import { clear } from 'console';
 
 interface IProps {
   alertCount: number;
-  alert: string;
+  alerts: any;
+  languages: any;
 }
 const getAnimationHeight = () => {
   const alertContainer = document.getElementsByClassName('alert');
@@ -12,40 +13,35 @@ const getAnimationHeight = () => {
   return -1 * (alert[0]?.scrollWidth - alertContainer[0]?.clientWidth);
 };
 
-const MonitorAlertRow: FC<IProps> = ({ alert, alertCount }) => {
+const MonitorAlertRow: FC<IProps> = ({ alerts, alertCount, languages }) => {
   const [animationHeight, setAnimationHeight] = useState(0);
+  const [curr, setCurr] = useState(0);
   const [update, setUpdate] = useState(false);
-  const [loop, setLoop] = useState(false);
   useEffect(() => {
-    setAnimationHeight(getAnimationHeight());
     let to;
     window.addEventListener('resize', () => {
       setAnimationHeight(getAnimationHeight());
-      setUpdate(true);
-      to = setTimeout(() => setUpdate(false), 100); // force keyframes to use the new value by rerendering
-    });
+      to = setTimeout(() => setUpdate(false), 100);
+    })
     return () => clearTimeout(to);
-  }, []);
-  useEffect(() => {
-    let to1, to2;
-    if (alertCount === 1) {
-      setLoop(true);
-      setUpdate(true);
-      to1 = setTimeout(() => setUpdate(false), 100);
-      to2 = setTimeout(() => setLoop(false), 20000);
-    }
-    return () => {
-      clearTimeout(to1);
-      clearTimeout(to2);
-    };
-  }, [alertCount, loop]);
+  }, [])
   useEffect(() => {
     setAnimationHeight(getAnimationHeight());
     setUpdate(true);
     const to = setTimeout(() => setUpdate(false), 100);
     return () => clearTimeout(to);
-  }, [alert]);
+  }, [curr])
+  useEffect(() => {
+    setUpdate(true);
+    const to = setTimeout(() => setUpdate(false), 100);
+    return () => clearTimeout(to);
+  }, [curr]);
 
+  const a = alerts[
+    Math.floor(curr / languages.length)
+  ]?.alertDescriptionTextTranslations.find(
+    a => a.language === languages[curr % languages.length],
+  ).text;
   const style = {
     '--animationHeight': `${Number(animationHeight).toFixed(0)}px`,
   } as React.CSSProperties;
@@ -54,14 +50,15 @@ const MonitorAlertRow: FC<IProps> = ({ alert, alertCount }) => {
       <div className={cx('grid-cols', 'alert-row')}>
         <div
           className={cx('alert-text', {
-            animated: animationHeight < 0 && !update,
+            animated: !update,
           })}
+          onAnimationEnd={() => {setTimeout(() => setCurr((curr+1) % alertCount ), 2000)}}
         >
-          {alert}
+          {a}
         </div>
       </div>
     </div>
   );
 };
 
-export default React.memo(MonitorAlertRow);
+export default MonitorAlertRow;

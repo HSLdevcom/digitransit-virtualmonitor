@@ -19,6 +19,7 @@ interface IStop {
 interface ITrip {
   route: IRoute;
   stops: Array<IStop>;
+  gtfsId: string;
 }
 export interface IDeparture {
   realtimeState: string;

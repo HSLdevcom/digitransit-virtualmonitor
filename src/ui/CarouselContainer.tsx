@@ -6,7 +6,7 @@ import { EpochMilliseconds } from '../time';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorAlertRow from './MonitorAlertRow';
-import { getAlertRowSpanForLayouts, getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getLayout';
 import cx from 'classnames';
 
 interface IProps {
@@ -33,10 +33,12 @@ const CarouselContainer: FC<IProps> = ({
   preview = false,
 }) => {
   const len = views.length * languages.length * 2;
+  const alertsLength = alerts.length * languages.length;
   const [current, setCurrent] = useState(0);
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
-  const [alert, setAlert] = useState(0);
+  //const [alert, setAlert] = useState(0);
+
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
@@ -52,14 +54,15 @@ const CarouselContainer: FC<IProps> = ({
     return () => clearTimeout(id);
   }, [current]);
 
-  useEffect(() => {
-    const len = alerts.length * languages.length;
-    const next = (alert + 1) % len;
-    const to = setInterval(() => {
-      setAlert(next);
-    }, 20000);
-    return () => clearInterval(to);
-  }, [alert, alerts, languages]);
+  // useEffect(() => {
+  //   console.log("useEff", alert)
+  //   // const len = alerts.length * languages.length;
+  //   // const next = (alert + 1) % len;
+  //   // const to = setTimeout(() => {
+  //   //   setAlert(next);
+  //   // }, 19000);
+  //   // return () => clearTimeout(to);
+  // }, [alert, alerts, languages]);
 
   const index = Math.floor(current / 2) % views.length;
   const config = getConfig();
@@ -73,11 +76,7 @@ const CarouselContainer: FC<IProps> = ({
     ...views[index],
     //layout: 13,
   };
-  const a = alerts[
-    Math.floor(alert / languages.length)
-  ]?.alertDescriptionTextTranslations.find(
-    a => a.language === languages[alert % languages.length],
-  ).text;
+
   const { alertSpan } = getLayout(newView.layout);
   let alertComponent;
   let alertRowClass = '';
@@ -95,14 +94,14 @@ const CarouselContainer: FC<IProps> = ({
       alertRowClass = '';
       break;
   }
-  if (a) {
+  if (alerts.length > 0) {
     alertComponent = (
       <div className={cx('row-with-separator alert', alertRowClass)}>
         <div className="separator"></div>
         <MonitorAlertRow
-          key={a}
-          alert={a}
+          alerts={alerts}
           alertCount={alerts.length * languages.length}
+          languages={languages}
         />
       </div>
     );

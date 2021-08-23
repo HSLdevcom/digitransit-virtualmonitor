@@ -3,11 +3,12 @@
 /**
  * Module dependencies.
  */
-
-var app = require('./app');
-var debug = require('debug')('express-react:server');
-var http = require('http');
-var CronJob = require('cron').CronJob;
+import app from './app.js';
+import Debug from 'debug';
+import http from 'http';
+const debug = Debug('express-react:server');
+import cron from 'cron';
+const CronJob = cron.CronJob;
 
 /**
  * Get port from environment and store in Express.
@@ -15,7 +16,8 @@ var CronJob = require('cron').CronJob;
 
 var port = normalizePort(process.env.PORT || '3001');
 
-const gtfs = require('gtfs');
+// const gtfs = require('gtfs');
+import { importGtfs } from 'gtfs';
 const config = {
   agencies: [
     {
@@ -38,13 +40,13 @@ const config = {
     }
   ]
 };
-gtfs.import(config)
-    .then(() => {
-      console.log('Import Successful');
-    })
-    .catch(err => {
-      console.error(err);
-    })
+importGtfs(config)
+  .then(() => {
+    console.log('Import Successful');
+  })
+  .catch(err => {
+    console.error(err);
+  })
 
 
 var job = new CronJob(
@@ -52,7 +54,7 @@ var job = new CronJob(
 function () {
   const d = new Date();
   console.log('IMPORT STARTING AT ', d)
-  gtfs.import(config)
+  importGtfs(config)
   .then(() => {
     console.log('Import Successful');
   })

@@ -1,5 +1,7 @@
-const CosmosClient = require("@azure/cosmos").CosmosClient;
-const config = require("./config");
+import cosmosClient from '@azure/cosmos';
+const CosmosClient = cosmosClient.CosmosClient;
+//const config = require("./config");
+import config from './config.js'
 
 const { endpoint, key, databaseId, containerId } = config;
 
@@ -129,4 +131,4 @@ const monitorService = {
   }
 }
 
-module.exports = monitorService;
+export default monitorService;

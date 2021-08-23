@@ -26,7 +26,6 @@ interface IProps {
   currentLang: string;
   readonly translatedStrings: Array<ITranslation>;
   readonly config: IMonitorConfig;
-  readonly noPolling?: boolean;
   readonly time?: EpochMilliseconds;
   readonly isPreview: boolean;
   alertComponent: any;
@@ -38,7 +37,6 @@ const Monitor: FC<IProps> = ({
   translatedStrings,
   currentLang,
   config,
-  noPolling,
   time,
   isPreview,
   alertState,
@@ -99,7 +97,6 @@ const Monitor: FC<IProps> = ({
         )}
         <TitlebarTime
           currentTime={currentTime}
-          updateInterval={noPolling ? 0 : 20000}
           isPreview={isPreview}
           isLandscape={isLandscapeByLayout}
         />

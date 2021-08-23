@@ -114,7 +114,6 @@ const CarouselContainer: FC<IProps> = ({
       departures={departures}
       translatedStrings={translations.filter(t => t.lang === lan)}
       config={config}
-      noPolling={noPolling}
       time={time}
       isPreview={preview}
       alertState={alertState}

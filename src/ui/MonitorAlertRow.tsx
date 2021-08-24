@@ -1,49 +1,56 @@
 import React, { FC, useEffect, useState } from 'react';
 import cx from 'classnames';
-import { clear } from 'console';
 
 interface IProps {
-  alertCount: number;
   alerts: any;
   languages: any;
 }
-const getAnimationHeight = () => {
-  const alertContainer = document.getElementsByClassName('alert');
-  const alert = document.getElementsByClassName('alert-text');
-  return -1 * (alert[0]?.scrollWidth - alertContainer[0]?.clientWidth);
+const getAnimationWidth = () => {
+  const alertElements = document.getElementsByClassName('single-alert');
+  const elementArray = alertElements
+  let animationWidth = 0;// = elementArray.forEach(i => console.log(i))
+  for (let i = 0; i < elementArray.length; i++) {
+    animationWidth += elementArray[i].clientWidth
+  }
+  return animationWidth;
 };
 
-const MonitorAlertRow: FC<IProps> = ({ alerts, alertCount, languages }) => {
-  const [animationHeight, setAnimationHeight] = useState(0);
-  const [curr, setCurr] = useState(0);
+const MonitorAlertRow: FC<IProps> = ({ alerts, languages }) => {
+  const [animationWidth, setAnimationWidth] = useState(0);
+  const [speed, setSpeed] = useState(0);
   const [update, setUpdate] = useState(false);
+
+  const updateAnimation = () => {
+    const width = getAnimationWidth()
+    setAnimationWidth(width);
+    setSpeed(width / window.innerWidth * 5);
+    setUpdate(true);
+  }
   useEffect(() => {
-    let to;
+    updateAnimation();
+    const to = setTimeout(() => setUpdate(false), 100);
     window.addEventListener('resize', () => {
-      setAnimationHeight(getAnimationHeight());
-      to = setTimeout(() => setUpdate(false), 100);
+      updateAnimation();
+      setTimeout(() => setUpdate(false), 100);
     });
     return () => clearTimeout(to);
-  }, []);
-  useEffect(() => {
-    setAnimationHeight(getAnimationHeight());
-    setUpdate(true);
-    const to = setTimeout(() => setUpdate(false), 100);
-    return () => clearTimeout(to);
-  }, [curr]);
-  useEffect(() => {
-    setUpdate(true);
-    const to = setTimeout(() => setUpdate(false), 100);
-    return () => clearTimeout(to);
-  }, [curr]);
+  }, [])
 
-  const a = alerts[
-    Math.floor(curr / languages.length)
-  ]?.alertDescriptionTextTranslations.find(
-    a => a.language === languages[curr % languages.length],
-  ).text;
+  useEffect(() => {
+    updateAnimation();
+    const to = setTimeout(() => setUpdate(false), 100);
+    return () => clearTimeout(to);
+  }, [alerts])
+
+  let a = [];
+  for (let i = 0; i < alerts.length; i++) {
+    for (let j = 0; j < languages.length; j++) {
+      a.push(<span className="single-alert">{alerts[i].alertDescriptionTextTranslations.find(a => a.language === languages[j]).text}</span>)
+    }
+  }
   const style = {
-    '--animationHeight': `${Number(animationHeight).toFixed(0)}px`,
+    '--animationWidth': `${Number(-1 * animationWidth).toFixed(0)}px`,
+    '--speed': `${Number(speed).toFixed(0)}s`,
   } as React.CSSProperties;
   return (
     <div style={style} className={cx('grid-row', 'alert')}>
@@ -52,9 +59,6 @@ const MonitorAlertRow: FC<IProps> = ({ alerts, alertCount, languages }) => {
           className={cx('alert-text', {
             animated: !update,
           })}
-          onAnimationEnd={() => {
-            setTimeout(() => setCurr((curr + 1) % alertCount), 2000);
-          }}
         >
           {a}
         </div>

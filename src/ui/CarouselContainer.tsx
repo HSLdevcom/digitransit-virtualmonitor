@@ -100,7 +100,6 @@ const CarouselContainer: FC<IProps> = ({
         <div className="separator"></div>
         <MonitorAlertRow
           alerts={alerts}
-          alertCount={alerts.length * languages.length}
           languages={languages}
         />
       </div>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { DateTime } from 'luxon';
 
 import NtpSyncContext from '../ntp/NtpSyncContext';
-import { EpochMilliseconds, Milliseconds } from '../time';
+import { EpochMilliseconds } from '../time';
 
 export interface ITimeProps {
   readonly currentTime?: EpochMilliseconds;

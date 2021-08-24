@@ -16,7 +16,6 @@ interface IProps {
   stopDepartures: Array<Array<Array<IDeparture>>>; // and the final one for the actual departures
   translations?: Array<ITranslation>;
   alerts: any;
-  noPolling?: boolean;
   time?: EpochMilliseconds;
   preview?: boolean;
 }
@@ -27,17 +26,14 @@ const CarouselContainer: FC<IProps> = ({
   stationDepartures,
   languages,
   translations,
-  noPolling,
   alerts,
   time,
   preview = false,
 }) => {
   const len = views.length * languages.length * 2;
-  const alertsLength = alerts.length * languages.length;
   const [current, setCurrent] = useState(0);
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
-  //const [alert, setAlert] = useState(0);
 
   useEffect(() => {
     const next = (current + 1) % len;
@@ -53,16 +49,6 @@ const CarouselContainer: FC<IProps> = ({
     }, time);
     return () => clearTimeout(id);
   }, [current]);
-
-  // useEffect(() => {
-  //   console.log("useEff", alert)
-  //   // const len = alerts.length * languages.length;
-  //   // const next = (alert + 1) % len;
-  //   // const to = setTimeout(() => {
-  //   //   setAlert(next);
-  //   // }, 19000);
-  //   // return () => clearTimeout(to);
-  // }, [alert, alerts, languages]);
 
   const index = Math.floor(current / 2) % views.length;
   const config = getConfig();

@@ -12,8 +12,10 @@ $preview-grid-divider: 2px;
 .main-content-container.preview {
   .grid.two-cols {
     margin: 0 5px;
+    .row-with-separator.alert {
+      width: calc(200% + 35px);
+    }
   }
-
   .grid-row.alert {
     left: -5px;
   }

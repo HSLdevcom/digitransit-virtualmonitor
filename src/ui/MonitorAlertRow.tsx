@@ -19,6 +19,7 @@ const MonitorAlertRow: FC<IProps> = ({ alerts, languages }) => {
   const [animationWidth, setAnimationWidth] = useState(0);
   const [speed, setSpeed] = useState(0);
   const [update, setUpdate] = useState(false);
+  const [alertsUpdated, setAlertsUpdated] = useState(false);
 
   const updateAnimation = () => {
     const width = getAnimationWidth();
@@ -37,9 +38,10 @@ const MonitorAlertRow: FC<IProps> = ({ alerts, languages }) => {
   }, []);
 
   useEffect(() => {
-    updateAnimation();
-    const to = setTimeout(() => setUpdate(false), 100);
-    return () => clearTimeout(to);
+    //updateAnimation();
+    setAlertsUpdated(true);
+    //const to = setTimeout(() => setUpdate(false), 100);
+    //return () => clearTimeout(to);
   }, [alerts]);
 
   const a = [];
@@ -67,6 +69,13 @@ const MonitorAlertRow: FC<IProps> = ({ alerts, languages }) => {
           className={cx('alert-text', {
             animated: !update,
           })}
+          onAnimationIteration={e => {
+            if (alertsUpdated) {
+              console.log("UPDATE ANIM")
+              updateAnimation();
+              setTimeout(() => setUpdate(false), 100);
+            }
+          }}
         >
           {a}
         </div>

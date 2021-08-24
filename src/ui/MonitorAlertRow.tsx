@@ -7,10 +7,10 @@ interface IProps {
 }
 const getAnimationWidth = () => {
   const alertElements = document.getElementsByClassName('single-alert');
-  const elementArray = alertElements
-  let animationWidth = 0;// = elementArray.forEach(i => console.log(i))
+  const elementArray = alertElements;
+  let animationWidth = 0; // = elementArray.forEach(i => console.log(i))
   for (let i = 0; i < elementArray.length; i++) {
-    animationWidth += elementArray[i].clientWidth
+    animationWidth += elementArray[i].clientWidth;
   }
   return animationWidth;
 };
@@ -21,11 +21,11 @@ const MonitorAlertRow: FC<IProps> = ({ alerts, languages }) => {
   const [update, setUpdate] = useState(false);
 
   const updateAnimation = () => {
-    const width = getAnimationWidth()
+    const width = getAnimationWidth();
     setAnimationWidth(width);
-    setSpeed(width / window.innerWidth * 5);
+    setSpeed((width / window.innerWidth) * 5);
     setUpdate(true);
-  }
+  };
   useEffect(() => {
     updateAnimation();
     const to = setTimeout(() => setUpdate(false), 100);
@@ -34,18 +34,26 @@ const MonitorAlertRow: FC<IProps> = ({ alerts, languages }) => {
       setTimeout(() => setUpdate(false), 100);
     });
     return () => clearTimeout(to);
-  }, [])
+  }, []);
 
   useEffect(() => {
     updateAnimation();
     const to = setTimeout(() => setUpdate(false), 100);
     return () => clearTimeout(to);
-  }, [alerts])
+  }, [alerts]);
 
-  let a = [];
+  const a = [];
   for (let i = 0; i < alerts.length; i++) {
     for (let j = 0; j < languages.length; j++) {
-      a.push(<span className="single-alert">{alerts[i].alertDescriptionTextTranslations.find(a => a.language === languages[j]).text}</span>)
+      a.push(
+        <span className="single-alert">
+          {
+            alerts[i].alertDescriptionTextTranslations.find(
+              a => a.language === languages[j],
+            ).text
+          }
+        </span>,
+      );
     }
   }
   const style = {

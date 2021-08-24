@@ -98,10 +98,7 @@ const CarouselContainer: FC<IProps> = ({
     alertComponent = (
       <div className={cx('row-with-separator alert', alertRowClass)}>
         <div className="separator"></div>
-        <MonitorAlertRow
-          alerts={alerts}
-          languages={languages}
-        />
+        <MonitorAlertRow alerts={alerts} languages={languages} />
       </div>
     );
   }

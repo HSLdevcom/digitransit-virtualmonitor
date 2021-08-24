@@ -4,6 +4,7 @@ import cx from 'classnames';
 interface IProps {
   alerts: any;
   languages: any;
+  preview: boolean;
 }
 const getAnimationWidth = () => {
   const alertElements = document.getElementsByClassName('single-alert');
@@ -15,16 +16,16 @@ const getAnimationWidth = () => {
   return animationWidth;
 };
 
-const MonitorAlertRow: FC<IProps> = ({ alerts, languages }) => {
+const MonitorAlertRow: FC<IProps> = ({ preview, alerts, languages }) => {
   const [animationWidth, setAnimationWidth] = useState(0);
   const [speed, setSpeed] = useState(0);
   const [update, setUpdate] = useState(false);
-  const [alertsUpdated, setAlertsUpdated] = useState(false);
 
   const updateAnimation = () => {
     const width = getAnimationWidth();
+    const windowWidth = preview ? 640 : window.innerWidth;
     setAnimationWidth(width);
-    setSpeed((width / window.innerWidth) * 5);
+    setSpeed((width / windowWidth) * 5);
     setUpdate(true);
   };
   useEffect(() => {
@@ -36,13 +37,6 @@ const MonitorAlertRow: FC<IProps> = ({ alerts, languages }) => {
     });
     return () => clearTimeout(to);
   }, []);
-
-  useEffect(() => {
-    //updateAnimation();
-    setAlertsUpdated(true);
-    //const to = setTimeout(() => setUpdate(false), 100);
-    //return () => clearTimeout(to);
-  }, [alerts]);
 
   const a = [];
   for (let i = 0; i < alerts.length; i++) {
@@ -69,12 +63,9 @@ const MonitorAlertRow: FC<IProps> = ({ alerts, languages }) => {
           className={cx('alert-text', {
             animated: !update,
           })}
-          onAnimationIteration={e => {
-            if (alertsUpdated) {
-              console.log("UPDATE ANIM")
-              updateAnimation();
-              setTimeout(() => setUpdate(false), 100);
-            }
+          onAnimationIteration={() => {
+            updateAnimation();
+            setTimeout(() => setUpdate(false), 100);
           }}
         >
           {a}

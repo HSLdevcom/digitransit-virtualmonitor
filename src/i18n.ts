@@ -151,6 +151,7 @@ i18n.init({
         stop: 'Pysäkki',
         stopsText: 'Pysäkki',
         stopCode: 'pysäkkinumero',
+        stopCodeOrPlatformNumber: 'Pysäkki- tai laiturinumero',
         stopName: 'Pysäkin nimi',
         stopRetrieveError: 'Virhe haettaessa pysäkkiä {{stopId}}',
         stopRetrieveNotFound: 'Haettua pysäkkiä {{stopId}} ei löytynyt',
@@ -171,7 +172,7 @@ i18n.init({
         timeShiftDescription:
           'Voit rajata esityksestä lähdöt, joihin pysäkkinäytön sijainnista ei\n' +
           '            ole mahdollista ehtiä kyytiin.',
-        timeShiftShow: 'Näytä vain lähdöt joiden lähtöön on yli',
+        timeShiftShow: 'Näytä vain lähdöt, joiden lähtöön on yli',
         title: 'Nyt voit luoda...',
         titlebarTitle: 'Virtuaalimonitori',
         vertical: 'Pysty',
@@ -201,7 +202,7 @@ i18n.init({
         continue: 'Jatka',
         createStopView: 'Create stopview',
         destination: 'Destination',
-        departureTime: 'Tim/min',
+        departureTime: 'Tid/min',
         displayLanguage: 'Esityskielet',
         displayDirection: 'Näytön suunta',
         dropdownPlaceHolder: 'Välja...',

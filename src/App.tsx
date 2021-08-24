@@ -27,6 +27,7 @@ export interface IMonitorConfig {
   urlMultipleStopsText?: string;
   urlParamFindText?: string;
   urlParamFindAltText?: string;
+  showMinutes?: string;
 }
 
 export interface IQueryString {

@@ -113,6 +113,7 @@ const Monitor: FC<IProps> = ({
         alertState={alertState}
         alertComponent={alertComponent}
         alertRowSpan={alertRowSpan}
+        showMinutes={Number(config.showMinutes)}
       />
     </div>
   );

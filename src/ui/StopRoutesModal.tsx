@@ -8,6 +8,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { IStopInfo } from './StopInfoRetriever';
 import { v4 as uuid } from 'uuid';
 import Modal from 'react-modal';
+import { sortBy } from 'lodash';
 Modal.setAppElement('#root');
 
 interface IRoute {
@@ -118,6 +119,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
   const vehicleMode = props.stop.vehicleMode
     ? props.stop.vehicleMode.toLowerCase()
     : 'bus';
+
   return (
     <Modal
       isOpen={props.showModal}
@@ -138,7 +140,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               width={30}
               height={30}
             />{' '}
-            <span className="setting-text">Pysäkkinumero</span>
+            <span className="setting-text">
+              {props.t('stopCodeOrPlatformNumber')}
+            </span>
           </div>
           <div className="setting">
             <Checkbox
@@ -148,7 +152,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               width={30}
               height={30}
             />{' '}
-            <span className={'setting-text'}> {props.t('endOfLine')} </span>
+            <span className={'setting-text'}>{props.t('endOfLine')}</span>
           </div>
         </div>
         <div className="divider" />
@@ -185,7 +189,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             />
             <span className="all"> {props.t('all')}</span>
           </div>
-          {props.routes.map(pattern => {
+          {sortBy(sortBy(props.routes, 'headsign'), 'code').map(pattern => {
             const route = pattern.route;
             return (
               <div key={uuid()} className="row">

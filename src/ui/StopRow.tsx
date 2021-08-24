@@ -1,12 +1,14 @@
 import cx from 'classnames';
 import React, { FC, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { IHiddenRoute, IPattern, ISettings } from '../util/Interfaces';
+import { IPattern, ISettings } from '../util/Interfaces';
 import StopRoutesModal from './StopRoutesModal';
 import StopCode from './StopCode';
 import Icon from './Icon';
 import { IStopInfo } from './StopInfoRetriever';
 import { getLayout } from '../util/getLayout';
+import { sortBy, uniqWith } from 'lodash';
+import { stringifyPattern } from '../util/monitorUtils';
 
 interface IStopInfoPlus extends IStopInfo {
   cardId?: number;
@@ -57,6 +59,13 @@ const StopRow: FC<IProps & WithTranslation> = ({
     changeOpen(true);
   };
   const isEastWest = stop.layout > 8 && stop.layout < 12;
+
+  const stopPatterns = stop.patterns.map(pattern => {
+    return stringifyPattern(pattern);
+  });
+
+  const combinedPatterns = sortBy(uniqWith(stopPatterns));
+
   return (
     <div className="stop-row-container">
       <div className="stop-row-stop icon">
@@ -102,7 +111,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
                   {stop.settings.hiddenRoutes.length
                     .toString()
                     .concat(' / ')
-                    .concat(stop.patterns.length.toString())}
+                    .concat(combinedPatterns.length.toString())}
                 </span>
               </>
             )}
@@ -114,7 +123,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
             closeModal={saveHiddenRoutes}
             showModal={showModal}
             stop={stop}
-            routes={stop.patterns}
+            combinedPatterns={combinedPatterns}
           />
         )}
         <div className="stop-bottom-row">

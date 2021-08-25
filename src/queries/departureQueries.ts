@@ -129,8 +129,11 @@ export const GET_STATION_DEPARTURES = gql`
       ) {
         pattern {
           code
+          directionId
+          headsign
           route {
             gtfsId
+            shortName
           }
         }
         stoptimes {

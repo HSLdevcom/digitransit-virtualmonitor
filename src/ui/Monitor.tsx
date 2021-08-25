@@ -26,7 +26,6 @@ interface IProps {
   currentLang: string;
   readonly translatedStrings: Array<ITranslation>;
   readonly config: IMonitorConfig;
-  readonly noPolling?: boolean;
   readonly time?: EpochMilliseconds;
   readonly isPreview: boolean;
   alertComponent: any;
@@ -38,7 +37,6 @@ const Monitor: FC<IProps> = ({
   translatedStrings,
   currentLang,
   config,
-  noPolling,
   time,
   isPreview,
   alertState,
@@ -61,7 +59,6 @@ const Monitor: FC<IProps> = ({
 
   const windowHeight = windowDimensions.height;
   const windowWidth = windowDimensions.width;
-
   const dimensions = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,
@@ -100,7 +97,6 @@ const Monitor: FC<IProps> = ({
         )}
         <TitlebarTime
           currentTime={currentTime}
-          updateInterval={noPolling ? 0 : 20000}
           isPreview={isPreview}
           isLandscape={isLandscapeByLayout}
         />
@@ -117,6 +113,7 @@ const Monitor: FC<IProps> = ({
         alertState={alertState}
         alertComponent={alertComponent}
         alertRowSpan={alertRowSpan}
+        showMinutes={Number(config.showMinutes)}
       />
     </div>
   );

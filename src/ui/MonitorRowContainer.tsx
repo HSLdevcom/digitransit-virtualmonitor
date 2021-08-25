@@ -20,6 +20,7 @@ interface IProps {
   alertState: number;
   alertComponent: any;
   alertRowSpan: number;
+  showMinutes?: number;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -34,6 +35,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   alertState,
   alertComponent,
   alertRowSpan,
+  showMinutes,
   t,
 }) => {
   const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
@@ -129,12 +131,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     leftColumnCountWithAlerts -= alertRowSpan;
   }
   for (let i = 0; i < leftColumnCountWithAlerts; i++) {
+    const departure =
+      i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null;
     leftColumn.push(
       <MonitorRow
-        key={uuid()}
-        departure={
-          i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
-        }
+        key={departure ? departure.trip.gtfsId : uuid()}
+        departure={departure}
         translations={translatedStrings}
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
         showVia={
@@ -153,6 +155,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         dayForDivider={
           i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
         }
+        showMinutes={showMinutes || 0}
       />,
     );
   }
@@ -184,6 +187,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
             }
             currentLang={currentLang}
+            showMinutes={showMinutes || 0}
           />,
         );
       }
@@ -209,6 +213,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               i === nextDayDepartureIndexRight ? formatDate(nextDay) : undefined
             }
             currentLang={currentLang}
+            showMinutes={showMinutes || 0}
           />,
         );
       }

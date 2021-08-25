@@ -134,7 +134,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               width={30}
               height={30}
             />{' '}
-            <span className="setting-text">Pysäkkinumero</span>
+            <span className="setting-text">
+              {props.t('stopCodeOrPlatformNumber')}
+            </span>
           </div>
           <div className="setting">
             <Checkbox
@@ -144,7 +146,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               width={30}
               height={30}
             />{' '}
-            <span className={'setting-text'}> {props.t('endOfLine')} </span>
+            <span className={'setting-text'}>{props.t('endOfLine')}</span>
           </div>
         </div>
         <div className="divider" />

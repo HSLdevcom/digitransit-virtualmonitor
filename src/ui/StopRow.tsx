@@ -137,7 +137,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
       >
         <Icon img="delete" color={'#007AC9'} />
       </div>
-      {getLayout(stop.layout)[2] && (
+      {getLayout(stop.layout).isMultiDisplay && (
         <div
           className="stop-row-move icon"
           onClick={() => onStopMove(stop.cardId, side, stop.gtfsId)}

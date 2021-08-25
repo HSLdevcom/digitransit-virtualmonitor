@@ -19,6 +19,7 @@ interface IStop {
 interface ITrip {
   route: IRoute;
   stops: Array<IStop>;
+  gtfsId: string;
 }
 export interface IDeparture {
   realtimeState: string;
@@ -43,6 +44,7 @@ interface IProps {
   alertState: number;
   dayForDivider?: string;
   currentLang: string;
+  showMinutes: number;
 }
 
 const processLine = inputText => {
@@ -68,6 +70,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   stops,
   translations,
   dayForDivider,
+  showMinutes,
   t,
 }) => {
   const isCancelled = departure?.realtimeState === 'CANCELED';
@@ -123,7 +126,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   const departureTime = getDepartureTime(
     departure?.realtimeDeparture,
-    600,
+    showMinutes * 60,
     departure?.serviceDay,
   );
   const stopSettings = stops.find(s => {
@@ -188,7 +191,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           <div className={cx('grid-col', `len${stopCodeLen}`)}>{stopCode}</div>
         )}
         <div className={cx('grid-col', 'time', `len${departureTime?.length}`)}>
-          {departure?.realtime && !isCancelled && departureTime !== null && (
+          {departureTime?.length > 0 && !departure?.realtime && (
             <span className={cx('tilde')}>~</span>
           )}
           {departureTime}

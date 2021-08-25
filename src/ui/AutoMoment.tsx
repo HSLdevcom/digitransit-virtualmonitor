@@ -1,13 +1,11 @@
-import * as moment from 'moment';
 import * as React from 'react';
-import ReactMoment from 'react-moment';
+import { DateTime } from 'luxon';
 
 import NtpSyncContext from '../ntp/NtpSyncContext';
-import { EpochMilliseconds, Milliseconds } from '../time';
+import { EpochMilliseconds } from '../time';
 
 export interface ITimeProps {
   readonly currentTime?: EpochMilliseconds;
-  readonly updateInterval?: Milliseconds;
 }
 
 class AutoMoment extends React.Component<ITimeProps, any> {
@@ -20,13 +18,17 @@ class AutoMoment extends React.Component<ITimeProps, any> {
   }
 
   public render() {
+    const dt = DateTime.fromMillis(
+      this.props.currentTime + this.context.deltaMilliseconds,
+    );
+    const hours = dt.toFormat('HH');
+    const minutes = dt.toFormat('mm');
     return (
-      <ReactMoment
-        date={this.props.currentTime}
-        interval={this.props.updateInterval}
-        format={moment.HTML5_FMT.TIME}
-        add={{ milliseconds: this.context.delta }}
-      />
+      <time>
+        {hours}
+        <span>:</span>
+        {minutes}
+      </time>
     );
   }
 }

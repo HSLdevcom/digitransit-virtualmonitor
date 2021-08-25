@@ -1,67 +1,78 @@
 import React, { FC, useEffect, useState } from 'react';
 import cx from 'classnames';
-import { clear } from 'console';
 
 interface IProps {
-  alertCount: number;
-  alert: string;
+  alerts: any;
+  languages: any;
+  preview: boolean;
 }
-const getAnimationHeight = () => {
-  const alertContainer = document.getElementsByClassName('alert');
-  const alert = document.getElementsByClassName('alert-text');
-  return -1 * (alert[0]?.scrollWidth - alertContainer[0]?.clientWidth);
+const getAnimationWidth = () => {
+  const alertElements = document.getElementsByClassName('single-alert');
+  const elementArray = alertElements;
+  let animationWidth = 0; // = elementArray.forEach(i => console.log(i))
+  for (let i = 0; i < elementArray.length; i++) {
+    animationWidth += elementArray[i].clientWidth;
+  }
+  return animationWidth;
 };
 
-const MonitorAlertRow: FC<IProps> = ({ alert, alertCount }) => {
-  const [animationHeight, setAnimationHeight] = useState(0);
+const MonitorAlertRow: FC<IProps> = ({ preview, alerts, languages }) => {
+  const [animationWidth, setAnimationWidth] = useState(0);
+  const [speed, setSpeed] = useState(0);
   const [update, setUpdate] = useState(false);
-  const [loop, setLoop] = useState(false);
+
+  const updateAnimation = () => {
+    const width = getAnimationWidth();
+    const windowWidth = preview ? 640 : window.innerWidth;
+    setAnimationWidth(width);
+    setSpeed((width / windowWidth) * 5);
+    setUpdate(true);
+  };
   useEffect(() => {
-    setAnimationHeight(getAnimationHeight());
-    let to;
+    updateAnimation();
+    const to = setTimeout(() => setUpdate(false), 100);
     window.addEventListener('resize', () => {
-      setAnimationHeight(getAnimationHeight());
-      setUpdate(true);
-      to = setTimeout(() => setUpdate(false), 100); // force keyframes to use the new value by rerendering
+      updateAnimation();
+      setTimeout(() => setUpdate(false), 100);
     });
     return () => clearTimeout(to);
   }, []);
-  useEffect(() => {
-    let to1, to2;
-    if (alertCount === 1) {
-      setLoop(true);
-      setUpdate(true);
-      to1 = setTimeout(() => setUpdate(false), 100);
-      to2 = setTimeout(() => setLoop(false), 20000);
-    }
-    return () => {
-      clearTimeout(to1);
-      clearTimeout(to2);
-    };
-  }, [alertCount, loop]);
-  useEffect(() => {
-    setAnimationHeight(getAnimationHeight());
-    setUpdate(true);
-    const to = setTimeout(() => setUpdate(false), 100);
-    return () => clearTimeout(to);
-  }, [alert]);
 
+  const a = [];
+  for (let i = 0; i < alerts.length; i++) {
+    for (let j = 0; j < languages.length; j++) {
+      a.push(
+        <span className="single-alert">
+          {
+            alerts[i].alertDescriptionTextTranslations.find(
+              a => a.language === languages[j],
+            ).text
+          }
+        </span>,
+      );
+    }
+  }
   const style = {
-    '--animationHeight': `${Number(animationHeight).toFixed(0)}px`,
+    '--animationWidth': `${Number(-1 * animationWidth).toFixed(0)}px`,
+    '--speed': `${Number(speed).toFixed(0)}s`,
   } as React.CSSProperties;
   return (
     <div style={style} className={cx('grid-row', 'alert')}>
       <div className={cx('grid-cols', 'alert-row')}>
         <div
           className={cx('alert-text', {
-            animated: animationHeight < 0 && !update,
+            animated: !update,
           })}
+          onAnimationIteration={() => {
+            updateAnimation();
+            setTimeout(() => setUpdate(false), 100);
+          }}
         >
-          {alert}
+          {a}
         </div>
       </div>
     </div>
   );
 };
 
-export default React.memo(MonitorAlertRow);
+export default MonitorAlertRow;

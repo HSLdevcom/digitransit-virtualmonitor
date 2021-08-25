@@ -5,14 +5,12 @@ import cx from 'classnames';
 
 interface IProps {
   currentTime?: EpochMilliseconds;
-  updateInterval?: Milliseconds;
   isPreview?: boolean;
   isLandscape?: boolean;
 }
 
 const TitlebarTime: FC<IProps> = ({
   currentTime,
-  updateInterval,
   isPreview = false,
   isLandscape = false,
 }) => {
@@ -25,7 +23,7 @@ const TitlebarTime: FC<IProps> = ({
       )}
     >
       <div className="title-time">
-        <AutoMoment currentTime={currentTime} updateInterval={updateInterval} />
+        <AutoMoment currentTime={currentTime} />
       </div>
     </div>
   );

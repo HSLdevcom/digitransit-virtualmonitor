@@ -150,5 +150,19 @@ $preview-container-height: 365px;
   time {
     margin-left: 0.25em;
     margin-right: 0.25em;
+
+    span {
+      animation: time-animation 2s steps(1) infinite;
+    }
+  }
+}
+
+@keyframes time-animation {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
   }
 }

@@ -8,26 +8,20 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { IStopInfo } from './StopInfoRetriever';
 import { v4 as uuid } from 'uuid';
 import Modal from 'react-modal';
-import { sortBy } from 'lodash';
 Modal.setAppElement('#root');
 
 interface IRoute {
-  gtfsID?: string;
+  gtfsId?: string;
   shortName?: string;
   code?: string;
-}
-interface IPattern {
-  code: string;
-  headsign: string;
-  route: IRoute;
 }
 
 interface Props {
   showModal: boolean;
-  routes: IPattern[];
   stop: IStopInfo;
   closeModal: (route: IRoute[]) => void;
   hiddenRoutes?: any;
+  combinedPatterns: string[];
 }
 
 const StopRoutesModal: FC<Props & WithTranslation> = (
@@ -64,10 +58,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
   const checkHiddenRoute = option => {
     if (option === 'all') {
       const routes =
-        settings.hiddenRoutes.length === props.routes.length
+        settings.hiddenRoutes.length === props.combinedPatterns.length
           ? []
-          : props.routes;
-      setSettings({ ...settings, hiddenRoutes: routes.map(r => r.code) });
+          : props.combinedPatterns;
+      setSettings({ ...settings, hiddenRoutes: routes });
     } else if (option) {
       if (settings.hiddenRoutes.includes(option)) {
         setSettings({
@@ -81,7 +75,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
         });
       }
     }
-    if (settings.hiddenRoutes.length !== props.routes.length) {
+    if (settings.hiddenRoutes.length !== props.combinedPatterns.length) {
       const input = document?.getElementById('all') as HTMLInputElement;
       if (input) {
         input.checked = false;
@@ -94,9 +88,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
   };
   const hiddenRouteChecked = route => {
     if (!route) {
-      return settings.hiddenRoutes.length === props.routes.length;
+      return settings.hiddenRoutes.length === props.combinedPatterns.length;
     }
-    return settings.hiddenRoutes.includes(route.code);
+    return settings.hiddenRoutes.includes(route);
   };
 
   const handleTimeShift = option => {
@@ -176,7 +170,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
           {settings.hiddenRoutes.length
             .toString()
             .concat(' / ')
-            .concat(props.routes.length)}
+            .concat(props.combinedPatterns.length)}
         </h2>{' '}
         <div className="route-rows">
           <div className="row">
@@ -189,23 +183,23 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             />
             <span className="all"> {props.t('all')}</span>
           </div>
-          {sortBy(sortBy(props.routes, 'headsign'), 'code').map(pattern => {
-            const route = pattern.route;
+          {props.combinedPatterns.map(pattern => {
+            const patternArray = pattern.split(':');
             return (
               <div key={uuid()} className="row">
                 {' '}
                 <Checkbox
                   checked={hiddenRouteChecked(pattern)}
                   onChange={checkHiddenRoute}
-                  name={pattern.code}
+                  name={pattern}
                   width={30}
                   height={30}
                 />
                 <div className="bus">
                   <Icon img={vehicleMode} />
                 </div>{' '}
-                <div className="route-number"> {route.shortName}</div>{' '}
-                <div className="destination">{pattern.headsign}</div>
+                <div className="route-number"> {patternArray[2]}</div>{' '}
+                <div className="destination">{patternArray[3]}</div>
               </div>
             );
           })}
@@ -214,7 +208,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
         <div
           className={cx(
             'button-container',
-            props.routes.length < 5 ? 'less' : '',
+            props.combinedPatterns.length < 5 ? 'less' : '',
           )}
         >
           <Button onClick={handleClose} text={props.t('save')} />

@@ -1,6 +1,15 @@
 import { getCurrentSeconds } from '../time';
 import { uniqBy } from 'lodash';
 
+export const stringifyPattern = pattern => {
+  return [
+    pattern.route.gtfsId,
+    pattern.route.shortName,
+    pattern.headsign,
+    pattern.code.split(':')[2],
+  ].join(':');
+};
+
 export const getStopsAndStationsFromViews = views => {
   const stopIds = [];
   const stationIds = [];
@@ -32,16 +41,18 @@ export const filterDepartures = (
     stop.stoptimesForPatterns.forEach(stp =>
       stp.stoptimes.forEach(s => {
         if (s.pickupType === 'NONE') {
-          arrivalDepartures.push(stp.pattern.code);
+          arrivalDepartures.push(stringifyPattern(stp.pattern));
         }
         return s.pickupType !== 'NONE';
       }),
     );
   }
   stop.stoptimesForPatterns.forEach(stoptimeList => {
+    const combinedPattern = stringifyPattern(stoptimeList.pattern);
+
     if (
-      !hiddenRoutes.includes(stoptimeList.pattern.code) &&
-      !arrivalDepartures.includes(stoptimeList.pattern.code)
+      !hiddenRoutes.includes(combinedPattern) &&
+      !arrivalDepartures.includes(combinedPattern)
     ) {
       if (timeshift > 0) {
         departures.push(

@@ -4,6 +4,7 @@ export const GET_STOP_DEPARTURES = gql`
   query GetDepartures($ids: [String!]!, $numberOfDepartures: Int!) {
     stops: stops(ids: $ids) {
       name
+      code
       gtfsId
       patterns {
         headsign
@@ -25,6 +26,12 @@ export const GET_STOP_DEPARTURES = gql`
           text
           language
         }
+        effectiveEndDate
+        effectiveStartDate
+        stop {
+          gtfsId
+          code
+        }
       }
       routes {
         alerts {
@@ -37,6 +44,12 @@ export const GET_STOP_DEPARTURES = gql`
           alertDescriptionTextTranslations {
             text
             language
+          }
+          effectiveEndDate
+          effectiveStartDate
+          stop {
+            gtfsId
+            code
           }
         }
         longName
@@ -102,6 +115,7 @@ export const GET_STATION_DEPARTURES = gql`
   query GetDeparturesForStations($ids: [String!]!, $numberOfDepartures: Int!) {
     stations: stations(ids: $ids) {
       name
+      code
       gtfsId
       stops {
         patterns {
@@ -124,6 +138,12 @@ export const GET_STATION_DEPARTURES = gql`
             alertDescriptionTextTranslations {
               text
               language
+            }
+            effectiveEndDate
+            effectiveStartDate
+            stop {
+              gtfsId
+              code
             }
           }
           longName
@@ -148,6 +168,12 @@ export const GET_STATION_DEPARTURES = gql`
           alertDescriptionTextTranslations {
             text
             language
+          }
+          effectiveEndDate
+          effectiveStartDate
+          stop {
+            gtfsId
+            code
           }
         }
       }

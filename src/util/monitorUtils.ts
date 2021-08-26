@@ -1,5 +1,6 @@
 import { getCurrentSeconds } from '../time';
 import { uniqBy } from 'lodash';
+import { IClosedStop } from './Interfaces';
 
 export const stringifyPattern = pattern => {
   return [
@@ -89,7 +90,7 @@ const getTranslationStringsForStop = stop => {
   return stringsToTranslate;
 };
 
-export const createDepartureArray = (views, stops, isStation = false) => {
+export const createDepartureArray = (views, stops, isStation = false, t) => {
   const defaultSettings = {
     hiddenRoutes: [],
     timeshift: 0,
@@ -97,6 +98,8 @@ export const createDepartureArray = (views, stops, isStation = false) => {
   const departures = [];
   const stringsToTranslate = [];
   const alerts = [];
+  const closedStopViews: Array<IClosedStop> = [];
+
   views.forEach((view, i) => {
     Object.keys(view.columns).forEach(column => {
       const departureArray = [];
@@ -104,27 +107,57 @@ export const createDepartureArray = (views, stops, isStation = false) => {
         const stopIndex = view.columns[column].stops
           .map(stop => stop.gtfsId)
           .indexOf(stop.gtfsId);
-        if (stopIndex >= 0) {
-          const { hiddenRoutes, timeShift, showEndOfLine } = view.columns[
-            column
-          ].stops[stopIndex].settings
-            ? view.columns[column].stops[stopIndex].settings
-            : defaultSettings;
-
-          if (isStation) {
-            stop.stops.forEach(s => {
-              stringsToTranslate.push(...getTranslationStringsForStop(stop));
-              alerts.push(...s.alerts);
-              s.routes.forEach(r => alerts.push(...r.alerts));
-            });
-          } else {
-            stringsToTranslate.push(...getTranslationStringsForStop(stop));
+        const stopAlerts = [];
+        if (!isStation) {
+          stopAlerts.push(...stop.alerts);
+        } else {
+          stop.stops.forEach(s => {
+            alerts.push(...s.alerts);
+          });
+        }
+        if (
+          stopIndex >= 0 &&
+          stopAlerts.length === 1 &&
+          stopAlerts[0].alertHeaderText === t('closedStop', { lng: 'fi' })
+        ) {
+          const closedStop: IClosedStop = {
+            viewId: i + 1,
+            column: column,
+            gtfsId: stop.gtfsId,
+            name: stop.name,
+            code: stop.code,
+            startTime: stopAlerts[0].effectiveStartDate,
+            endTime: stopAlerts[0].effectiveEndDate,
+          };
+          closedStopViews.push(closedStop);
+          if (
+            stops.length > 1 ||
+            (stops.length === 1 && view.layout >= 9 && view.layout < 12)
+          ) {
             alerts.push(...stop.alerts);
-            stop.routes.forEach(r => alerts.push(...r.alerts));
           }
-          departureArray.push(
-            ...filterDepartures(stop, hiddenRoutes, timeShift, showEndOfLine),
-          );
+        } else {
+          if (stopIndex >= 0) {
+            if (isStation) {
+              stop.stops.forEach(s => {
+                stringsToTranslate.push(...getTranslationStringsForStop(stop));
+                alerts.push(...s.alerts);
+                s.routes.forEach(r => alerts.push(...r.alerts));
+              });
+            } else {
+              stringsToTranslate.push(...getTranslationStringsForStop(stop));
+              alerts.push(...stop.alerts);
+              stop.routes.forEach(r => alerts.push(...r.alerts));
+            }
+            const { hiddenRoutes, timeShift, showEndOfLine } = view.columns[
+              column
+            ].stops[stopIndex].settings
+              ? view.columns[column].stops[stopIndex].settings
+              : defaultSettings;
+            departureArray.push(
+              ...filterDepartures(stop, hiddenRoutes, timeShift, showEndOfLine),
+            );
+          }
         }
       });
       const colIndex = column === 'left' ? 0 : 1;
@@ -139,5 +172,6 @@ export const createDepartureArray = (views, stops, isStation = false) => {
     stringsToTranslate,
     departures,
     uniqBy(alerts, a => a.alertHeaderText),
+    closedStopViews,
   ];
 };

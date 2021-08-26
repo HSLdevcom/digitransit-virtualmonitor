@@ -28,6 +28,11 @@ $preview-grid-divider: 2px;
     .no-departures-text-container {
       .no-departures-text {
         font-size: 40px;
+
+        &.closedStop {
+          white-space: pre-line;
+          font-size: 24px;
+        }
       }
     }
 
@@ -103,7 +108,21 @@ $preview-grid-divider: 2px;
 
       .no-departures-text {
         width: 100%;
-        font-size: calc((#{var(--height)} - 30vh) / 7);
+        display: flex;
+        text-align: center;
+        flex: 1;
+        align-self: center;
+        align-items: center;
+
+        .no-departures-text {
+          width: 100%;
+          font-size: calc((#{var(--height)} - 30vh) / 7);
+
+          &.closedStop {
+            white-space: pre-line;
+            font-size: calc((#{var(--height)} - 30vh) / 10);
+          }
+        }
       }
     }
 

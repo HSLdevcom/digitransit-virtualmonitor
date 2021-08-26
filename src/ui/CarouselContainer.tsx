@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { getConfig } from '../util/getConfig';
-import { IView } from '../util/Interfaces';
+import { IView, IClosedStop } from '../util/Interfaces';
 import Monitor from './Monitor';
 import { EpochMilliseconds } from '../time';
 import { IDeparture } from './MonitorRow';
@@ -18,6 +18,7 @@ interface IProps {
   alerts: any;
   time?: EpochMilliseconds;
   preview?: boolean;
+  closedStopViews: Array<IClosedStop>;
 }
 
 const CarouselContainer: FC<IProps> = ({
@@ -29,6 +30,7 @@ const CarouselContainer: FC<IProps> = ({
   alerts,
   time,
   preview = false,
+  closedStopViews,
 }) => {
   const len = views.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
@@ -105,6 +107,7 @@ const CarouselContainer: FC<IProps> = ({
       alertState={alertState}
       alertComponent={alertComponent}
       alertRowSpan={alertSpan}
+      closedStopViews={closedStopViews}
     />
   );
 };

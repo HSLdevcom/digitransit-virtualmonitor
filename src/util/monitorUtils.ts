@@ -1,6 +1,5 @@
 import { getCurrentSeconds } from '../time';
 import { uniqBy } from 'lodash';
-import { getAlertRowSpanForLayouts } from './getLayout';
 
 export const stringifyPattern = pattern => {
   return [
@@ -90,16 +89,6 @@ const getTranslationStringsForStop = stop => {
   return stringsToTranslate;
 };
 
-const getAlerts = (hiddenRoutes, route) => {
-  if (hiddenRoutes.length <= 0 || true) {
-    return route.alerts;
-  }
-  if (route.patterns.some(p => hiddenRoutes.includes(stringifyPattern(p)))) {
-    return [];
-  }
-  return route.alerts;
-};
-
 export const createDepartureArray = (views, stops, isStation = false) => {
   const defaultSettings = {
     hiddenRoutes: [],
@@ -126,14 +115,12 @@ export const createDepartureArray = (views, stops, isStation = false) => {
             stop.stops.forEach(s => {
               stringsToTranslate.push(...getTranslationStringsForStop(stop));
               alerts.push(...s.alerts);
-              s.routes.forEach(r => alerts.push(...getAlerts(hiddenRoutes, r)));
+              s.routes.forEach(r => alerts.push(...r.alerts));
             });
           } else {
             stringsToTranslate.push(...getTranslationStringsForStop(stop));
             alerts.push(...stop.alerts);
-            stop.routes.forEach(r =>
-              alerts.push(...getAlerts(hiddenRoutes, r)),
-            );
+            stop.routes.forEach(r => alerts.push(...r.alerts));
           }
           departureArray.push(
             ...filterDepartures(stop, hiddenRoutes, timeShift, showEndOfLine),

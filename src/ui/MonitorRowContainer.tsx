@@ -182,10 +182,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     } else {
       for (let i = 0; i < rightColumnCount; i++) {
         const departure =
-          i !== (nextDayDepartureIndexRight)
-            ? sortedDeparturesRight[i]
-            : null;
-            console.log(sortedDeparturesRight, nextDayDepartureIndexRight, departure)
+          i !== nextDayDepartureIndexRight ? sortedDeparturesRight[i] : null;
         rightColumn.push(
           <MonitorRow
             key={departure ? departure.trip.gtfsId : uuid()}
@@ -247,7 +244,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       </div>
     );
   };
-  console.log(rightColumnCount, sortedDeparturesRight, departuresRight);
+
   return (
     <div
       className={cx('monitor-container', {
@@ -277,6 +274,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               portrait: !isLandscape,
               'two-cols': withTwoColumns,
               tightened: isTighten,
+              'no-departures': departuresLeft.length === 0,
             },
           )}
         >
@@ -304,6 +302,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               <div
                 className={cx('grid-rows', `rows${rightColumnCount}`, {
                   'two-cols': withTwoColumns,
+                  'no-departures': departuresRight.length > 0,
                 })}
               >
                 {departuresRight.length === 0 ? (

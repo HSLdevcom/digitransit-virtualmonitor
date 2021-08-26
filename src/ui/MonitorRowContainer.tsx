@@ -272,7 +272,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         })}
       >
         {headers(leftColumnCount, leftStops)}
-        {isTighten && (
+        {isTighten && departuresLeft.length > 0 && (
           <div
             className={cx('grid-rows portrait tightened', `rows${tighten[0]}`)}
           >
@@ -295,7 +295,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             <>{isTighten ? leftColumn.slice(tighten[0]) : leftColumn}</>
           ) : (
             <div className="no-departures-text-container">
-              <div className="no-departures-text">
+              <div className={cx("no-departures-text", {'closed-stop': isClosedStopOnLeft})}>
               {isClosedStopOnLeft
                 ? t('closedStopWithRange', {
                     lng: currentLang,
@@ -336,7 +336,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 {departuresRight.length === 0 ? (
                   <>
                     <div className="no-departures-text-container">
-                      <div className="no-departures-text">
+                      <div className={cx("no-departures-text", {'closed-stop': isClosedStopOnRight})}>
                       {isClosedStopOnRight
                     ? t('closedStopWithRange', {
                         lng: currentLang,

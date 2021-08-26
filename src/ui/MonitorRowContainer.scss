@@ -29,7 +29,7 @@ $preview-grid-divider: 2px;
       .no-departures-text {
         font-size: 40px;
 
-        &.closedStop {
+        &.closed-stop {
           white-space: pre-line;
           font-size: 24px;
         }
@@ -111,21 +111,19 @@ $preview-grid-divider: 2px;
         display: flex;
         text-align: center;
         flex: 1;
-        align-self: center;
+        justify-content: center;
         align-items: center;
+        font-size: calc((#{var(--height)} - 30vh) / 7);
 
-        .no-departures-text {
-          width: 100%;
-          font-size: calc((#{var(--height)} - 30vh) / 7);
-
-          &.closedStop {
-            white-space: pre-line;
-            font-size: calc((#{var(--height)} - 30vh) / 10);
-          }
+        &.closed-stop {
+          white-space: pre-line;
+          font-size: calc((#{var(--height)} - 30vh) / 10);
         }
       }
     }
-
+    &.portrait {
+      height: calc(100% - 5vh - 30px);
+    }
     .divider {
       border-left: calc(0.3 * 1vh) solid #fff;
       width: 0;
@@ -149,12 +147,12 @@ $preview-grid-divider: 2px;
       display: flex;
 
       .grid {
-        width: calc(50% - 12.5px);
+        width: calc(50% - 32px - 0.3vw);
       }
 
       &.two-cols {
         .row-with-separator.alert {
-          width: calc(200% + 25px);
+          width: calc(200% + 60px + 0.7vw);
         }
       }
     }
@@ -163,6 +161,8 @@ $preview-grid-divider: 2px;
       margin: 0 15px;
       height: calc(100% - 5vh); // 100% - height of table headers
       &.portrait {
+        display: flex;
+        flex-direction: column;
         height: 100%;
       }
     }
@@ -194,6 +194,15 @@ $preview-grid-divider: 2px;
   &.portrait {
     .grid-rows {
       position: relative;
+      &.no-departures {
+        flex: 1;
+        .no-departures-text-container {
+          flex: 1;
+        }
+        .row-with-separator.alert {
+          height: calc(100% / 8) !important;
+        }
+      }
     }
   }
 

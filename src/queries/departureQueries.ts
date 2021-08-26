@@ -8,12 +8,6 @@ export const GET_STOP_DEPARTURES = gql`
       gtfsId
       patterns {
         headsign
-        code
-        headsign
-        route {
-          gtfsId
-          shortName
-        }
       }
       alerts {
         alertSeverityLevel
@@ -54,14 +48,6 @@ export const GET_STOP_DEPARTURES = gql`
         }
         longName
         id
-        patterns {
-          code
-          headsign
-          route {
-            gtfsId
-            shortName
-          }
-        }
       }
       stoptimesForPatterns(
         numberOfDepartures: $numberOfDepartures
@@ -120,12 +106,6 @@ export const GET_STATION_DEPARTURES = gql`
       stops {
         patterns {
           headsign
-          code
-          headsign
-          route {
-            gtfsId
-            shortName
-          }
         }
         routes {
           alerts {
@@ -148,14 +128,6 @@ export const GET_STATION_DEPARTURES = gql`
           }
           longName
           id
-          patterns {
-            code
-            headsign
-            route {
-              gtfsId
-              shortName
-            }
-          }
         }
         gtfsId
         alerts {

@@ -109,18 +109,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       }
     }
     sortedDeparturesRight.splice(nextDayDepartureIndexRight, 0, null);
-  } else if (
-    currentDayDeparturesLeft.length === 0 &&
-    currentDayDeparturesRight.length > 0
-  ) {
-    currentDayDepartureIndexRight = 0;
-    sortedDeparturesRight.splice(0, 0, null);
-  } else if (
-    currentDayDeparturesLeft.length > 0 &&
-    currentDayDeparturesRight.length === 0
-  ) {
-    currentDayDepartureIndexRight = 0;
-    sortedDeparturesRight.splice(0, 0, null);
   }
 
   const isTighten = tighten !== undefined;
@@ -167,12 +155,12 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         i < leftColumnCountWithAlerts + rightColumnCount;
         i++
       ) {
+        const departure =
+          i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null;
         rightColumn.push(
           <MonitorRow
-            key={uuid()}
-            departure={
-              i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null
-            }
+            key={departure ? departure.trip.gtfsId : uuid()}
+            departure={departure}
             translations={translatedStrings}
             isFirst={
               i === leftColumnCountWithAlerts ||
@@ -193,15 +181,15 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       }
     } else {
       for (let i = 0; i < rightColumnCount; i++) {
+        const departure =
+          i !== (nextDayDepartureIndexRight)
+            ? sortedDeparturesRight[i]
+            : null;
+            console.log(sortedDeparturesRight, nextDayDepartureIndexRight, departure)
         rightColumn.push(
           <MonitorRow
-            key={uuid()}
-            departure={
-              i !==
-              (nextDayDepartureIndexRight || currentDayDepartureIndexRight)
-                ? sortedDeparturesRight[i]
-                : null
-            }
+            key={departure ? departure.trip.gtfsId : uuid()}
+            departure={departure}
             isTwoRow={rightColumnCount === 4 || layout === 12}
             stops={rightStops}
             translations={translatedStrings}
@@ -259,6 +247,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       </div>
     );
   };
+  console.log(rightColumnCount, sortedDeparturesRight, departuresRight);
   return (
     <div
       className={cx('monitor-container', {
@@ -266,55 +255,47 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         'two-cols': withTwoColumns,
       })}
     >
-      {departuresLeft.length > 0 ? (
+      <div
+        className={cx('grid', {
+          portrait: !isLandscape,
+          'two-cols': withTwoColumns,
+        })}
+      >
+        {headers(leftColumnCount, leftStops)}
+        {isTighten && (
+          <div
+            className={cx('grid-rows portrait tightened', `rows${tighten[0]}`)}
+          >
+            {leftColumn.slice(0, tighten[0])}
+          </div>
+        )}
         <div
-          className={cx('grid', {
-            portrait: !isLandscape,
-            'two-cols': withTwoColumns,
-          })}
+          className={cx(
+            'grid-rows',
+            `rows${isTighten ? tighten[1] : leftColumnCount}`,
+            {
+              portrait: !isLandscape,
+              'two-cols': withTwoColumns,
+              tightened: isTighten,
+            },
+          )}
         >
-          {headers(leftColumnCount, leftStops)}
-          {isTighten && (
-            <div
-              className={cx(
-                'grid-rows portrait tightened',
-                `rows${tighten[0]}`,
-              )}
-            >
-              {leftColumn.slice(0, tighten[0])}
+          {departuresLeft.length > 0 ? (
+            <>{isTighten ? leftColumn.slice(tighten[0]) : leftColumn}</>
+          ) : (
+            <div className="no-departures-text-container">
+              <div className="no-departures-text">
+                {t('no-departures', { lng: currentLang })}
+              </div>
             </div>
           )}
-          <div
-            className={cx(
-              'grid-rows',
-              `rows${isTighten ? tighten[1] : leftColumnCount}`,
-              {
-                portrait: !isLandscape,
-                'two-cols': withTwoColumns,
-                tightened: isTighten,
-              },
-            )}
-          >
-            {isTighten ? leftColumn.slice(tighten[0]) : leftColumn}
-            {alertComponent}
-          </div>
-        </div>
-      ) : (
-        <div className="grid no-departures-container">
-          {headers(leftColumnCount, leftStops)}
-          <div className="no-departures-text-container">
-            <div className="no-departures-text">
-              {t('no-departures', { lng: currentLang })}
-            </div>
-          </div>
           {alertComponent}
         </div>
-      )}
-
+      </div>
       {isLandscape && rightColumnCount > 0 && (
         <>
           <div className="divider" />
-          {!isMultiDisplay || departuresRight.length > 0 ? (
+          {true && (
             <div className={cx('grid', { 'two-cols': withTwoColumns })}>
               {headers(
                 rightColumnCount,
@@ -325,16 +306,19 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   'two-cols': withTwoColumns,
                 })}
               >
-                {rightColumn}
-              </div>
-            </div>
-          ) : (
-            <div className="grid no-departures-container">
-              {headers(leftColumnCount, leftStops)}
-              <div className="no-departures-text-container">
-                <div className="no-departures-text">
-                  {t('no-departures', { lng: currentLang })}
-                </div>
+                {departuresRight.length === 0 ? (
+                  <>
+                    <div className="no-departures-text-container">
+                      <div className="no-departures-text">
+                        {t('no-departures', { lng: currentLang })}
+                      </div>
+                    </div>
+
+                    {alertComponent && <div className="alert-padding"></div>}
+                  </>
+                ) : (
+                  <>{rightColumn}</>
+                )}
               </div>
             </div>
           )}

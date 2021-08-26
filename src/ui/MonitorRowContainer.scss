@@ -31,8 +31,6 @@ $preview-grid-divider: 2px;
 
         &.closedStop {
           white-space: pre-line;
-          position: relative;
-          top: -40px;
           font-size: 24px;
         }
       }
@@ -118,8 +116,6 @@ $preview-grid-divider: 2px;
           font-size: calc((#{var(--height)} - 30vh) / 7);
 
           &.closedStop {
-            position: relative;
-            top: -12vh;
             white-space: pre-line;
             font-size: calc((#{var(--height)} - 30vh) / 10);
           }

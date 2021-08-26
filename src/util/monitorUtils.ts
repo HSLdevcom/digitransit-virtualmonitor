@@ -108,7 +108,13 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
           .map(stop => stop.gtfsId)
           .indexOf(stop.gtfsId);
         const stopAlerts = [];
-        stopAlerts.push(...stop.alerts);
+        if (!isStation) {
+          stopAlerts.push(...stop.alerts);
+        } else {
+          stop.stops.forEach(s => {
+            alerts.push(...s.alerts);
+          });
+        }
         if (
           stopIndex >= 0 &&
           stopAlerts.length === 1 &&
@@ -124,7 +130,10 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
             endTime: stopAlerts[0].effectiveEndDate,
           };
           closedStopViews.push(closedStop);
-          if (stops.length > 1) {
+          if (
+            stops.length > 1 ||
+            (stops.length === 1 && view.layout >= 9 && view.layout < 12)
+          ) {
             alerts.push(...stop.alerts);
           }
         } else {

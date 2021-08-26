@@ -77,20 +77,24 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   useEffect(() => {
     const stations = stationsState?.data?.stations;
     if (stations?.length > 0) {
-      const [stringsToTranslate, newDepartureArray, a, closedStopViews] =
-        createDepartureArray(views, stations, true, t);
+      const [stringsToTranslate, newDepartureArray, a] = createDepartureArray(
+        views,
+        stations,
+        true,
+        t,
+      );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStationDepartures(newDepartureArray);
       const arr = alerts.concat(a);
       setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStationsFetched(true);
-      setClosedStopViews(closedStopViews);
     }
   }, [stationsState]);
 
   if (!stopsFetched || !stationsFetched) {
     return <Loading />;
   }
+
   return (
     <TranslationContainer
       languages={languages}

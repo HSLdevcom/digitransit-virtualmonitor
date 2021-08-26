@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { IAlert, IView } from '../util/Interfaces';
+import { IAlert, IView, IClosedStop } from '../util/Interfaces';
 import CarouselContainer from './CarouselContainer';
 import monitorAPI from '../api';
 import { IDeparture } from './MonitorRow';
@@ -12,6 +12,7 @@ interface IProps {
   stationDepartures: Array<Array<Array<IDeparture>>>;
   stopDepartures: Array<Array<Array<IDeparture>>>;
   alerts: Array<Array<IAlert>>;
+  closedStopViews: Array<IClosedStop>;
 }
 
 export interface ITranslation {
@@ -42,7 +43,6 @@ const TranslationContainer: FC<IProps> = ({
   useEffect(() => {
     if (translationIds.length > 0) {
       const intervalId = setInterval(() => {
-        const d = new Date();
         getTranslations();
       }, onceADay);
       return () => clearInterval(intervalId); //This is important

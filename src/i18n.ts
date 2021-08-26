@@ -83,6 +83,9 @@ i18n.init({
         cancelled: 'Peruttu',
         'clear-button-label': 'Tyhjennä',
         chooseOne: 'Valitse vähintään yksi',
+        closedStop: 'Pysäkki suljettu',
+        closedStopWithRange:
+          'Pysäkki {{name}} {{code}}\nsuljettu aikavälillä\n{{startTime}} - {{endTime}}',
         configuration: 'Konfiguraatio',
         continue: 'Jatka',
         createViewTitle: 'Uuden näkymän luonti',

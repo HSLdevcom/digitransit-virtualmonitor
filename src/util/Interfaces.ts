@@ -72,3 +72,13 @@ export interface ITitle {
   sv: string;
   en: string;
 }
+
+export interface IClosedStop {
+  viewId?: number;
+  column?: string;
+  gtfsId?: string;
+  name?: string;
+  code?: string;
+  startTime?: number;
+  endTime?: number;
+}

@@ -13,14 +13,19 @@ import {
 import TranslationContainer from './TranslationContainer';
 import Loading from './Loading';
 import { uniq, uniqBy } from 'lodash';
-
+import { WithTranslation, withTranslation } from 'react-i18next';
 interface IProps {
   views: Array<IView>;
   languages: Array<string>;
   preview?: boolean;
 }
 
-const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
+const CarouselDataContainer: FC<IProps & WithTranslation> = ({
+  views,
+  languages,
+  preview,
+  t,
+}) => {
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
 
@@ -41,6 +46,7 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   const [stationsFetched, setStationsFetched] = useState(stationIds.length < 1);
   const [translationIds, setTranslationIds] = useState([]);
   const [alerts, setAlerts] = useState([]);
+  const [closedStopViews, setClosedStopViews] = useState([]);
 
   const stationsState = useQuery(GET_STATION_DEPARTURES, {
     variables: { ids: stationIds, numberOfDepartures: largest },
@@ -57,31 +63,28 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
   useEffect(() => {
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
-      const [stringsToTranslate, newDepartureArray, a] = createDepartureArray(
-        views,
-        stops,
-      );
+      const [stringsToTranslate, newDepartureArray, a, closedStopViews] =
+        createDepartureArray(views, stops, false, t);
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(newDepartureArray);
       const arr = alerts.concat(a);
       setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStopsFetched(true);
+      setClosedStopViews(closedStopViews);
     }
   }, [stopsState]);
 
   useEffect(() => {
     const stations = stationsState?.data?.stations;
     if (stations?.length > 0) {
-      const [stringsToTranslate, newDepartureArray, a] = createDepartureArray(
-        views,
-        stations,
-        true,
-      );
+      const [stringsToTranslate, newDepartureArray, a, closedStopViews] =
+        createDepartureArray(views, stations, true, t);
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStationDepartures(newDepartureArray);
       const arr = alerts.concat(a);
       setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStationsFetched(true);
+      setClosedStopViews(closedStopViews);
     }
   }, [stationsState]);
 
@@ -97,8 +100,9 @@ const CarouselDataContainer: FC<IProps> = ({ views, languages, preview }) => {
       alerts={alerts}
       views={views}
       preview={preview}
+      closedStopViews={closedStopViews}
     />
   );
 };
 
-export default CarouselDataContainer;
+export default withTranslation('translations')(CarouselDataContainer);

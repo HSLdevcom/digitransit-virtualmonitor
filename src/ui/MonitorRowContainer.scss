@@ -28,6 +28,13 @@ $preview-grid-divider: 2px;
     .no-departures-container > .no-departures-text-container {
       .no-departures-text {
         font-size: 40px;
+
+        &.closedStop {
+          white-space: pre-line;
+          position: relative;
+          top: -40px;
+          font-size: 24px;
+        }
       }
     }
 
@@ -109,6 +116,13 @@ $preview-grid-divider: 2px;
         .no-departures-text {
           width: 100%;
           font-size: calc((#{var(--height)} - 30vh) / 7);
+
+          &.closedStop {
+            position: relative;
+            top: -12vh;
+            white-space: pre-line;
+            font-size: calc((#{var(--height)} - 30vh) / 10);
+          }
         }
       }
     }

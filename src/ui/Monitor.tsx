@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import cx from 'classnames';
-import { IView } from '../util/Interfaces';
+import { IView, IClosedStop } from '../util/Interfaces';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
 import Logo from './logo/Logo';
@@ -30,6 +30,7 @@ interface IProps {
   readonly isPreview: boolean;
   alertComponent: any;
   alertRowSpan: number;
+  closedStopViews: Array<IClosedStop>;
 }
 const Monitor: FC<IProps> = ({
   view,
@@ -42,6 +43,7 @@ const Monitor: FC<IProps> = ({
   alertState,
   alertComponent,
   alertRowSpan,
+  closedStopViews,
 }) => {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
@@ -102,6 +104,7 @@ const Monitor: FC<IProps> = ({
         />
       </Titlebar>
       <MonitorRowContainer
+        viewId={view['id']}
         departuresLeft={departures[0]}
         departuresRight={departures[1]}
         rightStops={view.columns.right.stops}
@@ -114,6 +117,7 @@ const Monitor: FC<IProps> = ({
         alertComponent={alertComponent}
         alertRowSpan={alertRowSpan}
         showMinutes={Number(config.showMinutes)}
+        closedStopViews={closedStopViews}
       />
     </div>
   );

@@ -71,3 +71,10 @@ export const setDate = daysToAdd => {
   newDate.setHours(0, 0, 0, 0);
   return newDate;
 };
+
+export const setDateWithSeconds = seconds => {
+  const newDate = DateTime.fromSeconds(seconds)
+    .setLocale('fi')
+    .toFormat('dd.MM.yyyy HH:mm');
+  return newDate;
+};

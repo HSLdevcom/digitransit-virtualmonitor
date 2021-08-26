@@ -3,12 +3,14 @@ import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow, { IDeparture } from './MonitorRow';
 import cx from 'classnames';
-import { formatDate, setDate } from '../time';
+import { formatDate, setDate, setDateWithSeconds } from '../time';
 import { getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
 import { v4 as uuid } from 'uuid';
+import { IClosedStop } from '../util/Interfaces';
 
 interface IProps {
+  viewId: number;
   departuresLeft: Array<IDeparture>;
   departuresRight: Array<IDeparture>;
   rightStops: Array<any>;
@@ -21,9 +23,11 @@ interface IProps {
   alertComponent: any;
   alertRowSpan: number;
   showMinutes?: number;
+  closedStopViews: Array<IClosedStop>;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
+  viewId,
   departuresLeft,
   departuresRight,
   rightStops,
@@ -36,6 +40,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   alertComponent,
   alertRowSpan,
   showMinutes,
+  closedStopViews,
   t,
 }) => {
   const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
@@ -259,6 +264,15 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       </div>
     );
   };
+
+  const closedStopIndex = closedStopViews.findIndex(s => s.viewId === viewId);
+  const isClosedStopOnLeft =
+    closedStopIndex !== -1 &&
+    closedStopViews[closedStopIndex].column === 'left';
+  const isClosedStopOnRight =
+    closedStopIndex !== -1 &&
+    closedStopViews[closedStopIndex].column === 'right';
+
   return (
     <div
       className={cx('monitor-container', {
@@ -303,8 +317,25 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         <div className="grid no-departures-container">
           {headers(leftColumnCount, leftStops)}
           <div className="no-departures-text-container">
-            <div className="no-departures-text">
-              {t('no-departures', { lng: currentLang })}
+            <div
+              className={cx(
+                'no-departures-text',
+                isClosedStopOnLeft ? 'closedStop' : '',
+              )}
+            >
+              {isClosedStopOnLeft
+                ? t('closedStopWithRange', {
+                    lng: currentLang,
+                    name: closedStopViews[closedStopIndex].name,
+                    code: closedStopViews[closedStopIndex].code,
+                    startTime: setDateWithSeconds(
+                      closedStopViews[closedStopIndex].startTime,
+                    ),
+                    endTime: setDateWithSeconds(
+                      closedStopViews[closedStopIndex].endTime,
+                    ),
+                  })
+                : t('no-departures', { lng: currentLang })}
             </div>
           </div>
           {alertComponent}
@@ -332,8 +363,25 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             <div className="grid no-departures-container">
               {headers(leftColumnCount, leftStops)}
               <div className="no-departures-text-container">
-                <div className="no-departures-text">
-                  {t('no-departures', { lng: currentLang })}
+                <div
+                  className={cx(
+                    'no-departures-text',
+                    isClosedStopOnRight ? 'closedStop' : '',
+                  )}
+                >
+                  {isClosedStopOnRight
+                    ? t('closedStopWithRange', {
+                        lng: currentLang,
+                        name: closedStopViews[closedStopIndex].name,
+                        code: closedStopViews[closedStopIndex].code,
+                        startTime: setDateWithSeconds(
+                          closedStopViews[closedStopIndex].startTime,
+                        ),
+                        endTime: setDateWithSeconds(
+                          closedStopViews[closedStopIndex].endTime,
+                        ),
+                      })
+                    : t('no-departures', { lng: currentLang })}
                 </div>
               </div>
             </div>

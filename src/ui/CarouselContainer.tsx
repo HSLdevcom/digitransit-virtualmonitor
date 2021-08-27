@@ -62,7 +62,7 @@ const CarouselContainer: FC<IProps> = ({
   // for easy testing of different layouts
   const newView = {
     ...views[index],
-    //layout: 13,
+    //layout: 17,
   };
 
   const { alertSpan } = getLayout(newView.layout);

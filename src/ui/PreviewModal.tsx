@@ -7,29 +7,6 @@ import cx from 'classnames';
 import InformationDisplayContainer from './InformationDisplayContainer';
 
 Modal.setAppElement('#root');
-interface IStop {
-  code: string;
-  desc: string;
-  gtfsId: string;
-  locationType: string;
-  name: string;
-  settings: ISettings;
-}
-interface ISides {
-  stops: Array<IStop>;
-  title: ITitle;
-}
-interface IColumn {
-  left: ISides;
-  right: ISides;
-}
-interface ICard {
-  title: ITitle;
-  layout: number;
-  duration: number;
-  columns: IColumn;
-  showStopCode: boolean;
-}
 interface Props {
   view: IMonitor;
   languages: Array<string>;
@@ -38,7 +15,6 @@ interface Props {
   isLandscape: boolean;
 }
 const PreviewModal: FC<Props> = (props: Props) => {
-  const currentMillis = new Date().getTime();
   return (
     <>
       <Modal

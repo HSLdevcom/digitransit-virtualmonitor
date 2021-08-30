@@ -9,6 +9,17 @@
     font-size: 3vh;
     margin-bottom: 7vh;
   }
+  &.portrait {
+    margin: 4vh 2vh;
+    .alert-header {
+      font-size: 4vh;
+    }
+  
+    .alert-description {
+      font-size: 2vh;
+      margin-bottom: 5vh;
+    }
+  }
 
   &.preview {
     margin: 20px 10px;

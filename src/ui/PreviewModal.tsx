@@ -1,9 +1,10 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
-import { ISettings, ITitle } from '../util/Interfaces';
+import { IMonitor, ISettings, ITitle } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Icon from './Icon';
 import cx from 'classnames';
+import InformationDisplayContainer from './InformationDisplayContainer';
 
 Modal.setAppElement('#root');
 interface IStop {
@@ -29,11 +30,8 @@ interface ICard {
   columns: IColumn;
   showStopCode: boolean;
 }
-interface IView {
-  cards: Array<ICard>;
-}
 interface Props {
-  view: IView;
+  view: IMonitor;
   languages: Array<string>;
   isOpen: boolean;
   onClose: (boolean) => void;
@@ -59,11 +57,16 @@ const PreviewModal: FC<Props> = (props: Props) => {
           </div>
         </div>
         <div className="carouselContainer">
-          <CarouselDataContainer
+          {props.view.isInformationDisplay ? (
+            <InformationDisplayContainer preview={true} monitor={props.view}/>
+          ) : (
+            <CarouselDataContainer
             languages={props.languages}
             views={props.view.cards}
             preview
-          />
+              />
+          )}
+          
         </div>
       </Modal>
     </>

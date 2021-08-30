@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { IStop, IView } from '../util/Interfaces';
+import { IStop, IMonitor, IView } from '../util/Interfaces';
 import React, { FC, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import arrayMove from 'array-move';
@@ -15,19 +15,13 @@ import { getLayout } from '../util/getLayout';
 
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
+import { isInformationDisplay } from '../util/monitorUtils';
 interface IProps {
   feedIds: Array<string>;
   defaultStopCardList: any;
   languages: Array<string>;
   loading?: boolean;
   vertical?: boolean;
-}
-
-interface IMonitor {
-  cards: Array<IView>;
-  languages: Array<string>;
-  contenthash: string;
-  isInformationDisplay: boolean;
 }
 
 const StopCardItem = ({
@@ -291,12 +285,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     return !(languages.length > 0);
   };
 
-  const isInformationDisplay = cards => {
-    return (
-      cards.length === 1 &&
-      cards[0].columns.left.stops.every(stop => stop.settings.allRoutesHidden)
-    );
-  };
+  
 
   const createMonitor = () => {
     const languageArray = ['fi', 'sv', 'en'];
@@ -326,14 +315,15 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       isInformationDisplay: isInformationDisplay(cardArray),
       contenthash: '',
     };
-    (newCard.contenthash = hash(newCard, {
+    newCard.contenthash = hash(newCard, {
       algorithm: 'md5',
       encoding: 'base64',
-    }).replaceAll('/', '-')),
-      monitorAPI.create(newCard).then(res => {
-        setRedirect(true);
-        setView(newCard);
-      });
+    }).replaceAll('/', '-');
+
+    monitorAPI.create(newCard).then(res => {
+      setRedirect(true);
+      setView(newCard);
+    });
   };
   if (redirect && view) {
     return (
@@ -346,8 +336,10 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       />
     );
   }
-  const cards = {
+  const cards: IMonitor = {
     cards: stopCardList,
+    isInformationDisplay: isInformationDisplay(stopCardList),
+    languages: languages
   };
   if (loading) {
     return (
@@ -360,7 +352,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   return (
     <div className="stop-card-list-container">
       {isOpen && (
-        <PreviewModal
+        <PreviewModal 
           view={cards}
           languages={languages}
           isOpen={isOpen}

@@ -5,9 +5,11 @@ import { GET_STOP_ALERTS, GET_STATION_ALERTS } from '../queries/alertQueries';
 import { uniqBy } from 'lodash';
 import Loading from './Loading';
 import InformationDisplayCarousel from './InformationDisplayCarousel';
+import { IMonitor } from '../util/Interfaces';
 
 interface IProps {
-  monitor: any;
+  monitor: IMonitor;
+  preview?: boolean;
 }
 
 const getStopAlerts = stops => {
@@ -28,7 +30,7 @@ const getStationAlerts = stations => {
   });
   return alerts;
 };
-const InformationDisplayContainer: FC<IProps> = ({ monitor }) => {
+const InformationDisplayContainer: FC<IProps> = ({ monitor, preview = false }) => {
   const [stopIds, stationIds] = getStopsAndStationsFromViews(monitor.cards);
   const [stopsFetched, setStopsFetched] = useState(stopIds.length < 1);
   const [stationsFetched, setStationsFetched] = useState(stationIds.length < 1);
@@ -73,6 +75,7 @@ const InformationDisplayContainer: FC<IProps> = ({ monitor }) => {
       view={monitor.cards[0]}
       alerts={[...stopAlerts, ...stationAlerts]}
       languages={monitor.languages}
+      preview={preview}
     />
   );
 };

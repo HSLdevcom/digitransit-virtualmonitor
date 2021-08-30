@@ -41,7 +41,7 @@ const InformationDisplayCarousel: FC<IProps> = ({
         config={config}
         currentTime={new Date().getTime()}
       />
-      <div className="information-monitor-container">
+      <div className={cx("information-monitor-container", {preview: preview})}>
         {languages.map(language => {
           const header = alerts[current].alertHeaderTextTranslations.find(
             a => a.language === language,

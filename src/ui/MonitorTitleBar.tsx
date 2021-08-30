@@ -13,6 +13,7 @@ interface IProps {
   view: IView;
   currentLang: string;
   currentTime: number;
+  showTitle?: boolean;
 }
 const MonitorTitlebar: FC<IProps> = ({
   currentTime,
@@ -22,6 +23,7 @@ const MonitorTitlebar: FC<IProps> = ({
   isMultiDisplay = false,
   isLandscape = false,
   currentLang,
+  showTitle = false,
 }) => {
   return (
     <Titlebar isPreview={preview} isLandscape={isLandscape}>
@@ -30,12 +32,12 @@ const MonitorTitlebar: FC<IProps> = ({
         isPreview={preview}
         isLandscape={isLandscape}
       />
-      {!isMultiDisplay && (
+      {!isMultiDisplay && showTitle && (
         <div className={cx('title-text', { preview: preview })}>
           {view.title[currentLang]}
         </div>
       )}
-      {isMultiDisplay && (
+      {isMultiDisplay && showTitle && (
         <div className="multi-display-titles">
           <div className="left-title">
             {view.columns.left.title[currentLang]}

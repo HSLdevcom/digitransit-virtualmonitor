@@ -85,6 +85,7 @@ const Monitor: FC<IProps> = ({
         view={view}
         currentLang={currentLang}
         currentTime={currentTime}
+        showTitle
       />
       <MonitorRowContainer
         viewId={view['id']}

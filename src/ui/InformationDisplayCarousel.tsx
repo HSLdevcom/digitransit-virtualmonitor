@@ -18,10 +18,9 @@ const InformationDisplayCarousel: FC<IProps> = ({
   preview = false,
 }) => {
   const [current, setCurrent] = useState(0);
-  const carouselLength = alerts.length * languages.length;
 
   useEffect(() => {
-    const next = (current + 1) % carouselLength;
+    const next = (current + 1) % alerts.length;
     const to = setTimeout(() => {
       setCurrent(next);
     }, 20000);
@@ -43,26 +42,26 @@ const InformationDisplayCarousel: FC<IProps> = ({
         currentTime={new Date().getTime()}
       />
       <div className="information-monitor-container">
-        <h2 className="alert-header">
-          {
-            alerts[
-              Math.floor(current / languages.length)
-            ].alertHeaderTextTranslations.find(
-              a =>
-                a.language === languages[Math.floor(current % alerts.length)],
-            ).text
-          }
-        </h2>
-        <div className="alert-description">
-          {
-            alerts[
-              Math.floor(current / languages.length)
-            ].alertDescriptionTextTranslations.find(
-              a =>
-                a.language === languages[Math.floor(current % alerts.length)],
-            ).text
-          }
-        </div>
+        {languages.map(language => {
+          const header = alerts[current].alertHeaderTextTranslations.find(
+            a => a.language === language,
+          ).text;
+          const description = alerts[
+            current
+          ].alertDescriptionTextTranslations.find(
+            a => a.language === language,
+          ).text;
+          return (
+            <>
+              <h2 className="alert-header">
+                {description.includes(header) ? description : header}
+              </h2>
+              {!description.includes(header) && (
+                <div className="alert-description">{description}</div>
+              )}
+            </>
+          );
+        })}
       </div>
     </div>
   );

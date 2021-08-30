@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { IStop } from '../util/Interfaces';
+import { IStop, IView } from '../util/Interfaces';
 import React, { FC, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import arrayMove from 'array-move';
@@ -21,6 +21,12 @@ interface IProps {
   languages: Array<string>;
   loading?: boolean;
   vertical?: boolean;
+}
+
+interface IMonitor {
+  cards: Array<IView>;
+  languages: Array<string>
+  contenthash: string,
 }
 
 const StopCardItem = ({
@@ -305,14 +311,17 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         };
       });
     });
-    const newCard = {
+
+    const newCard: IMonitor = {
       cards: cardArray,
       languages: languageArray.filter(lan => languages.includes(lan)),
-      contenthash: hash(stopCardList, {
-        algorithm: 'md5',
-        encoding: 'base64',
-      }).replaceAll('/', '-'),
+      contenthash: '',
     };
+    newCard.contenthash = hash(newCard, {
+      algorithm: 'md5',
+      encoding: 'base64',
+    }).replaceAll('/', '-'),
+
     monitorAPI.create(newCard).then(res => {
       setRedirect(true);
       setView(newCard);

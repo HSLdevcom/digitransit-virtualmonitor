@@ -10,14 +10,16 @@ $preview-grid-rows-margin: 15px;
 $preview-grid-divider: 2px;
 
 .main-content-container.preview {
+  .monitor-container {
   .grid.two-cols {
     margin: 0 5px;
-
+    width: calc(50% - 8px);
     .row-with-separator.alert {
       width: calc(200% + 35px) !important;
     }
   }
 
+}
   .grid-row.alert {
     left: -5px;
   }

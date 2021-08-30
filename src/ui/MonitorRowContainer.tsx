@@ -333,7 +333,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   'no-departures': departuresRight.length > 0,
                 })}
               >
-                {departuresRight.length === 0 ? (
+                {departuresRight.length === 0 && !(sortedDeparturesLeft.length > leftColumnCount) ? (
                   <>
                     <div className="no-departures-text-container">
                       <div className={cx("no-departures-text", {'closed-stop': isClosedStopOnRight})}>

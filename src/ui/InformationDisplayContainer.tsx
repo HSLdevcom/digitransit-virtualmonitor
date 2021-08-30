@@ -30,7 +30,10 @@ const getStationAlerts = stations => {
   });
   return alerts;
 };
-const InformationDisplayContainer: FC<IProps> = ({ monitor, preview = false }) => {
+const InformationDisplayContainer: FC<IProps> = ({
+  monitor,
+  preview = false,
+}) => {
   const [stopIds, stationIds] = getStopsAndStationsFromViews(monitor.cards);
   const [stopsFetched, setStopsFetched] = useState(stopIds.length < 1);
   const [stationsFetched, setStationsFetched] = useState(stationIds.length < 1);

@@ -53,7 +53,11 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
       />
     );
   }
-  const view = { cards: cards, languages: props.languages, isInformationDisplay: isInformationDisplay(cards)};
+  const view = {
+    cards: cards,
+    languages: props.languages,
+    isInformationDisplay: isInformationDisplay(cards),
+  };
 
   const crds = cards.map((c, i) => {
     const cols = c.columns;

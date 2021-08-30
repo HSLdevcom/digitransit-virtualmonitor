@@ -46,7 +46,7 @@ export interface IView {
   duration: number;
 }
 export interface IMonitor {
-  cards: any//Array<IView> | any;
+  cards: Array<IView>;
   languages: Array<string>;
   contenthash?: string;
   isInformationDisplay: boolean;

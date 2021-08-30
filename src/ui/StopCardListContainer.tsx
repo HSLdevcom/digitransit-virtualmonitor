@@ -285,8 +285,6 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     return !(languages.length > 0);
   };
 
-  
-
   const createMonitor = () => {
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
@@ -339,7 +337,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   const cards: IMonitor = {
     cards: stopCardList,
     isInformationDisplay: isInformationDisplay(stopCardList),
-    languages: languages
+    languages: languages,
   };
   if (loading) {
     return (
@@ -352,7 +350,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   return (
     <div className="stop-card-list-container">
       {isOpen && (
-        <PreviewModal 
+        <PreviewModal
           view={cards}
           languages={languages}
           isOpen={isOpen}

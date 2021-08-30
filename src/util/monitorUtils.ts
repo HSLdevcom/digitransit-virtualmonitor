@@ -176,7 +176,6 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
   ];
 };
 
-
 export const isInformationDisplay = cards => {
   return (
     cards.length === 1 &&

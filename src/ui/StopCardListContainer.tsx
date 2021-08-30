@@ -25,8 +25,9 @@ interface IProps {
 
 interface IMonitor {
   cards: Array<IView>;
-  languages: Array<string>
-  contenthash: string,
+  languages: Array<string>;
+  contenthash: string;
+  isInformationDisplay: boolean;
 }
 
 const StopCardItem = ({
@@ -290,6 +291,13 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     return !(languages.length > 0);
   };
 
+  const isInformationDisplay = cards => {
+    return (
+      cards.length === 1 &&
+      cards[0].columns.left.stops.every(stop => stop.settings.allRoutesHidden)
+    );
+  };
+
   const createMonitor = () => {
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
@@ -315,17 +323,17 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     const newCard: IMonitor = {
       cards: cardArray,
       languages: languageArray.filter(lan => languages.includes(lan)),
+      isInformationDisplay: isInformationDisplay(cardArray),
       contenthash: '',
     };
-    newCard.contenthash = hash(newCard, {
+    (newCard.contenthash = hash(newCard, {
       algorithm: 'md5',
       encoding: 'base64',
-    }).replaceAll('/', '-'),
-
-    monitorAPI.create(newCard).then(res => {
-      setRedirect(true);
-      setView(newCard);
-    });
+    }).replaceAll('/', '-')),
+      monitorAPI.create(newCard).then(res => {
+        setRedirect(true);
+        setView(newCard);
+      });
   };
   if (redirect && view) {
     return (

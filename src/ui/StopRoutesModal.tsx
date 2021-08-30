@@ -29,6 +29,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
 ) => {
   const defaultSettings = {
     hiddenRoutes: [],
+    allRoutesHidden: false,
     showStopNumber: false,
     showEndOfLine: false,
     timeShift: 0,
@@ -61,17 +62,25 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
         settings.hiddenRoutes.length === props.combinedPatterns.length
           ? []
           : props.combinedPatterns;
-      setSettings({ ...settings, hiddenRoutes: routes });
+      setSettings({
+        ...settings,
+        hiddenRoutes: routes,
+        allRoutesHidden: routes.length > 0,
+      });
     } else if (option) {
       if (settings.hiddenRoutes.includes(option)) {
         setSettings({
           ...settings,
           hiddenRoutes: settings.hiddenRoutes.filter(r => r !== option),
+          allRoutesHidden:
+            settings.hiddenRoutes.length - 1 === props.combinedPatterns.length,
         });
       } else {
         setSettings({
           ...settings,
           hiddenRoutes: [...settings.hiddenRoutes, option],
+          allRoutesHidden:
+            settings.hiddenRoutes.length + 1 === props.combinedPatterns.length,
         });
       }
     }

@@ -10,22 +10,21 @@ $preview-grid-rows-margin: 15px;
 $preview-grid-divider: 2px;
 
 .main-content-container.preview {
-  .monitor-container {
-  .grid.two-cols {
-    margin: 0 5px;
-    width: calc(50% - 8px);
-    .row-with-separator.alert {
-      width: calc(200% + 35px) !important;
-    }
-  }
-
-}
   .grid-row.alert {
     left: -5px;
   }
 
   .monitor-container {
     height: calc(90% - 30px);
+
+    .grid.two-cols {
+      margin: 0 5px;
+      width: calc(50% - 8px);
+
+      .row-with-separator.alert {
+        width: calc(200% + 35px) !important;
+      }
+    }
 
     .no-departures-text-container {
       .no-departures-text {
@@ -123,9 +122,11 @@ $preview-grid-divider: 2px;
         }
       }
     }
+
     &.portrait {
       height: calc(100% - 5vh - 30px);
     }
+
     .divider {
       border-left: calc(0.3 * 1vh) solid #fff;
       width: 0;
@@ -196,11 +197,14 @@ $preview-grid-divider: 2px;
   &.portrait {
     .grid-rows {
       position: relative;
+
       &.no-departures {
         flex: 1;
+
         .no-departures-text-container {
           flex: 1;
         }
+
         .row-with-separator.alert {
           height: calc(100% / 8) !important;
         }

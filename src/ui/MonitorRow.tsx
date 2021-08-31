@@ -17,6 +17,7 @@ interface IStop {
   parentStation: any;
 }
 interface ITrip {
+  tripHeadsign: string;
   route: IRoute;
   stops: Array<IStop>;
   gtfsId: string;
@@ -78,7 +79,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')
       ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
-      : departure?.headsign;
+      : departure?.headsign || departure?.trip?.tripHeadsign;
 
   const d = translations.find(
     t => t.trans_id === departureDestination?.split(' via')[0],

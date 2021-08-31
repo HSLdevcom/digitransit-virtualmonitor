@@ -83,6 +83,7 @@ export const GET_STOP_DEPARTURES = gql`
           realtimeState
           headsign
           trip {
+            tripHeadsign
             gtfsId
             route {
               shortName
@@ -180,6 +181,7 @@ export const GET_STATION_DEPARTURES = gql`
           departureDelay
           headsign
           trip {
+            tripHeadsign
             gtfsId
             route {
               gtfsId

@@ -34,7 +34,7 @@ const PreviewModal: FC<Props> = (props: Props) => {
         </div>
         <div className="carouselContainer">
           {props.view.isInformationDisplay ? (
-            <InformationDisplayContainer preview={true} monitor={props.view} />
+            <InformationDisplayContainer preview monitor={props.view} />
           ) : (
             <CarouselDataContainer
               languages={props.languages}

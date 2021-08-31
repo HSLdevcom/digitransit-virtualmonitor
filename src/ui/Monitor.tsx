@@ -31,6 +31,7 @@ interface IProps {
   alertComponent: any;
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
+  error?: string;
 }
 const Monitor: FC<IProps> = ({
   view,
@@ -44,6 +45,7 @@ const Monitor: FC<IProps> = ({
   alertComponent,
   alertRowSpan,
   closedStopViews,
+  error,
 }) => {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
@@ -118,6 +120,7 @@ const Monitor: FC<IProps> = ({
         alertRowSpan={alertRowSpan}
         showMinutes={Number(config.showMinutes)}
         closedStopViews={closedStopViews}
+        error={error}
       />
     </div>
   );

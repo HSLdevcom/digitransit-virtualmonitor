@@ -18,12 +18,14 @@ interface IProps {
   views: Array<IView>;
   languages: Array<string>;
   preview?: boolean;
+  error?: string;
 }
 
 const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   views,
   languages,
   preview,
+  error,
   t,
 }) => {
   const pollInterval = 30000;
@@ -105,6 +107,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       views={views}
       preview={preview}
       closedStopViews={closedStopViews}
+      error={error}
     />
   );
 };

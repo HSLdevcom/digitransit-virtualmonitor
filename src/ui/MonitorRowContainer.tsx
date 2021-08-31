@@ -24,6 +24,7 @@ interface IProps {
   alertRowSpan: number;
   showMinutes?: number;
   closedStopViews: Array<IClosedStop>;
+  error?: string;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -41,6 +42,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   alertRowSpan,
   showMinutes,
   closedStopViews,
+  error,
   t,
 }) => {
   const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
@@ -295,9 +297,13 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             <>{isTighten ? leftColumn.slice(tighten[0]) : leftColumn}</>
           ) : (
             <div className="no-departures-text-container">
-              <div className={cx("no-departures-text", {'closed-stop': isClosedStopOnLeft})}>
-              {isClosedStopOnLeft
-                ? t('closedStopWithRange', {
+              <div
+                className={cx('no-departures-text', {
+                  'closed-stop': isClosedStopOnLeft,
+                })}
+              >
+                {isClosedStopOnLeft ? (
+                  t('closedStopWithRange', {
                     lng: currentLang,
                     name: closedStopViews[closedStopIndex].name,
                     code: closedStopViews[closedStopIndex].code,
@@ -308,10 +314,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                       closedStopViews[closedStopIndex].endTime,
                     ),
                   })
-                : (
-                  <>
-                {t('no-departures', { lng: currentLang })}</>
-              )}
+                ) : (
+                  <>{error || t('no-departures', { lng: currentLang })}</>
+                )}
               </div>
             </div>
           )}
@@ -336,20 +341,24 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 {departuresRight.length === 0 ? (
                   <>
                     <div className="no-departures-text-container">
-                      <div className={cx("no-departures-text", {'closed-stop': isClosedStopOnRight})}>
-                      {isClosedStopOnRight
-                    ? t('closedStopWithRange', {
-                        lng: currentLang,
-                        name: closedStopViews[closedStopIndex].name,
-                        code: closedStopViews[closedStopIndex].code,
-                        startTime: setDateWithSeconds(
-                          closedStopViews[closedStopIndex].startTime,
-                        ),
-                        endTime: setDateWithSeconds(
-                          closedStopViews[closedStopIndex].endTime,
-                        ),
-                      })
-                    : t('no-departures', { lng: currentLang })}
+                      <div
+                        className={cx('no-departures-text', {
+                          'closed-stop': isClosedStopOnRight,
+                        })}
+                      >
+                        {isClosedStopOnRight
+                          ? t('closedStopWithRange', {
+                              lng: currentLang,
+                              name: closedStopViews[closedStopIndex].name,
+                              code: closedStopViews[closedStopIndex].code,
+                              startTime: setDateWithSeconds(
+                                closedStopViews[closedStopIndex].startTime,
+                              ),
+                              endTime: setDateWithSeconds(
+                                closedStopViews[closedStopIndex].endTime,
+                              ),
+                            })
+                          : t('no-departures', { lng: currentLang })}
                       </div>
                     </div>
 

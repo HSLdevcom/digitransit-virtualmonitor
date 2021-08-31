@@ -3,6 +3,7 @@ import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
 import CarouselContainer from './CarouselContainer';
 import CarouselDataContainer from './CarouselDataContainer';
+import Loading from './Loading';
 import TranslationContainer from './TranslationContainer';
 
 interface Iv {
@@ -43,7 +44,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
 
   const monitor = fetched ? view : location?.state?.view.cards;
   if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
-    return null;
+    return <Loading />;
   }
   return (
     <CarouselDataContainer

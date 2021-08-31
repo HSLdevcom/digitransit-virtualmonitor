@@ -11,6 +11,14 @@ export interface ISettings {
   showStopNumber: boolean;
   showEndOfLine: boolean;
   timeShift: number;
+  renamedDestinations: Array<IDestinations>;
+}
+
+export interface IDestinations {
+  pattern: string;
+  en: string;
+  fi: string;
+  sv: string;
 }
 
 export interface IHiddenRoute {

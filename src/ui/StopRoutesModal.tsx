@@ -32,6 +32,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     showStopNumber: false,
     showEndOfLine: false,
     timeShift: 0,
+    renamedDestinations: [],
   };
   const [settings, setSettings] = useState(
     props.hiddenRoutes || defaultSettings,
@@ -83,9 +84,59 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     }
   };
 
+  const handleRenamedDestinations = () => {
+    const newDestinations = settings.renamedDestinations || [];
+    props.combinedPatterns.forEach(p => {
+      const inputFI = document?.getElementById(`fi-${p}`) as HTMLInputElement;
+      const inputSV = document?.getElementById(`sv-${p}`) as HTMLInputElement;
+      const inputEN = document?.getElementById(`en-${p}`) as HTMLInputElement;
+      if (
+        inputFI.value !== '' ||
+        inputSV.value !== '' ||
+        inputEN.value !== ''
+      ) {
+        const newDestination = {
+          pattern: p,
+          en: inputEN.value,
+          fi: inputFI.value,
+          sv: inputSV.value,
+        };
+        const foundIndex = newDestinations.findIndex(i => i.pattern === p);
+        if (foundIndex === -1) {
+          newDestinations.push(newDestination);
+        } else {
+          newDestinations.splice(foundIndex, 1, newDestination);
+        }
+      }
+    });
+    const newSettings = {
+      ...settings,
+      renamedDestinations: [...newDestinations],
+    };
+    setSettings(newSettings);
+  };
+
+  const handleDeleteRenamings = () => {
+    props.combinedPatterns.forEach(p => {
+      const inputFI = document?.getElementById(`fi-${p}`) as HTMLInputElement;
+      const inputSV = document?.getElementById(`sv-${p}`) as HTMLInputElement;
+      const inputEN = document?.getElementById(`en-${p}`) as HTMLInputElement;
+      inputFI.value = '';
+      inputSV.value = '';
+      inputEN.value = '';
+    });
+    const newSettings = {
+      ...settings,
+      renamedDestinations: [],
+    };
+    setSettings(newSettings);
+  };
+
   const handleClose = () => {
+    handleRenamedDestinations();
     props.closeModal?.(settings);
   };
+
   const hiddenRouteChecked = route => {
     if (!route) {
       return settings.hiddenRoutes.length === props.combinedPatterns.length;
@@ -113,6 +164,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
   const vehicleMode = props.stop.vehicleMode
     ? props.stop.vehicleMode.toLowerCase()
     : 'bus';
+
+  const renameDestinations = true;
+  const renamedDestinations = settings.renamedDestinations;
 
   return (
     <Modal
@@ -165,13 +219,20 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
           </div>
         </div>
         <div className="divider" />
-        <h2>
-          {props.t('hideLines')}
-          {settings.hiddenRoutes.length
-            .toString()
-            .concat(' / ')
-            .concat(props.combinedPatterns.length)}
-        </h2>{' '}
+        <div className="title-and-no-renaming">
+          <div className="title">
+            <h2>
+              {props.t('hideLines')}
+              {settings.hiddenRoutes.length
+                .toString()
+                .concat(' / ')
+                .concat(props.combinedPatterns.length)}
+            </h2>
+          </div>
+          <div className="no-renaming" onClick={handleDeleteRenamings}>
+            <h2>{props.t('deleteRenamings')}</h2>
+          </div>
+        </div>
         <div className="route-rows">
           <div className="row">
             <Checkbox
@@ -183,11 +244,22 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             />
             <span className="all"> {props.t('all')}</span>
           </div>
+          {renameDestinations && (
+            <div className="row-small">
+              <div className="labelsForRenameDestinations">
+                <div className={cx('lang', 'fi')}>FI</div>
+                <div className={cx('lang', 'sv')}>SV</div>
+                <div className={cx('lang', 'en')}>EN</div>
+              </div>
+            </div>
+          )}
           {props.combinedPatterns.map(pattern => {
+            const renamedDestination = renamedDestinations?.find(
+              d => d.pattern === pattern,
+            );
             const patternArray = pattern.split(':');
             return (
               <div key={uuid()} className="row">
-                {' '}
                 <Checkbox
                   checked={hiddenRouteChecked(pattern)}
                   onChange={checkHiddenRoute}
@@ -195,11 +267,36 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                   width={30}
                   height={30}
                 />
-                <div className="bus">
+                <div className="vehicle">
                   <Icon img={vehicleMode} />
-                </div>{' '}
-                <div className="route-number"> {patternArray[2]}</div>{' '}
-                <div className="destination">{patternArray[3]}</div>
+                </div>
+                <div className="route-number"> {patternArray[2]}</div>
+                {!renameDestinations && (
+                  <div className="destination">{patternArray[3]}</div>
+                )}
+                {renameDestinations && (
+                  <div className="renamedDestinations">
+                    <input
+                      id={`fi-${pattern}`}
+                      className="fi"
+                      defaultValue={renamedDestination?.fi}
+                      onBlur={handleRenamedDestinations}
+                      placeholder={patternArray[3]}
+                    />
+                    <input
+                      id={`sv-${pattern}`}
+                      className="sv"
+                      defaultValue={renamedDestination?.sv}
+                      onBlur={handleRenamedDestinations}
+                    />
+                    <input
+                      id={`en-${pattern}`}
+                      className="en"
+                      defaultValue={renamedDestination?.en}
+                      onBlur={handleRenamedDestinations}
+                    />
+                  </div>
+                )}
               </div>
             );
           })}

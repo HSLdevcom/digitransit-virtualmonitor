@@ -65,6 +65,32 @@ const StopRow: FC<IProps & WithTranslation> = ({
   });
 
   const combinedPatterns = sortBy(uniqWith(stopPatterns));
+  let settingsClassName = '';
+  if (
+    stop.settings?.timeShift > 0 &&
+    stop.settings?.hiddenRoutes.length > 0 &&
+    stop.settings?.renamedDestinations.length === 0
+  ) {
+    settingsClassName = 'clock-and-routes';
+  } else if (
+    stop.settings?.timeShift > 0 &&
+    stop.settings?.hiddenRoutes.length === 0 &&
+    stop.settings?.renamedDestinations.length > 0
+  ) {
+    settingsClassName = 'clock-and-renamed-destinations';
+  } else if (
+    stop.settings?.timeShift === 0 &&
+    stop.settings?.hiddenRoutes.length > 0 &&
+    stop.settings?.renamedDestinations.length > 0
+  ) {
+    settingsClassName = 'routes-and-renamed-destinations';
+  } else if (
+    stop.settings?.timeShift > 0 &&
+    stop.settings?.hiddenRoutes.length > 0 &&
+    stop.settings?.renamedDestinations.length > 0
+  ) {
+    settingsClassName = 'all';
+  }
 
   return (
     <div className="stop-row-container">
@@ -81,27 +107,20 @@ const StopRow: FC<IProps & WithTranslation> = ({
           {stop.name}
           <div className={cx('settings', isEastWest && 'east-west')}>
             <span onClick={handleClick}>
-              {' '}
               <Icon img="settings" />
             </span>
           </div>
           <div
             className={cx(
-              'hidden-routes',
+              'changed-settings',
               isEastWest && 'east-west',
-              stop.settings?.timeShift > 0 &&
-                stop.settings?.hiddenRoutes.length > 0
-                ? 'clock-and-routes'
-                : '',
+              settingsClassName,
             )}
           >
             {stop.settings?.timeShift > 0 && (
               <div className="clock">
                 <Icon img="clock" width={14} height={14} />
-                <span>
-                  {' '}
-                  {stop.settings.timeShift.toString().concat(' min')}{' '}
-                </span>
+                <span>{stop.settings.timeShift.toString().concat(' min')}</span>
               </div>
             )}
             {stop.settings?.hiddenRoutes.length > 0 && (
@@ -114,6 +133,21 @@ const StopRow: FC<IProps & WithTranslation> = ({
                     .concat(combinedPatterns.length.toString())}
                 </span>
               </>
+            )}
+            {stop.settings?.renamedDestinations.length > 0 && (
+              <div
+                className={
+                  settingsClassName === 'all' ? 'changed-destinations' : ''
+                }
+              >
+                {t('renamedDestinations')}
+                <span>
+                  {stop.settings.renamedDestinations.length
+                    .toString()
+                    .concat(' / ')
+                    .concat(combinedPatterns.length.toString())}
+                </span>
+              </div>
             )}
           </div>
         </div>

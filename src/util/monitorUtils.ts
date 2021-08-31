@@ -33,6 +33,7 @@ export const filterDepartures = (
   hiddenRoutes,
   timeshift,
   showEndOfLine = false,
+  renamedDestinations,
 ) => {
   const departures = [];
   const arrivalDepartures = [];
@@ -55,35 +56,42 @@ export const filterDepartures = (
       !hiddenRoutes.includes(combinedPattern) &&
       !arrivalDepartures.includes(combinedPattern)
     ) {
+      let stoptimes = [];
+      stoptimeList.stoptimes.forEach(item =>
+        stoptimes.push({
+          ...item,
+          combinedPattern: combinedPattern,
+        }),
+      );
+
       if (timeshift > 0) {
-        departures.push(
-          ...stoptimeList.stoptimes.filter(s => {
-            return (
-              s.serviceDay + s.realtimeDeparture >=
-              currentSeconds + parseInt(timeshift) * 60
-            );
-          }),
-        );
-      } else {
-        departures.push(...stoptimeList.stoptimes);
+        stoptimes = stoptimes.filter(s => {
+          return (
+            s.serviceDay + s.realtimeDeparture >=
+            currentSeconds + parseInt(timeshift) * 60
+          );
+        });
       }
+      departures.push(...stoptimes);
     }
   });
   return departures;
 };
-const getTranslationStringsForStop = stop => {
+const getTranslationStringsForStop = (stop, hiddenRoutes) => {
   const stringsToTranslate = [];
   stop.stoptimesForPatterns.forEach(stopTimeForPattern => {
-    let headsign = stopTimeForPattern.stoptimes[0].headsign;
-    if (headsign?.includes(' via ')) {
-      const destinations = headsign.split(' via ');
-      stringsToTranslate.push(...destinations);
-    } else if (headsign?.endsWith(' via')) {
-      headsign = headsign.substring(0, headsign.indexOf(' via'));
-      stringsToTranslate.push(headsign);
-    } else {
-      if (headsign) {
+    if (!hiddenRoutes.includes(stringifyPattern(stopTimeForPattern.pattern))) {
+      let headsign = stopTimeForPattern.stoptimes[0].headsign;
+      if (headsign?.includes(' via ')) {
+        const destinations = headsign.split(' via ');
+        stringsToTranslate.push(...destinations);
+      } else if (headsign?.endsWith(' via')) {
+        headsign = headsign.substring(0, headsign.indexOf(' via'));
         stringsToTranslate.push(headsign);
+      } else {
+        if (headsign) {
+          stringsToTranslate.push(headsign);
+        }
       }
     }
   });
@@ -94,6 +102,7 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
   const defaultSettings = {
     hiddenRoutes: [],
     timeshift: 0,
+    renamedDestinations: [],
   };
   const departures = [];
   const stringsToTranslate = [];
@@ -138,24 +147,38 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
           }
         } else {
           if (stopIndex >= 0) {
+            const {
+              hiddenRoutes,
+              timeShift,
+              showEndOfLine,
+              renamedDestinations,
+            } = view.columns[column].stops[stopIndex].settings
+              ? view.columns[column].stops[stopIndex].settings
+              : defaultSettings;
+
             if (isStation) {
               stop.stops.forEach(s => {
-                stringsToTranslate.push(...getTranslationStringsForStop(stop));
+                stringsToTranslate.push(
+                  ...getTranslationStringsForStop(stop, hiddenRoutes),
+                );
                 alerts.push(...s.alerts);
                 s.routes.forEach(r => alerts.push(...r.alerts));
               });
             } else {
-              stringsToTranslate.push(...getTranslationStringsForStop(stop));
+              stringsToTranslate.push(
+                ...getTranslationStringsForStop(stop, hiddenRoutes),
+              );
               alerts.push(...stop.alerts);
               stop.routes.forEach(r => alerts.push(...r.alerts));
             }
-            const { hiddenRoutes, timeShift, showEndOfLine } = view.columns[
-              column
-            ].stops[stopIndex].settings
-              ? view.columns[column].stops[stopIndex].settings
-              : defaultSettings;
             departureArray.push(
-              ...filterDepartures(stop, hiddenRoutes, timeShift, showEndOfLine),
+              ...filterDepartures(
+                stop,
+                hiddenRoutes,
+                timeShift,
+                showEndOfLine,
+                renamedDestinations,
+              ),
             );
           }
         }

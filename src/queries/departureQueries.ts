@@ -87,9 +87,6 @@ export const GET_STOP_DEPARTURES = gql`
             route {
               shortName
             }
-            stops {
-              gtfsId
-            }
           }
         }
       }
@@ -187,9 +184,6 @@ export const GET_STATION_DEPARTURES = gql`
             route {
               gtfsId
               shortName
-            }
-            stops {
-              gtfsId
             }
           }
         }

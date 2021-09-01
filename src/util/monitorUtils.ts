@@ -177,8 +177,10 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
 };
 
 export const isInformationDisplay = cards => {
+  console.log(cards)
   return (
     cards.length === 1 &&
+    cards[0].columns.left.stops.length && 
     cards[0].columns.left.stops.every(stop => stop.settings?.allRoutesHidden)
   );
 };

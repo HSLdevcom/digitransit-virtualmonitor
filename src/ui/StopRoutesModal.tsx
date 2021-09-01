@@ -20,7 +20,7 @@ interface Props {
   showModal: boolean;
   stop: IStopInfo;
   closeModal: (route: IRoute[]) => void;
-  hiddenRoutes?: any;
+  stopSettings?: any;
   combinedPatterns: string[];
 }
 
@@ -33,14 +33,22 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     showStopNumber: false,
     showEndOfLine: false,
     timeShift: 0,
+    renamedDestinations: [],
   };
+
   const [settings, setSettings] = useState(
-    props.hiddenRoutes || defaultSettings,
+    props.stopSettings || defaultSettings,
   );
+
+  const [renamings, setRenamings] = useState(
+    props.stopSettings?.renamedDestinations || [],
+  );
+
   const text = props.t('showHidden', {
     stop: props.stop.name,
     code: props.stop.code,
   });
+
   const checkShowSetting = setting => {
     let newSettings;
     if (setting === 'showStopNumber') {
@@ -56,6 +64,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     }
     setSettings(newSettings);
   };
+
   const checkHiddenRoute = option => {
     if (option === 'all') {
       const routes =
@@ -92,9 +101,49 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     }
   };
 
-  const handleClose = () => {
-    props.closeModal?.(settings);
+  const handleRenamedDestination = (e, lang) => {
+    const index = renamings.findIndex(r => r.pattern === e.target.name);
+    if (index !== -1) {
+      renamings.splice(index, 1, {
+        ...renamings[index],
+        [lang]: e.target.value,
+      });
+    } else {
+      const empty = {
+        pattern: '',
+        en: '',
+        fi: '',
+        sv: '',
+      };
+      const renamedDestination = {
+        ...empty,
+        pattern: e.target.name,
+        [lang]: e.target.value,
+      };
+      setRenamings([...renamings, renamedDestination]);
+    }
   };
+
+  const handleDeleteRenamings = () => {
+    props.combinedPatterns.forEach(p => {
+      const inputFI = document?.getElementById(`fi-${p}`) as HTMLInputElement;
+      const inputSV = document?.getElementById(`sv-${p}`) as HTMLInputElement;
+      const inputEN = document?.getElementById(`en-${p}`) as HTMLInputElement;
+      inputFI.value = '';
+      inputSV.value = '';
+      inputEN.value = '';
+    });
+    setRenamings([]);
+  };
+
+  const handleClose = () => {
+    const settingsToSave = {
+      ...settings,
+      renamedDestinations: renamings,
+    };
+    props.closeModal?.(settingsToSave);
+  };
+
   const hiddenRouteChecked = route => {
     if (!route) {
       return settings.hiddenRoutes.length === props.combinedPatterns.length;
@@ -122,6 +171,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
   const vehicleMode = props.stop.vehicleMode
     ? props.stop.vehicleMode.toLowerCase()
     : 'bus';
+
+  const renameDestinations = true;
+  const renamedDestinations = renamings;
 
   return (
     <Modal
@@ -174,13 +226,20 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
           </div>
         </div>
         <div className="divider" />
-        <h2>
-          {props.t('hideLines')}
-          {settings.hiddenRoutes.length
-            .toString()
-            .concat(' / ')
-            .concat(props.combinedPatterns.length)}
-        </h2>{' '}
+        <div className="title-and-no-renaming">
+          <div className="title">
+            <h2>
+              {props.t('hideLines')}
+              {settings.hiddenRoutes.length
+                .toString()
+                .concat(' / ')
+                .concat(props.combinedPatterns.length)}
+            </h2>
+          </div>
+          <div className="no-renaming" onClick={handleDeleteRenamings}>
+            <h2>{props.t('deleteRenamings')}</h2>
+          </div>
+        </div>
         <div className="route-rows">
           <div className="row">
             <Checkbox
@@ -192,11 +251,22 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             />
             <span className="all"> {props.t('all')}</span>
           </div>
+          {renameDestinations && (
+            <div className={cx('row', 'small')}>
+              <div>
+                <div className={cx('lang', 'fi')}>FI</div>
+                <div className={cx('lang', 'sv')}>SV</div>
+                <div className={cx('lang', 'en')}>EN</div>
+              </div>
+            </div>
+          )}
           {props.combinedPatterns.map(pattern => {
+            const renamedDestination = renamedDestinations?.find(
+              d => d.pattern === pattern,
+            );
             const patternArray = pattern.split(':');
             return (
               <div key={uuid()} className="row">
-                {' '}
                 <Checkbox
                   checked={hiddenRouteChecked(pattern)}
                   onChange={checkHiddenRoute}
@@ -204,11 +274,39 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                   width={30}
                   height={30}
                 />
-                <div className="bus">
+                <div className="vehicle">
                   <Icon img={vehicleMode} />
-                </div>{' '}
-                <div className="route-number"> {patternArray[2]}</div>{' '}
-                <div className="destination">{patternArray[3]}</div>
+                </div>
+                <div className="route-number"> {patternArray[2]}</div>
+                {!renameDestinations && (
+                  <div className="destination">{patternArray[3]}</div>
+                )}
+                {renameDestinations && (
+                  <div className="renamedDestinations">
+                    <input
+                      id={`fi-${pattern}`}
+                      name={pattern}
+                      className="fi"
+                      defaultValue={renamedDestination?.fi}
+                      onChange={e => handleRenamedDestination(e, 'fi')}
+                      placeholder={patternArray[3]}
+                    />
+                    <input
+                      id={`sv-${pattern}`}
+                      name={pattern}
+                      className="sv"
+                      defaultValue={renamedDestination?.sv}
+                      onChange={e => handleRenamedDestination(e, 'sv')}
+                    />
+                    <input
+                      id={`en-${pattern}`}
+                      name={pattern}
+                      className="en"
+                      defaultValue={renamedDestination?.en}
+                      onChange={e => handleRenamedDestination(e, 'en')}
+                    />
+                  </div>
+                )}
               </div>
             );
           })}

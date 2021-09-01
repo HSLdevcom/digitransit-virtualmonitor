@@ -90,6 +90,7 @@ i18n.init({
         continue: 'Jatka',
         createViewTitle: 'Uuden näkymän luonti',
         createStopView: 'Luo pysäkkinäyttö',
+        deleteRenamings: 'Kumoa tekstimuutokset',
         departureTime: 'Aika/min',
         destination: 'Määränpää',
         display: 'Näyttö',
@@ -138,6 +139,7 @@ i18n.init({
         prepareStop: 'Lisää pysäkki',
         previewView: 'Esikatsele',
         quickDisplayCreate: 'Luo uusi näyttö',
+        renamedDestinations: 'Muutetut määränpäät: ',
         save: 'Tallenna',
         search: 'Etsi',
         'search-autosuggest-label':

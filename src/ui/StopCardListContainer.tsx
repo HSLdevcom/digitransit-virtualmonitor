@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { IStop } from '../util/Interfaces';
+import { IStop, IMonitor, IView } from '../util/Interfaces';
 import React, { FC, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import arrayMove from 'array-move';
@@ -15,6 +15,7 @@ import { getLayout } from '../util/getLayout';
 
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
+import { isInformationDisplay } from '../util/monitorUtils';
 interface IProps {
   feedIds: Array<string>;
   defaultStopCardList: any;
@@ -305,14 +306,18 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         };
       });
     });
-    const newCard = {
+
+    const newCard: IMonitor = {
       cards: cardArray,
       languages: languageArray.filter(lan => languages.includes(lan)),
-      contenthash: hash(stopCardList, {
-        algorithm: 'md5',
-        encoding: 'base64',
-      }).replaceAll('/', '-'),
+      isInformationDisplay: isInformationDisplay(cardArray),
+      contenthash: '',
     };
+    newCard.contenthash = hash(newCard, {
+      algorithm: 'md5',
+      encoding: 'base64',
+    }).replaceAll('/', '-');
+
     monitorAPI.create(newCard).then(res => {
       setRedirect(true);
       setView(newCard);
@@ -329,8 +334,10 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       />
     );
   }
-  const cards = {
+  const cards: IMonitor = {
     cards: stopCardList,
+    isInformationDisplay: isInformationDisplay(stopCardList),
+    languages: languages,
   };
   if (loading) {
     return (

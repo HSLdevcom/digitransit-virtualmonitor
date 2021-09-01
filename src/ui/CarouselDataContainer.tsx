@@ -14,6 +14,7 @@ import TranslationContainer from './TranslationContainer';
 import Loading from './Loading';
 import { uniq, uniqBy } from 'lodash';
 import { WithTranslation, withTranslation } from 'react-i18next';
+import CarouselContainer from './CarouselContainer';
 interface IProps {
   views: Array<IView>;
   languages: Array<string>;
@@ -95,10 +96,24 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
     return <Loading />;
   }
 
+  if (languages.indexOf('sv') !== -1) {
+    return (
+      <TranslationContainer
+        languages={languages}
+        translationIds={uniq(translationIds)}
+        stopDepartures={stopDepartures}
+        stationDepartures={stationDepartures}
+        alerts={alerts}
+        views={views}
+        preview={preview}
+        closedStopViews={closedStopViews}
+      />
+    );
+  }
+
   return (
-    <TranslationContainer
+    <CarouselContainer
       languages={languages}
-      translationIds={uniq(translationIds)}
       stopDepartures={stopDepartures}
       stationDepartures={stationDepartures}
       alerts={alerts}

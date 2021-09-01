@@ -2,8 +2,9 @@ import * as React from 'react';
 import Async, { Props as AsyncProps } from 'react-promise';
 
 import { IDisplay } from './ConfigurationList';
-import ViewCarousel from './ViewCarousel';
 import createUrlCompression from '../urlCompression';
+import OldMonitorParser from './OldMonitorParser';
+import Loading from './Loading';
 
 interface IDisplayUrlCompressionProps {
   readonly version: string;
@@ -23,7 +24,7 @@ const AsyncInflater = <T extends {}>({
     then={unpacked =>
       unpacked ? children(unpacked) : <div>Error while unpacking</div>
     }
-    pending={() => <div>Still unpacking...</div>}
+    pending={() => <Loading />}
   />
 );
 
@@ -35,9 +36,7 @@ const displayDictionaries = {
 };
 
 const renderers = {
-  v0: (display: IDisplay) => (
-    <ViewCarousel viewCarousel={display.viewCarousel} />
-  ),
+  v0: (display: IDisplay) => <OldMonitorParser display={display} />,
 };
 
 type IPair = ReturnType<typeof createUrlCompression>;

@@ -77,15 +77,13 @@
         }
       }
 
-      .hidden-routes {
+      .changed-settings {
         &.east-west {
           right: 148px;
         }
 
         .clock {
           svg {
-            position: relative;
-            top: 3px;
             padding-right: 3px;
           }
 
@@ -94,7 +92,9 @@
           position: relative;
         }
 
-        &.clock-and-routes {
+        &.clock-and-routes,
+        &.clock-and-renamed-destinations,
+        &.all {
           padding-top: 0;
           padding-bottom: 10px;
 
@@ -103,8 +103,28 @@
           }
 
           .clock {
-            margin-left: 100px;
+            justify-content: flex-end;
+
+            svg {
+              position: relative;
+              top: 3px;
+            }
           }
+        }
+
+        &.all {
+          top: 13px;
+          padding-top: 0;
+          padding-bottom: 0;
+
+          .changed-destinations {
+            margin-top: 2px;
+          }
+        }
+
+        &.routes-and-renamed-destinations {
+          padding-top: 2px;
+          padding-bottom: 10px;
         }
 
         flex: 1 1;

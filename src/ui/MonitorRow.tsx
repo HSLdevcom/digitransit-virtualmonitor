@@ -8,6 +8,7 @@ import Icon from './Icon';
 interface IRoute {
   alerts: any;
   shortName: string;
+  patterns?: Array<any>;
 }
 
 interface IStop {
@@ -17,6 +18,7 @@ interface IStop {
   parentStation: any;
 }
 interface ITrip {
+  tripHeadsign: string;
   route: IRoute;
   stops: Array<IStop>;
   gtfsId: string;
@@ -31,12 +33,13 @@ export interface IDeparture {
   realtime: boolean;
   pickupType: string;
   stop: IStop;
+  combinedPattern?: string;
 }
 
 interface IProps {
   isTwoRow: boolean;
   departure: IDeparture;
-  translations: Array<ITranslation>;
+  translations?: Array<ITranslation>;
   stops: Array<any>;
   isFirst?: boolean;
   showVia?: boolean;
@@ -73,26 +76,50 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   showMinutes,
   t,
 }) => {
+  const stopSettings = stops.find(s => {
+    const gtfsID = departure?.stop?.parentStation
+      ? departure?.stop.parentStation.gtfsId
+      : departure?.stop.gtfsId;
+    return s.gtfsId === gtfsID;
+  });
+
+  const renamedDestinations = [];
+  stops.forEach(s =>
+    s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
+  );
+
   const isCancelled = departure?.realtimeState === 'CANCELED';
 
   const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')
       ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
-      : departure?.headsign;
+      : departure?.headsign || departure?.trip?.tripHeadsign;
 
-  const d = translations.find(
+  const d = translations?.find(
     t => t.trans_id === departureDestination?.split(' via')[0],
   );
-  let destination = d ? d.translation : departureDestination;
+
+  const renamedDestination = renamedDestinations.find(
+    dest => dest.pattern === departure?.combinedPattern,
+  );
+
+  let destination = '';
+  if (renamedDestination && renamedDestination[currentLang] !== '') {
+    destination = renamedDestination[currentLang];
+  } else {
+    destination = d ? d.translation : departureDestination;
+  }
 
   const splitDestination =
-    departureDestination && departureDestination.includes(' via');
+    (!renamedDestination || renamedDestination[currentLang] === '') &&
+    departureDestination &&
+    departureDestination.includes(' via');
 
   let viaDestination = splitDestination
     ? departureDestination.substring(departureDestination.indexOf(' via') + 1)
     : '';
   if (splitDestination) {
-    const t = translations.find(
+    const t = translations?.find(
       t => t.trans_id === viaDestination.substring(4, viaDestination.length),
     )?.translation;
     if (t) {
@@ -129,12 +156,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     showMinutes * 60,
     departure?.serviceDay,
   );
-  const stopSettings = stops.find(s => {
-    const gtfsID = departure?.stop?.parentStation
-      ? departure?.stop.parentStation.gtfsId
-      : departure?.stop.gtfsId;
-    return s.gtfsId === gtfsID;
-  });
   const showStopCode = stopSettings?.settings?.showStopNumber;
 
   return (

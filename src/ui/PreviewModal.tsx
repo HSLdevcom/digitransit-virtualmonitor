@@ -1,46 +1,20 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
-import { ISettings, ITitle } from '../util/Interfaces';
+import { IMonitor, ISettings, ITitle } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Icon from './Icon';
 import cx from 'classnames';
+import InformationDisplayContainer from './InformationDisplayContainer';
 
 Modal.setAppElement('#root');
-interface IStop {
-  code: string;
-  desc: string;
-  gtfsId: string;
-  locationType: string;
-  name: string;
-  settings: ISettings;
-}
-interface ISides {
-  stops: Array<IStop>;
-  title: ITitle;
-}
-interface IColumn {
-  left: ISides;
-  right: ISides;
-}
-interface ICard {
-  title: ITitle;
-  layout: number;
-  duration: number;
-  columns: IColumn;
-  showStopCode: boolean;
-}
-interface IView {
-  cards: Array<ICard>;
-}
 interface Props {
-  view: IView;
+  view: IMonitor;
   languages: Array<string>;
   isOpen: boolean;
   onClose: (boolean) => void;
   isLandscape: boolean;
 }
 const PreviewModal: FC<Props> = (props: Props) => {
-  const currentMillis = new Date().getTime();
   return (
     <>
       <Modal
@@ -59,11 +33,15 @@ const PreviewModal: FC<Props> = (props: Props) => {
           </div>
         </div>
         <div className="carouselContainer">
-          <CarouselDataContainer
-            languages={props.languages}
-            views={props.view.cards}
-            preview
-          />
+          {props.view.isInformationDisplay ? (
+            <InformationDisplayContainer preview monitor={props.view} />
+          ) : (
+            <CarouselDataContainer
+              languages={props.languages}
+              views={props.view.cards}
+              preview
+            />
+          )}
         </div>
       </Modal>
     </>

@@ -190,6 +190,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
                   stopIds={stopId.split(',')}
                   layout={layout ? Number(layout) : 2}
                   config={monitorConfig}
+                  urlTitle={this.props.search?.title}
                 />
               )}
             />

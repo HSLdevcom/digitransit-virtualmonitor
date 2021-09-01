@@ -10,6 +10,7 @@ interface IProps {
   stopIds: Array<string>;
   layout?: number;
   config: IMonitorConfig;
+  urlTitle?: string;
 }
 
 export const GET_STOP = gql`
@@ -25,6 +26,7 @@ export const GET_STOP = gql`
 const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   stopIds,
   layout = 2,
+  urlTitle,
   config,
   t,
 }) => {
@@ -44,7 +46,9 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
         card[0].columns.left.stops = data.stops;
         card[0].layout = layout;
         if (stopIds.length === 1) {
-          card[0].title.fi = data.stops[0]?.name;
+          card[0].title.fi = urlTitle || data.stops[0]?.name;
+        } else {
+          card[0].title.fi = urlTitle;
         }
       } else {
         setStopsFound(false);

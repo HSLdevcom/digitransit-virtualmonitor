@@ -45,6 +45,12 @@ export interface IView {
   showStopCode: boolean;
   duration: number;
 }
+export interface IMonitor {
+  cards: Array<IView>;
+  languages: Array<string>;
+  contenthash?: string;
+  isInformationDisplay: boolean;
+}
 
 export interface IAlertDescriptionTextTranslation {
   text: string;

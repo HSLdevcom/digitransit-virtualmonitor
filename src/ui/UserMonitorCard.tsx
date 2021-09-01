@@ -4,6 +4,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { Redirect } from 'react-router-dom';
 import { GET_STOP } from '../queries/stopStationQueries';
 import { IColumn } from '../util/Interfaces';
+import { isInformationDisplay } from '../util/monitorUtils';
 import Button from './Button';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
@@ -52,7 +53,11 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
       />
     );
   }
-  const view = { cards: cards };
+  const view = {
+    cards: cards,
+    languages: props.languages,
+    isInformationDisplay: isInformationDisplay(cards),
+  };
 
   const crds = cards.map((c, i) => {
     const cols = c.columns;

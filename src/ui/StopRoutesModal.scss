@@ -57,39 +57,6 @@
       overflow-x: hidden;
       height: 380px;
 
-      .row-small {
-        height: 15px;
-        padding: 0;
-
-        .labelsForRenameDestinations {
-          min-height: 10px;
-          display: flex;
-          margin-left: 145px;
-        }
-
-        .lang {
-          position: absolute;
-          font-style: normal;
-          font-weight: normal;
-          font-size: 13px;
-          line-height: 15px;
-          letter-spacing: -0.02em;
-          display: flex;
-
-          &.fi {
-            left: 216px;
-          }
-
-          &.sv {
-            left: 376px;
-          }
-
-          &.en {
-            left: 536px;
-          }
-        }
-      }
-
       .row {
         min-height: 30px;
         display: flex;
@@ -132,7 +99,7 @@
           .en,
           .fi,
           .sv {
-            width: 136px;
+            width: 130px;
 
             &::placeholder {
               color: black;
@@ -142,6 +109,35 @@
           .fi,
           .sv {
             margin-right: 18px;
+          }
+        }
+
+        &.small {
+          position: sticky;
+          min-height: 0;
+          margin: 0;
+          margin-bottom: 10px;
+
+          .lang {
+            position: absolute;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 13px;
+            line-height: 15px;
+            letter-spacing: -0.02em;
+            display: flex;
+
+            &.fi {
+              left: 136px;
+            }
+
+            &.sv {
+              left: 290px;
+            }
+
+            &.en {
+              left: 444px;
+            }
           }
         }
       }

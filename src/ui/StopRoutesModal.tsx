@@ -20,7 +20,7 @@ interface Props {
   showModal: boolean;
   stop: IStopInfo;
   closeModal: (route: IRoute[]) => void;
-  hiddenRoutes?: any;
+  stopSettings?: any;
   combinedPatterns: string[];
 }
 
@@ -34,13 +34,20 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     timeShift: 0,
     renamedDestinations: [],
   };
+
   const [settings, setSettings] = useState(
-    props.hiddenRoutes || defaultSettings,
+    props.stopSettings || defaultSettings,
   );
+
+  const [renamings, setRenamings] = useState(
+    props.stopSettings?.renamedDestinations || [],
+  );
+
   const text = props.t('showHidden', {
     stop: props.stop.name,
     code: props.stop.code,
   });
+
   const checkShowSetting = setting => {
     let newSettings;
     if (setting === 'showStopNumber') {
@@ -56,6 +63,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     }
     setSettings(newSettings);
   };
+
   const checkHiddenRoute = option => {
     if (option === 'all') {
       const routes =
@@ -84,36 +92,27 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     }
   };
 
-  const handleRenamedDestinations = () => {
-    const newDestinations = settings.renamedDestinations || [];
-    props.combinedPatterns.forEach(p => {
-      const inputFI = document?.getElementById(`fi-${p}`) as HTMLInputElement;
-      const inputSV = document?.getElementById(`sv-${p}`) as HTMLInputElement;
-      const inputEN = document?.getElementById(`en-${p}`) as HTMLInputElement;
-      if (
-        inputFI.value !== '' ||
-        inputSV.value !== '' ||
-        inputEN.value !== ''
-      ) {
-        const newDestination = {
-          pattern: p,
-          en: inputEN.value,
-          fi: inputFI.value,
-          sv: inputSV.value,
-        };
-        const foundIndex = newDestinations.findIndex(i => i.pattern === p);
-        if (foundIndex === -1) {
-          newDestinations.push(newDestination);
-        } else {
-          newDestinations.splice(foundIndex, 1, newDestination);
-        }
-      }
-    });
-    const newSettings = {
-      ...settings,
-      renamedDestinations: [...newDestinations],
-    };
-    setSettings(newSettings);
+  const handleRenamedDestination = (e, lang) => {
+    const index = renamings.findIndex(r => r.pattern === e.target.name);
+    if (index !== -1) {
+      renamings.splice(index, 1, {
+        ...renamings[index],
+        [lang]: e.target.value,
+      });
+    } else {
+      const empty = {
+        pattern: '',
+        en: '',
+        fi: '',
+        sv: '',
+      };
+      const renamedDestination = {
+        ...empty,
+        pattern: e.target.name,
+        [lang]: e.target.value,
+      };
+      setRenamings([...renamings, renamedDestination]);
+    }
   };
 
   const handleDeleteRenamings = () => {
@@ -125,16 +124,15 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
       inputSV.value = '';
       inputEN.value = '';
     });
-    const newSettings = {
-      ...settings,
-      renamedDestinations: [],
-    };
-    setSettings(newSettings);
+    setRenamings([]);
   };
 
   const handleClose = () => {
-    handleRenamedDestinations();
-    props.closeModal?.(settings);
+    const settingsToSave = {
+      ...settings,
+      renamedDestinations: renamings,
+    };
+    props.closeModal?.(settingsToSave);
   };
 
   const hiddenRouteChecked = route => {
@@ -166,7 +164,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     : 'bus';
 
   const renameDestinations = true;
-  const renamedDestinations = settings.renamedDestinations;
+  const renamedDestinations = renamings;
 
   return (
     <Modal
@@ -245,8 +243,8 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             <span className="all"> {props.t('all')}</span>
           </div>
           {renameDestinations && (
-            <div className="row-small">
-              <div className="labelsForRenameDestinations">
+            <div className={cx('row', 'small')}>
+              <div>
                 <div className={cx('lang', 'fi')}>FI</div>
                 <div className={cx('lang', 'sv')}>SV</div>
                 <div className={cx('lang', 'en')}>EN</div>
@@ -278,22 +276,25 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                   <div className="renamedDestinations">
                     <input
                       id={`fi-${pattern}`}
+                      name={pattern}
                       className="fi"
                       defaultValue={renamedDestination?.fi}
-                      onBlur={handleRenamedDestinations}
+                      onChange={e => handleRenamedDestination(e, 'fi')}
                       placeholder={patternArray[3]}
                     />
                     <input
                       id={`sv-${pattern}`}
+                      name={pattern}
                       className="sv"
                       defaultValue={renamedDestination?.sv}
-                      onBlur={handleRenamedDestinations}
+                      onChange={e => handleRenamedDestination(e, 'sv')}
                     />
                     <input
                       id={`en-${pattern}`}
+                      name={pattern}
                       className="en"
                       defaultValue={renamedDestination?.en}
-                      onBlur={handleRenamedDestinations}
+                      onChange={e => handleRenamedDestination(e, 'en')}
                     />
                   </div>
                 )}

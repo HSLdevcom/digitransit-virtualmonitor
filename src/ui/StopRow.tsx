@@ -153,7 +153,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
         </div>
         {showModal && (
           <StopRoutesModal
-            hiddenRoutes={stop.settings}
+            stopSettings={stop.settings}
             closeModal={saveHiddenRoutes}
             showModal={showModal}
             stop={stop}

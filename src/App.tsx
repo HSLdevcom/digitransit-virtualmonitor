@@ -19,6 +19,7 @@ import WithDatabaseConnection from './ui/WithDatabaseConnection';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 import './App.scss';
+import StopMonitorContainer from './ui/StopMonitorContainer';
 export interface IMonitorConfig {
   //feedIds?: Array<string>;
   uri?: string;
@@ -50,10 +51,9 @@ interface IConfigurationDisplayRouteParams {
   displayName: string;
 }
 
-interface IStopRouteParams {
+interface IStopMonitorProps {
   stopId: string;
-  displayedRoutes?: string;
-  search?: string;
+  layout?: string;
 }
 
 export type combinedConfigurationAndInjected = IConfigurationProps &
@@ -180,18 +180,16 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               )}
             />
             <Route
-              path={'/stop/:stopId/:displayedRoutes?'}
+              path={'/stop/:stopId/:layout?'}
               component={({
                 match: {
-                  params: { stopId, displayedRoutes },
+                  params: { stopId, layout },
                 },
-              }: RouteComponentProps<IStopRouteParams>) => (
-                <StopTimesView
+              }: RouteComponentProps<IStopMonitorProps>) => (
+                <StopMonitorContainer
                   stopIds={stopId.split(',')}
-                  displayedRoutes={
-                    displayedRoutes ? Number(displayedRoutes) : undefined
-                  }
-                  monitorConfig={monitorConfig}
+                  layout={layout ? Number(layout) : 2}
+                  config={monitorConfig}
                   urlTitle={this.props.search?.title}
                 />
               )}

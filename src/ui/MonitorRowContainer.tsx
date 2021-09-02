@@ -24,6 +24,7 @@ interface IProps {
   alertRowSpan: number;
   showMinutes?: number;
   closedStopViews: Array<IClosedStop>;
+  error?: string;
 }
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
@@ -41,6 +42,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   alertRowSpan,
   showMinutes,
   closedStopViews,
+  error,
   t,
 }) => {
   const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
@@ -313,7 +315,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                     ),
                   })
                 ) : (
-                  <>{t('no-departures', { lng: currentLang })}</>
+                  <>{error || t('no-departures', { lng: currentLang })}</>
                 )}
               </div>
             </div>

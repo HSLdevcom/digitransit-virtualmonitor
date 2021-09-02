@@ -19,6 +19,7 @@ interface IProps {
   time?: EpochMilliseconds;
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
+  error?: string;
 }
 
 const CarouselContainer: FC<IProps> = ({
@@ -31,6 +32,7 @@ const CarouselContainer: FC<IProps> = ({
   time,
   preview = false,
   closedStopViews,
+  error,
 }) => {
   const len = views.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
@@ -110,6 +112,7 @@ const CarouselContainer: FC<IProps> = ({
       alertComponent={alertComponent}
       alertRowSpan={alertSpan}
       closedStopViews={closedStopViews}
+      error={error}
     />
   );
 };

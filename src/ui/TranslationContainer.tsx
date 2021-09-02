@@ -13,6 +13,7 @@ interface IProps {
   stopDepartures: Array<Array<Array<IDeparture>>>;
   alerts: Array<Array<IAlert>>;
   closedStopViews: Array<IClosedStop>;
+  error?: string;
 }
 
 export interface ITranslation {

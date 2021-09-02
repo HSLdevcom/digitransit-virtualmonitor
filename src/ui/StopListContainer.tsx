@@ -154,9 +154,9 @@ const StopList = props => {
       <div>
         <ul className="stops">
           {leftItems &&
-            leftItems.map(item => {
+            leftItems.map((item, index) => {
               return (
-                <li className="stop">
+                <li key={`s-${index}`} className="stop">
                   <StopRow
                     key={uuid()}
                     stop={item}

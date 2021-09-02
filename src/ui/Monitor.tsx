@@ -10,6 +10,9 @@ import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
 import { EpochMilliseconds } from '../time';
 import { ITranslation } from './TranslationContainer';
+import { Link } from 'react-router-dom';
+import Icon from './Icon';
+import MonitorOverlay from './MonitorOverlay';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -33,6 +36,7 @@ interface IProps {
   closedStopViews: Array<IClosedStop>;
   error?: string;
 }
+let to;
 const Monitor: FC<IProps> = ({
   view,
   departures,
@@ -51,7 +55,7 @@ const Monitor: FC<IProps> = ({
     getWindowDimensions(),
   );
   const { isMultiDisplay } = getLayout(view.layout);
-
+  const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
     setWindowDimensions(getWindowDimensions());
     window.addEventListener('resize', () => {
@@ -77,7 +81,15 @@ const Monitor: FC<IProps> = ({
         preview: isPreview,
         portrait: !isLandscapeByLayout,
       })}
+      onMouseMove={() => {
+        setShowOverlay(true);
+        clearTimeout(to)
+        to = setTimeout(() => setShowOverlay(false), 3000)
+      }}
     >
+      <MonitorOverlay show={showOverlay} isPreview={isPreview} />
+        
+      
       <Titlebar isPreview={isPreview} isLandscape={isLandscapeByLayout}>
         <Logo
           monitorConfig={config}

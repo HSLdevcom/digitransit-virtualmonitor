@@ -84,8 +84,6 @@ const Monitor: FC<IProps> = ({
       }}
     >
       <MonitorOverlay show={showOverlay} isPreview={isPreview} />
-        
-    
       <MonitorTitlebar
         config={config}
         isMultiDisplay={isMultiDisplay}

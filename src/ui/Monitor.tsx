@@ -79,8 +79,8 @@ const Monitor: FC<IProps> = ({
       })}
       onMouseMove={() => {
         setShowOverlay(true);
-        clearTimeout(to)
-        to = setTimeout(() => setShowOverlay(false), 3000)
+        clearTimeout(to);
+        to = setTimeout(() => setShowOverlay(false), 3000);
       }}
     >
       <MonitorOverlay show={showOverlay} isPreview={isPreview} />

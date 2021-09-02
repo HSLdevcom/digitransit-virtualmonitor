@@ -1,18 +1,14 @@
 import React, { FC, useState, useEffect } from 'react';
 import cx from 'classnames';
 import { IView, IClosedStop } from '../util/Interfaces';
-import Titlebar from './Titlebar';
-import TitlebarTime from './TitlebarTime';
-import Logo from './logo/Logo';
 import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
 import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
 import { EpochMilliseconds } from '../time';
 import { ITranslation } from './TranslationContainer';
-import { Link } from 'react-router-dom';
-import Icon from './Icon';
 import MonitorOverlay from './MonitorOverlay';
+import MonitorTitlebar from './MonitorTitleBar';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -89,34 +85,17 @@ const Monitor: FC<IProps> = ({
     >
       <MonitorOverlay show={showOverlay} isPreview={isPreview} />
         
-      
-      <Titlebar isPreview={isPreview} isLandscape={isLandscapeByLayout}>
-        <Logo
-          monitorConfig={config}
-          isPreview={isPreview}
-          isLandscape={isLandscapeByLayout}
-        />
-        {!isMultiDisplay && (
-          <div className={cx('title-text', { preview: isPreview })}>
-            {view.title[currentLang]}
-          </div>
-        )}
-        {isMultiDisplay && (
-          <div className="multi-display-titles">
-            <div className="left-title">
-              {view.columns.left.title[currentLang]}
-            </div>
-            <div className="right-title">
-              {view.columns.right.title[currentLang]}
-            </div>
-          </div>
-        )}
-        <TitlebarTime
-          currentTime={currentTime}
-          isPreview={isPreview}
-          isLandscape={isLandscapeByLayout}
-        />
-      </Titlebar>
+    
+      <MonitorTitlebar
+        config={config}
+        isMultiDisplay={isMultiDisplay}
+        isLandscape={isLandscapeByLayout}
+        preview={isPreview}
+        view={view}
+        currentLang={currentLang}
+        currentTime={currentTime}
+        showTitle
+      />
       <MonitorRowContainer
         viewId={view['id']}
         departuresLeft={departures[0]}

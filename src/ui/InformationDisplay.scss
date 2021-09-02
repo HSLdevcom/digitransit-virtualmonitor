@@ -1,0 +1,38 @@
+.information-monitor-container {
+  margin: 8vh 2vh;
+
+  .alert-header {
+    font-size: 5vh;
+  }
+
+  .alert-description {
+    font-size: 3vh;
+    margin-bottom: 7vh;
+  }
+
+  &.portrait {
+    margin: 4vh 2vh;
+
+    .alert-header {
+      font-size: 4vh;
+    }
+
+    .alert-description {
+      font-size: 2vh;
+      margin-bottom: 5vh;
+    }
+  }
+
+  &.preview {
+    margin: 20px 10px;
+
+    .alert-header {
+      font-size: 20px;
+    }
+
+    .alert-description {
+      font-size: 15px;
+      margin-bottom: 10px;
+    }
+  }
+}

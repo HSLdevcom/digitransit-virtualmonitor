@@ -72,7 +72,7 @@
           margin-left: 8px;
         }
 
-        .bus {
+        .vehicle {
           padding-right: 10px;
           padding-left: 10px;
           display: flex;
@@ -90,6 +90,55 @@
         .destination {
           display: flex;
           justify-content: flex-start;
+        }
+
+        .renamedDestinations {
+          display: flex;
+          width: 100%;
+
+          .en,
+          .fi,
+          .sv {
+            width: 130px;
+
+            &::placeholder {
+              color: black;
+            }
+          }
+
+          .fi,
+          .sv {
+            margin-right: 18px;
+          }
+        }
+
+        &.small {
+          position: sticky;
+          min-height: 0;
+          margin: 0;
+          margin-bottom: 10px;
+
+          .lang {
+            position: absolute;
+            font-style: normal;
+            font-weight: normal;
+            font-size: 13px;
+            line-height: 15px;
+            letter-spacing: -0.02em;
+            display: flex;
+
+            &.fi {
+              left: 136px;
+            }
+
+            &.sv {
+              left: 290px;
+            }
+
+            &.en {
+              left: 444px;
+            }
+          }
         }
       }
     }
@@ -136,6 +185,28 @@
 
       .dd-select {
         width: 100px;
+      }
+    }
+
+    .title-and-no-renaming {
+      display: flex;
+
+      .no-renaming {
+        width: 50%;
+        text-align: end;
+
+        h2 {
+          color: #007ac9;
+          cursor: pointer;
+          position: relative;
+          top: 5px;
+          font-size: 15px;
+          line-height: 18px;
+        }
+      }
+
+      .title {
+        width: 50%;
       }
     }
   }

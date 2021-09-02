@@ -2,6 +2,8 @@ import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
+import Loading from './Loading';
+import InformationDisplayContainer from './InformationDisplayContainer';
 
 interface Iv {
   columns: ISides;
@@ -41,13 +43,19 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
 
   const monitor = fetched ? view : location?.state?.view.cards;
   if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
-    return null;
+    return <Loading />;
   }
   return (
-    <CarouselDataContainer
-      views={monitor.cards}
-      languages={monitor.languages}
-    />
+    <>
+      {monitor.isInformationDisplay ? (
+        <InformationDisplayContainer monitor={monitor} />
+      ) : (
+        <CarouselDataContainer
+          views={monitor.cards}
+          languages={monitor.languages}
+        />
+      )}
+    </>
   );
 };
 

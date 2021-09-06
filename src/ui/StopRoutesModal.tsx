@@ -260,14 +260,17 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               </div>
             </div>
           )}
-          {props.combinedPatterns.map(pattern => {
+          {props.combinedPatterns.map((pattern, index) => {
             const renamedDestination = renamedDestinations?.find(
               d => d.pattern === pattern,
             );
+            const keyForInput = 3 * index + 1;
+
             const patternArray = pattern.split(':');
             return (
-              <div key={uuid()} className="row">
+              <div key={`r-${index}`} className="row">
                 <Checkbox
+                  key={`c-${index}`}
                   checked={hiddenRouteChecked(pattern)}
                   onChange={checkHiddenRoute}
                   name={pattern}
@@ -284,6 +287,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                 {renameDestinations && (
                   <div className="renamedDestinations">
                     <input
+                      key={`i-${keyForInput}`}
                       id={`fi-${pattern}`}
                       name={pattern}
                       className="fi"
@@ -292,6 +296,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                       placeholder={patternArray[3]}
                     />
                     <input
+                      key={`i-${keyForInput + 1}`}
                       id={`sv-${pattern}`}
                       name={pattern}
                       className="sv"
@@ -299,6 +304,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                       onChange={e => handleRenamedDestination(e, 'sv')}
                     />
                     <input
+                      key={`i-${keyForInput + 2}`}
                       id={`en-${pattern}`}
                       name={pattern}
                       className="en"

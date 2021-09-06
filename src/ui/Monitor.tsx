@@ -13,6 +13,7 @@ import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
 import { EpochMilliseconds } from '../time';
 import { ITranslation } from './TranslationContainer';
+import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
 
 const getWindowDimensions = () => {
@@ -37,6 +38,7 @@ interface IProps {
   closedStopViews: Array<IClosedStop>;
   error?: string;
 }
+let to;
 const checkDayNight = (iconId, timem, lat, lon) => {
   const date = timem;
   const dateMillis = timem.ts;
@@ -73,7 +75,7 @@ const Monitor: FC<IProps> = ({
   const [weatherData, setWeatherData] = useState();
 
   const { isMultiDisplay } = getLayout(view.layout);
-
+  const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
     setWindowDimensions(getWindowDimensions());
     window.addEventListener('resize', () => {
@@ -125,7 +127,13 @@ const Monitor: FC<IProps> = ({
         preview: isPreview,
         portrait: !isLandscapeByLayout,
       })}
+      onMouseMove={() => {
+        setShowOverlay(true);
+        clearTimeout(to);
+        to = setTimeout(() => setShowOverlay(false), 3000);
+      }}
     >
+      <MonitorOverlay show={showOverlay} isPreview={isPreview} />
       <MonitorTitlebar
         weatherData={weatherData}
         config={config}

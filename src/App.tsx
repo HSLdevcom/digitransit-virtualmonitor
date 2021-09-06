@@ -12,7 +12,6 @@ import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import HelpPage from './ui/HelpPage';
 import QuickDisplay from './ui/QuickDisplay';
 import UserMonitors from './ui/UserMonitors';
-import StopTimesView from './ui/Views/StopTimesView';
 import CreateViewPage from './ui/CreateViewPage';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
 

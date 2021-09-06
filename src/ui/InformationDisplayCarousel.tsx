@@ -3,6 +3,7 @@ import { IAlert, IView } from '../util/Interfaces';
 import cx from 'classnames';
 import MonitorTitlebar from './MonitorTitleBar';
 import { getConfig } from '../util/getConfig';
+import MonitorOverlay from './MonitorOverlay';
 
 interface IProps {
   alerts: Array<IAlert>;
@@ -10,7 +11,7 @@ interface IProps {
   preview?: boolean;
   view: IView;
 }
-
+let to;
 const InformationDisplayCarousel: FC<IProps> = ({
   view,
   alerts,
@@ -18,7 +19,7 @@ const InformationDisplayCarousel: FC<IProps> = ({
   preview = false,
 }) => {
   const [current, setCurrent] = useState(0);
-
+  const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
     const next = (current + 1) % alerts.length;
     const to = setTimeout(() => {
@@ -33,7 +34,13 @@ const InformationDisplayCarousel: FC<IProps> = ({
         preview: preview,
         portrait: view.layout > 11,
       })}
+      onMouseMove={() => {
+        setShowOverlay(true);
+        clearTimeout(to);
+        to = setTimeout(() => setShowOverlay(false), 3000);
+      }}
     >
+      <MonitorOverlay show={showOverlay} isPreview={preview} />
       <MonitorTitlebar
         isLandscape
         view={view}

@@ -32,7 +32,7 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
 }) => {
   const [stopCard, setStopCard] = useState([defaultStopCard(t)]);
   const [fetched, setFetched] = useState(false);
-  const [stopsFound, setStopsFound] = useState(true);
+  const [stopsFound, setStopsFound] = useState(true);
 
   const { data, loading } = useQuery(GET_STOP, {
     variables: { ids: stopIds },
@@ -60,7 +60,17 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   if (loading || !fetched) {
     return <Loading />;
   }
-  return <CarouselDataContainer error={!stopsFound ? t('stopRetrieveNotFound', {stopId: stopIds[0]}) : undefined} languages={['fi']} views={stopCard} />;
+  return (
+    <CarouselDataContainer
+      error={
+        !stopsFound
+          ? t('stopRetrieveNotFound', { stopId: stopIds[0] })
+          : undefined
+      }
+      languages={['fi']}
+      views={stopCard}
+    />
+  );
 };
 
 export default withTranslation('translations')(StopMonitorContainer);

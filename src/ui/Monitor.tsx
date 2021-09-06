@@ -1,6 +1,9 @@
 import React, { FC, useState, useEffect } from 'react';
 import cx from 'classnames';
 import { IView, IClosedStop } from '../util/Interfaces';
+import { getWeatherData } from '../util/monitorUtils';
+import { DateTime } from 'luxon';
+import SunCalc from 'suncalc';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
 import Logo from './logo/Logo';
@@ -34,6 +37,21 @@ interface IProps {
   closedStopViews: Array<IClosedStop>;
   error?: string;
 }
+const checkDayNight = (iconId, timem, lat, lon) => {
+  const date = timem;
+  const dateMillis = timem.ts;
+  const sunCalcTimes = SunCalc.getTimes(date, lat, lon);
+  const sunrise = sunCalcTimes.sunrise.getTime();
+  const sunset = sunCalcTimes.sunset.getTime();
+  if (
+    (sunrise > dateMillis || sunset < dateMillis) &&
+    this.dayNightIconIds.includes(iconId)
+  ) {
+    // Night icon = iconId + 100
+    return iconId + 100;
+  }
+  return iconId;
+};
 const Monitor: FC<IProps> = ({
   view,
   departures,
@@ -51,6 +69,9 @@ const Monitor: FC<IProps> = ({
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
+  const [weatherFetched, setWeatherFetched] = useState(false);
+  const [weatherData, setWeatherData] = useState();
+
   const { isMultiDisplay } = getLayout(view.layout);
 
   useEffect(() => {
@@ -68,8 +89,34 @@ const Monitor: FC<IProps> = ({
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,
   } as React.CSSProperties;
-
+  const coeff = 1000 * 60 * 5;
+  const date = new Date(); //or use any other date
+  const rounded = new Date(Math.round(date.getTime() / coeff) * coeff);
   const isLandscapeByLayout = view.layout <= 11;
+  const timem = DateTime.now();
+  const from = view.columns.left.stops[0];
+
+  if (!weatherFetched) {
+    getWeatherData(timem, from.lat, from.lon).then(res => {
+      let weatherData;
+      if (Array.isArray(res) && res.length === 3) {
+        weatherData = {
+          temperature: res[0].ParameterValue,
+          windSpeed: res[1].ParameterValue,
+          time,
+          // Icon id's and descriptions: https://www.ilmatieteenlaitos.fi/latauspalvelun-pikaohje ->  Sääsymbolien selitykset ennusteissa.
+          iconId: checkDayNight(
+            res[2].ParameterValue,
+            timem,
+            from.lat,
+            from.lon,
+          ),
+        };
+      }
+      setWeatherData(weatherData);
+    });
+    setWeatherFetched(true);
+  }
 
   return (
     <div
@@ -80,6 +127,7 @@ const Monitor: FC<IProps> = ({
       })}
     >
       <MonitorTitlebar
+        weatherData={weatherData}
         config={config}
         isMultiDisplay={isMultiDisplay}
         isLandscape={isLandscapeByLayout}

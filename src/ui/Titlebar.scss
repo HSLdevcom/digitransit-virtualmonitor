@@ -14,7 +14,21 @@ $preview-container-height: 365px;
   padding: 15px;
   overflow: hidden;
   font-size: 4.5vw;
-
+  .weather-container {
+    font-size: 11px;
+    width: 50px;
+    padding-right: 10px;
+    svg {
+      height: 4vw !important;
+      width: 4vw !important;
+    }
+    .temperature {
+      position: relative;
+      font-size: 1.5vw;
+      bottom: 8px;
+      left: 8px;
+    }
+  }
   &.portrait {
     font-size: 5vw;
     height: 5vh !important;
@@ -156,6 +170,7 @@ $preview-container-height: 365px;
     }
   }
 }
+
 
 @keyframes time-animation {
   0% {

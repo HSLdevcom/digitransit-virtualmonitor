@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
-import { IMonitorConfig, IView } from '../util/Interfaces';
+import {IMonitorConfig, IView, IWeatherData} from '../util/Interfaces';
+import Icon from './Icon';
 import Logo from './logo/Logo';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
@@ -14,8 +15,10 @@ interface IProps {
   currentLang: string;
   currentTime: number;
   showTitle?: boolean;
+  weatherData?: IWeatherData;
 }
 const MonitorTitlebar: FC<IProps> = ({
+  weatherData,
   currentTime,
   view,
   config,
@@ -25,6 +28,13 @@ const MonitorTitlebar: FC<IProps> = ({
   currentLang,
   showTitle = false,
 }) => {
+  let weatherIconString;
+  let tempLabel;
+  if (weatherData) {
+    weatherIconString = 'weather'.concat(weatherData.iconId).toString();
+    const temperature = weatherData.temperature;
+    tempLabel = `${Math.round(temperature)}\u00B0C`; // Temperature with Celsius
+  }
   return (
     <Titlebar isPreview={preview} isLandscape={isLandscape}>
       <Logo
@@ -47,6 +57,10 @@ const MonitorTitlebar: FC<IProps> = ({
           </div>
         </div>
       )}
+      <div className={cx('weather-container', { preview: preview })}>
+        <Icon img={weatherIconString} width={50} height={50} />
+        <span className="temperature">{tempLabel}</span>
+      </div>
       <TitlebarTime
         currentTime={currentTime}
         isPreview={preview}

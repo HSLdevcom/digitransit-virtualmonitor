@@ -52,7 +52,15 @@ $preview-container-height: 365px;
   &.preview {
     font-size: calc(0.045 * #{$preview-container-width});
     height: calc(0.1 * #{$preview-container-height}) !important;
-
+    .weather-container {
+      .temperature {
+        font-size: 17px;
+      }
+      svg {
+        height: 50px !important;
+        width: 50px !important;
+      }
+    }
     &.portrait {
       .title-text {
         font-size: 25px !important;

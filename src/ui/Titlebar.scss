@@ -14,7 +14,21 @@ $preview-container-height: 365px;
   padding: 15px;
   overflow: hidden;
   font-size: 4.5vw;
-
+  .weather-container {
+    font-size: 11px;
+    width: 50px;
+    padding-right: 10px;
+    svg {
+      height: 4vw !important;
+      width: 4vw !important;
+    }
+    .temperature {
+      position: relative;
+      font-size: 1.5vw;
+      bottom: 8px;
+      left: 8px;
+    }
+  }
   &.portrait {
     font-size: 5vw;
     height: 5vh !important;
@@ -38,7 +52,15 @@ $preview-container-height: 365px;
   &.preview {
     font-size: calc(0.045 * #{$preview-container-width});
     height: calc(0.1 * #{$preview-container-height}) !important;
-
+    .weather-container {
+      .temperature {
+        font-size: 17px;
+      }
+      svg {
+        height: 50px !important;
+        width: 50px !important;
+      }
+    }
     &.portrait {
       .title-text {
         font-size: 25px !important;
@@ -156,6 +178,7 @@ $preview-container-height: 365px;
     }
   }
 }
+
 
 @keyframes time-animation {
   0% {

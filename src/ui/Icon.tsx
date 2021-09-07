@@ -39,6 +39,46 @@ import { ReactComponent as Train } from './icons/train-filled.svg';
 import { ReactComponent as Metro } from './icons/metro-filled.svg';
 import { ReactComponent as Alert } from './icons/alert.svg';
 import { ReactComponent as Spinner } from './icons/spinner.svg';
+import { ReactComponent as Weather1 } from './icons/weather/weather-1.svg';
+import { ReactComponent as Weather2 } from './icons/weather/weather-2.svg';
+import { ReactComponent as Weather3 } from './icons/weather/weather-3.svg';
+import { ReactComponent as Weather21 } from './icons/weather/weather-21.svg';
+import { ReactComponent as Weather22 } from './icons/weather/weather-22.svg';
+import { ReactComponent as Weather23 } from './icons/weather/weather-23.svg';
+import { ReactComponent as Weather31 } from './icons/weather/weather-31.svg';
+import { ReactComponent as Weather32 } from './icons/weather/weather-32.svg';
+import { ReactComponent as Weather33 } from './icons/weather/weather-33.svg';
+import { ReactComponent as Weather41 } from './icons/weather/weather-41.svg';
+import { ReactComponent as Weather42 } from './icons/weather/weather-42.svg';
+import { ReactComponent as Weather43 } from './icons/weather/weather-43.svg';
+import { ReactComponent as Weather51 } from './icons/weather/weather-51.svg';
+import { ReactComponent as Weather52 } from './icons/weather/weather-52.svg';
+import { ReactComponent as Weather53 } from './icons/weather/weather-53.svg';
+import { ReactComponent as Weather61 } from './icons/weather/weather-61.svg';
+import { ReactComponent as Weather62 } from './icons/weather/weather-62.svg';
+import { ReactComponent as Weather63 } from './icons/weather/weather-63.svg';
+import { ReactComponent as Weather64 } from './icons/weather/weather-64.svg';
+import { ReactComponent as Weather71 } from './icons/weather/weather-71.svg';
+import { ReactComponent as Weather72 } from './icons/weather/weather-72.svg';
+import { ReactComponent as Weather73 } from './icons/weather/weather-73.svg';
+import { ReactComponent as Weather81 } from './icons/weather/weather-81.svg';
+import { ReactComponent as Weather82 } from './icons/weather/weather-82.svg';
+import { ReactComponent as Weather83 } from './icons/weather/weather-83.svg';
+import { ReactComponent as Weather91 } from './icons/weather/weather-91.svg';
+import { ReactComponent as Weather92 } from './icons/weather/weather-92.svg';
+import { ReactComponent as Weather101 } from './icons/weather/weather-101.svg';
+import { ReactComponent as Weather102 } from './icons/weather/weather-102.svg';
+import { ReactComponent as Weather121 } from './icons/weather/weather-121.svg';
+import { ReactComponent as Weather122 } from './icons/weather/weather-122.svg';
+import { ReactComponent as Weather123 } from './icons/weather/weather-123.svg';
+import { ReactComponent as Weather141 } from './icons/weather/weather-141.svg';
+import { ReactComponent as Weather142 } from './icons/weather/weather-142.svg';
+import { ReactComponent as Weather143 } from './icons/weather/weather-143.svg';
+import { ReactComponent as Weather161 } from './icons/weather/weather-161.svg';
+import { ReactComponent as Weather162 } from './icons/weather/weather-162.svg';
+import { ReactComponent as Weather171 } from './icons/weather/weather-171.svg';
+import { ReactComponent as Weather172 } from './icons/weather/weather-172.svg';
+import { ReactComponent as Weather173 } from './icons/weather/weather-173.svg';
 
 export interface IIconMapProps {
   color?: string;
@@ -99,6 +139,46 @@ const IconMap = (style: IIconMapProps) => {
     tram: <Tram style={style} />,
     rail: <Train style={style} />,
     subway: <Metro style={style} />,
+    weather1: <Weather1 style={style} />,
+    weather2: <Weather2 style={style} />,
+    weather3: <Weather3 style={style} />,
+    weather21: <Weather21 style={style} />,
+    weather22: <Weather22 style={style} />,
+    weather23: <Weather23 style={style} />,
+    weather31: <Weather31 style={style} />,
+    weather32: <Weather32 style={style} />,
+    weather33: <Weather33 style={style} />,
+    weather41: <Weather41 style={style} />,
+    weather42: <Weather42 style={style} />,
+    weather43: <Weather43 style={style} />,
+    weather51: <Weather51 style={style} />,
+    weather52: <Weather52 style={style} />,
+    weather53: <Weather53 style={style} />,
+    weather61: <Weather61 style={style} />,
+    weather62: <Weather62 style={style} />,
+    weather63: <Weather63 style={style} />,
+    weather64: <Weather64 style={style} />,
+    weather71: <Weather71 style={style} />,
+    weather72: <Weather72 style={style} />,
+    weather73: <Weather73 style={style} />,
+    weather81: <Weather81 style={style} />,
+    weather82: <Weather82 style={style} />,
+    weather83: <Weather83 style={style} />,
+    weather91: <Weather91 style={style} />,
+    weather92: <Weather92 style={style} />,
+    weather101: <Weather101 style={style} />,
+    weather102: <Weather102 style={style} />,
+    weather121: <Weather121 style={style} />,
+    weather122: <Weather122 style={style} />,
+    weather123: <Weather123 style={style} />,
+    weather141: <Weather141 style={style} />,
+    weather142: <Weather142 style={style} />,
+    weather143: <Weather143 style={style} />,
+    weather161: <Weather161 style={style} />,
+    weather162: <Weather162 style={style} />,
+    weather171: <Weather171 style={style} />,
+    weather172: <Weather172 style={style} />,
+    weather173: <Weather173 style={style} />,
   };
 };
 /**

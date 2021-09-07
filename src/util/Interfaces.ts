@@ -3,6 +3,8 @@ export interface IStop {
   desc: string;
   gtfsId: string;
   locationType: string;
+  lat: number;
+  lon: number;
   name: string;
   settings: ISettings;
 }
@@ -91,7 +93,16 @@ export interface IClosedStop {
   column?: string;
   gtfsId?: string;
   name?: string;
+  lat?: number;
+  lon?: number;
   code?: string;
   startTime?: number;
   endTime?: number;
+}
+
+export interface IWeatherData {
+  temperature: number;
+  windSpeed: number;
+  time: any;
+  iconId: string;
 }

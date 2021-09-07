@@ -1,6 +1,16 @@
 import { getCurrentSeconds } from '../time';
 import { uniqBy } from 'lodash';
 import { IClosedStop } from './Interfaces';
+import xmlParser from 'fast-xml-parser';
+const WEATHER_URL =
+  'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
+
+const delay = ms =>
+  new Promise(resolve => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
 
 export const stringifyPattern = pattern => {
   return [
@@ -116,6 +126,13 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
         const stopIndex = view.columns[column].stops
           .map(stop => stop.gtfsId)
           .indexOf(stop.gtfsId);
+        let viewStop = view.columns[column].stops[stopIndex];
+        viewStop = {
+          ...viewStop,
+          lat: stop.lat,
+          lon: stop.lon,
+        };
+        view.columns[column].stops[stopIndex] = viewStop;
         const stopAlerts = [];
         if (!isStation) {
           stopAlerts.push(...stop.alerts);
@@ -135,6 +152,8 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
             gtfsId: stop.gtfsId,
             name: stop.name,
             code: stop.code,
+            lat: stop.lat,
+            lon: stop.lon,
             startTime: stopAlerts[0].effectiveStartDate,
             endTime: stopAlerts[0].effectiveEndDate,
           };
@@ -206,3 +225,74 @@ export const isInformationDisplay = cards => {
     cards[0].columns.left.stops.every(stop => stop.settings?.allRoutesHidden)
   );
 };
+
+export function getWeatherData(time, lat, lon) {
+  const remainder = 5 - (time.minute % 5);
+  const endtime = time
+    .set({ seconds: 0 })
+    .set({ milliseconds: 0 })
+    .setZone('utc')
+    .plus({ minutes: remainder });
+
+  const searchTime = endtime;
+
+  return (
+    retryFetch(
+      `${WEATHER_URL}&latlon=${lat},${lon}&starttime=${searchTime}&endtime=${searchTime}`,
+      {},
+      2,
+      200,
+    )
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      .then(res => res.text())
+      .then(str => {
+        const options = {
+          ignoreAttributes: true,
+          ignoreNameSpace: true,
+        };
+        return xmlParser.parse(str, options);
+      })
+      .then(json => {
+        if (json.FeatureCollection?.member) {
+          const data = json.FeatureCollection.member.map(
+            elem => elem.BsWfsElement,
+          );
+          return data;
+        }
+        return null;
+      })
+      .catch(err => {
+        throw new Error(`Error fetching weather data: ${err}`);
+      })
+  );
+}
+
+// Tries to fetch 1 + retryCount times until 200 is returned.
+// Uses retryDelay (ms) between requests. url and options are normal fetch parameters
+export const retryFetch = (URL, options = {}, retryCount, retryDelay) =>
+  new Promise((resolve, reject) => {
+    const retry = retriesLeft => {
+      fetch(URL, options)
+        .then(res => {
+          if (res.ok) {
+            resolve(res);
+            // Don't retry if user is not logged in
+          } else if (res.status === 401) {
+            throw res.status;
+          } else {
+            // eslint-disable-next-line no-throw-literal
+            throw `${URL}: ${res.statusText}`;
+          }
+        })
+        .catch(async err => {
+          if (retriesLeft > 0 && err !== 401) {
+            await delay(retryDelay);
+            retry(retriesLeft - 1);
+          } else {
+            reject(err);
+          }
+        });
+    };
+    retry(retryCount);
+  });

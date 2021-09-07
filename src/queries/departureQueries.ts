@@ -6,6 +6,8 @@ export const GET_STOP_DEPARTURES = gql`
       name
       code
       gtfsId
+      lat
+      lon
       patterns {
         headsign
       }
@@ -100,6 +102,8 @@ export const GET_STATION_DEPARTURES = gql`
     stations: stations(ids: $ids) {
       name
       code
+      lat
+      lon
       gtfsId
       stops {
         patterns {

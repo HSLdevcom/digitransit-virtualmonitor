@@ -12,6 +12,9 @@ const delay = ms =>
     }, ms);
   });
 
+const stopTimeAbsoluteDepartureTime = (stopTime: any) =>
+  stopTime.serviceDay + stopTime.realtimeDeparture;
+
 export const stringifyPattern = pattern => {
   return [
     pattern.route.gtfsId,
@@ -205,7 +208,13 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
       const colIndex = column === 'left' ? 0 : 1;
       departures[i] = departures[i] ? departures[i] : [[], []];
       departures[i][colIndex] = uniqBy(
-        departureArray,
+        departureArray
+          .filter(d => d)
+          .sort(
+            (stopTimeA, stopTimeB) =>
+              stopTimeAbsoluteDepartureTime(stopTimeA) -
+              stopTimeAbsoluteDepartureTime(stopTimeB),
+          ),
         departure => departure.trip.gtfsId,
       );
     });

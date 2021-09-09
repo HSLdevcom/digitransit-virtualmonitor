@@ -1,5 +1,8 @@
 import { getCurrentSeconds } from '../time';
-import { uniqBy } from 'lodash';
+//import { uniqBy, uniqWith } from 'lodash';
+import uniqBy from 'lodash/uniqBy';
+import uniqWith from 'lodash/uniqWith';
+import isEqual from 'lodash/isEqual';
 import { IClosedStop } from './Interfaces';
 import xmlParser from 'fast-xml-parser';
 const WEATHER_URL =
@@ -12,7 +15,7 @@ const delay = ms =>
     }, ms);
   });
 
-const stopTimeAbsoluteDepartureTime = (stopTime: any) =>
+export const stopTimeAbsoluteDepartureTime = (stopTime: any) =>
   stopTime.serviceDay + stopTime.realtimeDeparture;
 
 export const stringifyPattern = pattern => {

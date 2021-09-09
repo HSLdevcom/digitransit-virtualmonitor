@@ -8,6 +8,8 @@ import { ITranslation } from './TranslationContainer';
 import MonitorAlertRow from './MonitorAlertRow';
 import { getLayout } from '../util/getLayout';
 import cx from 'classnames';
+import uniqBy from 'lodash/uniqBy';
+import { stopTimeAbsoluteDepartureTime } from '../util/monitorUtils';
 
 interface IProps {
   views: Array<IView>;
@@ -21,6 +23,17 @@ interface IProps {
   closedStopViews: Array<IClosedStop>;
   error?: string;
 }
+
+const sortAndFilter = departures => {
+  return uniqBy(
+    departures.sort(
+      (stopTimeA, stopTimeB) =>
+        stopTimeAbsoluteDepartureTime(stopTimeA) -
+        stopTimeAbsoluteDepartureTime(stopTimeB),
+    ),
+    departure => departure.trip.gtfsId,
+  );
+};
 
 const CarouselContainer: FC<IProps> = ({
   views,
@@ -57,8 +70,14 @@ const CarouselContainer: FC<IProps> = ({
   const index = Math.floor(current / 2) % views.length;
   const config = getConfig();
   const departures = [
-    [...stationDepartures[index][0], ...stopDepartures[index][0]],
-    [...stationDepartures[index][1], ...stopDepartures[index][1]],
+    sortAndFilter([
+      ...stationDepartures[index][0],
+      ...stopDepartures[index][0],
+    ]),
+    sortAndFilter([
+      ...stationDepartures[index][1],
+      ...stopDepartures[index][1],
+    ]),
   ];
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts

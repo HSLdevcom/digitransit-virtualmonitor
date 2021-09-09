@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import {IMonitorConfig, IView, IWeatherData} from '../util/Interfaces';
+import { IMonitorConfig, IView, IWeatherData } from '../util/Interfaces';
 import Icon from './Icon';
 import Logo from './logo/Logo';
 import Titlebar from './Titlebar';

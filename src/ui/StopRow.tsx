@@ -60,11 +60,12 @@ const StopRow: FC<IProps & WithTranslation> = ({
   };
   const isEastWest = stop.layout > 8 && stop.layout < 12;
 
-  const stopPatterns = stop.patterns.map(pattern => {
+  const stopPatterns = sortBy(stop.patterns, 'route.shortName').map(pattern => {
     return stringifyPattern(pattern);
   });
 
-  const combinedPatterns = sortBy(uniqWith(stopPatterns));
+  const combinedPatterns = uniqWith(stopPatterns);
+
   let settingsClassName = '';
   if (
     stop.settings?.timeShift > 0 &&

@@ -48,57 +48,36 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
     getLayout(layout);
 
-  const sortedDeparturesLeft = departuresLeft
-    .filter(d => d)
-    .sort(
-      (a, b) =>
-        a.realtimeDeparture +
-        a.serviceDay -
-        (b.realtimeDeparture + b.serviceDay),
-    );
-
-  const sortedDeparturesRight =
-    departuresRight && departuresRight.length > 0
-      ? departuresRight
-          .filter(d => d)
-          .sort(
-            (a, b) =>
-              a.realtimeDeparture +
-              a.serviceDay -
-              (b.realtimeDeparture + b.serviceDay),
-          )
-      : [];
-
   const leftColumn = [];
   const rightColumn = [];
 
   const currentDay = setDate(0);
   const nextDay = setDate(1);
 
-  const nextDayDepartureIndexLeft = sortedDeparturesLeft
+  const nextDayDepartureIndexLeft = departuresLeft
     .slice(0, leftColumnCount)
     .findIndex(departure => departure.serviceDay === nextDay.getTime() / 1000);
 
-  const currentDayDeparturesLeft = sortedDeparturesLeft
+  const currentDayDeparturesLeft = departuresLeft
     .slice(0, leftColumnCount)
     .filter(departure => departure.serviceDay === currentDay.getTime() / 1000);
-  const nextDayDeparturesLeft = sortedDeparturesLeft
+  const nextDayDeparturesLeft = departuresLeft
     .slice(0, leftColumnCount)
     .filter(departure => departure.serviceDay === nextDay.getTime() / 1000);
 
   if (nextDayDepartureIndexLeft !== -1) {
-    sortedDeparturesLeft.splice(nextDayDepartureIndexLeft, 0, null);
+    departuresLeft.splice(nextDayDepartureIndexLeft, 0, null);
   }
 
   let currentDayDepartureIndexRight = -1;
-  let nextDayDepartureIndexRight = sortedDeparturesRight
+  let nextDayDepartureIndexRight = departuresRight
     .slice(0, rightColumnCount)
     .findIndex(departure => departure.serviceDay === nextDay.getTime() / 1000);
 
-  const currentDayDeparturesRight = sortedDeparturesRight
+  const currentDayDeparturesRight = departuresRight
     .slice(0, rightColumnCount)
     .filter(departure => departure.serviceDay === currentDay.getTime() / 1000);
-  const nextDayDeparturesRight = sortedDeparturesRight
+  const nextDayDeparturesRight = departuresRight
     .slice(0, rightColumnCount)
     .filter(departure => departure.serviceDay === nextDay.getTime() / 1000);
 
@@ -109,13 +88,13 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
 
   if (currentDayDepartureIndexRight !== -1) {
     if (rowCountRight < rightColumnCount || rightColumnCount !== 0) {
-      nextDayDepartureIndexRight += sortedDeparturesRight.length === 0 ? 0 : 1;
+      nextDayDepartureIndexRight += departuresRight.length === 0 ? 0 : 1;
       if (currentDayDeparturesRight.length > 0) {
         currentDayDepartureIndexRight = 0;
-        sortedDeparturesRight.splice(0, 0, null);
+        departuresRight.splice(0, 0, null);
       }
     }
-    sortedDeparturesRight.splice(nextDayDepartureIndexRight, 0, null);
+    departuresRight.splice(nextDayDepartureIndexRight, 0, null);
   }
 
   const isTighten = tighten !== undefined;
@@ -127,7 +106,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   }
   for (let i = 0; i < leftColumnCountWithAlerts; i++) {
     const departure =
-      i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null;
+      i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
     leftColumn.push(
       <MonitorRow
         key={departure ? departure.trip.gtfsId : uuid()}
@@ -163,7 +142,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         i++
       ) {
         const departure =
-          i !== nextDayDepartureIndexLeft ? sortedDeparturesLeft[i] : null;
+          i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
         rightColumn.push(
           <MonitorRow
             key={departure ? departure.trip.gtfsId : uuid()}
@@ -189,7 +168,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     } else {
       for (let i = 0; i < rightColumnCount; i++) {
         const departure =
-          i !== nextDayDepartureIndexRight ? sortedDeparturesRight[i] : null;
+          i !== nextDayDepartureIndexRight ? departuresRight[i] : null;
         rightColumn.push(
           <MonitorRow
             key={departure ? departure.trip.gtfsId : uuid()}
@@ -339,7 +318,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                 })}
               >
                 {departuresRight.length === 0 &&
-                !(sortedDeparturesLeft.length > leftColumnCount) ? (
+                !(departuresLeft.length > leftColumnCount) ? (
                   <>
                     <div className="no-departures-text-container">
                       <div

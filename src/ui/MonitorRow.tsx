@@ -203,7 +203,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
               {isCancelled && <Icon img={'alert'} />}
               <div>{destination}</div>
               {showVia && (
-                <div className="via-destination">{" ".concat(viaDestination)}</div>
+                <div className="via-destination">
+                  {' '.concat(viaDestination)}
+                </div>
               )}
             </>
           )}

@@ -36,6 +36,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     renamedDestinations: [],
   };
 
+  const [showInputs, setShowInputs] = useState(false);
   const [settings, setSettings] = useState(
     props.stopSettings || defaultSettings,
   );
@@ -139,7 +140,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
   const handleClose = () => {
     const settingsToSave = {
       ...settings,
-      renamedDestinations: renamings,
+      renamedDestinations: renamings.filter(f => f.fi + f.sv + f.en !== ''),
     };
     props.closeModal?.(settingsToSave);
   };
@@ -153,6 +154,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
 
   const handleTimeShift = option => {
     setSettings({ ...settings, timeShift: option.value });
+  };
+
+  const handleShowInputs = () => {
+    setShowInputs(true);
   };
 
   const durations = [
@@ -172,7 +177,6 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     ? props.stop.vehicleMode.toLowerCase()
     : 'bus';
 
-  const renameDestinations = true;
   const renamedDestinations = renamings;
 
   return (
@@ -236,8 +240,15 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                 .concat(props.combinedPatterns.length)}
             </h2>
           </div>
-          <div className="no-renaming" onClick={handleDeleteRenamings}>
-            <h2>{props.t('deleteRenamings')}</h2>
+          <div
+            className="no-renaming"
+            onClick={showInputs ? handleDeleteRenamings : handleShowInputs}
+          >
+            <h2>
+              {showInputs
+                ? props.t('deleteRenamings')
+                : props.t('renameDestinations')}
+            </h2>
           </div>
         </div>
         <div className="route-rows">
@@ -251,19 +262,19 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             />
             <span className="all"> {props.t('all')}</span>
           </div>
-          {renameDestinations && (
+          {(showInputs || renamedDestinations.length > 0) && (
             <div className={cx('row', 'small')}>
-              <div>
-                <div className={cx('lang', 'fi')}>FI</div>
-                <div className={cx('lang', 'sv')}>SV</div>
-                <div className={cx('lang', 'en')}>EN</div>
-              </div>
+              <div className="empty-space"></div>
+              <div className={cx('lang', 'fi')}>FI</div>
+              <div className={cx('lang', 'sv')}>SV</div>
+              <div className={cx('lang', 'en')}>EN</div>
             </div>
           )}
           {props.combinedPatterns.map((pattern, index) => {
             const renamedDestination = renamedDestinations?.find(
               d => d.pattern === pattern,
             );
+
             const keyForInput = 3 * index + 1;
 
             const patternArray = pattern.split(':');
@@ -280,36 +291,43 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                 <div className="vehicle">
                   <Icon img={vehicleMode} />
                 </div>
-                <div className="route-number"> {patternArray[2]}</div>
-                {!renameDestinations && (
+                <div className="route-number">{patternArray[2]}</div>
+                {!showInputs && !renamedDestination && (
                   <div className="destination">{patternArray[3]}</div>
                 )}
-                {renameDestinations && (
+                {(showInputs || renamedDestination) && (
                   <div className="renamedDestinations">
                     <input
                       key={`i-${keyForInput}`}
                       id={`fi-${pattern}`}
                       name={pattern}
-                      className="fi"
-                      defaultValue={renamedDestination?.fi}
+                      className={cx('fi', !showInputs ? 'readonly' : '')}
+                      defaultValue={
+                        !showInputs && renamedDestination?.fi
+                          ? renamedDestination?.fi
+                          : undefined
+                      }
                       onChange={e => handleRenamedDestination(e, 'fi')}
                       placeholder={patternArray[3]}
+                      readOnly={!showInputs}
                     />
                     <input
                       key={`i-${keyForInput + 1}`}
                       id={`sv-${pattern}`}
                       name={pattern}
-                      className="sv"
+                      className={cx('sv', !showInputs ? 'readonly' : '')}
                       defaultValue={renamedDestination?.sv}
                       onChange={e => handleRenamedDestination(e, 'sv')}
+                      readOnly={!showInputs}
                     />
                     <input
                       key={`i-${keyForInput + 2}`}
                       id={`en-${pattern}`}
                       name={pattern}
-                      className="en"
+                      className={cx('en', !showInputs ? 'readonly' : '')}
                       defaultValue={renamedDestination?.en}
                       onChange={e => handleRenamedDestination(e, 'en')}
+                      readOnly={!showInputs}
                     />
                   </div>
                 )}

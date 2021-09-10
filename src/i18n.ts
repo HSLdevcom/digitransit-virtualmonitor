@@ -139,6 +139,7 @@ i18n.init({
         prepareStop: 'Lisää pysäkki',
         previewView: 'Esikatsele',
         quickDisplayCreate: 'Luo uusi näyttö',
+        renameDestinations: 'Muokkaa määränpää-tekstejä',
         renamedDestinations: 'Muutetut määränpäät: ',
         save: 'Tallenna',
         search: 'Etsi',

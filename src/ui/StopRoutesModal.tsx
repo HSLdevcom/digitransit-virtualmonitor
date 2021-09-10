@@ -34,6 +34,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     showEndOfLine: false,
     timeShift: 0,
     renamedDestinations: [],
+    showVia: true,
   };
 
   const [settings, setSettings] = useState(
@@ -60,6 +61,11 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
       newSettings = {
         ...settings,
         showEndOfLine: !settings.showEndOfLine,
+      };
+    } else if (setting === 'showVia') {
+      newSettings = {
+        ...settings,
+        showVia: !settings.showVia,
       };
     }
     setSettings(newSettings);
@@ -208,6 +214,16 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               height={30}
             />{' '}
             <span className={'setting-text'}>{props.t('endOfLine')}</span>
+          </div>
+          <div className="setting">
+            <Checkbox
+              checked={settings.showVia}
+              onChange={checkShowSetting}
+              name={'showVia'}
+              width={30}
+              height={30}
+            />{' '}
+            <span className={'setting-text'}>{props.t('showVia')}</span>
           </div>
         </div>
         <div className="divider" />

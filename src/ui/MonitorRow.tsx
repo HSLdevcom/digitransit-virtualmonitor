@@ -157,6 +157,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     departure?.serviceDay,
   );
   const showStopCode = stopSettings?.settings?.showStopNumber;
+  const viaSettings = stopSettings?.settings?.showVia;
 
   return (
     <div className="row-with-separator">
@@ -202,7 +203,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             <>
               {isCancelled && <Icon img={'alert'} />}
               <div>{destination}</div>
-              {showVia && (
+              {showVia && viaSettings && (
                 <div className="via-destination">
                   {' '.concat(viaDestination)}
                 </div>

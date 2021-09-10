@@ -14,6 +14,7 @@ export interface ISettings {
   showEndOfLine: boolean;
   timeShift: number;
   renamedDestinations: Array<IDestinations>;
+  showVia: boolean;
 }
 
 export interface IDestinations {

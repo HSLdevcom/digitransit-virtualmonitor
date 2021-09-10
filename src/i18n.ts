@@ -207,7 +207,8 @@ i18n.init({
         renamedDestinations: 'Muutetut määränpäät: ',
         save: 'Tallenna',
         search: 'Etsi',
-        'search-autosuggest-label':'Paikka, linja ja pysäkkihaku. Navigoi listassa nuolinäppäimillä ja valitse enterillä',
+        'search-autosuggest-label':
+          'Paikka, linja ja pysäkkihaku. Navigoi listassa nuolinäppäimillä ja valitse enterillä',
         'search-autosuggest-len': ' Löydettiin {{count}} ehdotus',
         'search-autosuggest-len_plural': ' Löydettiin {{count}} ehdotusta',
         'search-current-suggestion': 'Tämänhetkinen valinta: {{selection}}',

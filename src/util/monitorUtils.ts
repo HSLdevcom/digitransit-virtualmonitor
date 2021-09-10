@@ -19,7 +19,7 @@ export const stringifyPattern = pattern => {
   return [
     pattern.route.gtfsId,
     pattern.route.shortName,
-    pattern.headsign,
+    capitalize(pattern.headsign),
     pattern.code.split(':')[2],
   ].join(':');
 };
@@ -94,7 +94,7 @@ const getTranslationStringsForStop = (stop, hiddenRoutes) => {
   const stringsToTranslate = [];
   stop.stoptimesForPatterns.forEach(stopTimeForPattern => {
     if (!hiddenRoutes.includes(stringifyPattern(stopTimeForPattern.pattern))) {
-      let headsign = stopTimeForPattern.stoptimes[0].headsign;
+      let headsign = capitalize(stopTimeForPattern.stoptimes[0].headsign);
       if (headsign?.includes(' via ')) {
         const destinations = headsign.split(' via ');
         stringsToTranslate.push(...destinations);
@@ -305,3 +305,12 @@ export const retryFetch = (URL, options = {}, retryCount, retryDelay) =>
     };
     retry(retryCount);
   });
+
+export const capitalize = text => {
+  const capitalized = text
+    .toLowerCase()
+    .replace(/(^|[\s-])\S/g, function (match) {
+      return match.toUpperCase();
+    });
+  return capitalized;
+};

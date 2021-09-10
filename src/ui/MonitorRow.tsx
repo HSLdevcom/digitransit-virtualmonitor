@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
+import { capitalize } from '../util/monitorUtils';
 
 interface IRoute {
   alerts: any;
@@ -90,10 +91,11 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   const isCancelled = departure?.realtimeState === 'CANCELED';
 
-  const departureDestination =
+  const departureDestination = capitalize(
     departure?.headsign && departure?.headsign.endsWith(' via')
       ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
-      : departure?.headsign || departure?.trip?.tripHeadsign;
+      : departure?.headsign || departure?.trip?.tripHeadsign,
+  );
 
   const d = translations?.find(
     t => t.trans_id === departureDestination?.split(' via')[0],

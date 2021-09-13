@@ -19,7 +19,7 @@ export const stringifyPattern = pattern => {
   return [
     pattern.route.gtfsId,
     pattern.route.shortName,
-    pattern.headsign,
+    capitalize(pattern.headsign),
     pattern.code.split(':')[2],
   ].join(':');
 };
@@ -305,3 +305,23 @@ export const retryFetch = (URL, options = {}, retryCount, retryDelay) =>
     };
     retry(retryCount);
   });
+
+export const capitalize = text => {
+  if (text && text !== null) {
+    const textArray = text.split(' ');
+    const capitalized = textArray[0]
+      .toLowerCase()
+      .replace(/(^|[\s-])\S/g, function (match) {
+        return match.toUpperCase();
+      });
+    textArray.splice(0, 1, capitalized);
+    let retValue = textArray.join(' ');
+    if (retValue.indexOf(' (m)') !== -1) {
+      retValue = retValue.replace(' (m)', ' (M)');
+    } else if (retValue.indexOf('(m)') !== -1) {
+      retValue = retValue.replace('(m)', ' (M)');
+    }
+    return retValue;
+  }
+  return text;
+};

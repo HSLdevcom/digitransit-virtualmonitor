@@ -147,8 +147,8 @@ const Monitor: FC<IProps> = ({
       />
       <MonitorRowContainer
         viewId={view['id']}
-        departuresLeft={departures[0]}
-        departuresRight={departures[1]}
+        departuresLeft={departures[0].filter(x => x != null)}
+        departuresRight={departures[1].filter(x => x != null)}
         rightStops={view.columns.right.stops}
         leftStops={view.columns.left.stops}
         currentLang={currentLang}

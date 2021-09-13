@@ -8,6 +8,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { IStopInfo } from './StopInfoRetriever';
 import { v4 as uuid } from 'uuid';
 import Modal from 'react-modal';
+import { capitalize } from '../util/monitorUtils';
 Modal.setAppElement('#root');
 
 interface IRoute {
@@ -309,7 +310,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                 </div>
                 <div className="route-number">{patternArray[2]}</div>
                 {!showInputs && !renamedDestination && (
-                  <div className="destination">{patternArray[3]}</div>
+                  <div className="destination">
+                    {capitalize(patternArray[3])}
+                  </div>
                 )}
                 {(showInputs || renamedDestination) && (
                   <div className="renamedDestinations">

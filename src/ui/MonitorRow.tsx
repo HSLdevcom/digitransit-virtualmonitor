@@ -4,6 +4,7 @@ import cx from 'classnames';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
+import { capitalize } from '../util/monitorUtils';
 
 interface IRoute {
   alerts: any;
@@ -107,7 +108,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   if (renamedDestination && renamedDestination[currentLang] !== '') {
     destination = renamedDestination[currentLang];
   } else {
-    destination = d ? d.translation : departureDestination;
+    destination = d ? d.translation : capitalize(departureDestination);
   }
 
   const splitDestination =

@@ -91,11 +91,10 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
 
   const isCancelled = departure?.realtimeState === 'CANCELED';
 
-  const departureDestination = capitalize(
+  const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')
       ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
-      : departure?.headsign || departure?.trip?.tripHeadsign,
-  );
+      : departure?.headsign || departure?.trip?.tripHeadsign;
 
   const d = translations?.find(
     t => t.trans_id === departureDestination?.split(' via')[0],
@@ -109,7 +108,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   if (renamedDestination && renamedDestination[currentLang] !== '') {
     destination = renamedDestination[currentLang];
   } else {
-    destination = d ? d.translation : departureDestination;
+    destination = d ? d.translation : capitalize(departureDestination);
   }
 
   const splitDestination =

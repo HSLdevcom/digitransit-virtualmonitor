@@ -94,7 +94,7 @@ const getTranslationStringsForStop = (stop, hiddenRoutes) => {
   const stringsToTranslate = [];
   stop.stoptimesForPatterns.forEach(stopTimeForPattern => {
     if (!hiddenRoutes.includes(stringifyPattern(stopTimeForPattern.pattern))) {
-      let headsign = capitalize(stopTimeForPattern.stoptimes[0].headsign);
+      let headsign = stopTimeForPattern.stoptimes[0].headsign;
       if (headsign?.includes(' via ')) {
         const destinations = headsign.split(' via ');
         stringsToTranslate.push(...destinations);
@@ -307,10 +307,21 @@ export const retryFetch = (URL, options = {}, retryCount, retryDelay) =>
   });
 
 export const capitalize = text => {
-  const capitalized = text
-    .toLowerCase()
-    .replace(/(^|[\s-])\S/g, function (match) {
-      return match.toUpperCase();
-    });
-  return capitalized;
+  if (text && text !== null) {
+    const textArray = text.split(' ');
+    const capitalized = textArray[0]
+      .toLowerCase()
+      .replace(/(^|[\s-])\S/g, function (match) {
+        return match.toUpperCase();
+      });
+    textArray.splice(0, 1, capitalized);
+    let retValue = textArray.join(' ');
+    if (retValue.indexOf(' (m)') !== -1) {
+      retValue = retValue.replace(' (m)', ' (M)');
+    } else if (retValue.indexOf('(m)') !== -1) {
+      retValue = retValue.replace('(m)', ' (M)');
+    }
+    return retValue;
+  }
+  return text;
 };

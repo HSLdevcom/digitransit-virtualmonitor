@@ -193,6 +193,8 @@ $preview-container-height: 365px;
 
   &.preview {
     font-size: 18px;
+    position: relative;
+    left: 28px;
   }
 
   mask-image:

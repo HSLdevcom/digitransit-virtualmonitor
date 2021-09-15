@@ -27,7 +27,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   lang,
   t,
 }) => {
-  const { isMultiDisplay } = getLayout(layout);
+  const { isMultiDisplay, isPortrait } = getLayout(layout);
   const [newTitle, setNewTitle] = useState(
     isMultiDisplay ? t('layout') : title,
   );
@@ -64,7 +64,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
             id={`stop-title-input${id}-${lang}`}
             onClick={e => onClick(e)}
             onChange={e => onChange(e)}
-            // maxLength={5} TODO: Define max length.
+            maxLength={isPortrait ? 15 : 20}
             onKeyDown={e => isKeyboardSelectionEvent(e)}
             onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
             onFocus={e => {

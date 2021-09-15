@@ -22,7 +22,7 @@ const TitlebarTime: FC<IProps> = ({
         isLandscape ? '' : 'portrait',
       )}
     >
-      <div className="title-time">
+      <div className={cx('title-time', isPreview ? 'preview' : '')}>
         <AutoMoment currentTime={currentTime} />
       </div>
     </div>

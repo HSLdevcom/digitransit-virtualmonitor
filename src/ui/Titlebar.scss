@@ -13,12 +13,20 @@ $preview-container-height: 365px;
   height: 10vh !important;
   padding: 15px;
   overflow: hidden;
-  font-size: 4.5vw;
+  font-size: 2.5vw;
 
   .weather-container {
+    &.eastwest {
+      padding-right: 79px;
+    }
+
     font-size: 11px;
     width: 50px;
     padding-right: 10px;
+
+    &.preview {
+      padding-right: 40px;
+    }
 
     svg {
       height: 4vw !important;
@@ -35,7 +43,7 @@ $preview-container-height: 365px;
 
   &.portrait {
     font-size: 5vw;
-    height: 5vh !important;
+    height: 7vh !important;
 
     .title-time-container {
       font-size: min(5vw, 70px);
@@ -44,11 +52,12 @@ $preview-container-height: 365px;
 
     .title-text {
       font-size: min(5vw, 80px);
+      max-width: 55vw;
     }
 
     .title-logo {
       #logo {
-        width: min(16vw, 330px) !important;
+        width: min(10vw, 330px) !important;
       }
     }
   }
@@ -70,7 +79,7 @@ $preview-container-height: 365px;
 
     &.portrait {
       .title-text {
-        font-size: 25px !important;
+        font-size: 15px !important;
       }
 
       .title-time-container {
@@ -78,35 +87,39 @@ $preview-container-height: 365px;
       }
 
       font-size: calc(0.05 * #{$preview-container-width-portrait});
-      height: calc(0.05 * #{$preview-container-height-portrait}) !important;
+      height: calc(0.07 * #{$preview-container-height-portrait}) !important;
     }
   }
 }
 
 .title-logo {
-  min-width: 16vw !important;
+  min-width: 10vw !important;
 
   #logo {
-    width: 16vw !important;
+    width: 10vw !important;
   }
 
   &.portrait {
-    min-width: 16vw !important;
+    min-width: 10vw !important;
 
     #logo {
-      width: 16vw !important;
+      width: 10vw !important;
     }
   }
 
   &.preview {
-    min-width: calc(0.16 * #{$preview-container-width}) !important;
+    min-width: calc(0.1 * #{$preview-container-width}) !important;
 
     #logo {
-      width: calc(0.16 * #{$preview-container-width}) !important;
+      width: calc(0.1 * #{$preview-container-width}) !important;
     }
 
     &.portrait {
       width: calc(0.1 * #{$preview-container-width}) !important;
+
+      #logo {
+        width: calc(0.09 * #{$preview-container-width}) !important;
+      }
     }
   }
 }
@@ -123,6 +136,17 @@ $preview-container-height: 365px;
   font-size: min(5vw, 100px);
   color: #fff;
   text-align: center;
+  white-space: nowrap;
+  max-width: 55vw;
+  overflow: hidden;
+  mask-image:
+    linear-gradient(
+      to left,
+      transparent,
+      rgba(0, 0, 0, 0.2) 5px,
+      rgba(0, 0, 0, 1) 25px,
+      rgba(0, 0, 0, 1)
+    );
 
   &.preview {
     font-size: 35px !important;
@@ -142,11 +166,43 @@ $preview-container-height: 365px;
 }
 
 .left-title {
+  &.preview {
+    font-size: 18px;
+  }
+
+  white-space: nowrap;
+  overflow: hidden;
+  mask-image:
+    linear-gradient(
+      to left,
+      transparent,
+      rgba(0, 0, 0, 0.2) 5px,
+      rgba(0, 0, 0, 1) 25px,
+      rgba(0, 0, 0, 1)
+    );
   text-align: left;
+  font-size: 4vw;
+  padding-left: 40px;
 }
 
 .right-title {
-  text-align: right;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 4vw;
+
+  &.preview {
+    font-size: 18px;
+  }
+
+  mask-image:
+    linear-gradient(
+      to left,
+      transparent,
+      rgba(0, 0, 0, 0.2) 5px,
+      rgba(0, 0, 0, 1) 25px,
+      rgba(0, 0, 0, 1)
+    );
 }
 
 .title-text-stop {
@@ -154,19 +210,25 @@ $preview-container-height: 365px;
 }
 
 .title-time-container {
-  min-width: 16vw !important;
+  min-width: 9vw !important;
   display: flex;
   flex: 0;
   justify-content: flex-end;
 
   &.preview {
-    min-width: calc(0.16 * #{$preview-container-width}) !important;
+    min-width: calc(0.09 * #{$preview-container-width}) !important;
   }
 }
 
 .title-time {
   font-family: 'Roboto', Arial, Georgia, serif;
   display: flex;
+  font-size: 4vw;
+
+  &.preview {
+    font-size: 30px !important;
+  }
+
   flex: 0;
   flex-direction: row;
   justify-content: center;

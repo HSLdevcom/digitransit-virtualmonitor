@@ -49,15 +49,21 @@ const MonitorTitlebar: FC<IProps> = ({
       )}
       {isMultiDisplay && showTitle && (
         <div className="multi-display-titles">
-          <div className="left-title">
+          <div className={cx('left-title', { preview: preview })}>
             {view.columns.left.title[currentLang]}
           </div>
-          <div className="right-title">
+          <div className={cx('right-title', { preview: preview })}>
             {view.columns.right.title[currentLang]}
           </div>
         </div>
       )}
-      <div className={cx('weather-container', { preview: preview })}>
+      <div
+        className={cx(
+          'weather-container',
+          { preview: preview },
+          { eastwest: isMultiDisplay },
+        )}
+      >
         <Icon img={weatherIconString} width={50} height={50} />
         <span className="temperature">{tempLabel}</span>
       </div>

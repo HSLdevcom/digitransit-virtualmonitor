@@ -144,6 +144,7 @@ function StopListTitleInput(props: {
           onClick={onClick}
           onFocus={() => setFocus(true)}
           onKeyDown={e => isKeyboardSelectionEvent(e, props.side)}
+          maxLength={13}
           onBlur={e =>
             !isKeyboardSelectionEvent(e, props.side) && onBlur(e, props.side)
           }

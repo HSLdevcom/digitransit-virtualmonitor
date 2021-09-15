@@ -64,7 +64,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
             id={`stop-title-input${id}-${lang}`}
             onClick={e => onClick(e)}
             onChange={e => onChange(e)}
-            maxLength={isPortrait ? 15 : 20}
+            maxLength={15}
             onKeyDown={e => isKeyboardSelectionEvent(e)}
             onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
             onFocus={e => {

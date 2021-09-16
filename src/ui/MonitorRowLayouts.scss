@@ -16,6 +16,7 @@
 }
 
 .rows8 .grid-row {
+  grid-template-columns: 18vh 1fr 25vh;
   font-size: calc((#{var(--height)} - 30vh) / 10);
 }
 

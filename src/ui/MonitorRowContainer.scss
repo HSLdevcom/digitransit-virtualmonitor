@@ -157,7 +157,7 @@ $preview-grid-divider: 2px;
     }
 
     &.portrait {
-      height: calc(100% - 5vh - 30px);
+      height: calc(100% - 7vh - 30px);
     }
 
     .divider {
@@ -352,7 +352,9 @@ $preview-grid-divider: 2px;
 
       .grid-col {
         align-self: center;
-
+        .line-letter {
+          font-size: smaller;
+        }
         &.time {
           text-align: end;
           font-family: $font-family;

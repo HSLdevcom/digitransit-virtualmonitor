@@ -352,9 +352,11 @@ $preview-grid-divider: 2px;
 
       .grid-col {
         align-self: center;
+
         .line-letter {
           font-size: smaller;
         }
+
         &.time {
           text-align: end;
           font-family: $font-family;

@@ -40,6 +40,7 @@ interface IProps {
 }
 let to;
 const checkDayNight = (iconId, timem, lat, lon) => {
+  const dayNightIconIds = [1, 2, 21, 22, 23, 41, 42, 43, 61, 62, 71, 72, 73];
   const date = timem;
   const dateMillis = timem.ts;
   const sunCalcTimes = SunCalc.getTimes(date, lat, lon);
@@ -47,7 +48,7 @@ const checkDayNight = (iconId, timem, lat, lon) => {
   const sunset = sunCalcTimes.sunset.getTime();
   if (
     (sunrise > dateMillis || sunset < dateMillis) &&
-    this.dayNightIconIds.includes(iconId)
+    dayNightIconIds.includes(iconId)
   ) {
     // Night icon = iconId + 100
     return iconId + 100;

@@ -7,8 +7,6 @@ $preview-container-height: 365px;
 .title-bar {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  justify-self: flex-start;
   align-items: center;
   height: 10vh !important;
   padding: 15px;
@@ -20,12 +18,13 @@ $preview-container-height: 365px;
       padding-right: 79px;
     }
 
+    display: flex;
+    flex-direction: column;
     font-size: 11px;
-    width: 50px;
     padding-right: 10px;
 
     &.preview {
-      padding-right: 40px;
+      padding-right: 5px;
     }
 
     svg {
@@ -52,7 +51,6 @@ $preview-container-height: 365px;
 
     .title-text {
       font-size: min(5vw, 80px);
-      max-width: 55vw;
     }
 
     .title-logo {
@@ -125,19 +123,15 @@ $preview-container-height: 365px;
 }
 
 .title-text {
-  font-family: 'Roboto', Arial, Georgia, serif;
+  font-family: $font-family;
   display: flex;
   flex: 1;
-  flex-direction: row;
-  justify-content: center;
   flex-wrap: wrap;
-  margin: 0 2vw;
+  justify-content: center;
   font-weight: bold;
   font-size: min(5vw, 100px);
   color: #fff;
-  text-align: center;
   white-space: nowrap;
-  max-width: 55vw;
   overflow: hidden;
   mask-image:
     linear-gradient(
@@ -212,14 +206,8 @@ $preview-container-height: 365px;
 }
 
 .title-time-container {
-  min-width: 9vw !important;
-  display: flex;
   flex: 0;
   justify-content: flex-end;
-
-  &.preview {
-    min-width: calc(0.09 * #{$preview-container-width}) !important;
-  }
 }
 
 .title-time {

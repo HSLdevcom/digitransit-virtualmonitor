@@ -61,7 +61,6 @@ const MonitorTitlebar: FC<IProps> = ({
         className={cx(
           'weather-container',
           { preview: preview },
-          { eastwest: isMultiDisplay },
         )}
       >
         <Icon img={weatherIconString} width={50} height={50} />

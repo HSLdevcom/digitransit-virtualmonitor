@@ -14,10 +14,6 @@ $preview-container-height: 365px;
   font-size: 2.5vw;
 
   .weather-container {
-    &.eastwest {
-      padding-right: 79px;
-    }
-
     display: flex;
     flex-direction: column;
     font-size: 11px;

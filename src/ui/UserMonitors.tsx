@@ -29,15 +29,15 @@ interface ILocation {
 interface IProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly location?: ILocation;
+  user: any; // todo: refactor when we have proper user
 }
 
 const UserMonitors: React.FC<IProps & WithTranslation> = props => {
   const [views, setViews] = useState({});
   const location = useLocation();
 
-  const id = location.pathname.split('/')[2];
   useEffect(() => {
-    monitorAPI.getMonitorsForUser(id).then(r => {
+    monitorAPI.getMonitorsForUser(props.user.urls).then(r => {
       setViews(r);
     });
   }, []);
@@ -46,6 +46,7 @@ const UserMonitors: React.FC<IProps & WithTranslation> = props => {
     ? views.map(view => {
         return (
           <UserMonitorCard
+            name={view.name}
             cards={view.cards}
             languages={view.languages}
             contentHash={view.contenthash}

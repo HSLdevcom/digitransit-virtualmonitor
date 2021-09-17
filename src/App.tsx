@@ -63,6 +63,12 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
     super(props);
   }
   render() {
+    // ---------- TODO: POC / DEBUG PURPOSES ONLY ----------
+    const user = {
+      loggedIn: true,
+      urls: ['abcdef'],
+    };
+    // ----------                                 ----------
     const monitorConfig = this.props.monitorConfig;
 
     const client = new ApolloClient({
@@ -113,20 +119,6 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               component={QuickDisplay}
             />
             <Route path={'/view'} component={WithDatabaseConnection} />
-            <Route
-              path={'/user/:id/monitors'}
-              component={({
-                match: {
-                  params: {},
-                },
-              }: RouteComponentProps<IMonitorConfig>) => (
-                <>
-                  <Banner config={monitorConfig} />
-                  <Breadcrumbs />
-                  <UserMonitors />
-                </>
-              )}
-            />
             <Route
               path={'/help'}
               // eslint-disable-next-line no-empty-pattern
@@ -208,7 +200,8 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
                 <>
                   <Banner config={monitorConfig} />
                   <Breadcrumbs />
-                  <IndexPage />
+                    {!user.loggedIn && <IndexPage />}
+                    {user.loggedIn && <UserMonitors user={user} />}
                 </>
               )}
             />

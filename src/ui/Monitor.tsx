@@ -99,7 +99,7 @@ const Monitor: FC<IProps> = ({
   const timem = DateTime.now();
   const from = view.columns.left.stops[0];
 
-  if (!weatherFetched) {
+  if (!weatherFetched && from) {
     getWeatherData(timem, from.lat, from.lon).then(res => {
       let weatherData;
       if (Array.isArray(res) && res.length === 3) {

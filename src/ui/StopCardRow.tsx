@@ -12,7 +12,6 @@ import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import { ICardInfo } from './CardInfo';
 import cx from 'classnames';
-import { v4 as uuid } from 'uuid';
 
 const getGTFSId = id => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -26,6 +25,7 @@ const getGTFSId = id => {
 
 interface IProps {
   readonly orientation: string;
+  noStopsSelected: () => boolean;
   readonly feedIds: Array<string>;
   readonly cardsCount: number;
   readonly cardInfo: ICardInfo;
@@ -66,6 +66,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   setStops,
   updateCardInfo,
   languages,
+  noStopsSelected,
   t,
 }) => {
   const [getStop, stopState] = useLazyQuery(GET_STOP);
@@ -164,6 +165,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   const isLast = cardInfo.index === cardsCount - 1;
   const isEastWest = cardInfo.layout >= 9 && cardInfo.layout <= 11;
   return (
+    <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
     <div className="stopcard-row-container">
       <div className="title-with-icons">
         {languages.includes('fi') && (
@@ -284,6 +286,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
       </div>
       <div className="search-stop-with-layout-and-time">
         <div className="search-stop">
+          {noStopsSelected() && <div className="add-stop-alert">{t('add-at-least-one-stop')}</div>}
           <DTAutosuggest
             appElement={'root'}
             searchContext={setSearchContextWithFeedIds(feedIds)}
@@ -315,6 +318,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         languages={languages}
       />
     </div>
+    </li>
   );
 };
 

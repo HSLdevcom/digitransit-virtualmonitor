@@ -22,6 +22,7 @@ i18n.init({
     en: {
       translations: {
         'add-stop-placeholder': 'TODO',
+        'add-at-least-one-stop': 'TODO',
         all: 'All',
         arriveTerminal: 'TODO',
         autosuggestPlaceHolder: 'Name or number of the stop',
@@ -140,6 +141,7 @@ i18n.init({
     fi: {
       translations: {
         'add-stop-placeholder': 'Lisää pysäkki...',
+        'add-at-least-one-stop': 'Lisää vähintään yksi pysäkki',
         all: 'Kaikki',
         arriveTerminal: 'Saapuu / Päätepysäkki',
         autosuggestPlaceHolder: 'Pysäkin nimi tai numero',
@@ -266,6 +268,7 @@ i18n.init({
     sv: {
       translations: {
         'add-stop-placeholder': 'TODO',
+        'add-at-least-one-stop': 'TODO',
         all: 'Alla',
         arriveTerminal: 'TODO',
         autosuggestPlaceHolder: 'TODO',

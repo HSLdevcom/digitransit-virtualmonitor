@@ -112,7 +112,9 @@
       div[class^='styles_autosuggest-input-icon'] svg {
         fill: #888;
       }
+
       position: relative;
+
       .add-stop-alert {
         color: red;
         font-size: 0.813rem;
@@ -120,6 +122,7 @@
         top: -20px;
         right: 0;
       }
+
       input[class^='styles_input'] {
         border: 1px solid #888;
       }

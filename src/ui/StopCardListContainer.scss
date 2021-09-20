@@ -24,6 +24,7 @@
   &.prepare {
     margin-right: 180px;
   }
+
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -54,6 +55,7 @@
   &:disabled {
     cursor: unset;
     background-color: #ccc;
+
     span {
       color: #fff;
     }

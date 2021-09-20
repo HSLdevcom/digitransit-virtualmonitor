@@ -224,12 +224,15 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
 
   const noStopsSelected = () => {
     return stopCardList.every(stopCard => {
-      return !stopCard.columns.left.stops.length && !stopCard.columns.right.stops.length
-    })
-  }
+      return (
+        !stopCard.columns.left.stops.length &&
+        !stopCard.columns.right.stops.length
+      );
+    });
+  };
 
   const createButtonsDisabled = () => {
-    return !languages.length || noStopsSelected();
+    return !languages.length || noStopsSelected();
   };
 
   const createMonitor = () => {
@@ -312,36 +315,36 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         handleChange={handleLanguageChange}
       />
       <ul className="stopcards">
-      {modifiedStopCardList.map((item, index) => {
-        const cardInfo: ICardInfo = {
-          feedIds: feedIds,
-          index: index,
-          id: item.id,
-          title: item.title,
-          layout: item.layout,
-          duration: item.duration,
-          possibleToMove: modifiedStopCardList.length > 1,
-        };
-        return (
-          <StopCardRow
-            key={uuid()}
-            noStopsSelected={noStopsSelected}
-            cardInfo={cardInfo}
-            feedIds={feedIds}
-            orientation={orientation}
-            cardsCount={modifiedStopCardList.length}
-            columns={item.columns}
-            onCardDelete={item.onCardDelete}
-            onCardMove={item.onCardMove}
-            setStops={item.setStops}
-            onStopDelete={item.onStopDelete}
-            onStopMove={item.onStopMove}
-            updateCardInfo={item.updateCardInfo}
-            languages={languages}
-          />
-        );
-      })}
-    </ul>
+        {modifiedStopCardList.map((item, index) => {
+          const cardInfo: ICardInfo = {
+            feedIds: feedIds,
+            index: index,
+            id: item.id,
+            title: item.title,
+            layout: item.layout,
+            duration: item.duration,
+            possibleToMove: modifiedStopCardList.length > 1,
+          };
+          return (
+            <StopCardRow
+              key={uuid()}
+              noStopsSelected={noStopsSelected}
+              cardInfo={cardInfo}
+              feedIds={feedIds}
+              orientation={orientation}
+              cardsCount={modifiedStopCardList.length}
+              columns={item.columns}
+              onCardDelete={item.onCardDelete}
+              onCardMove={item.onCardMove}
+              setStops={item.setStops}
+              onStopDelete={item.onStopDelete}
+              onStopMove={item.onStopMove}
+              updateCardInfo={item.updateCardInfo}
+              languages={languages}
+            />
+          );
+        })}
+      </ul>
       <div className="buttons">
         <button className={cx('button', 'prepare')} onClick={addNew}>
           <span>{t('prepareDisplay')} </span>

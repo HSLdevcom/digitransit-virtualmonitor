@@ -16,7 +16,6 @@ const LandingPage: React.FC<IProps> = props => {
   };
   // ----------                                 ----------
   const logIn = user.loggedIn && user.urls.length > 0;
-  console.log('LOGIN ', logIn)
   return (
     <>
       <Banner config={props.config} />

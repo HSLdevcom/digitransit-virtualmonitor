@@ -11,11 +11,15 @@ export const GET_STOP = gql`
       platformCode
       locationType
       vehicleMode
+      parentStation {
+        gtfsId
+      }
       stoptimesForPatterns {
         pattern {
           code
           headsign
           route {
+            mode
             shortName
             gtfsId
           }
@@ -47,6 +51,7 @@ export const GET_STATION = gql`
             code
             headsign
             route {
+              mode
               shortName
               gtfsId
             }

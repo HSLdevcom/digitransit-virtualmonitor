@@ -7,6 +7,8 @@ export interface IStop {
   lon: number;
   name: string;
   settings: ISettings;
+  mode?: string;
+  parentStation?: string;
 }
 export interface ISettings {
   hiddenRoutes: Array<IHiddenRoute>;

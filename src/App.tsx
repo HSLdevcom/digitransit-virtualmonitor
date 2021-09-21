@@ -15,7 +15,7 @@ import UserMonitors from './ui/UserMonitors';
 import CreateViewPage from './ui/CreateViewPage';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
 
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, ApolloLink } from '@apollo/client';
 
 import './App.scss';
 import StopMonitorContainer from './ui/StopMonitorContainer';
@@ -64,9 +64,21 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
   }
   render() {
     const monitorConfig = this.props.monitorConfig;
+    const monitorLink = new HttpLink({
+      uri: monitorConfig.uri,
+    });
+    
+    const railDataLink = new HttpLink({
+      uri: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
+    });
 
     const client = new ApolloClient({
-      uri: monitorConfig.uri,
+      link: ApolloLink.split(
+        operation => operation.getContext().clientName === "rail-data-client",
+        railDataLink,
+        monitorLink
+      ),
+      //uri: monitorConfig.uri,
       cache: new InMemoryCache(),
     });
     let helpPageUrlParamText = '';

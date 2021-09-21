@@ -4,6 +4,8 @@ import { ISides, ITitle } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
+import TrainDataFetcher from './TrainDataFetcher';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 interface Iv {
   columns: ISides;
@@ -45,15 +47,23 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
     return <Loading />;
   }
+  const hasTrainStops = true;
   return (
     <>
       {monitor.isInformationDisplay ? (
         <InformationDisplayContainer monitor={monitor} />
       ) : (
+        <>
+        {hasTrainStops ? (
+            <TrainDataFetcher 
+              monitor={monitor}
+            />
+        ) : (
         <CarouselDataContainer
           views={monitor.cards}
           languages={monitor.languages}
-        />
+        />)}
+        </>
       )}
     </>
   );

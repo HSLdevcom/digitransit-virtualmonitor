@@ -117,6 +117,8 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 'shortName.length',
               ),
               hiddenRoutes: [],
+              parentStation: stop.parentStation ? stop.parentStation.gtfsId : undefined,
+              mode: stop.stoptimesForPatterns[0].pattern.route.mode,
             };
           }),
         false,
@@ -152,6 +154,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 'pattern.route.shortname.length',
               ).map(e => e.pattern),
               hiddenRoutes: [],
+              mode: station.stops[0].stoptimesForPatterns[0].pattern.route.mode,
             };
           }),
         false,

@@ -69,26 +69,30 @@ const monitorService = {
   },
   getMonitorsForUser: async function get(req, res) {
     try {
+      const cont = database.container('staticMonitors');
       // <QueryItems>
-      console.log(`Querying a monitor`);
-      console.log(req.params.id);
+      console.log(`Querying a static monitor`);
+      const urls = req.params.id.split(',');
       // query to return all items
       const querySpec = {
-        query: "SELECT c.monitors from c WHERE c.id = @id",
+        query: "SELECT c.name, c.monitorContenthash from c WHERE ARRAY_CONTAINS(@urls, c.url)",
         parameters: [
           {
-            name: "@id",
-            value:  req.params.id,
+            name: "@urls",
+            value: urls,
           }
         ],
       };
       // read all items in the Items container
-      const { resources: items } = await container.items
+      const { resources: items } = await cont.items
           .query(querySpec)
           .fetchAll();
-      let monitors;
+      let monitors = [];
+      let contenthashes = []
       items.forEach(item => {
-        monitors = item.monitors;
+        console.log('item', item)
+        monitors.push(item)
+        contenthashes.push(item.monitorContenthash)
       });
       if (!items.length) {
         res.json({});
@@ -98,7 +102,7 @@ const monitorService = {
               parameters: [
             {
               name: "@hashes",
-              value:  monitors
+              value: contenthashes
             }
           ],
         };
@@ -108,7 +112,12 @@ const monitorService = {
         if (!items.length) {
           res.json({});
         } else {
-          res.json(items);
+          let userMonitors = items;
+           userMonitors.forEach(mon => {
+            const monitor = monitors.find(m => m.monitorContenthash ===  mon.contenthash)
+            mon.name = monitor.name;
+          });
+          res.json(userMonitors);
         }
       }
     } catch (e) {

@@ -15,7 +15,13 @@ import UserMonitors from './ui/UserMonitors';
 import CreateViewPage from './ui/CreateViewPage';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
 
-import { ApolloClient, InMemoryCache, ApolloProvider, HttpLink, ApolloLink } from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+  ApolloLink,
+} from '@apollo/client';
 
 import './App.scss';
 import StopMonitorContainer from './ui/StopMonitorContainer';
@@ -67,16 +73,16 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
     const monitorLink = new HttpLink({
       uri: monitorConfig.uri,
     });
-    
+
     const railDataLink = new HttpLink({
       uri: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
     });
 
     const client = new ApolloClient({
       link: ApolloLink.split(
-        operation => operation.getContext().clientName === "rail-data-client",
+        operation => operation.getContext().clientName === 'rail-data-client',
         railDataLink,
-        monitorLink
+        monitorLink,
       ),
       //uri: monitorConfig.uri,
       cache: new InMemoryCache(),

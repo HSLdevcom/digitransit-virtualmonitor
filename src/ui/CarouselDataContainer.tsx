@@ -22,8 +22,6 @@ interface IProps {
   error?: string;
 }
 
-
-
 const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   views,
   languages,

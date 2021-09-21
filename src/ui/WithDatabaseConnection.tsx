@@ -54,15 +54,14 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
         <InformationDisplayContainer monitor={monitor} />
       ) : (
         <>
-        {hasTrainStops ? (
-            <TrainDataFetcher 
-              monitor={monitor}
+          {hasTrainStops ? (
+            <TrainDataFetcher monitor={monitor} />
+          ) : (
+            <CarouselDataContainer
+              views={monitor.cards}
+              languages={monitor.languages}
             />
-        ) : (
-        <CarouselDataContainer
-          views={monitor.cards}
-          languages={monitor.languages}
-        />)}
+          )}
         </>
       )}
     </>

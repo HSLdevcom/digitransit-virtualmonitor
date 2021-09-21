@@ -48,7 +48,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
 }) => {
   const [showModal, changeOpen] = useState(false);
   const saveStopSettings = settings => {
-    console.log(stop)
+    console.log(stop);
     const newStop = {
       ...stop,
       settings: settings,

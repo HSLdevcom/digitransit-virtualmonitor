@@ -117,7 +117,9 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 'shortName.length',
               ),
               hiddenRoutes: [],
-              parentStation: stop.parentStation ? stop.parentStation.gtfsId : undefined,
+              parentStation: stop.parentStation
+                ? stop.parentStation.gtfsId
+                : undefined,
               mode: stop.stoptimesForPatterns[0].pattern.route.mode,
             };
           }),

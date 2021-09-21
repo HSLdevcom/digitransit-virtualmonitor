@@ -67,7 +67,7 @@ const UserMonitors: React.FC<IProps & WithTranslation> = props => {
         })}
       <Link to={'/createView'}>
         <span className="create-container">
-          <Button text={props.t('quickDisplayCreate')} onClick={() => null} />
+          <button className="btn"> {props.t('quickDisplayCreate')} </button>
         </span>
       </Link>
     </ContentContainer>

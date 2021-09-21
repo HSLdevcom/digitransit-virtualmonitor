@@ -4,6 +4,17 @@
   flex-flow: row-reverse;
 
   .btn {
+    font-size: 16px;
+    padding: 0 28px;
+    height: 40px;
+    background: #007ac9;
+    border: 1px solid #888;
+    box-sizing: border-box;
+    border-radius: 40px;
+    cursor: pointer;
+    margin-right: 4px;
+    margin-left: 0;
+    color: #fff;
     position: relative;
     bottom: 10px;
   }

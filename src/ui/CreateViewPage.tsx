@@ -13,6 +13,7 @@ interface IConfigWithFeedIs extends IMonitorConfig {
 }
 interface IProps {
   config: IConfigWithFeedIs;
+  user?: any; // todo: refactor when we have proper user
 }
 
 const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
@@ -37,7 +38,9 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
     }
   }, []);
 
+  console.log('location.search:', location.search);
   const hash: any = location.search.split('cont=');
+
   if (hash[1] && !stopCardList) {
     return null;
   }
@@ -45,6 +48,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
     return (
       <ContentContainer>
         <StopCardListContainer
+          user={props.user}
           languages={languages}
           defaultStopCardList={[defaultStopCard(props.t)]}
           feedIds={props.config.feedIds}
@@ -69,15 +73,18 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
   if (loading) {
     return <Loading white />;
   }
+  console.log('And continuing...');
   return (
     <ContentContainer>
       <StopCardListDataContainer
+        user={props.user}
         languages={languages}
         stopIds={stopIds}
         stationIds={stationIds}
         stopCardList={stopCardList}
         feedIds={props.config.feedIds}
         loading={loading}
+        viewName={name}
       />
     </ContentContainer>
   );

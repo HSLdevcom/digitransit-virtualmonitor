@@ -9,10 +9,7 @@ import Button from './Button';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 interface IProps {
-  name: string;
-  cards: any;
-  languages: Array<string>;
-  contentHash: string;
+  view: any;
 }
 
 /*
@@ -27,7 +24,7 @@ title: "Näkymän nimi"
  */
 
 const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
-  const { cards, name } = props;
+  const { cards, name, contenthash, languages } = props.view;
   const [redirect, setRedirect] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const title = cards[0].title.fi;
@@ -48,15 +45,15 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
     return (
       <Redirect
         to={{
-          pathname: '/createview',
-          search: `?cont=${props.contentHash}`,
+          pathname: '/createStaticView',
+          search: `?name=${name}&cont=${contenthash}`,
         }}
       />
     );
   }
-  const view = {
+  const v = {
     cards: cards,
-    languages: props.languages,
+    languages: languages,
     isInformationDisplay: isInformationDisplay(cards),
   };
 
@@ -67,13 +64,13 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
       ? cols.left.stops.concat(cols.right.stops)
       : cols.left.stops;
     const stops = (
-      <ul>
-        {colStops.flat().map(stop => {
+      <ul key={`card#${i}`}>
+        {colStops.flat().map((stop, j) => {
           const stopText = stop.name
             .concat(' (')
             .concat(stop.gtfsId)
             .concat(')');
-          return <li>{stopText}</li>;
+          return <li key={`stop#${j}`}>{stopText}</li>;
         })}
       </ul>
     );
@@ -100,8 +97,8 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
     <div className={'card'}>
       {isOpen && (
         <PreviewModal
-          languages={props.languages}
-          view={view}
+          languages={languages}
+          view={v}
           isOpen={isOpen}
           onClose={onClose}
           isLandscape={layout < 11}
@@ -118,12 +115,10 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
         <span className="monitor-name"> {name} </span>
         <div className="control-buttons">
           <button className="button" onClick={() => setOpen(true)}>
-            {' '}
-            Esikatselu{' '}
+            Esikatselu
           </button>
           <button className="edit-button" onClick={goToEdit}>
-            {' '}
-            Muokkaa{' '}
+            Muokkaa
           </button>
           <div
             className="delete-icon"
@@ -135,8 +130,8 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
       </div>
       <div className="cards">
         {Array.isArray(crds) &&
-          crds.map(c => {
-            return <div className="card-item">{c}</div>;
+          crds.map((c, x) => {
+            return <div key={`c#${x}`} className="card-item">{c}</div>;
           })}
       </div>
     </div>

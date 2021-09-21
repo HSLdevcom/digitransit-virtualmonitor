@@ -22,7 +22,10 @@
 
 .button {
   &.prepare {
-    margin-right: 180px;
+    margin-right: 250px;
+    &.modifyView {
+      margin-right: 160px;
+    }
   }
 
   display: flex;
@@ -46,6 +49,7 @@
 
   &:last-child {
     background: #007ac9;
+    margin-left: 5px;
 
     span {
       color: #fff;
@@ -54,15 +58,16 @@
 
   &:disabled {
     cursor: unset;
-    background-color: #ccc;
-
+    background: #ccc;
+    border: 1px solid #ccc;
+    color: #fff;
     span {
       color: #fff;
     }
   }
 
   &:not(:first-child):not(:last-child) {
-    margin-left: 40px;
-    margin-right: 40px;
+    margin-left: 5px;
+    margin-right: 5px;
   }
 }

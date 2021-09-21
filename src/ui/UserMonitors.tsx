@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
-
+import { Link } from 'react-router-dom';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
-import Button from './Button';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
 import './UserMonitors.scss';
@@ -36,7 +34,6 @@ interface IProps {
 
 const UserMonitors: React.FC<IProps & WithTranslation> = props => {
   const [views, setViews] = useState({});
-  const location = useLocation();
 
   useEffect(() => {
     monitorAPI.getMonitorsForUser(props.user.urls).then(r => {
@@ -46,14 +43,7 @@ const UserMonitors: React.FC<IProps & WithTranslation> = props => {
 
   const monitors = Array.isArray(views)
     ? views.map(view => {
-        return (
-          <UserMonitorCard
-            name={view.name}
-            cards={view.cards}
-            languages={view.languages}
-            contentHash={view.contenthash}
-          />
-        );
+        return <UserMonitorCard view={view} />;
       })
     : [];
   if (!monitors || !monitors.length) {
@@ -62,10 +52,10 @@ const UserMonitors: React.FC<IProps & WithTranslation> = props => {
   return (
     <ContentContainer>
       {Array.isArray(monitors) &&
-        monitors.map((monitor, index) => {
-          return <>{monitor}</>;
+        monitors.map((monitor, i) => {
+          return <div key={`monitor#${i}`}>{monitor}</div>;
         })}
-      <Link to={'/createView'}>
+      <Link to={'/createStaticView'}>
         <span className="create-container">
           <button className="btn"> {props.t('quickDisplayCreate')} </button>
         </span>

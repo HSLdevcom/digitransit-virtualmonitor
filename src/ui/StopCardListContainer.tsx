@@ -16,12 +16,16 @@ import { getLayout } from '../util/getLayout';
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
 import { isInformationDisplay } from '../util/monitorUtils';
+
+import UserViewTitleEditor from './UserViewTitleEditor';
 interface IProps {
   feedIds: Array<string>;
   defaultStopCardList: any;
   languages: Array<string>;
   loading?: boolean;
   vertical?: boolean;
+  user?: any;
+  viewName?: string;
 }
 
 const StopCardListContainer: FC<IProps & WithTranslation> = ({
@@ -222,17 +226,17 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     };
   });
 
-  const noStopsSelected = () => {
-    return stopCardList.every(stopCard => {
-      return (
-        !stopCard.columns.left.stops.length &&
-        !stopCard.columns.right.stops.length
-      );
+  const createButtonsDisabled = stopCardList => {
+    let noStop = false;
+    stopCardList.forEach((stopCard, i) => {
+      if (
+        stopCard.columns.left.stops.length === 0 &&
+        stopCard.columns.right.stops.length === 0
+      ) {
+        noStop = true;
+      }
     });
-  };
-
-  const createButtonsDisabled = () => {
-    return !languages.length || noStopsSelected();
+    return !(languages.length > 0 && !noStop);
   };
 
   const createMonitor = () => {
@@ -273,6 +277,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       setView(newCard);
     });
   };
+
   if (redirect && view) {
     return (
       <Redirect
@@ -284,6 +289,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       />
     );
   }
+
   const cards: IMonitor = {
     cards: stopCardList,
     isInformationDisplay: isInformationDisplay(stopCardList),
@@ -297,8 +303,34 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     );
   }
 
+  const checkIfModify = () => {
+    if (
+      window &&
+      (window.location.href.indexOf('?cont=') !== -1 ||
+        window.location.pathname.split('/').length > 2)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const backToList = save => {
+    if (save) {
+      console.log('Saving...');
+    }
+    window.location.href = '/?pocLogin';
+  };
+
+  const makeButtonsDisabled = createButtonsDisabled(modifiedStopCardList);
+  const isModifyView = checkIfModify();
+  console.log('modifiedStopCardList:', modifiedStopCardList);
   return (
     <div className="stop-card-list-container">
+      {props.user && props.user.loggedIn && (
+        <UserViewTitleEditor
+          title={'Foo'}
+        />
+      )}
       {isOpen && (
         <PreviewModal
           view={cards}
@@ -328,7 +360,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           return (
             <StopCardRow
               key={uuid()}
-              noStopsSelected={noStopsSelected}
+              noStopsSelected={makeButtonsDisabled}
               cardInfo={cardInfo}
               feedIds={feedIds}
               orientation={orientation}
@@ -346,23 +378,42 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         })}
       </ul>
       <div className="buttons">
-        <button className={cx('button', 'prepare')} onClick={addNew}>
+        <button className={cx('button', 'prepare', isModifyView ? 'modifyView' : '')} onClick={addNew}>
           <span>{t('prepareDisplay')} </span>
         </button>
         <button
-          disabled={createButtonsDisabled()}
+          disabled={makeButtonsDisabled}
           className="button"
           onClick={openPreview}
         >
           <span>{t('previewView')}</span>
         </button>
-        <button
-          disabled={createButtonsDisabled()}
-          className="button"
-          onClick={createMonitor}
-        >
-          <span>{t('displayEditorStaticLink')}</span>
-        </button>
+        {!isModifyView && (
+          <button
+            disabled={makeButtonsDisabled}
+            className="button"
+            onClick={createMonitor}
+          >
+            <span>{t('displayEditorStaticLink')}</span>
+          </button>
+        )}
+        {isModifyView && (
+          <>
+            <button
+              className="button"
+              onClick={() => backToList(false)}
+            >
+              <span>{t('cancel')}</span>
+            </button>
+            <button
+              disabled={makeButtonsDisabled}
+              className="button"
+              onClick={() => backToList(true)}
+            >
+              <span>{t('save')}</span>
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

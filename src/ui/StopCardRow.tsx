@@ -12,7 +12,6 @@ import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import { ICardInfo } from './CardInfo';
 import cx from 'classnames';
-import { v4 as uuid } from 'uuid';
 
 const getGTFSId = id => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -26,6 +25,7 @@ const getGTFSId = id => {
 
 interface IProps {
   readonly orientation: string;
+  noStopsSelected: () => boolean;
   readonly feedIds: Array<string>;
   readonly cardsCount: number;
   readonly cardInfo: ICardInfo;
@@ -66,6 +66,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   setStops,
   updateCardInfo,
   languages,
+  noStopsSelected,
   t,
 }) => {
   const [getStop, stopState] = useLazyQuery(GET_STOP);
@@ -164,157 +165,166 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   const isLast = cardInfo.index === cardsCount - 1;
   const isEastWest = cardInfo.layout >= 9 && cardInfo.layout <= 11;
   return (
-    <div className="stopcard-row-container">
-      <div className="title-with-icons">
-        {languages.includes('fi') && (
-          <StopViewTitleEditor
-            id={cardInfo.id}
-            layout={cardInfo.layout}
-            title={cardInfo.title}
-            updateCardInfo={updateCardInfo}
-            lang={'fi'}
-          />
-        )}
-        {languages.includes('sv') &&
-          (!isEastWest || !languages.includes('fi')) && (
+    <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
+      <div className="stopcard-row-container">
+        <div className="title-with-icons">
+          {languages.includes('fi') && (
             <StopViewTitleEditor
               id={cardInfo.id}
               layout={cardInfo.layout}
               title={cardInfo.title}
               updateCardInfo={updateCardInfo}
-              lang={'sv'}
+              lang={'fi'}
             />
           )}
-        {languages.includes('en') &&
-          (!isEastWest ||
-            (!languages.includes('fi') && !languages.includes('sv'))) && (
-            <StopViewTitleEditor
-              id={cardInfo.id}
-              layout={cardInfo.layout}
-              title={cardInfo.title}
-              updateCardInfo={updateCardInfo}
-              lang={'en'}
-            />
-          )}
-        <div className="icons">
-          {cardsCount > 1 && (
-            <div
-              className={cx(
-                'delete icon',
-                cardInfo.possibleToMove ? '' : 'move-end',
-              )}
-              onClick={() => onCardDelete(cardInfo.id)}
-            >
-              <Icon img="delete" color={'#007AC9'} />
-            </div>
-          )}
-          {cardInfo.possibleToMove && (
-            <div
-              className={cx(
-                'move icon',
-                !isFirst && !isLast ? 'up-and-down' : '',
-              )}
-            >
-              {isFirst && (
-                <div
-                  onClick={() => onCardMove(cardInfo.index, cardInfo.index + 1)}
-                >
-                  <Icon
-                    img="move-both-down"
-                    color={'#007AC9'}
-                    width={30}
-                    height={40}
-                  />
-                </div>
-              )}
-              {isLast && (
-                <div
-                  onClick={() => onCardMove(cardInfo.index, cardInfo.index - 1)}
-                >
-                  <Icon
-                    img="move-both-up"
-                    color={'#007AC9'}
-                    width={30}
-                    height={40}
-                  />
-                </div>
-              )}
-              {!isFirst && !isLast && (
-                <div className="container">
+          {languages.includes('sv') &&
+            (!isEastWest || !languages.includes('fi')) && (
+              <StopViewTitleEditor
+                id={cardInfo.id}
+                layout={cardInfo.layout}
+                title={cardInfo.title}
+                updateCardInfo={updateCardInfo}
+                lang={'sv'}
+              />
+            )}
+          {languages.includes('en') &&
+            (!isEastWest ||
+              (!languages.includes('fi') && !languages.includes('sv'))) && (
+              <StopViewTitleEditor
+                id={cardInfo.id}
+                layout={cardInfo.layout}
+                title={cardInfo.title}
+                updateCardInfo={updateCardInfo}
+                lang={'en'}
+              />
+            )}
+          <div className="icons">
+            {cardsCount > 1 && (
+              <div
+                className={cx(
+                  'delete icon',
+                  cardInfo.possibleToMove ? '' : 'move-end',
+                )}
+                onClick={() => onCardDelete(cardInfo.id)}
+              >
+                <Icon img="delete" color={'#007AC9'} />
+              </div>
+            )}
+            {cardInfo.possibleToMove && (
+              <div
+                className={cx(
+                  'move icon',
+                  !isFirst && !isLast ? 'up-and-down' : '',
+                )}
+              >
+                {isFirst && (
+                  <div
+                    onClick={() =>
+                      onCardMove(cardInfo.index, cardInfo.index + 1)
+                    }
+                  >
+                    <Icon
+                      img="move-both-down"
+                      color={'#007AC9'}
+                      width={30}
+                      height={40}
+                    />
+                  </div>
+                )}
+                {isLast && (
                   <div
                     onClick={() =>
                       onCardMove(cardInfo.index, cardInfo.index - 1)
                     }
                   >
                     <Icon
-                      img="move-up"
+                      img="move-both-up"
                       color={'#007AC9'}
-                      width={16}
-                      height={16}
+                      width={30}
+                      height={40}
                     />
                   </div>
-                  <div className="move-divider">
-                    <div></div>
+                )}
+                {!isFirst && !isLast && (
+                  <div className="container">
+                    <div
+                      onClick={() =>
+                        onCardMove(cardInfo.index, cardInfo.index - 1)
+                      }
+                    >
+                      <Icon
+                        img="move-up"
+                        color={'#007AC9'}
+                        width={16}
+                        height={16}
+                      />
+                    </div>
+                    <div className="move-divider">
+                      <div></div>
+                    </div>
+                    <div
+                      onClick={() =>
+                        onCardMove(cardInfo.index, cardInfo.index + 1)
+                      }
+                      className="move-down"
+                    >
+                      <Icon
+                        img="move-down"
+                        color={'#007AC9'}
+                        width={16}
+                        height={16}
+                      />
+                    </div>
                   </div>
-                  <div
-                    onClick={() =>
-                      onCardMove(cardInfo.index, cardInfo.index + 1)
-                    }
-                    className="move-down"
-                  >
-                    <Icon
-                      img="move-down"
-                      color={'#007AC9'}
-                      width={16}
-                      height={16}
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="headers">
-        <div className="stop">{t('prepareStop')}</div>
-        <div className="layout">{t('layout')}</div>
-        <div className="duration">
-          {cardInfo.possibleToMove ? t('duration') : ''}
+        <div className="headers">
+          <div className="stop">{t('prepareStop')}</div>
+          <div className="layout">{t('layout')}</div>
+          <div className="duration">
+            {cardInfo.possibleToMove ? t('duration') : ''}
+          </div>
         </div>
-      </div>
-      <div className="search-stop-with-layout-and-time">
-        <div className="search-stop">
-          <DTAutosuggest
-            appElement={'root'}
-            searchContext={setSearchContextWithFeedIds(feedIds)}
-            icon="search"
-            id={'search'}
-            placeholder={'autosuggestPlaceHolder'}
-            value=""
-            onSelect={onSelect}
-            onClear={onClear}
-            autoFocus={false}
-            lang={lang}
-            sources={['Datasource']}
-            targets={['Stops']}
+        <div className="search-stop-with-layout-and-time">
+          <div className="search-stop">
+            {noStopsSelected() && (
+              <div className="add-stop-alert">{t('add-at-least-one-stop')}</div>
+            )}
+            <DTAutosuggest
+              appElement={'root'}
+              searchContext={setSearchContextWithFeedIds(feedIds)}
+              icon="search"
+              id={'search'}
+              placeholder={'autosuggestPlaceHolder'}
+              value=""
+              onSelect={onSelect}
+              onClear={onClear}
+              autoFocus={false}
+              lang={lang}
+              sources={['Datasource']}
+              targets={['Stops']}
+            />
+          </div>
+          <LayoutAndTimeContainer
+            orientation={orientation}
+            cardInfo={cardInfo}
+            updateCardInfo={updateCardInfo}
           />
         </div>
-        <LayoutAndTimeContainer
-          orientation={orientation}
+        <StopListContainer
+          stops={columns}
+          onStopDelete={onStopDelete}
+          onStopMove={onStopMove}
+          setStops={setStops}
           cardInfo={cardInfo}
           updateCardInfo={updateCardInfo}
+          languages={languages}
         />
       </div>
-      <StopListContainer
-        stops={columns}
-        onStopDelete={onStopDelete}
-        onStopMove={onStopMove}
-        setStops={setStops}
-        cardInfo={cardInfo}
-        updateCardInfo={updateCardInfo}
-        languages={languages}
-      />
-    </div>
+    </li>
   );
 };
 

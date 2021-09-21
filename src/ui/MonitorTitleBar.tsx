@@ -57,13 +57,7 @@ const MonitorTitlebar: FC<IProps> = ({
           </div>
         </div>
       )}
-      <div
-        className={cx(
-          'weather-container',
-          { preview: preview },
-          { eastwest: isMultiDisplay },
-        )}
-      >
+      <div className={cx('weather-container', { preview: preview })}>
         <Icon img={weatherIconString} width={50} height={50} />
         <span className="temperature">{tempLabel}</span>
       </div>

@@ -24,65 +24,6 @@ interface IProps {
   vertical?: boolean;
 }
 
-const StopCardItem = ({
-  value: item,
-  possibleToMove,
-  index,
-  totalCount,
-  feedIds,
-  orientation,
-  languages,
-}) => {
-  const cardInfo: ICardInfo = {
-    feedIds: feedIds,
-    index: index,
-    id: item.id,
-    title: item.title,
-    layout: item.layout,
-    duration: item.duration,
-    possibleToMove: possibleToMove,
-  };
-  return (
-    <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
-      <StopCardRow
-        feedIds={feedIds}
-        orientation={orientation}
-        cardsCount={totalCount}
-        cardInfo={cardInfo}
-        columns={item.columns}
-        onCardDelete={item.onCardDelete}
-        onCardMove={item.onCardMove}
-        setStops={item.setStops}
-        onStopDelete={item.onStopDelete}
-        onStopMove={item.onStopMove}
-        updateCardInfo={item.updateCardInfo}
-        languages={languages}
-      />
-    </li>
-  );
-};
-
-const StopCardList = ({ orientation, feedIds, items, languages }) => {
-  return (
-    <ul className="stopcards">
-      {items.map((item, index) => {
-        return (
-          <StopCardItem
-            orientation={orientation}
-            feedIds={feedIds}
-            key={uuid()}
-            index={index}
-            value={item}
-            totalCount={items.length}
-            possibleToMove={items.length > 1}
-            languages={languages}
-          />
-        );
-      })}
-    </ul>
-  );
-};
-
 const StopCardListContainer: FC<IProps & WithTranslation> = ({
   feedIds,
   t,
@@ -281,8 +222,17 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     };
   });
 
+  const noStopsSelected = () => {
+    return stopCardList.every(stopCard => {
+      return (
+        !stopCard.columns.left.stops.length &&
+        !stopCard.columns.right.stops.length
+      );
+    });
+  };
+
   const createButtonsDisabled = () => {
-    return !(languages.length > 0);
+    return !languages.length || noStopsSelected();
   };
 
   const createMonitor = () => {
@@ -364,12 +314,37 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         languages={languages}
         handleChange={handleLanguageChange}
       />
-      <StopCardList
-        orientation={orientation}
-        feedIds={feedIds}
-        items={modifiedStopCardList}
-        languages={languages}
-      />
+      <ul className="stopcards">
+        {modifiedStopCardList.map((item, index) => {
+          const cardInfo: ICardInfo = {
+            feedIds: feedIds,
+            index: index,
+            id: item.id,
+            title: item.title,
+            layout: item.layout,
+            duration: item.duration,
+            possibleToMove: modifiedStopCardList.length > 1,
+          };
+          return (
+            <StopCardRow
+              key={uuid()}
+              noStopsSelected={noStopsSelected}
+              cardInfo={cardInfo}
+              feedIds={feedIds}
+              orientation={orientation}
+              cardsCount={modifiedStopCardList.length}
+              columns={item.columns}
+              onCardDelete={item.onCardDelete}
+              onCardMove={item.onCardMove}
+              setStops={item.setStops}
+              onStopDelete={item.onStopDelete}
+              onStopMove={item.onStopMove}
+              updateCardInfo={item.updateCardInfo}
+              languages={languages}
+            />
+          );
+        })}
+      </ul>
       <div className="buttons">
         <button className={cx('button', 'prepare')} onClick={addNew}>
           <span>{t('prepareDisplay')} </span>

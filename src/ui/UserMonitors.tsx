@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 import { withTranslation, WithTranslation } from 'react-i18next';
 import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
+import Button from './Button';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
+import './UserMonitors.scss';
 
 interface Iv {
   columns: ISides;
@@ -63,6 +65,11 @@ const UserMonitors: React.FC<IProps & WithTranslation> = props => {
         monitors.map((monitor, index) => {
           return <>{monitor}</>;
         })}
+      <Link to={'/createView'}>
+        <span className="create-container">
+          <Button text={props.t('quickDisplayCreate')} onClick={() => null} />
+        </span>
+      </Link>
     </ContentContainer>
   );
 };

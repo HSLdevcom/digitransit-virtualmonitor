@@ -115,13 +115,13 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
             width={32}
           />
         </span>
-        <span> {name} </span>
+        <span className="monitor-name"> {name} </span>
         <div className="control-buttons">
           <button className="button" onClick={() => setOpen(true)}>
             {' '}
             Esikatselu{' '}
           </button>
-          <button className="button" onClick={goToEdit}>
+          <button className="edit-button" onClick={goToEdit}>
             {' '}
             Muokkaa{' '}
           </button>

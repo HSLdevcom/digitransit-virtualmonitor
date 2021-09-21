@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import LandingPage from './LandingPage';
 import Breadcrumbs from './ui/Breadcrumbs';
 import IndexPage from './ui/IndexPage';
 import Banner from './ui/Banner';
@@ -33,6 +34,7 @@ export interface IMonitorConfig {
 export interface IQueryString {
   title?: string;
   cont?: string;
+  pocLogin?: boolean;
 }
 
 export interface IConfigurationProps {
@@ -66,7 +68,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
     // ---------- TODO: POC / DEBUG PURPOSES ONLY ----------
     const user = {
       loggedIn: true,
-      urls: ['abcdef'],
+      urls: ['abcdef', 'ghijk'],
     };
     // ----------                                 ----------
     const monitorConfig = this.props.monitorConfig;
@@ -198,10 +200,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
                 },
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
-                  <Banner config={monitorConfig} />
-                  <Breadcrumbs />
-                    {!user.loggedIn && <IndexPage />}
-                    {user.loggedIn && <UserMonitors user={user} />}
+                  <LandingPage login={this.props.search?.pocLogin} config={monitorConfig} />
                 </>
               )}
             />

@@ -14,5 +14,5 @@ export const defaultStopCard = t => ({
     },
   },
   layout: 2,
-  duration: 5,
+  duration: 30,
 });

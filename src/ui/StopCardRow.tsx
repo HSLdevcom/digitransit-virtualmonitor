@@ -78,10 +78,16 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
     setAutosuggestValue(properties);
     switch (properties.layer) {
       case 'stop':
-        getStop({ variables: { ids: getGTFSId(properties.id) }, context: { clientName: 'default' } });
+        getStop({
+          variables: { ids: getGTFSId(properties.id) },
+          context: { clientName: 'default' },
+        });
         break;
       case 'station':
-        getStation({ variables: { ids: getGTFSId(properties.id) }, context: { clientName: 'default' } });
+        getStation({
+          variables: { ids: getGTFSId(properties.id) },
+          context: { clientName: 'default' },
+        });
         break;
       default:
         break;

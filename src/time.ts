@@ -72,14 +72,19 @@ export const setDate = daysToAdd => {
   return newDate;
 };
 
-export const setDateWithSeconds = seconds => {
-  const newDate = DateTime.fromSeconds(seconds)
-    .setLocale('fi')
-    .toFormat('dd.MM.yyyy HH:mm');
-  return newDate;
+export const getTodayWithFormat = format => {
+  return DateTime.now().setLocale('fi').toFormat(format);
 };
 
-export const getCurrentDateWithFormat = format => {
-  const newDate = DateTime.now().setLocale('fi').toFormat(format);
-  return newDate;
-}
+export const utcToSeconds = utc => {
+  const newDate = DateTime.fromISO(utc, { zone: 'utc' });
+  return Number(newDate.toSeconds().toFixed(0));
+};
+
+export const formattedDateTimeFromSeconds = (secs, format) => {
+  return DateTime.fromSeconds(secs).setLocale('fi').toFormat(format);
+};
+
+export const getTomorrowWithFormat = format => {
+  return DateTime.now().plus({ days: 1 }).setLocale('fi').toFormat(format);
+};

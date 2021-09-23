@@ -1,15 +1,45 @@
 import React, { FC, useState, useEffect, useCallback } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import CarouselDataContainer from './CarouselDataContainer';
-import { getCurrentDateWithFormat } from '../time';
+import {
+  getTodayWithFormat,
+  utcToSeconds,
+  formattedDateTimeFromSeconds,
+  getTomorrowWithFormat,
+} from '../time';
+import { sortBy } from 'lodash';
 
 const GET_TRACKS = gql`
   query getTracks(
-    $date: Date!
+    $dateToday: Date!
+    $dateTomorrow: Date!
     $trainClause: TrainWhere!
     $stationIds: TimeTableRowWhere!
   ) @api(contextKey: "clientName") {
-    trainsByDepartureDate(departureDate: $date, where: $trainClause) {
+    today: trainsByDepartureDate(
+      departureDate: $dateToday
+      where: $trainClause
+    ) {
+      commuterLineid
+      trainNumber
+      timetableType
+      runningCurrently
+      timeTableRows(where: $stationIds) {
+        commercialStop
+        type
+        scheduledTime
+        trainStopping
+        actualTime
+        commercialTrack
+        station {
+          name
+        }
+      }
+    }
+    tomorrow: trainsByDepartureDate(
+      departureDate: $dateTomorrow
+      where: $trainClause
+    ) {
       commuterLineid
       trainNumber
       timetableType
@@ -60,9 +90,7 @@ const getStationIds = monitor => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
         if (stop.mode === 'RAIL') {
-          ids.push(
-            stop.parentStation ? stop.parentStation : stop.gtfsId,
-          );
+          ids.push(stop.parentStation ? stop.parentStation : stop.gtfsId);
         }
       });
     });
@@ -96,12 +124,11 @@ const TrainDataFetcher: FC<IProps> = props => {
   console.log('PROPS:', props);
   console.log('routeData:', routeData);
 
-
   const stationIds = getStationIds(props.monitor);
   //Get short codes for stations (e.g. Kerava = KE, Pasila = PSL, Kannelmäki = KAN)
-  const shortCodes = stationIds.map(
-    id => dataMap.find(i => i.gtfsId === id).shortCode,
-  );
+  /*const shortCodes = stationIds.map(
+    id => dataMap?.find(i => i.gtfsId === id).shortCode,
+  );*/
 
   /*const getRouteShortNames = useCallback(async () => {
     const query = await useQuery(GET_ROUTE_SHORTNAMES, {
@@ -133,21 +160,26 @@ const TrainDataFetcher: FC<IProps> = props => {
     console.log('queryObject2:', queryObject2);
     return <TrainDataFetcher monitor={props.monitor} queryObject={queryObject} queryObject2={queryObject2} />
   }*/
-
-  /*const getTracks = useCallback(async () => {
+  const queryObject = [{ station: { shortCode: { equals: 'KE' } } }];
+  const queryObject2 = [
+    { commuterLineid: { equals: 'D' } },
+    { commuterLineid: { equals: 'T' } },
+  ];
+  const getTracks = useCallback(async () => {
     const query = await useQuery(GET_TRACKS, {
       variables: {
         stationIds: {
-          and: [{ type: { equals: 'DEPARTURE' } }, { or: props.queryObject }],
+          and: [{ type: { equals: 'DEPARTURE' } }, { or: queryObject }],
         },
         trainClause: {
           and: [
             { trainType: { trainCategory: { name: { equals: 'Commuter' } } } },
             { timetableType: { unequals: 'ADHOC' } },
-            { or: props.queryObject2 },
+            { or: queryObject2 },
           ],
         },
-        date: getCurrentDateWithFormat('yyyy-MM-dd'),
+        dateToday: getTodayWithFormat('yyyy-MM-dd'),
+        dateTomorrow: getTomorrowWithFormat('yyyy-MM-dd'),
       },
       context: { clientName: 'rail' },
     });
@@ -156,16 +188,32 @@ const TrainDataFetcher: FC<IProps> = props => {
     setRailData(newData);
   }, [railData]);
 
-  //getTracks();
-  /*if (railData) {
-    console.log('railData:', railData);
-  }*/
+  getTracks();
+  const trainTracks = [];
+  if (railData) {
+    ['today', 'tomorrow'].forEach(day => {
+      railData[day].forEach(train => {
+        trainTracks.push({
+          lineId: train.commuterLineid,
+          time: formattedDateTimeFromSeconds(
+            utcToSeconds(train.timeTableRows[0].scheduledTime),
+            'yyyy-MM-dd HH:mm:ss',
+          ),
+          timeInSecs: utcToSeconds(train.timeTableRows[0].scheduledTime),
+          track: train.timeTableRows[0].commercialTrack,
+        });
+        //console.log('TRAIN:', train);
+        //console.log(`Train ${train.commuterLineid} @ ${formattedDateTimeFromSeconds(utcToSeconds(train.timeTableRows[0].scheduledTime), 'dd.MM. HH:mm:ss')} : ${train.timeTableRows[0].commercialTrack}`);
+      });
+    });
+  }
+  console.log('Train tracks:', sortBy(trainTracks, 'timeInSecs'));
 
   return (
     <CarouselDataContainer
       views={props.monitor.cards}
       languages={props.monitor.languages}
-      railData={railData}
+      trainTracks={sortBy(trainTracks, 'timeInSecs')}
     />
   );
 };

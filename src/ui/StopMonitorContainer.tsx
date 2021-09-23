@@ -30,7 +30,6 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   config,
   t,
 }) => {
-  console.log('StopMonitorContainer...');
   const [stopCard, setStopCard] = useState([defaultStopCard(t)]);
   const [fetched, setFetched] = useState(false);
   const [stopsFound, setStopsFound] = useState(true);
@@ -43,7 +42,6 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
 
   useEffect(() => {
     if (data) {
-      console.log('data:', data);
       const card = stopCard.slice();
       if (data.stops.filter(s => s).length > 0) {
         card[0].columns.left.stops = data.stops;

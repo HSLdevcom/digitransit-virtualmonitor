@@ -22,10 +22,10 @@ interface IProps {
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
   error?: string;
-  railData?: any;
+  trainTracks?: any;
 }
 
-const sortAndFilter = (departures, railData) => {
+const sortAndFilter = (departures, trainTracks) => {
   const sortedAndFiltered = uniqBy(
     departures.sort(
       (stopTimeA, stopTimeB) =>
@@ -34,10 +34,28 @@ const sortAndFilter = (departures, railData) => {
     ),
     departure => departure.trip.gtfsId,
   );
-  if (railData) {
-    console.log('Set tracks...');
+  const sortedAndFilteredWithTrack = [];
+  if (sortedAndFiltered.length > 0) {
+    sortedAndFiltered.forEach(sf => {
+      const trackDataFound = trainTracks.filter(
+        tt =>
+          tt.lineId === sf.trip.route.shortName &&
+          tt.timeInSecs === sf.serviceDay + sf.scheduledDeparture,
+      );
+      if (trackDataFound.length === 0) {
+        sortedAndFilteredWithTrack.push({ ...sf });
+      } else {
+        sortedAndFilteredWithTrack.push({
+          ...sf,
+          stop: {
+            ...sf.stop,
+            platformCode: trackDataFound[0].track,
+          },
+        });
+      }
+    });
   }
-  return sortedAndFiltered;
+  return sortedAndFilteredWithTrack;
 };
 
 const CarouselContainer: FC<IProps> = ({
@@ -51,7 +69,7 @@ const CarouselContainer: FC<IProps> = ({
   preview = false,
   closedStopViews,
   error,
-  railData,
+  trainTracks,
 }) => {
   const len = views.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
@@ -61,7 +79,9 @@ const CarouselContainer: FC<IProps> = ({
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
-      (views[Math.floor(current / 2) % views.length].duration * 1000) / 2;
+      views.length > 1
+        ? (views[Math.floor(current / 2) % views.length].duration * 1000) / 2
+        : Math.floor(30000 / languages.length);
     const id = setTimeout(() => {
       if ((next / 2) % views.length === 0) {
         const nextLan = (language + 1) % languages.length;
@@ -76,14 +96,14 @@ const CarouselContainer: FC<IProps> = ({
   const index = Math.floor(current / 2) % views.length;
   const config = getConfig();
   const departures = [
-    sortAndFilter([
-      ...stationDepartures[index][0],
-      ...stopDepartures[index][0],
-    ], railData),
-    sortAndFilter([
-      ...stationDepartures[index][1],
-      ...stopDepartures[index][1],
-    ], railData),
+    sortAndFilter(
+      [...stationDepartures[index][0], ...stopDepartures[index][0]],
+      trainTracks,
+    ),
+    sortAndFilter(
+      [...stationDepartures[index][1], ...stopDepartures[index][1]],
+      trainTracks,
+    ),
   ];
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts

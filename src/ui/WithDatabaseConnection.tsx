@@ -25,19 +25,26 @@ interface ILocation {
   state: IState;
 }
 interface IProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly location?: ILocation;
 }
 const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const [view, setView] = useState({});
   const [fetched, setFetched] = useState(false);
   useEffect(() => {
-    if (!location?.state?.view?.cards) {
+    if (location && !location?.state?.view?.cards) {
+      const isStatic = location.pathname.indexOf('static') !== -1;
       const hash: Array<string> = location.search.split('cont=');
-      monitorAPI.get(hash[1]).then(r => {
-        setFetched(true);
-        setView(r);
-      });
+      if (isStatic) {
+        monitorAPI.getStaticMonitor(hash[1]).then(r => {
+          setFetched(true);
+          setView(r);
+        });
+      } else {
+        monitorAPI.get(hash[1]).then(r => {
+          setFetched(true);
+          setView(r);
+        });
+      }
     }
   }, []);
 

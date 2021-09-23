@@ -121,6 +121,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               component={QuickDisplay}
             />
             <Route path={'/view'} component={WithDatabaseConnection} />
+              <Route path={'/static'} component={WithDatabaseConnection} />
             <Route
               path={'/help'}
               // eslint-disable-next-line no-empty-pattern
@@ -200,7 +201,10 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
                 },
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
-                  <LandingPage login={this.props.search?.pocLogin} config={monitorConfig} />
+                  <LandingPage
+                    login={this.props.search?.pocLogin}
+                    config={monitorConfig}
+                  />
                 </>
               )}
             />

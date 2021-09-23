@@ -2,12 +2,20 @@
   width: 720px;
   background-color: #fff;
   margin: 20px;
+  padding-left: 10px;
+  border-radius: 5px;
 
   .main-container {
     height: 80px;
-    width: 100%;
+    width: 98%;
     display: flex;
     border-bottom: 1px solid #ddd;
+
+    .monitor-name {
+      position: relative;
+      right: 300px;
+      top: 29px;
+    }
 
     .layout-img {
       margin-right: 320px;
@@ -30,12 +38,19 @@
       display: flex;
       width: 10px;
       margin-top: 22px;
+      position: absolute;
+      left: 426px;
 
       .button {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
+        margin-right: 4px;
+        color: #007ac9;
+        position: relative;
+        right: 6px;
+        font-size: 16px;
+      }
+
+      .edit-button {
+        font-size: 16px;
         padding: 0 28px;
         height: 40px;
         background: #fff;
@@ -44,6 +59,7 @@
         border-radius: 40px;
         cursor: pointer;
         margin-right: 4px;
+        margin-left: 0;
         color: #007ac9;
       }
     }
@@ -72,7 +88,7 @@
         .data {
           .card-title {
             font-style: normal;
-            font-weight: normal;
+            font-weight: bold;
             font-size: 15px;
             line-height: 24px;
             letter-spacing: -0.03em;
@@ -91,6 +107,7 @@
             line-height: 18px;
             letter-spacing: -0.03em;
             color: #333;
+            margin-top: -11px;
           }
         }
       }

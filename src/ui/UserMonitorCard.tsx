@@ -9,6 +9,7 @@ import Button from './Button';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 interface IProps {
+  name: string;
   cards: any;
   languages: Array<string>;
   contentHash: string;
@@ -26,7 +27,7 @@ title: "Näkymän nimi"
  */
 
 const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
-  const { cards } = props;
+  const { cards, name } = props;
   const [redirect, setRedirect] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const title = cards[0].title.fi;
@@ -114,12 +115,13 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
             width={32}
           />
         </span>
+        <span className="monitor-name"> {name} </span>
         <div className="control-buttons">
           <button className="button" onClick={() => setOpen(true)}>
             {' '}
             Esikatselu{' '}
           </button>
-          <button className="button" onClick={goToEdit}>
+          <button className="edit-button" onClick={goToEdit}>
             {' '}
             Muokkaa{' '}
           </button>

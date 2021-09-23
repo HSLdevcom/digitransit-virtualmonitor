@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 import { withTranslation, WithTranslation } from 'react-i18next';
 import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
+import Button from './Button';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
+import './UserMonitors.scss';
 
 interface Iv {
   columns: ISides;
@@ -29,15 +31,15 @@ interface ILocation {
 interface IProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly location?: ILocation;
+  user: any; // todo: refactor when we have proper user
 }
 
 const UserMonitors: React.FC<IProps & WithTranslation> = props => {
   const [views, setViews] = useState({});
   const location = useLocation();
 
-  const id = location.pathname.split('/')[2];
   useEffect(() => {
-    monitorAPI.getMonitorsForUser(id).then(r => {
+    monitorAPI.getMonitorsForUser(props.user.urls).then(r => {
       setViews(r);
     });
   }, []);
@@ -46,6 +48,7 @@ const UserMonitors: React.FC<IProps & WithTranslation> = props => {
     ? views.map(view => {
         return (
           <UserMonitorCard
+            name={view.name}
             cards={view.cards}
             languages={view.languages}
             contentHash={view.contenthash}
@@ -62,6 +65,11 @@ const UserMonitors: React.FC<IProps & WithTranslation> = props => {
         monitors.map((monitor, index) => {
           return <>{monitor}</>;
         })}
+      <Link to={'/createView'}>
+        <span className="create-container">
+          <button className="btn"> {props.t('quickDisplayCreate')} </button>
+        </span>
+      </Link>
     </ContentContainer>
   );
 };

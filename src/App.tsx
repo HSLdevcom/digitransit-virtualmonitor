@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import LandingPage from './LandingPage';
 import Breadcrumbs from './ui/Breadcrumbs';
 import IndexPage from './ui/IndexPage';
 import Banner from './ui/Banner';
@@ -40,6 +41,7 @@ export interface IMonitorConfig {
 export interface IQueryString {
   title?: string;
   cont?: string;
+  pocLogin?: boolean;
 }
 
 export interface IConfigurationProps {
@@ -70,6 +72,12 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
     super(props);
   }
   render() {
+    // ---------- TODO: POC / DEBUG PURPOSES ONLY ----------
+    const user = {
+      loggedIn: true,
+      urls: ['abcdef', 'ghijk'],
+    };
+    // ----------                                 ----------
     const monitorConfig = this.props.monitorConfig;
 
     const client = new ApolloClient({
@@ -134,20 +142,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               component={QuickDisplay}
             />
             <Route path={'/view'} component={WithDatabaseConnection} />
-            <Route
-              path={'/user/:id/monitors'}
-              component={({
-                match: {
-                  params: {},
-                },
-              }: RouteComponentProps<IMonitorConfig>) => (
-                <>
-                  <Banner config={monitorConfig} />
-                  <Breadcrumbs />
-                  <UserMonitors />
-                </>
-              )}
-            />
+              <Route path={'/static'} component={WithDatabaseConnection} />
             <Route
               path={'/help'}
               // eslint-disable-next-line no-empty-pattern
@@ -227,9 +222,10 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
                 },
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
-                  <Banner config={monitorConfig} />
-                  <Breadcrumbs />
-                  <IndexPage />
+                  <LandingPage
+                    login={this.props.search?.pocLogin}
+                    config={monitorConfig}
+                  />
                 </>
               )}
             />

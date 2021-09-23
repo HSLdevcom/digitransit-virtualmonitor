@@ -20,6 +20,7 @@ interface IProps {
   languages: Array<string>;
   preview?: boolean;
   error?: string;
+  railData?: any;
 }
 
 const CarouselDataContainer: FC<IProps & WithTranslation> = ({
@@ -28,7 +29,9 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   preview,
   error,
   t,
+  railData,
 }) => {
+  console.log('railData:', railData);
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
 
@@ -55,12 +58,14 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
     variables: { ids: stationIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stationIds.length < 1,
+    context: { clientName: 'default' },
   });
 
   const stopsState = useQuery(GET_STOP_DEPARTURES, {
     variables: { ids: stopIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stopIds.length < 1,
+    context: { clientName: 'default' },
   });
 
   useEffect(() => {
@@ -109,6 +114,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
         views={views}
         preview={preview}
         closedStopViews={closedStopViews}
+        railData={railData}
       />
     );
   }
@@ -123,6 +129,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       preview={preview}
       closedStopViews={closedStopViews}
       error={error}
+      railData={railData}
     />
   );
 };

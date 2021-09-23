@@ -7,7 +7,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
-
+import { gql, useQuery } from '@apollo/client';
 interface IConfigWithFeedIs extends IMonitorConfig {
   feedIds?: Array<string>;
 }
@@ -15,10 +15,44 @@ interface IProps {
   config: IConfigWithFeedIs;
 }
 
+/*const GET_ROUTE_SHORTNAMES = gql`
+  query getRouteShortNames ($stationIds: [String]!) @api(contextKey: "clientName") {
+    stations(ids: $stationIds) {
+      name
+      gtfsId
+      stops {
+        patterns {
+          route {
+            shortName
+          }
+        }
+      }
+    }
+  }
+`;*/
+
 const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
   const [stopCardList, setStopCardList] = useState(null);
   const [languages, setLanguages] = useState(['fi']);
   const [loading, setLoading] = useState(true);
+
+  /*const data = useQuery(GET_ROUTE_SHORTNAMES, {
+    variables: {
+      stationIds: ["HSL:9000202"],
+    },
+    context: { clientName: 'hsl' },
+  });
+  useEffect(() => {
+    if (data.data) {
+      data.data.stations.forEach(station => {
+        station.stops.forEach(stop => {
+          stop.patterns.forEach(pattern => {
+            console.log('data:', pattern.route.shortName);
+          });
+        });
+      });
+    }
+  }, [data]);*/
 
   useEffect(() => {
     const hash: any = location.search.split('cont=');

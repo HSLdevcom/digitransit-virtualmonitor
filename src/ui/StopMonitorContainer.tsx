@@ -14,8 +14,8 @@ interface IProps {
 }
 
 export const GET_STOP = gql`
-  query GetStops($ids: [String!]!) {
-    stops: stops(ids: $ids) {
+  query GetStops {
+    stops: stops(ids: ["Ke0042"]) {
       name
       gtfsId
       locationType
@@ -30,17 +30,20 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   config,
   t,
 }) => {
+  console.log('StopMonitorContainer...');
   const [stopCard, setStopCard] = useState([defaultStopCard(t)]);
   const [fetched, setFetched] = useState(false);
   const [stopsFound, setStopsFound] = useState(true);
 
   const { data, loading } = useQuery(GET_STOP, {
     variables: { ids: stopIds },
-    skip: stopIds.length < 1,
+    //skip: stopIds.length < 1,
+    context: { clientName: 'default' },
   });
 
   useEffect(() => {
     if (data) {
+      console.log('data:', data);
       const card = stopCard.slice();
       if (data.stops.filter(s => s).length > 0) {
         card[0].columns.left.stops = data.stops;

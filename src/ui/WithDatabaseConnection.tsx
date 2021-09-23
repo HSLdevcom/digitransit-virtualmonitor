@@ -5,7 +5,6 @@ import CarouselDataContainer from './CarouselDataContainer';
 import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
 import TrainDataFetcher from './TrainDataFetcher';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 
 interface Iv {
   columns: ISides;

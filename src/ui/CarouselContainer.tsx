@@ -22,10 +22,11 @@ interface IProps {
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
   error?: string;
+  railData?: any;
 }
 
-const sortAndFilter = departures => {
-  return uniqBy(
+const sortAndFilter = (departures, railData) => {
+  const sortedAndFiltered = uniqBy(
     departures.sort(
       (stopTimeA, stopTimeB) =>
         stopTimeAbsoluteDepartureTime(stopTimeA) -
@@ -33,6 +34,10 @@ const sortAndFilter = departures => {
     ),
     departure => departure.trip.gtfsId,
   );
+  if (railData) {
+    console.log('Set tracks...');
+  }
+  return sortedAndFiltered;
 };
 
 const CarouselContainer: FC<IProps> = ({
@@ -46,6 +51,7 @@ const CarouselContainer: FC<IProps> = ({
   preview = false,
   closedStopViews,
   error,
+  railData,
 }) => {
   const len = views.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
@@ -73,11 +79,11 @@ const CarouselContainer: FC<IProps> = ({
     sortAndFilter([
       ...stationDepartures[index][0],
       ...stopDepartures[index][0],
-    ]),
+    ], railData),
     sortAndFilter([
       ...stationDepartures[index][1],
       ...stopDepartures[index][1],
-    ]),
+    ], railData),
   ];
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts

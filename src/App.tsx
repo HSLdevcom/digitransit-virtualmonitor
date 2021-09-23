@@ -19,10 +19,11 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  HttpLink,
   ApolloLink,
+  createHttpLink,
 } from '@apollo/client';
 
+import { MultiAPILink } from '@habx/apollo-multi-endpoint-link';
 import './App.scss';
 import StopMonitorContainer from './ui/StopMonitorContainer';
 export interface IMonitorConfig {
@@ -70,21 +71,23 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
   }
   render() {
     const monitorConfig = this.props.monitorConfig;
-    const monitorLink = new HttpLink({
-      uri: monitorConfig.uri,
-    });
-
-    const railDataLink = new HttpLink({
-      uri: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
-    });
 
     const client = new ApolloClient({
-      link: ApolloLink.split(
-        operation => operation.getContext().clientName === 'rail-data-client',
-        railDataLink,
-        monitorLink,
-      ),
-      //uri: monitorConfig.uri,
+      link: ApolloLink.from([
+        new MultiAPILink({
+          endpoints: {
+            default: monitorConfig.uri,
+            finland:
+              'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql',
+            hsl: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+            rail: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
+            waltti:
+              'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+          },
+          httpSuffix: '',
+          createHttpLink: () => createHttpLink(),
+        }),
+      ]),
       cache: new InMemoryCache(),
     });
     let helpPageUrlParamText = '';

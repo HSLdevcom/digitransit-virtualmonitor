@@ -78,3 +78,8 @@ export const setDateWithSeconds = seconds => {
     .toFormat('dd.MM.yyyy HH:mm');
   return newDate;
 };
+
+export const getCurrentDateWithFormat = format => {
+  const newDate = DateTime.now().setLocale('fi').toFormat(format);
+  return newDate;
+}

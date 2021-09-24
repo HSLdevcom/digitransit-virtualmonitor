@@ -53,22 +53,13 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
     return <Loading />;
   }
-  const hasTrainStops = true;
+
   return (
     <>
       {monitor.isInformationDisplay ? (
         <InformationDisplayContainer monitor={monitor} />
       ) : (
-        <>
-          {hasTrainStops ? (
-            <TrainDataFetcher monitor={monitor} />
-          ) : (
-            <CarouselDataContainer
-              views={monitor.cards}
-              languages={monitor.languages}
-            />
-          )}
-        </>
+        <TrainDataFetcher monitor={monitor} />
       )}
     </>
   );

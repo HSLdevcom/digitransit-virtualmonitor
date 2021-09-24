@@ -105,18 +105,41 @@ const createLineIdsArray = data => {
   return Array.from(new Set(lineIds));
 };
 
+const isPlatformOrTrackVisible = monitor => {
+  let showPlatformOrTrack = false;
+  monitor.cards.forEach(card => {
+    Object.keys(card.columns).forEach(column => {
+      card.columns[column].stops?.forEach(stop => {
+        if (stop.settings && stop.settings.showStopNumber) {
+          showPlatformOrTrack = true;
+        }
+      });
+    });
+  });
+  return showPlatformOrTrack;
+};
+
 interface IProps {
   monitor: any;
 }
 
 const TrainDataFetcher: FC<IProps> = props => {
+  const stationIds = getStationIds(props.monitor);
+  const showPlatformsOrTracks = stationIds.length
+    ? isPlatformOrTrackVisible(props.monitor)
+    : false;
+  if (!stationIds.length || !showPlatformsOrTracks) {
+    return (
+      <CarouselDataContainer
+        views={props.monitor.cards}
+        languages={props.monitor.languages}
+      />
+    );
+  }
   const [getLineIds, lineIdsState] = useLazyQuery(GET_LINE_IDS);
   const [getTrainsWithTracks, trainsWithTrackState] = useLazyQuery(GET_TRACKS);
   const [trainsWithTrack, setTrainsWithTrack] = useState([]);
   const [queryObjects, setQueryObjects] = useState([]);
-
-  //Get short codes for stations (e.g. Kerava = KE, Pasila = PSL, Kannelmäki = KAN)
-  const stationIds = getStationIds(props.monitor);
 
   if (!lineIdsState.loading && !lineIdsState.data) {
     getLineIds({

@@ -20,7 +20,7 @@ interface IProps {
   languages: Array<string>;
   preview?: boolean;
   error?: string;
-  trainTracks?: any;
+  trainsWithTrack?: any;
 }
 
 const CarouselDataContainer: FC<IProps & WithTranslation> = ({
@@ -29,7 +29,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   preview,
   error,
   t,
-  trainTracks,
+  trainsWithTrack,
 }) => {
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
@@ -113,7 +113,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
         views={views}
         preview={preview}
         closedStopViews={closedStopViews}
-        trainTracks={trainTracks}
+        trainsWithTrack={trainsWithTrack}
       />
     );
   }
@@ -128,7 +128,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       preview={preview}
       closedStopViews={closedStopViews}
       error={error}
-      trainTracks={trainTracks}
+      trainsWithTrack={trainsWithTrack}
     />
   );
 };

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
 import CarouselDataContainer from './CarouselDataContainer';
 import Loading from './Loading';
@@ -62,8 +62,7 @@ const GET_TRACKS = gql`
 `;
 
 const GET_LINE_IDS = gql`
-  query getLineIds($stationIds: [String]!)
-  @api(contextKey: "clientName") {
+  query getLineIds($stationIds: [String]!) @api(contextKey: "clientName") {
     stations(ids: $stationIds) {
       name
       gtfsId
@@ -113,10 +112,8 @@ interface IProps {
 const TrainDataFetcher: FC<IProps> = props => {
   const [getLineIds, lineIdsState] = useLazyQuery(GET_LINE_IDS);
   const [getTrainsWithTracks, trainsWithTrackState] = useLazyQuery(GET_TRACKS);
-  const [trainsWithTracksFetched, setTrainsWithTracksFetched] = useState(false);
+  const [trainsWithTrack, setTrainsWithTrack] = useState([]);
   const [queryObjects, setQueryObjects] = useState([]);
-
-  const trainsWithTrack = [];
 
   //Get short codes for stations (e.g. Kerava = KE, Pasila = PSL, Kannelmäki = KAN)
   const stationIds = getStationIds(props.monitor);
@@ -144,11 +141,17 @@ const TrainDataFetcher: FC<IProps> = props => {
         })
         .filter(x => x !== undefined);
 
-      setQueryObjects([queryObject, queryObject2])
+      setQueryObjects([queryObject, queryObject2]);
     }
   }, [lineIdsState.data]);
 
-  if (!trainsWithTrackState.loading && !trainsWithTrackState.data && !lineIdsState.loading && lineIdsState.data && queryObjects.length === 2) {
+  if (
+    !trainsWithTrackState.loading &&
+    !trainsWithTrackState.data &&
+    !lineIdsState.loading &&
+    lineIdsState.data &&
+    queryObjects.length === 2
+  ) {
     getTrainsWithTracks({
       variables: {
         stationIds: {
@@ -170,28 +173,25 @@ const TrainDataFetcher: FC<IProps> = props => {
 
   useEffect(() => {
     if (trainsWithTrackState.data) {
-      console.log('trainsWithTrackState.data:', trainsWithTrackState.data);
-      setTrainsWithTracksFetched(true);
+      const trainsWithTrack = [];
+      ['today', 'tomorrow'].forEach(day => {
+        trainsWithTrackState.data[day].forEach(train => {
+          if (train.timeTableRows !== null) {
+            trainsWithTrack.push({
+              lineId: train.commuterLineid,
+              time: formattedDateTimeFromSeconds(
+                utcToSeconds(train.timeTableRows[0].scheduledTime),
+                'yyyy-MM-dd HH:mm:ss',
+              ),
+              timeInSecs: utcToSeconds(train.timeTableRows[0].scheduledTime),
+              track: train.timeTableRows[0].commercialTrack,
+            });
+          }
+        });
+      });
+      setTrainsWithTrack(trainsWithTrack);
     }
   }, [trainsWithTrackState.data]);
-  
-  if (trainsWithTrackState.data) {
-    ['today', 'tomorrow'].forEach(day => {
-      trainsWithTrackState.data[day].forEach(train => {
-        if(train.timeTableRows !== null) {
-          trainsWithTrack.push({
-            lineId: train.commuterLineid,
-            time: formattedDateTimeFromSeconds(
-              utcToSeconds(train.timeTableRows[0].scheduledTime),
-              'yyyy-MM-dd HH:mm:ss',
-            ),
-            timeInSecs: utcToSeconds(train.timeTableRows[0].scheduledTime),
-            track: train.timeTableRows[0].commercialTrack,
-          });
-        }
-      });
-    });
-  }
 
   if (lineIdsState.loading || trainsWithTrackState.loading) {
     return <Loading />;
@@ -201,7 +201,7 @@ const TrainDataFetcher: FC<IProps> = props => {
     <CarouselDataContainer
       views={props.monitor.cards}
       languages={props.monitor.languages}
-      trainTracks={sortBy(trainsWithTrack, 'timeInSecs')}
+      trainsWithTrack={sortBy(trainsWithTrack, 'timeInSecs')}
     />
   );
 };

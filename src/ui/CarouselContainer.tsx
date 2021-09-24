@@ -22,10 +22,10 @@ interface IProps {
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
   error?: string;
-  trainTracks?: any;
+  trainsWithTrack?: any;
 }
 
-const sortAndFilter = (departures, trainTracks) => {
+const sortAndFilter = (departures, trainsWithTrack) => {
   const sortedAndFiltered = uniqBy(
     departures.sort(
       (stopTimeA, stopTimeB) =>
@@ -34,10 +34,10 @@ const sortAndFilter = (departures, trainTracks) => {
     ),
     departure => departure.trip.gtfsId,
   );
-  const sortedAndFilteredWithTrack = trainTracks ? [] : sortedAndFiltered;
-  if (sortedAndFiltered.length > 0 && trainTracks) {
+  const sortedAndFilteredWithTrack = trainsWithTrack ? [] : sortedAndFiltered;
+  if (sortedAndFiltered.length > 0 && trainsWithTrack) {
     sortedAndFiltered.forEach(sf => {
-      const trackDataFound = trainTracks.filter(
+      const trackDataFound = trainsWithTrack.filter(
         tt =>
           tt.lineId === sf.trip.route.shortName &&
           tt.timeInSecs === sf.serviceDay + sf.scheduledDeparture,
@@ -69,7 +69,7 @@ const CarouselContainer: FC<IProps> = ({
   preview = false,
   closedStopViews,
   error,
-  trainTracks,
+  trainsWithTrack,
 }) => {
   const len = views.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
@@ -98,11 +98,11 @@ const CarouselContainer: FC<IProps> = ({
   const departures = [
     sortAndFilter(
       [...stationDepartures[index][0], ...stopDepartures[index][0]],
-      trainTracks,
+      trainsWithTrack,
     ),
     sortAndFilter(
       [...stationDepartures[index][1], ...stopDepartures[index][1]],
-      trainTracks,
+      trainsWithTrack,
     ),
   ];
   const lan = languages[language] === 'en' ? 'fi' : languages[language];

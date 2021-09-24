@@ -14,7 +14,7 @@ interface IProps {
   alerts: Array<Array<IAlert>>;
   closedStopViews: Array<IClosedStop>;
   error?: string;
-  trainTracks?: any;
+  trainsWithTrack?: any;
 }
 
 export interface ITranslation {

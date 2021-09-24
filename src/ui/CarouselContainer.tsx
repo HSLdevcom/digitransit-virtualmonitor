@@ -34,8 +34,8 @@ const sortAndFilter = (departures, trainTracks) => {
     ),
     departure => departure.trip.gtfsId,
   );
-  const sortedAndFilteredWithTrack = [];
-  if (sortedAndFiltered.length > 0) {
+  const sortedAndFilteredWithTrack = trainTracks ? [] : sortedAndFiltered;
+  if (sortedAndFiltered.length > 0 && trainTracks) {
     sortedAndFiltered.forEach(sf => {
       const trackDataFound = trainTracks.filter(
         tt =>

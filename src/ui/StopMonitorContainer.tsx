@@ -36,7 +36,7 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
 
   const { data, loading } = useQuery(GET_STOP, {
     variables: { ids: stopIds },
-    //skip: stopIds.length < 1,
+    skip: stopIds.length < 1,
     context: { clientName: 'default' },
   });
 

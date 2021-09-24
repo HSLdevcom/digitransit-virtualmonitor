@@ -85,12 +85,8 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
         new MultiAPILink({
           endpoints: {
             default: monitorConfig.uri,
-            finland:
-              'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql',
             hsl: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
             rail: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
-            waltti:
-              'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
           },
           httpSuffix: '',
           createHttpLink: () => createHttpLink(),

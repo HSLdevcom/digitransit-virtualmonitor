@@ -169,7 +169,7 @@ i18n.init({
         displayEditorNewView: 'Lisää uusi pysäkkinäkymä karuselliin',
         displayEditorStaticLink: 'Luo näkymä',
         dropdownPlaceHolder: 'Valitse...',
-        duration: 'Kesto',
+        duration: 'Kesto / esityskieli',
         en: 'Englanti',
         endStopArrive: 'Saapuu',
         endStopTerminus: 'Päätepysäkki',

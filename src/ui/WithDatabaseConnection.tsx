@@ -4,6 +4,7 @@ import { ISides, ITitle } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
+import { getStationIds, isPlatformOrTrackVisible } from '../util/monitorUtils';
 import TrainDataFetcher from './TrainDataFetcher';
 
 interface Iv {
@@ -28,6 +29,7 @@ interface ILocation {
 interface IProps {
   readonly location?: ILocation;
 }
+
 const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const [view, setView] = useState({});
   const [fetched, setFetched] = useState(false);
@@ -54,12 +56,26 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
     return <Loading />;
   }
 
+  const stationIds = getStationIds(monitor);
+  const showPlatformsOrTracks = stationIds.length
+    ? isPlatformOrTrackVisible(monitor)
+    : false;
+
   return (
     <>
       {monitor.isInformationDisplay ? (
         <InformationDisplayContainer monitor={monitor} />
       ) : (
-        <TrainDataFetcher monitor={monitor} />
+        <>
+          {stationIds.length && showPlatformsOrTracks ? (
+            <TrainDataFetcher monitor={monitor} stationIds={stationIds} />
+          ) : (
+            <CarouselDataContainer
+              views={monitor.cards}
+              languages={monitor.languages}
+            />
+          )}
+        </>
       )}
     </>
   );

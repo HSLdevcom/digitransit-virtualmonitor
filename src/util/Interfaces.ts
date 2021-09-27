@@ -109,3 +109,10 @@ export interface IWeatherData {
   time: any;
   iconId: string;
 }
+
+export interface ITrainData {
+  lineId: string;
+  time: string;
+  timeInSecs: number;
+  track: string;
+}

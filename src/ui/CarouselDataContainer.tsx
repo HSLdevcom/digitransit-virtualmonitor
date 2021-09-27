@@ -5,7 +5,7 @@ import {
   GET_STATION_DEPARTURES,
 } from '../queries/departureQueries';
 import { getLayout } from '../util/getLayout';
-import { IView } from '../util/Interfaces';
+import { IView, ITrainData } from '../util/Interfaces';
 import {
   getStopsAndStationsFromViews,
   createDepartureArray,
@@ -20,7 +20,7 @@ interface IProps {
   languages: Array<string>;
   preview?: boolean;
   error?: string;
-  trainsWithTrack?: any;
+  trainsWithTrack?: Array<ITrainData>;
 }
 
 const CarouselDataContainer: FC<IProps & WithTranslation> = ({

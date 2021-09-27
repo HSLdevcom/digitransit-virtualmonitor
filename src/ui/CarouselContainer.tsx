@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { getConfig } from '../util/getConfig';
-import { IView, IClosedStop } from '../util/Interfaces';
+import { IView, IClosedStop, ITrainData } from '../util/Interfaces';
 import Monitor from './Monitor';
 import { EpochMilliseconds } from '../time';
 import { IDeparture } from './MonitorRow';
@@ -22,7 +22,7 @@ interface IProps {
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
   error?: string;
-  trainsWithTrack?: any;
+  trainsWithTrack?: Array<ITrainData>;
 }
 
 const sortAndFilter = (departures, trainsWithTrack) => {
@@ -79,9 +79,7 @@ const CarouselContainer: FC<IProps> = ({
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
-      views.length > 1
-        ? (views[Math.floor(current / 2) % views.length].duration * 1000) / 2
-        : Math.floor(30000 / languages.length);
+      (views[Math.floor(current / 2) % views.length].duration * 1000) / 2;
     const id = setTimeout(() => {
       if ((next / 2) % views.length === 0) {
         const nextLan = (language + 1) % languages.length;

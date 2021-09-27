@@ -2,6 +2,8 @@ import { getCurrentSeconds } from '../time';
 import uniqBy from 'lodash/uniqBy';
 import { IClosedStop } from './Interfaces';
 import xmlParser from 'fast-xml-parser';
+import { trainStationMap } from '../util/trainStations';
+
 const WEATHER_URL =
   'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
 
@@ -324,4 +326,39 @@ export const capitalize = text => {
     return retValue;
   }
   return text;
+};
+
+export const getStationIds = monitor => {
+  const ids = [];
+  monitor.cards.forEach(card => {
+    Object.keys(card.columns).forEach(column => {
+      card.columns[column].stops?.forEach(stop => {
+        if (stop.mode === 'RAIL' && stop.gtfsId.startsWith('HSL:')) {
+          ids.push(stop.parentStation ? stop.parentStation : stop.gtfsId);
+        } else if (stop.mode === 'RAIL' && stop.gtfsId.startsWith('MATKA:4_')) {
+          const hslGtfsId = trainStationMap?.find(
+            i => i.shortCode === stop.gtfsId.substring(8),
+          ).gtfsId;
+          if (hslGtfsId) {
+            ids.push(hslGtfsId);
+          }
+        }
+      });
+    });
+  });
+  return ids;
+};
+
+export const isPlatformOrTrackVisible = monitor => {
+  let showPlatformOrTrack = false;
+  monitor.cards.forEach(card => {
+    Object.keys(card.columns).forEach(column => {
+      card.columns[column].stops?.forEach(stop => {
+        if (stop.settings && stop.settings.showStopNumber) {
+          showPlatformOrTrack = true;
+        }
+      });
+    });
+  });
+  return showPlatformOrTrack;
 };

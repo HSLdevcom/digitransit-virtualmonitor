@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { gql, useLazyQuery } from '@apollo/client';
 import CarouselDataContainer from './CarouselDataContainer';
+import { IMonitor } from '../util/Interfaces';
 import Loading from './Loading';
 import {
   getTodayWithFormat,
@@ -10,6 +11,7 @@ import {
 } from '../time';
 import { sortBy } from 'lodash';
 import { trainStationMap } from '../util/trainStations';
+import { ITrainData } from '../util/Interfaces';
 
 const GET_TRACKS = gql`
   query getTracks(
@@ -77,20 +79,6 @@ const GET_LINE_IDS = gql`
   }
 `;
 
-const getStationIds = monitor => {
-  const ids = [];
-  monitor.cards.forEach(card => {
-    Object.keys(card.columns).forEach(column => {
-      card.columns[column].stops?.forEach(stop => {
-        if (stop.mode === 'RAIL') {
-          ids.push(stop.parentStation ? stop.parentStation : stop.gtfsId);
-        }
-      });
-    });
-  });
-  return ids;
-};
-
 const createLineIdsArray = data => {
   const lineIds = [];
   if (data) {
@@ -105,37 +93,37 @@ const createLineIdsArray = data => {
   return Array.from(new Set(lineIds));
 };
 
-const isPlatformOrTrackVisible = monitor => {
-  let showPlatformOrTrack = false;
-  monitor.cards.forEach(card => {
-    Object.keys(card.columns).forEach(column => {
-      card.columns[column].stops?.forEach(stop => {
-        if (stop.settings && stop.settings.showStopNumber) {
-          showPlatformOrTrack = true;
-        }
-      });
-    });
+const removeDuplicatesWithDifferentTracks = (
+  trainsWithTrack,
+): Array<ITrainData> => {
+  const trains = trainsWithTrack;
+  const result: Array<ITrainData> = [];
+  trainsWithTrack.forEach((train, index) => {
+    const possibleDuplicates = trainsWithTrack.filter(
+      train =>
+        train.lineId === trains[index].lineId &&
+        train.timeInSecs === trains[index].timeInSecs,
+    );
+    if (possibleDuplicates.length > 1) {
+      result.push(...possibleDuplicates.filter(d => d.track !== null));
+    } else {
+      result.push(...possibleDuplicates);
+    }
   });
-  return showPlatformOrTrack;
+  return Array.from(new Set(result));
 };
 
 interface IProps {
-  monitor: any;
+  monitor: IMonitor;
+  stationIds: Array<string>;
+  preview?: boolean;
 }
 
-const TrainDataFetcher: FC<IProps> = props => {
-  const stationIds = getStationIds(props.monitor);
-  const showPlatformsOrTracks = stationIds.length
-    ? isPlatformOrTrackVisible(props.monitor)
-    : false;
-  if (!stationIds.length || !showPlatformsOrTracks) {
-    return (
-      <CarouselDataContainer
-        views={props.monitor.cards}
-        languages={props.monitor.languages}
-      />
-    );
-  }
+const TrainDataFetcher: FC<IProps> = ({
+  monitor,
+  stationIds,
+  preview = false,
+}) => {
   const [getLineIds, lineIdsState] = useLazyQuery(GET_LINE_IDS);
   const [getTrainsWithTracks, trainsWithTrackState] = useLazyQuery(GET_TRACKS);
   const [trainsWithTrack, setTrainsWithTrack] = useState([]);
@@ -154,17 +142,17 @@ const TrainDataFetcher: FC<IProps> = props => {
         id => trainStationMap?.find(i => i.gtfsId === id).shortCode,
       );
 
-      const queryObject = shortCodes.map(code => {
+      const stations = shortCodes.map(code => {
         return { station: { shortCode: { equals: code } } };
       });
 
-      const queryObject2 = createLineIdsArray(lineIdsState.data)
+      const lineIds = createLineIdsArray(lineIdsState.data)
         .map(shortName => {
           return { commuterLineid: { equals: shortName } };
         })
         .filter(x => x !== undefined);
 
-      setQueryObjects([queryObject, queryObject2]);
+      setQueryObjects([stations, lineIds]);
     }
   }, [lineIdsState.data]);
 
@@ -183,7 +171,6 @@ const TrainDataFetcher: FC<IProps> = props => {
         trainClause: {
           and: [
             { trainType: { trainCategory: { name: { equals: 'Commuter' } } } },
-            { timetableType: { unequals: 'ADHOC' } },
             { or: queryObjects[1] },
           ],
         },
@@ -222,9 +209,12 @@ const TrainDataFetcher: FC<IProps> = props => {
 
   return (
     <CarouselDataContainer
-      views={props.monitor.cards}
-      languages={props.monitor.languages}
-      trainsWithTrack={sortBy(trainsWithTrack, 'timeInSecs')}
+      views={monitor.cards}
+      languages={monitor.languages}
+      trainsWithTrack={removeDuplicatesWithDifferentTracks(
+        sortBy(trainsWithTrack, 'timeInSecs'),
+      )}
+      preview={preview}
     />
   );
 };

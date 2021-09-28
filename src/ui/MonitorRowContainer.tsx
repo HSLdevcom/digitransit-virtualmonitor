@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow, { IDeparture } from './MonitorRow';
 import cx from 'classnames';
-import { formatDate, setDate, setDateWithSeconds } from '../time';
+import { formatDate, setDate, formattedDateTimeFromSeconds } from '../time';
 import { getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
 import { v4 as uuid } from 'uuid';
@@ -45,6 +45,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   error,
   t,
 }) => {
+  const DATE_FORMAT = 'dd.MM.yyyy HH:mm';
   const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
     getLayout(layout);
 
@@ -286,11 +287,13 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                     lng: currentLang,
                     name: closedStopViews[closedStopIndex].name,
                     code: closedStopViews[closedStopIndex].code,
-                    startTime: setDateWithSeconds(
+                    startTime: formattedDateTimeFromSeconds(
                       closedStopViews[closedStopIndex].startTime,
+                      DATE_FORMAT,
                     ),
-                    endTime: setDateWithSeconds(
+                    endTime: formattedDateTimeFromSeconds(
                       closedStopViews[closedStopIndex].endTime,
+                      DATE_FORMAT,
                     ),
                   })
                 ) : (
@@ -331,11 +334,13 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                               lng: currentLang,
                               name: closedStopViews[closedStopIndex].name,
                               code: closedStopViews[closedStopIndex].code,
-                              startTime: setDateWithSeconds(
+                              startTime: formattedDateTimeFromSeconds(
                                 closedStopViews[closedStopIndex].startTime,
+                                DATE_FORMAT,
                               ),
-                              endTime: setDateWithSeconds(
+                              endTime: formattedDateTimeFromSeconds(
                                 closedStopViews[closedStopIndex].endTime,
+                                DATE_FORMAT,
                               ),
                             })
                           : t('no-departures', { lng: currentLang })}

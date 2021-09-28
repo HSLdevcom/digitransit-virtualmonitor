@@ -14,8 +14,15 @@ import QuickDisplay from './ui/QuickDisplay';
 import CreateViewPage from './ui/CreateViewPage';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
 
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  ApolloLink,
+  createHttpLink,
+} from '@apollo/client';
 
+import { MultiAPILink } from '@habx/apollo-multi-endpoint-link';
 import './App.scss';
 import StopMonitorContainer from './ui/StopMonitorContainer';
 export interface IMonitorConfig {
@@ -72,7 +79,17 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
     const monitorConfig = this.props.monitorConfig;
 
     const client = new ApolloClient({
-      uri: monitorConfig.uri,
+      link: ApolloLink.from([
+        new MultiAPILink({
+          endpoints: {
+            default: monitorConfig.uri,
+            hsl: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+            rail: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
+          },
+          httpSuffix: '',
+          createHttpLink: () => createHttpLink(),
+        }),
+      ]),
       cache: new InMemoryCache(),
     });
     let helpPageUrlParamText = '';
@@ -134,6 +151,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               component={QuickDisplay}
             />
             <Route path={'/view'} component={WithDatabaseConnection} />
+            <Route path={'/static'} component={WithDatabaseConnection} />
             <Route
               path={'/help'}
               // eslint-disable-next-line no-empty-pattern
@@ -213,7 +231,10 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
                 },
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
-                  <LandingPage login={this.props.search?.pocLogin} config={monitorConfig} />
+                  <LandingPage
+                    login={this.props.search?.pocLogin}
+                    config={monitorConfig}
+                  />
                 </>
               )}
             />

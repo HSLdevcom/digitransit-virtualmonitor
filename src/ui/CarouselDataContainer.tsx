@@ -5,7 +5,7 @@ import {
   GET_STATION_DEPARTURES,
 } from '../queries/departureQueries';
 import { getLayout } from '../util/getLayout';
-import { IView } from '../util/Interfaces';
+import { IView, ITrainData } from '../util/Interfaces';
 import {
   getStopsAndStationsFromViews,
   createDepartureArray,
@@ -20,6 +20,7 @@ interface IProps {
   languages: Array<string>;
   preview?: boolean;
   error?: string;
+  trainsWithTrack?: Array<ITrainData>;
 }
 
 const CarouselDataContainer: FC<IProps & WithTranslation> = ({
@@ -28,6 +29,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   preview,
   error,
   t,
+  trainsWithTrack,
 }) => {
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
@@ -55,12 +57,14 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
     variables: { ids: stationIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stationIds.length < 1,
+    context: { clientName: 'default' },
   });
 
   const stopsState = useQuery(GET_STOP_DEPARTURES, {
     variables: { ids: stopIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stopIds.length < 1,
+    context: { clientName: 'default' },
   });
 
   useEffect(() => {
@@ -109,6 +113,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
         views={views}
         preview={preview}
         closedStopViews={closedStopViews}
+        trainsWithTrack={trainsWithTrack}
       />
     );
   }
@@ -123,6 +128,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       preview={preview}
       closedStopViews={closedStopViews}
       error={error}
+      trainsWithTrack={trainsWithTrack}
     />
   );
 };

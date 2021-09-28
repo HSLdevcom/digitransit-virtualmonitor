@@ -24,20 +24,19 @@ interface Props {
   stopSettings?: any;
   combinedPatterns: string[];
 }
+export const defaultSettings = {
+  hiddenRoutes: [],
+  allRoutesHidden: false,
+  showStopNumber: false,
+  showEndOfLine: false,
+  timeShift: 0,
+  renamedDestinations: [],
+  showVia: true,
+};
 
 const StopRoutesModal: FC<Props & WithTranslation> = (
   props: Props & WithTranslation,
 ) => {
-  const defaultSettings = {
-    hiddenRoutes: [],
-    allRoutesHidden: false,
-    showStopNumber: false,
-    showEndOfLine: false,
-    timeShift: 0,
-    renamedDestinations: [],
-    showVia: true,
-  };
-
   const [showInputs, setShowInputs] = useState(false);
   const [settings, setSettings] = useState(
     props.stopSettings || defaultSettings,

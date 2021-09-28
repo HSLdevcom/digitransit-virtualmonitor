@@ -4,6 +4,8 @@ import { ISides, ITitle } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
+import { getStationIds, isPlatformOrTrackVisible } from '../util/monitorUtils';
+import TrainDataFetcher from './TrainDataFetcher';
 
 interface Iv {
   columns: ISides;
@@ -25,19 +27,27 @@ interface ILocation {
   state: IState;
 }
 interface IProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly location?: ILocation;
 }
+
 const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const [view, setView] = useState({});
   const [fetched, setFetched] = useState(false);
   useEffect(() => {
-    if (!location?.state?.view?.cards) {
+    if (location && !location?.state?.view?.cards) {
+      const isStatic = location.pathname.indexOf('static') !== -1;
       const hash: Array<string> = location.search.split('cont=');
-      monitorAPI.get(hash[1]).then(r => {
-        setFetched(true);
-        setView(r);
-      });
+      if (isStatic) {
+        monitorAPI.getStaticMonitor(hash[1]).then(r => {
+          setFetched(true);
+          setView(r);
+        });
+      } else {
+        monitorAPI.get(hash[1]).then(r => {
+          setFetched(true);
+          setView(r);
+        });
+      }
     }
   }, []);
 
@@ -45,15 +55,27 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
     return <Loading />;
   }
+
+  const stationIds = getStationIds(monitor);
+  const showPlatformsOrTracks = stationIds.length
+    ? isPlatformOrTrackVisible(monitor)
+    : false;
+
   return (
     <>
       {monitor.isInformationDisplay ? (
         <InformationDisplayContainer monitor={monitor} />
       ) : (
-        <CarouselDataContainer
-          views={monitor.cards}
-          languages={monitor.languages}
-        />
+        <>
+          {stationIds.length && showPlatformsOrTracks ? (
+            <TrainDataFetcher monitor={monitor} stationIds={stationIds} />
+          ) : (
+            <CarouselDataContainer
+              views={monitor.cards}
+              languages={monitor.languages}
+            />
+          )}
+        </>
       )}
     </>
   );

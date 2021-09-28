@@ -7,7 +7,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
-
+import { gql, useQuery } from '@apollo/client';
 interface IConfigWithFeedIs extends IMonitorConfig {
   feedIds?: Array<string>;
 }

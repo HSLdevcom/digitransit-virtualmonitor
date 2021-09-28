@@ -1,7 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_STOP_DEPARTURES = gql`
-  query GetDepartures($ids: [String!]!, $numberOfDepartures: Int!) {
+  query GetDepartures($ids: [String!]!, $numberOfDepartures: Int!)
+  @api(contextKey: "clientName") {
     stops: stops(ids: $ids) {
       name
       code
@@ -98,7 +99,8 @@ export const GET_STOP_DEPARTURES = gql`
 `;
 
 export const GET_STATION_DEPARTURES = gql`
-  query GetDeparturesForStations($ids: [String!]!, $numberOfDepartures: Int!) {
+  query GetDeparturesForStations($ids: [String!]!, $numberOfDepartures: Int!)
+  @api(contextKey: "clientName") {
     stations: stations(ids: $ids) {
       name
       code

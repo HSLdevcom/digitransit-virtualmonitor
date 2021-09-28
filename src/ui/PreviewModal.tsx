@@ -1,10 +1,12 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
-import { IMonitor, ISettings, ITitle } from '../util/Interfaces';
+import { IMonitor } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Icon from './Icon';
 import cx from 'classnames';
 import InformationDisplayContainer from './InformationDisplayContainer';
+import { getStationIds, isPlatformOrTrackVisible } from '../util/monitorUtils';
+import TrainDataFetcher from './TrainDataFetcher';
 
 Modal.setAppElement('#root');
 interface Props {
@@ -15,6 +17,11 @@ interface Props {
   isLandscape: boolean;
 }
 const PreviewModal: FC<Props> = (props: Props) => {
+  const stationIds = getStationIds(props.view);
+  const showPlatformsOrTracks = stationIds.length
+    ? isPlatformOrTrackVisible(props.view)
+    : false;
+
   return (
     <>
       <Modal
@@ -36,11 +43,21 @@ const PreviewModal: FC<Props> = (props: Props) => {
           {props.view.isInformationDisplay ? (
             <InformationDisplayContainer preview monitor={props.view} />
           ) : (
-            <CarouselDataContainer
-              languages={props.languages}
-              views={props.view.cards}
-              preview
-            />
+            <>
+              {stationIds.length && showPlatformsOrTracks ? (
+                <TrainDataFetcher
+                  monitor={props.view}
+                  stationIds={stationIds}
+                  preview
+                />
+              ) : (
+                <CarouselDataContainer
+                  languages={props.languages}
+                  views={props.view.cards}
+                  preview
+                />
+              )}
+            </>
           )}
         </div>
       </Modal>

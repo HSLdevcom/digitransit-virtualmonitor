@@ -7,6 +7,8 @@ export interface IStop {
   lon: number;
   name: string;
   settings: ISettings;
+  mode?: string;
+  parentStation?: string;
 }
 export interface ISettings {
   hiddenRoutes: Array<IHiddenRoute>;
@@ -106,4 +108,11 @@ export interface IWeatherData {
   windSpeed: number;
   time: any;
   iconId: string;
+}
+
+export interface ITrainData {
+  lineId: string;
+  time: string;
+  timeInSecs: number;
+  track: string;
 }

@@ -23,8 +23,21 @@ const monitorAPI = {
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/monitor/${monitor}`, {
         headers: {
-          // Accept: 'application/json',
-          // 'Content-Type': 'application/json'
+          accepts: 'application/json',
+        },
+      })
+        .then(result => result.json())
+        .then(json => resolve(json))
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+
+  getStaticMonitor(url) {
+    return new Promise((resolve, reject) => {
+      fetch(`${baseAPI}/staticmonitor/${url}`, {
+        headers: {
           accepts: 'application/json',
         },
       })

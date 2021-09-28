@@ -29,10 +29,12 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
   const stops = useQuery(GET_STOP, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
+    context: { clientName: 'default' },
   });
   const stations = useQuery(GET_STATION, {
     variables: { ids: stationIds },
     skip: stationIds.length < 1,
+    context: { clientName: 'default' },
   });
   useEffect(() => {
     if (stops.data?.stop) {

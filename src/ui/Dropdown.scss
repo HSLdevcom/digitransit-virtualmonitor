@@ -15,6 +15,14 @@
     }
   }
 
+  &.dd--is-disabled {
+    .dd__indicators {
+      svg {
+        fill: #ccc !important;
+      }
+    }
+  }
+
   .dd__placeholder,
   .dd__value-container,
   .dd__single-value {

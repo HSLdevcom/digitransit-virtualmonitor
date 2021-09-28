@@ -9,6 +9,7 @@ interface IProps {
   cardInfo: ICardInfo;
   updateCardInfo: (cardId: number, type: string, value: string) => void;
   orientation: string;
+  durationEditable: boolean;
 }
 
 const durations = [
@@ -16,15 +17,13 @@ const durations = [
   { value: 5, label: '5s' },
   { value: 10, label: '10s' },
   { value: 15, label: '15s' },
-  { value: 20, label: '20s' },
-  { value: 25, label: '25s' },
-  { value: 30, label: '30s' },
 ];
 
 const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
   cardInfo,
   updateCardInfo,
   orientation,
+  durationEditable,
 }) => {
   const placeHolder = durations.find(
     duration => duration.value === cardInfo.duration,
@@ -66,15 +65,14 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
         </button>
       </div>
       <div className="duration">
-        {cardInfo.possibleToMove && (
-          <Dropdown
-            name="duration"
-            isSearchable={false}
-            options={durations}
-            placeholder={placeHolder}
-            handleChange={handleChange}
-          />
-        )}
+        <Dropdown
+          name="duration"
+          isSearchable={false}
+          options={durations}
+          placeholder={!durationEditable ? '-' : placeHolder}
+          handleChange={handleChange}
+          isDisabled={!durationEditable}
+        />
       </div>
       <LayoutModal
         orientation={orientation}

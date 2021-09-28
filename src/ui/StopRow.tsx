@@ -7,9 +7,9 @@ import StopCode from './StopCode';
 import Icon from './Icon';
 import { IStopInfo } from './StopInfoRetriever';
 import { getLayout } from '../util/getLayout';
-import { sortBy, uniqWith } from 'lodash';
+import { sortBy, uniqWith, isEqual } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
-
+import { defaultSettings } from './StopRoutesModal';
 interface IStopInfoPlus extends IStopInfo {
   cardId?: number;
   settings?: ISettings;
@@ -47,7 +47,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
   t,
 }) => {
   const [showModal, changeOpen] = useState(false);
-  const saveHiddenRoutes = settings => {
+  const saveStopSettings = settings => {
     const newStop = {
       ...stop,
       settings: settings,
@@ -66,32 +66,8 @@ const StopRow: FC<IProps & WithTranslation> = ({
 
   const combinedPatterns = uniqWith(stopPatterns);
 
-  let settingsClassName = '';
-  if (
-    stop.settings?.timeShift > 0 &&
-    stop.settings?.hiddenRoutes.length > 0 &&
-    stop.settings?.renamedDestinations.length === 0
-  ) {
-    settingsClassName = 'clock-and-routes';
-  } else if (
-    stop.settings?.timeShift > 0 &&
-    stop.settings?.hiddenRoutes.length === 0 &&
-    stop.settings?.renamedDestinations.length > 0
-  ) {
-    settingsClassName = 'clock-and-renamed-destinations';
-  } else if (
-    stop.settings?.timeShift === 0 &&
-    stop.settings?.hiddenRoutes.length > 0 &&
-    stop.settings?.renamedDestinations.length > 0
-  ) {
-    settingsClassName = 'routes-and-renamed-destinations';
-  } else if (
-    stop.settings?.timeShift > 0 &&
-    stop.settings?.hiddenRoutes.length > 0 &&
-    stop.settings?.renamedDestinations.length > 0
-  ) {
-    settingsClassName = 'all';
-  }
+  const isDefaultSettings =
+    isEqual(defaultSettings, stop.settings) || !stop.settings;
 
   return (
     <div className="stop-row-container">
@@ -111,51 +87,14 @@ const StopRow: FC<IProps & WithTranslation> = ({
               <Icon img="settings" />
             </span>
           </div>
-          <div
-            className={cx(
-              'changed-settings',
-              isEastWest && 'east-west',
-              settingsClassName,
-            )}
-          >
-            {stop.settings?.timeShift > 0 && (
-              <div className="clock">
-                <Icon img="clock" width={14} height={14} />
-                <span>{stop.settings.timeShift.toString().concat(' min')}</span>
-              </div>
-            )}
-            {stop.settings?.hiddenRoutes.length > 0 && (
-              <>
-                {t('hiddenRoutes')}
-                <span>
-                  {stop.settings.hiddenRoutes.length
-                    .toString()
-                    .concat(' / ')
-                    .concat(combinedPatterns.length.toString())}
-                </span>
-              </>
-            )}
-            {stop.settings?.renamedDestinations.length > 0 && (
-              <div
-                className={
-                  settingsClassName === 'all' ? 'changed-destinations' : ''
-                }
-              >
-                {t('renamedDestinations')}
-                <span>
-                  {stop.settings.renamedDestinations.length
-                    .toString()
-                    .concat(' / ')
-                    .concat(combinedPatterns.length.toString())}
-                </span>
-              </div>
-            )}
+          <div className={cx('changed-settings', isEastWest && 'east-west')}>
+            {!isDefaultSettings && <span> {t('settingsChanged')}</span>}
           </div>
         </div>
         {showModal && (
           <StopRoutesModal
             stopSettings={stop.settings}
-            closeModal={saveHiddenRoutes}
+            closeModal={saveStopSettings}
             showModal={showModal}
             stop={stop}
             combinedPatterns={combinedPatterns}

@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import { IStop, IMonitor, IView } from '../util/Interfaces';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import arrayMove from 'array-move';
 import { v4 as uuid } from 'uuid';
@@ -249,20 +249,27 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           gtfsId: stop.gtfsId,
           locationType: stop.locationType,
           settings: stop.settings,
+          parentStation: stop.parentStation,
+          mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
         };
       });
       card.columns.right.stops = card.columns.right.stops.map(stop => {
         return {
           name: stop.name,
           gtfsId: stop.gtfsId,
+          parentStation: stop.parentStation,
+          mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           locationType: stop.locationType,
           settings: stop.settings,
         };
       });
     });
-
+    const cards = cardArray.slice();
+    if (cards.length === 1 && languages.length === 1) {
+      cards[0].duration = 5;
+    }
     const newCard: IMonitor = {
-      cards: cardArray,
+      cards: cards,
       languages: languageArray.filter(lan => languages.includes(lan)),
       isInformationDisplay: isInformationDisplay(cardArray),
       contenthash: '',

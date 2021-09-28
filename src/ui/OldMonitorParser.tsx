@@ -12,7 +12,7 @@ interface IProps {
 }
 
 export const GET_STOP = gql`
-  query GetStops($ids: [String!]!) {
+  query GetStops($ids: [String!]!) @api(contextKey: "clientName") {
     stops: stops(ids: $ids) {
       name
       gtfsId
@@ -85,6 +85,7 @@ const OldMonitorParser: FC<IProps & WithTranslation> = ({ display, t }) => {
   const { data } = useQuery(GET_STOP, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
+    context: { clientName: 'default' },
   });
   useEffect(() => {
     if (data?.stops) {

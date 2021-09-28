@@ -14,8 +14,8 @@ interface IProps {
 }
 
 export const GET_STOP = gql`
-  query GetStops {
-    stops: stops(ids: ["Ke0042"]) {
+  query GetStops($ids: [String!]!) @api(contextKey: "clientName") {
+    stops: stops(ids: $ids) {
       name
       gtfsId
       locationType

@@ -42,7 +42,7 @@ const MonitorAlertRow: FC<IProps> = ({ preview, alerts, languages }) => {
   for (let i = 0; i < alerts.length; i++) {
     for (let j = 0; j < languages.length; j++) {
       a.push(
-        <span className="single-alert">
+        <span key={`alert-${i + 1}-lang-${j + 1}`} className="single-alert">
           {
             alerts[i].alertDescriptionTextTranslations.find(
               a => a.language === languages[j],

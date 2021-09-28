@@ -13,6 +13,7 @@
     "@digitransit-component/digitransit-component-dialog-modal": "^0.3.2",
     "@digitransit-component/digitransit-component-icon": "^0.1.10",
     "@digitransit-component/digitransit-component-suggestion-item": "^0.2.11",
+    "@habx/apollo-multi-endpoint-link": "^2.5.0",
     "@hsl-fi/sass": "^0.1.1",
     "@loona/react": "^1.0.0",
     "@types/graphql": "^14.5.0",

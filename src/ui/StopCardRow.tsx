@@ -78,10 +78,16 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
     setAutosuggestValue(properties);
     switch (properties.layer) {
       case 'stop':
-        getStop({ variables: { ids: getGTFSId(properties.id) } });
+        getStop({
+          variables: { ids: getGTFSId(properties.id) },
+          context: { clientName: 'default' },
+        });
         break;
       case 'station':
-        getStation({ variables: { ids: getGTFSId(properties.id) } });
+        getStation({
+          variables: { ids: getGTFSId(properties.id) },
+          context: { clientName: 'default' },
+        });
         break;
       default:
         break;
@@ -93,7 +99,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   };
 
   useEffect(() => {
-    if (stopState.data?.stop) {
+    if (stopState.data && stopState.data.stop) {
       setStops(
         cardInfo.id,
         'left',
@@ -117,6 +123,14 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 'shortName.length',
               ),
               hiddenRoutes: [],
+              parentStation: stop.parentStation
+                ? stop.parentStation.gtfsId
+                : undefined,
+              mode:
+                stop.stoptimesForPatterns &&
+                stop.stoptimesForPatterns.length > 0
+                  ? stop.stoptimesForPatterns[0].pattern.route.mode
+                  : undefined,
             };
           }),
         false,
@@ -126,7 +140,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   }, [stopState.data]);
 
   useEffect(() => {
-    if (stationState.data?.station) {
+    if (stationState.data && stationState.data.station) {
       setStops(
         cardInfo.id,
         'left',
@@ -152,6 +166,13 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 'pattern.route.shortname.length',
               ).map(e => e.pattern),
               hiddenRoutes: [],
+              mode:
+                station.stops &&
+                station.stops.length > 0 &&
+                station.stops[0].stoptimesForPatterns &&
+                station.stops[0].stoptimesForPatterns.length > 0
+                  ? station.stops[0].stoptimesForPatterns[0].pattern.route.mode
+                  : undefined,
             };
           }),
         false,

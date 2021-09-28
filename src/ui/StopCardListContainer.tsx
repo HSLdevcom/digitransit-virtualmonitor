@@ -245,12 +245,16 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           gtfsId: stop.gtfsId,
           locationType: stop.locationType,
           settings: stop.settings,
+          parentStation: stop.parentStation,
+          mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
         };
       });
       card.columns.right.stops = card.columns.right.stops.map(stop => {
         return {
           name: stop.name,
           gtfsId: stop.gtfsId,
+          parentStation: stop.parentStation,
+          mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           locationType: stop.locationType,
           settings: stop.settings,
         };

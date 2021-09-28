@@ -47,7 +47,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
   t,
 }) => {
   const [showModal, changeOpen] = useState(false);
-  const saveHiddenRoutes = settings => {
+  const saveStopSettings = settings => {
     const newStop = {
       ...stop,
       settings: settings,
@@ -94,7 +94,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
         {showModal && (
           <StopRoutesModal
             stopSettings={stop.settings}
-            closeModal={saveHiddenRoutes}
+            closeModal={saveStopSettings}
             showModal={showModal}
             stop={stop}
             combinedPatterns={combinedPatterns}

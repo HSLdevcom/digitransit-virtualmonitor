@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { getConfig } from '../util/getConfig';
-import { IView, IClosedStop } from '../util/Interfaces';
+import { IView, IClosedStop, ITrainData } from '../util/Interfaces';
 import Monitor from './Monitor';
 import { EpochMilliseconds } from '../time';
 import { IDeparture } from './MonitorRow';
@@ -22,10 +22,11 @@ interface IProps {
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
   error?: string;
+  trainsWithTrack?: Array<ITrainData>;
 }
 
-const sortAndFilter = departures => {
-  return uniqBy(
+const sortAndFilter = (departures, trainsWithTrack) => {
+  const sortedAndFiltered = uniqBy(
     departures.sort(
       (stopTimeA, stopTimeB) =>
         stopTimeAbsoluteDepartureTime(stopTimeA) -
@@ -33,6 +34,28 @@ const sortAndFilter = departures => {
     ),
     departure => departure.trip.gtfsId,
   );
+  const sortedAndFilteredWithTrack = trainsWithTrack ? [] : sortedAndFiltered;
+  if (sortedAndFiltered.length > 0 && trainsWithTrack) {
+    sortedAndFiltered.forEach(sf => {
+      const trackDataFound = trainsWithTrack.filter(
+        tt =>
+          tt.lineId === sf.trip.route.shortName &&
+          tt.timeInSecs === sf.serviceDay + sf.scheduledDeparture,
+      );
+      if (trackDataFound.length === 0) {
+        sortedAndFilteredWithTrack.push({ ...sf });
+      } else {
+        sortedAndFilteredWithTrack.push({
+          ...sf,
+          stop: {
+            ...sf.stop,
+            platformCode: trackDataFound[0].track,
+          },
+        });
+      }
+    });
+  }
+  return sortedAndFilteredWithTrack;
 };
 
 const CarouselContainer: FC<IProps> = ({
@@ -46,6 +69,7 @@ const CarouselContainer: FC<IProps> = ({
   preview = false,
   closedStopViews,
   error,
+  trainsWithTrack,
 }) => {
   const len = views.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
@@ -70,14 +94,14 @@ const CarouselContainer: FC<IProps> = ({
   const index = Math.floor(current / 2) % views.length;
   const config = getConfig();
   const departures = [
-    sortAndFilter([
-      ...stationDepartures[index][0],
-      ...stopDepartures[index][0],
-    ]),
-    sortAndFilter([
-      ...stationDepartures[index][1],
-      ...stopDepartures[index][1],
-    ]),
+    sortAndFilter(
+      [...stationDepartures[index][0], ...stopDepartures[index][0]],
+      trainsWithTrack,
+    ),
+    sortAndFilter(
+      [...stationDepartures[index][1], ...stopDepartures[index][1]],
+      trainsWithTrack,
+    ),
   ];
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts

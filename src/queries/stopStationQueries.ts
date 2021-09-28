@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const GET_STOP = gql`
-  query stopQuery($ids: [String]) {
+  query stopQuery($ids: [String]) @api(contextKey: "clientName") {
     stop: stops(ids: $ids) {
       id
       name
@@ -11,11 +11,15 @@ export const GET_STOP = gql`
       platformCode
       locationType
       vehicleMode
+      parentStation {
+        gtfsId
+      }
       stoptimesForPatterns {
         pattern {
           code
           headsign
           route {
+            mode
             shortName
             gtfsId
           }
@@ -30,7 +34,7 @@ export const GET_STOP = gql`
 `;
 
 export const GET_STATION = gql`
-  query stationQuery($ids: [String]) {
+  query stationQuery($ids: [String]) @api(contextKey: "clientName") {
     station: stations(ids: $ids) {
       id
       name
@@ -47,6 +51,7 @@ export const GET_STATION = gql`
             code
             headsign
             route {
+              mode
               shortName
               gtfsId
             }

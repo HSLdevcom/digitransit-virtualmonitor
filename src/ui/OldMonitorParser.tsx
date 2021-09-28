@@ -12,8 +12,7 @@ interface IProps {
 }
 
 export const GET_STOP = gql`
-  query GetStops($ids: [String!]!)
-  @api(contextKey: "clientName") {
+  query GetStops($ids: [String!]!) @api(contextKey: "clientName") {
     stops: stops(ids: $ids) {
       name
       gtfsId
@@ -83,17 +82,13 @@ const OldMonitorParser: FC<IProps & WithTranslation> = ({ display, t }) => {
     contenthash: '',
   });
   const [redirect, setRedirect] = useState(false);
-  console.log("asd", display)
-  const asd = useQuery(GET_STOP, {
+  const { data } = useQuery(GET_STOP, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
     context: { clientName: 'default' },
   });
   useEffect(() => {
-    console.log("effect", asd)
-    const {data} = asd
     if (data?.stops) {
-      console.log("effect2", data)
       const monitor = migrateMonitor(display, data.stops);
       monitor.contenthash = hash(monitor, {
         algorithm: 'md5',
@@ -104,7 +99,7 @@ const OldMonitorParser: FC<IProps & WithTranslation> = ({ display, t }) => {
         setRedirect(true);
       });
     }
-  }, [asd]);
+  }, [data]);
   if (!redirect) {
     return <Loading />;
   }

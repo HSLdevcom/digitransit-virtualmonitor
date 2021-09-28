@@ -213,12 +213,14 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           )}
         </div>
         {showStopCode && (
-          <div className={cx('grid-col code', `len${stopCodeLen}`)}>{stopCode}</div>
+          <div className={cx('grid-col code', `len${stopCodeLen}`)}>
+            {stopCode}
+          </div>
         )}
         <div className={cx('grid-col', 'time', `len${departureTime?.length}`)}>
-          {!isCancelled && departureTime?.length > 0 && !departure?.realtime && (
-            <span className={cx('tilde')}>~</span>
-          )}
+          {!isCancelled &&
+            departureTime?.length > 0 &&
+            !departure?.realtime && <span className={cx('tilde')}>~</span>}
           {departureTime}
         </div>
       </div>

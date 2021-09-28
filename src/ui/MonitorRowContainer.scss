@@ -364,7 +364,8 @@ $preview-grid-divider: 2px;
       }
 
       &.is-cancelled {
-        .time, .code {
+        .time,
+        .code {
           text-decoration: line-through $alert-color 0.4vh;
         }
       }

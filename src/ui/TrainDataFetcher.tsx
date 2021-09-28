@@ -93,6 +93,8 @@ const createLineIdsArray = data => {
   return Array.from(new Set(lineIds));
 };
 
+// There could be almost two identical rows 
+// (difference only in track - one with number and one with null)
 const removeDuplicatesWithDifferentTracks = (
   trainsWithTrack,
 ): Array<ITrainData> => {

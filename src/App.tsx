@@ -138,7 +138,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               component={QuickDisplay}
             />
             <Route path={'/view'} component={WithDatabaseConnection} />
-              <Route path={'/static'} component={WithDatabaseConnection} />
+            <Route path={'/static'} component={WithDatabaseConnection} />
             <Route
               path={'/help'}
               // eslint-disable-next-line no-empty-pattern

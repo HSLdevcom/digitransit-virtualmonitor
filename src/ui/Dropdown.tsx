@@ -16,6 +16,7 @@ interface IProps {
   readonly options?: Array<Option>;
   readonly placeholder?: string | JSX.Element;
   readonly handleChange?: (option: IOption) => void;
+  isDisabled?: boolean;
 }
 
 interface Option {
@@ -36,6 +37,7 @@ const Dropdown: FC<IProps & WithTranslation> = ({
   options,
   placeholder,
   handleChange,
+  isDisabled = false,
   t,
 }) => {
   const ddIndicator = (
@@ -62,6 +64,7 @@ const Dropdown: FC<IProps & WithTranslation> = ({
         DropdownIndicator: () => ddIndicator,
         IndicatorSeparator: () => null,
       }}
+      isDisabled={isDisabled}
       inputId={uuid()}
       isSearchable={isSearchable ? isSearchable : false}
       name={name}

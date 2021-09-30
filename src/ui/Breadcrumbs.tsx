@@ -17,7 +17,7 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
   const arr = parser.pathname.split('/');
   const path = arr[1] ? arr[1].toLowerCase() : null;
   const isModify =
-    arr.length > 2 || window.location.href.indexOf('?cont=') !== -1;
+    arr.length > 2 || window.location.href.indexOf('cont=') !== -1;
   let crumb;
 
   switch (path) {
@@ -59,7 +59,9 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
         />
         {crumb}
       </div>
-      <span className="desc"> {!isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify')}</span>
+      <span className="desc">
+        {!isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify')}
+      </span>
     </div>
   );
 };

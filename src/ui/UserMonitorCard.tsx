@@ -8,6 +8,8 @@ import { isInformationDisplay } from '../util/monitorUtils';
 import Button from './Button';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
+import monitorAPI from '../api';
+
 interface IProps {
   view: any;
 }
@@ -24,10 +26,10 @@ title: "Näkymän nimi"
  */
 
 const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
-  const { cards, name, contenthash, languages } = props.view;
+  const { cards, name, contenthash, languages, url } = props.view;
   const [redirect, setRedirect] = useState(false);
   const [isOpen, setOpen] = useState(false);
-  const title = cards[0].title.fi;
+  const [isDelete, setDelete] = useState(false);
   const layout = cards[0].layout;
   const titles = cards.map(c => {
     return c.title.fi;
@@ -41,12 +43,30 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
   const onClose = () => {
     setOpen(false);
   };
+
+  const onDelete = () => {
+    monitorAPI.deleteStatic(contenthash, url).then(res => {
+      setDelete(true);
+    });
+  };
+
+  if (isDelete) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/',
+          search: `?pocLogin`,
+        }}
+      />
+    );
+  }
+
   if (redirect) {
     return (
       <Redirect
         to={{
           pathname: '/createStaticView',
-          search: `?name=${name}&cont=${contenthash}`,
+          search: `?name=${name}&url=${url}&cont=${contenthash}`,
         }}
       />
     );
@@ -112,7 +132,7 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
             width={32}
           />
         </span>
-        <span className="monitor-name"> {name} </span>
+        <span className="monitor-name">{name}</span>
         <div className="control-buttons">
           <button className="button" onClick={() => setOpen(true)}>
             Esikatselu
@@ -120,10 +140,7 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
           <button className="edit-button" onClick={goToEdit}>
             Muokkaa
           </button>
-          <div
-            className="delete-icon"
-            // onClick={() => {/*TODO*/}}
-          >
+          <div className="delete-icon" onClick={onDelete}>
             <Icon img="delete" color={'#007AC9'} />
           </div>
         </div>
@@ -131,7 +148,11 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
       <div className="cards">
         {Array.isArray(crds) &&
           crds.map((c, x) => {
-            return <div key={`c#${x}`} className="card-item">{c}</div>;
+            return (
+              <div key={`c#${x}`} className="card-item">
+                {c}
+              </div>
+            );
           })}
       </div>
     </div>

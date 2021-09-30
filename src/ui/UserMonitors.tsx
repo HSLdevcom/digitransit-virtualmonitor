@@ -36,7 +36,7 @@ const UserMonitors: React.FC<IProps & WithTranslation> = props => {
   const [views, setViews] = useState({});
 
   useEffect(() => {
-    monitorAPI.getMonitorsForUser(props.user.urls).then(r => {
+    monitorAPI.getAllMonitorsForUser().then(r => {
       setViews(r);
     });
   }, []);

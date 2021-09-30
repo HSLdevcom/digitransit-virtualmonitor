@@ -1,9 +1,8 @@
 import cx from 'classnames';
-import { IStop, IMonitor, IView } from '../util/Interfaces';
-import React, { FC, useEffect, useState } from 'react';
+import { IStop, IMonitor } from '../util/Interfaces';
+import React, { FC, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import arrayMove from 'array-move';
-import { v4 as uuid } from 'uuid';
 import hash from 'object-hash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
@@ -12,12 +11,17 @@ import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getLayout';
+import isEqual from 'lodash/isEqual';
 
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
 import { isInformationDisplay } from '../util/monitorUtils';
 
 import UserViewTitleEditor from './UserViewTitleEditor';
+import { getCurrentSecondsWithMilliSeconds } from '../time';
+import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
+import { uuidValidateV5 } from '../util/monitorUtils';
+
 interface IProps {
   feedIds: Array<string>;
   defaultStopCardList: any;
@@ -25,8 +29,51 @@ interface IProps {
   loading?: boolean;
   vertical?: boolean;
   user?: any;
-  viewName?: string;
 }
+
+const getViewName = () => {
+  if (window && window.location && window.location.search) {
+    const params = window.location.search.split('&');
+    if (params.length > 0 && params[0].startsWith('?name=')) {
+      return decodeURI(params[0].substring(6));
+    }
+  }
+  return 'Näytön nimi';
+};
+
+const getHash = () => {
+  if (window && window.location && window.location.search) {
+    const params = window.location.search.split('cont=');
+    if (params[1]) {
+      return params[1];
+    }
+  }
+  return undefined;
+};
+
+const getUuid = () => {
+  if (window && window.location && window.location.search) {
+    const params = window.location.search.split('&');
+    if (params[1] && params[1].startsWith('url=')) {
+      return params[1].substring(4);
+    }
+  }
+  return undefined;
+};
+
+const getPath = () => {
+  if (window && window.location) {
+    return window.location.pathname;
+  }
+  return undefined;
+};
+
+const createUUID = (startTime, hash) => {
+  return uuidv5(
+    startTime + getCurrentSecondsWithMilliSeconds() + hash,
+    NIL_UUID,
+  );
+};
 
 const StopCardListContainer: FC<IProps & WithTranslation> = ({
   feedIds,
@@ -35,6 +82,9 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   loading = false,
   ...props
 }) => {
+  const [startTime, setStartTime] = useState(
+    getCurrentSecondsWithMilliSeconds(),
+  );
   const [stopCardList, setStopCardList] = useState(defaultStopCardList);
   const [languages, setLanguages] = useState(props.languages);
   const [orientation, setOrientation] = useState(
@@ -43,6 +93,9 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);
+
+  const [uuid, setUuid] = useState(getUuid());
+  const [viewTitle, setViewTitle] = useState(getViewName());
 
   const openPreview = () => {
     setOpen(true);
@@ -239,7 +292,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     return !(languages.length > 0 && !noStop);
   };
 
-  const createMonitor = () => {
+  const createOrSaveMonitor = isNew => {
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
     cardArray.forEach(card => {
@@ -279,19 +332,83 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       encoding: 'base64',
     }).replaceAll('/', '-');
 
-    monitorAPI.create(newCard).then(res => {
-      setRedirect(true);
-      setView(newCard);
-    });
+    if (isNew) {
+      monitorAPI.create(newCard).then(res => {
+        if (res['status'] === 200 || res['status'] === 409) {
+          if (getPath() === '/createStaticView') {
+            const newUuid = createUUID(newCard.contenthash, startTime);
+            monitorAPI
+              .createStatic(newCard.contenthash, newUuid, viewTitle)
+              .then(res => {
+                setUuid(newUuid);
+                setView(newCard);
+              });
+          } else {
+            setRedirect(true);
+            setView(newCard);
+          }
+        }
+      });
+    } else {
+      const hashChanged = !isEqual(getHash(), newCard.contenthash);
+      const titleChanged = !isEqual(getViewName(), viewTitle);
+      if (hashChanged) {
+        monitorAPI.create(newCard).then(res => {
+          monitorAPI
+            .updateStatic(getHash(), getUuid(), newCard.contenthash, viewTitle)
+            .then(res => {
+              setRedirect(true);
+              setView(newCard);
+            });
+        });
+      } else if (!hashChanged && titleChanged) {
+        monitorAPI
+          .updateStatic(getHash(), getUuid(), getHash(), viewTitle)
+          .then(res => {
+            setRedirect(true);
+            setView(newCard);
+          });
+      } else {
+        setRedirect(true);
+        setView(newCard);
+      }
+    }
   };
 
+  const checkIfModify = () => {
+    if (
+      window &&
+      (window.location.href.indexOf('cont=') !== -1 ||
+        window.location.pathname.split('/').length > 2) &&
+      getPath() === '/createStaticView'
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  if (!redirect && view && uuid) {
+    setRedirect(true);
+  }
+
   if (redirect && view) {
+    let search;
+    const isStatic = getPath() === '/createStaticView';
+    const url = uuid ? uuid : getUuid();
+    if (isStatic && url && uuidValidateV5(url)) {
+      search = `?cont=${url}`;
+    } else {
+      search = `?cont=${view.contenthash}`;
+    }
     return (
       <Redirect
         to={{
-          pathname: '/view',
-          search: `?cont=${view.contenthash}`,
-          state: { view: view.cards },
+          pathname: isStatic ? '/static' : '/view',
+          search: search,
+          state: {
+            view: view.cards,
+            viewTitle: viewTitle,
+          },
         }}
       />
     );
@@ -310,32 +427,27 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     );
   }
 
-  const checkIfModify = () => {
-    if (
-      window &&
-      (window.location.href.indexOf('?cont=') !== -1 ||
-        window.location.pathname.split('/').length > 2)
-    ) {
-      return true;
-    }
-    return false;
+  const backToList = () => {
+    window.location.href = '/?pocLogin';
   };
 
-  const backToList = save => {
-    if (save) {
-      console.log('Saving...');
-    }
-    window.location.href = '/?pocLogin';
+  const updateViewTitle = newTitle => {
+    setViewTitle(newTitle);
   };
 
   const makeButtonsDisabled = createButtonsDisabled(modifiedStopCardList);
   const isModifyView = checkIfModify();
-  console.log('modifiedStopCardList:', modifiedStopCardList);
+
   return (
     <div className="stop-card-list-container">
       {props.user && props.user.loggedIn && (
         <UserViewTitleEditor
-          title={'Foo'}
+          title={viewTitle}
+          updateViewTitle={updateViewTitle}
+          backToList={backToList}
+          contentHash={getHash()}
+          url={getUuid()}
+          isNew={!isModifyView}
         />
       )}
       {isOpen && (
@@ -366,7 +478,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           };
           return (
             <StopCardRow
-              key={uuid()}
+              key={`stopcard-${index}`}
               noStopsSelected={makeButtonsDisabled}
               cardInfo={cardInfo}
               feedIds={feedIds}
@@ -385,7 +497,10 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         })}
       </ul>
       <div className="buttons">
-        <button className={cx('button', 'prepare', isModifyView ? 'modifyView' : '')} onClick={addNew}>
+        <button
+          className={cx('button', 'prepare', isModifyView ? 'modifyView' : '')}
+          onClick={addNew}
+        >
           <span>{t('prepareDisplay')} </span>
         </button>
         <button
@@ -399,23 +514,20 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           <button
             disabled={makeButtonsDisabled}
             className="button"
-            onClick={createMonitor}
+            onClick={() => createOrSaveMonitor(true)}
           >
             <span>{t('displayEditorStaticLink')}</span>
           </button>
         )}
         {isModifyView && (
           <>
-            <button
-              className="button"
-              onClick={() => backToList(false)}
-            >
+            <button className="button" onClick={backToList}>
               <span>{t('cancel')}</span>
             </button>
             <button
               disabled={makeButtonsDisabled}
               className="button"
-              onClick={() => backToList(true)}
+              onClick={() => createOrSaveMonitor(false)}
             >
               <span>{t('save')}</span>
             </button>

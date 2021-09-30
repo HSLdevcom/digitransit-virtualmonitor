@@ -3,39 +3,62 @@ import Icon from './Icon';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { focusToInput, onClick } from './InputUtils';
 import { isKeyboardSelectionEvent } from '../util/browser';
+import { Redirect } from 'react-router-dom';
+import monitorAPI from '../api';
+
 interface IProps {
   title: string;
-  updateCardInfo?: (
-    cardId: number,
-    type: string,
-    value: string,
-    lang?: string,
-  ) => void;
+  updateViewTitle: (newTitle: string) => void;
+  backToList: () => void;
+  contentHash?: string;
+  url?: string;
+  isNew: boolean;
 }
 
 const UserViewTitleEditor: FC<IProps & WithTranslation> = ({
   title,
-  updateCardInfo,
+  updateViewTitle,
+  backToList,
+  isNew,
+  contentHash,
+  url,
   t,
 }) => {
   const [newTitle, setNewTitle] = useState(title);
-  const [isFocus, setisFocus] = useState(false);
+  const [isFocus, setFocus] = useState(false);
+  const [isDeleted, setDeleted] = useState(false);
 
   const onBlur = event => {
-    setisFocus(false);
-    if (updateCardInfo) {
-      //updateCardInfo(id, 'title', event.target.value, lang);
-      console.log('Update title...');
-    }
+    setFocus(false);
+    updateViewTitle(newTitle);
   };
 
   function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
-    setisFocus(true);
+    setFocus(true);
   }
 
   const onChange = e => {
     setNewTitle(e.target.value);
   };
+
+  const onDelete = () => {
+    if (contentHash && url) {
+      monitorAPI.deleteStatic(contentHash, url).then(res => {
+        setDeleted(true);
+      });
+    }
+  };
+
+  if (isDeleted) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/',
+          search: `?pocLogin`,
+        }}
+      />
+    );
+  }
 
   return (
     <div className="user-view-title">
@@ -63,7 +86,7 @@ const UserViewTitleEditor: FC<IProps & WithTranslation> = ({
             <Icon img="edit" color={'#007ac9'} />
           </div>
         )}
-        <div className="delete-icon" onClick={() => console.log('Delete....')}>
+        <div className="delete-icon" onClick={isNew ? backToList : onDelete}>
           <Icon img="delete" color={'#007AC9'} />
         </div>
       </div>

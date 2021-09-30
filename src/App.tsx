@@ -113,7 +113,6 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
         : '';
     }
 
-    console.log('SEARCH:', this.props.search);
     return (
       <div className={'App'}>
         <ApolloProvider client={client}>

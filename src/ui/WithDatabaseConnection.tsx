@@ -6,6 +6,8 @@ import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
 import { getStationIds, isPlatformOrTrackVisible } from '../util/monitorUtils';
 import TrainDataFetcher from './TrainDataFetcher';
+import { uuidValidateV5 } from '../util/monitorUtils';
+import { isConstructorDeclaration } from 'typescript';
 
 interface Iv {
   columns: ISides;
@@ -18,6 +20,7 @@ interface Iv {
 }
 interface IState {
   view: Iv;
+  viewTitle?: string;
 }
 interface ILocation {
   hash: string;
@@ -33,21 +36,15 @@ interface IProps {
 const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const [view, setView] = useState({});
   const [fetched, setFetched] = useState(false);
+  const [hash, setHash] = useState(undefined);
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
-      const isStatic = location.pathname.indexOf('static') !== -1;
       const hash: Array<string> = location.search.split('cont=');
-      if (isStatic) {
-        monitorAPI.getStaticMonitor(hash[1]).then(r => {
-          setFetched(true);
-          setView(r);
-        });
-      } else {
-        monitorAPI.get(hash[1]).then(r => {
-          setFetched(true);
-          setView(r);
-        });
-      }
+      monitorAPI.get(hash[1]).then(r => {
+        setHash(hash[1]);
+        setFetched(true);
+        setView(r);
+      });
     }
   }, []);
 
@@ -68,11 +65,24 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
       ) : (
         <>
           {stationIds.length && showPlatformsOrTracks ? (
-            <TrainDataFetcher monitor={monitor} stationIds={stationIds} />
+            <TrainDataFetcher
+              monitor={monitor}
+              stationIds={stationIds}
+              staticContentHash={
+                monitor.contenthash ? monitor.contenthash : undefined
+              }
+              staticUrl={uuidValidateV5(hash) ? hash : undefined}
+              staticViewTitle={location?.state?.viewTitle}
+            />
           ) : (
             <CarouselDataContainer
               views={monitor.cards}
               languages={monitor.languages}
+              staticContentHash={
+                monitor.contenthash ? monitor.contenthash : undefined
+              }
+              staticUrl={uuidValidateV5(hash) ? hash : undefined}
+              staticViewTitle={location?.state?.viewTitle}
             />
           )}
         </>

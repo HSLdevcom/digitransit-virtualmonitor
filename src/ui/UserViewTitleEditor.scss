@@ -1,7 +1,7 @@
 .user-view-title {
   display: flex;
   flex-direction: column;
-  background: #F2F5F7;
+  background: #f2f5f7;
   color: #666;
   height: 52px;
   width: 780px;
@@ -25,7 +25,7 @@
     width: 150px;
     height: 31px;
     border: none;
-    background: #F2F5F7;
+    background: #f2f5f7;
 
     &:focus {
       outline: auto #007ac9;
@@ -41,5 +41,6 @@
     position: absolute;
     top: 5px;
     left: 750px;
+    cursor: pointer;
   }
 }

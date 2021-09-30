@@ -136,7 +136,6 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
       vertical={stopCardList[0].layout > 11}
       feedIds={feedIds}
       defaultStopCardList={cardList}
-      viewName={name}
     />
   );
 };

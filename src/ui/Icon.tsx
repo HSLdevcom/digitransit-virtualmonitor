@@ -33,10 +33,16 @@ import { ReactComponent as RectangleSelected } from './icons/rectangle-selected.
 import { ReactComponent as Checkbox } from './icons/checkbox.svg';
 import { ReactComponent as Settings } from './icons/settings.svg';
 import { ReactComponent as Clock } from './icons/clock.svg';
-import { ReactComponent as Bus } from './icons/bus-filled.svg';
-import { ReactComponent as Tram } from './icons/tram-filled.svg';
-import { ReactComponent as Train } from './icons/train-filled.svg';
-import { ReactComponent as Metro } from './icons/metro-filled.svg';
+import { ReactComponent as Airplane } from './icons/mode-airplane.svg';
+import { ReactComponent as Bus } from './icons/mode-bus.svg';
+import { ReactComponent as Ferry } from './icons/mode-ferry.svg';
+import { ReactComponent as Metro } from './icons/mode-metro.svg';
+import { ReactComponent as Rail } from './icons/mode-rail.svg';
+import { ReactComponent as Tram } from './icons/mode-tram.svg';
+import { ReactComponent as BusWaltti } from './icons/mode-bus-waltti.svg';
+import { ReactComponent as FerryWaltti } from './icons/mode-ferry-waltti.svg';
+import { ReactComponent as RailWaltti } from './icons/mode-rail-waltti.svg';
+import { ReactComponent as TramWaltti } from './icons/mode-tram-waltti.svg';
 import { ReactComponent as Alert } from './icons/alert.svg';
 import { ReactComponent as Spinner } from './icons/spinner.svg';
 import { ReactComponent as Weather1 } from './icons/weather/weather-1.svg';
@@ -87,6 +93,7 @@ export interface IIconMapProps {
   rotate?: string;
   stroke?: string;
   width?: string;
+  borderRadius?: string;
 }
 export interface ICustomInputProps {
   color?: string;
@@ -95,6 +102,7 @@ export interface ICustomInputProps {
   img: string;
   rotate?: string;
   width?: number;
+  borderRadius?: string;
 }
 
 const IconMap = (style: IIconMapProps) => {
@@ -135,10 +143,18 @@ const IconMap = (style: IIconMapProps) => {
     settings: <Settings style={style} />,
     spinner: <Spinner style={style} />,
     clock: <Clock style={style} />,
+    airplane: <Airplane style={style} />,
     bus: <Bus style={style} />,
+    ferry: <Ferry style={style} />,
     tram: <Tram style={style} />,
-    rail: <Train style={style} />,
+    rail: <Rail style={style} />,
     subway: <Metro style={style} />,
+    'airplane-waltti': <Airplane style={style} />,
+    'bus-waltti': <BusWaltti style={style} />,
+    'ferry-waltti': <FerryWaltti style={style} />,
+    'tram-waltti': <TramWaltti style={style} />,
+    'rail-waltti': <RailWaltti style={style} />,
+    'subway-waltti': <Metro style={style} />,
     weather1: <Weather1 style={style} />,
     weather2: <Weather2 style={style} />,
     weather3: <Weather3 style={style} />,
@@ -193,6 +209,7 @@ const IconMap = (style: IIconMapProps) => {
  * />
  */
 const Icon = (props: ICustomInputProps) => {
+  let background = null;
   let fill = props.color;
   let height = props.height ? `${props.height}` : '24';
   let width = props.width ? `${props.width}` : '24';
@@ -205,6 +222,9 @@ const Icon = (props: ICustomInputProps) => {
     height = '18';
     width = '14';
     stroke = props.color;
+  } else if (props.img && props.img.endsWith('-waltti')) {
+    fill = null;
+    background = props.color;
   }
   const style = {
     fill: fill,
@@ -212,6 +232,8 @@ const Icon = (props: ICustomInputProps) => {
     height: height,
     width: width,
     transform: props.rotate ? `rotate(${props.rotate}deg)` : null,
+    background: background,
+    borderRadius: props.borderRadius ? props.borderRadius : null,
   };
 
   const icons = IconMap(style);

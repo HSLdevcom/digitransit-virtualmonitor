@@ -10,31 +10,16 @@ import { IApolloClientContextType } from './ApolloClientsContextCreator';
 import App from './App';
 import { loona, virtualMonitorClient } from './graphQL/virtualMonitorClient';
 import i18n from './i18n';
-import './index.scss';
 import { default as config } from './monitorConfig.js';
 import NtpSyncComponent from './ntp/NtpSyncComponent';
 import registerServiceWorker from './registerServiceWorker';
 import { ApolloClientsContext } from './VirtualMonitorApolloClients';
 import VirtualMonitorLocalState from './VirtualMonitorLocalState';
 import { getParams } from './util/queryUtils';
+import { getConfig } from './util/getConfig';
 
 const domain = window.location.hostname;
-let monitorConfig: { feedIds?: Array<string>; uri: string };
-
-if (domain.indexOf('tremonitori') >= 0) {
-  // domain url for Tampere Virtual monitor
-
-  monitorConfig = config.tampere;
-} else if (domain.indexOf('matkamonitori') >= 0) {
-  // domain url for Matka.fi Virtual monitor
-  monitorConfig = config.matka;
-} else if (domain.indexOf('jyvaskyla') >= 0) {
-  // domain url for Linkki Virtual monitor
-  monitorConfig = config.linkki;
-} else {
-  require('./sass/matka/matka.scss');
-  monitorConfig = config.matka;
-}
+const monitorConfig = getConfig();
 
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),

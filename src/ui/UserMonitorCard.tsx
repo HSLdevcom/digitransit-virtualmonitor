@@ -8,6 +8,8 @@ import { isInformationDisplay } from '../util/monitorUtils';
 import Button from './Button';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
+import { getPrimaryColor } from '../util/getConfig';
+
 interface IProps {
   name: string;
   cards: any;
@@ -129,7 +131,7 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
             className="delete-icon"
             // onClick={() => {/*TODO*/}}
           >
-            <Icon img="delete" color={'#007AC9'} />
+            <Icon img="delete" color={getPrimaryColor()} />
           </div>
         </div>
       </div>

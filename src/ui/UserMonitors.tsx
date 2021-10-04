@@ -7,7 +7,6 @@ import { ISides, ITitle } from '../util/Interfaces';
 import Button from './Button';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
-import './UserMonitors.scss';
 
 interface Iv {
   columns: ISides;

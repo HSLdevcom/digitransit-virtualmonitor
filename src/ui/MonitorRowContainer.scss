@@ -415,7 +415,6 @@ $preview-grid-divider: 2px;
     flex: 1;
     color: white;
     background: $background-color;
-    background: #0057a2;
     display: block !important;
     width: calc(100% + calc(2 * #{$preview-grid-rows-margin}));
     z-index: 1000;

@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
+import { getPrimaryColor } from '../util/getConfig';
 
 /*const routes = [
   { path: '/', breadcrumb: i18n.t('breadCrumbsHome') },
@@ -40,7 +41,7 @@ const Breadcrumbs: FC<WithTranslation> = props => {
           width={14}
           height={14}
           rotate={'-90'}
-          color={'#007ac9'}
+          color={getPrimaryColor()}
         />{' '}
         {crumb}
       </div>

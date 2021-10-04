@@ -105,7 +105,7 @@ $preview-container-height: 365px;
     min-width: calc(0.1 * #{$preview-container-width}) !important;
 
     #logo {
-      width: calc(0.1 * #{$preview-container-width}) !important;
+      width: calc(0.07 * #{$preview-container-width}) !important;
     }
 
     &.portrait {
@@ -145,7 +145,7 @@ $preview-container-height: 365px;
 }
 
 .multi-display-titles {
-  font-family: 'Roboto', Arial, Georgia, serif;
+  font-family: $font-family;
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin-right: 0.5em;
@@ -207,7 +207,7 @@ $preview-container-height: 365px;
 }
 
 .title-time {
-  font-family: 'Roboto', Arial, Georgia, serif;
+  font-family: $font-family;
   display: flex;
   font-size: 4vw;
 
@@ -222,7 +222,7 @@ $preview-container-height: 365px;
   font-weight: bold;
   border-radius: 0.2em;
   background-color: white;
-  color: rgb(0, 115, 201);
+  color: $primary-color;
 
   time {
     margin-left: 0.25em;

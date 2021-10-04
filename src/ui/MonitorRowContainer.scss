@@ -86,6 +86,10 @@ $preview-grid-divider: 2px;
         &.alert {
           font-size: 35px !important;
 
+          &.vertical {
+            font-size: 25px !important;
+          }
+
           &.two-rows {
             padding-bottom: 2px;
           }
@@ -318,6 +322,7 @@ $preview-grid-divider: 2px;
       height: 100%;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
 
       &.two-rows {
         flex: 2 1 0;
@@ -422,9 +427,43 @@ $preview-grid-divider: 2px;
     overflow: hidden;
     font-size: calc((#{var(--height)} - 30vh) / 9) !important;
 
+    &.vertical {
+      font-size: calc((#{var(--height)} - 30vh) / 12) !important;
+
+      .alert-text {
+        .alert-separator {
+          margin-top: 10px;
+          width: 110%;
+          display: flex;
+          text-align: left;
+          min-height: 2px;
+          background-color: white;
+        }
+
+        white-space: unset;
+        flex-direction: column;
+
+        .single-alert {
+          padding-top: 10px;
+          padding-left: 0;
+        }
+
+        .single-alert:first-child {
+          padding-top: calc(100% / 6);
+        }
+      }
+
+      .animated {
+        -moz-animation: alert-animation-vertical #{var(--speed)} linear infinite;
+        -webkit-animation: alert-animation-vertical #{var(--speed)} linear infinite;
+        animation: alert-animation-vertical #{var(--speed)} linear infinite;
+      }
+    }
+
     .alert-text {
       white-space: nowrap;
     }
+
 
     .single-alert {
       padding-left: 66%;
@@ -434,11 +473,27 @@ $preview-grid-divider: 2px;
       padding-left: 110%;
     }
 
-    .animated {
-      -moz-animation: alert-animation #{var(--speed)} linear infinite;
-      -webkit-animation: alert-animation #{var(--speed)} linear infinite;
-      animation: alert-animation #{var(--speed)} linear infinite;
+    &.horizontal {
+      .animated {
+        -moz-animation: alert-animation #{var(--speed)} linear infinite;
+        -webkit-animation: alert-animation #{var(--speed)} linear infinite;
+        animation: alert-animation #{var(--speed)} linear infinite;
+      }
     }
+  }
+}
+
+@keyframes alert-animation-vertical {
+  from {
+    -moz-transform: translateY(0);
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  to {
+    -moz-transform: translateY(#{var(--animationWidth)});
+    -webkit-transform: translateY(#{var(--animationWidth)});
+    transform: translateY(#{var(--animationWidth)});
   }
 }
 
@@ -452,7 +507,7 @@ $preview-grid-divider: 2px;
   to {
     -moz-transform: translateX(#{var(--animationWidth)});
     -webkit-transform: translateX(#{var(--animationWidth)});
-    transform: translateX(calc(#{var(--animationWidth)}));
+    transform: translateX(#{var(--animationWidth)});
   }
 }
 

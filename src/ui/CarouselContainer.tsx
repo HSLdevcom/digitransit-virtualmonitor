@@ -127,11 +127,19 @@ const CarouselContainer: FC<IProps> = ({
       alertRowClass = '';
       break;
   }
+  const alertOrientation = 'vertical';
   if (alerts.length > 0) {
     alertComponent = (
-      <div className={cx('row-with-separator alert', alertRowClass)}>
+      <div
+        className={cx(
+          'row-with-separator alert',
+          alertOrientation,
+          alertRowClass,
+        )}
+      >
         <div className="separator"></div>
         <MonitorAlertRow
+          alertOrientation={alertOrientation}
           alerts={alerts}
           languages={languages}
           preview={preview}

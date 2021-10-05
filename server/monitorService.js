@@ -1,8 +1,12 @@
 import cosmosClient from '@azure/cosmos';
-const CosmosClient = cosmosClient.CosmosClient;
+// eslint-disable-next-line import/extensions
 import config from './config.js';
 
-const { endpoint, key, databaseId, containerId } = config;
+const { CosmosClient } = cosmosClient;
+
+const {
+ endpoint, key, databaseId, containerId 
+} = config;
 
 const client = new CosmosClient({ endpoint, key });
 
@@ -11,16 +15,18 @@ const container = database.container(containerId);
 async function getMonitor(hash) {
   try {
     const querySpec = {
-      query: "SELECT * from c WHERE c.contenthash = @hash",
+      query: 'SELECT * from c WHERE c.contenthash = @hash',
       parameters: [
         {
-          name: "@hash",
+          name: '@hash',
           value: hash,
         },
       ],
     };
     // read all items in the Items container
-    const {resources: items} = await container.items.query(querySpec).fetchAll();
+    const { resources: items } = await container.items
+      .query(querySpec)
+      .fetchAll();
     return items;
   } catch (e) {
     console.log('ERROR', e);
@@ -32,18 +38,18 @@ const monitorService = {
   getAll: async function getAll(req, res) {
     try {
       // <QueryItems>
-      console.log(`Querying container: monitors`);
+      console.log('Querying container: monitors');
 
       // query to return all items
       const querySpec = {
-        query: "SELECT * from c"
+        query: 'SELECT * from c',
       };
       // read all items in the Items container
       const { resources: items } = await container.items
         .query(querySpec)
         .fetchAll();
 
-      items.forEach(item => {
+      items.forEach((item) => {
         console.log(`${item.contenthash}`);
       });
       res.json(items);
@@ -55,7 +61,7 @@ const monitorService = {
   get: async function get(req, res) {
     try {
       // <QueryItems>
-      console.log(`Querying a monitor`);
+      console.log('Querying a monitor');
       // query to return all items
       const items = await getMonitor(req.params.id);
       if (!items.length) {
@@ -73,14 +79,14 @@ const monitorService = {
       let contentHash;
       const cont = database.container('staticMonitors');
       // <QueryItems>
-      console.log(`Querying a static monitor`);
+      console.log('Querying a static monitor');
       const url = req.params.id;
       // query to return all items
       const querySpec = {
-        query: "SELECT c.monitorContenthash from c WHERE c.url = @url",
+        query: 'SELECT c.monitorContenthash from c WHERE c.url = @url',
         parameters: [
           {
-            name: "@url",
+            name: '@url',
             value: url,
           },
         ],
@@ -108,7 +114,7 @@ const monitorService = {
     try {
       const cont = database.container('staticMonitors');
       // <QueryItems>
-      console.log(`Querying a static monitor`);
+      console.log('Querying a static monitor');
       const urls = req.params.id.split(',');
       // query to return all items
       const querySpec = {
@@ -116,17 +122,15 @@ const monitorService = {
           'SELECT c.name, c.monitorContenthash from c WHERE ARRAY_CONTAINS(@urls, c.url)',
         parameters: [
           {
-            name: "@urls",
+            name: '@urls',
             value: urls,
           },
         ],
       };
       // read all items in the Items container
-      const { resources: items } = await cont.items
-          .query(querySpec)
-          .fetchAll();
-      let monitors = [];
-      let contenthashes = [];
+      const { resources: items } = await cont.items.query(querySpec).fetchAll();
+      const monitors = [];
+      const contenthashes = [];
       items.forEach(item => {
         monitors.push(item);
         contenthashes.push(item.monitorContenthash);
@@ -139,18 +143,22 @@ const monitorService = {
             'SELECT * from c WHERE ARRAY_CONTAINS (@hashes, c.contenthash)',
           parameters: [
             {
-              name: "@hashes",
-              value: contenthashes
-            }
+              name: '@hashes',
+              value: contenthashes,
+            },
           ],
         };
-        const { resources: items } = await container.items.query(queryS).fetchAll();
-        if (!items.length) {
+        const { resources: userMonitors } = await container.items
+          .query(queryS)
+          .fetchAll();
+        if (!userMonitors.length) {
           res.json({});
         } else {
-          let userMonitors = items;
+
           userMonitors.forEach(mon => {
-            const monitor = monitors.find(m => m.monitorContenthash ===  mon.contenthash);
+            const monitor = monitors.find(
+              m => m.monitorContenthash === mon.contenthash,
+            );
             mon.name = monitor.name;
           });
           res.json(userMonitors);
@@ -164,13 +172,13 @@ const monitorService = {
   create: async function create(req, res) {
     try {
       // <QueryItems>
-      console.log(`Adding a monitor`);
+      console.log('Adding a monitor');
 
       console.log(req.body);
-      await Promise.resolve(container.items.create(req.body))
+      await Promise.resolve(container.items.create(req.body));
       res.status(200).send('OK');
     } catch (e) {
-      console.log(e)
+      console.log(e);
       res.status(500).send(e);
     }
   },

@@ -3,21 +3,45 @@
 /**
  * Module dependencies.
  */
-import app from './app.js';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import Debug from 'debug';
 import http from 'http';
-const debug = Debug('express-react:server');
 import cron from 'cron';
-const CronJob = cron.CronJob;
+
+// const gtfs = require('gtfs');
+import { importGtfs } from 'gtfs';
+// eslint-disable-next-line import/extensions
+import app from './app.js';
+
+const debug = Debug('express-react:server');
+const { CronJob } = cron;
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+
+  // eslint-disable-next-line no-restricted-globals
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3001');
-
-// const gtfs = require('gtfs');
-import { importGtfs } from 'gtfs';
+const port = normalizePort(process.env.PORT || '3001');
 const config = {
   agencies: [
     {
@@ -36,33 +60,33 @@ const config = {
         'routes',
         'trips',
         'stops',
-      ]
-    }
-  ]
+      ],
+    },
+  ],
 };
+
 importGtfs(config)
   .then(() => {
     console.log('Import Successful');
   })
-  .catch(err => {
+  .catch((err) => {
     console.error(err);
-  })
+  });
 
-
-var job = new CronJob(
-    '00 00 00 * * *',
-function () {
-  const d = new Date();
-  console.log('IMPORT STARTING AT ', d)
-  importGtfs(config)
-  .then(() => {
-    console.log('Import Successful');
-  })
-    .catch(err => {
-      console.error(err);
-    })},
-null,
-
+const job = new CronJob(
+  '00 00 00 * * *',
+  () => {
+    const d = new Date();
+    console.log('IMPORT STARTING AT ', d);
+    importGtfs(config)
+      .then(() => {
+        console.log('Import Successful');
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  },
+  null,
 );
 job.start();
 
@@ -72,38 +96,11 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
  */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-
-
-function normalizePort(val) {
-  var port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-}
-
 /**
  * Event listener for HTTP server "error" event.
  */
@@ -113,18 +110,16 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind = typeof port === 'string' ? `Pipe ${port}` : `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      console.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      console.error(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
@@ -137,9 +132,11 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
+  debug(`Listening on ${bind}`);
 }
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);

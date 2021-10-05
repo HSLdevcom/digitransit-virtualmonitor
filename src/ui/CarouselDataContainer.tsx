@@ -21,6 +21,9 @@ interface IProps {
   preview?: boolean;
   error?: string;
   trainsWithTrack?: Array<ITrainData>;
+  staticContentHash?: string;
+  staticUrl?: string;
+  staticViewTitle?: string;
 }
 
 const CarouselDataContainer: FC<IProps & WithTranslation> = ({
@@ -30,6 +33,9 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   error,
   t,
   trainsWithTrack,
+  staticContentHash,
+  staticUrl,
+  staticViewTitle,
 }) => {
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
@@ -114,6 +120,9 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
         preview={preview}
         closedStopViews={closedStopViews}
         trainsWithTrack={trainsWithTrack}
+        staticContentHash={staticContentHash}
+        staticUrl={staticUrl}
+        staticViewTitle={staticViewTitle}
       />
     );
   }
@@ -129,6 +138,9 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       closedStopViews={closedStopViews}
       error={error}
       trainsWithTrack={trainsWithTrack}
+      staticContentHash={staticContentHash}
+      staticUrl={staticUrl}
+      staticViewTitle={staticViewTitle}
     />
   );
 };

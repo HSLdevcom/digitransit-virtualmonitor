@@ -1,7 +1,6 @@
 import React, { useEffect, FC, useState } from 'react';
 import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
 import { useQuery } from '@apollo/client';
-import Loading from './Loading';
 import StopCardListContainer from './StopCardListContainer';
 import { sortBy, uniqBy } from 'lodash';
 import { withTranslation, WithTranslation } from 'react-i18next';
@@ -13,6 +12,7 @@ interface IProps {
   stationIds: Array<string>;
   languages: Array<string>;
   loading: boolean;
+  user?: any;
 }
 
 const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
@@ -23,6 +23,7 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
   languages,
   t,
   loading,
+  user,
 }) => {
   const [cardList, setCardList] = useState(stopCardList);
   const stops = useQuery(GET_STOP, {
@@ -129,6 +130,7 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
 
   return (
     <StopCardListContainer
+      user={user}
       loading={stations.loading || stops.loading || loading}
       languages={languages}
       vertical={stopCardList[0].layout > 11}

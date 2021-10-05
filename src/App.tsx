@@ -4,7 +4,6 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import Breadcrumbs from './ui/Breadcrumbs';
-import IndexPage from './ui/IndexPage';
 import Banner from './ui/Banner';
 import ConfigurationDisplay from './ui/ConfigurationDisplay';
 import ConfigurationList from './ui/ConfigurationList';
@@ -12,7 +11,6 @@ import DisplayEditor from './ui/DisplayEditor';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import HelpPage from './ui/HelpPage';
 import QuickDisplay from './ui/QuickDisplay';
-import UserMonitors from './ui/UserMonitors';
 import CreateViewPage from './ui/CreateViewPage';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
 
@@ -134,6 +132,20 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               )}
             />
             <Route
+              path={'/createStaticView'}
+              component={({
+                match: {
+                  params: {},
+                },
+              }: RouteComponentProps<IMonitorConfig>) => (
+                <>
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs isLogged={user.loggedIn} />
+                  <CreateViewPage config={monitorConfig} user={user} />
+                </>
+              )}
+            />
+            <Route
               path={'/quickDisplay/:version?/:packedDisplay?'}
               component={QuickDisplay}
             />
@@ -149,7 +161,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
                   <Banner config={monitorConfig} />
-                  <Breadcrumbs />
+                  <Breadcrumbs isLogged={user.loggedIn} />
                   <HelpPage
                     urlParamUsageText={helpPageUrlParamText}
                     urlMultipleStopsText={helpPageurlMultipleStopsText}

@@ -7,12 +7,12 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
-import { gql, useQuery } from '@apollo/client';
 interface IConfigWithFeedIs extends IMonitorConfig {
   feedIds?: Array<string>;
 }
 interface IProps {
   config: IConfigWithFeedIs;
+  user?: any; // todo: refactor when we have proper user
 }
 
 const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
@@ -38,6 +38,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
   }, []);
 
   const hash: any = location.search.split('cont=');
+
   if (hash[1] && !stopCardList) {
     return null;
   }
@@ -45,6 +46,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
     return (
       <ContentContainer>
         <StopCardListContainer
+          user={props.user}
           languages={languages}
           defaultStopCardList={[defaultStopCard(props.t)]}
           feedIds={props.config.feedIds}
@@ -69,9 +71,11 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
   if (loading) {
     return <Loading white />;
   }
+
   return (
     <ContentContainer>
       <StopCardListDataContainer
+        user={props.user}
         languages={languages}
         stopIds={stopIds}
         stationIds={stationIds}

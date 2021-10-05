@@ -1,5 +1,4 @@
 import React from 'react';
-import { WithTranslation } from 'react-i18next';
 import Banner from './ui/Banner';
 import Breadcrumbs from './ui/Breadcrumbs';
 import IndexPage from './ui/IndexPage';
@@ -19,7 +18,7 @@ const LandingPage: React.FC<IProps> = props => {
   return (
     <>
       <Banner config={props.config} />
-      <Breadcrumbs />
+      <Breadcrumbs isLogged={user.loggedIn} />
       {logIn && <UserMonitors user={user} />}
       {!logIn && <IndexPage />}
     </>

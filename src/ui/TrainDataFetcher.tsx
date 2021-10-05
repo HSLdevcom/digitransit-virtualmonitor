@@ -119,12 +119,18 @@ interface IProps {
   monitor: IMonitor;
   stationIds: Array<string>;
   preview?: boolean;
+  staticContentHash?: string;
+  staticUrl?: string;
+  staticViewTitle?: string;
 }
 
 const TrainDataFetcher: FC<IProps> = ({
   monitor,
   stationIds,
   preview = false,
+  staticContentHash,
+  staticUrl,
+  staticViewTitle,
 }) => {
   const [getLineIds, lineIdsState] = useLazyQuery(GET_LINE_IDS);
   const [getTrainsWithTracks, trainsWithTrackState] = useLazyQuery(GET_TRACKS);
@@ -217,6 +223,9 @@ const TrainDataFetcher: FC<IProps> = ({
         sortBy(trainsWithTrack, 'timeInSecs'),
       )}
       preview={preview}
+      staticContentHash={staticContentHash}
+      staticUrl={staticUrl}
+      staticViewTitle={staticViewTitle}
     />
   );
 };

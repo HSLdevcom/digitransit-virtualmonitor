@@ -51,14 +51,27 @@ interface IProps {
   showMinutes: number;
 }
 
+const isCharacter = char => {
+  return char.toLowerCase() !== char.toUpperCase();
+};
+
 const processLine = inputText => {
-  const output = [];
   if (inputText) {
-    const splittedText = inputText.split(' ');
-    splittedText.forEach(item => {
-      output.push(item.replace(/\\'/g, '').split(/(\d+)/).filter(Boolean));
-    });
-    return output[0];
+    let index = 0;
+    let letterFound = false;
+    const splittedText = inputText.split('');
+    while (!letterFound && index < splittedText.length) {
+      if (isCharacter(splittedText[index])) {
+        letterFound = true;
+      } else {
+        index++;
+      }
+    }
+    if (letterFound && index > 0) {
+      return [inputText.substring(0, index), inputText.substring(index)];
+    } else {
+      return [inputText];
+    }
   }
   return [''];
 };

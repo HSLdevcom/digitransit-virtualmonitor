@@ -446,6 +446,9 @@ $preview-grid-divider: 2px;
   .grid-row.alert.static {
     font-size: calc((#{var(--height)} - 30vh) / 24) !important;
   }
+  .grid-row.alert.vertical {
+    font-size: calc((#{var(--height)} - 30vh) / 20) !important;
+  }
 }
 
 .grid-row {

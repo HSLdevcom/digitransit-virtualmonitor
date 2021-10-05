@@ -81,13 +81,22 @@ $preview-grid-divider: 2px;
 
     .grid-rows {
       height: calc(100% - 25px);
-
+      &.portrait {
+        .grid-row.alert {
+          &.static {
+            font-size: 14px !important;
+          }
+        }
+      }
       .grid-row {
         &.alert {
           font-size: 35px !important;
 
           &.vertical {
             font-size: 25px !important;
+          }
+          &.static {
+            font-size: 20px !important;
           }
 
           &.two-rows {
@@ -414,7 +423,11 @@ $preview-grid-divider: 2px;
     font-size: calc((#{var(--height)} - 30vh) / 14) !important;
   }
 }
-
+.grid.portrait {
+  .grid-row.alert.static {
+    font-size: calc((#{var(--height)} - 30vh) / 24) !important;
+  }
+}
 .grid-row {
   &.alert {
     flex: 1;
@@ -426,7 +439,12 @@ $preview-grid-divider: 2px;
     z-index: 1000;
     overflow: hidden;
     font-size: calc((#{var(--height)} - 30vh) / 9) !important;
-
+    &.static {
+      font-size: calc((#{var(--height)} - 30vh) / 12) !important;
+      .grid-cols.alert-row {
+        width: unset;
+      }
+    }
     &.vertical {
       font-size: calc((#{var(--height)} - 30vh) / 12) !important;
 
@@ -517,7 +535,6 @@ $preview-grid-divider: 2px;
 
   &.alert-row {
     display: block;
-    //position: absolute;
     padding: 0 $preview-grid-rows-margin;
     height: 100%;
     width: 100%;

@@ -10,6 +10,7 @@ import { getLayout } from '../util/getLayout';
 import cx from 'classnames';
 import uniqBy from 'lodash/uniqBy';
 import { stopTimeAbsoluteDepartureTime } from '../util/monitorUtils';
+import MonitorAlertRowStatic from './MonitorAlertRowStatic';
 
 interface IProps {
   views: Array<IView>;
@@ -107,7 +108,7 @@ const CarouselContainer: FC<IProps> = ({
   // for easy testing of different layouts
   const newView = {
     ...views[index],
-    //layout: 17,
+    layout: 12,
   };
 
   const { alertSpan } = getLayout(newView.layout);
@@ -127,7 +128,7 @@ const CarouselContainer: FC<IProps> = ({
       alertRowClass = '';
       break;
   }
-  const alertOrientation = 'vertical';
+  let alertOrientation = 'static';
   if (alerts.length > 0) {
     alertComponent = (
       <div
@@ -138,12 +139,15 @@ const CarouselContainer: FC<IProps> = ({
         )}
       >
         <div className="separator"></div>
-        <MonitorAlertRow
+        {(alertOrientation === 'static' ? <MonitorAlertRowStatic alerts={alerts} languages={languages} preview={preview}/> : (
+          <MonitorAlertRow
           alertOrientation={alertOrientation}
           alerts={alerts}
           languages={languages}
           preview={preview}
         />
+        ))}
+        
       </div>
     );
   }

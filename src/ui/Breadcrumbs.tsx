@@ -3,11 +3,6 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
 
-/*const routes = [
-  { path: '/', breadcrumb: i18n.t('breadCrumbsHome') },
-  { path: '/createView', breadcrumb: i18n.t('breadCrumbsCreate') },
-  { path: '/help', breadcrumb: i18n.t('breadCrumbsHelp') },
-];*/
 interface IProps {
   isLogged?: boolean;
 }
@@ -22,6 +17,7 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
 
   switch (path) {
     case 'createview':
+    case 'createstaticview':
       crumb = !isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify');
       break;
     case 'help':
@@ -30,13 +26,14 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
     default:
       crumb = isLogged ? t('breadCrumbsOwnMonitors') : null;
   }
+
   return (
     <div className="breadcrumbs-container">
       <div className="crumbs">
         <Link className="to-home" to={'/'}>
           {!isLogged ? t('breadCrumbsHome') : t('breadCrumbsSite')}
         </Link>
-        {isLogged && (
+        {isLogged && crumb !== t('breadCrumbsOwnMonitors') && (
           <>
             <Icon
               img={'arrow-down'}
@@ -59,9 +56,7 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
         />
         {crumb}
       </div>
-      <span className="desc">
-        {!isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify')}
-      </span>
+      <span className="desc">{crumb}</span>
     </div>
   );
 };

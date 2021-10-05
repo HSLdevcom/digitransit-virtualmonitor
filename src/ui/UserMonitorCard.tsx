@@ -1,29 +1,22 @@
-import { useLazyQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Redirect } from 'react-router-dom';
-import { GET_STOP } from '../queries/stopStationQueries';
-import { IColumn } from '../util/Interfaces';
 import { isInformationDisplay } from '../util/monitorUtils';
-import Button from './Button';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
 
-interface IProps {
-  view: any;
+interface IView {
+  name?: string;
+  languages: Array<string>;
+  cards?: any;
+  contenthash?: string;
+  url?: string;
 }
 
-/*
-columns:
-left: {inUse: true, title: "Vasen otsikko", stops: Array(1)}
-right: {inUse: false, title: "Oikea otsikko", stops: Array(0)}
-__proto__: Object
-duration: 5
-id: 1
-layout: 1
-title: "Näkymän nimi"
- */
+interface IProps {
+  view: IView;
+}
 
 const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
   const { cards, name, contenthash, languages, url } = props.view;
@@ -135,10 +128,10 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
         <span className="monitor-name">{name}</span>
         <div className="control-buttons">
           <button className="button" onClick={() => setOpen(true)}>
-            Esikatselu
+            {props.t('preview')}
           </button>
           <button className="edit-button" onClick={goToEdit}>
-            Muokkaa
+            {props.t('modify')}
           </button>
           <div className="delete-icon" onClick={onDelete}>
             <Icon img="delete" color={'#007AC9'} />

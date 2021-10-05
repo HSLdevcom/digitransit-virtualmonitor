@@ -7,7 +7,7 @@ interface IProps {
   preview: boolean;
 }
 
-const MonitorAlertRowStatic : FC<IProps> = ({alerts, languages}) => {
+const MonitorAlertRowStatic: FC<IProps> = ({ alerts, languages }) => {
   const [current, setCurrent] = useState(0);
   const len = alerts.length * languages.length;
   useEffect(() => {
@@ -17,15 +17,16 @@ const MonitorAlertRowStatic : FC<IProps> = ({alerts, languages}) => {
     }, 5000);
     return () => clearTimeout(id);
   }, [current]);
-  const alert = alerts[current % alerts.length].alertDescriptionTextTranslations.find(
+  const alert = alerts[
+    current % alerts.length
+  ].alertDescriptionTextTranslations.find(
     a => a.language === languages[current % languages.length],
-  ).text
+  ).text;
   return (
     <div className={cx('grid-row', 'alert static')}>
-      <div className={cx('grid-cols', 'alert-row')}>
-       {alert}
-        </div></div>
-  )
-}
+      <div className={cx('grid-cols', 'alert-row')}>{alert}</div>
+    </div>
+  );
+};
 
 export default MonitorAlertRowStatic;

@@ -2,7 +2,11 @@ import { default as config } from '../monitorConfig.js';
 
 export const getConfig = () => {
   const domain = window.location.hostname;
-  let monitorConfig: { feedIds?: Array<string>; uri: string };
+  let monitorConfig: {
+    feedIds?: Array<string>;
+    uri: string;
+    alertOrientation: string;
+  };
 
   if (domain.indexOf('tremonitori') >= 0) {
     // domain url for Tampere Virtual monitor

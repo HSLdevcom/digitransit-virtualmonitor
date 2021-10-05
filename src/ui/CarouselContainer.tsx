@@ -108,7 +108,7 @@ const CarouselContainer: FC<IProps> = ({
   // for easy testing of different layouts
   const newView = {
     ...views[index],
-    layout: 12,
+    //layout: 12,
   };
 
   const { alertSpan } = getLayout(newView.layout);
@@ -128,7 +128,7 @@ const CarouselContainer: FC<IProps> = ({
       alertRowClass = '';
       break;
   }
-  let alertOrientation = 'static';
+  const alertOrientation = config.alertOrientation;
   if (alerts.length > 0) {
     alertComponent = (
       <div
@@ -139,15 +139,20 @@ const CarouselContainer: FC<IProps> = ({
         )}
       >
         <div className="separator"></div>
-        {(alertOrientation === 'static' ? <MonitorAlertRowStatic alerts={alerts} languages={languages} preview={preview}/> : (
+        {alertOrientation === 'static' ? (
+          <MonitorAlertRowStatic
+            alerts={alerts}
+            languages={languages}
+            preview={preview}
+          />
+        ) : (
           <MonitorAlertRow
-          alertOrientation={alertOrientation}
-          alerts={alerts}
-          languages={languages}
-          preview={preview}
-        />
-        ))}
-        
+            alertOrientation={alertOrientation}
+            alerts={alerts}
+            languages={languages}
+            preview={preview}
+          />
+        )}
       </div>
     );
   }

@@ -11,6 +11,7 @@ export default {
     urlParamUsageText:
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/HSL:1230109/10 Näyttää 10 riviä pysäkiltä Kumpulan kampus',
     showMinutes: 10,
+    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
   linkki: {
     feedIds: ['LINKKI'],
@@ -23,6 +24,7 @@ export default {
     urlParamUsageText:
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/LINKKI:207477/10 näyttää 10 riviä pysäkiltä Urhonkatu 1.',
     showMinutes: 10,
+    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
   matka: {
     feedIds: [
@@ -55,6 +57,7 @@ export default {
     urlParamUsageText:
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/MATKA:7_201860/10 Näyttää 10 riviä pysäkiltä Umpikuja E',
     showMinutes: 15,
+    alertOrientation: 'vertical', // Possible values are 'vertical', 'horizontal' and 'static'
   },
   tampere: {
     feedIds: ['tampere'],
@@ -67,5 +70,6 @@ export default {
     urlParamUsageText:
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/tampere:0010/10 näyttää 10 riviä pysäkiltä Keskustori F.',
     showMinutes: 20,
+    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
 };

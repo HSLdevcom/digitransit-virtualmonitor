@@ -41,6 +41,7 @@ $preview-grid-divider: 2px;
     height: 100px;
   }
 }
+
 .demo-button {
   position: absolute;
   background-color: transparent;
@@ -368,6 +369,12 @@ $preview-grid-divider: 2px;
         .separator {
           border-top: calc(0.3 * 1vh) solid white;
         }
+
+        &.vertical {
+          .grid-cols.alert-row {
+            width: unset;
+          }
+        }
       }
     }
 
@@ -465,11 +472,12 @@ $preview-grid-divider: 2px;
       font-size: calc((#{var(--height)} - 30vh) / 12) !important;
 
       .alert-text {
+        align-items: flex-start;
+
         .alert-separator {
           margin-top: 10px;
-          width: 110%;
+          width: 100%;
           display: flex;
-          text-align: left;
           min-height: 2px;
           background-color: white;
         }

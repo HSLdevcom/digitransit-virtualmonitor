@@ -46,7 +46,7 @@ const MonitorAlertRow: FC<IProps> = ({
     updateAnimation();
     const to = setTimeout(() => setUpdate(false), 100);
     return () => clearTimeout(to);
-  }, [alertOrientation])
+  }, [alertOrientation]);
   // ---------------------------------
   useEffect(() => {
     updateAnimation();

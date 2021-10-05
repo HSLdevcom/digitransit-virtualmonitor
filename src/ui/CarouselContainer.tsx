@@ -142,12 +142,13 @@ const CarouselContainer: FC<IProps> = ({
           alertRowClass,
         )}
       >
-      <span className="demo-button" onClick={() => {
-        const next = (demoOrientation + 1) % 3;
-        setDemoOrientation(next);
-      }}>
-
-      </span>
+        <span
+          className="demo-button"
+          onClick={() => {
+            const next = (demoOrientation + 1) % 3;
+            setDemoOrientation(next);
+          }}
+        ></span>
         <div className="separator"></div>
         {alertOrientation === 'static' ? (
           <MonitorAlertRowStatic

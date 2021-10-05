@@ -25,7 +25,7 @@ const getGTFSId = id => {
 
 interface IProps {
   readonly orientation: string;
-  noStopsSelected: () => boolean;
+  readonly noStopsSelected: boolean;
   readonly feedIds: Array<string>;
   readonly cardsCount: number;
   readonly cardInfo: ICardInfo;
@@ -309,7 +309,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         </div>
         <div className="search-stop-with-layout-and-time">
           <div className="search-stop">
-            {noStopsSelected() && (
+            {noStopsSelected && (
               <div className="add-stop-alert">{t('add-at-least-one-stop')}</div>
             )}
             <DTAutosuggest

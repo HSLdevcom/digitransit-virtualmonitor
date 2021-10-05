@@ -3,48 +3,60 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
 
-/*const routes = [
-  { path: '/', breadcrumb: i18n.t('breadCrumbsHome') },
-  { path: '/createView', breadcrumb: i18n.t('breadCrumbsCreate') },
-  { path: '/help', breadcrumb: i18n.t('breadCrumbsHelp') },
-];*/
-
-const Breadcrumbs: FC<WithTranslation> = props => {
+interface IProps {
+  isLogged?: boolean;
+}
+const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
   const parser = document.createElement('a');
   parser.href = window.location.href;
   const arr = parser.pathname.split('/');
-  const path = arr[1] ? arr[1] : null;
+  const path = arr[1] ? arr[1].toLowerCase() : null;
+  const isModify =
+    arr.length > 2 || window.location.href.indexOf('cont=') !== -1;
   let crumb;
+
   switch (path) {
-    case 'createView':
-      crumb = props.t('breadCrumbsCreate');
+    case 'createview':
+    case 'createstaticview':
+      crumb = !isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify');
       break;
     case 'help':
-      crumb = props.t('breadCrumbsHelp');
-      break;
-    case 'user':
-      crumb = 'Omat pysäkkinäytöt';
+      crumb = t('breadCrumbsHelp');
       break;
     default:
-      crumb = null;
+      crumb = isLogged ? t('breadCrumbsOwnMonitors') : null;
   }
+
   return (
     <div className="breadcrumbs-container">
       <div className="crumbs">
         <Link className="to-home" to={'/'}>
-          {' '}
-          {props.t('breadCrumbsHome')}{' '}
-        </Link>{' '}
+          {!isLogged ? t('breadCrumbsHome') : t('breadCrumbsSite')}
+        </Link>
+        {isLogged && crumb !== t('breadCrumbsOwnMonitors') && (
+          <>
+            <Icon
+              img={'arrow-down'}
+              width={14}
+              height={14}
+              rotate={'-90'}
+              color={'#007ac9'}
+            />
+            <Link className="to-home" to={'/?pocLogin'}>
+              {t('breadCrumbsOwnMonitors')}
+            </Link>
+          </>
+        )}
         <Icon
           img={'arrow-down'}
           width={14}
           height={14}
           rotate={'-90'}
           color={'#007ac9'}
-        />{' '}
+        />
         {crumb}
       </div>
-      <span className="desc"> {props.t('createStopView')}</span>
+      <span className="desc">{crumb}</span>
     </div>
   );
 };

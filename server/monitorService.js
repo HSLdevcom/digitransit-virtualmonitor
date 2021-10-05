@@ -1,17 +1,19 @@
 import cosmosClient from '@azure/cosmos';
-// eslint-disable-next-line import/extensions
+import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import config from './config.js';
 
 const { CosmosClient } = cosmosClient;
 
-const {
- endpoint, key, databaseId, containerId 
-} = config;
-
+const { endpoint, key, databaseId, containerId } = config;
 const client = new CosmosClient({ endpoint, key });
 
 const database = client.database(databaseId);
 const container = database.container(containerId);
+
+function uuidValidateV5(uuid) {
+  return uuidValidate(uuid) && uuidVersion(uuid) === 5;
+}
+
 async function getMonitor(hash) {
   try {
     const querySpec = {
@@ -35,35 +37,28 @@ async function getMonitor(hash) {
 }
 
 const monitorService = {
-  getAll: async function getAll(req, res) {
-    try {
-      // <QueryItems>
-      console.log('Querying container: monitors');
-
-      // query to return all items
-      const querySpec = {
-        query: 'SELECT * from c',
-      };
-      // read all items in the Items container
-      const { resources: items } = await container.items
-        .query(querySpec)
-        .fetchAll();
-
-      items.forEach((item) => {
-        console.log(`${item.contenthash}`);
-      });
-      res.json(items);
-    } catch (e) {
-      console.log(e);
-      res.status(500).send(e);
-    }
-  },
   get: async function get(req, res) {
     try {
-      // <QueryItems>
-      console.log('Querying a monitor');
-      // query to return all items
-      const items = await getMonitor(req.params.id);
+      let contentHash = req.params.id;
+      const isValidUuid = uuidValidateV5(req.params.id);
+      if (isValidUuid) {
+        const container = database.container('staticMonitors');
+        const url = req.params.id;
+        const querySpec = {
+          query: 'SELECT c.monitorContenthash from c WHERE c.url = @url',
+          parameters: [
+            {
+              name: '@url',
+              value: url,
+            },
+          ],
+        };
+        const { resources: items } = await container.items
+          .query(querySpec)
+          .fetchAll();
+        contentHash = items[0].monitorContenthash;
+      }
+      const items = await getMonitor(contentHash);
       if (!items.length) {
         res.json({});
       } else {
@@ -74,58 +69,12 @@ const monitorService = {
       res.status(500).send(e);
     }
   },
-  getStaticMonitor: async function get(req, res) {
-    try {
-      let contentHash;
-      const cont = database.container('staticMonitors');
-      // <QueryItems>
-      console.log('Querying a static monitor');
-      const url = req.params.id;
-      // query to return all items
-      const querySpec = {
-        query: 'SELECT c.monitorContenthash from c WHERE c.url = @url',
-        parameters: [
-          {
-            name: '@url',
-            value: url,
-          },
-        ],
-      };
-      // read all items in the Items container
-      const { resources: items } = await cont.items.query(querySpec).fetchAll();
-      contentHash = items[0].monitorContenthash;
-      if (!items) {
-        res.json({});
-      } else {
-        const items = await getMonitor(contentHash);
-        if (!items.length) {
-          res.json({});
-        } else {
-          res.json(items[0]);
-        }
-      }
-    } catch (e) {
-      console.log(e);
-      res.status(500).send(e);
-    }
-  },
-
-  getMonitorsForUser: async function get(req, res) {
+  getAllMonitorsForUser: async function getAll(req, res) {
     try {
       const cont = database.container('staticMonitors');
-      // <QueryItems>
-      console.log('Querying a static monitor');
-      const urls = req.params.id.split(',');
       // query to return all items
       const querySpec = {
-        query:
-          'SELECT c.name, c.monitorContenthash from c WHERE ARRAY_CONTAINS(@urls, c.url)',
-        parameters: [
-          {
-            name: '@urls',
-            value: urls,
-          },
-        ],
+        query: 'SELECT * from c',
       };
       // read all items in the Items container
       const { resources: items } = await cont.items.query(querySpec).fetchAll();
@@ -154,12 +103,70 @@ const monitorService = {
         if (!userMonitors.length) {
           res.json({});
         } else {
-
           userMonitors.forEach(mon => {
             const monitor = monitors.find(
               m => m.monitorContenthash === mon.contenthash,
             );
             mon.name = monitor.name;
+            mon.url = monitor.url;
+          });
+          res.json(userMonitors);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+      res.status(500).send(e);
+    }
+  },
+  getMonitorsForUser: async function get(req, res) {
+    try {
+      const cont = database.container('staticMonitors');
+      const urls = req.params.id.split(',');
+      // query to return all items
+      const querySpec = {
+        query:
+          'SELECT c.name, c.monitorContenthash, c.url from c WHERE ARRAY_CONTAINS(@urls, c.url)',
+        parameters: [
+          {
+            name: '@urls',
+            value: urls,
+          },
+        ],
+      };
+      // read all items in the Items container
+      const { resources: items } = await cont.items.query(querySpec).fetchAll();
+      const monitors = [];
+      const contenthashes = [];
+      items.forEach(item => {
+        monitors.push(item);
+        contenthashes.push(item.monitorContenthash);
+      });
+      if (!items.length) {
+        res.json({});
+      } else {
+        const queryS = {
+          query:
+            'SELECT * from c WHERE ARRAY_CONTAINS (@hashes, c.contenthash)',
+          parameters: [
+            {
+              name: '@hashes',
+              value: contenthashes,
+            },
+          ],
+        };
+        const { resources: items } = await container.items
+          .query(queryS)
+          .fetchAll();
+        if (!items.length) {
+          res.json({});
+        } else {
+          const userMonitors = items;
+          userMonitors.forEach(mon => {
+            const monitor = monitors.find(
+              m => m.monitorContenthash === mon.contenthash,
+            );
+            mon.name = monitor.name;
+            mon.url = monitor.url;
           });
           res.json(userMonitors);
         }
@@ -171,15 +178,60 @@ const monitorService = {
   },
   create: async function create(req, res) {
     try {
-      // <QueryItems>
-      console.log('Adding a monitor');
-
-      console.log(req.body);
       await Promise.resolve(container.items.create(req.body));
-      res.status(200).send('OK');
+      res.send('OK');
+    } catch (e) {
+      if (e.code !== 409) {
+        console.log(e);
+      }
+      res.send(e);
+    }
+  },
+  createStatic: async function createStaticMonitor(req, res) {
+    try {
+      const container = database.container('staticMonitors');
+      await Promise.resolve(container.items.create(req.body));
+      res.send('OK');
+    } catch (e) {
+      if (e.code !== 409) {
+        console.log(e);
+      }
+      res.send(e);
+    }
+  },
+  updateStatic: async function updateStaticMonitor(req, res) {
+    try {
+      const container = database.container('staticMonitors');
+      const itemToUpdate = await container
+        .item(req.body.id, req.body.url)
+        .read();
+      if (!itemToUpdate) {
+        res.json({});
+      } else {
+        const newData = {
+          ...itemToUpdate.resource,
+          id: req.body.hash,
+          name: req.body.name,
+          monitorContenthash: req.body.hash,
+        };
+        const { resource: updatedItem } = await container
+          .item(req.body.id, req.body.url)
+          .replace(newData);
+        res.json(updatedItem);
+      }
     } catch (e) {
       console.log(e);
-      res.status(500).send(e);
+      res.send(e);
+    }
+  },
+  deleteStatic: async function deleteStaticMonitor(req, res) {
+    try {
+      const container = database.container('staticMonitors');
+      const { body } = await container.item(req.body.id, req.body.url).delete();
+      res.status(200).json(body);
+    } catch (e) {
+      console.log(e);
+      res.send(e);
     }
   },
 };

@@ -1,0 +1,46 @@
+.user-view-title {
+  display: flex;
+  flex-direction: column;
+  background: #f2f5f7;
+  color: #666;
+  height: 52px;
+  width: 780px;
+  position: relative;
+  left: 60px;
+  top: 28px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 18px;
+}
+
+.user-view-title-input-container {
+  display: flex;
+
+  .user-view-title-input {
+    font-size: 26px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 31px;
+    letter-spacing: -0.3px;
+    text-align: left;
+    width: 150px;
+    height: 31px;
+    border: none;
+    background: #f2f5f7;
+
+    &:focus {
+      outline: auto #007ac9;
+    }
+  }
+
+  .user-view-title-input-button {
+    position: relative;
+    top: 5px;
+  }
+
+  .delete-icon {
+    position: absolute;
+    top: 5px;
+    left: 750px;
+    cursor: pointer;
+  }
+}

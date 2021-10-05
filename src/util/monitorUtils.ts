@@ -3,12 +3,13 @@ import uniqBy from 'lodash/uniqBy';
 import { IClosedStop } from './Interfaces';
 import xmlParser from 'fast-xml-parser';
 import { trainStationMap } from '../util/trainStations';
+import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 
 const WEATHER_URL =
   'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
 
 const delay = ms =>
-  new Promise(resolve => {
+  new Promise<void>(resolve => {
     setTimeout(() => {
       resolve();
     }, ms);
@@ -338,7 +339,7 @@ export const getStationIds = monitor => {
         } else if (stop.mode === 'RAIL' && stop.gtfsId.startsWith('MATKA:4_')) {
           const hslGtfsId = trainStationMap?.find(
             i => i.shortCode === stop.gtfsId.substring(8),
-          ).gtfsId;
+          )?.gtfsId;
           if (hslGtfsId) {
             ids.push(hslGtfsId);
           }
@@ -361,4 +362,8 @@ export const isPlatformOrTrackVisible = monitor => {
     });
   });
   return showPlatformOrTrack;
+};
+
+export const uuidValidateV5 = uuid => {
+  return uuidValidate(uuid) && uuidVersion(uuid) === 5;
 };

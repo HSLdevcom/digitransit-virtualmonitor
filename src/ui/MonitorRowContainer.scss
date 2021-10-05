@@ -41,6 +41,14 @@ $preview-grid-divider: 2px;
     height: 100px;
   }
 }
+.demo-button {
+  position: absolute;
+  background-color: transparent;
+  z-index: 10000000;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+}
 
 .main-content-container.preview {
   .grid-row.alert {

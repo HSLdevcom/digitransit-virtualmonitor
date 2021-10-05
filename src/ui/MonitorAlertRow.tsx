@@ -41,6 +41,13 @@ const MonitorAlertRow: FC<IProps> = ({
       : setSpeed((width / (windowHeight / 6)) * 5);
     setUpdate(true);
   };
+  // ONLY NEEDED FOR DEMO TO WORK ---
+  useEffect(() => {
+    updateAnimation();
+    const to = setTimeout(() => setUpdate(false), 100);
+    return () => clearTimeout(to);
+  }, [alertOrientation])
+  // ---------------------------------
   useEffect(() => {
     updateAnimation();
     const to = setTimeout(() => setUpdate(false), 100);

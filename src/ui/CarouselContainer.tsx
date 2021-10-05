@@ -77,6 +77,8 @@ const CarouselContainer: FC<IProps> = ({
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
 
+  const [demoOrientation, setDemoOrientation] = useState(0);
+
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
@@ -128,7 +130,9 @@ const CarouselContainer: FC<IProps> = ({
       alertRowClass = '';
       break;
   }
-  const alertOrientation = config.alertOrientation;
+  //const alertOrientation = config.alertOrientation;
+  const orientations = ['vertical', 'horizontal', 'static'];
+  const alertOrientation = orientations[demoOrientation];
   if (alerts.length > 0) {
     alertComponent = (
       <div
@@ -138,6 +142,12 @@ const CarouselContainer: FC<IProps> = ({
           alertRowClass,
         )}
       >
+      <span className="demo-button" onClick={() => {
+        const next = (demoOrientation + 1) % 3;
+        setDemoOrientation(next);
+      }}>
+
+      </span>
         <div className="separator"></div>
         {alertOrientation === 'static' ? (
           <MonitorAlertRowStatic

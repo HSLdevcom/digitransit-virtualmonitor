@@ -57,7 +57,7 @@ export default {
     urlParamUsageText:
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/MATKA:7_201860/10 Näyttää 10 riviä pysäkiltä Umpikuja E',
     showMinutes: 15,
-    alertOrientation: 'vertical', // Possible values are 'vertical', 'horizontal' and 'static'
+    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
   tampere: {
     feedIds: ['tampere'],

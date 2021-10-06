@@ -17,7 +17,6 @@ function IndexPage(props: WithTranslation) {
           <h1 className="title">{title}</h1>
           <div className={'welcome'}>
             <p className={'welcome-text'}>
-              {' '}
               {t1} <br />
               <br /> {t2} <br />
               <br /> {t3}

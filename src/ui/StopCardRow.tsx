@@ -12,6 +12,7 @@ import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import { ICardInfo } from './CardInfo';
 import cx from 'classnames';
+import { getPrimaryColor } from '../util/getConfig';
 
 const getGTFSId = id => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -228,7 +229,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 )}
                 onClick={() => onCardDelete(cardInfo.id)}
               >
-                <Icon img="delete" color={'#007AC9'} />
+                <Icon img="delete" color={getPrimaryColor()} />
               </div>
             )}
             {cardInfo.possibleToMove && (
@@ -246,7 +247,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                   >
                     <Icon
                       img="move-both-down"
-                      color={'#007AC9'}
+                      color={getPrimaryColor()}
                       width={30}
                       height={40}
                     />
@@ -260,7 +261,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                   >
                     <Icon
                       img="move-both-up"
-                      color={'#007AC9'}
+                      color={getPrimaryColor()}
                       width={30}
                       height={40}
                     />
@@ -275,7 +276,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                     >
                       <Icon
                         img="move-up"
-                        color={'#007AC9'}
+                        color={getPrimaryColor()}
                         width={16}
                         height={16}
                       />
@@ -291,7 +292,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                     >
                       <Icon
                         img="move-down"
-                        color={'#007AC9'}
+                        color={getPrimaryColor()}
                         width={16}
                         height={16}
                       />

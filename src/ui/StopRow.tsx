@@ -10,6 +10,8 @@ import { getLayout } from '../util/getLayout';
 import { sortBy, uniqWith, isEqual } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
+import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
+
 interface IStopInfoPlus extends IStopInfo {
   cardId?: number;
   settings?: ISettings;
@@ -69,14 +71,20 @@ const StopRow: FC<IProps & WithTranslation> = ({
   const isDefaultSettings =
     isEqual(defaultSettings, stop.settings) || !stop.settings;
 
+  const iconStyle = getIconStyleWithColor(getStopIcon(stop));
   return (
     <div className="stop-row-container">
       <div className="stop-row-stop icon">
         <Icon
-          img={getStopIcon(stop)}
-          color={'#007ac9'}
+          img={
+            !iconStyle.color
+              ? getStopIcon(stop)
+              : getStopIcon(stop) + iconStyle.postfix
+          }
+          color={!iconStyle.color ? getPrimaryColor() : iconStyle.color}
           height={32}
           width={32}
+          borderRadius={!iconStyle.color ? null : iconStyle.borderRadius}
         />
       </div>
       <div className="stop-row-main">
@@ -84,7 +92,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
           {stop.name}
           <div className={cx('settings', isEastWest && 'east-west')}>
             <span onClick={handleClick}>
-              <Icon img="settings" />
+              <Icon img="settings" color={getPrimaryColor()} />
             </span>
           </div>
           <div className={cx('changed-settings', isEastWest && 'east-west')}>
@@ -109,7 +117,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
         className="stop-row-delete icon"
         onClick={() => onStopDelete(stop.cardId, side, stop.gtfsId)}
       >
-        <Icon img="delete" color={'#007AC9'} />
+        <Icon img="delete" color={getPrimaryColor()} />
       </div>
       {getLayout(stop.layout).isMultiDisplay && (
         <div
@@ -118,7 +126,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
         >
           <Icon
             img={side === 'left' ? 'move-both-down' : 'move-both-up'}
-            color={'#007AC9'}
+            color={getPrimaryColor()}
             width={30}
             height={40}
           />

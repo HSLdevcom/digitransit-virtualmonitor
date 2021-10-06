@@ -7,7 +7,7 @@
   .crumbs {
     .to-home {
       text-decoration: none;
-      color: #007ac9;
+      color: $primary-color;
     }
 
     display: flex;
@@ -22,7 +22,7 @@
   }
 
   .desc {
-    font-family: 'Roboto', Arial, Georgia, serif;
+    font-family: $font-family;
     padding-top: 53px;
     font-size: 36px;
     font-style: normal;

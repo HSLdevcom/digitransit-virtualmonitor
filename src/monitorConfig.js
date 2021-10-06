@@ -1,6 +1,19 @@
 export default {
   hsl: {
+    colors: {
+      primary: '#007ac9',
+      hover: '#0062a1',
+    },
     feedIds: ['HSL'],
+    modeIcons: {
+      colors: {
+        'mode-bus': '#007ac9',
+        'mode-rail': '#8c4799',
+        'mode-tram': '#008151',
+        'mode-ferry': '#007A97',
+        'mode-subway': '#CA4000',
+      },
+    },
     uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
     urlMultipleStopsText:
       'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/HSL:1040279,HSL:1230109/10. Voit määrittää usean pysäkin näytölle otsikon url-parametrilla title, esimerkiksi /stop/HSL:1040279,HSL:1230109/10?title=Omat pysäkit',
@@ -14,7 +27,16 @@ export default {
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
   linkki: {
+    colors: {
+      primary: '#7DC02D',
+    },
     feedIds: ['LINKKI'],
+    modeIcons: {
+      colors: {
+        'mode-bus': '#7DC02D',
+      },
+      postfix: '-waltti',
+    },
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     urlMultipleStopsText:
       'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/LINKKI:207477,LINKKI:207818,LINKKI:207478/10. Voit määrittää usean pysäkin näytölle otsikon url-parametrilla title, esimerkiksi /stop/LINKKI:207477,LINKKI:207818,LINKKI:207478/10?title=Omat pysäkit',
@@ -27,6 +49,9 @@ export default {
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
   matka: {
+    colors: {
+      primary: '#026273',
+    },
     feedIds: [
       'MATKA',
       'HSL',
@@ -47,6 +72,16 @@ export default {
       'MatkahuoltoVantaa',
       'MatkahuoltoVarsinais',
     ],
+    modeIcons: {
+      colors: {
+        'mode-airplane': '#0046AD',
+        'mode-bus': '#007ac9',
+        'mode-tram': '#5E7921',
+        'mode-subway': '#CA4000',
+        'mode-rail': '#8E5EA0',
+        'mode-ferry': '#247C7B',
+      },
+    },
     uri: 'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql',
     urlMultipleStopsText:
       'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/MATKA:7_201860,MATKA:7_201848/10. Voit määrittää usean pysäkin näytölle otsikon url-parametrilla title, esimerkiksi /stop/MATKA:7_201860,MATKA:7_201848/10?title=Omat pysäkit',
@@ -60,7 +95,18 @@ export default {
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
   tampere: {
+    colors: {
+      primary: '#1c57cf',
+    },
     feedIds: ['tampere'],
+    modeIcons: {
+      colors: {
+        'mode-bus': '#1A4A8F',
+        'mode-rail': '#0E7F3C',
+        'mode-tram': '#DA2128',
+      },
+      postfix: '-waltti',
+    },
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     urlMultipleStopsText:
       'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/tampere:0010,tampere:3729,tampere:3730/10. Voit määrittää usean pysäkin näytölle otsikon url-parametrilla title, esimerkiksi /stop/tampere:0010,tampere:3729,tampere:3730/10?title=Omat pysäkit',

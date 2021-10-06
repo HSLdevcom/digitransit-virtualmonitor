@@ -2,6 +2,7 @@ import cx from 'classnames';
 import React, { useState } from 'react';
 import Icon from './Icon';
 import { focusToInput, onClick } from './InputUtils';
+import { getPrimaryColor } from '../util/getConfig';
 
 function StopListTitleInput(props: {
   lang: string;
@@ -157,7 +158,7 @@ function StopListTitleInput(props: {
               focusToInput(`stop-list-title-input-${props.side}-${props.lang}`)
             }
           >
-            <Icon img="edit" color={'#007ac9'} width={20} height={20} />
+            <Icon img="edit" color={getPrimaryColor()} width={20} height={20} />
           </div>
         )}
       </div>

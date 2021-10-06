@@ -4,6 +4,7 @@ import cx from 'classnames';
 import Select from 'react-select';
 import Icon from './Icon';
 import { v4 as uuid } from 'uuid';
+import { getPrimaryColor } from '../util/getConfig';
 
 interface IOption {
   value: string;
@@ -43,7 +44,7 @@ const Dropdown: FC<IProps & WithTranslation> = ({
   const ddIndicator = (
     <Icon
       img="arrow-down"
-      color={indicatorColor ? indicatorColor : '#007ac9'}
+      color={indicatorColor ? indicatorColor : getPrimaryColor()}
     />
   );
 

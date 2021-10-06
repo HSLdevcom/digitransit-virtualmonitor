@@ -8,8 +8,7 @@ interface IProps {
 const Button: FC<IProps> = ({ text, onClick }) => {
   return (
     <button onClick={onClick} className={'btn'}>
-      {' '}
-      {text}{' '}
+      {text}
     </button>
   );
 };

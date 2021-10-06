@@ -17,7 +17,7 @@ const LandingPage: React.FC<IProps> = props => {
   const logIn = user.loggedIn && user.urls.length > 0;
   return (
     <>
-      <Banner config={props.config} />
+      <Banner config={props.config} user={user} />
       <Breadcrumbs isLogged={user.loggedIn} />
       {logIn && <UserMonitors user={user} />}
       {!logIn && <IndexPage />}

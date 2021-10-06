@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
+import { getPrimaryColor } from '../util/getConfig';
 
 interface IProps {
   isLogged?: boolean;
@@ -52,7 +53,7 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
           width={14}
           height={14}
           rotate={'-90'}
-          color={'#007ac9'}
+          color={getPrimaryColor()}
         />
         {crumb}
       </div>

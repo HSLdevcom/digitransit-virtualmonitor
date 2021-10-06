@@ -201,7 +201,7 @@ const StopTimesViewEditor = ({ configuration, view, t }: IViewEditorProps) => (
                   {stops.map(stop => (
                     <li key={stop.gtfsId}>
                       <span>
-                        {stop.name} - {stop.gtfsId}{' '}
+                        {stop.name} - {stop.gtfsId}
                         {stop.code ? `(${stop.code})` : ''}
                       </span>
                       <button

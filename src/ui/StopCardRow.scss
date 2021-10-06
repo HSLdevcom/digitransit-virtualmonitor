@@ -1,5 +1,5 @@
 .stopcard-row-container {
-  font-family: 'Roboto', Arial, Georgia, serif;
+  font-family: $font-family;
   display: flex;
   flex-direction: column;
   background-color: white;
@@ -157,7 +157,7 @@
             border: none;
 
             &:focus {
-              outline: auto #007ac9;
+              outline: auto $primary-color;
             }
           }
 

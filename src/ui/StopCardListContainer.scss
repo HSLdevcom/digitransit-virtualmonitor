@@ -45,11 +45,11 @@
     font-size: 16px;
     line-height: 19px;
     letter-spacing: -0.02em;
-    color: #007ac9;
+    color: $primary-color;
   }
 
   &:last-child {
-    background: #007ac9;
+    background: $primary-color;
     margin-left: 5px;
 
     span {

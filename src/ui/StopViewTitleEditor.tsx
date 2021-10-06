@@ -6,6 +6,8 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { focusToInput, onClick } from './InputUtils';
 import { getLayout } from '../util/getLayout';
 import { isKeyboardSelectionEvent } from '../util/browser';
+import { getPrimaryColor } from '../util/getConfig';
+
 interface IProps {
   id: number;
   layout: number;
@@ -86,7 +88,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
             role="button"
             onClick={() => focusToInput(`stop-title-input${id}-${lang}`)}
           >
-            <Icon img="edit" color={'#007ac9'} />
+            <Icon img="edit" color={getPrimaryColor()} />
           </div>
         )}
       </div>

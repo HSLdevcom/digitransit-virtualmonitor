@@ -5,9 +5,11 @@ import { IMonitorConfig } from '../App';
 import Icon from './Icon';
 import Logo from './logo/Logo';
 import { slide as Menu } from 'react-burger-menu';
+import { getPrimaryColor } from '../util/getConfig';
 
 interface Props {
   config?: IMonitorConfig;
+  user?: any; // todo: refactor when we have proper user
 }
 const Banner: React.FC<Props & WithTranslation> = (
   props: Props & WithTranslation,
@@ -21,40 +23,46 @@ const Banner: React.FC<Props & WithTranslation> = (
       <Menu
         right
         width="400px"
-        customCrossIcon={<Icon img="close" color="#1c57cf" width={25} />}
+        customCrossIcon={
+          <Icon img="close" color={getPrimaryColor()} width={25} />
+        }
       >
         <div className="lang-section">
           <span
             className="lang-select"
             onClick={() => changeLanguage(props.i18n, 'fi')}
           >
-            {' '}
-            FI{' '}
+            FI
           </span>
           <span
             className="lang-select"
             onClick={() => changeLanguage(props.i18n, 'sv')}
           >
-            {' '}
-            SV{' '}
+            SV
           </span>
           <span
             className="lang-select"
             onClick={() => changeLanguage(props.i18n, 'en')}
           >
-            {' '}
-            EN{' '}
+            EN
           </span>
         </div>
         <div className="link-section">
           <Link className="link" to={'/'}>
-            {'Etusivu'}
+            {props.t('breadCrumbsHome')}
           </Link>
-          <Link className="link" to={'/createView'}>
-            {props.t('quickDisplayCreate')}
+          <Link
+            className="link"
+            to={
+              props.user && props.user.loggedIn
+                ? '/createStaticView'
+                : '/createView'
+            }
+          >
+            {props.t('createViewTitle')}
           </Link>
           <Link className="link" to={'/help'}>
-            {'Apua'}
+            {props.t('breadCrumbsHelp')}
           </Link>
         </div>
       </Menu>

@@ -9,6 +9,8 @@ import { IStopInfo } from './StopInfoRetriever';
 import { v4 as uuid } from 'uuid';
 import Modal from 'react-modal';
 import { capitalize } from '../util/monitorUtils';
+import { getIconStyleWithColor } from '../util/getConfig';
+
 Modal.setAppElement('#root');
 
 interface IRoute {
@@ -204,7 +206,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               name={'showStopNumber'}
               width={30}
               height={30}
-            />{' '}
+            />
             <span className="setting-text">
               {props.t('stopCodeOrPlatformNumber')}
             </span>
@@ -216,7 +218,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               name={'showEndOfLine'}
               width={30}
               height={30}
-            />{' '}
+            />
             <span className={'setting-text'}>{props.t('endOfLine')}</span>
           </div>
           <div className="setting">
@@ -226,7 +228,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               name={'showVia'}
               width={30}
               height={30}
-            />{' '}
+            />
             <span className={'setting-text'}>{props.t('showVia')}</span>
           </div>
         </div>
@@ -294,6 +296,8 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             const keyForInput = 3 * index + 1;
 
             const patternArray = pattern.split(':');
+
+            const iconStyle = getIconStyleWithColor(vehicleMode);
             return (
               <div key={`r-${index}`} className="row">
                 <Checkbox
@@ -305,7 +309,11 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                   height={30}
                 />
                 <div className="vehicle">
-                  <Icon img={vehicleMode} />
+                  <Icon
+                    img={vehicleMode + iconStyle.postfix}
+                    color={iconStyle.color}
+                    borderRadius={iconStyle.borderRadius}
+                  />
                 </div>
                 <div className="route-number">{patternArray[2]}</div>
                 {!showInputs && !renamedDestination && (

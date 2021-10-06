@@ -5,7 +5,6 @@ import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
-import './UserMonitors.scss';
 
 interface Iv {
   columns: ISides;

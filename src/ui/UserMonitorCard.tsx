@@ -5,6 +5,7 @@ import { isInformationDisplay } from '../util/monitorUtils';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
+import { getPrimaryColor } from '../util/getConfig';
 
 interface IView {
   name?: string;
@@ -93,12 +94,9 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
           <Icon img={'layout'.concat(layouts[i])} />
           <div className="data">
             <div className="card-title">
-              {' '}
               {layouts[i] < 9 || layouts[i] > 11
                 ? titles[i]
-                : cols.left.title.fi
-                    .concat(' / ')
-                    .concat(cols.right.title.fi)}{' '}
+                : cols.left.title.fi.concat(' / ').concat(cols.right.title.fi)}
             </div>
             <div className="stop-list">{stops}</div>
           </div>
@@ -134,7 +132,7 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
             {props.t('modify')}
           </button>
           <div className="delete-icon" onClick={onDelete}>
-            <Icon img="delete" color={'#007AC9'} />
+            <Icon img="delete" color={getPrimaryColor()} />
           </div>
         </div>
       </div>

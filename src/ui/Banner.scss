@@ -1,12 +1,15 @@
 .banner {
-  background: #007ac9;
+  background: $primary-color;
   min-width: 100%;
   z-index: 2;
   height: 70px;
 
   .title-logo {
     #logo {
-      width: 215px !important;
+      position: absolute;
+      max-height: 50px !important;
+      top: 10px;
+      left: 10px;
     }
 
     div {
@@ -20,16 +23,16 @@
     .lang-select {
       text-decoration: none;
       line-height: normal;
-      color: #1c57cf;
-      font-family: 'Roboto', Arial, Georgia, serif;
+      color: $primary-color;
+      font-family: $font-family;
       font-weight: 700;
       letter-spacing: 0;
       font-size: 1.25rem;
       display: inline-block;
       text-transform: uppercase;
       cursor: pointer;
-      padding: 8px 13px;
-      margin: 0 2px;
+      padding: 8px 10px;
+      margin-right: 15px;
     }
   }
 
@@ -43,15 +46,14 @@
       outline: none;
       width: 400px;
       background: #fff;
-      color: #1c57cf;
+      color: $primary-color;
       height: 100%;
       overflow-y: auto;
       text-align: left;
-      font-family: 'Roboto', Arial, Georgia, serif;
+      font-family: $font-family;
       font-weight: 700;
       letter-spacing: 0;
-      padding-top: 10px;
-      padding-bottom: 10px;
+      padding: 10px 10px;
     }
   }
 
@@ -71,7 +73,7 @@
 
   /* Color/shape of burger icon bars on hover */
   .bm-burger-bars-hover {
-    background: #a90000;
+    background: #fff;
   }
 
   /* Position and sizing of clickable cross button */
@@ -82,7 +84,7 @@
 
   /* Color/shape of close button cross */
   .bm-cross {
-    background: #1c57cf;
+    background: $primary-color;
   }
 
   /*

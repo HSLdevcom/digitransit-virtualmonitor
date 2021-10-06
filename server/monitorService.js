@@ -1,8 +1,8 @@
 import cosmosClient from '@azure/cosmos';
-import config from './config.js';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
+import config from './config.js';
 
-const CosmosClient = cosmosClient.CosmosClient;
+const { CosmosClient } = cosmosClient;
 
 const { endpoint, key, databaseId, containerId } = config;
 const client = new CosmosClient({ endpoint, key });
@@ -17,16 +17,18 @@ function uuidValidateV5(uuid) {
 async function getMonitor(hash) {
   try {
     const querySpec = {
-      query: "SELECT * from c WHERE c.contenthash = @hash",
+      query: 'SELECT * from c WHERE c.contenthash = @hash',
       parameters: [
         {
-          name: "@hash",
+          name: '@hash',
           value: hash,
         },
       ],
     };
     // read all items in the Items container
-    const {resources: items} = await container.items.query(querySpec).fetchAll();
+    const { resources: items } = await container.items
+      .query(querySpec)
+      .fetchAll();
     return items;
   } catch (e) {
     console.log('ERROR', e);
@@ -43,15 +45,17 @@ const monitorService = {
         const container = database.container('staticMonitors');
         const url = req.params.id;
         const querySpec = {
-          query: "SELECT c.monitorContenthash from c WHERE c.url = @url",
+          query: 'SELECT c.monitorContenthash from c WHERE c.url = @url',
           parameters: [
             {
-              name: "@url",
+              name: '@url',
               value: url,
             },
           ],
         };
-        const { resources: items } = await container.items.query(querySpec).fetchAll();
+        const { resources: items } = await container.items
+          .query(querySpec)
+          .fetchAll();
         contentHash = items[0].monitorContenthash;
       }
       const items = await getMonitor(contentHash);
@@ -70,14 +74,12 @@ const monitorService = {
       const cont = database.container('staticMonitors');
       // query to return all items
       const querySpec = {
-        query: "SELECT * from c"
+        query: 'SELECT * from c',
       };
       // read all items in the Items container
-      const { resources: items } = await cont.items
-          .query(querySpec)
-          .fetchAll();
-      let monitors = [];
-      let contenthashes = [];
+      const { resources: items } = await cont.items.query(querySpec).fetchAll();
+      const monitors = [];
+      const contenthashes = [];
       items.forEach(item => {
         monitors.push(item);
         contenthashes.push(item.monitorContenthash);
@@ -90,18 +92,21 @@ const monitorService = {
             'SELECT * from c WHERE ARRAY_CONTAINS (@hashes, c.contenthash)',
           parameters: [
             {
-              name: "@hashes",
-              value: contenthashes
-            }
+              name: '@hashes',
+              value: contenthashes,
+            },
           ],
         };
-        const { resources: items } = await container.items.query(queryS).fetchAll();
-        if (!items.length) {
+        const { resources: userMonitors } = await container.items
+          .query(queryS)
+          .fetchAll();
+        if (!userMonitors.length) {
           res.json({});
         } else {
-          let userMonitors = items;
           userMonitors.forEach(mon => {
-            const monitor = monitors.find(m => m.monitorContenthash ===  mon.contenthash);
+            const monitor = monitors.find(
+              m => m.monitorContenthash === mon.contenthash,
+            );
             mon.name = monitor.name;
             mon.url = monitor.url;
           });
@@ -123,17 +128,15 @@ const monitorService = {
           'SELECT c.name, c.monitorContenthash, c.url from c WHERE ARRAY_CONTAINS(@urls, c.url)',
         parameters: [
           {
-            name: "@urls",
+            name: '@urls',
             value: urls,
           },
         ],
       };
       // read all items in the Items container
-      const { resources: items } = await cont.items
-          .query(querySpec)
-          .fetchAll();
-      let monitors = [];
-      let contenthashes = [];
+      const { resources: items } = await cont.items.query(querySpec).fetchAll();
+      const monitors = [];
+      const contenthashes = [];
       items.forEach(item => {
         monitors.push(item);
         contenthashes.push(item.monitorContenthash);
@@ -146,18 +149,22 @@ const monitorService = {
             'SELECT * from c WHERE ARRAY_CONTAINS (@hashes, c.contenthash)',
           parameters: [
             {
-              name: "@hashes",
-              value: contenthashes
-            }
+              name: '@hashes',
+              value: contenthashes,
+            },
           ],
         };
-        const { resources: items } = await container.items.query(queryS).fetchAll();
+        const { resources: items } = await container.items
+          .query(queryS)
+          .fetchAll();
         if (!items.length) {
           res.json({});
         } else {
-          let userMonitors = items;
+          const userMonitors = items;
           userMonitors.forEach(mon => {
-            const monitor = monitors.find(m => m.monitorContenthash ===  mon.contenthash);
+            const monitor = monitors.find(
+              m => m.monitorContenthash === mon.contenthash,
+            );
             mon.name = monitor.name;
             mon.url = monitor.url;
           });
@@ -171,7 +178,7 @@ const monitorService = {
   },
   create: async function create(req, res) {
     try {
-      await Promise.resolve(container.items.create(req.body))
+      await Promise.resolve(container.items.create(req.body));
       res.send('OK');
     } catch (e) {
       if (e.code !== 409) {
@@ -183,7 +190,7 @@ const monitorService = {
   createStatic: async function createStaticMonitor(req, res) {
     try {
       const container = database.container('staticMonitors');
-      await Promise.resolve(container.items.create(req.body))
+      await Promise.resolve(container.items.create(req.body));
       res.send('OK');
     } catch (e) {
       if (e.code !== 409) {
@@ -195,7 +202,9 @@ const monitorService = {
   updateStatic: async function updateStaticMonitor(req, res) {
     try {
       const container = database.container('staticMonitors');
-      const itemToUpdate = await container.item(req.body.id, req.body.url).read();
+      const itemToUpdate = await container
+        .item(req.body.id, req.body.url)
+        .read();
       if (!itemToUpdate) {
         res.json({});
       } else {
@@ -204,8 +213,10 @@ const monitorService = {
           id: req.body.hash,
           name: req.body.name,
           monitorContenthash: req.body.hash,
-        }
-        const { resource: updatedItem } = await container.item(req.body.id, req.body.url).replace(newData);
+        };
+        const { resource: updatedItem } = await container
+          .item(req.body.id, req.body.url)
+          .replace(newData);
         res.json(updatedItem);
       }
     } catch (e) {

@@ -23,14 +23,14 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: https://index.docker.io/v1/
-          username: ${{ secrets.AzureAppService_ContainerUsername_00c90eb0bfd74212be51141d8ea78d7a }}
-          password: ${{ secrets.AzureAppService_ContainerPassword_6c2a2b75f650404e896aef03e763b65d }}
+          username: ${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}
+          password: ${{ secrets.AzureAppService_ContainerPassword_60e925249e694d2896f1c2a466ddf37d }}
 
       - name: Build and push container image to registry
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_00c90eb0bfd74212be51141d8ea78d7a }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
+          tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
           file: ./Dockerfile
 
     deploy:
@@ -48,4 +48,4 @@ jobs:
             app-name: 'virtualmonitor-app(dev)'
             slot-name: 'dev'
             publish-profile: ${{ secrets.AzureAppService_PublishProfile_31939d05ad2e45d0b1860087f509d13e }}
-            images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_00c90eb0bfd74212be51141d8ea78d7a }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'
+            images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'

@@ -33,19 +33,11 @@ jobs:
           tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
           file: ./Dockerfile
 
-    deploy:
-      runs-on: ubuntu-latest
-      needs: build
-      environment:
-        name: 'dev'
-        url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
-
-      steps:
-        - name: Deploy to Azure Web App
-          id: deploy-to-webapp
-          uses: azure/webapps-deploy@v2
-          with:
-            app-name: 'virtualmonitor-app(dev)'
-            slot-name: 'dev'
-            publish-profile: ${{ secrets.AzureAppService_PublishProfile_31939d05ad2e45d0b1860087f509d13e }}
-            images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'virtualmonitor-app(dev)'
+          slot-name: 'dev'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_31939d05ad2e45d0b1860087f509d13e }}
+          images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'

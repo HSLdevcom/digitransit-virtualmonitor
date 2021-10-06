@@ -67,8 +67,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
                         onClick={() => onClick(option)}
                         key={uuid()}
                       >
-                        {' '}
-                        {option.label}{' '}
+                        {option.label}
                       </div>
                     );
                   })}

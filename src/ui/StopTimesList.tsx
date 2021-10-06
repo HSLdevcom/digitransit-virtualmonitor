@@ -145,7 +145,6 @@ const StopTimeRow = ({
       ) : null}
       {showStopColumn ? (
         <td className={'pier'}>
-          {' '}
           {stoptime.stop === undefined ? (
             'not found'
           ) : (

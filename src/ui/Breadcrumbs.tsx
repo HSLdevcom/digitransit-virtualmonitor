@@ -54,7 +54,7 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
           height={14}
           rotate={'-90'}
           color={getPrimaryColor()}
-        />{' '}
+        />
         {crumb}
       </div>
       <span className="desc">{crumb}</span>

@@ -94,12 +94,9 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
           <Icon img={'layout'.concat(layouts[i])} />
           <div className="data">
             <div className="card-title">
-              {' '}
               {layouts[i] < 9 || layouts[i] > 11
                 ? titles[i]
-                : cols.left.title.fi
-                    .concat(' / ')
-                    .concat(cols.right.title.fi)}{' '}
+                : cols.left.title.fi.concat(' / ').concat(cols.right.title.fi)}
             </div>
             <div className="stop-list">{stops}</div>
           </div>

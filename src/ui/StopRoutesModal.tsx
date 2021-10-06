@@ -206,7 +206,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               name={'showStopNumber'}
               width={30}
               height={30}
-            />{' '}
+            />
             <span className="setting-text">
               {props.t('stopCodeOrPlatformNumber')}
             </span>
@@ -218,7 +218,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               name={'showEndOfLine'}
               width={30}
               height={30}
-            />{' '}
+            />
             <span className={'setting-text'}>{props.t('endOfLine')}</span>
           </div>
           <div className="setting">
@@ -228,7 +228,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               name={'showVia'}
               width={30}
               height={30}
-            />{' '}
+            />
             <span className={'setting-text'}>{props.t('showVia')}</span>
           </div>
         </div>

@@ -36,7 +36,7 @@ const PreviewModal: FC<Props> = (props: Props) => {
             className="close"
             onClick={() => props.onClose(false)}
           >
-            <Icon img={'close'} height={15} width={15} color={'#FFFFFF'} />{' '}
+            <Icon img={'close'} height={15} width={15} color={'#FFFFFF'} />
           </div>
         </div>
         <div className="carouselContainer">

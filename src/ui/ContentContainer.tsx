@@ -8,8 +8,7 @@ interface Props {
 function ContentContainer(props: Props) {
   return (
     <div className={cx('content-wrapper', props.longContainer && 'front-page')}>
-      {' '}
-      {props.children}{' '}
+      {props.children}
     </div>
   );
 }

@@ -47,7 +47,6 @@ const defaultModeIcons: IMonitorConfig = {
   },
 };
 export const getConfig = (requireNeeded = false) => {
-  console.log('requireNeeded:', requireNeeded);
   const domain = window.location.hostname;
   let monitorConfig: IMonitorConfig;
 
@@ -76,21 +75,6 @@ export const getConfig = (requireNeeded = false) => {
       require('../sass/matka/matka.scss');
     }
     monitorConfig = config.matka;
-
-    //if (requireNeeded) {
-    //  require('../sass/tampere/tampere.scss');
-    //}
-    //monitorConfig = config.tampere;
-    
-    //if (requireNeeded) {
-    //  require('../sass/hsl/hsl.scss');
-    //}
-    //monitorConfig = config.hsl;
-
-    //if (requireNeeded) {
-    //  require('../sass/jyvaskyla/jyvaskyla.scss');
-    //}
-    //monitorConfig = config.linkki;
   }
 
   return monitorConfig;

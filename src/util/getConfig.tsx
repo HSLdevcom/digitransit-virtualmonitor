@@ -71,10 +71,10 @@ export const getConfig = (requireNeeded = false) => {
     }
     monitorConfig = config.hsl;
   } else {
-    //if (requireNeeded) {
-    //  require('../sass/matka/matka.scss');
-    //}
-    //monitorConfig = config.matka;
+    if (requireNeeded) {
+      require('../sass/matka/matka.scss');
+    }
+    monitorConfig = config.matka;
 
     //if (requireNeeded) {
     //  require('../sass/tampere/tampere.scss');
@@ -86,10 +86,10 @@ export const getConfig = (requireNeeded = false) => {
     //}
     //monitorConfig = config.hsl;
 
-    if (requireNeeded) {
-      require('../sass/jyvaskyla/jyvaskyla.scss');
-    }
-    monitorConfig = config.linkki;
+    //if (requireNeeded) {
+    //  require('../sass/jyvaskyla/jyvaskyla.scss');
+    //}
+    //monitorConfig = config.linkki;
   }
 
   return monitorConfig;

@@ -5,6 +5,7 @@ interface IMonitorConfig {
     primary?: string;
     hover?: string;
   };
+  alertOrientation?: string;
   feedIds?: Array<string>;
   modeIcons?: {
     borderRadius?: string;

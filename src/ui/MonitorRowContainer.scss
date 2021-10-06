@@ -42,6 +42,15 @@ $preview-grid-divider: 2px;
   }
 }
 
+.demo-button {
+  position: absolute;
+  background-color: transparent;
+  z-index: 10000000;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+}
+
 .main-content-container.preview {
   .grid-row.alert {
     left: -5px;
@@ -82,9 +91,25 @@ $preview-grid-divider: 2px;
     .grid-rows {
       height: calc(100% - 25px);
 
+      &.portrait {
+        .grid-row.alert {
+          &.static {
+            font-size: 14px !important;
+          }
+        }
+      }
+
       .grid-row {
         &.alert {
           font-size: 35px !important;
+
+          &.vertical {
+            font-size: 25px !important;
+          }
+
+          &.static {
+            font-size: 20px !important;
+          }
 
           &.two-rows {
             padding-bottom: 2px;
@@ -318,6 +343,7 @@ $preview-grid-divider: 2px;
       height: 100%;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
 
       &.two-rows {
         flex: 2 1 0;
@@ -342,6 +368,12 @@ $preview-grid-divider: 2px;
 
         .separator {
           border-top: calc(0.3 * 1vh) solid white;
+        }
+
+        &.vertical {
+          .grid-cols.alert-row {
+            width: unset;
+          }
         }
       }
     }
@@ -410,6 +442,15 @@ $preview-grid-divider: 2px;
   }
 }
 
+.grid.portrait {
+  .grid-row.alert.static {
+    font-size: calc((#{var(--height)} - 30vh) / 24) !important;
+  }
+  .grid-row.alert.vertical {
+    font-size: calc((#{var(--height)} - 30vh) / 20) !important;
+  }
+}
+
 .grid-row {
   &.alert {
     flex: 1;
@@ -421,6 +462,48 @@ $preview-grid-divider: 2px;
     z-index: 1000;
     overflow: hidden;
     font-size: calc((#{var(--height)} - 30vh) / 9) !important;
+
+    &.static {
+      font-size: calc((#{var(--height)} - 30vh) / 12) !important;
+
+      .grid-cols.alert-row {
+        width: unset;
+      }
+    }
+
+    &.vertical {
+      font-size: calc((#{var(--height)} - 30vh) / 12) !important;
+
+      .alert-text {
+        align-items: flex-start;
+
+        .alert-separator {
+          margin-top: 10px;
+          width: 100%;
+          display: flex;
+          min-height: 2px;
+          background-color: white;
+        }
+
+        white-space: unset;
+        flex-direction: column;
+
+        .single-alert {
+          padding-top: 10px;
+          padding-left: 0;
+        }
+
+        .single-alert:first-child {
+          padding-top: calc(100% / 6);
+        }
+      }
+
+      .animated {
+        -moz-animation: alert-animation-vertical #{var(--speed)} linear infinite;
+        -webkit-animation: alert-animation-vertical #{var(--speed)} linear infinite;
+        animation: alert-animation-vertical #{var(--speed)} linear infinite;
+      }
+    }
 
     .alert-text {
       white-space: nowrap;
@@ -434,11 +517,27 @@ $preview-grid-divider: 2px;
       padding-left: 110%;
     }
 
-    .animated {
-      -moz-animation: alert-animation #{var(--speed)} linear infinite;
-      -webkit-animation: alert-animation #{var(--speed)} linear infinite;
-      animation: alert-animation #{var(--speed)} linear infinite;
+    &.horizontal {
+      .animated {
+        -moz-animation: alert-animation #{var(--speed)} linear infinite;
+        -webkit-animation: alert-animation #{var(--speed)} linear infinite;
+        animation: alert-animation #{var(--speed)} linear infinite;
+      }
     }
+  }
+}
+
+@keyframes alert-animation-vertical {
+  from {
+    -moz-transform: translateY(0);
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  to {
+    -moz-transform: translateY(#{var(--animationWidth)});
+    -webkit-transform: translateY(#{var(--animationWidth)});
+    transform: translateY(#{var(--animationWidth)});
   }
 }
 
@@ -452,7 +551,7 @@ $preview-grid-divider: 2px;
   to {
     -moz-transform: translateX(#{var(--animationWidth)});
     -webkit-transform: translateX(#{var(--animationWidth)});
-    transform: translateX(calc(#{var(--animationWidth)}));
+    transform: translateX(#{var(--animationWidth)});
   }
 }
 
@@ -462,7 +561,6 @@ $preview-grid-divider: 2px;
 
   &.alert-row {
     display: block;
-    //position: absolute;
     padding: 0 $preview-grid-rows-margin;
     height: 100%;
     width: 100%;

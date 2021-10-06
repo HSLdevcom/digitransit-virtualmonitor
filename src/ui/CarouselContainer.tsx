@@ -10,6 +10,7 @@ import { getLayout } from '../util/getLayout';
 import cx from 'classnames';
 import uniqBy from 'lodash/uniqBy';
 import { stopTimeAbsoluteDepartureTime } from '../util/monitorUtils';
+import MonitorAlertRowStatic from './MonitorAlertRowStatic';
 
 interface IProps {
   views: Array<IView>;
@@ -82,6 +83,8 @@ const CarouselContainer: FC<IProps> = ({
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
 
+  const [demoOrientation, setDemoOrientation] = useState(0);
+
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
@@ -113,7 +116,7 @@ const CarouselContainer: FC<IProps> = ({
   // for easy testing of different layouts
   const newView = {
     ...views[index],
-    //layout: 17,
+    //layout: 8,
   };
 
   const { alertSpan } = getLayout(newView.layout);
@@ -133,15 +136,40 @@ const CarouselContainer: FC<IProps> = ({
       alertRowClass = '';
       break;
   }
+  //const alertOrientation = config.alertOrientation;
+  const orientations = ['vertical', 'horizontal', 'static'];
+  const alertOrientation = orientations[demoOrientation];
   if (alerts.length > 0) {
     alertComponent = (
-      <div className={cx('row-with-separator alert', alertRowClass)}>
+      <div
+        className={cx(
+          'row-with-separator alert',
+          alertOrientation,
+          alertRowClass,
+        )}
+      >
+        <span
+          className="demo-button"
+          onClick={() => {
+            const next = (demoOrientation + 1) % 3;
+            setDemoOrientation(next);
+          }}
+        ></span>
         <div className="separator"></div>
-        <MonitorAlertRow
-          alerts={alerts}
-          languages={languages}
-          preview={preview}
-        />
+        {alertOrientation === 'static' ? (
+          <MonitorAlertRowStatic
+            alerts={alerts}
+            languages={languages}
+            preview={preview}
+          />
+        ) : (
+          <MonitorAlertRow
+            alertOrientation={alertOrientation}
+            alerts={alerts}
+            languages={languages}
+            preview={preview}
+          />
+        )}
       </div>
     );
   }

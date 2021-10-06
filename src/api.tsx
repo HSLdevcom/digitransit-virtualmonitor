@@ -1,24 +1,6 @@
-import { resolve } from '@loona/react';
-
 const baseAPI = '/api';
 
 const monitorAPI = {
-  getAll() {
-    return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/monitors`, {
-        headers: {
-          accepts: 'application/json',
-        },
-      })
-        .then(response => response.json())
-        .then(json => {
-          return resolve(json);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  },
   get(monitor) {
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/monitor/${monitor}`, {
@@ -33,22 +15,20 @@ const monitorAPI = {
         });
     });
   },
-
-  getStaticMonitor(url) {
+  getAllMonitorsForUser() {
     return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/staticmonitor/${url}`, {
+      fetch(`${baseAPI}/usermonitors`, {
         headers: {
           accepts: 'application/json',
         },
       })
-        .then(result => result.json())
-        .then(json => resolve(json))
-        .catch(err => {
-          reject(err);
-        });
+      .then(result => result.json())
+      .then(json => resolve(json))
+      .catch(err => {
+        reject(err);
+      });
     });
   },
-
   getMonitorsForUser(urls) {
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/usermonitors/${urls}`, {
@@ -65,7 +45,6 @@ const monitorAPI = {
         });
     });
   },
-
   create(monitor) {
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/monitor`, {
@@ -82,7 +61,6 @@ const monitorAPI = {
         });
     });
   },
-
   getTranslations(ids) {
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/translations/${ids.join()}`, {
@@ -91,6 +69,67 @@ const monitorAPI = {
         },
       })
         .then(result => result.json())
+        .then(result => resolve(result))
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  createStatic(hash, url, title) {
+    return new Promise((resolve, reject) => {
+      fetch(`${baseAPI}/staticmonitor`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          id: hash,
+          monitorContenthash: hash,
+          name: title,
+          url: url,
+        }),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(result => resolve(result))
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  updateStatic(oldHash, url, newHash, title) {
+    return new Promise((resolve, reject) => {
+      fetch(`${baseAPI}/staticmonitor`, {
+        method: 'POST',
+        body: JSON.stringify({
+          id: oldHash,
+          url: url,
+          hash: newHash,
+          name: title,
+        }),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(result => resolve(result))
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
+  deleteStatic(hash, url) {
+    return new Promise((resolve, reject) => {
+      fetch(`${baseAPI}/staticmonitor`, {
+        method: 'DELETE',
+        body: JSON.stringify({
+          id: hash,
+          url: url,
+        }),
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
         .then(result => resolve(result))
         .catch(err => {
           reject(err);

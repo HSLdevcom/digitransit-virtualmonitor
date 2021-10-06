@@ -45,31 +45,51 @@ const defaultModeIcons: IMonitorConfig = {
     postfix: '',
   },
 };
-export const getConfig = () => {
+export const getConfig = (requireNeeded = false) => {
+  console.log('requireNeeded:', requireNeeded);
   const domain = window.location.hostname;
   let monitorConfig: IMonitorConfig;
 
   if (domain.indexOf('tremonitori') >= 0) {
-    require('../sass/tampere/tampere.scss');
+    if (requireNeeded) {
+      require('../sass/tampere/tampere.scss');
+    }
     monitorConfig = config.tampere;
   } else if (domain.indexOf('matkamonitori') >= 0) {
-    require('../sass/matka/matka.scss');
+    if (requireNeeded) {
+      require('../sass/matka/matka.scss');
+    }
     monitorConfig = config.matka;
   } else if (domain.indexOf('jyvaskyla') >= 0) {
-    require('../sass/jyvaskyla/jyvaskyla.scss');
+    if (requireNeeded) {
+      require('../sass/jyvaskyla/jyvaskyla.scss');
+    }
     monitorConfig = config.linkki;
   } else if (domain.indexOf('hsl') >= 0) {
-    require('../sass/hsl/hsl.scss');
+    if (requireNeeded) {
+      require('../sass/hsl/hsl.scss');
+    }
     monitorConfig = config.hsl;
   } else {
-    require('../sass/matka/matka.scss');
-    monitorConfig = config.matka;
-    //require('../sass/tampere/tampere.scss');
+    //if (requireNeeded) {
+    //  require('../sass/matka/matka.scss');
+    //}
+    //monitorConfig = config.matka;
+
+    //if (requireNeeded) {
+    //  require('../sass/tampere/tampere.scss');
+    //}
     //monitorConfig = config.tampere;
-    //require('../sass/hsl/hsl.scss');
+    
+    //if (requireNeeded) {
+    //  require('../sass/hsl/hsl.scss');
+    //}
     //monitorConfig = config.hsl;
-    //require('../sass/jyvaskyla/jyvaskyla.scss');
-    //monitorConfig = config.linkki;
+
+    if (requireNeeded) {
+      require('../sass/jyvaskyla/jyvaskyla.scss');
+    }
+    monitorConfig = config.linkki;
   }
 
   return monitorConfig;

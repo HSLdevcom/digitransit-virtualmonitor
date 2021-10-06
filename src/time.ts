@@ -65,6 +65,10 @@ export const getCurrentSeconds = () => {
   return Number(DateTime.now().toSeconds().toFixed(0));
 };
 
+export const getCurrentSecondsWithMilliSeconds = () => {
+  return DateTime.now().toSeconds();
+};
+
 export const setDate = daysToAdd => {
   const newDate = new Date();
   newDate.setDate(newDate.getDate() + daysToAdd);

@@ -1,38 +1,29 @@
-import { useLazyQuery } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Redirect } from 'react-router-dom';
-import { GET_STOP } from '../queries/stopStationQueries';
-import { IColumn } from '../util/Interfaces';
 import { isInformationDisplay } from '../util/monitorUtils';
-import Button from './Button';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
+import monitorAPI from '../api';
 import { getPrimaryColor } from '../util/getConfig';
 
-interface IProps {
-  name: string;
-  cards: any;
+interface IView {
+  name?: string;
   languages: Array<string>;
-  contentHash: string;
+  cards?: any;
+  contenthash?: string;
+  url?: string;
 }
 
-/*
-columns:
-left: {inUse: true, title: "Vasen otsikko", stops: Array(1)}
-right: {inUse: false, title: "Oikea otsikko", stops: Array(0)}
-__proto__: Object
-duration: 5
-id: 1
-layout: 1
-title: "Näkymän nimi"
- */
+interface IProps {
+  view: IView;
+}
 
 const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
-  const { cards, name } = props;
+  const { cards, name, contenthash, languages, url } = props.view;
   const [redirect, setRedirect] = useState(false);
   const [isOpen, setOpen] = useState(false);
-  const title = cards[0].title.fi;
+  const [isDelete, setDelete] = useState(false);
   const layout = cards[0].layout;
   const titles = cards.map(c => {
     return c.title.fi;
@@ -46,19 +37,37 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
   const onClose = () => {
     setOpen(false);
   };
-  if (redirect) {
+
+  const onDelete = () => {
+    monitorAPI.deleteStatic(contenthash, url).then(res => {
+      setDelete(true);
+    });
+  };
+
+  if (isDelete) {
     return (
       <Redirect
         to={{
-          pathname: '/createview',
-          search: `?cont=${props.contentHash}`,
+          pathname: '/',
+          search: `?pocLogin`,
         }}
       />
     );
   }
-  const view = {
+
+  if (redirect) {
+    return (
+      <Redirect
+        to={{
+          pathname: '/createStaticView',
+          search: `?name=${name}&url=${url}&cont=${contenthash}`,
+        }}
+      />
+    );
+  }
+  const v = {
     cards: cards,
-    languages: props.languages,
+    languages: languages,
     isInformationDisplay: isInformationDisplay(cards),
   };
 
@@ -69,13 +78,13 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
       ? cols.left.stops.concat(cols.right.stops)
       : cols.left.stops;
     const stops = (
-      <ul>
-        {colStops.flat().map(stop => {
+      <ul key={`card#${i}`}>
+        {colStops.flat().map((stop, j) => {
           const stopText = stop.name
             .concat(' (')
             .concat(stop.gtfsId)
             .concat(')');
-          return <li>{stopText}</li>;
+          return <li key={`stop#${j}`}>{stopText}</li>;
         })}
       </ul>
     );
@@ -102,8 +111,8 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
     <div className={'card'}>
       {isOpen && (
         <PreviewModal
-          languages={props.languages}
-          view={view}
+          languages={languages}
+          view={v}
           isOpen={isOpen}
           onClose={onClose}
           isLandscape={layout < 11}
@@ -117,28 +126,27 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
             width={32}
           />
         </span>
-        <span className="monitor-name"> {name} </span>
+        <span className="monitor-name">{name}</span>
         <div className="control-buttons">
           <button className="button" onClick={() => setOpen(true)}>
-            {' '}
-            Esikatselu{' '}
+            {props.t('preview')}
           </button>
           <button className="edit-button" onClick={goToEdit}>
-            {' '}
-            Muokkaa{' '}
+            {props.t('modify')}
           </button>
-          <div
-            className="delete-icon"
-            // onClick={() => {/*TODO*/}}
-          >
+          <div className="delete-icon" onClick={onDelete}>
             <Icon img="delete" color={getPrimaryColor()} />
           </div>
         </div>
       </div>
       <div className="cards">
         {Array.isArray(crds) &&
-          crds.map(c => {
-            return <div className="card-item">{c}</div>;
+          crds.map((c, x) => {
+            return (
+              <div key={`c#${x}`} className="card-item">
+                {c}
+              </div>
+            );
           })}
       </div>
     </div>

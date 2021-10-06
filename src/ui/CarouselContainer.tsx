@@ -23,6 +23,9 @@ interface IProps {
   closedStopViews: Array<IClosedStop>;
   error?: string;
   trainsWithTrack?: Array<ITrainData>;
+  staticContentHash?: string;
+  staticUrl?: string;
+  staticViewTitle?: string;
 }
 
 const sortAndFilter = (departures, trainsWithTrack) => {
@@ -70,6 +73,9 @@ const CarouselContainer: FC<IProps> = ({
   closedStopViews,
   error,
   trainsWithTrack,
+  staticContentHash,
+  staticUrl,
+  staticViewTitle,
 }) => {
   const len = views.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
@@ -156,6 +162,9 @@ const CarouselContainer: FC<IProps> = ({
       alertRowSpan={alertSpan}
       closedStopViews={closedStopViews}
       error={error}
+      staticContentHash={staticContentHash}
+      staticUrl={staticUrl}
+      staticViewTitle={staticViewTitle}
     />
   );
 };

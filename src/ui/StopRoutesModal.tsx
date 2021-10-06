@@ -47,10 +47,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
   const [renamings, setRenamings] = useState(
     props.stopSettings?.renamedDestinations || [],
   );
-
+  const stopCode = props.stop.code ? `( ${props.stop.code} )` : '';
   const text = props.t('showHidden', {
     stop: props.stop.name,
-    code: props.stop.code,
+    code: stopCode,
   });
 
   const checkShowSetting = setting => {

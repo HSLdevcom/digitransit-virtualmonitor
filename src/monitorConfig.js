@@ -26,7 +26,16 @@ export default {
     showMinutes: 10,
   },
   linkki: {
+    colors: {
+      primary: '#7DC02D',
+    },
     feedIds: ['LINKKI'],
+    modeIcons: {
+      colors: {
+        'mode-bus': '#7DC02D',
+      },
+      postfix: '-waltti',
+    },
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     urlMultipleStopsText:
       'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/LINKKI:207477,LINKKI:207818,LINKKI:207478/10. Voit määrittää usean pysäkin näytölle otsikon url-parametrilla title, esimerkiksi /stop/LINKKI:207477,LINKKI:207818,LINKKI:207478/10?title=Omat pysäkit',
@@ -88,7 +97,6 @@ export default {
     },
     feedIds: ['tampere'],
     modeIcons: {
-      borderRadius: '50%',
       colors: {
         'mode-bus': '#1A4A8F',
         'mode-rail': '#0E7F3C',

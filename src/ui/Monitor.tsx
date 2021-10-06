@@ -37,6 +37,9 @@ interface IProps {
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
   error?: string;
+  staticContentHash?: string;
+  staticUrl?: string;
+  staticViewTitle?: string;
 }
 let to;
 const checkDayNight = (iconId, timem, lat, lon) => {
@@ -68,6 +71,9 @@ const Monitor: FC<IProps> = ({
   alertRowSpan,
   closedStopViews,
   error,
+  staticContentHash,
+  staticUrl,
+  staticViewTitle,
 }) => {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
@@ -134,7 +140,13 @@ const Monitor: FC<IProps> = ({
         to = setTimeout(() => setShowOverlay(false), 3000);
       }}
     >
-      <MonitorOverlay show={showOverlay} isPreview={isPreview} />
+      <MonitorOverlay
+        show={showOverlay}
+        isPreview={isPreview}
+        staticUrl={staticUrl}
+        staticViewTitle={staticViewTitle}
+        staticContentHash={staticContentHash}
+      />
       <MonitorTitlebar
         weatherData={weatherData}
         config={config}

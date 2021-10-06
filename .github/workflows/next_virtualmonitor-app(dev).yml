@@ -31,5 +31,5 @@ jobs:
       with:
         app-name: 'virtualmonitor-app'
         slot-name: 'dev'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_ac199bbb79794ee4b4543ac859416c54 }}
+        publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_31939D05AD2E45D0B1860087F509D13E }}
         images: 'index.docker.io/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'

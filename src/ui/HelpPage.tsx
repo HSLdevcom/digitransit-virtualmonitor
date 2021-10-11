@@ -16,7 +16,7 @@ const HelpPage: React.FC<IHelpPageProps> = props => {
   return (
     <>
       <ContentContainer>
-        <div>
+        <div className="help">
           <h1>Virtuaalimonitorin käyttöopas</h1>
           <h2>Virtuaalimonitorin käyttö selainparametrien avulla </h2>
           <p>{props.urlParamUsageText}</p>

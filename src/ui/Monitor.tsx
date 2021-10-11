@@ -15,6 +15,7 @@ import { EpochMilliseconds } from '../time';
 import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
+import { getColorByName } from '../util/getConfig';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -94,10 +95,12 @@ const Monitor: FC<IProps> = ({
 
   const windowHeight = windowDimensions.height;
   const windowWidth = windowDimensions.width;
-  const dimensions = {
+  const style = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,
+    '--monitor-background-color': getColorByName('monitorBackground') || getColorByName('primary'),
   } as React.CSSProperties;
+
   const coeff = 1000 * 60 * 5;
   const date = new Date(); //or use any other date
   const rounded = new Date(Math.round(date.getTime() / coeff) * coeff);
@@ -129,7 +132,7 @@ const Monitor: FC<IProps> = ({
 
   return (
     <div
-      style={dimensions}
+      style={style}
       className={cx('main-content-container', {
         preview: isPreview,
         portrait: !isLandscapeByLayout,

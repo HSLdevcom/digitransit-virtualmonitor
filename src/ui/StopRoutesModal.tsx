@@ -6,10 +6,10 @@ import Dropdown from './Dropdown';
 import Icon from './Icon';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { IStopInfo } from './StopInfoRetriever';
-import { v4 as uuid } from 'uuid';
 import Modal from 'react-modal';
 import { capitalize } from '../util/monitorUtils';
-import { getIconStyleWithColor } from '../util/getConfig';
+import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
+import { defaultColorAlert, defaultColorFont, defaultFontNarrow, defaultFontNormal} from './DefaultStyles';
 
 Modal.setAppElement('#root');
 
@@ -187,13 +187,22 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
 
   const renamedDestinations = renamings;
 
+  const style = {
+    '--alert-color': getColorByName('alert') || defaultColorAlert,
+    '--font-color': getColorByName('font') || defaultColorFont,
+    '--font-family': defaultFontNormal,
+    '--font-family-narrow': defaultFontNarrow,
+    '--monitor-background-color': getColorByName('monitorBackground') || getColorByName('primary'),
+    '--primary-color':  getColorByName('primary'),
+  } as React.CSSProperties;
+
   return (
     <Modal
       isOpen={props.showModal}
       onRequestClose={handleClose}
       portalClassName="modal-stop-routes"
     >
-      <div className="modal">
+      <div className="modal" style={style} >
         <div className="title-container">
           <span className="title"> {text} </span>
         </div>

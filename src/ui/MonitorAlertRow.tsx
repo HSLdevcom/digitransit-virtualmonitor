@@ -66,7 +66,7 @@ const MonitorAlertRow: FC<IProps> = ({
           {
             alerts[i].alertDescriptionTextTranslations.find(
               a => a.language === languages[j],
-            ).text
+            )?.text
           }
         </span>,
       );

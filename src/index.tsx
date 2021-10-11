@@ -10,7 +10,6 @@ import { IApolloClientContextType } from './ApolloClientsContextCreator';
 import App from './App';
 import { loona, virtualMonitorClient } from './graphQL/virtualMonitorClient';
 import i18n from './i18n';
-import { default as config } from './monitorConfig.js';
 import NtpSyncComponent from './ntp/NtpSyncComponent';
 import registerServiceWorker from './registerServiceWorker';
 import { ApolloClientsContext } from './VirtualMonitorApolloClients';
@@ -19,7 +18,7 @@ import { getParams } from './util/queryUtils';
 import { getConfig } from './util/getConfig';
 
 const domain = window.location.hostname;
-const monitorConfig = getConfig(true);
+const monitorConfig = getConfig();
 
 const reittiOpasClient = new ApolloBoostClient({
   cache: new InMemoryCache(),

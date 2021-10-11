@@ -1,4 +1,5 @@
 .modal-stop-routes {
+  font-family: $font-family;
   h2 {
     font-style: normal;
     font-weight: 400;
@@ -170,6 +171,7 @@
       margin-top: 30px;
 
       .btn {
+        background: $primary-color;
         height: 40px;
         width: 240px;
         border: none;

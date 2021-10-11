@@ -1,37 +1,17 @@
 import { default as config } from '../monitorConfig.js';
+import { IExtendedMonitorConfig } from '../App';
 
-interface IMonitorConfig {
-  colors?: {
-    primary?: string;
-    hover?: string;
-  };
-  alertOrientation?: string;
-  feedIds?: Array<string>;
-  modeIcons?: {
-    borderRadius?: string;
-    colors?: {
-      'mode-airplane'?: string;
-      'mode-bus'?: string;
-      'mode-tram'?: string;
-      'mode-metro'?: string;
-      'mode-rail'?: string;
-      'mode-ferry'?: string;
-      'mode-citybike'?: string;
-      'mode-citybike-secondary'?: string;
-    };
-    postfix?: string;
-  };
-  uri?: string;
-}
-
-const defaultColors: IMonitorConfig = {
+const defaultColors: IExtendedMonitorConfig = {
   colors: {
-    primary: undefined,
+    alert: undefined,
+    font: undefined,
     hover: undefined,
+    monitorBackground: undefined,
+    primary: undefined,
   },
 };
 
-const defaultModeIcons: IMonitorConfig = {
+const defaultModeIcons: IExtendedMonitorConfig = {
   modeIcons: {
     borderRadius: undefined,
     colors: {
@@ -46,44 +26,35 @@ const defaultModeIcons: IMonitorConfig = {
     postfix: '',
   },
 };
-export const getConfig = (requireNeeded = false) => {
+
+export const getConfig = () => {
   const domain = window.location.hostname;
-  let monitorConfig: IMonitorConfig;
+  let theme;
 
   if (domain.indexOf('tremonitori') >= 0) {
-    if (requireNeeded) {
-      require('../sass/tampere/tampere.scss');
-    }
-    monitorConfig = config.tampere;
+    theme = 'tampere';
   } else if (domain.indexOf('matkamonitori') >= 0) {
-    if (requireNeeded) {
-      require('../sass/matka/matka.scss');
-    }
-    monitorConfig = config.matka;
+    theme = 'matka';
   } else if (domain.indexOf('jyvaskyla') >= 0) {
-    if (requireNeeded) {
-      require('../sass/jyvaskyla/jyvaskyla.scss');
-    }
-    monitorConfig = config.linkki;
+    theme = 'jyvaskyla';
   } else if (domain.indexOf('hsl') >= 0) {
-    if (requireNeeded) {
-      require('../sass/hsl/hsl.scss');
-    }
-    monitorConfig = config.hsl;
+    theme = 'hsl';
   } else {
-    if (requireNeeded) {
-      require('../sass/matka/matka.scss');
-    }
-    monitorConfig = config.matka;
+    theme = 'jyvaskyla';
   }
-
-  return monitorConfig;
+  return config[theme];
 };
 
 export const getPrimaryColor = () => {
   const config = getConfig();
   const colors = { ...defaultColors.colors, ...config.colors };
   return colors.primary;
+};
+
+export const getColorByName = name => {
+  const config = getConfig();
+  const colors = { ...defaultColors.colors, ...config.colors };
+  return colors[name];
 };
 
 export const getIconStyleWithColor = mode => {

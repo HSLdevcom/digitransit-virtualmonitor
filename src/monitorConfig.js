@@ -14,6 +14,7 @@ export default {
         'mode-subway': '#CA4000',
       },
     },
+    name: 'hsl',
     uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
     urlMultipleStopsText:
       'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/HSL:1040279,HSL:1230109/10. Voit määrittää usean pysäkin näytölle otsikon url-parametrilla title, esimerkiksi /stop/HSL:1040279,HSL:1230109/10?title=Omat pysäkit',
@@ -23,10 +24,10 @@ export default {
       'Löydät oikean pysäkki-id:n helposti esimerkiksi reittioppaasta: Siirry halutun pysäkin pysäkkinäkymään, ja katso urlin lopusta pysäkki-id. ',
     urlParamUsageText:
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/HSL:1230109/10 Näyttää 10 riviä pysäkiltä Kumpulan kampus',
-    showMinutes: 10,
+    showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
-  linkki: {
+  jyvaskyla: {
     colors: {
       primary: '#7DC02D',
     },
@@ -37,6 +38,7 @@ export default {
       },
       postfix: '-waltti',
     },
+    name: 'jyvaskyla',
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     urlMultipleStopsText:
       'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/LINKKI:207477,LINKKI:207818,LINKKI:207478/10. Voit määrittää usean pysäkin näytölle otsikon url-parametrilla title, esimerkiksi /stop/LINKKI:207477,LINKKI:207818,LINKKI:207478/10?title=Omat pysäkit',
@@ -45,7 +47,7 @@ export default {
       'Löydät oikean pysäkki-id:n helposti esimerkiksi jyvaskyla.digitransit.fi osoitteesta. Siirry pysäkin pysäkkinäkymään, ja katso urlin lopusta pysäkki-id.',
     urlParamUsageText:
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/LINKKI:207477/10 näyttää 10 riviä pysäkiltä Urhonkatu 1.',
-    showMinutes: 10,
+    showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
   matka: {
@@ -82,6 +84,7 @@ export default {
         'mode-ferry': '#247C7B',
       },
     },
+    name: 'matka',
     uri: 'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql',
     urlMultipleStopsText:
       'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/MATKA:7_201860,MATKA:7_201848/10. Voit määrittää usean pysäkin näytölle otsikon url-parametrilla title, esimerkiksi /stop/MATKA:7_201860,MATKA:7_201848/10?title=Omat pysäkit',
@@ -91,7 +94,7 @@ export default {
       'Löydät oikean pysäkki-id:n helposti esimerkiksi reittioppaasta: Siirry halutun Waltti-kaupungin pysäkin pysäkkinäkymään, ja katso urlin lopusta pysäkki-id. ',
     urlParamUsageText:
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/MATKA:7_201860/10 Näyttää 10 riviä pysäkiltä Umpikuja E',
-    showMinutes: 15,
+    showMinutes: '15',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
   tampere: {
@@ -107,6 +110,7 @@ export default {
       },
       postfix: '-waltti',
     },
+    name: 'tampere',
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     urlMultipleStopsText:
       'Usean pysäkin näytön saat yksinkertaisesti lisäämällä pysäkkejä pilkulla erotettuna, esimerkiksi /stop/tampere:0010,tampere:3729,tampere:3730/10. Voit määrittää usean pysäkin näytölle otsikon url-parametrilla title, esimerkiksi /stop/tampere:0010,tampere:3729,tampere:3730/10?title=Omat pysäkit',
@@ -115,7 +119,7 @@ export default {
       'Pysäkki-id on sama kuin pysäkin numero. Esimerkiksi Keskusterori F:n pysäkiltä saat kirjoittamalla tampere:0010. Pysäkkinumerot löytyvät esimerkiksi Reittioppaasta.',
     urlParamUsageText:
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/tampere:0010/10 näyttää 10 riviä pysäkiltä Keskustori F.',
-    showMinutes: 20,
+    showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
   },
 };

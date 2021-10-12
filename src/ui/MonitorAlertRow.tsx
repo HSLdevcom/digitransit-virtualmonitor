@@ -1,5 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import cx from 'classnames';
+import {
+  getServiceAlertDescription,
+  getServiceAlertHeader,
+} from '../util/alertUtils';
 
 interface IProps {
   alerts: any;
@@ -60,20 +64,34 @@ const MonitorAlertRow: FC<IProps> = ({
 
   const a = [];
   for (let i = 0; i < alerts.length; i++) {
-    for (let j = 0; j < languages.length; j++) {
+    if (
+      alerts[i].alertDescriptionTextTranslations ||
+      alerts[i].alertHeaderTextTranslations
+    ) {
+      for (let j = 0; j < languages.length; j++) {
+        a.push(
+          <span key={`alert-${i + 1}-lang-${j + 1}`} className="single-alert">
+            {getServiceAlertDescription(alerts[i], languages[j]) ||
+              getServiceAlertHeader(alerts[i], languages[j])}
+          </span>,
+        );
+      }
+    } else {
       a.push(
-        <span key={`alert-${i + 1}-lang-${j + 1}`} className="single-alert">
-          {
-            alerts[i].alertDescriptionTextTranslations.find(
-              a => a.language === languages[j],
-            ).text
-          }
+        <span key={`alert-${i + 1}-lang-1`} className="single-alert">
+          {getServiceAlertDescription(alerts[i], 'fi') ||
+            getServiceAlertHeader(alerts[i], 'fi')}
         </span>,
       );
     }
-    a.push(
-      <div key={`alert-${i + 1}-separator}`} className="alert-separator"></div>,
-    );
+    if (!(i === alerts.length - 1) && !(alertOrientation === 'horizontal')) {
+      a.push(
+        <div
+          key={`alert-${i + 1}-separator}`}
+          className="alert-separator"
+        ></div>,
+      );
+    }
   }
   const style = {
     '--animationWidth': `${Number(-1 * animationWidth).toFixed(0)}px`,

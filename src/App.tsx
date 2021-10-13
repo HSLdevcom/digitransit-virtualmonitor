@@ -13,6 +13,7 @@ import HelpPage from './ui/HelpPage';
 import QuickDisplay from './ui/QuickDisplay';
 import CreateViewPage from './ui/CreateViewPage';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
+import { defaultColorAlert, defaultColorFont, defaultFontNarrow, defaultFontNormal} from './ui/DefaultStyles';
 
 import {
   ApolloClient,
@@ -23,9 +24,40 @@ import {
 } from '@apollo/client';
 
 import { MultiAPILink } from '@habx/apollo-multi-endpoint-link';
-import './App.scss';
 import StopMonitorContainer from './ui/StopMonitorContainer';
+
+import './sass/main.scss';
+
+export interface IExtendedMonitorConfig extends IMonitorConfig {
+  fonts?: {
+    normal?: string;
+    narrow?: string;
+  }
+  colors?: {
+    alert?: string;
+    font?: string;
+    hover?: string;
+    monitorBackground?: string;
+    primary?: string;
+  };
+  alertOrientation?: string;
+  modeIcons?: {
+    borderRadius?: string;
+    colors?: {
+      'mode-airplane'?: string;
+      'mode-bus'?: string;
+      'mode-tram'?: string;
+      'mode-metro'?: string;
+      'mode-rail'?: string;
+      'mode-ferry'?: string;
+      'mode-citybike'?: string;
+      'mode-citybike-secondary'?: string;
+    };
+    postfix?: string;
+  };
+}
 export interface IMonitorConfig {
+  name?: string;
   //feedIds?: Array<string>;
   uri?: string;
   // Texts for Help page
@@ -76,7 +108,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
       urls: ['abcdef', 'ghijk'],
     };
     // ----------                                 ----------
-    const monitorConfig = this.props.monitorConfig;
+    const monitorConfig: IExtendedMonitorConfig = this.props.monitorConfig;
 
     const client = new ApolloClient({
       link: ApolloLink.from([
@@ -113,8 +145,17 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
         : '';
     }
 
+    const style = {
+      '--alert-color': monitorConfig.colors.alert || defaultColorAlert,
+      '--font-color': monitorConfig.colors.font || defaultColorFont,
+      '--font-family': monitorConfig.fonts?.normal || defaultFontNormal,
+      '--font-family-narrow': monitorConfig.fonts?.narrow || defaultFontNarrow,
+      '--monitor-background-color': monitorConfig.colors.monitorBackground || monitorConfig.colors.primary,
+      '--primary-color': monitorConfig.colors.primary,
+    } as React.CSSProperties;
+
     return (
-      <div className={'App'}>
+      <div className="App" style={style}>
         <ApolloProvider client={client}>
           <Switch>
             <Route

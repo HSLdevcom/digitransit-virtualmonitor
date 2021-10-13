@@ -1,18 +1,14 @@
-/* body {
-  background-color: rgb(0, 115, 201);
-  color: white;
-  font-family: Proxima Nova Soft, Arial, Helvetica, sans-serif;
-} */
-
-
-
-/*
-a {
-  color: lightblue;
+#root {
+  font-family: var(--font-family);
+  height: 100%;
 }
-*/
 
-ul,
-li {
+$font-family: var(--font-family);
+$font-family-narrow: var(--font-family-narrow);
+$alert-color: var(--alert-color);
+$primary-color: var(--primary-color);
+$monitor-background-color: var(--monitor-background-color);
+
+ul, li {
   list-style-type: none;
 }

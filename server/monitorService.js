@@ -59,7 +59,7 @@ const monitorService = {
         contentHash = items[0].monitorContenthash;
       }
       const items = await getMonitor(contentHash);
-      if (!items.length) {
+      if (items == null || !items.length) {
         res.json({});
       } else {
         res.json(items[0]);
@@ -84,7 +84,7 @@ const monitorService = {
         monitors.push(item);
         contenthashes.push(item.monitorContenthash);
       });
-      if (!items.length) {
+      if (items == null || !items.length) {
         res.json({});
       } else {
         const queryS = {
@@ -97,10 +97,11 @@ const monitorService = {
             },
           ],
         };
+
         const { resources: userMonitors } = await container.items
           .query(queryS)
           .fetchAll();
-        if (!userMonitors.length) {
+        if (userMonitors == null || !userMonitors.length) {
           res.json({});
         } else {
           userMonitors.forEach(mon => {
@@ -154,10 +155,11 @@ const monitorService = {
             },
           ],
         };
+
         const { resources: items } = await container.items
           .query(queryS)
           .fetchAll();
-        if (!items.length) {
+        if (items == null || !items.length) {
           res.json({});
         } else {
           const userMonitors = items;

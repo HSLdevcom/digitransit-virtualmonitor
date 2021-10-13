@@ -37,6 +37,15 @@ $preview-grid-divider: 2px;
   bottom: 50px;
 
   .link {
+<<<<<<< HEAD
+    svg {
+      transform: rotate(90deg);
+      fill: $monitor-background-color;
+      margin-right: 15px;
+    }
+
+=======
+>>>>>>> next
     display: flex;
     min-width: 40vh;
     background-color: $background-color;
@@ -159,7 +168,7 @@ $preview-grid-divider: 2px;
 }
 
 .main-content-container {
-  background-color: $background-color;
+  background-color: $monitor-background-color;
   font-family: $font-family-narrow;
   letter-spacing: -0.2px;
   color: #fff;
@@ -319,7 +328,7 @@ $preview-grid-divider: 2px;
       }
 
       .row-with-separator.alert {
-        background-color: $background-color;
+        background-color: $monitor-background-color;
         position: absolute;
         bottom: 0;
         height: calc(100% / 8);
@@ -466,7 +475,7 @@ $preview-grid-divider: 2px;
   &.alert {
     flex: 1;
     color: white;
-    background: $background-color;
+    background: $monitor-background-color;
     display: block !important;
     width: calc(100% + calc(2 * #{$preview-grid-rows-margin}));
     z-index: 1000;
@@ -592,7 +601,7 @@ $preview-grid-divider: 2px;
     height: 100%;
     align-items: center;
     justify-content: center;
-    color: $background-color;
+    color: $monitor-background-color;
     background: white;
   }
 }

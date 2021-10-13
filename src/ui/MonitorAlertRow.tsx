@@ -78,9 +78,18 @@ const MonitorAlertRow: FC<IProps> = ({
       }
     } else {
       a.push(
+<<<<<<< HEAD
+        <span key={`alert-${i + 1}-lang-${j + 1}`} className="single-alert">
+          {
+            alerts[i].alertDescriptionTextTranslations.find(
+              a => a.language === languages[j],
+            )?.text
+          }
+=======
         <span key={`alert-${i + 1}-lang-1`} className="single-alert">
           {getServiceAlertDescription(alerts[i], 'fi') ||
             getServiceAlertHeader(alerts[i], 'fi')}
+>>>>>>> next
         </span>,
       );
     }

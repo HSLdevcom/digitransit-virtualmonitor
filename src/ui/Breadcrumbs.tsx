@@ -34,7 +34,7 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
         <Link className="to-home" to={'/'}>
           {!isLogged ? t('breadCrumbsHome') : t('breadCrumbsSite')}
         </Link>
-        {isLogged && crumb !== t('breadCrumbsOwnMonitors') && (
+        {isLogged && crumb !== t('breadCrumbsOwnMonitors') && crumb !== t('breadCrumbsHelp') && (
           <>
             <Icon
               img={'arrow-down'}

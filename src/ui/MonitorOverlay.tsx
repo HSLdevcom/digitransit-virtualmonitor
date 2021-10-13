@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import Icon from './Icon';
 import cx from 'classnames';
+import { WithTranslation, withTranslation } from 'react-i18next';
 
 interface IProps {
   show: boolean;
@@ -10,12 +10,13 @@ interface IProps {
   staticUrl?: string;
   staticViewTitle?: string;
 }
-const MonitorOverlay: FC<IProps> = ({
+const MonitorOverlay: FC<IProps & WithTranslation> = ({
   isPreview,
   show,
   staticUrl,
   staticViewTitle,
   staticContentHash,
+  t,
 }) => {
   return (
     <>
@@ -29,7 +30,7 @@ const MonitorOverlay: FC<IProps> = ({
                 : `/createStaticView?name=${staticViewTitle}&url=${staticUrl}&cont=${staticContentHash}`
             }
           >
-            <Icon img="arrow-down" height={60} width={60} />
+            <span>{t('edit-display')}</span>
           </Link>
         </div>
       )}
@@ -37,4 +38,4 @@ const MonitorOverlay: FC<IProps> = ({
   );
 };
 
-export default MonitorOverlay;
+export default withTranslation('translations')(MonitorOverlay);

@@ -1,5 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import cx from 'classnames';
+import {
+  getServiceAlertDescription,
+  getServiceAlertHeader,
+} from '../util/alertUtils';
 
 interface IProps {
   alerts: any;
@@ -17,11 +21,17 @@ const MonitorAlertRowStatic: FC<IProps> = ({ alerts, languages }) => {
     }, 5000);
     return () => clearTimeout(id);
   }, [current]);
-  const alert = alerts[
-    current % alerts.length
-  ].alertDescriptionTextTranslations.find(
-    a => a.language === languages[current % languages.length],
-  ).text;
+
+  const alert =
+    getServiceAlertDescription(
+      alerts[current % alerts.length],
+      languages[current % languages.length],
+    ) ||
+    getServiceAlertHeader(
+      alerts[current % alerts.length],
+      languages[current % languages.length],
+    );
+
   return (
     <div className={cx('grid-row', 'alert static')}>
       <div className={cx('grid-cols', 'alert-row')}>{alert}</div>

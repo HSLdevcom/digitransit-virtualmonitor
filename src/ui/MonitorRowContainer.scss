@@ -11,6 +11,14 @@ $preview-grid-divider: 2px;
 
 .monitor-overlay {
   transition: opacity 1s;
+  z-index: 1000;
+  width: 60%;
+  height: 15%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
 
   &.show {
     opacity: 1;
@@ -21,24 +29,35 @@ $preview-grid-divider: 2px;
   }
 
   position: absolute;
-  background-color: white;
-  border: solid #ccc 2px;
-  border-radius: 50%;
-  top: 50px;
-  left: 50px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  bottom: 50px;
 
   .link {
+<<<<<<< HEAD
     svg {
       transform: rotate(90deg);
       fill: $monitor-background-color;
       margin-right: 15px;
     }
 
+=======
+>>>>>>> next
     display: flex;
+    min-width: 40vh;
+    background-color: $background-color;
+    height: 50%;
+    font-family: $font-family;
+    width: 40%;
+    text-decoration: none;
+    color: white;
+    border-radius: 500px;
     align-items: center;
     justify-content: center;
-    width: 100px;
-    height: 100px;
+    font-size: 3vh;
   }
 }
 

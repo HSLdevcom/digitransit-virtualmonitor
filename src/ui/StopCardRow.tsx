@@ -12,7 +12,7 @@ import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import { ICardInfo } from './CardInfo';
 import cx from 'classnames';
-import { getPrimaryColor } from '../util/getConfig';
+import {getAllIconStyleWithColor, getPrimaryColor} from '../util/getConfig';
 
 const getGTFSId = id => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -181,7 +181,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
       );
     }
   }, [stationState.data]);
-
+  const modeIconColor = getAllIconStyleWithColor();
   const lang = t('languageCode');
   const isFirst = cardInfo.index === 0;
   const isLast = cardInfo.index === cardsCount - 1;
@@ -326,6 +326,8 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               lang={lang}
               sources={['Datasource']}
               targets={['Stops']}
+              modeIconColors={getAllIconStyleWithColor()}
+              modeSet={'digitransit'} // TODO: This needs to be configured properly
             />
           </div>
           <LayoutAndTimeContainer

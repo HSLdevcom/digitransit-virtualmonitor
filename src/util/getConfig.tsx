@@ -66,3 +66,9 @@ export const getIconStyleWithColor = mode => {
     postfix: mode === 'airplane' || mode === 'subway' ? '' : style.postfix,
   };
 };
+
+export const getAllIconStyleWithColor = () => {
+  const config = getConfig();
+  const style = { ...defaultModeIcons.modeIcons, ...config.modeIcons };
+  return style.colors;
+};

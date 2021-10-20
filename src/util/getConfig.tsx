@@ -40,7 +40,7 @@ export const getConfig = () => {
   } else if (domain.indexOf('hsl') >= 0) {
     theme = 'hsl';
   } else {
-    theme = 'jyvaskyla';
+    theme = 'matka';
   }
   return config[theme];
 };

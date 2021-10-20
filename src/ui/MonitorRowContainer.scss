@@ -37,18 +37,9 @@ $preview-grid-divider: 2px;
   bottom: 50px;
 
   .link {
-<<<<<<< HEAD
-    svg {
-      transform: rotate(90deg);
-      fill: $monitor-background-color;
-      margin-right: 15px;
-    }
-
-=======
->>>>>>> next
     display: flex;
     min-width: 40vh;
-    background-color: $background-color;
+    background-color: $monitor-background-color;
     height: 50%;
     font-family: $font-family;
     width: 40%;

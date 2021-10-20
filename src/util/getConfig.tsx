@@ -40,7 +40,7 @@ export const getConfig = () => {
   } else if (domain.indexOf('hsl') >= 0) {
     theme = 'hsl';
   } else {
-    theme = 'jyvaskyla';
+    theme = 'matka';
   }
   return config[theme];
 };
@@ -65,4 +65,10 @@ export const getIconStyleWithColor = mode => {
     color: style.colors[`mode-${mode}`],
     postfix: mode === 'airplane' || mode === 'subway' ? '' : style.postfix,
   };
+};
+
+export const getAllIconStyleWithColor = () => {
+  const config = getConfig();
+  const style = { ...defaultModeIcons.modeIcons, ...config.modeIcons };
+  return style.colors;
 };

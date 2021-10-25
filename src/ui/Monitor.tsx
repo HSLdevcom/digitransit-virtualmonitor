@@ -16,6 +16,7 @@ import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
 import { getColorByName } from '../util/getConfig';
+import { defaultFontNarrow, defaultFontNormal } from './DefaultStyles';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -98,7 +99,10 @@ const Monitor: FC<IProps> = ({
   const style = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,
-    '--monitor-background-color': getColorByName('monitorBackground') || getColorByName('primary'),
+    '--monitor-background-color':
+      getColorByName('monitorBackground') || getColorByName('primary'),
+    '--font-family': defaultFontNormal,
+    '--font-family-narrow': defaultFontNarrow,
   } as React.CSSProperties;
 
   const coeff = 1000 * 60 * 5;

@@ -3,6 +3,7 @@ export default {
     colors: {
       primary: '#007ac9',
       hover: '#0062a1',
+      monitorBackground: '#0057a2',
     },
     feedIds: ['HSL'],
     modeIcons: {
@@ -13,6 +14,7 @@ export default {
         'mode-ferry': '#007A97',
         'mode-subway': '#CA4000',
       },
+      setName: 'hsl',
     },
     name: 'hsl',
     uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
@@ -37,6 +39,7 @@ export default {
         'mode-bus': '#7DC02D',
       },
       postfix: '-waltti',
+      setName: 'digitransit',
     },
     name: 'jyvaskyla',
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
@@ -53,6 +56,7 @@ export default {
   matka: {
     colors: {
       primary: '#026273',
+      monitorBackground: '#0057a2',
     },
     feedIds: [
       'MATKA',
@@ -82,7 +86,10 @@ export default {
         'mode-subway': '#CA4000',
         'mode-rail': '#8E5EA0',
         'mode-ferry': '#247C7B',
+        'mode-hybrid-bus-tram': '#1A4A8F,#DA2128',
       },
+      postfix: '-waltti',
+      setName: 'digitransit',
     },
     name: 'matka',
     uri: 'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql',
@@ -109,6 +116,7 @@ export default {
         'mode-tram': '#DA2128',
       },
       postfix: '-waltti',
+      setName: 'digitransit',
     },
     name: 'tampere',
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',

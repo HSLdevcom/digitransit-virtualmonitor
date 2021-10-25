@@ -5,6 +5,14 @@ import isEqual from 'lodash/isEqual';
 import Modal from 'react-modal';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { v4 as uuid } from 'uuid';
+import { getColorByName } from '../util/getConfig';
+import {
+  defaultColorAlert,
+  defaultColorFont,
+  defaultFontNarrow,
+  defaultFontNormal,
+} from './DefaultStyles';
+
 Modal.setAppElement('#root');
 
 interface Option {
@@ -39,6 +47,15 @@ const LayoutModal: FC<Props & WithTranslation> = ({
   };
   const layouts =
     orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;
+
+  const style = {
+    '--primary-color': getColorByName('primary'),
+    '--alert-color': getColorByName('alert') || defaultColorAlert,
+    '--font-color': getColorByName('font') || defaultColorFont,
+    fontFamily: defaultFontNormal,
+    '--font-family-narrow': defaultFontNarrow,
+  } as React.CSSProperties;
+
   return (
     <Modal
       isOpen={isOpen}
@@ -46,7 +63,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
       portalClassName="modal"
       style={orientation === 'vertical' ? verticalHeight : {}}
     >
-      <div className="layout-modal-content-container">
+      <div className="layout-modal-content-container" style={style}>
         <h2 className="layout-modal-header">{t('layoutModalHeader')}</h2>
         <div className="layouts">
           {layouts.map(l => {

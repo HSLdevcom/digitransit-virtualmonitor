@@ -5,7 +5,8 @@ import { isInformationDisplay } from '../util/monitorUtils';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
-import { getPrimaryColor } from '../util/getConfig';
+import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
+import StopCode from './StopCode';
 
 interface IView {
   name?: string;
@@ -25,9 +26,7 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
   const [isOpen, setOpen] = useState(false);
   const [isDelete, setDelete] = useState(false);
   const layout = cards[0].layout;
-  const titles = cards.map(c => {
-    return c.title.fi;
-  });
+
   const layouts = cards.map(c => {
     return c.layout;
   });
@@ -71,35 +70,70 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
     isInformationDisplay: isInformationDisplay(cards),
   };
 
+  const getTitles = obj => {
+    let titles = '';
+    languages.forEach((lang, x) => {
+      if (x !== 0) {
+        titles += ' / ';
+      }
+      titles += obj.title[lang];
+    });
+    return titles;
+  };
+
   const crds = cards.map((c, i) => {
     const cols = c.columns;
     const multipleCols = cols.right.inUse;
     const colStops = multipleCols
-      ? cols.left.stops.concat(cols.right.stops)
-      : cols.left.stops;
-    const stops = (
+      ? [cols.left.stops, cols.right.stops]
+      : [cols.left.stops];
+
+    const colTitles = multipleCols
+      ? [getTitles(cols.left), getTitles(cols.right)]
+      : [getTitles(c)];
+
+    const titlesAndStops = (
       <ul key={`card#${i}`}>
-        {colStops.flat().map((stop, j) => {
-          const stopText = stop.name
-            .concat(' (')
-            .concat(stop.gtfsId)
-            .concat(')');
-          return <li key={`stop#${j}`}>{stopText}</li>;
+        {colStops.map((colStop, c) => {
+          return (
+            <>
+              <div className="card-title">{colTitles[c]}</div>
+              <div className="stop-list">
+                {colStop.map((stop, j) => {
+                  const icon =
+                    `${stop.locationType}-${stop.mode}`.toLowerCase();
+                  const iconStyle = getIconStyleWithColor(icon);
+                  const stopTitle = stop.name
+                    .concat(stop.code ? ' (' + stop.code + ')' : '')
+                    .concat(' - ')
+                    .concat(stop.gtfsId);
+                  return (
+                    <li key={`stop#${j}`} title={stopTitle}>
+                      <div className="icon">
+                        <Icon
+                          img={icon + iconStyle.postfix}
+                          width={16}
+                          height={16}
+                          color={iconStyle.color}
+                        />
+                        {stop.name}
+                        <StopCode code={stop.code} />
+                      </div>
+                    </li>
+                  );
+                })}
+              </div>
+            </>
+          );
         })}
       </ul>
     );
+
     return (
       <>
         <div className="card-container">
           <Icon img={'layout'.concat(layouts[i])} />
-          <div className="data">
-            <div className="card-title">
-              {layouts[i] < 9 || layouts[i] > 11
-                ? titles[i]
-                : cols.left.title.fi.concat(' / ').concat(cols.right.title.fi)}
-            </div>
-            <div className="stop-list">{stops}</div>
-          </div>
+          <div className="data">{titlesAndStops}</div>
         </div>
       </>
     );
@@ -121,6 +155,7 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
             img={layouts[0] < 11 ? 'rectangle-selected' : 'vertical-selected'}
             height={32}
             width={32}
+            color={getPrimaryColor()}
           />
         </span>
         <span className="monitor-name">{name}</span>

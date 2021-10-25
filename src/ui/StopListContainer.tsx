@@ -188,7 +188,7 @@ const StopList = props => {
           {rightItems &&
             rightItems.map(item => {
               return (
-                <li className="stop">
+                <li className="stop" key={uuid()}>
                   <StopRow
                     key={uuid()}
                     stop={item}

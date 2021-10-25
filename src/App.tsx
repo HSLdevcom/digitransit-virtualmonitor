@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import * as React from 'react';
+import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
@@ -47,13 +47,14 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
       'mode-airplane'?: string;
       'mode-bus'?: string;
       'mode-tram'?: string;
-      'mode-metro'?: string;
+      'mode-subway'?: string;
       'mode-rail'?: string;
       'mode-ferry'?: string;
       'mode-citybike'?: string;
       'mode-citybike-secondary'?: string;
     };
     postfix?: string;
+    setName?: string;
   };
 }
 export interface IMonitorConfig {
@@ -97,18 +98,16 @@ interface IStopMonitorProps {
 export type combinedConfigurationAndInjected = IConfigurationProps &
   WithTranslation;
 
-class App extends React.Component<combinedConfigurationAndInjected, any> {
-  constructor(props: combinedConfigurationAndInjected) {
-    super(props);
-  }
-  render() {
+const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
+  props: combinedConfigurationAndInjected & WithTranslation,
+) => {
     // ---------- TODO: POC / DEBUG PURPOSES ONLY ----------
     const user = {
       loggedIn: true,
       urls: ['abcdef', 'ghijk'],
     };
     // ----------                                 ----------
-    const monitorConfig: IExtendedMonitorConfig = this.props.monitorConfig;
+    const monitorConfig: IExtendedMonitorConfig = props.monitorConfig;
 
     const client = new ApolloClient({
       link: ApolloLink.from([
@@ -208,7 +207,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
                     urlMultipleStopsText={helpPageurlMultipleStopsText}
                     urlParamFindText={helpPageUrlParamFindText}
                     urlParamFindAltText={helpPageUrlParamFindAltText}
-                    content={this.props.search.cont}
+                    content={props.search.cont}
                   />
                 </>
               )}
@@ -254,7 +253,7 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
                   stopIds={stopId.split(',')}
                   layout={layout ? Number(layout) : 2}
                   config={monitorConfig}
-                  urlTitle={this.props.search?.title}
+                  urlTitle={props.search?.title}
                 />
               )}
             />
@@ -272,17 +271,16 @@ class App extends React.Component<combinedConfigurationAndInjected, any> {
               }: RouteComponentProps<IMonitorConfig>) => (
                 <>
                   <LandingPage
-                    login={this.props.search?.pocLogin}
+                    login={props.search?.pocLogin}
                     config={monitorConfig}
                   />
                 </>
               )}
             />
-          </Switch>
+          </Switch> 
         </ApolloProvider>
       </div>
     );
   }
-}
 
 export default withTranslation('translations')(App);

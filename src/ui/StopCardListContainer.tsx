@@ -31,14 +31,14 @@ interface IProps {
   user?: any;
 }
 
-const getViewName = () => {
+const getViewName = title => {
   if (window && window.location && window.location.search) {
     const params = window.location.search.split('&');
     if (params.length > 0 && params[0].startsWith('?name=')) {
       return decodeURI(params[0].substring(6));
     }
   }
-  return 'Näytön nimi';
+  return title;
 };
 
 const getHash = () => {
@@ -95,7 +95,9 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   const [isOpen, setOpen] = useState(false);
 
   const [uuid, setUuid] = useState(getUuid());
-  const [viewTitle, setViewTitle] = useState(getViewName());
+  const [viewTitle, setViewTitle] = useState(
+    getViewName(t('staticMonitorTitle')),
+  );
 
   const openPreview = () => {
     setOpen(true);
@@ -108,8 +110,23 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     setStopCardList(stopCardList.filter(s => s.id !== id));
   };
 
-  const onCardMove = (oldIndex: number, newIndex: number) => {
-    setStopCardList(arrayMove(stopCardList, oldIndex, newIndex));
+  const onCardMove = (
+    oldIndex: number,
+    newIndex: number,
+    oldId: number,
+    newId: number,
+  ) => {
+    const oldCard = stopCardList.filter(s => s.id === oldId);
+    const newCard = stopCardList.filter(s => s.id === newId);
+    const newlyArrandedCards = stopCardList.filter(
+      s => s.id !== oldId && s.id !== newId,
+    );
+    if (oldIndex < newIndex) {
+      newlyArrandedCards.splice(oldIndex, 0, newCard[0], oldCard[0]);
+    } else {
+      newlyArrandedCards.splice(newIndex, 0, newCard[0], oldCard[0]);
+    }
+    setStopCardList(newlyArrandedCards);
   };
 
   const onStopDelete = (cardId: number, side: string, gtfsId: string) => {
@@ -206,8 +223,6 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       } else {
         stopCardList[cardIndex].columns['right'].title[lang] = value;
       }
-
-      stopCardList[cardIndex].columns['right'].inUse = true;
     } else if (type === 'layout') {
       if (
         getLayout(stopCardList[cardIndex].layout).isMultiDisplay &&
@@ -223,6 +238,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         stopCardList[cardIndex].columns.right.stops = [];
         stopCardList[cardIndex].columns.left.title[lang] = t('sideLeft');
         stopCardList[cardIndex].columns.right.title[lang] = t('sideRight');
+        stopCardList[cardIndex].columns.right.inUse = true;
       }
       stopCardList[cardIndex].layout = Number(value);
     } else if (type === 'duration') {
@@ -296,6 +312,9 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
     cardArray.forEach(card => {
+      if (card.layout >= 9 && card.layout < 11) {
+        card.columns.right.inUse = true;
+      }
       card.columns.left.stops = card.columns.left.stops.map(stop => {
         return {
           name: stop.name,
@@ -304,16 +323,18 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           settings: stop.settings,
           parentStation: stop.parentStation,
           mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
+          code: stop.code ? stop.code : null,
         };
       });
       card.columns.right.stops = card.columns.right.stops.map(stop => {
         return {
           name: stop.name,
           gtfsId: stop.gtfsId,
-          parentStation: stop.parentStation,
-          mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           locationType: stop.locationType,
           settings: stop.settings,
+          parentStation: stop.parentStation,
+          mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
+          code: stop.code ? stop.code : null,
         };
       });
     });
@@ -351,7 +372,10 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       });
     } else {
       const hashChanged = !isEqual(getHash(), newCard.contenthash);
-      const titleChanged = !isEqual(getViewName(), viewTitle);
+      const titleChanged = !isEqual(
+        getViewName(t('staticMonitorTitle')),
+        viewTitle,
+      );
       if (hashChanged) {
         monitorAPI.create(newCard).then(res => {
           monitorAPI
@@ -483,7 +507,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
               cardInfo={cardInfo}
               feedIds={feedIds}
               orientation={orientation}
-              cardsCount={modifiedStopCardList.length}
+              cards={modifiedStopCardList}
               columns={item.columns}
               onCardDelete={item.onCardDelete}
               onCardMove={item.onCardMove}

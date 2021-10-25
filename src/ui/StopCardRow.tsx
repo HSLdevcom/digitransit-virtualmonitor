@@ -12,7 +12,11 @@ import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import { ICardInfo } from './CardInfo';
 import cx from 'classnames';
-import {getAllIconStyleWithColor, getPrimaryColor} from '../util/getConfig';
+import {
+  getAllIconStyleWithColor,
+  getPrimaryColor,
+  getModeSet,
+} from '../util/getConfig';
 
 const getGTFSId = id => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -28,11 +32,16 @@ interface IProps {
   readonly orientation: string;
   readonly noStopsSelected: boolean;
   readonly feedIds: Array<string>;
-  readonly cardsCount: number;
+  readonly cards: Array<any>;
   readonly cardInfo: ICardInfo;
   readonly columns: Array<IColumn>;
   readonly onCardDelete?: (id: number) => void;
-  readonly onCardMove?: (oldIndex: number, newIndex: number) => void;
+  readonly onCardMove?: (
+    oldIndex: number,
+    newIndex: number,
+    oldId: number,
+    newId: number,
+  ) => void;
   readonly onStopDelete?: (
     cardId: number,
     side: string,
@@ -50,6 +59,7 @@ interface IProps {
     cardId: number,
     type: string,
     value: string,
+    lang?: string,
   ) => void;
   languages: Array<string>;
 }
@@ -57,7 +67,7 @@ interface IProps {
 const StopCardRow: FC<IProps & WithTranslation> = ({
   orientation,
   feedIds,
-  cardsCount,
+  cards,
   cardInfo,
   columns,
   onCardDelete,
@@ -73,6 +83,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   const [getStop, stopState] = useLazyQuery(GET_STOP);
   const [getStation, stationState] = useLazyQuery(GET_STATION);
   const [autosuggestValue, setAutosuggestValue] = useState(null);
+  const [queryTimestamp, setQueryTimestamp] = useState(0);
 
   const onSelect = selected => {
     const properties = selected.properties;
@@ -83,12 +94,14 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
           variables: { ids: getGTFSId(properties.id) },
           context: { clientName: 'default' },
         });
+        setQueryTimestamp(new Date().getTime());
         break;
       case 'station':
         getStation({
           variables: { ids: getGTFSId(properties.id) },
           context: { clientName: 'default' },
         });
+        setQueryTimestamp(new Date().getTime());
         break;
       default:
         break;
@@ -105,14 +118,12 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         cardInfo.id,
         'left',
         stopState.data.stop
-          .filter(
-            stop =>
-              stop && !columns['left'].stops.some(el => el.id === stop.id),
-          )
+          .filter(s => s && !columns['left'].stops.some(el => el.id === s.id))
           .map(stop => {
             const stopWithGTFS = {
               ...stop,
               locality: autosuggestValue.locality,
+              modes: autosuggestValue.addendum.GTFS.modes,
             };
             const routes = stop.stoptimesForPatterns.map(
               stoptimes => stoptimes.pattern,
@@ -127,18 +138,17 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               parentStation: stop.parentStation
                 ? stop.parentStation.gtfsId
                 : undefined,
-              mode:
-                stop.stoptimesForPatterns &&
-                stop.stoptimesForPatterns.length > 0
-                  ? stop.stoptimesForPatterns[0].pattern.route.mode
-                  : undefined,
+              vehicleMode:
+                stopWithGTFS.modes.length === 1
+                  ? stopWithGTFS.modes[0]
+                  : 'hybrid-'.concat(stopWithGTFS.modes.sort().join('-')),
             };
           }),
         false,
         undefined,
       );
     }
-  }, [stopState.data]);
+  }, [stopState.data, queryTimestamp]);
 
   useEffect(() => {
     if (stationState.data && stationState.data.station) {
@@ -157,35 +167,34 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             const stationWithGTFS = {
               ...station,
               locality: autosuggestValue.locality,
+              modes: autosuggestValue.addendum.GTFS.modes,
             };
             return {
               ...stationWithGTFS,
-              code: t('station'),
+              code: station.stops[0].code, //t('station'),
               desc: station.stops[0].desc,
               patterns: sortBy(
                 sortBy(patterns, 'pattern.route.shortname'),
                 'pattern.route.shortname.length',
               ).map(e => e.pattern),
               hiddenRoutes: [],
-              mode:
-                station.stops &&
-                station.stops.length > 0 &&
-                station.stops[0].stoptimesForPatterns &&
-                station.stops[0].stoptimesForPatterns.length > 0
-                  ? station.stops[0].stoptimesForPatterns[0].pattern.route.mode
-                  : undefined,
+              vehicleMode:
+                stationWithGTFS.modes.length === 1
+                  ? stationWithGTFS.modes[0]
+                  : 'hybrid-'.concat(stationWithGTFS.modes.sort().join('-')),
             };
           }),
         false,
         undefined,
       );
     }
-  }, [stationState.data]);
-  const modeIconColor = getAllIconStyleWithColor();
+  }, [stationState.data, queryTimestamp]);
+
   const lang = t('languageCode');
   const isFirst = cardInfo.index === 0;
-  const isLast = cardInfo.index === cardsCount - 1;
+  const isLast = cardInfo.index === cards.length - 1;
   const isEastWest = cardInfo.layout >= 9 && cardInfo.layout <= 11;
+
   return (
     <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
       <div className="stopcard-row-container">
@@ -221,7 +230,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               />
             )}
           <div className="icons">
-            {cardsCount > 1 && (
+            {cards.length > 1 && (
               <div
                 className={cx(
                   'delete icon',
@@ -242,7 +251,12 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 {isFirst && (
                   <div
                     onClick={() =>
-                      onCardMove(cardInfo.index, cardInfo.index + 1)
+                      onCardMove(
+                        cardInfo.index,
+                        cardInfo.index + 1,
+                        cards[cardInfo.index].id,
+                        cards[cardInfo.index + 1].id,
+                      )
                     }
                   >
                     <Icon
@@ -256,7 +270,12 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 {isLast && (
                   <div
                     onClick={() =>
-                      onCardMove(cardInfo.index, cardInfo.index - 1)
+                      onCardMove(
+                        cardInfo.index,
+                        cardInfo.index - 1,
+                        cards[cardInfo.index].id,
+                        cards[cardInfo.index - 1].id,
+                      )
                     }
                   >
                     <Icon
@@ -271,7 +290,12 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                   <div className="container">
                     <div
                       onClick={() =>
-                        onCardMove(cardInfo.index, cardInfo.index - 1)
+                        onCardMove(
+                          cardInfo.index,
+                          cardInfo.index - 1,
+                          cards[cardInfo.index].id,
+                          cards[cardInfo.index - 1].id,
+                        )
                       }
                     >
                       <Icon
@@ -286,7 +310,12 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                     </div>
                     <div
                       onClick={() =>
-                        onCardMove(cardInfo.index, cardInfo.index + 1)
+                        onCardMove(
+                          cardInfo.index,
+                          cardInfo.index + 1,
+                          cards[cardInfo.index].id,
+                          cards[cardInfo.index + 1].id,
+                        )
                       }
                       className="move-down"
                     >
@@ -327,14 +356,14 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               sources={['Datasource']}
               targets={['Stops']}
               modeIconColors={getAllIconStyleWithColor()}
-              modeSet={'digitransit'} // TODO: This needs to be configured properly
+              modeSet={getModeSet()}
             />
           </div>
           <LayoutAndTimeContainer
             orientation={orientation}
             cardInfo={cardInfo}
             updateCardInfo={updateCardInfo}
-            durationEditable={cardsCount !== 1 || languages.length > 1}
+            durationEditable={cards.length !== 1 || languages.length > 1}
           />
         </div>
         <StopListContainer

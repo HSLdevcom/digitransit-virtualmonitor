@@ -11,6 +11,7 @@ import { sortBy, uniqWith, isEqual } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
 import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
+import { getStopIcon } from '../util/stopCardUtil';
 
 interface IStopInfoPlus extends IStopInfo {
   cardId?: number;
@@ -34,11 +35,6 @@ interface IProps {
     gtfsIdForHidden: string,
   ) => void;
 }
-const getStopIcon = stop => {
-  return stop.locationType === 'STATION' && stop.vehicleMode
-    ? stop.vehicleMode?.toLowerCase()
-    : 'stop-bus';
-};
 
 const StopRow: FC<IProps & WithTranslation> = ({
   side,
@@ -77,14 +73,13 @@ const StopRow: FC<IProps & WithTranslation> = ({
       <div className="stop-row-stop icon">
         <Icon
           img={
-            !iconStyle.color
+            !iconStyle.postfix
               ? getStopIcon(stop)
               : getStopIcon(stop) + iconStyle.postfix
           }
-          color={!iconStyle.color ? getPrimaryColor() : iconStyle.color}
-          height={32}
           width={32}
-          borderRadius={!iconStyle.color ? null : iconStyle.borderRadius}
+          height={32}
+          color={iconStyle.color}
         />
       </div>
       <div className="stop-row-main">

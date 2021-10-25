@@ -200,6 +200,13 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       }
     });
 
+    let withoutRouteColumn = false;
+    stops.every(s => {
+      if (!s.settings?.showRouteColumn) {
+        withoutRouteColumn = true;
+      }
+    });
+
     return (
       <div
         className={cx(
@@ -212,10 +219,18 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           },
         )}
       >
-        <div className={cx('grid-row', { 'with-stop-code': withStopCode })}>
-          <div className={cx('grid-header', 'line')}>
-            {t('lineId', { lng: currentLang })}
-          </div>
+        <div
+          className={cx(
+            'grid-row',
+            { 'with-stop-code': withStopCode },
+            { 'without-route-column': withoutRouteColumn },
+          )}
+        >
+          {!withoutRouteColumn && (
+            <div className={cx('grid-header', 'line')}>
+              {t('lineId', { lng: currentLang })}
+            </div>
+          )}
           <div className={cx('grid-header', 'destination')}>
             {t('destination', { lng: currentLang })}
           </div>

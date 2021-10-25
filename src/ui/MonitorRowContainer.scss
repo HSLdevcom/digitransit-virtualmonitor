@@ -11,7 +11,7 @@ $preview-grid-divider: 2px;
 
 .monitor-overlay {
   transition: opacity 1s;
-  z-index: 1000;
+  z-index: 10000;
   width: 60%;
   height: 15%;
   background-color: rgba(0, 0, 0, 0.7);
@@ -55,8 +55,8 @@ $preview-grid-divider: 2px;
 .demo-button {
   position: absolute;
   background-color: transparent;
-  z-index: 10000000;
-  width: 100%;
+  z-index: 9999;
+  width: 25vh;
   height: 100%;
   bottom: 0;
 }
@@ -425,6 +425,16 @@ $preview-grid-divider: 2px;
           align-self: center;
         }
 
+        .destination-row {
+          display: flex;
+
+          .metro-icon {
+            position: relative;
+            top: 3px;
+            margin: 0 3px;
+          }
+        }
+
         white-space: nowrap;
         overflow: hidden;
         mask-image:
@@ -440,6 +450,12 @@ $preview-grid-divider: 2px;
           font-size: smaller;
           white-space: pre;
           display: flex;
+
+          .metro-icon-small {
+            position: relative;
+            top: 2px;
+            margin: 0 3px;
+          }
         }
       }
     }

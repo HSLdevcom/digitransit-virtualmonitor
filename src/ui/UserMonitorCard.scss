@@ -86,19 +86,47 @@
         }
 
         .data {
+          ul {
+            margin-block: 0;
+          }
+
           .card-title {
+            position: relative;
+            top: -5px;
             font-style: normal;
             font-weight: bold;
             font-size: 15px;
             line-height: 24px;
             letter-spacing: -0.03em;
             color: #333;
+
+            &:not(:first-child) {
+              margin-top: 15px;
+            }
           }
 
           .stop-list {
             ul,
             li {
-              list-style: disc inside none;
+              list-style: none;/* disc inside none; */
+              .icon {
+                svg {
+                  padding-right: 5px;
+                  padding-left: 0;
+                  height: 16px !important;
+                  width: 16px !important;
+                  position: relative;
+                  top: 2px;
+                }
+
+                span {
+                  margin-left: 5px;
+                }
+              }
+
+              &:last-child {
+                padding-bottom: 10px;
+              }
             }
 
             font-style: normal;
@@ -107,7 +135,7 @@
             line-height: 18px;
             letter-spacing: -0.03em;
             color: #333;
-            margin-top: -11px;
+            // margin-top: -11px;
           }
         }
       }

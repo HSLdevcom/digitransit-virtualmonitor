@@ -109,7 +109,8 @@ i18n.init({
         cancelled: 'Peruttu',
         chooseOne: 'Valitse vähintään yksi',
         closedStop: 'Pysäkki suljettu',
-        closedStopWithRange: 'Pysäkki {{name}} {{code}}\nsuljettu aikavälillä\n{{startTime}} - {{endTime}}',
+        closedStopWithRange:
+          'Pysäkki {{name}} {{code}}\nsuljettu aikavälillä\n{{startTime}} - {{endTime}}',
         continue: 'Jatka',
         createViewTitle: 'Uuden näkymän luonti',
         deleteRenamings: 'Tyhjennä tekstimuutokset',
@@ -121,9 +122,12 @@ i18n.init({
         duration: 'Kesto / esityskieli',
         'edit-display': 'Muokkaa näyttöä',
         endOfLine: 'Linjat, joille tämä on päätepysäkki',
-        frontPageParagraph1: 'Luo itsellesi puhelimen tai tietokoneen ruudulla näkyvä pysäkkinäyttö ja valitse minkä pysäkkien ja linjojen aikatauluista olet kiinnostunut.',
-        frontPageParagraph2: 'Palvelulla voi tuottaa myös julkisten tilojen auloihin tai yritysten intranet-verkkoon kyseisen paikan läheisyydessä olevien pysäkkien aikataulut.',
-        frontPageParagraph3: 'Joukkoliikenteen aikataulut näkyvällä paikalla kannustavat käyttämään joukkoliikennettä ja aikataulujen lisäksi palvelun kautta saat myös liikenne- ja häiriötiedotteet.',
+        frontPageParagraph1:
+          'Luo itsellesi puhelimen tai tietokoneen ruudulla näkyvä pysäkkinäyttö ja valitse minkä pysäkkien ja linjojen aikatauluista olet kiinnostunut.',
+        frontPageParagraph2:
+          'Palvelulla voi tuottaa myös julkisten tilojen auloihin tai yritysten intranet-verkkoon kyseisen paikan läheisyydessä olevien pysäkkien aikataulut.',
+        frontPageParagraph3:
+          'Joukkoliikenteen aikataulut näkyvällä paikalla kannustavat käyttämään joukkoliikennettä ja aikataulujen lisäksi palvelun kautta saat myös liikenne- ja häiriötiedotteet.',
         headerSideLeft: 'Vasen palsta',
         headerSideRight: 'Oikea palsta',
         hideLines: 'Piilota linjoja ',
@@ -147,7 +151,8 @@ i18n.init({
         quickDisplayCreate: 'Luo pysäkkinäyttö',
         renameDestinations: 'Muokkaa määränpää-tekstejä',
         save: 'Tallenna',
-        'search-autosuggest-label': 'Paikka, linja ja pysäkkihaku. Navigoi listassa nuolinäppäimillä ja valitse enterillä',
+        'search-autosuggest-label':
+          'Paikka, linja ja pysäkkihaku. Navigoi listassa nuolinäppäimillä ja valitse enterillä',
         'search-autosuggest-len': ' Löydettiin {{count}} ehdotus',
         'search-autosuggest-len_plural': ' Löydettiin {{count}} ehdotusta',
         'search-current-suggestion': 'Tämänhetkinen valinta: {{selection}}',
@@ -163,7 +168,8 @@ i18n.init({
         stopCodeOrPlatformNumber: 'Pysäkki- tai laiturinumero',
         stoptitle: 'Pysäkkinäkymän nimi',
         timeShift: 'Rajaa lähtöjä ajan mukaan',
-        timeShiftDescription: 'Voit rajata esityksestä lähdöt, joihin pysäkkinäytön sijainnista ei\nole mahdollista ehtiä kyytiin.',
+        timeShiftDescription:
+          'Voit rajata esityksestä lähdöt, joihin pysäkkinäytön sijainnista ei\nole mahdollista ehtiä kyytiin.',
         timeShiftShow: 'Näytä vain lähdöt, joiden lähtöön on yli',
         vertical: 'Pysty',
         viewEditorName: 'Näkymän nimi',

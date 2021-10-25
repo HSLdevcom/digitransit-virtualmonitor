@@ -430,7 +430,7 @@ $preview-grid-divider: 2px;
 
           .metro-icon {
             position: relative;
-            top: 3px;
+            display: flex;
             margin: 0 3px;
           }
         }
@@ -453,8 +453,8 @@ $preview-grid-divider: 2px;
 
           .metro-icon-small {
             position: relative;
-            top: 2px;
             margin: 0 3px;
+            display: flex;
           }
         }
       }

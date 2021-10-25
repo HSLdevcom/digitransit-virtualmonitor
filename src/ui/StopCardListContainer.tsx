@@ -2,7 +2,6 @@ import cx from 'classnames';
 import { IStop, IMonitor } from '../util/Interfaces';
 import React, { FC, useState } from 'react';
 import StopCardRow from './StopCardRow';
-import arrayMove from 'array-move';
 import hash from 'object-hash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
@@ -12,11 +11,9 @@ import { Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getLayout';
 import isEqual from 'lodash/isEqual';
-
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
 import { isInformationDisplay } from '../util/monitorUtils';
-
 import UserViewTitleEditor from './UserViewTitleEditor';
 import { getCurrentSecondsWithMilliSeconds } from '../time';
 import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
@@ -110,23 +107,10 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     setStopCardList(stopCardList.filter(s => s.id !== id));
   };
 
-  const onCardMove = (
-    oldIndex: number,
-    newIndex: number,
-    oldId: number,
-    newId: number,
-  ) => {
-    const oldCard = stopCardList.filter(s => s.id === oldId);
-    const newCard = stopCardList.filter(s => s.id === newId);
-    const newlyArrandedCards = stopCardList.filter(
-      s => s.id !== oldId && s.id !== newId,
-    );
-    if (oldIndex < newIndex) {
-      newlyArrandedCards.splice(oldIndex, 0, newCard[0], oldCard[0]);
-    } else {
-      newlyArrandedCards.splice(newIndex, 0, newCard[0], oldCard[0]);
-    }
-    setStopCardList(newlyArrandedCards);
+  const onCardMove = (oldIndex: number, newIndex: number) => {
+    const c = stopCardList.slice();
+    [c[oldIndex], c[newIndex]] = [c[newIndex], c[oldIndex]];
+    setStopCardList(c);
   };
 
   const onStopDelete = (cardId: number, side: string, gtfsId: string) => {

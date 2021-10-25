@@ -36,12 +36,7 @@ interface IProps {
   readonly cardInfo: ICardInfo;
   readonly columns: Array<IColumn>;
   readonly onCardDelete?: (id: number) => void;
-  readonly onCardMove?: (
-    oldIndex: number,
-    newIndex: number,
-    oldId: number,
-    newId: number,
-  ) => void;
+  readonly onCardMove?: (oldIndex: number, newIndex: number) => void;
   readonly onStopDelete?: (
     cardId: number,
     side: string,
@@ -251,12 +246,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 {isFirst && (
                   <div
                     onClick={() =>
-                      onCardMove(
-                        cardInfo.index,
-                        cardInfo.index + 1,
-                        cards[cardInfo.index].id,
-                        cards[cardInfo.index + 1].id,
-                      )
+                      onCardMove(cardInfo.index, cardInfo.index + 1)
                     }
                   >
                     <Icon
@@ -270,12 +260,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 {isLast && (
                   <div
                     onClick={() =>
-                      onCardMove(
-                        cardInfo.index,
-                        cardInfo.index - 1,
-                        cards[cardInfo.index].id,
-                        cards[cardInfo.index - 1].id,
-                      )
+                      onCardMove(cardInfo.index, cardInfo.index - 1)
                     }
                   >
                     <Icon
@@ -290,12 +275,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                   <div className="container">
                     <div
                       onClick={() =>
-                        onCardMove(
-                          cardInfo.index,
-                          cardInfo.index - 1,
-                          cards[cardInfo.index].id,
-                          cards[cardInfo.index - 1].id,
-                        )
+                        onCardMove(cardInfo.index, cardInfo.index - 1)
                       }
                     >
                       <Icon
@@ -310,12 +290,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                     </div>
                     <div
                       onClick={() =>
-                        onCardMove(
-                          cardInfo.index,
-                          cardInfo.index + 1,
-                          cards[cardInfo.index].id,
-                          cards[cardInfo.index + 1].id,
-                        )
+                        onCardMove(cardInfo.index, cardInfo.index + 1)
                       }
                       className="move-down"
                     >

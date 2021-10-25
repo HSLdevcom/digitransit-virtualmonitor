@@ -75,10 +75,9 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   noStopsSelected,
   t,
 }) => {
-  const [getStop, stopState] = useLazyQuery(GET_STOP);
-  const [getStation, stationState] = useLazyQuery(GET_STATION);
+  const [getStop, stopState] = useLazyQuery(GET_STOP, {fetchPolicy: "network-only" });
+  const [getStation, stationState] = useLazyQuery(GET_STATION, {fetchPolicy: "network-only" });
   const [autosuggestValue, setAutosuggestValue] = useState(null);
-  const [queryTimestamp, setQueryTimestamp] = useState(0);
 
   const onSelect = selected => {
     const properties = selected.properties;
@@ -89,14 +88,12 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
           variables: { ids: getGTFSId(properties.id) },
           context: { clientName: 'default' },
         });
-        setQueryTimestamp(new Date().getTime());
         break;
       case 'station':
         getStation({
           variables: { ids: getGTFSId(properties.id) },
           context: { clientName: 'default' },
         });
-        setQueryTimestamp(new Date().getTime());
         break;
       default:
         break;
@@ -143,7 +140,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         undefined,
       );
     }
-  }, [stopState.data, queryTimestamp]);
+  }, [stopState.data]);
 
   useEffect(() => {
     if (stationState.data && stationState.data.station) {
@@ -183,7 +180,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         undefined,
       );
     }
-  }, [stationState.data, queryTimestamp]);
+  }, [stationState.data]);
 
   const lang = t('languageCode');
   const isFirst = cardInfo.index === 0;

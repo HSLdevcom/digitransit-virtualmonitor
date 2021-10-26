@@ -30,6 +30,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   t,
 }) => {
   const { isMultiDisplay, isPortrait } = getLayout(layout);
+  const [titleChanged, setTitleChanged] = useState(false);
   const [newTitle, setNewTitle] = useState(
     isMultiDisplay ? t('layout') : title,
   );
@@ -39,6 +40,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
     setisFocus(false);
     if (updateCardInfo) {
       updateCardInfo(id, 'title', event.target.value, lang);
+      setTitleChanged(false);
     }
   };
   const layoutTitle = t('layoutEastWest');
@@ -49,6 +51,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
 
   const onChange = e => {
     setNewTitle({ ...newTitle, [lang]: e.target.value });
+    setTitleChanged(true);
   };
 
   const titleDescription = t('stoptitle')
@@ -72,7 +75,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
             onFocus={e => {
               handleFocus(e);
             }}
-            value={newTitle[lang]}
+            value={titleChanged ? newTitle[lang] : title[lang]}
           />
         )}
         {isMultiDisplay && (

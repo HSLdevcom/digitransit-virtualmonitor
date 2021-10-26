@@ -2,36 +2,31 @@ import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import ContentContainer from './ContentContainer';
-import NysseLaptop from './icons/nysse-reittiopas.jpg';
+import monitorsImage from './icons/create-monitor.svg';
+import cx from 'classnames';
 
 function IndexPage(props: WithTranslation) {
-  const title = props.t('title');
-  const t1 = props.t('frontPageParagraph1');
-  const t2 = props.t('frontPageParagraph2');
-  const t3 = props.t('frontPageParagraph3');
-
   return (
     <ContentContainer longContainer>
       <div className="index">
         <div className="left">
-          <h1 className="title">{title}</h1>
-          <div className={'welcome'}>
-            <p className={'welcome-text'}>
-              {t1} <br />
-              <br /> {t2} <br />
-              <br /> {t3}
-            </p>
-          </div>
-          <div className="button-container">
-            <Link to={'/createView'}>
-              <button className="create-new">
-                {props.t('quickDisplayCreate')}
-              </button>
-            </Link>
+          <div className="welcome">
+            <div className={cx('text', 'bigger')}>
+              {props.t('frontPageParagraph1')}
+            </div>
+            <div className="text">{props.t('frontPageParagraph2')}</div>
+            <div className="text">{props.t('frontPageParagraph3')}</div>
+            <div className="button-container">
+              <Link to={'/createView'}>
+                <button className="create-new">
+                  {props.t('quickDisplayCreate')}
+                </button>
+              </Link>
+            </div>
           </div>
         </div>
         <div className="right">
-          <img className={'desktop-img'} src={NysseLaptop} alt="" />
+          <img className={'desktop-img'} src={monitorsImage} alt="" />
         </div>
       </div>
     </ContentContainer>

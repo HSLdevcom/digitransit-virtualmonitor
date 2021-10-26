@@ -5,6 +5,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
 import { capitalize } from '../util/monitorUtils';
+import { getIconStyleWithColor } from '../util/getConfig';
 
 interface IRoute {
   alerts: any;
@@ -125,20 +126,32 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   }
 
   const splitDestination =
-    (!renamedDestination || renamedDestination[currentLang] === '') &&
-    departureDestination &&
-    departureDestination.includes(' via');
+    (renamedDestination &&
+      renamedDestination[currentLang] !== '' &&
+      renamedDestination[currentLang].includes(' via')) ||
+    ((!renamedDestination || renamedDestination[currentLang] === '') &&
+      departureDestination &&
+      departureDestination.includes(' via'));
 
-  let viaDestination = splitDestination
-    ? departureDestination.substring(departureDestination.indexOf(' via') + 1)
-    : '';
-  if (splitDestination) {
-    const t = translations?.find(
-      t => t.trans_id === viaDestination.substring(4, viaDestination.length),
-    )?.translation;
-    if (t) {
-      viaDestination = ` via ${t}`;
+  let viaDestination = '';
+  if (!renamedDestination || renamedDestination[currentLang] === '') {
+    viaDestination = splitDestination
+      ? departureDestination.substring(departureDestination.indexOf(' via') + 1)
+      : '';
+    if (splitDestination) {
+      const t = translations?.find(
+        t => t.trans_id === viaDestination.substring(4, viaDestination.length),
+      )?.translation;
+      if (t) {
+        viaDestination = ` via ${t}`;
+      }
     }
+  } else if (renamedDestination && renamedDestination[currentLang] !== '') {
+    viaDestination = splitDestination
+      ? renamedDestination[currentLang].substring(
+          renamedDestination[currentLang].indexOf(' via') + 1,
+        )
+      : '';
   }
   if (departure?.pickupType === 'NONE') {
     const lastStop = departure?.trip?.stops?.slice(-1).pop().gtfsId;
@@ -151,6 +164,20 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   if (destination?.indexOf(' via') !== -1) {
     destination = destination?.substring(0, destination.indexOf(' via'));
   }
+
+  let replaceMetroStringWithIcon = false;
+  let replaceViaMetroStringWithIcon = false;
+  const metroStringIdx = destination ? destination.indexOf('(M)') : -1;
+  const viaMetroStringIdx = viaDestination ? viaDestination.indexOf('(M)') : -1;
+  if (metroStringIdx !== -1) {
+    replaceMetroStringWithIcon = true;
+    destination = destination.substring(0, metroStringIdx).trimEnd();
+  }
+  if (viaMetroStringIdx !== -1) {
+    replaceViaMetroStringWithIcon = true;
+    viaDestination = viaDestination.substring(0, viaMetroStringIdx).trimEnd();
+  }
+
   if (departure === null && dayForDivider) {
     return (
       <div className="row-with-separator">
@@ -172,6 +199,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   );
   const showStopCode = stopSettings?.settings?.showStopNumber;
   const viaSettings = stopSettings?.settings?.showVia;
+  const withoutRouteColumn = stopSettings?.settings?.showRouteColumn || false;
 
   return (
     <div className="row-with-separator">
@@ -182,17 +210,32 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           'two-rows': isTwoRow,
           'with-stop-code': showStopCode,
           'is-cancelled': isCancelled,
+          'without-route-column': withoutRouteColumn,
         })}
       >
-        <div className={cx('grid-col line', `len${lineLen}`)}>
-          {line[0]}
-          {line.length > 1 && <span className="line-letter">{line[1]}</span>}
-        </div>
+        {!withoutRouteColumn && (
+          <div className={cx('grid-col line', `len${lineLen}`)}>
+            {line[0]}
+            {line.length > 1 && <span className="line-letter">{line[1]}</span>}
+          </div>
+        )}
         <div className="grid-col destination">
           {alertState && isCancelled ? (
             isTwoRow ? (
               <>
-                <div>{destination}</div>
+                <div className="destination-row">
+                  {destination}
+                  {replaceMetroStringWithIcon && (
+                    <div className="metro-icon">
+                      <Icon
+                        img={'subway'}
+                        height={16}
+                        width={16}
+                        color={getIconStyleWithColor('subway').color}
+                      />
+                    </div>
+                  )}
+                </div>
                 <div className="via-destination">
                   {isCancelled && <Icon img={'alert'} />}
                   {t('cancelled', { lng: currentLang })}
@@ -206,21 +249,67 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             )
           ) : isTwoRow ? (
             <>
-              <div>{destination}</div>
+              <div className="destination-row">
+                {destination}
+                {replaceMetroStringWithIcon && (
+                  <div className="metro-icon">
+                    <Icon
+                      img={'subway'}
+                      height={16}
+                      width={16}
+                      color={getIconStyleWithColor('subway').color}
+                    />
+                  </div>
+                )}
+              </div>
               <div className="via-destination">
                 {isCancelled && <Icon img={'alert'} />}
                 {viaDestination ||
                   (isCancelled && t('cancelled', { lng: currentLang }))}
+                {replaceViaMetroStringWithIcon && (
+                  <div className="metro-icon-small">
+                    <Icon
+                      img={'subway'}
+                      height={12}
+                      width={12}
+                      color={getIconStyleWithColor('subway').color}
+                    />
+                  </div>
+                )}
               </div>
             </>
           ) : (
             <>
               {isCancelled && <Icon img={'alert'} />}
-              <div>{destination}</div>
+              <div className="destination-row">
+                {destination}
+                {replaceMetroStringWithIcon && (
+                  <div className="metro-icon">
+                    <Icon
+                      img={'subway'}
+                      height={16}
+                      width={16}
+                      color={getIconStyleWithColor('subway').color}
+                    />
+                  </div>
+                )}
+              </div>
               {showVia && viaSettings && (
-                <div className="via-destination">
-                  {' '.concat(viaDestination)}
-                </div>
+                <>
+                  <div className="via-destination">
+                    {' '.concat(viaDestination)}
+                    {replaceViaMetroStringWithIcon && (
+                      <div className="metro-icon-small">
+                        <Icon
+                          img={'subway'}
+                          height={12}
+                          width={12}
+                          color={getIconStyleWithColor('subway').color}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
             </>
           )}

@@ -1,5 +1,6 @@
 .modal-stop-routes {
   font-family: $font-family;
+
   h2 {
     font-style: normal;
     font-weight: 400;
@@ -56,7 +57,7 @@
       flex-direction: column;
       overflow-y: auto;
       overflow-x: hidden;
-      height: 380px;
+      max-height: 380px;
 
       .row {
         min-height: 30px;

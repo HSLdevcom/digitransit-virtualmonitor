@@ -18,12 +18,13 @@ const defaultModeIcons: IExtendedMonitorConfig = {
       'mode-airplane': '#0046ad',
       'mode-bus': '#0088ce',
       'mode-tram': '#6a8925',
-      'mode-metro': '#ed8c00',
+      'mode-subway': '#ed8c00',
       'mode-rail': '#af8dbc',
       'mode-ferry': '#35b5b3',
       'mode-citybike': '#f2b62d',
     },
     postfix: '',
+    setName: '',
   },
 };
 
@@ -57,7 +58,11 @@ export const getColorByName = name => {
   return colors[name];
 };
 
-export const getIconStyleWithColor = mode => {
+export const getIconStyleWithColor = modeIn => {
+  let mode = modeIn;
+  if (modeIn && modeIn.indexOf('-') !== -1) {
+    mode = modeIn.substring(modeIn.indexOf('-') + 1);
+  }
   const config = getConfig();
   const style = { ...defaultModeIcons.modeIcons, ...config.modeIcons };
   return {
@@ -71,4 +76,10 @@ export const getAllIconStyleWithColor = () => {
   const config = getConfig();
   const style = { ...defaultModeIcons.modeIcons, ...config.modeIcons };
   return style.colors;
+};
+
+export const getModeSet = () => {
+  const config = getConfig();
+  const style = { ...defaultModeIcons.modeIcons, ...config.modeIcons };
+  return style.setName;
 };

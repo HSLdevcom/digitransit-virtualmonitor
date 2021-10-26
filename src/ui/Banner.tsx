@@ -49,7 +49,7 @@ const Banner: React.FC<Props & WithTranslation> = (
         </div>
         <div className="link-section">
           <Link className="link" to={'/'}>
-            {props.t('breadCrumbsHome')}
+            {props.t('breadCrumbsSite')}
           </Link>
           <Link
             className="link"

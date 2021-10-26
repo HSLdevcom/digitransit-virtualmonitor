@@ -220,6 +220,16 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
           <h2> {props.t('show')}</h2>
           <div className="setting">
             <Checkbox
+              checked={settings.showRouteColumn}
+              onChange={checkShowSetting}
+              name={'showRouteColumn'}
+              width={30}
+              height={30}
+            />
+            <span className="setting-text">{props.t('showRouteColumn')}</span>
+          </div>
+          <div className="setting">
+            <Checkbox
               checked={settings.showStopNumber}
               onChange={checkShowSetting}
               name={'showStopNumber'}
@@ -249,16 +259,6 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               height={30}
             />
             <span className={'setting-text'}>{props.t('showVia')}</span>
-          </div>
-          <div className="setting">
-            <Checkbox
-              checked={settings.showRouteColumn}
-              onChange={checkShowSetting}
-              name={'showRouteColumn'}
-              width={30}
-              height={30}
-            />
-            <span className="setting-text">{props.t('showRouteColumn')}</span>
           </div>
         </div>
         <div className="divider" />

@@ -34,7 +34,16 @@ interface IProps {
     reorder: boolean,
     gtfsIdForHidden: string,
   ) => void;
+  readonly leftStops?: Array<IStopInfoPlus>;
+  readonly rightStops?: Array<IStopInfoPlus>;
 }
+
+const moveIsPossible = (stop, stopList) => {
+  if (stopList.some((s: IStopInfoPlus) => s.id === stop.id)) {
+    return false;
+  }
+  return true;
+};
 
 const StopRow: FC<IProps & WithTranslation> = ({
   side,
@@ -43,6 +52,8 @@ const StopRow: FC<IProps & WithTranslation> = ({
   onStopMove,
   setStops,
   t,
+  leftStops,
+  rightStops,
 }) => {
   const [showModal, changeOpen] = useState(false);
   const saveStopSettings = settings => {
@@ -68,6 +79,11 @@ const StopRow: FC<IProps & WithTranslation> = ({
     isEqual(defaultSettings, stop.settings) || !stop.settings;
 
   const iconStyle = getIconStyleWithColor(getStopIcon(stop));
+
+  const moveBetweenColumns = getLayout(stop.layout).isMultiDisplay
+    ? moveIsPossible(stop, side === 'left' ? rightStops : leftStops)
+    : false;
+
   return (
     <div className="stop-row-container">
       <div className="stop-row-stop icon">
@@ -117,11 +133,15 @@ const StopRow: FC<IProps & WithTranslation> = ({
       {getLayout(stop.layout).isMultiDisplay && (
         <div
           className="stop-row-move icon"
-          onClick={() => onStopMove(stop.cardId, side, stop.gtfsId)}
+          onClick={() =>
+            moveBetweenColumns
+              ? onStopMove(stop.cardId, side, stop.gtfsId)
+              : null
+          }
         >
           <Icon
             img={side === 'left' ? 'move-both-down' : 'move-both-up'}
-            color={getPrimaryColor()}
+            color={moveBetweenColumns ? getPrimaryColor() : '#AAAAAA'}
             width={30}
             height={40}
           />

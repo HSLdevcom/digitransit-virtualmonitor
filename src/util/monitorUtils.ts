@@ -129,6 +129,9 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
     Object.keys(view.columns).forEach(column => {
       const departureArray = [];
       stops.forEach(stop => {
+        if (!stop) {
+          return null;
+        }
         const stopIndex = view.columns[column].stops
           .map(stop => stop.gtfsId)
           .indexOf(stop.gtfsId);
@@ -239,6 +242,9 @@ export const isInformationDisplay = cards => {
 };
 
 export function getWeatherData(time, lat, lon) {
+  if (!lat || !lon) {
+    return null;
+  }
   const remainder = 5 - (time.minute % 5);
   const endtime = time
     .set({ seconds: 0 })

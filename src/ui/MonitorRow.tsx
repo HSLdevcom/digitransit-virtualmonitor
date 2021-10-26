@@ -201,7 +201,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const viaSettings = stopSettings?.settings?.showVia;
   const withoutRouteColumn = stopSettings?.settings?.showRouteColumn || false;
 
-  console.log('stopSettings:', stopSettings.settings);
   return (
     <div className="row-with-separator">
       <div className={cx('separator', { first: isFirst })}></div>

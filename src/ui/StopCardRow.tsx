@@ -187,6 +187,12 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   const isLast = cardInfo.index === cards.length - 1;
   const isEastWest = cardInfo.layout >= 9 && cardInfo.layout <= 11;
 
+  const filterSearchResults = results => {
+    return results.filter(result => {
+      const gtfsId = getGTFSId(result.properties.id);
+      return !columns['left'].stops.some(s => s.gtfsId === gtfsId)
+    })
+  }
   return (
     <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
       <div className="stopcard-row-container">
@@ -322,6 +328,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               placeholder={'autosuggestPlaceHolder'}
               value=""
               onSelect={onSelect}
+              filterResults={filterSearchResults}
               onClear={onClear}
               autoFocus={false}
               lang={lang}

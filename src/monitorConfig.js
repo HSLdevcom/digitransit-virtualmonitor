@@ -14,7 +14,7 @@ export default {
         'mode-ferry': '#007A97',
         'mode-subway': '#CA4000',
       },
-      setName: 'hsl',
+      setName: 'default',
     },
     name: 'hsl',
     uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',

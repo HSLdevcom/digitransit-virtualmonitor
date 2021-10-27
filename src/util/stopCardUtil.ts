@@ -16,3 +16,19 @@ export const defaultStopCard = t => ({
   layout: 2,
   duration: 5,
 });
+
+export const getStopIcon = stop => {
+  const stopWithStationIcons = [
+    'airplane',
+    'ferry',
+    'subway',
+    'hybrid-bus-tram',
+  ];
+  if (
+    stop.locationType === 'STATION' ||
+    stopWithStationIcons.includes(stop.vehicleMode?.toLowerCase())
+  ) {
+    return `station-${stop.vehicleMode?.toLowerCase()}`;
+  }
+  return `stop-${stop.vehicleMode?.toLowerCase()}`;
+};

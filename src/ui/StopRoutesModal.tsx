@@ -9,7 +9,13 @@ import { IStopInfo } from './StopInfoRetriever';
 import Modal from 'react-modal';
 import { capitalize } from '../util/monitorUtils';
 import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
-import { defaultColorAlert, defaultColorFont, defaultFontNarrow, defaultFontNormal} from './DefaultStyles';
+import {
+  defaultColorAlert,
+  defaultColorFont,
+  defaultFontNarrow,
+  defaultFontNormal,
+} from './DefaultStyles';
+import { getStopIcon } from '../util/stopCardUtil';
 
 Modal.setAppElement('#root');
 
@@ -34,6 +40,7 @@ export const defaultSettings = {
   timeShift: 0,
   renamedDestinations: [],
   showVia: true,
+  showRouteColumn: true,
 };
 
 const StopRoutesModal: FC<Props & WithTranslation> = (
@@ -48,7 +55,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     props.stopSettings?.renamedDestinations || [],
   );
   const stopCode = props.stop.code ? `( ${props.stop.code} )` : '';
-  const text = props.t('showHidden', {
+  const text = props.t('stopSettings', {
     stop: props.stop.name,
     code: stopCode,
   });
@@ -69,6 +76,11 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
       newSettings = {
         ...settings,
         showVia: !settings.showVia,
+      };
+    } else if (setting === 'showRouteColumn') {
+      newSettings = {
+        ...settings,
+        showRouteColumn: !settings.showRouteColumn,
       };
     }
     setSettings(newSettings);
@@ -181,9 +193,6 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     { value: 9, label: '9 min' },
     { value: 10, label: '10 min' },
   ];
-  const vehicleMode = props.stop.vehicleMode
-    ? props.stop.vehicleMode.toLowerCase()
-    : 'bus';
 
   const renamedDestinations = renamings;
 
@@ -192,8 +201,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     '--font-color': getColorByName('font') || defaultColorFont,
     '--font-family': defaultFontNormal,
     '--font-family-narrow': defaultFontNarrow,
-    '--monitor-background-color': getColorByName('monitorBackground') || getColorByName('primary'),
-    '--primary-color':  getColorByName('primary'),
+    '--monitor-background-color':
+      getColorByName('monitorBackground') || getColorByName('primary'),
+    '--primary-color': getColorByName('primary'),
   } as React.CSSProperties;
 
   return (
@@ -202,12 +212,22 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
       onRequestClose={handleClose}
       portalClassName="modal-stop-routes"
     >
-      <div className="modal" style={style} >
+      <div className="modal" style={style}>
         <div className="title-container">
           <span className="title"> {text} </span>
         </div>
         <div className="show-settings">
           <h2> {props.t('show')}</h2>
+          <div className="setting">
+            <Checkbox
+              checked={settings.showRouteColumn}
+              onChange={checkShowSetting}
+              name={'showRouteColumn'}
+              width={30}
+              height={30}
+            />
+            <span className="setting-text">{props.t('showRouteColumn')}</span>
+          </div>
           <div className="setting">
             <Checkbox
               checked={settings.showStopNumber}
@@ -303,10 +323,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             );
 
             const keyForInput = 3 * index + 1;
-
             const patternArray = pattern.split(':');
+            const iconStyle = getIconStyleWithColor(getStopIcon(props.stop));
 
-            const iconStyle = getIconStyleWithColor(vehicleMode);
             return (
               <div key={`r-${index}`} className="row">
                 <Checkbox
@@ -319,9 +338,14 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                 />
                 <div className="vehicle">
                   <Icon
-                    img={vehicleMode + iconStyle.postfix}
+                    img={
+                      !iconStyle.postfix
+                        ? getStopIcon(props.stop)
+                        : getStopIcon(props.stop) + iconStyle.postfix
+                    }
+                    width={24}
+                    height={24}
                     color={iconStyle.color}
-                    borderRadius={iconStyle.borderRadius}
                   />
                 </div>
                 <div className="route-number">{patternArray[2]}</div>

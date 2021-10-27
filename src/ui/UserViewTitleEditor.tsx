@@ -5,6 +5,7 @@ import { focusToInput, onClick } from './InputUtils';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { Redirect } from 'react-router-dom';
 import monitorAPI from '../api';
+import { getPrimaryColor } from '../util/getConfig';
 
 interface IProps {
   title: string;
@@ -83,11 +84,11 @@ const UserViewTitleEditor: FC<IProps & WithTranslation> = ({
             role="button"
             onClick={() => focusToInput('user-view-title-input')}
           >
-            <Icon img="edit" color={'#007ac9'} />
+            <Icon img="edit" color={getPrimaryColor()} />
           </div>
         )}
         <div className="delete-icon" onClick={isNew ? backToList : onDelete}>
-          <Icon img="delete" color={'#007AC9'} />
+          <Icon img="delete" color={getPrimaryColor()} />
         </div>
       </div>
     </div>

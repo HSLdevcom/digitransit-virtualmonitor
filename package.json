@@ -9,7 +9,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.19",
-    "@digitransit-component/digitransit-component-autosuggest": "^1.7.17",
+    "@digitransit-component/digitransit-component-autosuggest": "^1.7.20",
     "@digitransit-component/digitransit-component-dialog-modal": "^0.3.2",
     "@digitransit-component/digitransit-component-icon": "^0.1.13",
     "@digitransit-component/digitransit-component-suggestion-item": "^0.2.13",
@@ -20,7 +20,6 @@
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
     "apollo-boost": "^0.1.28",
-    "array-move": "^3.0.1",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.3.1",
     "cross-env": "^7.0.3",

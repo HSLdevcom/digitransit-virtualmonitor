@@ -22,7 +22,23 @@ import { ReactComponent as Layout14 } from './icons/layout14.svg';
 import { ReactComponent as Layout15 } from './icons/layout15.svg';
 import { ReactComponent as Layout16 } from './icons/layout16.svg';
 import { ReactComponent as Layout17 } from './icons/layout17.svg';
+import { ReactComponent as StationAirplane } from './icons/station-airplane-waltti.svg';
+import { ReactComponent as StationAirplaneWaltti } from './icons/station-airplane-waltti.svg';
+import { ReactComponent as StationBus } from './icons/station-bus.svg';
+import { ReactComponent as StationBusWaltti } from './icons/station-bus-waltti.svg';
+import { ReactComponent as StationFerry } from './icons/station-ferry.svg';
+import { ReactComponent as StationFerryWaltti } from './icons/station-ferry-waltti.svg';
+import StationHybridBusTramWaltti from './icons/StationHybridBusTramWaltti';
+import { ReactComponent as StationRail } from './icons/station-rail.svg';
+import { ReactComponent as StationRailWaltti } from './icons/station-rail-waltti.svg';
+import { ReactComponent as StationSubway } from './icons/station-subway.svg';
+import { ReactComponent as StationSubwayWaltti } from './icons/station-subway-waltti.svg';
 import { ReactComponent as StopBus } from './icons/stop-bus.svg';
+import { ReactComponent as StopBusWaltti } from './icons/stop-bus-waltti.svg';
+import { ReactComponent as StopRail } from './icons/stop-rail.svg';
+import { ReactComponent as StopRailWaltti } from './icons/stop-rail-waltti.svg';
+import { ReactComponent as StopTram } from './icons/stop-tram.svg';
+import { ReactComponent as StopTramWaltti } from './icons/stop-tram-waltti.svg';
 import { ReactComponent as MoveDown } from './icons/move-down.svg';
 import { ReactComponent as MoveUp } from './icons/move-up.svg';
 import { ReactComponent as MoveBothDown } from './icons/move-both-down.svg';
@@ -132,6 +148,24 @@ const IconMap = (style: IIconMapProps) => {
     layout16: <Layout16 style={style} />,
     layout17: <Layout16 style={style} />,
     'stop-bus': <StopBus style={style} />,
+    'stop-bus-waltti': <StopBusWaltti style={style} />,
+    'stop-rail': <StopRail style={style} />,
+    'stop-rail-waltti': <StopRailWaltti style={style} />,
+    'stop-tram': <StopTram style={style} />,
+    'stop-tram-waltti': <StopTramWaltti style={style} />,
+    'station-airplane': <StationAirplane style={style} />,
+    'station-airplane-waltti': <StationAirplaneWaltti style={style} />,
+    'station-ferry': <StationFerry style={style} />,
+    'station-ferry-waltti': <StationFerryWaltti style={style} />,
+    'station-bus': <StationBus style={style} />,
+    'station-bus-waltti': <StationBusWaltti style={style} />,
+    'station-hybrid-bus-tram-waltti': (
+      <StationHybridBusTramWaltti style={style} />
+    ),
+    'station-rail': <StationRail style={style} />,
+    'station-rail-waltti': <StationRailWaltti style={style} />,
+    'station-subway': <StationSubway style={style} />,
+    'station-subway-waltti': <StationSubwayWaltti style={style} />,
     'move-down': <MoveDown style={style} />,
     'move-up': <MoveUp style={style} />,
     'move-both-down': <MoveBothDown style={style} />,
@@ -209,22 +243,16 @@ const IconMap = (style: IIconMapProps) => {
  * />
  */
 const Icon = (props: ICustomInputProps) => {
-  let background = null;
+  const background = null;
   let fill = props.color;
   let height = props.height ? `${props.height}` : '24';
   let width = props.width ? `${props.width}` : '24';
   let stroke = null;
-  if (props.img === 'stop-bus') {
-    height = '32';
-    width = '32';
-  } else if (props.img === 'check') {
+  if (props.img === 'check') {
     fill = null;
     height = '18';
     width = '14';
     stroke = props.color;
-  } else if (props.img && props.img.endsWith('-waltti')) {
-    fill = null;
-    background = props.color;
   }
   const style = {
     fill: fill,

@@ -32,22 +32,24 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
     <div className="breadcrumbs-container">
       <div className="crumbs">
         <Link className="to-home" to={'/'}>
-          {!isLogged ? t('breadCrumbsHome') : t('breadCrumbsSite')}
+          {t('breadCrumbsSite')}
         </Link>
-        {isLogged && crumb !== t('breadCrumbsOwnMonitors') && crumb !== t('breadCrumbsHelp') && (
-          <>
-            <Icon
-              img={'arrow-down'}
-              width={14}
-              height={14}
-              rotate={'-90'}
-              color={'#007ac9'}
-            />
-            <Link className="to-home" to={'/?pocLogin'}>
-              {t('breadCrumbsOwnMonitors')}
-            </Link>
-          </>
-        )}
+        {isLogged &&
+          crumb !== t('breadCrumbsOwnMonitors') &&
+          crumb !== t('breadCrumbsHelp') && (
+            <>
+              <Icon
+                img={'arrow-down'}
+                width={14}
+                height={14}
+                rotate={'-90'}
+                color={getPrimaryColor()}
+              />
+              <Link className="to-home" to={'/?pocLogin'}>
+                {t('breadCrumbsOwnMonitors')}
+              </Link>
+            </>
+          )}
         <Icon
           img={'arrow-down'}
           width={14}

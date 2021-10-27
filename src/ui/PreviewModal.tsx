@@ -9,6 +9,12 @@ import { getStationIds, isPlatformOrTrackVisible } from '../util/monitorUtils';
 import TrainDataFetcher from './TrainDataFetcher';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { getColorByName } from '../util/getConfig';
+import {
+  defaultColorAlert,
+  defaultColorFont,
+  defaultFontNarrow,
+  defaultFontNormal,
+} from './DefaultStyles';
 
 Modal.setAppElement('#root');
 interface Props {
@@ -24,15 +30,24 @@ const PreviewModal: FC<Props & WithTranslation> = ({
   isOpen,
   onClose,
   isLandscape,
-  t
+  t,
 }) => {
   const stationIds = getStationIds(view);
   const showPlatformsOrTracks = stationIds.length
     ? isPlatformOrTrackVisible(view)
     : false;
 
-  const style =  {
-    background: getColorByName('monitorBackground') || getColorByName('primary')
+  const styleFont = {
+    fontFamily: defaultFontNormal,
+  } as React.CSSProperties;
+
+  const style = {
+    background:
+      getColorByName('monitorBackground') || getColorByName('primary'),
+    '--alert-color': getColorByName('alert') || defaultColorAlert,
+    '--font-color': getColorByName('font') || defaultColorFont,
+    fontFamily: defaultFontNormal,
+    '--font-family-narrow': defaultFontNarrow,
   } as React.CSSProperties;
 
   return (
@@ -42,13 +57,9 @@ const PreviewModal: FC<Props & WithTranslation> = ({
         onRequestClose={() => onClose(false)}
         portalClassName={cx('preview', !isLandscape ? 'portrait' : '')}
       >
-        <div className="title-and-close">
+        <div className="title-and-close" style={styleFont}>
           <div className="title">{t('preview')}</div>
-          <div
-            role="button"
-            className="close"
-            onClick={() => onClose(false)}
-          >
+          <div role="button" className="close" onClick={() => onClose(false)}>
             <Icon img={'close'} height={15} width={15} color={'#FFFFFF'} />
           </div>
         </div>

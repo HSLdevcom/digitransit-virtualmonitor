@@ -149,6 +149,7 @@ function StopListTitleInput(props: {
           onBlur={e =>
             !isKeyboardSelectionEvent(e, props.side) && onBlur(e, props.side)
           }
+          onChange={() => null}
           value={props.value[props.lang]}
         />
         {!focus && (

@@ -57,7 +57,6 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const showPlatformsOrTracks = stationIds.length
     ? isPlatformOrTrackVisible(monitor)
     : false;
-
   return (
     <>
       {monitor.isInformationDisplay ? (

@@ -50,6 +50,7 @@ interface IProps {
   dayForDivider?: string;
   currentLang: string;
   showMinutes: number;
+  withoutRouteColumn: boolean;
 }
 
 const isCharacter = char => {
@@ -90,14 +91,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   dayForDivider,
   showMinutes,
   t,
+  withoutRouteColumn,
 }) => {
-  const stopSettings = stops.find(s => {
-    const gtfsID = departure?.stop?.parentStation
-      ? departure?.stop.parentStation.gtfsId
-      : departure?.stop.gtfsId;
-    return s.gtfsId === gtfsID;
-  });
-
+  const stopSettings = stops.find(s => s.gtfsId === departure?.stop.gtfsId);
   const renamedDestinations = [];
   stops.forEach(s =>
     s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
@@ -199,8 +195,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   );
   const showStopCode = stopSettings?.settings?.showStopNumber;
   const viaSettings = stopSettings?.settings?.showVia;
-  const withoutRouteColumn = stopSettings?.settings?.showRouteColumn || false;
-
   return (
     <div className="row-with-separator">
       <div className={cx('separator', { first: isFirst })}></div>

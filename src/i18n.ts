@@ -33,6 +33,7 @@ i18n.init({
         cancel: 'Cancel',
         cancelled: 'Canceled',
         chooseOne: 'Choose at least one',
+        close: 'Close',
         closedStop: 'TODO',
         closedStopWithRange: 'TODO',
         continue: 'Continue',
@@ -108,6 +109,7 @@ i18n.init({
         cancel: 'Peruuta',
         cancelled: 'Peruttu',
         chooseOne: 'Valitse vähintään yksi',
+        close: 'Sulje',
         closedStop: 'Pysäkki suljettu',
         closedStopWithRange:
           'Pysäkki {{name}} {{code}}\nsuljettu aikavälillä\n{{startTime}} - {{endTime}}',
@@ -189,6 +191,7 @@ i18n.init({
         cancel: 'TODO',
         cancelled: 'Inställt',
         chooseOne: 'TODO',
+        close: 'Stäng',
         closedStop: 'TODO',
         closedStopWithRange: 'TODO',
         continue: 'TODO',

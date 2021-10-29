@@ -12,6 +12,7 @@ import {
   defaultFontNarrow,
   defaultFontNormal,
 } from './DefaultStyles';
+import Icon from './Icon';
 
 Modal.setAppElement('#root');
 
@@ -59,11 +60,14 @@ const LayoutModal: FC<Props & WithTranslation> = ({
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={() => onClose(selected)}
+      onRequestClose={() => onClose(null)}
       portalClassName="modal"
       style={orientation === 'vertical' ? verticalHeight : {}}
     >
       <div className="layout-modal-content-container" style={style}>
+        <div role="button" className="close" onClick={() => onClose(null)}>
+          <Icon img={'close'} height={15} width={15} color={getColorByName('primary')} />
+        </div>
         <h2 className="layout-modal-header">{t('layoutModalHeader')}</h2>
         <div className="layouts">
           {layouts.map(l => {
@@ -95,7 +99,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
         </div>
         <div className="button-container">
           <button className="close-button" onClick={handleClose}>
-            {t('continue')}
+            {t('save')}
           </button>
         </div>
       </div>

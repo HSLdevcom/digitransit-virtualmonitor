@@ -157,12 +157,16 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     setRenamings([]);
   };
 
-  const handleClose = () => {
+  const handleSave = () => {
     const settingsToSave = {
       ...settings,
       renamedDestinations: renamings.filter(f => f.fi + f.sv + f.en !== ''),
     };
     props.closeModal?.(settingsToSave);
+  };
+
+  const handleClose = () => {
+    props.closeModal?.(null);
   };
 
   const hiddenRouteChecked = route => {
@@ -213,6 +217,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
       portalClassName="modal-stop-routes"
     >
       <div className="modal" style={style}>
+        <div role="button" className="close" onClick={handleClose}>
+          <Icon img={'close'} height={15} width={15} color={getColorByName('primary')} />
+        </div>
         <div className="title-container">
           <span className="title"> {text} </span>
         </div>
@@ -401,7 +408,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             props.combinedPatterns.length < 5 ? 'less' : '',
           )}
         >
-          <Button onClick={handleClose} text={props.t('save')} />
+          <Button onClick={handleSave} text={props.t('save')} />
         </div>
       </div>
     </Modal>

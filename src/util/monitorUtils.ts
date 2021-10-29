@@ -340,9 +340,15 @@ export const getStationIds = monitor => {
   monitor.cards.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
-        if (stop.mode === 'RAIL' && stop.gtfsId.startsWith('HSL:')) {
+        if (
+          stop.mode?.toLowerCase() === 'rail' &&
+          stop.gtfsId.startsWith('HSL:')
+        ) {
           ids.push(stop.parentStation ? stop.parentStation : stop.gtfsId);
-        } else if (stop.mode === 'RAIL' && stop.gtfsId.startsWith('MATKA:4_')) {
+        } else if (
+          stop.mode?.toLowerCase() === 'rail' &&
+          stop.gtfsId.startsWith('MATKA:4_')
+        ) {
           const hslGtfsId = trainStationMap?.find(
             i => i.shortCode === stop.gtfsId.substring(8),
           )?.gtfsId;

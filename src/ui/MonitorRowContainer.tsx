@@ -101,7 +101,11 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const isTighten = tighten !== undefined;
   const hasRouteColumn = [];
   leftStops.forEach(s => {
-    hasRouteColumn.push(s.settings?.showRouteColumn || false);
+    if (s.settings && s.settings.showRouteColumn !== undefined) {
+      hasRouteColumn.push(s.settings.showRouteColumn);
+    } else {
+      hasRouteColumn.push(true);
+    }
   });
   const withoutRouteColumn = hasRouteColumn.every(hasColumn);
   const withTwoColumns = isLandscape && rightColumnCount > 0;
@@ -209,7 +213,11 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
 
     const hasRouteColumn = [];
     stops.forEach(s => {
-      hasRouteColumn.push(s.settings?.showRouteColumn || false);
+      if (s.settings && s.settings.showRouteColumn !== undefined) {
+        hasRouteColumn.push(s.settings.showRouteColumn);
+      } else {
+        hasRouteColumn.push(true);
+      }
     });
     const withoutRouteColumn = hasRouteColumn.every(hasColumn);
     return (

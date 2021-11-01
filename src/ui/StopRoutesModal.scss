@@ -29,8 +29,9 @@
   }
 
   .close {
-    position: absolute;
-    right: 10px;
+    position: relative;
+    left: calc(100% - 15px);
+    margin-bottom: 30px;
   }
 
   .title-container {
@@ -48,7 +49,7 @@
   }
 
   .modal {
-    padding-top: 45px;
+    padding-top: 0px;
     width: 600px;
     font-family: $font-family;
     margin: 0;

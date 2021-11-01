@@ -57,11 +57,13 @@ const StopRow: FC<IProps & WithTranslation> = ({
 }) => {
   const [showModal, changeOpen] = useState(false);
   const saveStopSettings = settings => {
-    const newStop = {
-      ...stop,
-      settings: settings,
-    };
-    setStops(stop.cardId, side, newStop, false, stop.gtfsId);
+    if (settings) {
+      const newStop = {
+        ...stop,
+        settings: settings,
+      };
+      setStops(stop.cardId, side, newStop, false, stop.gtfsId);
+    }
     changeOpen(false);
   };
   const handleClick = () => {

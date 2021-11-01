@@ -50,12 +50,19 @@ const PreviewModal: FC<Props & WithTranslation> = ({
     '--font-family-narrow': defaultFontNarrow,
   } as React.CSSProperties;
 
+  const modalStyle = {
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    },
+  }
+
   return (
     <>
       <Modal
         isOpen={isOpen}
         onRequestClose={() => onClose(false)}
         portalClassName={cx('preview', !isLandscape ? 'portrait' : '')}
+        style={modalStyle}
       >
         <div className="title-and-close" style={styleFont}>
           <div className="title">{t('preview')}</div>

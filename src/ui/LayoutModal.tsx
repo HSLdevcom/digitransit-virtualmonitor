@@ -41,7 +41,15 @@ const LayoutModal: FC<Props & WithTranslation> = ({
   const onClick = option => {
     setSelected(option);
   };
+
+  const modalStyle = {
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    },
+  }
+
   const verticalHeight = {
+    ...modalStyle,
     content: {
       width: '640px',
     },
@@ -62,7 +70,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
       isOpen={isOpen}
       onRequestClose={() => onClose(null)}
       portalClassName="modal"
-      style={orientation === 'vertical' ? verticalHeight : {}}
+      style={orientation === 'vertical' ? verticalHeight : modalStyle }
     >
       <div className="layout-modal-content-container" style={style}>
         <div role="button" className="close" onClick={() => onClose(null)}>

@@ -210,11 +210,18 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     '--primary-color': getColorByName('primary'),
   } as React.CSSProperties;
 
+  const modalStyle = {
+    overlay: {
+      backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    },
+  }
+
   return (
     <Modal
       isOpen={props.showModal}
       onRequestClose={handleClose}
       portalClassName="modal-stop-routes"
+      style={modalStyle}
     >
       <div className="modal" style={style}>
         <div role="button" className="close" onClick={handleClose}>

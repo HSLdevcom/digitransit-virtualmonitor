@@ -12,6 +12,7 @@ import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import HelpPage from './ui/HelpPage';
 import QuickDisplay from './ui/QuickDisplay';
 import CreateViewPage from './ui/CreateViewPage';
+import Version from './ui/Version';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
 import {
   defaultColorAlert,
@@ -197,6 +198,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
           />
           <Route path={'/view'} component={WithDatabaseConnection} />
           <Route path={'/static'} component={WithDatabaseConnection} />
+          <Route path={'/version'} component={Version} />
           <Route
             path={'/help'}
             // eslint-disable-next-line no-empty-pattern

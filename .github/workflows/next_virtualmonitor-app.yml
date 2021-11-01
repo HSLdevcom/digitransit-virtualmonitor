@@ -30,6 +30,6 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'virtualmonitor-app'
-        slot-name: 'production'
+        slot-name: 'pre-prod'
         publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F8D003FAE29941AAAD3EC1C675174051 }}
         images: 'index.docker.io/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'

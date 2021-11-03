@@ -58,14 +58,7 @@ export default {
       primary: '#026273',
       monitorBackground: '#0057a2',
     },
-    feedIds: [
-      'MATKA',
-      'HSL',
-      'tampere',
-      'LINKKI',
-      'lautta',
-      'OULU',
-    ],
+    feedIds: ['MATKA', 'HSL', 'tampere', 'LINKKI', 'lautta', 'OULU'],
     modeIcons: {
       colors: {
         'mode-airplane': '#0046AD',

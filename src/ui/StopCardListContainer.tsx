@@ -475,7 +475,9 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       />
       <ul className="stopcards">
         {modifiedStopCardList.map((item, index) => {
-          const noStops = item.columns.left.stops.length === 0 && item.columns.right.stops.length === 0;
+          const noStops =
+            item.columns.left.stops.length === 0 &&
+            item.columns.right.stops.length === 0;
           const cardInfo: ICardInfo = {
             feedIds: feedIds,
             index: index,

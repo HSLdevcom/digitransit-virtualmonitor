@@ -54,7 +54,7 @@ const PreviewModal: FC<Props & WithTranslation> = ({
     overlay: {
       backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
-  }
+  };
 
   return (
     <>

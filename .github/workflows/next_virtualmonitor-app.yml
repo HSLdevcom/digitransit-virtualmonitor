@@ -4,9 +4,10 @@
 name: Build and deploy container app to Azure Web App - PROD Virtual monitor
 
 on:
-  push:
-    branches:
-      - next
+  release:
+    types:
+      - published
+      
   workflow_dispatch:
 
 jobs:
@@ -14,7 +15,7 @@ jobs:
     runs-on: 'ubuntu-latest'
 
     steps:
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
 
     - uses: azure/docker-login@v1
       with:

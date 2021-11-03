@@ -75,8 +75,12 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   noStopsSelected,
   t,
 }) => {
-  const [getStop, stopState] = useLazyQuery(GET_STOP, {fetchPolicy: "network-only" });
-  const [getStation, stationState] = useLazyQuery(GET_STATION, {fetchPolicy: "network-only" });
+  const [getStop, stopState] = useLazyQuery(GET_STOP, {
+    fetchPolicy: 'network-only',
+  });
+  const [getStation, stationState] = useLazyQuery(GET_STATION, {
+    fetchPolicy: 'network-only',
+  });
   const [autosuggestValue, setAutosuggestValue] = useState(null);
 
   const onSelect = selected => {
@@ -190,9 +194,9 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   const filterSearchResults = results => {
     return results.filter(result => {
       const gtfsId = getGTFSId(result.properties.id);
-      return !columns['left'].stops.some(s => s.gtfsId === gtfsId)
-    })
-  }
+      return !columns['left'].stops.some(s => s.gtfsId === gtfsId);
+    });
+  };
   return (
     <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
       <div className="stopcard-row-container">

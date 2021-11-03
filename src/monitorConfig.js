@@ -65,18 +65,6 @@ export default {
       'LINKKI',
       'lautta',
       'OULU',
-      'MatkahuoltoKainuu',
-      'MatkahuoltoSavo',
-      'MatkahuoltoKanta',
-      'MatkahuoltoKarjala',
-      'MatkahuoltoKeski',
-      'MatkahuoltoKyme',
-      'MatkahuoltoLappi',
-      'MatkahuoltoPohjanmaa',
-      'MatkahuoltoSatakunta',
-      'MatkahuoltoVakka',
-      'MatkahuoltoVantaa',
-      'MatkahuoltoVarsinais',
     ],
     modeIcons: {
       colors: {

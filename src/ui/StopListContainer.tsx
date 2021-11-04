@@ -6,7 +6,7 @@ import StopListTitleInput from './StopListTitleInput';
 import StopRow from './StopRow';
 import { v4 as uuid } from 'uuid';
 import cx from 'classnames';
-import { focusToInput, onClick } from './InputUtils';
+import { focusToInput, onClick } from '../util/InputUtils';
 import { getLayout } from '../util/getLayout';
 import { ICardInfo } from './CardInfo';
 

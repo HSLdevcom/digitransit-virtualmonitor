@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import React, { useState } from 'react';
 import Icon from './Icon';
-import { focusToInput, onClick } from './InputUtils';
+import { focusToInput, onClick } from '../util/InputUtils';
 import { getPrimaryColor } from '../util/getConfig';
 
 function StopListTitleInput(props: {

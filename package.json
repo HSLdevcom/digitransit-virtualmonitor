@@ -1,5 +1,6 @@
 {
   "name": "otp-virtual-monitor",
+  "version": "0.9.5",
   "version": "0.9.4",
   "description": "Real-time, updating public transport info display that aggregates OpenTripPlanner schedules for multiple stops",
   "license": "MIT",
@@ -59,14 +60,17 @@
   },
   "scripts": {
     "start-prod": "cd server && npm start",
-    "prepare": "patch-package",
+    "prepare": "patch-package && husky install",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "npm-run-all lint-ts lint-scss",
+    "lint-test": "npm-run-all lint-ts-test lint-scss-test",
     "lint-ts": "eslint ./src/**/*{ts,tsx,js} --fix --quiet",
-    "lint-scss": "stylelint src/**/*.{scss,sass} --fix --quiet"
+    "lint-scss": "stylelint src/**/*.{scss,sass} --fix --quiet",
+    "lint-ts-test": "eslint ./src/**/*{ts,tsx,js} --quiet",
+    "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet"
   },
   "devDependencies": {
     "@types/history": "^4.7.8",
@@ -90,7 +94,8 @@
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "ts-node": "^7.0.1",
-    "typescript": "^3.9.9"
+    "typescript": "^3.9.9",
+    "husky": "^7.0.0"
   },
   "proxy": "http://localhost:3001",
   "jest": {

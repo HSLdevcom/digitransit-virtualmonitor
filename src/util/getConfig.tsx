@@ -29,6 +29,12 @@ const defaultModeIcons: IExtendedMonitorConfig = {
 };
 
 export const getConfig = () => {
+  // When developing locally, you can define REACT_APP_CONFIG env variable. Use themes assinged below.
+  const env = process.env.REACT_APP_CONFIG;
+  const allowedThemes = ['hsl', 'matka', 'tampere', 'jyvaskyla'];
+  if (env && allowedThemes.indexOf(env) > -1) {
+    return config[env];
+  }
   const domain = window.location.hostname;
   let theme;
 

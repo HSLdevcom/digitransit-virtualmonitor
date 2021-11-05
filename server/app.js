@@ -5,28 +5,40 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import index from './routes.js';
+import { Helmet } from 'react-helmet';
 
 const __dirname = fileURLToPath(import.meta.url);
 
 const app = express();
 
-// uncomment after placing your favicon in /public
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../../build')));
-
 // view engine setup
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 
 app.use('/api', index);
-app.get('/favicon.ico', (req, res) => res.status(200));
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
-  // res.end()
+  const helmet = Helmet.renderStatic(); 
+
+  const html = `<!DOCTYPE html>
+    <html lang="en">
+      <head>
+        ${helmet.title.toString()}
+        ${helmet.meta.toString()}
+        ${helmet.link.toString()}
+      </head>
+      <body>
+        <div id="root"></div>
+      </body>
+    </html>
+  `;
+
+  res.send(html);
 });
 
 // catch 404 and forward to error handler

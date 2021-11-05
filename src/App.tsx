@@ -20,6 +20,7 @@ import {
   defaultFontNarrow,
   defaultFontNormal,
 } from './ui/DefaultStyles';
+import { Helmet } from 'react-helmet';
 
 import {
   ApolloClient,
@@ -163,8 +164,15 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     '--primary-color': monitorConfig.colors.primary,
   } as React.CSSProperties;
 
+  const favicon = monitorConfig.name.concat('.png');
+  const faviconLink = <link rel="shortcut icon" href={favicon} />;
+  
   return (
     <div className="App" style={style}>
+      <Helmet>
+        <title>{monitorConfig.name} - pysäkkinäyttö</title>
+        {faviconLink}
+      </Helmet>
       <SkipToMainContent />
       <ApolloProvider client={client}>
         <Switch>

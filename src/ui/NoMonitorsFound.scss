@@ -7,12 +7,14 @@
   flex-flow: column;
   align-items: center;
   flex: 1;
-  font-family:  $font-family;
+  font-family: $font-family;
   color: white;
   font-size: 60px;
+
   a {
     text-decoration: none;
   }
+
   .to-create-view {
     margin-top: 80px;
     display: flex;
@@ -23,7 +25,7 @@
     padding: 0 28px;
     height: 120px;
     font-size: 40px;
-    background: #ffffff;
+    background: #fff;
     border: 1px solid #888;
     box-sizing: border-box;
     border-radius: 40px;

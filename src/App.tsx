@@ -20,6 +20,7 @@ import {
   defaultFontNarrow,
   defaultFontNormal,
 } from './ui/DefaultStyles';
+import { Helmet } from 'react-helmet';
 
 import {
   ApolloClient,
@@ -160,53 +161,60 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     '--primary-color': monitorConfig.colors.primary,
   } as React.CSSProperties;
 
-  return (
-    <div className="App" style={style}>
-      <ApolloProvider client={client}>
-        <Switch>
-          <Route
-            path={'/createView'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <>
-                <Banner config={monitorConfig} />
-                <Breadcrumbs />
-                <CreateViewPage config={monitorConfig} />
-              </>
-            )}
-          />
-          <Route
-            path={'/createStaticView'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <>
-                <Banner config={monitorConfig} />
-                <Breadcrumbs isLogged={user.loggedIn} />
-                <CreateViewPage config={monitorConfig} user={user} />
-              </>
-            )}
-          />
-          <Route
-            path={'/quickDisplay/:version?/:packedDisplay?'}
-            component={QuickDisplay}
-          />
-          <Route path={'/view'} component={WithDatabaseConnection} />
-          <Route path={'/static'} component={WithDatabaseConnection} />
-          <Route path={'/version'} component={Version} />
-          <Route
-            path={'/help'}
-            // eslint-disable-next-line no-empty-pattern
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
+    const favicon = monitorConfig.name.concat('.png');
+    const faviconLink = <link rel="shortcut icon" href={favicon} />;
+    console.log('faviconLink:', faviconLink.props.href);
+    return (
+      <div className="App" style={style}>
+        <Helmet>
+          <title>{monitorConfig.name} - pysäkkinäyttö</title>
+          {faviconLink}
+        </Helmet>
+        <ApolloProvider client={client}>
+          <Switch>
+            <Route
+              path={'/createView'}
+              component={({
+                match: {
+                  params: {},
+                },
+              }: RouteComponentProps<IMonitorConfig>) => (
+                <>
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs />
+                  <CreateViewPage config={monitorConfig} />
+                </>
+              )}
+            />
+            <Route
+              path={'/createStaticView'}
+              component={({
+                match: {
+                  params: {},
+                },
+              }: RouteComponentProps<IMonitorConfig>) => (
+                <>
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs isLogged={user.loggedIn} />
+                  <CreateViewPage config={monitorConfig} user={user} />
+                </>
+              )}
+            />
+            <Route
+              path={'/quickDisplay/:version?/:packedDisplay?'}
+              component={QuickDisplay}
+            />
+            <Route path={'/view'} component={WithDatabaseConnection} />
+            <Route path={'/static'} component={WithDatabaseConnection} />
+            <Route path={'/version'} component={Version} />
+            <Route
+              path={'/help'}
+              // eslint-disable-next-line no-empty-pattern
+              component={({
+                match: {
+                  params: {},
+                },
+              }: RouteComponentProps<IMonitorConfig>) => (
               <>
                 <Banner config={monitorConfig} />
                 <Breadcrumbs isLogged={user.loggedIn} />

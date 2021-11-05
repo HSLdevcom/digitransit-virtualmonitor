@@ -28,6 +28,7 @@ export default {
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/HSL:1230109/10 Näyttää 10 riviä pysäkiltä Kumpulan kampus',
     showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
   },
   jyvaskyla: {
     colors: {
@@ -52,6 +53,7 @@ export default {
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/LINKKI:207477/10 näyttää 10 riviä pysäkiltä Urhonkatu 1.',
     showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
   },
   matka: {
     colors: {
@@ -102,6 +104,7 @@ export default {
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/MATKA:7_201860/10 Näyttää 10 riviä pysäkiltä Umpikuja E',
     showMinutes: '15',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site' 
   },
   tampere: {
     colors: {
@@ -129,5 +132,6 @@ export default {
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/tampere:0010/10 näyttää 10 riviä pysäkiltä Keskustori F.',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
   },
 };

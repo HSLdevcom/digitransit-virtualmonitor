@@ -1,71 +1,38 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { IMonitorConfig } from '../App';
-import Icon from './Icon';
 import Logo from './logo/Logo';
-import { slide as Menu } from 'react-burger-menu';
-import { getPrimaryColor } from '../util/getConfig';
+import BurgerMenu from './BurgerMenu';
 
 interface Props {
   config?: IMonitorConfig;
   user?: any; // todo: refactor when we have proper user
 }
-const Banner: React.FC<Props & WithTranslation> = (
-  props: Props & WithTranslation,
-) => {
-  const changeLanguage = (i18n, lang) => {
-    i18n.changeLanguage(lang);
-  };
+const Banner: React.FC<Props & WithTranslation> = ({config, user, t}) => {
+  useEffect(() => {
+    const classNames = ['.bm-menu-wrap', '.bm-item', '.bm-burger-button'];
+    const attributesWithValues = [
+      [{ name: 'aria-hidden', value: 'true' }],
+      [{ name: 'aria-hidden', value: 'true' }, { name: 'tabindex', value: '-1' }],
+      [{ name: 'aria-hidden', value: 'false' }, { name: 'aria-label', value: t('menuOpen') }, { name: 'role', value: 'button' }]
+    ];
+      
+    classNames.forEach((className, idx) => {
+      const items = document.querySelectorAll(className);
+      if (items) {
+        items.forEach(item => {
+          attributesWithValues[idx].forEach(attr => {
+            item.setAttribute(attr.name, attr.value);
+          });
+        });
+      }
+    })
+  }, []);
+
   return (
     <div className="banner">
-      <Logo isLandscape monitorConfig={props.config} />
-      <Menu
-        right
-        width="400px"
-        customCrossIcon={
-          <Icon img="close" color={getPrimaryColor()} width={25} />
-        }
-      >
-        <div className="lang-section">
-          <span
-            className="lang-select"
-            onClick={() => changeLanguage(props.i18n, 'fi')}
-          >
-            FI
-          </span>
-          <span
-            className="lang-select"
-            onClick={() => changeLanguage(props.i18n, 'sv')}
-          >
-            SV
-          </span>
-          <span
-            className="lang-select"
-            onClick={() => changeLanguage(props.i18n, 'en')}
-          >
-            EN
-          </span>
-        </div>
-        <div className="link-section">
-          <Link className="link" to={'/'}>
-            {props.t('breadCrumbsSite')}
-          </Link>
-          <Link
-            className="link"
-            to={
-              props.user && props.user.loggedIn
-                ? '/createStaticView'
-                : '/createView'
-            }
-          >
-            {props.t('createViewTitle')}
-          </Link>
-          <Link className="link" to={'/help'}>
-            {props.t('breadCrumbsHelp')}
-          </Link>
-        </div>
-      </Menu>
+      <Logo isLandscape monitorConfig={config} />
+      <BurgerMenu config={config} user={user} />
     </div>
   );
 };

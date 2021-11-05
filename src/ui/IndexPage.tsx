@@ -11,12 +11,12 @@ function IndexPage(props: WithTranslation) {
       <div className="index">
         <div className="left">
           <div className="welcome">
-            <div className={cx('text', 'bigger')}>
+            <h1 className={cx('text', 'bigger')}>
               {props.t('frontPageParagraph1')}
-            </div>
+            </h1>
             <div className="text">{props.t('frontPageParagraph2')}</div>
             <div className="text">{props.t('frontPageParagraph3')}</div>
-            <div className="button-container">
+            <div className="button-container" tabIndex={-1}>
               <Link to={'/createView'}>
                 <button className="create-new">
                   {props.t('quickDisplayCreate')}

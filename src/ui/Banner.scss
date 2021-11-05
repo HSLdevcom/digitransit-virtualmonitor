@@ -2,7 +2,7 @@
   background: $primary-color;
   min-width: 100%;
   z-index: 2;
-  height: 70px;
+  min-height: 70px !important;
 
   .title-logo {
     #logo {

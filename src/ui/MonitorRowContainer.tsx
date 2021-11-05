@@ -26,6 +26,7 @@ interface IProps {
   closedStopViews: Array<IClosedStop>;
   error?: string;
 }
+const hasColumn = value => value === false;
 
 const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   viewId,
@@ -54,7 +55,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
 
   const currentDay = setDate(0);
   const nextDay = setDate(1);
-
   const nextDayDepartureIndexLeft = departuresLeft
     .slice(0, leftColumnCount)
     .findIndex(departure => departure.serviceDay === nextDay.getTime() / 1000);
@@ -99,7 +99,15 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   }
 
   const isTighten = tighten !== undefined;
-
+  const hasRouteColumn = [];
+  leftStops.forEach(s => {
+    if (s.settings && s.settings.showRouteColumn !== undefined) {
+      hasRouteColumn.push(s.settings.showRouteColumn);
+    } else {
+      hasRouteColumn.push(true);
+    }
+  });
+  const withoutRouteColumn = hasRouteColumn.every(hasColumn);
   const withTwoColumns = isLandscape && rightColumnCount > 0;
   let leftColumnCountWithAlerts = leftColumnCount;
   if (alertComponent && layout < 12) {
@@ -131,6 +139,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
         }
         showMinutes={showMinutes || 0}
+        withoutRouteColumn={withoutRouteColumn}
       />,
     );
   }
@@ -163,6 +172,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             }
             currentLang={currentLang}
             showMinutes={showMinutes || 0}
+            withoutRouteColumn={withoutRouteColumn}
           />,
         );
       }
@@ -186,6 +196,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             }
             currentLang={currentLang}
             showMinutes={showMinutes || 0}
+            withoutRouteColumn={withoutRouteColumn}
           />,
         );
       }
@@ -200,6 +211,15 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       }
     });
 
+    const hasRouteColumn = [];
+    stops.forEach(s => {
+      if (s.settings && s.settings.showRouteColumn !== undefined) {
+        hasRouteColumn.push(s.settings.showRouteColumn);
+      } else {
+        hasRouteColumn.push(true);
+      }
+    });
+    const withoutRouteColumn = hasRouteColumn.every(hasColumn);
     return (
       <div
         className={cx(
@@ -212,10 +232,18 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           },
         )}
       >
-        <div className={cx('grid-row', { 'with-stop-code': withStopCode })}>
-          <div className={cx('grid-header', 'line')}>
-            {t('lineId', { lng: currentLang })}
-          </div>
+        <div
+          className={cx(
+            'grid-row',
+            { 'with-stop-code': withStopCode },
+            { 'without-route-column': withoutRouteColumn },
+          )}
+        >
+          {!withoutRouteColumn && (
+            <div className={cx('grid-header', 'line')}>
+              {t('lineId', { lng: currentLang })}
+            </div>
+          )}
           <div className={cx('grid-header', 'destination')}>
             {t('destination', { lng: currentLang })}
           </div>

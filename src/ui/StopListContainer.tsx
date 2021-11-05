@@ -164,6 +164,7 @@ const StopList = props => {
                     onStopDelete={props.onStopDelete}
                     onStopMove={props.onStopMove}
                     setStops={props.setStops}
+                    rightStops={rightItems}
                   />
                 </li>
               );
@@ -188,7 +189,7 @@ const StopList = props => {
           {rightItems &&
             rightItems.map(item => {
               return (
-                <li className="stop">
+                <li className="stop" key={uuid()}>
                   <StopRow
                     key={uuid()}
                     stop={item}
@@ -196,6 +197,7 @@ const StopList = props => {
                     onStopDelete={props.onStopDelete}
                     onStopMove={props.onStopMove}
                     setStops={props.setStops}
+                    leftStops={leftItems}
                   />
                 </li>
               );
@@ -238,12 +240,14 @@ const StopListContainer: FC<Props & WithTranslation> = props => {
         leftItemsHeader={props.t('headerSideLeft')}
         leftItemsPlaceHolder={props.t('placeholderSideLeft')}
         leftTitle={props.stops['left'].title}
+        leftStops={leftItems}
         rightItems={addInfoToItems(props, rightItems, 'right')}
         rightItemsHeader={props.t('headerSideRight')}
         rightItemsPlaceHolder={props.t('placeholderSideRight', {
           title: props.stops['left'].title,
         })}
         rightTitle={props.stops['right'].title}
+        rightStops={rightItems}
         onStopDelete={props.onStopDelete}
         onStopMove={props.onStopMove}
         setStops={props.setStops}

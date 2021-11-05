@@ -82,13 +82,15 @@ const GET_LINE_IDS = gql`
 const createLineIdsArray = data => {
   const lineIds = [];
   if (data) {
-    data.stations.forEach(station => {
-      station.stops.forEach(stop => {
-        stop.patterns.forEach(pattern => {
-          lineIds.push(pattern.route.shortName);
+    data.stations
+      .filter(s => s)
+      .forEach(station => {
+        station.stops.forEach(stop => {
+          stop.patterns.forEach(pattern => {
+            lineIds.push(pattern.route.shortName);
+          });
         });
       });
-    });
   }
   return Array.from(new Set(lineIds));
 };
@@ -136,10 +138,10 @@ const TrainDataFetcher: FC<IProps> = ({
   const [getTrainsWithTracks, trainsWithTrackState] = useLazyQuery(GET_TRACKS);
   const [trainsWithTrack, setTrainsWithTrack] = useState([]);
   const [queryObjects, setQueryObjects] = useState([]);
-
   if (!lineIdsState.loading && !lineIdsState.data) {
+    const ids = stationIds.map(st => st['gtfsId']);
     getLineIds({
-      variables: { stationIds: stationIds },
+      variables: { stationIds: ids },
       context: { clientName: 'hsl' },
     });
   }
@@ -147,29 +149,30 @@ const TrainDataFetcher: FC<IProps> = ({
   useEffect(() => {
     if (lineIdsState.data) {
       const shortCodes = stationIds.map(
-        id => trainStationMap?.find(i => i.gtfsId === id).shortCode,
+        id => trainStationMap?.find(i => i.gtfsId === id['gtfsId'])?.shortCode,
       );
-
-      const stations = shortCodes.map(code => {
-        return { station: { shortCode: { equals: code } } };
-      });
-
+      const stations = shortCodes
+        .filter(a => a)
+        .map(code => {
+          return { station: { shortCode: { equals: code } } };
+        });
       const lineIds = createLineIdsArray(lineIdsState.data)
         .map(shortName => {
           return { commuterLineid: { equals: shortName } };
         })
-        .filter(x => x !== undefined);
+        .filter(x => x);
 
       setQueryObjects([stations, lineIds]);
     }
   }, [lineIdsState.data]);
-
   if (
     !trainsWithTrackState.loading &&
     !trainsWithTrackState.data &&
     !lineIdsState.loading &&
     lineIdsState.data &&
-    queryObjects.length === 2
+    queryObjects.length === 2 &&
+    queryObjects[0].length > 0 &&
+    queryObjects[1].length > 0
   ) {
     getTrainsWithTracks({
       variables: {

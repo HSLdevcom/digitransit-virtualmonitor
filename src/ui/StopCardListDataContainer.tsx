@@ -99,7 +99,7 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
             richCard[j].columns.left.stops[leftIndex] = {
               ...richCard[j].columns.left.stops[leftIndex],
               ...station,
-              code: t('station'),
+              code: station.stops[0].code, //t('station'),
               desc: station.stops[0].desc,
               patterns: sortBy(
                 sortBy(patterns, 'pattern.route.shortname'),

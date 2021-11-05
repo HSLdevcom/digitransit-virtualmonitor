@@ -1,6 +1,6 @@
 {
   "name": "otp-virtual-monitor",
-  "version": "0.1.0",
+  "version": "0.9.6",
   "description": "Real-time, updating public transport info display that aggregates OpenTripPlanner schedules for multiple stops",
   "license": "MIT",
   "contributors": [
@@ -9,7 +9,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.19",
-    "@digitransit-component/digitransit-component-autosuggest": "^1.7.17",
+    "@digitransit-component/digitransit-component-autosuggest": "^1.7.20",
     "@digitransit-component/digitransit-component-dialog-modal": "^0.3.2",
     "@digitransit-component/digitransit-component-icon": "^0.1.13",
     "@digitransit-component/digitransit-component-suggestion-item": "^0.2.13",
@@ -20,7 +20,6 @@
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
     "apollo-boost": "^0.1.28",
-    "array-move": "^3.0.1",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.3.1",
     "cross-env": "^7.0.3",
@@ -61,14 +60,17 @@
   },
   "scripts": {
     "start-prod": "cd server && npm start",
-    "prepare": "patch-package",
+    "prepare": "patch-package && husky install",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "npm-run-all lint-ts lint-scss",
+    "lint-test": "npm-run-all lint-ts-test lint-scss-test",
     "lint-ts": "eslint ./src/**/*{ts,tsx,js} --fix --quiet",
-    "lint-scss": "stylelint src/**/*.{scss,sass} --fix --quiet"
+    "lint-scss": "stylelint src/**/*.{scss,sass} --fix --quiet",
+    "lint-ts-test": "eslint ./src/**/*{ts,tsx,js} --quiet",
+    "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet"
   },
   "devDependencies": {
     "@types/history": "^4.7.8",
@@ -92,7 +94,8 @@
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "ts-node": "^7.0.1",
-    "typescript": "^3.9.9"
+    "typescript": "^3.9.9",
+    "husky": "^7.0.0"
   },
   "proxy": "http://localhost:3001",
   "jest": {

@@ -7,7 +7,12 @@ import { ICardInfo } from './CardInfo';
 
 interface IProps {
   cardInfo: ICardInfo;
-  updateCardInfo: (cardId: number, type: string, value: string) => void;
+  updateCardInfo: (
+    cardId: number,
+    type: string,
+    value: string,
+    lang?: string,
+  ) => void;
   orientation: string;
   durationEditable: boolean;
 }
@@ -46,8 +51,10 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
   };
 
   const getLayout = option => {
-    if (updateCardInfo) {
-      updateCardInfo(cardInfo.id, 'layout', option.value.toString());
+    if (option) {
+      if (updateCardInfo) {
+        updateCardInfo(cardInfo.id, 'layout', option.value.toString());
+      }
     }
     changeOpen(false);
   };

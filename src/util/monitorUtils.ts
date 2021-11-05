@@ -129,6 +129,9 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
     Object.keys(view.columns).forEach(column => {
       const departureArray = [];
       stops.forEach(stop => {
+        if (!stop) {
+          return null;
+        }
         const stopIndex = view.columns[column].stops
           .map(stop => stop.gtfsId)
           .indexOf(stop.gtfsId);
@@ -239,6 +242,9 @@ export const isInformationDisplay = cards => {
 };
 
 export function getWeatherData(time, lat, lon) {
+  if (!lat || !lon) {
+    return null;
+  }
   const remainder = 5 - (time.minute % 5);
   const endtime = time
     .set({ seconds: 0 })
@@ -334,9 +340,15 @@ export const getStationIds = monitor => {
   monitor.cards.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
-        if (stop.mode === 'RAIL' && stop.gtfsId.startsWith('HSL:')) {
+        if (
+          stop.mode?.toLowerCase() === 'rail' &&
+          stop.gtfsId.startsWith('HSL:')
+        ) {
           ids.push(stop.parentStation ? stop.parentStation : stop.gtfsId);
-        } else if (stop.mode === 'RAIL' && stop.gtfsId.startsWith('MATKA:4_')) {
+        } else if (
+          stop.mode?.toLowerCase() === 'rail' &&
+          stop.gtfsId.startsWith('MATKA:4_')
+        ) {
           const hslGtfsId = trainStationMap?.find(
             i => i.shortCode === stop.gtfsId.substring(8),
           )?.gtfsId;

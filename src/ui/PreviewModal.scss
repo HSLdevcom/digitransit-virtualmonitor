@@ -1,5 +1,6 @@
 .preview {
   .ReactModal__Content {
+    border: none !important;
     position: absolute;
     width: 700px !important;
     height: 470px !important;
@@ -65,6 +66,7 @@
 
   &.portrait {
     .ReactModal__Content {
+      border: none !important;
       position: absolute;
       width: 470px !important;
       height: 700px !important;

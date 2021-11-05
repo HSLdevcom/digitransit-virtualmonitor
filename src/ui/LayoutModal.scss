@@ -6,6 +6,7 @@
   }
 
   .ReactModal__Content {
+    border: none !important;
     width: 680px;
     top: 110px !important;
     left: 50% !important;
@@ -20,8 +21,11 @@
   }
 
   .layout-modal-content-container {
+    $font-family: var(--font-family);
+    $primary-color: var(--primary-color);
+
     font-family: $font-family;
-    margin: 45px 0 0 60px;
+    margin: 0 0 0 60px;
     display: flex;
     flex-direction: column;
     max-width: 560px;
@@ -30,6 +34,16 @@
       font-weight: normal;
       margin: 28px 0 10px;
       font-size: 1.125rem;
+    }
+
+    .close {
+      svg {
+        position: relative;
+        left: calc(100% - 15px);
+        margin-bottom: 30px;
+        height: 24px;
+        width: 24px;
+      }
     }
   }
 

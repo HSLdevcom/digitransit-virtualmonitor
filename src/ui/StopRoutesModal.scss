@@ -1,5 +1,6 @@
 .modal-stop-routes {
   font-family: $font-family;
+
   h2 {
     font-style: normal;
     font-weight: 400;
@@ -14,6 +15,7 @@
   }
 
   .ReactModal__Content {
+    border: none !important;
     width: 720px;
     height: 80%;
     overflow-x: hidden !important;
@@ -27,8 +29,11 @@
   }
 
   .close {
-    position: absolute;
-    right: 10px;
+    position: relative;
+    left: calc(100% - 15px);
+    margin-bottom: 30px;
+    height: 24px;
+    width: 24px;
   }
 
   .title-container {
@@ -46,7 +51,7 @@
   }
 
   .modal {
-    padding-top: 45px;
+    padding-top: 0;
     width: 600px;
     font-family: $font-family;
     margin: 0;
@@ -56,7 +61,7 @@
       flex-direction: column;
       overflow-y: auto;
       overflow-x: hidden;
-      height: 380px;
+      max-height: 380px;
 
       .row {
         min-height: 30px;

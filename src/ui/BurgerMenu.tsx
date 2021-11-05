@@ -1,41 +1,81 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { IMonitorConfig } from '../App';
 import Icon from './Icon';
 import { slide as Menu } from 'react-burger-menu';
 import { getPrimaryColor } from '../util/getConfig';
 
 interface Props {
-  config?: IMonitorConfig;
-  user?: any; // todo: refactor when we have proper user
+  createStatic: boolean;
 }
 
+const toggleMenu = ({ isOpen }, t) => {
+  const elements = {
+    '.bm-cross-button': [
+      { name: 'aria-hidden', value: isOpen ? 'false' : 'true' },
+      { name: 'aria-label', value: t('menuClose') },
+      { name: 'role', value: 'button' }
+    ],
+    '#create-new-link': [
+      { name: 'aria-hidden', value: isOpen ? 'true' : 'false' },
+      { name: 'tabindex', value: isOpen ? '-1' : '0' }
+    ],
+    '.create-new': [
+      { name: 'aria-hidden', value: 'true' },
+      { name: 'tabindex', value: '-1' }
+    ],
+  }
+  
+  Object.keys(elements).forEach(className => {
+    const items = document.querySelectorAll(className);
+    if (items) {
+      items.forEach(item => {
+        elements[className].forEach(attr => {
+          item.setAttribute(attr.name, attr.value);
+        });
+      });
+    }
+  });
+};
+
 const BurgerMenu: React.FC<Props & WithTranslation> = (
-  { config, user, t, i18n }
+  { createStatic, t, i18n }
 ) => {
   const changeLanguage = (i18n, lang) => {
     i18n.changeLanguage(lang);
   };
 
-  useEffect(() => {
-    const classNames = ['.bm-item', '.bm-cross-button'];
-    const attributesWithValues = [
-      [{ name: 'aria-hidden', value: 'true' }, { name: 'tabindex', value: '-1' }],
-      [{ name: 'aria-hidden', value: 'false' }, { name: 'aria-label', value: t('menuClose') }, { name: 'role', value: 'button' }]
-    ];
-      
-    classNames.forEach((className, idx) => {
-      const items = document.querySelectorAll(className);
-      if (items) {
-        items.forEach(item => {
-          attributesWithValues[idx].forEach(attr => {
-            item.setAttribute(attr.name, attr.value);
-          });
-        });
-      }
-    })
-  }, []);
+  const languageCodes = ['fi', 'sv', 'en'];
+
+  const languageElements = () => {
+    let retValue = [];
+    languageCodes.forEach(language => {
+      retValue.push(
+        <Link className="lang-select" onClick={() => changeLanguage(i18n, language)} to={window.location.pathname} aria-label={t('changeLanguage', { language: t(`languageName${language.charAt(0).toUpperCase() + language.slice(1)}`) })}>
+          {language}
+        </Link>
+      );
+    });
+    return retValue;
+  };
+
+  const links = [
+    { text: t('breadCrumbsFrontPage'), to: '/' },
+    { text: t('createViewTitle'), to: createStatic ? '/createStaticView' : '/createView' },
+    { text: t('breadCrumbsHelp'), to: '/help' },
+  ];
+
+  const linkElements = () => {
+    let retValue = [];
+    links.forEach(link => {
+      retValue.push(
+        <Link className="link" to={link.to}>
+          {link.text}
+        </Link>
+      );
+    });
+    return retValue;
+  };
 
   return (
     <Menu
@@ -45,36 +85,15 @@ const BurgerMenu: React.FC<Props & WithTranslation> = (
         <Icon img="close" color={getPrimaryColor()} width={25} />
       }
       disableAutoFocus
+      noOverlay
+      onStateChange={e => toggleMenu(e, t)}
     >
-      <div id="languages" style={{ display: 'flex' }} tabIndex={ -1 }>
-        <Link className="lang-select" onClick={() => changeLanguage(i18n, 'fi')} to={window.location.pathname} aria-label={t('changeLanguage', { language: t('languageNameFi') })}>
-          FI
-        </Link>
-        <Link className="lang-select" onClick={() => changeLanguage(i18n, 'sv')} to={window.location.pathname} aria-label={t('changeLanguage', { language: t('languageNameSv') })}>
-          SV
-        </Link>
-        <Link className="lang-select" onClick={() => changeLanguage(i18n, 'en')} to={window.location.pathname} aria-label={t('changeLanguage', { language: t('languageNameEn') })}>
-          EN
-        </Link>
-      </div>
-      <div id="links" style={{ display: 'flex' }} tabIndex={ -1 }>
-        <Link className="link" to={'/'}>
-          {t('breadCrumbsFrontPage')}
-        </Link>
-        <Link
-          className="link"
-          to={
-            user && user.loggedIn
-              ? '/createStaticView'
-              : '/createView'
-          }
-        >
-          {t('createViewTitle')}
-        </Link>
-        <Link className="link" to={'/help'}>
-          {t('breadCrumbsHelp')}
-        </Link>
-      </div>
+      <section id="languages" style={{ display: 'flex' }} aria-label={t('languageSelection')}>
+        {languageElements()}
+      </section>
+      <section id="links" style={{ display: 'flex' }} aria-label={t('links')}>
+        {linkElements()}
+      </section>
       <></>
     </Menu>
   );

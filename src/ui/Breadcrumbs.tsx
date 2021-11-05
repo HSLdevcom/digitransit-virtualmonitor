@@ -37,6 +37,11 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
             {t('breadCrumbsSite')}
           </Link>
         )}
+        {start === 'front' && path && (
+          <Link className="to-home" to={'/'}>
+            {t('breadCrumbsFrontPage')}
+          </Link>
+        )}
         {isLogged &&
           crumb !== t('breadCrumbsOwnMonitors') &&
           crumb !== t('breadCrumbsHelp') && (

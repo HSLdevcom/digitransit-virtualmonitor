@@ -10,29 +10,33 @@ interface Props {
 }
 const Banner: React.FC<Props & WithTranslation> = ({config, user, t}) => {
   useEffect(() => {
-    const classNames = ['.bm-menu-wrap', '.bm-item', '.bm-burger-button'];
-    const attributesWithValues = [
-      [{ name: 'aria-hidden', value: 'true' }],
-      [{ name: 'aria-hidden', value: 'true' }, { name: 'tabindex', value: '-1' }],
-      [{ name: 'aria-hidden', value: 'false' }, { name: 'aria-label', value: t('menuOpen') }, { name: 'role', value: 'button' }]
-    ];
-      
-    classNames.forEach((className, idx) => {
+    const elements = {
+      '.bm-menu-wrap': [
+        { name: 'aria-hidden', value: 'true' }
+      ],
+      '.bm-burger-button': [
+        { name: 'aria-hidden', value: 'false' },
+        { name: 'aria-label', value: t('menuOpen') }, 
+        { name: 'role', value: 'button' }
+      ]
+    };
+    
+    Object.keys(elements).forEach(className => {
       const items = document.querySelectorAll(className);
       if (items) {
         items.forEach(item => {
-          attributesWithValues[idx].forEach(attr => {
+          elements[className].forEach(attr => {
             item.setAttribute(attr.name, attr.value);
           });
         });
       }
-    })
+    });
   }, []);
 
   return (
     <div className="banner">
       <Logo isLandscape monitorConfig={config} />
-      <BurgerMenu config={config} user={user} />
+      <BurgerMenu createStatic={user && user.loggedIn} />
     </div>
   );
 };

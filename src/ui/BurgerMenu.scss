@@ -1,10 +1,9 @@
 .link-section {
-  display: grid; 
-  grid-template-columns: 1fr; 
-  grid-template-rows: 1fr 1fr 1fr; 
-  gap: 25px 0px; 
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 25px 0;
   border-bottom: 1px solid #ddd;
-
 }
 
 /* Position and sizing of burger button */
@@ -65,13 +64,14 @@ Note: Beware of modifying this element as it can break the animations - you shou
   color: #b8b7ad;
   padding: 0.8em;
   display: grid;
-  grid-template-columns: 1fr; 
-  grid-template-rows: 50px 150px auto; 
+  grid-template-columns: 1fr;
+  grid-template-rows: 50px 150px auto;
 }
 
 /* Individual item */
 .bm-item {
   display: flex;
+
   &:first-child {
     display: flex;
     flex-direction: row;
@@ -89,9 +89,9 @@ Note: Beware of modifying this element as it can break the animations - you shou
       display: inline-block;
       text-transform: uppercase;
       cursor: pointer;
-      
-    } 
+    }
   }
+
   &:nth-child(2) {
     display: flex;
     flex-direction: column;

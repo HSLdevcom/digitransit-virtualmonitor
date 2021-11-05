@@ -8,19 +8,17 @@ interface Props {
   config?: IMonitorConfig;
   user?: any; // todo: refactor when we have proper user
 }
-const Banner: React.FC<Props & WithTranslation> = ({config, user, t}) => {
+const Banner: React.FC<Props & WithTranslation> = ({ config, user, t }) => {
   useEffect(() => {
     const elements = {
-      '.bm-menu-wrap': [
-        { name: 'aria-hidden', value: 'true' }
-      ],
+      '.bm-menu-wrap': [{ name: 'aria-hidden', value: 'true' }],
       '.bm-burger-button': [
         { name: 'aria-hidden', value: 'false' },
-        { name: 'aria-label', value: t('menuOpen') }, 
-        { name: 'role', value: 'button' }
-      ]
+        { name: 'aria-label', value: t('menuOpen') },
+        { name: 'role', value: 'button' },
+      ],
     };
-    
+
     Object.keys(elements).forEach(className => {
       const items = document.querySelectorAll(className);
       if (items) {

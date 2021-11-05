@@ -60,26 +60,7 @@ export default {
       primary: '#026273',
       monitorBackground: '#0057a2',
     },
-    feedIds: [
-      'MATKA',
-      'HSL',
-      'tampere',
-      'LINKKI',
-      'lautta',
-      'OULU',
-      'MatkahuoltoKainuu',
-      'MatkahuoltoSavo',
-      'MatkahuoltoKanta',
-      'MatkahuoltoKarjala',
-      'MatkahuoltoKeski',
-      'MatkahuoltoKyme',
-      'MatkahuoltoLappi',
-      'MatkahuoltoPohjanmaa',
-      'MatkahuoltoSatakunta',
-      'MatkahuoltoVakka',
-      'MatkahuoltoVantaa',
-      'MatkahuoltoVarsinais',
-    ],
+    feedIds: ['MATKA', 'HSL', 'tampere', 'LINKKI', 'lautta', 'OULU'],
     modeIcons: {
       colors: {
         'mode-airplane': '#0046AD',
@@ -104,7 +85,7 @@ export default {
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/MATKA:7_201860/10 Näyttää 10 riviä pysäkiltä Umpikuja E',
     showMinutes: '15',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site' 
+    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
   },
   tampere: {
     colors: {

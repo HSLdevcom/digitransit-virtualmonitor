@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 
-
 const SkipToMainContent: FC<WithTranslation> = ({ t }) => {
   return (
     <div className="skipLinkDiv">

@@ -17,7 +17,11 @@ function IndexPage(props: WithTranslation) {
             <div className="text">{props.t('frontPageParagraph2')}</div>
             <div className="text">{props.t('frontPageParagraph3')}</div>
             <div className="button-container" tabIndex={-1}>
-              <Link to={'/createView'} id='create-new-link' aria-label={props.t('quickDisplayCreate')}>
+              <Link
+                to={'/createView'}
+                id="create-new-link"
+                aria-label={props.t('quickDisplayCreate')}
+              >
                 <button className="create-new">
                   {props.t('quickDisplayCreate')}
                 </button>

@@ -14,18 +14,18 @@ const toggleMenu = ({ isOpen }, t) => {
     '.bm-cross-button': [
       { name: 'aria-hidden', value: isOpen ? 'false' : 'true' },
       { name: 'aria-label', value: t('menuClose') },
-      { name: 'role', value: 'button' }
+      { name: 'role', value: 'button' },
     ],
     '#create-new-link': [
       { name: 'aria-hidden', value: isOpen ? 'true' : 'false' },
-      { name: 'tabindex', value: isOpen ? '-1' : '0' }
+      { name: 'tabindex', value: isOpen ? '-1' : '0' },
     ],
     '.create-new': [
       { name: 'aria-hidden', value: 'true' },
-      { name: 'tabindex', value: '-1' }
+      { name: 'tabindex', value: '-1' },
     ],
-  }
-  
+  };
+
   Object.keys(elements).forEach(className => {
     const items = document.querySelectorAll(className);
     if (items) {
@@ -38,9 +38,11 @@ const toggleMenu = ({ isOpen }, t) => {
   });
 };
 
-const BurgerMenu: React.FC<Props & WithTranslation> = (
-  { createStatic, t, i18n }
-) => {
+const BurgerMenu: React.FC<Props & WithTranslation> = ({
+  createStatic,
+  t,
+  i18n,
+}) => {
   const changeLanguage = (i18n, lang) => {
     i18n.changeLanguage(lang);
   };
@@ -48,12 +50,23 @@ const BurgerMenu: React.FC<Props & WithTranslation> = (
   const languageCodes = ['fi', 'sv', 'en'];
 
   const languageElements = () => {
-    let retValue = [];
+    const retValue = [];
     languageCodes.forEach(language => {
       retValue.push(
-        <Link className="lang-select" onClick={() => changeLanguage(i18n, language)} to={window.location.pathname} aria-label={t('changeLanguage', { language: t(`languageName${language.charAt(0).toUpperCase() + language.slice(1)}`) })}>
+        <Link
+          className="lang-select"
+          onClick={() => changeLanguage(i18n, language)}
+          to={window.location.pathname}
+          aria-label={t('changeLanguage', {
+            language: t(
+              `languageName${
+                language.charAt(0).toUpperCase() + language.slice(1)
+              }`,
+            ),
+          })}
+        >
           {language}
-        </Link>
+        </Link>,
       );
     });
     return retValue;
@@ -61,17 +74,20 @@ const BurgerMenu: React.FC<Props & WithTranslation> = (
 
   const links = [
     { text: t('breadCrumbsFrontPage'), to: '/' },
-    { text: t('createViewTitle'), to: createStatic ? '/createStaticView' : '/createView' },
+    {
+      text: t('createViewTitle'),
+      to: createStatic ? '/createStaticView' : '/createView',
+    },
     { text: t('breadCrumbsHelp'), to: '/help' },
   ];
 
   const linkElements = () => {
-    let retValue = [];
+    const retValue = [];
     links.forEach(link => {
       retValue.push(
         <Link className="link" to={link.to}>
           {link.text}
-        </Link>
+        </Link>,
       );
     });
     return retValue;
@@ -88,7 +104,11 @@ const BurgerMenu: React.FC<Props & WithTranslation> = (
       noOverlay
       onStateChange={e => toggleMenu(e, t)}
     >
-      <section id="languages" style={{ display: 'flex' }} aria-label={t('languageSelection')}>
+      <section
+        id="languages"
+        style={{ display: 'flex' }}
+        aria-label={t('languageSelection')}
+      >
         {languageElements()}
       </section>
       <section id="links" style={{ display: 'flex' }} aria-label={t('links')}>

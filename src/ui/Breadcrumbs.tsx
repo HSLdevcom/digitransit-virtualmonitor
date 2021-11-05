@@ -26,7 +26,11 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
       crumb = t('breadCrumbsHelp');
       break;
     default:
-      crumb = isLogged ? t('breadCrumbsOwnMonitors') : start === 'front' ? t('breadCrumbsFrontPage') : null;
+      crumb = isLogged
+        ? t('breadCrumbsOwnMonitors')
+        : start === 'front'
+        ? t('breadCrumbsFrontPage')
+        : null;
   }
 
   return (
@@ -69,7 +73,9 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
         )}
         {crumb}
       </div>
-      <span className="desc">{crumb !== t('breadCrumbsFrontPage') ? crumb : null}</span>
+      <span className="desc">
+        {crumb !== t('breadCrumbsFrontPage') ? crumb : null}
+      </span>
     </div>
   );
 };

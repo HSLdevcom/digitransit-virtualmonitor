@@ -111,8 +111,9 @@ const Monitor: FC<IProps> = ({
   const isLandscapeByLayout = view.layout <= 11;
   const timem = DateTime.now();
   const from = view.columns.left.stops[0];
-
-  if (!weatherFetched && from) {
+  const layout = getLayout(view.layout);
+  const showWeather = !layout.isMultiDisplay && !layout.isPortrait;
+  if (!weatherFetched && from && showWeather) {
     getWeatherData(timem, from.lat, from.lon).then(res => {
       let weatherData;
       if (Array.isArray(res) && res.length === 3) {

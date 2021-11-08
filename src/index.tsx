@@ -14,7 +14,6 @@ import { ApolloClientsContext } from './VirtualMonitorApolloClients';
 import { getParams } from './util/queryUtils';
 import { getConfig } from './util/getConfig';
 
-const domain = window.location.hostname;
 const monitorConfig = getConfig();
 
 const reittiOpasClient = new ApolloBoostClient({

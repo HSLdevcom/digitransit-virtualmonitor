@@ -4,9 +4,6 @@ import { IView, IClosedStop } from '../util/Interfaces';
 import { getWeatherData } from '../util/monitorUtils';
 import { DateTime } from 'luxon';
 import SunCalc from 'suncalc';
-import Titlebar from './Titlebar';
-import TitlebarTime from './TitlebarTime';
-import Logo from './logo/Logo';
 import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
 import { IMonitorConfig } from '../App';
@@ -107,7 +104,6 @@ const Monitor: FC<IProps> = ({
 
   const coeff = 1000 * 60 * 5;
   const date = new Date(); //or use any other date
-  const rounded = new Date(Math.round(date.getTime() / coeff) * coeff);
   const isLandscapeByLayout = view.layout <= 11;
   const timem = DateTime.now();
   const from = view.columns.left.stops[0];

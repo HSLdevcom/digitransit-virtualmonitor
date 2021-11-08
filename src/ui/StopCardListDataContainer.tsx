@@ -21,7 +21,6 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
   stopIds,
   stationIds,
   languages,
-  t,
   loading,
   user,
 }) => {

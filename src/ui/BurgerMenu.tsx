@@ -10,12 +10,12 @@ interface Props {
 }
 
 const toggleMenu = ({ isOpen }, t) => {
+  const closeMenu = document.querySelector('#react-burger-cross-btn');
+  if (closeMenu) {
+    closeMenu.innerHTML = t('menuClose');
+  }
+
   const elements = {
-    '.bm-cross-button': [
-      { name: 'aria-hidden', value: isOpen ? 'false' : 'true' },
-      { name: 'aria-label', value: t('menuClose') },
-      { name: 'role', value: 'button' },
-    ],
     '#create-new-link': [
       { name: 'aria-hidden', value: isOpen ? 'true' : 'false' },
       { name: 'tabindex', value: isOpen ? '-1' : '0' },

@@ -10,13 +10,13 @@ interface Props {
 }
 const Banner: React.FC<Props & WithTranslation> = ({ config, user, t }) => {
   useEffect(() => {
+    const openMenu = document.querySelector('#react-burger-menu-btn');
+    if (openMenu) {
+      openMenu.innerHTML = t('menuOpen');
+    }
+
     const elements = {
       '.bm-menu-wrap': [{ name: 'aria-hidden', value: 'true' }],
-      '.bm-burger-button': [
-        { name: 'aria-hidden', value: 'false' },
-        { name: 'aria-label', value: t('menuOpen') },
-        { name: 'role', value: 'button' },
-      ],
     };
 
     Object.keys(elements).forEach(className => {

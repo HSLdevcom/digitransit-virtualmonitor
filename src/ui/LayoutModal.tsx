@@ -46,7 +46,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
     overlay: {
       backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
-  }
+  };
 
   const verticalHeight = {
     ...modalStyle,
@@ -70,11 +70,16 @@ const LayoutModal: FC<Props & WithTranslation> = ({
       isOpen={isOpen}
       onRequestClose={() => onClose(null)}
       portalClassName="modal"
-      style={orientation === 'vertical' ? verticalHeight : modalStyle }
+      style={orientation === 'vertical' ? verticalHeight : modalStyle}
     >
       <div className="layout-modal-content-container" style={style}>
         <div role="button" className="close" onClick={() => onClose(null)}>
-          <Icon img={'close'} height={15} width={15} color={getColorByName('primary')} />
+          <Icon
+            img={'close'}
+            height={15}
+            width={15}
+            color={getColorByName('primary')}
+          />
         </div>
         <h2 className="layout-modal-header">{t('layoutModalHeader')}</h2>
         <div className="layouts">

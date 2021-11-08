@@ -139,7 +139,7 @@ const TrainDataFetcher: FC<IProps> = ({
   const [trainsWithTrack, setTrainsWithTrack] = useState([]);
   const [queryObjects, setQueryObjects] = useState([]);
   if (!lineIdsState.loading && !lineIdsState.data) {
-    const ids = stationIds.map(st => st['gtfsId'])
+    const ids = stationIds.map(st => st['gtfsId']);
     getLineIds({
       variables: { stationIds: ids },
       context: { clientName: 'hsl' },

@@ -214,7 +214,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     overlay: {
       backgroundColor: 'rgba(0, 0, 0, 0.4)',
     },
-  }
+  };
 
   return (
     <Modal
@@ -225,7 +225,12 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     >
       <div className="modal" style={style}>
         <div role="button" className="close" onClick={handleClose}>
-          <Icon img={'close'} height={15} width={15} color={getColorByName('primary')} />
+          <Icon
+            img={'close'}
+            height={15}
+            width={15}
+            color={getColorByName('primary')}
+          />
         </div>
         <div className="title-container">
           <span className="title"> {text} </span>

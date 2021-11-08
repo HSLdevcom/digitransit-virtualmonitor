@@ -5,6 +5,7 @@ import CarouselDataContainer from './CarouselDataContainer';
 import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
 import { getStationIds, isPlatformOrTrackVisible } from '../util/monitorUtils';
+import NoMonitorsFound from './NoMonitorsFound';
 import TrainDataFetcher from './TrainDataFetcher';
 import { uuidValidateV5 } from '../util/monitorUtils';
 import { isConstructorDeclaration } from 'typescript';
@@ -50,6 +51,9 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
 
   const monitor = fetched ? view : location?.state?.view.cards;
   if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
+    if (fetched) {
+      return <NoMonitorsFound />;
+    }
     return <Loading />;
   }
 

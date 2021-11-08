@@ -37,13 +37,8 @@ const TitleItem = props => {
   const [changedLeft, setChangedLeft] = useState(false);
   const [titleRight, setTitleRight] = useState('');
   const [changedRight, setChangedRight] = useState(false);
-  const {
-    cardInfo,
-    side,
-    updateCardInfo,
-    leftItemsHeader,
-    rightItemsHeader,
-  } = props;
+  const { cardInfo, side, updateCardInfo, leftItemsHeader, rightItemsHeader } =
+    props;
 
   const setTitle = (
     side: string,

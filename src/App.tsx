@@ -166,7 +166,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
 
   const favicon = monitorConfig.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
-  
+
   return (
     <div className="App" style={style}>
       <Helmet>
@@ -186,7 +186,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               <>
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
-                  <Breadcrumbs start={monitorConfig.breadCrumbsStartPage}/>
+                  <Breadcrumbs start={monitorConfig.breadCrumbsStartPage} />
                 </section>
                 <section role="main" id="mainContent">
                   <CreateViewPage config={monitorConfig} />
@@ -204,7 +204,10 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               <>
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
-                  <Breadcrumbs isLogged={user.loggedIn} start={monitorConfig.breadCrumbsStartPage} />
+                  <Breadcrumbs
+                    isLogged={user.loggedIn}
+                    start={monitorConfig.breadCrumbsStartPage}
+                  />
                 </section>
                 <section role="main" id="mainContent">
                   <CreateViewPage config={monitorConfig} user={user} />
@@ -230,7 +233,10 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               <>
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
-                  <Breadcrumbs isLogged={user.loggedIn} start={monitorConfig.breadCrumbsStartPage} />
+                  <Breadcrumbs
+                    isLogged={user.loggedIn}
+                    start={monitorConfig.breadCrumbsStartPage}
+                  />
                 </section>
                 <section role="main" id="mainContent">
                   <HelpPage

@@ -33,7 +33,7 @@ import {
 import { MultiAPILink } from '@habx/apollo-multi-endpoint-link';
 import StopMonitorContainer from './ui/StopMonitorContainer';
 
-import'./sass/main.scss';
+import './sass/main.scss';
 
 import SkipToMainContent from './ui/SkipToMainContent';
 

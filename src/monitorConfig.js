@@ -1,8 +1,9 @@
 export default {
   hsl: {
     fonts: {
-      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif', 
-      narrow: '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
+      narrow:
+        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
     },
     colors: {
       primary: '#007ac9',
@@ -36,8 +37,9 @@ export default {
   },
   jyvaskyla: {
     fonts: {
-      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif', 
-      narrow: '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
+      narrow:
+        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
     },
     colors: {
       primary: '#7DC02D',
@@ -65,8 +67,9 @@ export default {
   },
   matka: {
     fonts: {
-      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif', 
-      narrow: '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
+      narrow:
+        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
     },
     colors: {
       primary: '#026273',
@@ -101,8 +104,9 @@ export default {
   },
   tampere: {
     fonts: {
-      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif', 
-      narrow: '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
+      narrow:
+        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
     },
     colors: {
       primary: '#1c57cf',

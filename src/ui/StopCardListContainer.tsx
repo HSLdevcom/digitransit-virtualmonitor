@@ -509,10 +509,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       </ul>
       <div className="buttons">
         <div className="wide">
-          <button
-            className={cx('button', 'add-new-view')}
-            onClick={addNew}
-          >
+          <button className={cx('button', 'add-new-view')} onClick={addNew}>
             <span>{t('prepareDisplay')} </span>
           </button>
         </div>

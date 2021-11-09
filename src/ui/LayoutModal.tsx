@@ -6,10 +6,7 @@ import Modal from 'react-modal';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { v4 as uuid } from 'uuid';
 import { getColorByName } from '../util/getConfig';
-import {
-  defaultColorAlert,
-  defaultColorFont,
-} from './DefaultStyles';
+import { defaultColorAlert, defaultColorFont } from './DefaultStyles';
 import Icon from './Icon';
 
 Modal.setAppElement('#root');

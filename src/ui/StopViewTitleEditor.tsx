@@ -90,6 +90,13 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
           <div
             role="button"
             onClick={() => focusToInput(`stop-title-input${id}-${lang}`)}
+            aria-label={
+              t('modify') +
+              ' ' +
+              t('stoptitle') +
+              ' ' +
+              t(`languageName${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
+            }
           >
             <Icon img="edit" color={getPrimaryColor()} />
           </div>

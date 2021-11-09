@@ -11,6 +11,7 @@ interface IProps {
   name: string;
   width?: number;
   height?: number;
+  ariaLabel?: string;
 }
 
 const Checkbox: FC<IProps> = ({
@@ -20,6 +21,7 @@ const Checkbox: FC<IProps> = ({
   name,
   width = 20,
   height = 20,
+  ariaLabel,
 }) => {
   const id = uniqueId('input-');
   return (
@@ -36,7 +38,7 @@ const Checkbox: FC<IProps> = ({
         <label className={cx({ checked, disabled })} htmlFor={id}>
           {checked && <Icon img="checkbox" width={width} height={height} />}
           <input
-            aria-label={name}
+            aria-label={ariaLabel ? ariaLabel : name}
             checked={checked}
             disabled={disabled}
             id={id}

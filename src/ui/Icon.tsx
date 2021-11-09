@@ -39,6 +39,7 @@ import { ReactComponent as StopRail } from './icons/stop-rail.svg';
 import { ReactComponent as StopRailWaltti } from './icons/stop-rail-waltti.svg';
 import { ReactComponent as StopTram } from './icons/stop-tram.svg';
 import { ReactComponent as StopTramWaltti } from './icons/stop-tram-waltti.svg';
+import { ReactComponent as Menu } from './icons/menu.svg';
 import { ReactComponent as MoveDown } from './icons/move-down.svg';
 import { ReactComponent as MoveUp } from './icons/move-up.svg';
 import { ReactComponent as MoveBothDown } from './icons/move-both-down.svg';
@@ -147,6 +148,7 @@ const IconMap = (style: IIconMapProps) => {
     layout15: <Layout15 style={style} />,
     layout16: <Layout16 style={style} />,
     layout17: <Layout16 style={style} />,
+    menu: <Menu style={style} />,
     'stop-bus': <StopBus style={style} />,
     'stop-bus-waltti': <StopBusWaltti style={style} />,
     'stop-rail': <StopRail style={style} />,
@@ -254,6 +256,7 @@ const Icon = (props: ICustomInputProps) => {
     width = '14';
     stroke = props.color;
   }
+
   const style = {
     fill: fill,
     stroke: stroke,

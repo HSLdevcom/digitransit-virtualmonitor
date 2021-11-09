@@ -54,9 +54,10 @@ export const getDepartureTime = (time, minutesThreshold, serviceDay) => {
   return null;
 };
 
-export const formatDate = date => {
+export const formatDate = (date, locale) => {
+  console.log('locale:', locale);
   const newDate = DateTime.fromISO(date.toISOString())
-    .setLocale('fi')
+    .setLocale(locale)
     .toFormat('EEEE d.M.yyyy');
   return newDate.charAt(0).toUpperCase() + newDate.slice(1);
 };

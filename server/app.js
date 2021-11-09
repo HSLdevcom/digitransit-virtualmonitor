@@ -5,7 +5,6 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import index from './routes.js';
-import { Helmet } from 'react-helmet';
 
 const __dirname = fileURLToPath(import.meta.url);
 
@@ -23,22 +22,7 @@ app.set('view engine', 'pug');
 app.use('/api', index);
 
 app.get('*', (req, res) => {
-  const helmet = Helmet.renderStatic(); 
-
-  const html = `<!DOCTYPE html>
-    <html lang="en">
-      <head>
-        ${helmet.title.toString()}
-        ${helmet.meta.toString()}
-        ${helmet.link.toString()}
-      </head>
-      <body>
-        <div id="root"></div>
-      </body>
-    </html>
-  `;
-
-  res.send(html);
+  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
 });
 
 // catch 404 and forward to error handler

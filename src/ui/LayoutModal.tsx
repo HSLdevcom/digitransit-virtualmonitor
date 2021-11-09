@@ -9,8 +9,6 @@ import { getColorByName } from '../util/getConfig';
 import {
   defaultColorAlert,
   defaultColorFont,
-  defaultFontNarrow,
-  defaultFontNormal,
 } from './DefaultStyles';
 import Icon from './Icon';
 
@@ -61,8 +59,6 @@ const LayoutModal: FC<Props & WithTranslation> = ({
     '--primary-color': getColorByName('primary'),
     '--alert-color': getColorByName('alert') || defaultColorAlert,
     '--font-color': getColorByName('font') || defaultColorFont,
-    fontFamily: defaultFontNormal,
-    '--font-family-narrow': defaultFontNarrow,
   } as React.CSSProperties;
 
   return (

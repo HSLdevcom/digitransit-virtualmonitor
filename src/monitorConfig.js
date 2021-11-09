@@ -1,5 +1,9 @@
 export default {
   hsl: {
+    fonts: {
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif', 
+      narrow: '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+    },
     colors: {
       primary: '#007ac9',
       hover: '#0062a1',
@@ -31,6 +35,10 @@ export default {
     breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
   },
   jyvaskyla: {
+    fonts: {
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif', 
+      narrow: '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+    },
     colors: {
       primary: '#7DC02D',
     },
@@ -56,6 +64,10 @@ export default {
     breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
   },
   matka: {
+    fonts: {
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif', 
+      narrow: '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+    },
     colors: {
       primary: '#026273',
       monitorBackground: '#0057a2',
@@ -88,6 +100,10 @@ export default {
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
   },
   tampere: {
+    fonts: {
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif', 
+      narrow: '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+    },
     colors: {
       primary: '#1c57cf',
     },

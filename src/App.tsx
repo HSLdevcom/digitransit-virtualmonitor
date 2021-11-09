@@ -35,6 +35,8 @@ import StopMonitorContainer from './ui/StopMonitorContainer';
 
 import './sass/main.scss';
 
+import SkipToMainContent from './ui/SkipToMainContent';
+
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
     normal?: string;
@@ -74,6 +76,7 @@ export interface IMonitorConfig {
   urlParamFindText?: string;
   urlParamFindAltText?: string;
   showMinutes?: string;
+  breadCrumbsStartPage?: string;
 }
 
 export interface IQueryString {
@@ -161,70 +164,83 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     '--primary-color': monitorConfig.colors.primary,
   } as React.CSSProperties;
 
-    const favicon = monitorConfig.name.concat('.png');
-    const faviconLink = <link rel="shortcut icon" href={favicon} />;
-    console.log('faviconLink:', faviconLink.props.href);
-    return (
-      <div className="App" style={style}>
-        <Helmet>
-          <title>{monitorConfig.name} - pysäkkinäyttö</title>
-          {faviconLink}
-        </Helmet>
-        <ApolloProvider client={client}>
-          <Switch>
-            <Route
-              path={'/createView'}
-              component={({
-                match: {
-                  params: {},
-                },
-              }: RouteComponentProps<IMonitorConfig>) => (
-                <>
-                  <Banner config={monitorConfig} />
-                  <Breadcrumbs />
-                  <CreateViewPage config={monitorConfig} />
-                </>
-              )}
-            />
-            <Route
-              path={'/createStaticView'}
-              component={({
-                match: {
-                  params: {},
-                },
-              }: RouteComponentProps<IMonitorConfig>) => (
-                <>
-                  <Banner config={monitorConfig} />
-                  <Breadcrumbs isLogged={user.loggedIn} />
-                  <CreateViewPage config={monitorConfig} user={user} />
-                </>
-              )}
-            />
-            <Route
-              path={'/quickDisplay/:version?/:packedDisplay?'}
-              component={QuickDisplay}
-            />
-            <Route path={'/view'} component={WithDatabaseConnection} />
-            <Route path={'/static'} component={WithDatabaseConnection} />
-            <Route path={'/version'} component={Version} />
-            <Route
-              path={'/help'}
-              // eslint-disable-next-line no-empty-pattern
-              component={({
-                match: {
-                  params: {},
-                },
-              }: RouteComponentProps<IMonitorConfig>) => (
+  const favicon = monitorConfig.name.concat('.png');
+  const faviconLink = <link rel="shortcut icon" href={favicon} />;
+  
+  return (
+    <div className="App" style={style}>
+      <Helmet>
+        <title>{monitorConfig.name} - pysäkkinäyttö</title>
+        {faviconLink}
+      </Helmet>
+      <SkipToMainContent />
+      <ApolloProvider client={client}>
+        <Switch>
+          <Route
+            path={'/createView'}
+            component={({
+              match: {
+                params: {},
+              },
+            }: RouteComponentProps<IMonitorConfig>) => (
               <>
-                <Banner config={monitorConfig} />
-                <Breadcrumbs isLogged={user.loggedIn} />
-                <HelpPage
-                  urlParamUsageText={helpPageUrlParamText}
-                  urlMultipleStopsText={helpPageurlMultipleStopsText}
-                  urlParamFindText={helpPageUrlParamFindText}
-                  urlParamFindAltText={helpPageUrlParamFindAltText}
-                  content={props.search.cont}
-                />
+                <section aria-label="navigation">
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs start={monitorConfig.breadCrumbsStartPage}/>
+                </section>
+                <section role="main" id="mainContent">
+                  <CreateViewPage config={monitorConfig} />
+                </section>
+              </>
+            )}
+          />
+          <Route
+            path={'/createStaticView'}
+            component={({
+              match: {
+                params: {},
+              },
+            }: RouteComponentProps<IMonitorConfig>) => (
+              <>
+                <section aria-label="navigation">
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs isLogged={user.loggedIn} start={monitorConfig.breadCrumbsStartPage} />
+                </section>
+                <section role="main" id="mainContent">
+                  <CreateViewPage config={monitorConfig} user={user} />
+                </section>
+              </>
+            )}
+          />
+          <Route
+            path={'/quickDisplay/:version?/:packedDisplay?'}
+            component={QuickDisplay}
+          />
+          <Route path={'/view'} component={WithDatabaseConnection} />
+          <Route path={'/static'} component={WithDatabaseConnection} />
+          <Route path={'/version'} component={Version} />
+          <Route
+            path={'/help'}
+            // eslint-disable-next-line no-empty-pattern
+            component={({
+              match: {
+                params: {},
+              },
+            }: RouteComponentProps<IMonitorConfig>) => (
+              <>
+                <section aria-label="navigation">
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs isLogged={user.loggedIn} start={monitorConfig.breadCrumbsStartPage} />
+                </section>
+                <section role="main" id="mainContent">
+                  <HelpPage
+                    urlParamUsageText={helpPageUrlParamText}
+                    urlMultipleStopsText={helpPageurlMultipleStopsText}
+                    urlParamFindText={helpPageUrlParamFindText}
+                    urlParamFindAltText={helpPageUrlParamFindAltText}
+                    content={props.search.cont}
+                  />
+                </section>
               </>
             )}
           />

@@ -98,6 +98,7 @@
 
     .duration {
       margin-left: 20px;
+      white-space: nowrap;
     }
   }
 
@@ -177,4 +178,8 @@
     position: relative;
     list-style-type: none;
   }
+}
+
+input {
+  font-family: $font-family;
 }

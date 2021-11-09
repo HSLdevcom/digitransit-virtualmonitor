@@ -12,7 +12,8 @@ interface IProps {
 }
 
 export const GET_STOP = gql`
-  query GetStops($ids: [String!]!) @api(contextKey: "clientName") {
+  query GetStopsForOldMonitors($ids: [String!]!)
+  @api(contextKey: "clientName") {
     stops: stops(ids: $ids) {
       name
       gtfsId

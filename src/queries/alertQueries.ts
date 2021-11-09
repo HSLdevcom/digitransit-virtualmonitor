@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const GET_STOP_ALERTS = gql`
-  query GetDepartures($ids: [String!]!) {
+  query GetAlertsForStops($ids: [String!]!) {
     stops: stops(ids: $ids) {
       alerts {
         alertSeverityLevel
@@ -46,7 +46,7 @@ export const GET_STOP_ALERTS = gql`
 `;
 
 export const GET_STATION_ALERTS = gql`
-  query GetDeparturesForStations($ids: [String!]!) {
+  query GetAlertsForStations($ids: [String!]!) {
     stations: stations(ids: $ids) {
       stops {
         routes {

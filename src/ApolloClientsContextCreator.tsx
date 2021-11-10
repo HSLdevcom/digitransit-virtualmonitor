@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import ApolloBoostClient from "apollo-boost";
 
 export interface IApolloClientContextType {
   // default: ReturnType<typeof ApolloBoostClient>,

@@ -18,17 +18,13 @@
   padding-top: 30px;
   padding-bottom: 40px;
   justify-content: center;
+
+  .wide {
+    flex: 1;
+  }
 }
 
 .button {
-  &.prepare {
-    margin-right: 250px;
-
-    &.modifyView {
-      margin-right: 160px;
-    }
-  }
-
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -49,7 +45,7 @@
     white-space: nowrap;
   }
 
-  &:last-child {
+  &.create {
     background: $primary-color;
     margin-left: 5px;
 
@@ -69,7 +65,7 @@
     }
   }
 
-  &:not(:first-child):not(:last-child) {
+  &.preview {
     margin-left: 5px;
     margin-right: 5px;
   }

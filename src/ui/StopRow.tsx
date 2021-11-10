@@ -5,7 +5,7 @@ import { IPattern, ISettings } from '../util/Interfaces';
 import StopRoutesModal from './StopRoutesModal';
 import StopCode from './StopCode';
 import Icon from './Icon';
-import { IStopInfo } from './StopInfoRetriever';
+import { IStop } from '../util/Interfaces';
 import { getLayout } from '../util/getLayout';
 import { sortBy, uniqWith, isEqual } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
@@ -13,12 +13,13 @@ import { defaultSettings } from './StopRoutesModal';
 import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
 import { getStopIcon } from '../util/stopCardUtil';
 
-interface IStopInfoPlus extends IStopInfo {
+interface IStopInfoPlus extends IStop {
   cardId?: number;
-  settings?: ISettings;
+  settings: ISettings;
   layout: number;
   locality?: string;
   patterns: Array<IPattern>;
+  id?: string;
 }
 
 interface IProps {

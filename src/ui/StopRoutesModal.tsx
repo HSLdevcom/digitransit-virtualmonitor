@@ -5,7 +5,7 @@ import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { IStopInfo } from './StopInfoRetriever';
+import { IStop } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { capitalize } from '../util/monitorUtils';
 import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
@@ -27,7 +27,7 @@ interface IRoute {
 
 interface Props {
   showModal: boolean;
-  stop: IStopInfo;
+  stop: IStop;
   closeModal: (route: IRoute[]) => void;
   stopSettings?: any;
   combinedPatterns: string[];

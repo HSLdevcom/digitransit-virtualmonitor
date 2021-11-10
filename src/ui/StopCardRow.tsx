@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { gql, useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { IColumn, IStop } from '../util/Interfaces';
 import Icon from './Icon';
 import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';

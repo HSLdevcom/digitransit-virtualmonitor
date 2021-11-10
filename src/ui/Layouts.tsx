@@ -3,7 +3,7 @@ import Icon from './Icon';
 
 export const horizontalLayouts = [
   {
-    label: 'Yksijakoinen',
+    label: 'one-column',
     options: [
       {
         value: '1',
@@ -35,7 +35,7 @@ export const horizontalLayouts = [
     ],
   },
   {
-    label: 'Kaksijakoinen',
+    label: 'two-columns',
     options: [
       {
         value: '4',
@@ -67,7 +67,7 @@ export const horizontalLayouts = [
     ],
   },
   {
-    label: 'Kaksijakoinen yhdistelmä',
+    label: 'two-columns-combo',
     options: [
       {
         value: '7',
@@ -90,7 +90,7 @@ export const horizontalLayouts = [
     ],
   },
   {
-    label: 'Itään / länteen',
+    label: 'layoutEastWest',
     options: [
       {
         value: '9',
@@ -125,7 +125,7 @@ export const horizontalLayouts = [
 
 export const verticalLayouts = [
   {
-    label: 'Yksinkertainen',
+    label: 'simple',
     options: [
       {
         value: '12',
@@ -166,7 +166,7 @@ export const verticalLayouts = [
     ],
   },
   {
-    label: 'Tiivistyvä',
+    label: 'tighten',
     options: [
       {
         value: '16',
@@ -186,15 +186,6 @@ export const verticalLayouts = [
           </>
         ),
       },
-      /*{
-        value: '17',
-        label: (
-          <>
-            <Icon img="layout1" height={90} width={160} />
-            <span className="label">2+4+12</span>
-          </>
-        ),
-      },*/
     ],
   },
 ];

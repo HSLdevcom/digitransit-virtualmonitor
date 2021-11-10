@@ -79,7 +79,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
           {layouts.map(l => {
             return (
               <div className="row" key={uuid()}>
-                <h3 className="row-header"> {l.label}</h3>
+                <h3 className="row-header">{t(l.label)}</h3>
                 <div className="options">
                   {l.options.map(option => {
                     return (

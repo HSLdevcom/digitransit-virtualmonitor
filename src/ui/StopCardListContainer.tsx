@@ -508,15 +508,14 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         })}
       </ul>
       <div className="buttons">
-        <button
-          className={cx('button', 'prepare', isModifyView ? 'modifyView' : '')}
-          onClick={addNew}
-        >
-          <span>{t('prepareDisplay')} </span>
-        </button>
+        <div className="wide">
+          <button className={cx('button', 'add-new-view')} onClick={addNew}>
+            <span>{t('prepareDisplay')} </span>
+          </button>
+        </div>
         <button
           disabled={makeButtonsDisabled}
-          className="button"
+          className="button preview"
           onClick={openPreview}
         >
           <span>{t('previewView')}</span>
@@ -524,7 +523,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         {!isModifyView && (
           <button
             disabled={makeButtonsDisabled}
-            className="button"
+            className="button create"
             onClick={() => createOrSaveMonitor(true)}
           >
             <span>{t('displayEditorStaticLink')}</span>

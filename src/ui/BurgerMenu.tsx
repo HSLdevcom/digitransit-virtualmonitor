@@ -2,7 +2,7 @@ import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
-import { getColorByName } from '../util/getConfig';
+import { getColorByName, getFontByName } from '../util/getConfig';
 import Modal from 'react-modal';
 import {
   defaultColorAlert,
@@ -85,8 +85,8 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
     '--primary-color': getColorByName('primary'),
     '--alert-color': getColorByName('alert') || defaultColorAlert,
     '--font-color': getColorByName('font') || defaultColorFont,
-    fontFamily: defaultFontNormal,
-    '--font-family-narrow': defaultFontNarrow,
+    fontFamily: getFontByName('normal') || defaultFontNormal,
+    '--font-family-narrow': getFontByName('narrow') || defaultFontNarrow,
   } as React.CSSProperties;
 
   return (
@@ -103,7 +103,12 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
             aria-label={t('menuClose')}
             onClick={onClose}
           >
-            <Icon img="close" color={getColorByName('primary')} width={25} />
+            <Icon
+              img="close"
+              color={getColorByName('primary')}
+              height={24}
+              width={24}
+            />
           </button>
         </section>
         <section

@@ -227,8 +227,8 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
         <div role="button" className="close" onClick={handleClose}>
           <Icon
             img={'close'}
-            height={15}
-            width={15}
+            height={24}
+            width={24}
             color={getColorByName('primary')}
           />
         </div>

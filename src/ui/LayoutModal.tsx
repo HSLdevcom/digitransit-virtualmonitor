@@ -5,8 +5,12 @@ import isEqual from 'lodash/isEqual';
 import Modal from 'react-modal';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { v4 as uuid } from 'uuid';
-import { getColorByName } from '../util/getConfig';
-import { defaultColorAlert, defaultColorFont } from './DefaultStyles';
+import { getColorByName, getFontByName } from '../util/getConfig';
+import {
+  defaultColorAlert,
+  defaultColorFont,
+  defaultFontNormal,
+} from './DefaultStyles';
 import Icon from './Icon';
 
 Modal.setAppElement('#root');
@@ -56,6 +60,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
     '--primary-color': getColorByName('primary'),
     '--alert-color': getColorByName('alert') || defaultColorAlert,
     '--font-color': getColorByName('font') || defaultColorFont,
+    '--font-family-normal': getFontByName('normal') || defaultFontNormal,
   } as React.CSSProperties;
 
   return (
@@ -66,14 +71,21 @@ const LayoutModal: FC<Props & WithTranslation> = ({
       style={orientation === 'vertical' ? verticalHeight : modalStyle}
     >
       <div className="layout-modal-content-container" style={style}>
-        <div role="button" className="close" onClick={() => onClose(null)}>
-          <Icon
-            img={'close'}
-            height={15}
-            width={15}
-            color={getColorByName('primary')}
-          />
-        </div>
+        <section id="close">
+          <button
+            className="close-button"
+            role="button"
+            aria-label={t('close')}
+            onClick={() => onClose(null)}
+          >
+            <Icon
+              img="close"
+              color={getColorByName('primary')}
+              height={24}
+              width={24}
+            />
+          </button>
+        </section>
         <h2 className="layout-modal-header">{t('layoutModalHeader')}</h2>
         <div className="layouts">
           {layouts.map(l => {
@@ -83,7 +95,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
                 <div className="options">
                   {l.options.map(option => {
                     return (
-                      <div
+                      <button
                         className={cx(
                           'option',
                           orientation === 'vertical' ? 'vertical' : '',
@@ -93,9 +105,13 @@ const LayoutModal: FC<Props & WithTranslation> = ({
                         )}
                         onClick={() => onClick(option)}
                         key={uuid()}
+                        role="button"
+                        aria-label={`${t(orientation)} ${t(l.label)} ${
+                          option.label
+                        } ${t('rows')}`}
                       >
                         {option.label}
-                      </div>
+                      </button>
                     );
                   })}
                 </div>

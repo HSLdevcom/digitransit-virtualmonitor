@@ -67,7 +67,7 @@ const PreviewModal: FC<Props & WithTranslation> = ({
         <div className="title-and-close" style={styleFont}>
           <div className="title">{t('preview')}</div>
           <div role="button" className="close" onClick={() => onClose(false)}>
-            <Icon img={'close'} height={15} width={15} color={'#FFFFFF'} />
+            <Icon img={'close'} height={24} width={24} color={'#FFFFFF'} />
           </div>
         </div>
         <div className="carouselContainer" style={style}>

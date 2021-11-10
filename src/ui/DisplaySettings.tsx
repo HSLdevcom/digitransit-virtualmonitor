@@ -74,7 +74,12 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
       >
         <div className="language-header">{t('displayLanguages')}</div>
         {languages.length < 1 && (
-          <div className="language-alert" role="alert">
+          <div
+            className="language-alert"
+            role="alert"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             {t('chooseOne')}
           </div>
         )}

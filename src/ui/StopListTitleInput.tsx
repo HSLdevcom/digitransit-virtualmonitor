@@ -1,7 +1,7 @@
 import cx from 'classnames';
 import React, { useState } from 'react';
 import Icon from './Icon';
-import { focusToInput, onClick } from './InputUtils';
+import { focusToInput, onClick } from '../util/InputUtils';
 import { getPrimaryColor } from '../util/getConfig';
 
 function StopListTitleInput(props: {
@@ -21,9 +21,7 @@ function StopListTitleInput(props: {
   value: string;
 }) {
   const [titleLeft, setTitleLeft] = useState(props.titleLeft);
-  const [changedLeft, setChangedLeft] = useState(false);
   const [titleRight, setTitleRight] = useState(props.titleRight);
-  const [changedRight, setChangedRight] = useState(false);
   const [focus, setFocus] = useState(false);
 
   const onBlur = (event: any, side: string) => {
@@ -36,10 +34,8 @@ function StopListTitleInput(props: {
         props.lang,
       );
       if (side === 'left') {
-        setChangedLeft(false);
         props.setTitle('left', false);
       } else {
-        setChangedRight(false);
         props.setTitle('right', false);
       }
     }
@@ -61,22 +57,18 @@ function StopListTitleInput(props: {
         if (side === 'left') {
           setTitleLeft('');
           props.setTitle('left', true, '');
-          setChangedLeft(true);
         } else {
           setTitleRight('');
           props.setTitle('right', true, '');
-          setChangedRight(true);
         }
       } else if (key.length === 1) {
         event.target.value = key;
         if (side === 'left') {
           setTitleLeft(key);
           props.setTitle('left', true, key);
-          setChangedLeft(true);
         } else {
           props.setTitle('right', true, key);
           setTitleRight(key);
-          setChangedRight(true);
         }
       }
       event.preventDefault();
@@ -87,11 +79,9 @@ function StopListTitleInput(props: {
       if (side === 'left') {
         setTitleLeft(titleLeft.slice(0, -1));
         props.setTitle('left', true, titleLeft.slice(0, -1));
-        setChangedLeft(true);
       } else {
         setTitleRight(titleLeft.slice(0, -1));
         props.setTitle('right', true, titleLeft.slice(0, -1));
-        setChangedRight(true);
       }
       return false;
     }
@@ -101,7 +91,6 @@ function StopListTitleInput(props: {
         if (side === 'left') {
           setTitleLeft(titleLeft.concat(key));
           props.setTitle('left', true, titleLeft.concat(key));
-          setChangedLeft(true);
         } else {
           setTitleRight(titleRight ? titleRight.concat(key) : key);
           props.setTitle(
@@ -109,7 +98,6 @@ function StopListTitleInput(props: {
             true,
             titleRight ? titleRight.concat(key) : key,
           );
-          setChangedRight(true);
         }
       }
       return false;
@@ -124,10 +112,8 @@ function StopListTitleInput(props: {
         props.lang,
       );
       if (side === 'left') {
-        setChangedLeft(false);
         props.setTitle('left', false);
       } else {
-        setChangedRight(false);
         props.setTitle('right', false);
       }
     }

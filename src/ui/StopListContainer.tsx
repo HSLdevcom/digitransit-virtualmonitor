@@ -6,7 +6,7 @@ import StopListTitleInput from './StopListTitleInput';
 import StopRow from './StopRow';
 import { v4 as uuid } from 'uuid';
 import cx from 'classnames';
-import { focusToInput, onClick } from './InputUtils';
+import { focusToInput, onClick } from '../util/InputUtils';
 import { getLayout } from '../util/getLayout';
 import { ICardInfo } from './CardInfo';
 
@@ -34,19 +34,11 @@ interface Props {
 
 const TitleItem = props => {
   const [titleLeft, setTitleLeft] = useState('');
-  const [titleLang, setTitleLang] = useState('');
   const [changedLeft, setChangedLeft] = useState(false);
   const [titleRight, setTitleRight] = useState('');
   const [changedRight, setChangedRight] = useState(false);
-  const [focus, setFocus] = useState(false);
-  const {
-    cardInfo,
-    side,
-    updateCardInfo,
-    leftItemsHeader,
-    rightItemsHeader,
-    languages,
-  } = props;
+  const { cardInfo, side, updateCardInfo, leftItemsHeader, rightItemsHeader } =
+    props;
 
   const setTitle = (
     side: string,

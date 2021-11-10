@@ -5,12 +5,8 @@ import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import Breadcrumbs from './ui/Breadcrumbs';
 import Banner from './ui/Banner';
-import ConfigurationDisplay from './ui/ConfigurationDisplay';
-import ConfigurationList from './ui/ConfigurationList';
-import DisplayEditor from './ui/DisplayEditor';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import HelpPage from './ui/HelpPage';
-import QuickDisplay from './ui/QuickDisplay';
 import CreateViewPage from './ui/CreateViewPage';
 import Version from './ui/Version';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
@@ -166,7 +162,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
 
   const favicon = monitorConfig.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
-
   return (
     <div className="App" style={style}>
       <Helmet>
@@ -215,10 +210,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
                 </section>
               </>
             )}
-          />
-          <Route
-            path={'/quickDisplay/:version?/:packedDisplay?'}
-            component={QuickDisplay}
           />
           <Route path={'/view'} component={WithDatabaseConnection} />
           <Route path={'/static'} component={WithDatabaseConnection} />
@@ -270,19 +261,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
             }}
           />
           <Route
-            path={'/configuration/:configuration/display/:display'}
-            component={({
-              match: {
-                params: { configuration, displayName },
-              },
-            }: RouteComponentProps<IConfigurationDisplayRouteParams>) => (
-              <ConfigurationDisplay
-                configurationName={configuration}
-                displayName={displayName}
-              />
-            )}
-          />
-          <Route
             path={'/stop/:stopId/:layout?'}
             component={({
               match: {
@@ -297,8 +275,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               />
             )}
           />
-          <Route path={'/configs/:configName?'} component={ConfigurationList} />
-          <Route path={'/displayEditor/'} component={DisplayEditor} />
           <Route
             path={'/'}
             component={({

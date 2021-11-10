@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react';
 import { ITitle } from '../util/Interfaces';
 import Icon from './Icon';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { focusToInput, onClick } from './InputUtils';
+import { focusToInput, onClick } from '../util/InputUtils';
 import { getLayout } from '../util/getLayout';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { getPrimaryColor } from '../util/getConfig';

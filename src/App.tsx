@@ -173,7 +173,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
         <title>{monitorConfig.name} - pysäkkinäyttö</title>
         {faviconLink}
       </Helmet>
-      <SkipToMainContent />
       <ApolloProvider client={client}>
         <Switch>
           <Route
@@ -184,6 +183,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
                   <Breadcrumbs start={monitorConfig.breadCrumbsStartPage} />
@@ -202,6 +202,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
                   <Breadcrumbs
@@ -231,6 +232,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
                   <Breadcrumbs
@@ -305,6 +307,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <LandingPage
                   login={props.search?.pocLogin}
                   config={monitorConfig}

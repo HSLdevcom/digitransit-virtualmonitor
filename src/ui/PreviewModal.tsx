@@ -66,31 +66,40 @@ const PreviewModal: FC<Props & WithTranslation> = ({
       >
         <div className="title-and-close" style={styleFont}>
           <div className="title">{t('preview')}</div>
-          <div role="button" className="close" onClick={() => onClose(false)}>
-            <Icon img={'close'} height={24} width={24} color={'#FFFFFF'} />
+          <section id="close">
+            <button
+              className="close"
+              role="button"
+              aria-label={t('close')}
+              onClick={() => onClose(false)}
+            >
+              <Icon img="close" color={'#FFFFFF'} height={16} width={16} />
+            </button>
+          </section>
+        </div>
+        <section id={isLandscape ? 'previewMonitor' : 'previewMonitorPortrait'}>
+          <div className="carouselContainer" style={style}>
+            {view.isInformationDisplay ? (
+              <InformationDisplayContainer preview monitor={view} />
+            ) : (
+              <>
+                {stationIds.length && showPlatformsOrTracks ? (
+                  <TrainDataFetcher
+                    monitor={view}
+                    stationIds={stationIds}
+                    preview
+                  />
+                ) : (
+                  <CarouselDataContainer
+                    languages={languages}
+                    views={view.cards}
+                    preview
+                  />
+                )}
+              </>
+            )}
           </div>
-        </div>
-        <div className="carouselContainer" style={style}>
-          {view.isInformationDisplay ? (
-            <InformationDisplayContainer preview monitor={view} />
-          ) : (
-            <>
-              {stationIds.length && showPlatformsOrTracks ? (
-                <TrainDataFetcher
-                  monitor={view}
-                  stationIds={stationIds}
-                  preview
-                />
-              ) : (
-                <CarouselDataContainer
-                  languages={languages}
-                  views={view.cards}
-                  preview
-                />
-              )}
-            </>
-          )}
-        </div>
+        </section>
       </Modal>
     </>
   );

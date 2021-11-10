@@ -208,6 +208,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               title={cardInfo.title}
               updateCardInfo={updateCardInfo}
               lang={'fi'}
+              index={cardInfo.index}
             />
           )}
           {languages.includes('sv') &&
@@ -218,6 +219,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 title={cardInfo.title}
                 updateCardInfo={updateCardInfo}
                 lang={'sv'}
+                index={cardInfo.index}
               />
             )}
           {languages.includes('en') &&
@@ -229,6 +231,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 title={cardInfo.title}
                 updateCardInfo={updateCardInfo}
                 lang={'en'}
+                index={cardInfo.index}
               />
             )}
           <div className="icons">

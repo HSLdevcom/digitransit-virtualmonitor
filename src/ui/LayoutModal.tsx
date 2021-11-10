@@ -1,4 +1,4 @@
-import React, { ClassAttributes, FC, useState } from 'react';
+import React, { ClassAttributes, FC, useState, useEffect } from 'react';
 import cx from 'classnames';
 import { horizontalLayouts, verticalLayouts } from './Layouts';
 import isEqual from 'lodash/isEqual';
@@ -34,10 +34,21 @@ const LayoutModal: FC<Props & WithTranslation> = ({
   t,
 }) => {
   const [selected, setSelected] = useState(option);
+
+  useEffect(() => {
+    if (selected.value !== option.value) {
+      const layoutBtn = document.getElementById(
+        `layoutBtn-${selected.value}`,
+      ) as HTMLInputElement;
+      layoutBtn.focus();
+    }
+  }, [selected]);
+
   const handleClose = () => {
     onClose(selected);
   };
-  const onClick = option => {
+
+  const handleSelect = option => {
     setSelected(option);
   };
 
@@ -103,11 +114,12 @@ const LayoutModal: FC<Props & WithTranslation> = ({
                             ? 'label-selected'
                             : '',
                         )}
-                        onClick={() => onClick(option)}
+                        onClick={() => handleSelect(option)}
+                        id={`layoutBtn-${option.value}`}
                         key={uuid()}
                         role="button"
                         aria-label={`${t(orientation)} ${t(l.label)} ${
-                          option.label
+                          option.rows
                         } ${t('rows')}`}
                       >
                         {option.label}

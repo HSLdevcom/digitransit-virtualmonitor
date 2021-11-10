@@ -19,6 +19,7 @@ interface IProps {
     lang?: string,
   ) => void;
   lang: 'fi' | 'sv' | 'en';
+  index: number;
 }
 
 const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
@@ -27,6 +28,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   title,
   updateCardInfo,
   lang,
+  index,
   t,
 }) => {
   const { isMultiDisplay, isPortrait } = getLayout(layout);
@@ -94,6 +96,8 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
               t('modify') +
               ' ' +
               t('stoptitle') +
+              ' ' +
+              index +
               ' ' +
               t(`languageName${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
             }

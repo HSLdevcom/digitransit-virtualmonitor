@@ -79,13 +79,12 @@
           svg {
             position: relative;
             top: 10px;
-            left: 7px;
           }
 
           &.vertical {
             height: 210px;
-            width: 110px;
-            margin-right: 12px;
+            width: 121px;
+            margin-right: 20px;
 
             svg {
               top: 10px;
@@ -101,13 +100,15 @@
           height: 140px;
           width: 174px;
           margin-right: 20px;
+          background: transparent;
 
           .label {
-            display: flex;
-            justify-content: center;
-            position: relative;
+            font-size: 14px;
+            line-height: 17px;
+            letter-spacing: -0.02em;
             margin-top: 20px;
             margin-bottom: 10px;
+            width: 100%;
           }
         }
 

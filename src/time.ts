@@ -55,7 +55,6 @@ export const getDepartureTime = (time, minutesThreshold, serviceDay) => {
 };
 
 export const formatDate = (date, locale) => {
-  console.log('locale:', locale);
   const newDate = DateTime.fromISO(date.toISOString())
     .setLocale(locale)
     .toFormat('EEEE d.M.yyyy');

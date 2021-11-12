@@ -227,7 +227,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
           <Route path={'/view'} component={WithDatabaseConnection} />
           <Route path={'/static'} component={WithDatabaseConnection} />
           <Route path={'/version'} component={Version} />
-          <Route
+          {/*   <Route
             path={'/help'}
             // eslint-disable-next-line no-empty-pattern
             component={({
@@ -254,7 +254,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
                 </section>
               </>
             )}
-          />
+          />*/}
           <Route
             path={'/urld/:version/:packedDisplay'}
             component={({

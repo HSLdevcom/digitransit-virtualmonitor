@@ -6,6 +6,10 @@ import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
 import Loading from './Loading';
 import hash from 'object-hash';
+import {
+  GetStopsForOldMonitors,
+  GetStopsForOldMonitorsVariables,
+} from '../generated/GetStopsForOldMonitors';
 
 interface IProps {
   display: any;
@@ -83,7 +87,10 @@ const OldMonitorParser: FC<IProps & WithTranslation> = ({ display, t }) => {
     contenthash: '',
   });
   const [redirect, setRedirect] = useState(false);
-  const { data } = useQuery(GET_STOP, {
+  const { data } = useQuery<
+    GetStopsForOldMonitors,
+    GetStopsForOldMonitorsVariables
+  >(GET_STOP, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
     context: { clientName: 'default' },

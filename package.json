@@ -65,7 +65,9 @@
     "lint-ts": "eslint ./src/**/*{ts,tsx,js} --fix --quiet",
     "lint-scss": "stylelint src/**/*.{scss,sass} --fix --quiet",
     "lint-ts-test": "eslint ./src/**/*{ts,tsx,js} --quiet",
-    "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet"
+    "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet",
+    "apollo-schema": "apollo client:download-schema .",
+    "apollo-codegen": "apollo client:codegen --target=typescript ./src/generated/ --outputFlat"
   },
   "devDependencies": {
     "@types/history": "^4.7.8",

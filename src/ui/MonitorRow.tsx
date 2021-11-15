@@ -5,7 +5,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
 import { capitalize } from '../util/monitorUtils';
-import { getIconStyleWithColor } from '../util/getConfig';
+import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
 
 interface IRoute {
   alerts: any;
@@ -51,6 +51,7 @@ interface IProps {
   currentLang: string;
   showMinutes: number;
   withoutRouteColumn: boolean;
+  isPreview?: boolean;
 }
 
 const isCharacter = char => {
@@ -92,6 +93,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   showMinutes,
   t,
   withoutRouteColumn,
+  isPreview,
 }) => {
   const stopSettings = stops.find(s => s.gtfsId === departure?.stop.gtfsId);
   const renamedDestinations = [];
@@ -187,7 +189,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const lineLen = departure?.trip?.route.shortName?.length;
   const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
   const stopCodeLen = stopCode?.length;
-
+  const iconSize = isPreview ? 25 : 52;
   const departureTime = getDepartureTime(
     departure?.realtimeDeparture,
     showMinutes * 60,
@@ -207,10 +209,20 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           'without-route-column': withoutRouteColumn,
         })}
       >
-        {!withoutRouteColumn && (
+        {!withoutRouteColumn && lineLen < 5 && (
           <div className={cx('grid-col line', `len${lineLen}`)}>
             {line[0]}
             {line.length > 1 && <span className="line-letter">{line[1]}</span>}
+          </div>
+        )}
+        {!withoutRouteColumn && lineLen >= 5 && (
+          <div className={cx('grid-col line', `len${2}`)}>
+            <Icon
+              img={stopSettings.mode}
+              height={iconSize}
+              width={iconSize}
+              color={getColorByName('monitorBackground')}
+            />
           </div>
         )}
         <div className="grid-col destination">

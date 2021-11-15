@@ -178,6 +178,7 @@ const Monitor: FC<IProps> = ({
         showMinutes={Number(config.showMinutes)}
         closedStopViews={closedStopViews}
         error={error}
+        isPreview={isPreview}
       />
     </div>
   );

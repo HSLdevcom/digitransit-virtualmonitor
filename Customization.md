@@ -1,22 +1,25 @@
-# Customizing Virtual Monitor
+# Customizing Stop Monitor
 
-The default theming is for HSL, but that might not be what you need. Here's instructions on what to change and where if you want to customize the virtual monitor for a different organization.
+The default theming is for Matka, and there is also theming for 
+Jyvaskyla, and Tampere. But that might not be what you need. Here's instructions on what to change and where if you want to customize the stop monitor for a different organization.
 
-## API backend.
+##  backend.
 
-The GraphQL API endpoint is defined in `src/monitorConfig.js`.
+The backend is defined in `server/`.
 
 ## monitorConfig.js 
 
-MonitorConfig.js hold all the relevant information for configuring virtual monitor's appereance and incoming data. FeedId string is meant for  `src/ui/logo/Logo.tsx` to change correct logo depending on url where the user is going to. uri is the  GraphQL API endpoint.
+MonitorConfig.js hold all the relevant information for configuring stop monitor's appereance and incoming data. FeedId string is meant for  `src/ui/logo/Logo.tsx` to change correct logo depending on url where the user is going to. uri is the  GraphQL API endpoint.
 
+
+You can also edit primary colors and fonts used in different themes in this file as well.
 ## Logo
 
 Logo is in `src/ui/logo/Logo.tsx` which by default returns the logo depending on feedId, like tampere for example. You can create a new file for a new logo and have `src/ui/logo/Logo.tsx` import that too. The logo can be either JSX or an image tag or whatever you might want.
 
 ## Page title
 
-Page title is in `public/index.html` in `<title>` -tag.
+Page title is configurable in `src/App.tsx` below `<Helmet>` -component.
 
 ## manifest.json
 
@@ -28,8 +31,5 @@ Page title is in `public/index.html` in `<title>` -tag.
 
 ## Favicon
 
-Favicon is defined in `public/manifest.json`.
+Favicons are defined in `src/ui/favicons/`.
 
-## In-app title
-
-`src/i18n.ts` has `titlebarTitle`, the translation string for the title diplayed in titlebar (currently Virtuaalimonitori).

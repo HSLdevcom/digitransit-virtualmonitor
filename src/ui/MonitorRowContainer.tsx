@@ -136,7 +136,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         stops={leftStops}
         currentLang={currentLang}
         dayForDivider={
-          i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
+          i === nextDayDepartureIndexLeft
+            ? formatDate(nextDay, currentLang)
+            : undefined
         }
         showMinutes={showMinutes || 0}
         withoutRouteColumn={withoutRouteColumn}
@@ -168,7 +170,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             withTwoColumns={withTwoColumns}
             alertState={alertState}
             dayForDivider={
-              i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
+              i === nextDayDepartureIndexLeft
+                ? formatDate(nextDay, currentLang)
+                : undefined
             }
             currentLang={currentLang}
             showMinutes={showMinutes || 0}
@@ -192,7 +196,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             withTwoColumns={withTwoColumns}
             alertState={alertState}
             dayForDivider={
-              i === nextDayDepartureIndexRight ? formatDate(nextDay) : undefined
+              i === nextDayDepartureIndexRight
+                ? formatDate(nextDay, currentLang)
+                : undefined
             }
             currentLang={currentLang}
             showMinutes={showMinutes || 0}
@@ -249,7 +255,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           </div>
           {withStopCode && (
             <div className={cx('grid-header', 'platform-code')}>
-              {t('platform/stop', { lng: currentLang })}
+              {t('platform-or-stop', { lng: currentLang })}
             </div>
           )}
           <div className={cx('grid-header', 'time')}>

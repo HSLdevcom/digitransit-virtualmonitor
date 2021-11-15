@@ -1,5 +1,10 @@
 export default {
   hsl: {
+    fonts: {
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
+      narrow:
+        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+    },
     colors: {
       primary: '#007ac9',
       hover: '#0062a1',
@@ -28,8 +33,14 @@ export default {
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/HSL:1230109/10 Näyttää 10 riviä pysäkiltä Kumpulan kampus',
     showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
   },
   jyvaskyla: {
+    fonts: {
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
+      narrow:
+        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+    },
     colors: {
       primary: '#7DC02D',
     },
@@ -52,8 +63,14 @@ export default {
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/LINKKI:207477/10 näyttää 10 riviä pysäkiltä Urhonkatu 1.',
     showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
   },
   matka: {
+    fonts: {
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
+      narrow:
+        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+    },
     colors: {
       primary: '#026273',
       monitorBackground: '#0057a2',
@@ -83,8 +100,14 @@ export default {
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/MATKA:7_201860/10 Näyttää 10 riviä pysäkiltä Umpikuja E',
     showMinutes: '15',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
   },
   tampere: {
+    fonts: {
+      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
+      narrow:
+        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+    },
     colors: {
       primary: '#1c57cf',
     },
@@ -110,5 +133,6 @@ export default {
       'Pysäkkinäytön käyttö selaimen osoiteriviltä tapahtuu seuraavasti: kirjoita osoitteen perään /stop/pysäkit/rivimäärä. Esimerkiksi /stop/tampere:0010/10 näyttää 10 riviä pysäkiltä Keskustori F.',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
   },
 };

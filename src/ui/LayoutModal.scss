@@ -21,10 +21,9 @@
   }
 
   .layout-modal-content-container {
-    $font-family: var(--font-family);
     $primary-color: var(--primary-color);
 
-    font-family: $font-family;
+    //font-family: $font-family;
     margin: 0 0 0 60px;
     display: flex;
     flex-direction: column;

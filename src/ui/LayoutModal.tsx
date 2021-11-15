@@ -6,12 +6,7 @@ import Modal from 'react-modal';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { v4 as uuid } from 'uuid';
 import { getColorByName } from '../util/getConfig';
-import {
-  defaultColorAlert,
-  defaultColorFont,
-  defaultFontNarrow,
-  defaultFontNormal,
-} from './DefaultStyles';
+import { defaultColorAlert, defaultColorFont } from './DefaultStyles';
 import Icon from './Icon';
 
 Modal.setAppElement('#root');
@@ -61,8 +56,6 @@ const LayoutModal: FC<Props & WithTranslation> = ({
     '--primary-color': getColorByName('primary'),
     '--alert-color': getColorByName('alert') || defaultColorAlert,
     '--font-color': getColorByName('font') || defaultColorFont,
-    fontFamily: defaultFontNormal,
-    '--font-family-narrow': defaultFontNarrow,
   } as React.CSSProperties;
 
   return (
@@ -86,7 +79,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
           {layouts.map(l => {
             return (
               <div className="row" key={uuid()}>
-                <h3 className="row-header"> {l.label}</h3>
+                <h3 className="row-header">{t(l.label)}</h3>
                 <div className="options">
                   {l.options.map(option => {
                     return (

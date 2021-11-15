@@ -6,8 +6,9 @@ import { getPrimaryColor } from '../util/getConfig';
 
 interface IProps {
   isLogged?: boolean;
+  start?: string;
 }
-const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
+const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
   const parser = document.createElement('a');
   parser.href = window.location.href;
   const arr = parser.pathname.split('/');
@@ -25,15 +26,26 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
       crumb = t('breadCrumbsHelp');
       break;
     default:
-      crumb = isLogged ? t('breadCrumbsOwnMonitors') : null;
+      crumb = isLogged
+        ? t('breadCrumbsOwnMonitors')
+        : start === 'front'
+        ? t('breadCrumbsFrontPage')
+        : null;
   }
 
   return (
     <div className="breadcrumbs-container">
       <div className="crumbs">
-        <Link className="to-home" to={'/'}>
-          {t('breadCrumbsSite')}
-        </Link>
+        {start === 'site' && (
+          <Link className="to-home" to={'/'}>
+            {t('breadCrumbsSite')}
+          </Link>
+        )}
+        {start === 'front' && path && (
+          <Link className="to-home" to={'/'}>
+            {t('breadCrumbsFrontPage')}
+          </Link>
+        )}
         {isLogged &&
           crumb !== t('breadCrumbsOwnMonitors') &&
           crumb !== t('breadCrumbsHelp') && (
@@ -50,16 +62,20 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
               </Link>
             </>
           )}
-        <Icon
-          img={'arrow-down'}
-          width={14}
-          height={14}
-          rotate={'-90'}
-          color={getPrimaryColor()}
-        />
+        {crumb !== t('breadCrumbsFrontPage') && (
+          <Icon
+            img={'arrow-down'}
+            width={14}
+            height={14}
+            rotate={'-90'}
+            color={getPrimaryColor()}
+          />
+        )}
         {crumb}
       </div>
-      <span className="desc">{crumb}</span>
+      <span className="desc">
+        {crumb !== t('breadCrumbsFrontPage') ? crumb : null}
+      </span>
     </div>
   );
 };

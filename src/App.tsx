@@ -31,6 +31,8 @@ import StopMonitorContainer from './ui/StopMonitorContainer';
 
 import './sass/main.scss';
 
+import SkipToMainContent from './ui/SkipToMainContent';
+
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
     normal?: string;
@@ -70,6 +72,7 @@ export interface IMonitorConfig {
   urlParamFindText?: string;
   urlParamFindAltText?: string;
   showMinutes?: string;
+  breadCrumbsStartPage?: string;
 }
 
 export interface IQueryString {
@@ -159,12 +162,27 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
 
   const favicon = monitorConfig.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
+  const fontHSL = (
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cloud.typography.com/6364294/7432412/css/fonts.css"
+    />
+  );
+  const fontDefault = (
+    <link
+      rel="stylesheet"
+      href="https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"
+    />
+  );
   return (
     <div className="App" style={style}>
       <Helmet>
         <title>{monitorConfig.name} - pysäkkinäyttö</title>
         {faviconLink}
+        {monitorConfig.name === 'hsl' ? fontHSL : fontDefault}{' '}
       </Helmet>
+      <SkipToMainContent />
       <ApolloProvider client={client}>
         <Switch>
           <Route
@@ -175,9 +193,13 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
-                <Banner config={monitorConfig} />
-                <Breadcrumbs />
-                <CreateViewPage config={monitorConfig} />
+                <section aria-label="navigation">
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs start={monitorConfig.breadCrumbsStartPage} />
+                </section>
+                <section role="main" id="mainContent">
+                  <CreateViewPage config={monitorConfig} />
+                </section>
               </>
             )}
           />
@@ -189,9 +211,16 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
-                <Banner config={monitorConfig} />
-                <Breadcrumbs isLogged={user.loggedIn} />
-                <CreateViewPage config={monitorConfig} user={user} />
+                <section aria-label="navigation">
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs
+                    isLogged={user.loggedIn}
+                    start={monitorConfig.breadCrumbsStartPage}
+                  />
+                </section>
+                <section role="main" id="mainContent">
+                  <CreateViewPage config={monitorConfig} user={user} />
+                </section>
               </>
             )}
           />
@@ -207,15 +236,22 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
-                <Banner config={monitorConfig} />
-                <Breadcrumbs isLogged={user.loggedIn} />
-                <HelpPage
-                  urlParamUsageText={helpPageUrlParamText}
-                  urlMultipleStopsText={helpPageurlMultipleStopsText}
-                  urlParamFindText={helpPageUrlParamFindText}
-                  urlParamFindAltText={helpPageUrlParamFindAltText}
-                  content={props.search.cont}
-                />
+                <section aria-label="navigation">
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs
+                    isLogged={user.loggedIn}
+                    start={monitorConfig.breadCrumbsStartPage}
+                  />
+                </section>
+                <section role="main" id="mainContent">
+                  <HelpPage
+                    urlParamUsageText={helpPageUrlParamText}
+                    urlMultipleStopsText={helpPageurlMultipleStopsText}
+                    urlParamFindText={helpPageUrlParamFindText}
+                    urlParamFindAltText={helpPageUrlParamFindAltText}
+                    content={props.search.cont}
+                  />
+                </section>
               </>
             )}
           />

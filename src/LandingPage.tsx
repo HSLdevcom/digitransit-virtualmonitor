@@ -17,10 +17,17 @@ const LandingPage: React.FC<IProps> = props => {
   const logIn = user.loggedIn && user.urls.length > 0;
   return (
     <>
-      <Banner config={props.config} user={user} />
-      <Breadcrumbs isLogged={user.loggedIn} />
-      {logIn && <UserMonitors user={user} />}
-      {!logIn && <IndexPage />}
+      <section aria-label="navigation">
+        <Banner config={props.config} user={user} />
+        <Breadcrumbs
+          isLogged={user.loggedIn}
+          start={props.config.breadCrumbsStartPage}
+        />
+      </section>
+      <section role="main" id="mainContent">
+        {logIn && <UserMonitors user={user} />}
+        {!logIn && <IndexPage />}
+      </section>
     </>
   );
 };

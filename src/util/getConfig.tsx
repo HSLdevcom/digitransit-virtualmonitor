@@ -28,9 +28,17 @@ const defaultModeIcons: IExtendedMonitorConfig = {
   },
 };
 
+const defaultFonts: IExtendedMonitorConfig = {
+  fonts: {
+    normal: '"Roboto", arial, georgia, serif',
+    narrow: '"Roboto Condensed", "Arial Condensed", arial, georgia, serif',
+  },
+};
+
 export const getConfig = () => {
   // When developing locally, you can define REACT_APP_CONFIG env variable. Use themes assinged below.
   const env = process.env.REACT_APP_CONFIG;
+  // console.log('ENV:', process.env);
   const allowedThemes = ['hsl', 'matka', 'tampere', 'jyvaskyla'];
   if (env && allowedThemes.indexOf(env) > -1) {
     return config[env];
@@ -88,4 +96,10 @@ export const getModeSet = () => {
   const config = getConfig();
   const style = { ...defaultModeIcons.modeIcons, ...config.modeIcons };
   return style.setName;
+};
+
+export const getFontByName = name => {
+  const config = getConfig();
+  const fonts = { ...defaultFonts.fonts, ...config.fonts };
+  return fonts[name];
 };

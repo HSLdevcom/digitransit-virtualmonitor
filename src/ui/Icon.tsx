@@ -39,6 +39,7 @@ import { ReactComponent as StopRail } from './icons/stop-rail.svg';
 import { ReactComponent as StopRailWaltti } from './icons/stop-rail-waltti.svg';
 import { ReactComponent as StopTram } from './icons/stop-tram.svg';
 import { ReactComponent as StopTramWaltti } from './icons/stop-tram-waltti.svg';
+import { ReactComponent as Menu } from './icons/menu.svg';
 import { ReactComponent as MoveDown } from './icons/move-down.svg';
 import { ReactComponent as MoveUp } from './icons/move-up.svg';
 import { ReactComponent as MoveBothDown } from './icons/move-both-down.svg';
@@ -46,7 +47,8 @@ import { ReactComponent as MoveBothUp } from './icons/move-both-up.svg';
 import { ReactComponent as MoveDivider } from './icons/move-divider.svg';
 import { ReactComponent as Rectangle } from './icons/rectangle.svg';
 import { ReactComponent as RectangleSelected } from './icons/rectangle-selected.svg';
-import { ReactComponent as Checkbox } from './icons/checkbox.svg';
+import { ReactComponent as CheckboxChecked } from './icons/checkbox-checked.svg';
+import { ReactComponent as CheckboxUnchecked } from './icons/checkbox-unchecked.svg';
 import { ReactComponent as Settings } from './icons/settings.svg';
 import { ReactComponent as Clock } from './icons/clock.svg';
 import { ReactComponent as Airplane } from './icons/mode-airplane.svg';
@@ -110,6 +112,7 @@ export interface IIconMapProps {
   stroke?: string;
   width?: string;
   borderRadius?: string;
+  margin?: string;
 }
 export interface ICustomInputProps {
   color?: string;
@@ -119,6 +122,7 @@ export interface ICustomInputProps {
   rotate?: string;
   width?: number;
   borderRadius?: string;
+  margin?: string;
 }
 
 const IconMap = (style: IIconMapProps) => {
@@ -147,6 +151,7 @@ const IconMap = (style: IIconMapProps) => {
     layout15: <Layout15 style={style} />,
     layout16: <Layout16 style={style} />,
     layout17: <Layout16 style={style} />,
+    menu: <Menu style={style} />,
     'stop-bus': <StopBus style={style} />,
     'stop-bus-waltti': <StopBusWaltti style={style} />,
     'stop-rail': <StopRail style={style} />,
@@ -173,7 +178,8 @@ const IconMap = (style: IIconMapProps) => {
     'move-divider': <MoveDivider style={style} />,
     rectangle: <Rectangle style={style} />,
     'rectangle-selected': <RectangleSelected style={style} />,
-    checkbox: <Checkbox style={style} />,
+    'checkbox-unchecked': <CheckboxUnchecked style={style} />,
+    'checkbox-checked': <CheckboxChecked style={style} />,
     settings: <Settings style={style} />,
     spinner: <Spinner style={style} />,
     clock: <Clock style={style} />,
@@ -244,16 +250,18 @@ const IconMap = (style: IIconMapProps) => {
  */
 const Icon = (props: ICustomInputProps) => {
   const background = null;
+  let img = props.img;
   let fill = props.color;
   let height = props.height ? `${props.height}` : '24';
   let width = props.width ? `${props.width}` : '24';
   let stroke = null;
-  if (props.img === 'check') {
+  if (img === 'check') {
     fill = null;
     height = '18';
     width = '14';
     stroke = props.color;
   }
+
   const style = {
     fill: fill,
     stroke: stroke,
@@ -262,10 +270,17 @@ const Icon = (props: ICustomInputProps) => {
     transform: props.rotate ? `rotate(${props.rotate}deg)` : null,
     background: background,
     borderRadius: props.borderRadius ? props.borderRadius : null,
+    margin: props.margin ? `${props.margin}` : '0',
   };
 
+  if (img && img.indexOf('checkbox-') !== -1) {
+    const isFocus = img.indexOf('-focus') !== -1;
+    style['outlineStyle'] = isFocus ? 'auto' : 'none';
+    style['outlineOffset'] = isFocus ? '2px' : 'none';
+    img = isFocus ? img.substring(0, img.indexOf('-focus')) : img;
+  }
   const icons = IconMap(style);
-  return <React.Fragment>{icons[props.img]}</React.Fragment>;
+  return <React.Fragment>{icons[img]}</React.Fragment>;
 };
 
 export default Icon;

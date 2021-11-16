@@ -7,26 +7,34 @@
 
   .ReactModal__Content {
     border: none !important;
-    width: 680px;
-    top: 110px !important;
+    border-radius: 5px !important;
+    width: 680px !important;
+    height: 90% !important;
+    overflow-x: hidden !important;
+    top: 50% !important;
     left: 50% !important;
     margin-right: -50%;
-    transform: translate(-50%, 0);
+    margin-bottom: -50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    animation: none;
   }
 
   .layout-modal-header {
     margin: 0 0 34px 0;
     font-size: 1.5rem;
     font-weight: 500;
+    padding-left: 60px;
   }
 
   .layout-modal-content-container {
     $primary-color: var(--primary-color);
-
-    margin: 0 0 0 60px;
+    font-family: var(--font-family-normal);
+    margin: 0;
     display: flex;
     flex-direction: column;
-    max-width: 560px;
+    width: 100%;
 
     .row-header {
       font-weight: normal;
@@ -34,19 +42,21 @@
       font-size: 1.125rem;
     }
 
-    .close {
-      svg {
-        position: relative;
-        left: calc(100% - 15px);
-        margin-bottom: 30px;
-        height: 24px;
-        width: 24px;
+    #close {
+      display: flex;
+      justify-content: flex-end;
+
+      .close-button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
       }
     }
   }
 
   .layouts {
     margin-top: -31px;
+    margin-left: 60px;
 
     .row {
       .header {
@@ -68,13 +78,12 @@
           svg {
             position: relative;
             top: 10px;
-            left: 7px;
           }
 
           &.vertical {
             height: 210px;
-            width: 110px;
-            margin-right: 12px;
+            width: 121px;
+            margin-right: 20px;
 
             svg {
               top: 10px;
@@ -88,15 +97,17 @@
           }
 
           height: 140px;
-          width: 180px;
-          margin-right: 10px;
+          width: 174px;
+          margin-right: 20px;
+          background: transparent;
 
           .label {
-            display: flex;
-            justify-content: center;
-            position: relative;
+            font-size: 14px;
+            line-height: 17px;
+            letter-spacing: -0.02em;
             margin-top: 20px;
             margin-bottom: 10px;
+            width: 100%;
           }
         }
 

@@ -19,6 +19,7 @@ interface IProps {
     lang?: string,
   ) => void;
   lang: 'fi' | 'sv' | 'en';
+  index: number;
 }
 
 const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
@@ -27,6 +28,7 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   title,
   updateCardInfo,
   lang,
+  index,
   t,
 }) => {
   const { isMultiDisplay, isPortrait } = getLayout(layout);
@@ -88,8 +90,16 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
         )}
         {!isMultiDisplay && !isFocus && (
           <div
+            tabIndex={-1}
             role="button"
             onClick={() => focusToInput(`stop-title-input${id}-${lang}`)}
+            aria-label={
+              t('modify') +
+              ' ' +
+              t('stoptitle', { id: index + 1 }) +
+              ' ' +
+              t(`languageName${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
+            }
           >
             <Icon img="edit" color={getPrimaryColor()} />
           </div>

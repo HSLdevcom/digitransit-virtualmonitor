@@ -71,7 +71,7 @@ const UserViewTitleEditor: FC<IProps & WithTranslation> = ({
           onChange={e => onChange(e)}
           maxLength={25}
           onKeyDown={e => isKeyboardSelectionEvent(e)}
-          onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
+          onBlur={e => onBlur(e)}
           onFocus={e => {
             handleFocus(e);
           }}

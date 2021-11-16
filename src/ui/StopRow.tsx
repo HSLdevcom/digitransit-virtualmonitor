@@ -12,6 +12,7 @@ import { stringifyPattern } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
 import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
 import { getStopIcon } from '../util/stopCardUtil';
+import { isKeyboardSelectionEvent } from '../util/browser';
 
 interface IStopInfoPlus extends IStop {
   cardId?: number;
@@ -67,8 +68,13 @@ const StopRow: FC<IProps & WithTranslation> = ({
     }
     changeOpen(false);
   };
-  const handleClick = () => {
-    changeOpen(true);
+  const handleClick = (
+    event?: React.KeyboardEvent<HTMLDivElement>,
+    role?: boolean,
+  ) => {
+    if (event == null || isKeyboardSelectionEvent(event, role)) {
+      changeOpen(true);
+    }
   };
   const isEastWest = stop.layout > 8 && stop.layout < 12;
 
@@ -104,10 +110,19 @@ const StopRow: FC<IProps & WithTranslation> = ({
       <div className="stop-row-main">
         <div className="stop-upper-row">
           {stop.name}
-          <div className={cx('settings', isEastWest && 'east-west')}>
-            <span onClick={handleClick}>
-              <Icon img="settings" color={getPrimaryColor()} />
-            </span>
+          <div
+            className={cx('settings', isEastWest && 'east-west')}
+            tabIndex={0}
+            role="button"
+            aria-label={t('stopSettings', {
+              stop: `${stop.name} ${stop.code}`,
+            })}
+            onClick={() => handleClick()}
+            onKeyPress={e =>
+              isKeyboardSelectionEvent(e, true) && handleClick(e, true)
+            }
+          >
+            <Icon img="settings" color={getPrimaryColor()} />
           </div>
           <div className={cx('changed-settings', isEastWest && 'east-west')}>
             {!isDefaultSettings && <span> {t('settingsChanged')}</span>}
@@ -129,16 +144,35 @@ const StopRow: FC<IProps & WithTranslation> = ({
       </div>
       <div
         className="stop-row-delete icon"
+        tabIndex={0}
+        role="button"
+        aria-label={t('deleteStop', { stop: `${stop.name} ${stop.code}` })}
         onClick={() => onStopDelete(stop.cardId, side, stop.gtfsId)}
+        onKeyPress={e =>
+          isKeyboardSelectionEvent(e, true) &&
+          onStopDelete(stop.cardId, side, stop.gtfsId)
+        }
       >
         <Icon img="delete" color={getPrimaryColor()} />
       </div>
       {getLayout(stop.layout).isMultiDisplay && (
         <div
           className="stop-row-move icon"
+          tabIndex={0}
+          role="button"
+          aria-label={t(
+            side === 'left' ? 'moveStopToRightCol' : 'moveStopToLeftCol',
+            { stop: `${stop.name} ${stop.code}` },
+          )}
           onClick={() =>
             moveBetweenColumns
               ? onStopMove(stop.cardId, side, stop.gtfsId)
+              : null
+          }
+          onKeyPress={e =>
+            moveBetweenColumns
+              ? isKeyboardSelectionEvent(e, true) &&
+                onStopMove(stop.cardId, side, stop.gtfsId)
               : null
           }
         >

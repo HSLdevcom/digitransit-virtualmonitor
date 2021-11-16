@@ -1,6 +1,4 @@
 .modal-stop-routes {
-  font-family: $font-family;
-
   h2 {
     font-style: normal;
     font-weight: 400;
@@ -16,8 +14,9 @@
 
   .ReactModal__Content {
     border: none !important;
-    width: 720px;
-    height: 80%;
+    border-radius: 5px !important;
+    width: 720px !important;
+    height: 80% !important;
     overflow-x: hidden !important;
     top: 50% !important;
     left: 50% !important;
@@ -26,14 +25,22 @@
     transform: translate(-50%, -50%);
     display: flex;
     justify-content: center;
+    animation: none;
   }
 
-  .close {
-    position: relative;
-    left: calc(100% - 15px);
-    margin-bottom: 30px;
-    height: 24px;
-    width: 24px;
+  #close {
+    display: flex;
+    justify-content: flex-end;
+
+    .close-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
+  }
+
+  #section-with-side-padding {
+    padding: 0 40px;
   }
 
   .title-container {

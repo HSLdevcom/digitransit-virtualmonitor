@@ -110,6 +110,14 @@ $preview-grid-divider: 2px;
       }
 
       .grid-row {
+        .grid-col {
+          svg {
+            width: 24px !important;
+            height: 24px !important;
+            display: flex;
+          }
+        }
+
         &.alert {
           font-size: 35px !important;
 
@@ -141,6 +149,10 @@ $preview-grid-divider: 2px;
 
       .grid-headers {
         height: 25px;
+
+        .grid-row {
+          height: 25px;
+        }
 
         .grid-header {
           font-size: 16px;
@@ -394,6 +406,12 @@ $preview-grid-divider: 2px;
 
       .grid-col {
         align-self: center;
+
+        svg {
+          width: 7vh !important;
+          height: 7vh !important;
+          display: flex;
+        }
 
         .line-letter {
           font-size: smaller;

@@ -162,8 +162,19 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
 
   const favicon = monitorConfig.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
-  const fontHSL = <link rel="stylesheet" type="text/css" href="https://cloud.typography.com/6364294/7432412/css/fonts.css" />;
-  const fontDefault = <link rel="stylesheet" href="https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css" />;
+  const fontHSL = (
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cloud.typography.com/6364294/7432412/css/fonts.css"
+    />
+  );
+  const fontDefault = (
+    <link
+      rel="stylesheet"
+      href="https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"
+    />
+  );
   return (
     <div className="App" style={style}>
       <Helmet>

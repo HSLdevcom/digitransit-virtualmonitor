@@ -38,6 +38,7 @@ export default {
   jyvaskyla: {
     colors: {
       primary: '#7DC02D',
+      monitorBackground: '#0057a2',
     },
     feedIds: ['LINKKI'],
     modeIcons: {

@@ -98,12 +98,8 @@ const Monitor: FC<IProps> = ({
     '--width': `${Number(windowWidth).toFixed(0)}px`,
     '--monitor-background-color':
       getColorByName('monitorBackground') || getColorByName('primary'),
-    '--font-family': defaultFontNormal,
-    '--font-family-narrow': defaultFontNarrow,
   } as React.CSSProperties;
 
-  const coeff = 1000 * 60 * 5;
-  const date = new Date(); //or use any other date
   const isLandscapeByLayout = view.layout <= 11;
   const timem = DateTime.now();
   const from = view.columns.left.stops[0];

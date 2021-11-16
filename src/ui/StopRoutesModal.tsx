@@ -9,12 +9,6 @@ import { IStop } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { capitalize } from '../util/monitorUtils';
 import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
-import {
-  defaultColorAlert,
-  defaultColorFont,
-  defaultFontNarrow,
-  defaultFontNormal,
-} from './DefaultStyles';
 import { getStopIcon } from '../util/stopCardUtil';
 
 Modal.setAppElement('#root');
@@ -200,30 +194,13 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
 
   const renamedDestinations = renamings;
 
-  const style = {
-    '--alert-color': getColorByName('alert') || defaultColorAlert,
-    '--font-color': getColorByName('font') || defaultColorFont,
-    '--font-family': defaultFontNormal,
-    '--font-family-narrow': defaultFontNarrow,
-    '--monitor-background-color':
-      getColorByName('monitorBackground') || getColorByName('primary'),
-    '--primary-color': getColorByName('primary'),
-  } as React.CSSProperties;
-
-  const modalStyle = {
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    },
-  };
-
   return (
     <Modal
       isOpen={props.showModal}
       onRequestClose={handleClose}
       portalClassName="modal-stop-routes"
-      style={modalStyle}
     >
-      <div className="modal" style={style}>
+      <div className="modal">
         <div role="button" className="close" onClick={handleClose}>
           <Icon
             img={'close'}

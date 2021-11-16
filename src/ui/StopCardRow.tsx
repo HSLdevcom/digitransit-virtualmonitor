@@ -17,6 +17,7 @@ import {
   getPrimaryColor,
   getModeSet,
 } from '../util/getConfig';
+import { isKeyboardSelectionEvent } from '../util/browser';
 
 const getGTFSId = id => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -241,7 +242,13 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                   'delete icon',
                   cardInfo.possibleToMove ? '' : 'move-end',
                 )}
+                tabIndex={0}
+                role="button"
+                aria-label={t('deleteView', { id: `${cardInfo.index + 1}` })}
                 onClick={() => onCardDelete(cardInfo.id)}
+                onKeyPress={e =>
+                  isKeyboardSelectionEvent(e, true) && onCardDelete(cardInfo.id)
+                }
               >
                 <Icon img="delete" color={getPrimaryColor()} />
               </div>
@@ -255,7 +262,16 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               >
                 {isFirst && (
                   <div
+                    tabIndex={0}
+                    role="button"
+                    aria-label={t('moveViewDown', {
+                      id: `${cardInfo.index + 1}`,
+                    })}
                     onClick={() =>
+                      onCardMove(cardInfo.index, cardInfo.index + 1)
+                    }
+                    onKeyPress={e =>
+                      isKeyboardSelectionEvent(e, true) &&
                       onCardMove(cardInfo.index, cardInfo.index + 1)
                     }
                   >
@@ -269,7 +285,16 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 )}
                 {isLast && (
                   <div
+                    tabIndex={0}
+                    role="button"
+                    aria-label={t('moveViewUp', {
+                      id: `${cardInfo.index + 1}`,
+                    })}
                     onClick={() =>
+                      onCardMove(cardInfo.index, cardInfo.index - 1)
+                    }
+                    onKeyPress={e =>
+                      isKeyboardSelectionEvent(e, true) &&
                       onCardMove(cardInfo.index, cardInfo.index - 1)
                     }
                   >
@@ -284,7 +309,16 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 {!isFirst && !isLast && (
                   <div className="container">
                     <div
+                      tabIndex={0}
+                      role="button"
+                      aria-label={t('moveViewUp', {
+                        id: `${cardInfo.index + 1}`,
+                      })}
                       onClick={() =>
+                        onCardMove(cardInfo.index, cardInfo.index - 1)
+                      }
+                      onKeyPress={e =>
+                        isKeyboardSelectionEvent(e, true) &&
                         onCardMove(cardInfo.index, cardInfo.index - 1)
                       }
                     >
@@ -299,7 +333,16 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                       <div></div>
                     </div>
                     <div
+                      tabIndex={0}
+                      role="button"
+                      aria-label={t('moveViewDown', {
+                        id: `${cardInfo.index + 1}`,
+                      })}
                       onClick={() =>
+                        onCardMove(cardInfo.index, cardInfo.index + 1)
+                      }
+                      onKeyPress={e =>
+                        isKeyboardSelectionEvent(e, true) &&
                         onCardMove(cardInfo.index, cardInfo.index + 1)
                       }
                       className="move-down"
@@ -324,9 +367,9 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
         </div>
         <div className="search-stop-with-layout-and-time">
           <div className="search-stop">
-            {noStopsSelected && (
-              <div className="add-stop-alert">{t('add-at-least-one-stop')}</div>
-            )}
+            <div className="add-stop-alert" aria-hidden="true">
+              {noStopsSelected ? t('add-at-least-one-stop') : ''}
+            </div>
             <DTAutosuggest
               appElement={'root'}
               searchContext={setSearchContextWithFeedIds(feedIds)}

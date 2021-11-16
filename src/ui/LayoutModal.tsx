@@ -36,11 +36,13 @@ const LayoutModal: FC<Props & WithTranslation> = ({
   const [selected, setSelected] = useState(option);
 
   useEffect(() => {
-    if (selected.value !== option.value) {
+    if (selected) {
       const layoutBtn = document.getElementById(
         `layoutBtn-${selected.value}`,
       ) as HTMLInputElement;
-      layoutBtn.focus();
+      if (layoutBtn) {
+        layoutBtn.focus();
+      }
     }
   }, [selected]);
 

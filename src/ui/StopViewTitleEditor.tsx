@@ -90,14 +90,13 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
         )}
         {!isMultiDisplay && !isFocus && (
           <div
+            tabIndex={-1}
             role="button"
             onClick={() => focusToInput(`stop-title-input${id}-${lang}`)}
             aria-label={
               t('modify') +
               ' ' +
-              t('stoptitle') +
-              ' ' +
-              index +
+              t('stoptitle', { id: index + 1 }) +
               ' ' +
               t(`languageName${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
             }

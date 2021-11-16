@@ -115,3 +115,41 @@
     margin-top: 0.15em;
   }
 }
+
+.c-checkbox--svg input:checked + .c-checkbox__label--svg {
+  &::before {
+    background: #3863d9;
+    border-color: #3863d9;
+  }
+
+  .path {
+    stroke: #fff;
+    stroke-dashoffset: 0;
+  }
+}
+
+.c-checkbox__label--svg {
+  padding-left: 32px;
+
+  &::before {
+    position: absolute;
+    left: 0;
+    top: -1px;
+    width: 24px;
+    height: 24px;
+  }
+
+  svg {
+    position: absolute;
+    left: 4px;
+    top: 4px;
+    width: 15px;
+    height: 15px;
+  }
+
+  .path {
+    stroke-dashoffset: 111.46px;
+    stroke-dasharray: 111.46px;
+    stroke: #3863d9;
+  }
+}

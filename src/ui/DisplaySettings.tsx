@@ -4,6 +4,7 @@ import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';
 import { v4 as uuid } from 'uuid';
+import { getPrimaryColor } from '../util/getConfig';
 
 interface IProps {
   languages: Array<string>;
@@ -73,25 +74,18 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
         aria-label={t('displayLanguages')}
       >
         <div className="language-header">{t('displayLanguages')}</div>
-        {languages.length < 1 && (
-          <div
-            className="language-alert"
-            role="alert"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            {t('chooseOne')}
-          </div>
-        )}
+        <div className="language-alert" aria-hidden="true">
+          {t('chooseOne')}
+        </div>
         <div className="language-controls">
-          {options.map(option => {
+          {options.map((option, idx) => {
             return (
               <React.Fragment key={uuid()}>
                 <Checkbox
                   name={option}
-                  checked={isChecked(option)}
-                  onChange={handleChange}
-                  ariaLabel={
+                  isSelected={isChecked(option)}
+                  onChange={() => handleChange(option)}
+                  aria-label={
                     t('displayLanguage') +
                     ' ' +
                     t(
@@ -100,8 +94,11 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
                       }`,
                     )
                   }
-                />
-                <div>{option.toUpperCase()}</div>
+                  color={getPrimaryColor()}
+                  margin={idx !== 0 ? '0 5px 0 5px' : '0 5px 0 0'}
+                >
+                  {option.toUpperCase()}
+                </Checkbox>
               </React.Fragment>
             );
           })}

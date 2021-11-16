@@ -25,7 +25,6 @@ interface IProps {
   showMinutes?: number;
   closedStopViews: Array<IClosedStop>;
   error?: string;
-  isPreview?: boolean;
 }
 const hasColumn = value => value === false;
 
@@ -46,7 +45,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   closedStopViews,
   error,
   t,
-  isPreview,
 }) => {
   const DATE_FORMAT = 'dd.MM.yyyy HH:mm';
   const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
@@ -144,7 +142,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         }
         showMinutes={showMinutes || 0}
         withoutRouteColumn={withoutRouteColumn}
-        isPreview={isPreview}
       />,
     );
   }
@@ -180,7 +177,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             currentLang={currentLang}
             showMinutes={showMinutes || 0}
             withoutRouteColumn={withoutRouteColumn}
-            isPreview={isPreview}
           />,
         );
       }
@@ -207,7 +203,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             currentLang={currentLang}
             showMinutes={showMinutes || 0}
             withoutRouteColumn={withoutRouteColumn}
-            isPreview={isPreview}
           />,
         );
       }

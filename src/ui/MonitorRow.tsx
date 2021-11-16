@@ -51,7 +51,6 @@ interface IProps {
   currentLang: string;
   showMinutes: number;
   withoutRouteColumn: boolean;
-  isPreview?: boolean;
 }
 
 const isCharacter = char => {
@@ -93,7 +92,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   showMinutes,
   t,
   withoutRouteColumn,
-  isPreview,
 }) => {
   const stopSettings = stops.find(s => s.gtfsId === departure?.stop.gtfsId);
   const renamedDestinations = [];
@@ -189,7 +187,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const lineLen = departure?.trip?.route.shortName?.length;
   const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
   const stopCodeLen = stopCode?.length;
-  const iconSize = isPreview ? 25 : 52;
   const departureTime = getDepartureTime(
     departure?.realtimeDeparture,
     showMinutes * 60,
@@ -218,9 +215,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         {!withoutRouteColumn && lineLen >= 5 && (
           <div className={cx('grid-col line', `len${2}`)}>
             <Icon
+              height={24}
+              width={24}
               img={stopSettings.mode}
-              height={iconSize}
-              width={iconSize}
               color={getColorByName('monitorBackground')}
             />
           </div>

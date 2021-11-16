@@ -74,9 +74,11 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
         aria-label={t('displayLanguages')}
       >
         <div className="language-header">{t('displayLanguages')}</div>
-        <div className="language-alert" aria-hidden="true">
-          {t('chooseOne')}
-        </div>
+        {languages.length === 0 && (
+          <div className="language-alert" aria-hidden="true">
+            {t('chooseOne')}
+          </div>
+        )}
         <div className="language-controls">
           {options.map((option, idx) => {
             return (

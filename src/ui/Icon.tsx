@@ -49,8 +49,6 @@ import { ReactComponent as Rectangle } from './icons/rectangle.svg';
 import { ReactComponent as RectangleSelected } from './icons/rectangle-selected.svg';
 import { ReactComponent as CheckboxChecked } from './icons/checkbox-checked.svg';
 import { ReactComponent as CheckboxUnchecked } from './icons/checkbox-unchecked.svg';
-import { ReactComponent as CheckboxCheckedFocus } from './icons/checkbox-checked-focus.svg';
-import { ReactComponent as CheckboxUncheckedFocus } from './icons/checkbox-unchecked-focus.svg';
 import { ReactComponent as Settings } from './icons/settings.svg';
 import { ReactComponent as Clock } from './icons/clock.svg';
 import { ReactComponent as Airplane } from './icons/mode-airplane.svg';
@@ -182,8 +180,6 @@ const IconMap = (style: IIconMapProps) => {
     'rectangle-selected': <RectangleSelected style={style} />,
     'checkbox-unchecked': <CheckboxUnchecked style={style} />,
     'checkbox-checked': <CheckboxChecked style={style} />,
-    'checkbox-unchecked-focus': <CheckboxUncheckedFocus style={style} />,
-    'checkbox-checked-focus': <CheckboxCheckedFocus style={style} />,
     settings: <Settings style={style} />,
     spinner: <Spinner style={style} />,
     clock: <Clock style={style} />,

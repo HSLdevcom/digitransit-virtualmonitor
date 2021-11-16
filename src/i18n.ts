@@ -238,7 +238,8 @@ i18n.init({
         moveViewDown: 'Siirrä pysäkkinäkymä {{id}} alemmaksi',
         moveViewUp: 'Siirrä pysäkkinäkymä {{id}} ylemmäksi',
         notPossibleToCreate: 'Ilman {{requirements}} ei voida luoda näkymää',
-        notPossibleToPreview: 'Ilman {{requirements}} ei voida näyttää esikatselua',
+        notPossibleToPreview:
+          'Ilman {{requirements}} ei voida näyttää esikatselua',
         notPossibleToSave: 'Ilman {{requirements}} ei voida tallentaa näkymää',
         requirementLanguage: 'kieltä',
         requirementStop: 'pysäkkiä',

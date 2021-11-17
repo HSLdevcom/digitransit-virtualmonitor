@@ -10,6 +10,7 @@ interface ICommonProps {
   readonly monitorConfig?: any;
   readonly isPreview?: boolean;
   readonly isLandscape?: boolean;
+  readonly forMonitor?: boolean;
 }
 
 class Logo extends React.Component<ICommonProps> {
@@ -21,8 +22,12 @@ class Logo extends React.Component<ICommonProps> {
     const isLandscape = (this.props as ICommonProps).isLandscape
       ? (this.props as ICommonProps).isLandscape
       : false;
+    const forMonitor = (this.props as ICommonProps).forMonitor
+    ? (this.props as ICommonProps).forMonitor
+    : false;
 
     let logo = undefined;
+    let isHsl = false;
 
     if (monitorConfig) {
       const feedIds = monitorConfig.feedIds;
@@ -33,7 +38,8 @@ class Logo extends React.Component<ICommonProps> {
           logo = <NysseLogo />;
           break;
         case 'hsl':
-          logo = <HslLogo />;
+          logo = <HslLogo forMonitor={forMonitor} />;
+          isHsl = true;
           break;
         case 'matka':
           logo = <MatkaLogo />;
@@ -52,6 +58,7 @@ class Logo extends React.Component<ICommonProps> {
             'title-logo',
             isPreview ? 'preview' : '',
             isLandscape ? '' : 'portrait',
+            isHsl ? 'hsl' : '',
           )}
         >
           {logo}

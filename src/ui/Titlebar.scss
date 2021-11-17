@@ -53,6 +53,13 @@ $preview-container-height: 365px;
       #logo {
         width: min(10vw, 330px) !important;
       }
+
+      &.hsl {
+        svg {
+          width: 180px;
+          height: 90px;
+        }
+      }
     }
   }
 
@@ -88,6 +95,13 @@ $preview-container-height: 365px;
 
 .title-logo {
   min-width: 10vw !important;
+
+  &.hsl {
+    svg {
+      width: 120px;
+      height: 60px;
+    }
+  }
 
   #logo {
     width: 10vw !important;

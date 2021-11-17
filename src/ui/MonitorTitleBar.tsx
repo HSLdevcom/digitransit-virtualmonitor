@@ -41,6 +41,7 @@ const MonitorTitlebar: FC<IProps> = ({
         monitorConfig={config}
         isPreview={preview}
         isLandscape={isLandscape}
+        forMonitor={true}
       />
       {!isMultiDisplay && showTitle && (
         <div className={cx('title-text', { preview: preview })}>

@@ -14,7 +14,9 @@ jobs:
     runs-on: 'ubuntu-latest'
 
     steps:    
-    - uses: actions/checkout@master
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0    
     
     - uses: paulhatch/semantic-version@v4.0.3
       with:

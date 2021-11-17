@@ -1,18 +1,19 @@
 name: Version Increment
+  if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
 
-on:
- push:
-   branches:
-     - next
+    on:
+    push:
+      branches:
+        - next
 
-jobs:
- version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.GIT_SECRET }}
-      - run: git config --global user.name 'Digitransit'
-      - run: git config --global user.email 'digitransit@hsl.fi'
-      - run: npm version patch
-      - run: git push
+    jobs:
+    version:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v2
+            with:
+              token: ${{ secrets.GIT_SECRET }}
+          - run: git config --global user.name 'Digitransit'
+          - run: git config --global user.email 'digitransit@hsl.fi'
+          - run: npm version patch
+          - run: git push

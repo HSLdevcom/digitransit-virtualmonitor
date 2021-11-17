@@ -21,13 +21,13 @@
     "@types/graphql": "^14.5.0",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",
-    "apollo-boost": "^0.1.28",
     "classnames": "^2.2.6",
     "eslint": "^7.26.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-sonarjs": "^0.7.0",
     "fast-xml-parser": "3.17.4",
     "graphql": "^14.7.0",
+    "graphql-tag": "^2.12.6",
     "i18next": "^19.8.4",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
@@ -36,7 +36,6 @@
     "patch-package": "^5.1.2",
     "prettier": "^2.3.0",
     "react": "^16.14.0",
-    "react-apollo": "^2.5.8",
     "react-autosuggest": "^10.0.0",
     "react-burger-menu": "^3.0.6",
     "react-dom": "^16.14.0",
@@ -62,7 +61,8 @@
     "lint-ts": "eslint ./src/**/*{ts,tsx,js} --fix --quiet",
     "lint-scss": "stylelint src/**/*.{scss,sass} --fix --quiet",
     "lint-ts-test": "eslint ./src/**/*{ts,tsx,js} --quiet",
-    "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet"
+    "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet",
+    "apollo-codegen": "apollo client:codegen --target=typescript ./src/generated/ --outputFlat --watch"
   },
   "devDependencies": {
     "@types/history": "^4.7.8",
@@ -84,7 +84,6 @@
     "sass": "^1.35.2",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
-    "ts-node": "^7.0.1",
     "typescript": "^3.9.9"
   },
   "proxy": "http://localhost:3001",

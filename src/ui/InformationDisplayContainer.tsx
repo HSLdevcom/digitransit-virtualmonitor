@@ -2,6 +2,14 @@ import React, { FC, useState, useEffect } from 'react';
 import { getStopsAndStationsFromViews } from '../util/monitorUtils';
 import { useQuery } from '@apollo/client';
 import { GET_STOP_ALERTS, GET_STATION_ALERTS } from '../queries/alertQueries';
+import {
+  GetAlertsForStations,
+  GetAlertsForStationsVariables,
+} from '../generated/GetAlertsForStations';
+import {
+  GetAlertsForStops,
+  GetAlertsForStopsVariables,
+} from '../generated/GetAlertsForStops';
 import { uniqBy } from 'lodash';
 import Loading from './Loading';
 import InformationDisplayCarousel from './InformationDisplayCarousel';
@@ -41,17 +49,23 @@ const InformationDisplayContainer: FC<IProps> = ({
   const [stopAlerts, setStopAlerts] = useState([]);
   const [stationAlerts, setStationAlerts] = useState([]);
 
-  const stationsState = useQuery(GET_STATION_ALERTS, {
+  const stationsState = useQuery<
+    GetAlertsForStations,
+    GetAlertsForStationsVariables
+  >(GET_STATION_ALERTS, {
     variables: { ids: stationIds },
     pollInterval: 180000,
     skip: stationIds.length < 1,
   });
 
-  const stopsState = useQuery(GET_STOP_ALERTS, {
-    variables: { ids: stopIds },
-    pollInterval: 180000,
-    skip: stopIds.length < 1,
-  });
+  const stopsState = useQuery<GetAlertsForStops, GetAlertsForStopsVariables>(
+    GET_STOP_ALERTS,
+    {
+      variables: { ids: stopIds },
+      pollInterval: 180000,
+      skip: stopIds.length < 1,
+    },
+  );
   useEffect(() => {
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {

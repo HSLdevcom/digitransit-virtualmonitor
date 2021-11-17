@@ -93,7 +93,12 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   t,
   withoutRouteColumn,
 }) => {
-  const stopSettings = stops.find(s => s.gtfsId === departure?.stop.gtfsId);
+  const stopSettings = stops.find(s => {
+    const gtfsID = departure?.stop?.parentStation
+      ? departure?.stop.parentStation.gtfsId
+      : departure?.stop.gtfsId;
+    return s.gtfsId === gtfsID;
+  });
   const renamedDestinations = [];
   stops.forEach(s =>
     s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),

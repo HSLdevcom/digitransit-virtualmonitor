@@ -1,18 +1,19 @@
 name: Version Increment
+
 on:
-  push:
-    branches:
-      - next
+ push:
+   branches:
+     - next
 
 jobs:
-  version:
+ version:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+    if: "!startsWith(github.event.head_commit.message, '[RELEASE]')"
     steps:
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.GIT_SECRET }}
       - run: git config --global user.name 'Digitransit'
       - run: git config --global user.email 'digitransit@hsl.fi'
-      - run: npm version patch
+      - run: npm version patch -m "[RELEASE] %s"
       - run: git push

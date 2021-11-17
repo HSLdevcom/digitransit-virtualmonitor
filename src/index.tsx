@@ -5,7 +5,6 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import i18n from './i18n';
 import NtpSyncComponent from './ntp/NtpSyncComponent';
-import registerServiceWorker from './registerServiceWorker';
 import { getParams } from './util/queryUtils';
 import { getConfig } from './util/getConfig';
 
@@ -24,4 +23,3 @@ ReactDOM.render(
   </NtpSyncComponent>,
   document.getElementById('root') as HTMLElement,
 );
-registerServiceWorker();

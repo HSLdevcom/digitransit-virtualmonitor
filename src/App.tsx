@@ -180,9 +180,8 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
       <Helmet>
         <title>{monitorConfig.name} - pysäkkinäyttö</title>
         {faviconLink}
-        {monitorConfig.name === 'hsl' ? fontHSL : fontDefault}{' '}
+        {monitorConfig.name === 'hsl' ? fontHSL : fontDefault}
       </Helmet>
-      <SkipToMainContent />
       <ApolloProvider client={client}>
         <Switch>
           <Route
@@ -193,6 +192,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
                   <Breadcrumbs start={monitorConfig.breadCrumbsStartPage} />
@@ -211,6 +211,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
                   <Breadcrumbs
@@ -236,6 +237,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
                   <Breadcrumbs
@@ -295,6 +297,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <LandingPage
                   login={props.search?.pocLogin}
                   config={monitorConfig}

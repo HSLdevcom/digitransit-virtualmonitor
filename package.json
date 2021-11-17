@@ -1,6 +1,6 @@
 {
   "name": "otp-virtual-monitor",
-  "version": "0.9.12",
+  "version": "0.9.16",
   "description": "Real-time, updating public transport info display that aggregates OpenTripPlanner schedules for multiple stops",
   "license": "MIT",
   "contributors": [
@@ -14,6 +14,10 @@
     "@digitransit-component/digitransit-component-icon": "^0.1.13",
     "@digitransit-component/digitransit-component-suggestion-item": "^0.2.13",
     "@habx/apollo-multi-endpoint-link": "^2.5.0",
+    "@react-aria/checkbox": "^3.2.3",
+    "@react-aria/focus": "^3.5.0",
+    "@react-aria/visually-hidden": "^3.2.3",
+    "@react-stately/toggle": "^3.2.3",
     "@types/graphql": "^14.5.0",
     "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.22.1",

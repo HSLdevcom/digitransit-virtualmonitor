@@ -1,40 +1,43 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { IMonitorConfig } from '../App';
 import Logo from './logo/Logo';
 import BurgerMenu from './BurgerMenu';
+import Icon from './Icon';
 
 interface Props {
   config?: IMonitorConfig;
   user?: any; // todo: refactor when we have proper user
 }
 const Banner: React.FC<Props & WithTranslation> = ({ config, user, t }) => {
-  useEffect(() => {
-    const openMenu = document.querySelector('#react-burger-menu-btn');
-    if (openMenu) {
-      openMenu.innerHTML = t('menuOpen');
-    }
+  const [isOpen, changeOpen] = useState(false);
 
-    const elements = {
-      '.bm-menu-wrap': [{ name: 'aria-hidden', value: 'true' }],
-    };
+  const setOpen = () => {
+    changeOpen(true);
+  };
 
-    Object.keys(elements).forEach(className => {
-      const items = document.querySelectorAll(className);
-      if (items) {
-        items.forEach(item => {
-          elements[className].forEach(attr => {
-            item.setAttribute(attr.name, attr.value);
-          });
-        });
-      }
-    });
-  }, []);
+  const setClose = () => {
+    changeOpen(false);
+  };
 
   return (
     <div className="banner">
       <Logo isLandscape monitorConfig={config} />
-      <BurgerMenu createStatic={user && user.loggedIn} />
+      <div>
+        <button
+          className="menu-button"
+          role="button"
+          aria-label={t('menuOpen')}
+          onClick={setOpen}
+        >
+          <Icon img="menu" width={40} height={40} color={'white'} />
+        </button>
+      </div>
+      <BurgerMenu
+        isOpen={isOpen}
+        onClose={setClose}
+        createStatic={user && user.loggedIn}
+      />
     </div>
   );
 };

@@ -2,14 +2,8 @@ import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
-import { getColorByName, getFontByName } from '../util/getConfig';
+import { getColorByName } from '../util/getConfig';
 import Modal from 'react-modal';
-import {
-  defaultColorAlert,
-  defaultColorFont,
-  defaultFontNarrow,
-  defaultFontNormal,
-} from './DefaultStyles';
 
 Modal.setAppElement('#root');
 interface Props {
@@ -81,21 +75,13 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
     },
   };
 
-  const style = {
-    '--primary-color': getColorByName('primary'),
-    '--alert-color': getColorByName('alert') || defaultColorAlert,
-    '--font-color': getColorByName('font') || defaultColorFont,
-    fontFamily: getFontByName('normal') || defaultFontNormal,
-    '--font-family-narrow': getFontByName('narrow') || defaultFontNarrow,
-  } as React.CSSProperties;
-
   return (
     <Modal
       isOpen={isOpen}
       style={modalStyle}
       onRequestClose={() => onClose(null)}
     >
-      <div className="container" style={style}>
+      <div className="container">
         <section id="close">
           <button
             className="close-button"

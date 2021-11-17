@@ -9,12 +9,6 @@ import { IStop } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { capitalize } from '../util/monitorUtils';
 import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
-import {
-  defaultColorAlert,
-  defaultColorFont,
-  defaultFontNarrow,
-  defaultFontNormal,
-} from './DefaultStyles';
 import { getStopIcon } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 
@@ -204,26 +198,6 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     { value: 10, label: '10 min' },
   ];
 
-  const renamedDestinations = renamings;
-
-  const style = {
-    '--alert-color': getColorByName('alert') || defaultColorAlert,
-    '--font-color': getColorByName('font') || defaultColorFont,
-    '--font-family': defaultFontNormal,
-    '--font-family-narrow': defaultFontNarrow,
-    '--monitor-background-color':
-      getColorByName('monitorBackground') || getColorByName('primary'),
-    '--primary-color': getColorByName('primary'),
-    fontFamily: defaultFontNormal,
-    width: '100%',
-  } as React.CSSProperties;
-
-  const modalStyle = {
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    },
-  };
-
   const showSettings = [
     'showRouteColumn',
     'showStopNumber',
@@ -236,9 +210,8 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
       isOpen={props.showModal}
       onRequestClose={handleClose}
       portalClassName="modal-stop-routes"
-      style={modalStyle}
     >
-      <div className="modal" style={style}>
+      <div className="modal">
         <section id="close">
           <button
             className="close-button"
@@ -347,7 +320,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               <span className="all">{props.t('all')}</span>
             </Checkbox>
           </div>
-          {(showInputs || renamedDestinations.length > 0) && (
+          {(showInputs || renamings.length > 0) && (
             <div className={cx('row', 'small')}>
               <div className="empty-space"></div>
               <div className={cx('lang', 'fi')}>FI</div>
@@ -356,7 +329,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             </div>
           )}
           {props.combinedPatterns.map((pattern, index) => {
-            const renamedDestination = renamedDestinations?.find(
+            const renamedDestination = renamings?.find(
               d => d.pattern === pattern,
             );
 

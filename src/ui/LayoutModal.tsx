@@ -5,12 +5,7 @@ import isEqual from 'lodash/isEqual';
 import Modal from 'react-modal';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { v4 as uuid } from 'uuid';
-import { getColorByName, getFontByName } from '../util/getConfig';
-import {
-  defaultColorAlert,
-  defaultColorFont,
-  defaultFontNormal,
-} from './DefaultStyles';
+import { getColorByName } from '../util/getConfig';
 import Icon from './Icon';
 
 Modal.setAppElement('#root');
@@ -54,14 +49,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
     setSelected(option);
   };
 
-  const modalStyle = {
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    },
-  };
-
   const verticalHeight = {
-    ...modalStyle,
     content: {
       width: '640px',
     },
@@ -69,21 +57,14 @@ const LayoutModal: FC<Props & WithTranslation> = ({
   const layouts =
     orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;
 
-  const style = {
-    '--primary-color': getColorByName('primary'),
-    '--alert-color': getColorByName('alert') || defaultColorAlert,
-    '--font-color': getColorByName('font') || defaultColorFont,
-    '--font-family-normal': getFontByName('normal') || defaultFontNormal,
-  } as React.CSSProperties;
-
   return (
     <Modal
       isOpen={isOpen}
       onRequestClose={() => onClose(null)}
       portalClassName="modal"
-      style={orientation === 'vertical' ? verticalHeight : modalStyle}
+      style={orientation === 'vertical' ? verticalHeight : undefined}
     >
-      <div className="layout-modal-content-container" style={style}>
+      <div className="layout-modal-content-container">
         <section id="close">
           <button
             className="close-button"

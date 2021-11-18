@@ -211,13 +211,13 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           'without-route-column': withoutRouteColumn,
         })}
       >
-        {!withoutRouteColumn && lineLen < 5 && (
+        {!withoutRouteColumn && lineLen <= 5 && (
           <div className={cx('grid-col line', `len${lineLen}`)}>
             {line[0]}
             {line.length > 1 && <span className="line-letter">{line[1]}</span>}
           </div>
         )}
-        {!withoutRouteColumn && lineLen >= 5 && (
+        {!withoutRouteColumn && lineLen > 5 && (
           <div className={cx('grid-col line', `len${2}`)}>
             <Icon
               height={24}

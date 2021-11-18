@@ -17,9 +17,9 @@ jobs:
       - name: Check Semver
         id: check-semver
         run: |
-          if [[ ${github.event.head_commit.message} == *"[MAJOR]"*]]; then
+          if [[ ${github.event.head_commit.message} == *"[MAJOR]"* ]]; then
             echo ::set-output name=semver::major
-          elif [[ ${github.event.head_commit.message} == *"[MINOR]"*]]; then
+          elif [[ ${github.event.head_commit.message} == *"[MINOR]"* ]]; then
             echo ::set-output name=semver::minor
           else
             echo ::set-output name=semver::patch

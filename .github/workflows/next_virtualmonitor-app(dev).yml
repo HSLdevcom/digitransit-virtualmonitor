@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: echo pr title
         run: echo github.event.pull_request.title
-      - name: echo pr head !
+      - name: echo pr head
         run: echo github.event.pull_request.head
       - name: echo pr labels
         run: echo github.event.pull_request.labels

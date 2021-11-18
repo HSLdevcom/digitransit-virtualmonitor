@@ -15,13 +15,13 @@ jobs:
 
     steps:
       - name: echo pr title
-        run: echo github.event.pull_request.title
+        run: echo ${github.event.pull_request.title}
       - name: echo pr head
-        run: echo github.event.pull_request.head
+        run: echo ${github.event.pull_request.head}
       - name: echo pr labels
-        run: echo github.event.pull_request.labels
+        run: echo ${github.event.pull_request.labels}
       - name: echo head commit message
-        run: echo github.event.head_commit.message
+        run: echo ${github.event.head_commit.message}
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.GIT_SECRET }}

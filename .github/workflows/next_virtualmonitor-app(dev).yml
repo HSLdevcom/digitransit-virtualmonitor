@@ -14,22 +14,17 @@ jobs:
     if: "!startsWith(github.event.head_commit.message, '[DEPLOY]')"
 
     steps:
-      - name: Check Semver
-        id: check-semver
-        run: |
-          if [[ $github.event.head_commit.message == *"[MAJOR]"* ]]; then
-            echo ::set-output name=semver::major
-          elif [[ ${github.event.head_commit.message} == *"[MINOR]"* ]]; then
-            echo ::set-output name=semver::minor
-          else
-            echo ::set-output name=semver::patch
-          fi
       - uses: actions/checkout@v2
         with:
           token: ${{ secrets.GIT_SECRET }}
       - run: git config --global user.name 'Digitransit'
       - run: git config --global user.email 'digitransit@hsl.fi'
-      - run: npm version ${{steps.check-semver.outputs.semver}} -m "[DEPLOY] %s"
+      if: "contains(github.event.head_commit.message, '[MAJOR]')"
+        - run: npm version major -m "[DEPLOY] %s"
+      if: "contains(github.event.head_commit.message, '[MINOR]')"
+        - run: npm version minor -m "[DEPLOY] %s"
+      if: "!contains(github.event.head_commit.message, '[MAJOR]') && !contains(github.event.head_commit.message, '[MINOR]')"
+        - run: npm version patch -m "[DEPLOY] %s"
       - run: git push
 
   build-and-deploy:

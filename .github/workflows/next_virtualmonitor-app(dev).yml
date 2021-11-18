@@ -15,9 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - id: step1
-        run: echo "::set-output name=test::hello"
+          token: ${{ secrets.GIT_SECRET }}
       - run: git config --global user.name 'Digitransit'
       - run: git config --global user.email 'digitransit@hsl.fi'
       - run: npm version patch -m "[DEPLOY] %s"

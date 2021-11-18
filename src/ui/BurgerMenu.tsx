@@ -78,7 +78,6 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
       text: t('createViewTitle'),
       to: createStatic ? '/createStaticView' : '/createView',
     },
-    { text: t('breadCrumbsHelp'), to: '/help' },
   ];
 
   const linkElements = () => {

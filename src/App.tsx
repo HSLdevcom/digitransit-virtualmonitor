@@ -6,7 +6,6 @@ import LandingPage from './LandingPage';
 import Breadcrumbs from './ui/Breadcrumbs';
 import Banner from './ui/Banner';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
-import HelpPage from './ui/HelpPage';
 import CreateViewPage from './ui/CreateViewPage';
 import Version from './ui/Version';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
@@ -129,26 +128,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     ]),
     cache: new InMemoryCache(),
   });
-  let helpPageUrlParamText = '';
-  let helpPageurlMultipleStopsText = '';
-  let helpPageUrlParamFindText = '';
-  let helpPageUrlParamFindAltText = '';
 
-  if (monitorConfig) {
-    // set texts for help page.
-    helpPageUrlParamText = monitorConfig.urlParamUsageText
-      ? monitorConfig.urlParamUsageText
-      : '';
-    helpPageurlMultipleStopsText = monitorConfig.urlMultipleStopsText
-      ? monitorConfig.urlMultipleStopsText
-      : '';
-    helpPageUrlParamFindText = monitorConfig.urlParamFindText
-      ? monitorConfig.urlParamFindText
-      : '';
-    helpPageUrlParamFindAltText = monitorConfig.urlParamFindAltText
-      ? monitorConfig.urlParamFindAltText
-      : '';
-  }
 
   const style = {
     '--alert-color': monitorConfig.colors.alert || defaultColorAlert,
@@ -227,34 +207,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
           <Route path={'/view'} component={WithDatabaseConnection} />
           <Route path={'/static'} component={WithDatabaseConnection} />
           <Route path={'/version'} component={Version} />
-          {/*   <Route
-            path={'/help'}
-            // eslint-disable-next-line no-empty-pattern
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <>
-                <section aria-label="navigation">
-                  <Banner config={monitorConfig} />
-                  <Breadcrumbs
-                    isLogged={user.loggedIn}
-                    start={monitorConfig.breadCrumbsStartPage}
-                  />
-                </section>
-                <section role="main" id="mainContent">
-                  <HelpPage
-                    urlParamUsageText={helpPageUrlParamText}
-                    urlMultipleStopsText={helpPageurlMultipleStopsText}
-                    urlParamFindText={helpPageUrlParamFindText}
-                    urlParamFindAltText={helpPageUrlParamFindAltText}
-                    content={props.search.cont}
-                  />
-                </section>
-              </>
-            )}
-          />*/}
           <Route
             path={'/urld/:version/:packedDisplay'}
             component={({

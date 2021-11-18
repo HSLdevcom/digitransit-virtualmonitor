@@ -22,9 +22,6 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
     case 'createstaticview':
       crumb = !isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify');
       break;
-    /*    case 'help':
-      crumb = t('breadCrumbsHelp');
-      break;*/
     case null:
       crumb = isLogged
         ? t('breadCrumbsOwnMonitors')

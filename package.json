@@ -1,6 +1,6 @@
 {
   "name": "otp-virtual-monitor",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "description": "Real-time, updating public transport info display that aggregates OpenTripPlanner schedules for multiple stops",
   "license": "MIT",
   "contributors": [

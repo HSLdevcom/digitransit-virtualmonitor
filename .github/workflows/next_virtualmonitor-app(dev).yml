@@ -11,24 +11,22 @@ on:
 jobs:
   version-increment: 
     runs-on: ubuntu-latest
-    if: "!startsWith(github.event.head_commit.message, '[RELEASE]')"
-    outputs:
-      output1: ${{ steps.step1.outputs.test }}
+    if: "!startsWith(github.event.head_commit.message, '[DEPLOY]')"
     steps:
       - uses: actions/checkout@v2
         with:
-          token: ${{ secrets.GIT_SECRET }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - id: step1
         run: echo "::set-output name=test::hello"
       - run: git config --global user.name 'Digitransit'
       - run: git config --global user.email 'digitransit@hsl.fi'
-      - run: npm version patch -m "[RELEASE] %s"
+      - run: npm version patch -m "[DEPLOY] %s"
       - run: git push
 
   build-and-deploy:
     runs-on: 'ubuntu-latest'
     needs: version-increment
-    if: "contains(${{needs.version-increment.outputs.output1}}, 'hello')"
+    if: "startsWith(github.event.head_commit.message, '[DEPLOY]')"
     steps:
     - name: Checkout
       uses: actions/checkout@v2

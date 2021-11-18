@@ -26,6 +26,7 @@ jobs:
           npm version minor -m "[DEPLOY] %s"
         else
           npm version patch -m "[DEPLOY] %s"
+        fi
       - run: git push
 
   build-and-deploy:

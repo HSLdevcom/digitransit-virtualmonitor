@@ -279,17 +279,17 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     };
   });
 
-  const createButtonsDisabled = stopCardList => {
-    let noStop = false;
+  const checkNoStops = stopCardList => {
+    let noStops = false;
     stopCardList.forEach((stopCard, i) => {
       if (
         stopCard.columns.left.stops.length === 0 &&
         stopCard.columns.right.stops.length === 0
       ) {
-        noStop = true;
+        noStops = true;
       }
     });
-    return !(languages.length > 0 && !noStop);
+    return noStops;
   };
 
   const createOrSaveMonitor = isNew => {
@@ -422,6 +422,11 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     );
   }
 
+  const createAriaLabel = (key, requirements, t) => {
+    const joinedRequirements = requirements.join(` ${t('or')} `);
+    return t(`notPossibleTo${key}`, { requirements: joinedRequirements });
+  };
+
   const cards: IMonitor = {
     cards: stopCardList,
     isInformationDisplay: isInformationDisplay(stopCardList),
@@ -443,8 +448,27 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     setViewTitle(newTitle);
   };
 
-  const makeButtonsDisabled = createButtonsDisabled(modifiedStopCardList);
+  const noStops = checkNoStops(modifiedStopCardList);
+  const makeButtonsDisabled = !(languages.length > 0 && !noStops);
   const isModifyView = checkIfModify();
+
+  const buttonsRequirements = [];
+  if (languages.length === 0) {
+    buttonsRequirements.push(t('requirementLanguage'));
+  }
+  if (noStops) {
+    buttonsRequirements.push(t('requirementStop'));
+  }
+
+  const ariaLabelForCreate = makeButtonsDisabled
+    ? createAriaLabel('Create', buttonsRequirements, t)
+    : t('previewView');
+  const ariaLabelForPreview = makeButtonsDisabled
+    ? createAriaLabel('Preview', buttonsRequirements, t)
+    : t('previewView');
+  const ariaLabelForSave = makeButtonsDisabled
+    ? createAriaLabel('Save', buttonsRequirements, t)
+    : t('previewView');
 
   return (
     <div className="stop-card-list-container">
@@ -517,6 +541,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           disabled={makeButtonsDisabled}
           className="button preview"
           onClick={openPreview}
+          aria-label={ariaLabelForPreview}
         >
           <span>{t('previewView')}</span>
         </button>
@@ -525,6 +550,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
             disabled={makeButtonsDisabled}
             className="button create"
             onClick={() => createOrSaveMonitor(true)}
+            aria-label={ariaLabelForCreate}
           >
             <span>{t('displayEditorStaticLink')}</span>
           </button>
@@ -538,6 +564,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
               disabled={makeButtonsDisabled}
               className="button"
               onClick={() => createOrSaveMonitor(false)}
+              aria-label={ariaLabelForSave}
             >
               <span>{t('save')}</span>
             </button>

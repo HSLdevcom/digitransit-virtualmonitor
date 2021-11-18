@@ -5,6 +5,7 @@ import { defaultStopCard } from '../util/stopCardUtil';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import Loading from './Loading';
+import { GetStops, GetStopsVariables } from '../generated/GetStops';
 
 interface IProps {
   stopIds: Array<string>;
@@ -34,7 +35,7 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   const [fetched, setFetched] = useState(false);
   const [stopsFound, setStopsFound] = useState(true);
 
-  const { data, loading } = useQuery(GET_STOP, {
+  const { data, loading } = useQuery<GetStops, GetStopsVariables>(GET_STOP, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
     context: { clientName: 'default' },

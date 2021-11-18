@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
@@ -113,7 +113,20 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
   };
   // ----------                                 ----------
   const monitorConfig: IExtendedMonitorConfig = props.monitorConfig;
-
+  const style = {
+    '--alert-color': monitorConfig.colors.alert || defaultColorAlert,
+    '--font-color': monitorConfig.colors.font || defaultColorFont,
+    '--font-family': monitorConfig.fonts?.normal || defaultFontNormal,
+    '--font-family-narrow': monitorConfig.fonts?.narrow || defaultFontNarrow,
+    '--monitor-background-color':
+      monitorConfig.colors.monitorBackground || monitorConfig.colors.primary,
+    '--primary-color': monitorConfig.colors.primary,
+  };
+  useEffect(() => {
+    for (const i in style) {
+      document.body.style.setProperty(i, style[i]);
+    }
+  }, []);
   const client = new ApolloClient({
     link: ApolloLink.from([
       new MultiAPILink({
@@ -129,16 +142,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     cache: new InMemoryCache(),
   });
 
-
-  const style = {
-    '--alert-color': monitorConfig.colors.alert || defaultColorAlert,
-    '--font-color': monitorConfig.colors.font || defaultColorFont,
-    '--font-family': monitorConfig.fonts?.normal || defaultFontNormal,
-    '--font-family-narrow': monitorConfig.fonts?.narrow || defaultFontNarrow,
-    '--monitor-background-color':
-      monitorConfig.colors.monitorBackground || monitorConfig.colors.primary,
-    '--primary-color': monitorConfig.colors.primary,
-  } as React.CSSProperties;
 
   const favicon = monitorConfig.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
@@ -156,13 +159,12 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     />
   );
   return (
-    <div className="App" style={style}>
+    <div className="App">
       <Helmet>
         <title>{monitorConfig.name} - pysäkkinäyttö</title>
         {faviconLink}
-        {monitorConfig.name === 'hsl' ? fontHSL : fontDefault}{' '}
+        {monitorConfig.name === 'hsl' ? fontHSL : fontDefault}
       </Helmet>
-      <SkipToMainContent />
       <ApolloProvider client={client}>
         <Switch>
           <Route
@@ -173,6 +175,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
                   <Breadcrumbs start={monitorConfig.breadCrumbsStartPage} />
@@ -191,6 +194,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
                   <Breadcrumbs
@@ -247,6 +251,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <LandingPage
                   login={props.search?.pocLogin}
                   config={monitorConfig}

@@ -5,7 +5,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
 import { capitalize } from '../util/monitorUtils';
-import { getIconStyleWithColor } from '../util/getConfig';
+import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
 
 interface IRoute {
   alerts: any;
@@ -93,7 +93,12 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   t,
   withoutRouteColumn,
 }) => {
-  const stopSettings = stops.find(s => s.gtfsId === departure?.stop.gtfsId);
+  const stopSettings = stops.find(s => {
+    const gtfsID = departure?.stop?.parentStation
+      ? departure?.stop.parentStation.gtfsId
+      : departure?.stop.gtfsId;
+    return s.gtfsId === gtfsID;
+  });
   const renamedDestinations = [];
   stops.forEach(s =>
     s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
@@ -187,7 +192,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   const lineLen = departure?.trip?.route.shortName?.length;
   const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
   const stopCodeLen = stopCode?.length;
-
   const departureTime = getDepartureTime(
     departure?.realtimeDeparture,
     showMinutes * 60,
@@ -207,10 +211,20 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           'without-route-column': withoutRouteColumn,
         })}
       >
-        {!withoutRouteColumn && (
+        {!withoutRouteColumn && lineLen < 5 && (
           <div className={cx('grid-col line', `len${lineLen}`)}>
             {line[0]}
             {line.length > 1 && <span className="line-letter">{line[1]}</span>}
+          </div>
+        )}
+        {!withoutRouteColumn && lineLen >= 5 && (
+          <div className={cx('grid-col line', `len${2}`)}>
+            <Icon
+              height={24}
+              width={24}
+              img={stopSettings.mode}
+              color={getColorByName('monitorBackground')}
+            />
           </div>
         )}
         <div className="grid-col destination">

@@ -13,3 +13,11 @@ ul,
 li {
   list-style-type: none;
 }
+
+.ReactModal__Content {
+  font-family: var(--font-family);
+}
+
+.ReactModal__Overlay {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+}

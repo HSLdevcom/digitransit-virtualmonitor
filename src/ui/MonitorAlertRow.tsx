@@ -14,7 +14,7 @@ interface IProps {
 const getAnimationWidth = orientation => {
   const alertElements = document.getElementsByClassName('single-alert');
   const elementArray = alertElements;
-  let animationWidth = 0; // = elementArray.forEach(i => console.log(i))
+  let animationWidth = 0;
   for (let i = 0; i < elementArray.length; i++) {
     if (orientation === 'vertical') {
       animationWidth += elementArray[i].clientHeight + 10;

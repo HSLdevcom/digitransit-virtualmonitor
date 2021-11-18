@@ -4,18 +4,16 @@
 name: Build and deploy container app to Azure Web App - DEV Virtual monitor
 
 on:
-  push:
-    branches:
-      - next
-  workflow_dispatch:
+  workflow_run:
+    workflows: ["Version Increment"]
+    types:
+      - completed
 
 jobs:
   build-and-deploy:
     runs-on: 'ubuntu-latest'
 
     steps:
-    - uses: actions/checkout@master
-
     - uses: azure/docker-login@v1
       with:
         login-server: https://index.docker.io/v1/

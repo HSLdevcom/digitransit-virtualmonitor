@@ -1,119 +1,85 @@
-.link-section {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr 1fr 1fr;
-  gap: 25px 0;
-  border-bottom: 1px solid #ddd;
+.ReactModal__Overlay {
+  z-index: 10;
 }
 
-/* Position and sizing of burger button */
-.bm-burger-button {
-  position: absolute;
-  width: 36px;
-  height: 30px;
-  right: 36px;
-  top: 20px;
-}
-
-/* Color/shape of burger icon bars */
-.bm-burger-bars {
-  background: #fff;
-}
-
-/* Color/shape of burger icon bars on hover */
-.bm-burger-bars-hover {
-  background: #fff;
-}
-
-/* Position and sizing of clickable cross button */
-.bm-cross-button {
-  right: 10px !important;
-  top: 10px !important;
-}
-
-/* Color/shape of close button cross */
-.bm-cross {
-  background: $primary-color;
-}
-
-/*
-Sidebar wrapper styles
-Note: Beware of modifying this element as it can break the animations - you should not need to touch it in most cases
-*/
-.bm-menu-wrap {
-  position: fixed;
-  height: 100%;
-  top: 70px;
-}
-
-/* General sidebar styles */
-.bm-menu {
-  background: #fff;
-  padding: 2.5em 1.5em 0;
-  font-size: 1.15em;
-  overflow: hidden !important;
-}
-
-/* Morph shape necessary with bubble or elastic */
-.bm-morph-shape {
-  fill: #373a47;
-}
-
-/* Wrapper for item list */
-.bm-item-list {
-  color: #b8b7ad;
-  padding: 0.8em;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 50px 150px auto;
-}
-
-/* Individual item */
-.bm-item {
+.ReactModal__Content {
   display: flex;
+  width: 360px;
+  top: 0 !important;
+  height: 100% !important;
+  left: calc(100% - 360px) !important;
+  border-radius: 0 !important;
+  animation-name: menuSlideOpen;
+  animation-duration: 0.5s;
 
-  &:first-child {
-    display: flex;
-    flex-direction: row;
-    border-bottom: 1px solid #ddd;
+  .container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 50px 150px auto;
+    width: calc(100% - 40px);
 
-    .lang-select {
-      color: $primary-color;
-      font-family: $font-family;
-      font-weight: 700;
-      letter-spacing: 0;
-      padding: 10px 10px;
-      text-decoration: none;
-      line-height: normal;
-      font-size: 1.25rem;
-      display: inline-block;
-      text-transform: uppercase;
-      cursor: pointer;
+    #close {
+      display: flex;
+      justify-content: flex-end;
+
+      .close-button {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+      }
+
+      animation-name: menuSlideClose;
+      animation-duration: 1s;
     }
-  }
 
-  &:nth-child(2) {
-    display: flex;
-    flex-direction: column;
-    border-bottom: 1px solid #ddd;
+    #languages {
+      display: flex;
+      flex-direction: row;
+      border-bottom: 1px solid #ddd;
 
-    .link {
-      color: $primary-color;
-      font-family: $font-family;
-      font-weight: 700;
-      letter-spacing: 0;
-      padding: 10px 10px;
-      text-decoration: none;
-      width: 100%;
-      background: #fff;
-      height: 100%;
-      overflow-y: auto;
-      text-align: left;
+      .lang-select {
+        color: $primary-color;
+        font-family: $font-family;
+        font-weight: 700;
+        letter-spacing: 0;
+        padding: 10px 10px;
+        text-decoration: none;
+        line-height: normal;
+        font-size: 1.25rem;
+        display: inline-block;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+    }
+
+    #links {
+      display: flex;
+      flex-direction: column;
+      border-bottom: 1px solid #ddd;
+
+      .link {
+        color: $primary-color;
+        font-family: $font-family;
+        font-weight: 700;
+        letter-spacing: 0;
+        padding: 10px 10px;
+        text-decoration: none;
+        width: 100%;
+        background: #fff;
+        height: 100%;
+        overflow-y: auto;
+        text-align: left;
+      }
     }
   }
 }
 
-/* Styling of overlay */
-.bm-overlay {
-  background: rgba(0, 0, 0, 0.4);
+@keyframes menuSlideOpen {
+  0% {
+    left: 100%;
+  }
+
+  100% {
+    left: calc(100% - 360px);
+  }
 }

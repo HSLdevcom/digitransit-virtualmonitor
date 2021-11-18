@@ -59,13 +59,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     .slice(0, leftColumnCount)
     .findIndex(departure => departure.serviceDay === nextDay.getTime() / 1000);
 
-  const currentDayDeparturesLeft = departuresLeft
-    .slice(0, leftColumnCount)
-    .filter(departure => departure.serviceDay === currentDay.getTime() / 1000);
-  const nextDayDeparturesLeft = departuresLeft
-    .slice(0, leftColumnCount)
-    .filter(departure => departure.serviceDay === nextDay.getTime() / 1000);
-
   if (nextDayDepartureIndexLeft !== -1) {
     departuresLeft.splice(nextDayDepartureIndexLeft, 0, null);
   }

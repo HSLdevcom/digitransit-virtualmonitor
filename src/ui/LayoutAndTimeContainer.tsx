@@ -29,6 +29,7 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
   updateCardInfo,
   orientation,
   durationEditable,
+  t,
 }) => {
   const placeHolder = durations.find(
     duration => duration.value === cardInfo.duration,
@@ -67,7 +68,12 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
   return (
     <div className="layout-and-time-container">
       <div role="button" onClick={setOpen}>
-        <button className="layout-button" name="layout">
+        <button
+          className="layout-button"
+          name="layout"
+          role="button"
+          aria-label={t('layout')}
+        >
           {layoutButton}
         </button>
       </div>

@@ -141,16 +141,16 @@ const TrainDataFetcher: FC<IProps> = ({
   if (!lineIdsState.loading && !lineIdsState.data) {
     const ids = stationIds.map(st => st['gtfsId']);
     getLineIds({
-      variables: { stationIds: ids },
+      variables: { stationIds: stationIds },
       context: { clientName: 'hsl' },
     });
   }
 
   useEffect(() => {
     if (lineIdsState.data) {
-      const shortCodes = stationIds.map(
-        id => trainStationMap?.find(i => i.gtfsId === id['gtfsId'])?.shortCode,
-      );
+      const shortCodes = stationIds.map(id => {
+        return trainStationMap?.find(i => i.gtfsId === id)?.shortCode;
+      });
       const stations = shortCodes
         .filter(a => a)
         .map(code => {

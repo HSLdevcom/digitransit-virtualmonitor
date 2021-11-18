@@ -9,13 +9,8 @@ import { IStop } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { capitalize } from '../util/monitorUtils';
 import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
-import {
-  defaultColorAlert,
-  defaultColorFont,
-  defaultFontNarrow,
-  defaultFontNormal,
-} from './DefaultStyles';
 import { getStopIcon } from '../util/stopCardUtil';
+import { isKeyboardSelectionEvent } from '../util/browser';
 
 Modal.setAppElement('#root');
 
@@ -54,7 +49,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
   const [renamings, setRenamings] = useState(
     props.stopSettings?.renamedDestinations || [],
   );
-  const stopCode = props.stop.code ? `( ${props.stop.code} )` : '';
+  const stopCode = props.stop.code ? `(${props.stop.code})` : '';
   const text = props.t('stopSettings', {
     stop: props.stop.name,
     code: stopCode,
@@ -145,16 +140,19 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     }
   };
 
-  const handleDeleteRenamings = () => {
-    props.combinedPatterns.forEach(p => {
-      const inputFI = document?.getElementById(`fi-${p}`) as HTMLInputElement;
-      const inputSV = document?.getElementById(`sv-${p}`) as HTMLInputElement;
-      const inputEN = document?.getElementById(`en-${p}`) as HTMLInputElement;
-      inputFI.value = '';
-      inputSV.value = '';
-      inputEN.value = '';
-    });
-    setRenamings([]);
+  const handleDeleteRenamings = event => {
+    if (event === null || isKeyboardSelectionEvent(event, true)) {
+      props.combinedPatterns.forEach(p => {
+        const inputFI = document?.getElementById(`fi-${p}`) as HTMLInputElement;
+        const inputSV = document?.getElementById(`sv-${p}`) as HTMLInputElement;
+        const inputEN = document?.getElementById(`en-${p}`) as HTMLInputElement;
+        inputFI.value = '';
+        inputSV.value = '';
+        inputEN.value = '';
+      });
+      setRenamings([]);
+      setShowInputs(false);
+    }
   };
 
   const handleSave = () => {
@@ -180,8 +178,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     setSettings({ ...settings, timeShift: option.value });
   };
 
-  const handleShowInputs = () => {
-    setShowInputs(true);
+  const handleShowInputs = event => {
+    if (event === null || isKeyboardSelectionEvent(event, true)) {
+      setShowInputs(true);
+    }
   };
 
   const durations = [
@@ -198,90 +198,67 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     { value: 10, label: '10 min' },
   ];
 
-  const renamedDestinations = renamings;
-
-  const style = {
-    '--alert-color': getColorByName('alert') || defaultColorAlert,
-    '--font-color': getColorByName('font') || defaultColorFont,
-    '--font-family': defaultFontNormal,
-    '--font-family-narrow': defaultFontNarrow,
-    '--monitor-background-color':
-      getColorByName('monitorBackground') || getColorByName('primary'),
-    '--primary-color': getColorByName('primary'),
-  } as React.CSSProperties;
-
-  const modalStyle = {
-    overlay: {
-      backgroundColor: 'rgba(0, 0, 0, 0.4)',
-    },
-  };
+  const showSettings = [
+    'showRouteColumn',
+    'showStopNumber',
+    'showEndOfLine',
+    'showVia',
+  ];
 
   return (
     <Modal
       isOpen={props.showModal}
       onRequestClose={handleClose}
       portalClassName="modal-stop-routes"
-      style={modalStyle}
     >
-      <div className="modal" style={style}>
-        <div role="button" className="close" onClick={handleClose}>
-          <Icon
-            img={'close'}
-            height={15}
-            width={15}
-            color={getColorByName('primary')}
-          />
-        </div>
-        <div className="title-container">
-          <span className="title"> {text} </span>
-        </div>
-        <div className="show-settings">
-          <h2> {props.t('show')}</h2>
-          <div className="setting">
-            <Checkbox
-              checked={settings.showRouteColumn}
-              onChange={checkShowSetting}
-              name={'showRouteColumn'}
-              width={30}
-              height={30}
+      <div className="modal">
+        <section id="close">
+          <button
+            className="close-button"
+            role="button"
+            aria-label={props.t('close')}
+            onClick={handleClose}
+          >
+            <Icon
+              img="close"
+              color={getColorByName('primary')}
+              height={24}
+              width={24}
             />
-            <span className="setting-text">{props.t('showRouteColumn')}</span>
+          </button>
+        </section>
+        <section id="section-with-side-padding">
+          <div className="title-container">
+            <h2 className="title">{text}</h2>
           </div>
-          <div className="setting">
-            <Checkbox
-              checked={settings.showStopNumber}
-              onChange={checkShowSetting}
-              name={'showStopNumber'}
-              width={30}
-              height={30}
-            />
-            <span className="setting-text">
-              {props.t('stopCodeOrPlatformNumber')}
-            </span>
-          </div>
-          <div className="setting">
-            <Checkbox
-              checked={settings.showEndOfLine}
-              onChange={checkShowSetting}
-              name={'showEndOfLine'}
-              width={30}
-              height={30}
-            />
-            <span className={'setting-text'}>{props.t('endOfLine')}</span>
-          </div>
-          <div className="setting">
-            <Checkbox
-              checked={settings.showVia}
-              onChange={checkShowSetting}
-              name={'showVia'}
-              width={30}
-              height={30}
-            />
-            <span className={'setting-text'}>{props.t('showVia')}</span>
-          </div>
-        </div>
-        <div className="divider" />
-        <div className="timeshift">
+        </section>
+        <section id="section-with-side-padding">
+          <h2 id="show-settings-group-label">{props.t('show')}</h2>
+          {showSettings.map(setting => {
+            return (
+              <React.Fragment key={`setting-${setting}`}>
+                <Checkbox
+                  width={30}
+                  height={30}
+                  name={setting}
+                  isSelected={
+                    settings && settings[setting] ? settings[setting] : false
+                  }
+                  onChange={() => checkShowSetting(setting)}
+                  aria-label={`${props.t('show')} ${props.t(setting)}`}
+                  margin={'0 10px 5px 0'}
+                  color={getColorByName('primary')}
+                >
+                  {props.t(setting)}
+                </Checkbox>
+              </React.Fragment>
+            );
+          })}
+        </section>
+        <section id="section-with-side-padding">
+          <div className="divider" />
+        </section>
+        <section id="section-with-side-padding" className="timeshift">
           <h2> {props.t('timeShift')}</h2>
           <p>{props.t('timeShiftDescription')}</p>
           <div className="show-departures-over">
@@ -294,41 +271,56 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               handleChange={handleTimeShift}
             />
           </div>
-        </div>
-        <div className="divider" />
-        <div className="title-and-no-renaming">
+        </section>
+        <section id="section-with-side-padding">
+          <div className="divider" />
+        </section>
+        <section
+          id="section-with-side-padding"
+          className="title-and-no-renaming"
+        >
           <div className="title">
             <h2>
-              {props.t('hideLines')}
-              {settings.hiddenRoutes.length
-                .toString()
-                .concat(' / ')
-                .concat(props.combinedPatterns.length)}
+              {props.t('hideLines', {
+                hidden: settings.hiddenRoutes.length,
+                all: props.combinedPatterns.length,
+              })}
             </h2>
           </div>
-          <div
-            className="no-renaming"
-            onClick={showInputs ? handleDeleteRenamings : handleShowInputs}
-          >
-            <h2>
+          <div className="no-renaming">
+            <h2
+              role="button"
+              tabIndex={0}
+              onClick={() =>
+                showInputs
+                  ? handleDeleteRenamings(null)
+                  : handleShowInputs(null)
+              }
+              onKeyPress={e =>
+                showInputs ? handleDeleteRenamings(e) : handleShowInputs(e)
+              }
+            >
               {showInputs
                 ? props.t('deleteRenamings')
                 : props.t('renameDestinations')}
             </h2>
           </div>
-        </div>
-        <div className="route-rows">
+        </section>
+        <section id="section-with-side-padding" className="route-rows">
           <div className="row">
             <Checkbox
-              checked={hiddenRouteChecked(null)}
-              onChange={checkHiddenRoute}
+              isSelected={hiddenRouteChecked(null)}
+              onChange={() => checkHiddenRoute('all')}
               name={'all'}
               width={30}
               height={30}
-            />
-            <span className="all"> {props.t('all')}</span>
+              color={getColorByName('primary')}
+              aria-label={props.t('hideAllLines')}
+            >
+              <span className="all">{props.t('all')}</span>
+            </Checkbox>
           </div>
-          {(showInputs || renamedDestinations.length > 0) && (
+          {(showInputs || renamings.length > 0) && (
             <div className={cx('row', 'small')}>
               <div className="empty-space"></div>
               <div className={cx('lang', 'fi')}>FI</div>
@@ -337,7 +329,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             </div>
           )}
           {props.combinedPatterns.map((pattern, index) => {
-            const renamedDestination = renamedDestinations?.find(
+            const renamedDestination = renamings?.find(
               d => d.pattern === pattern,
             );
 
@@ -349,79 +341,84 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               <div key={`r-${index}`} className="row">
                 <Checkbox
                   key={`c-${index}`}
-                  checked={hiddenRouteChecked(pattern)}
-                  onChange={checkHiddenRoute}
+                  isSelected={hiddenRouteChecked(pattern)}
+                  onChange={() => checkHiddenRoute(pattern)}
                   name={pattern}
                   width={30}
                   height={30}
-                />
-                <div className="vehicle">
-                  <Icon
-                    img={
-                      !iconStyle.postfix
-                        ? getStopIcon(props.stop)
-                        : getStopIcon(props.stop) + iconStyle.postfix
-                    }
-                    width={24}
-                    height={24}
-                    color={iconStyle.color}
-                  />
-                </div>
-                <div className="route-number">{patternArray[2]}</div>
-                {!showInputs && !renamedDestination && (
-                  <div className="destination">
-                    {capitalize(patternArray[3])}
-                  </div>
-                )}
-                {(showInputs || renamedDestination) && (
-                  <div className="renamedDestinations">
-                    <input
-                      key={`i-${keyForInput}`}
-                      id={`fi-${pattern}`}
-                      name={pattern}
-                      className={cx('fi', !showInputs ? 'readonly' : '')}
-                      defaultValue={
-                        !showInputs && renamedDestination?.fi
-                          ? renamedDestination?.fi
-                          : undefined
+                  color={getColorByName('primary')}
+                  aria-label={props.t('hideLine', { line: patternArray[2] })}
+                >
+                  <div className="vehicle">
+                    <Icon
+                      img={
+                        !iconStyle.postfix
+                          ? getStopIcon(props.stop)
+                          : getStopIcon(props.stop) + iconStyle.postfix
                       }
-                      onChange={e => handleRenamedDestination(e, 'fi')}
-                      placeholder={patternArray[3]}
-                      readOnly={!showInputs}
-                    />
-                    <input
-                      key={`i-${keyForInput + 1}`}
-                      id={`sv-${pattern}`}
-                      name={pattern}
-                      className={cx('sv', !showInputs ? 'readonly' : '')}
-                      defaultValue={renamedDestination?.sv}
-                      onChange={e => handleRenamedDestination(e, 'sv')}
-                      readOnly={!showInputs}
-                    />
-                    <input
-                      key={`i-${keyForInput + 2}`}
-                      id={`en-${pattern}`}
-                      name={pattern}
-                      className={cx('en', !showInputs ? 'readonly' : '')}
-                      defaultValue={renamedDestination?.en}
-                      onChange={e => handleRenamedDestination(e, 'en')}
-                      readOnly={!showInputs}
+                      width={24}
+                      height={24}
+                      color={iconStyle.color}
                     />
                   </div>
-                )}
+                  <div className="route-number">{patternArray[2]}</div>
+                  {!showInputs && !renamedDestination && (
+                    <div className="destination">
+                      {capitalize(patternArray[3])}
+                    </div>
+                  )}
+                  {(showInputs || renamedDestination) && (
+                    <div className="renamedDestinations">
+                      <input
+                        key={`i-${keyForInput}`}
+                        id={`fi-${pattern}`}
+                        name={pattern}
+                        className={cx('fi', !showInputs ? 'readonly' : '')}
+                        defaultValue={
+                          !showInputs && renamedDestination?.fi
+                            ? renamedDestination?.fi
+                            : undefined
+                        }
+                        onChange={e => handleRenamedDestination(e, 'fi')}
+                        placeholder={patternArray[3]}
+                        readOnly={!showInputs}
+                      />
+                      <input
+                        key={`i-${keyForInput + 1}`}
+                        id={`sv-${pattern}`}
+                        name={pattern}
+                        className={cx('sv', !showInputs ? 'readonly' : '')}
+                        defaultValue={renamedDestination?.sv}
+                        onChange={e => handleRenamedDestination(e, 'sv')}
+                        readOnly={!showInputs}
+                      />
+                      <input
+                        key={`i-${keyForInput + 2}`}
+                        id={`en-${pattern}`}
+                        name={pattern}
+                        className={cx('en', !showInputs ? 'readonly' : '')}
+                        defaultValue={renamedDestination?.en}
+                        onChange={e => handleRenamedDestination(e, 'en')}
+                        readOnly={!showInputs}
+                      />
+                    </div>
+                  )}
+                </Checkbox>
               </div>
             );
           })}
-        </div>
-        <div className="divider-routes" />
-        <div
-          className={cx(
-            'button-container',
-            props.combinedPatterns.length < 5 ? 'less' : '',
-          )}
-        >
-          <Button onClick={handleSave} text={props.t('save')} />
-        </div>
+        </section>
+        <section id="section-with-side-padding">
+          <div className="divider-routes" />
+          <div
+            className={cx(
+              'button-container',
+              props.combinedPatterns.length < 5 ? 'less' : '',
+            )}
+          >
+            <Button onClick={handleSave} text={props.t('save')} />
+          </div>
+        </section>
       </div>
     </Modal>
   );

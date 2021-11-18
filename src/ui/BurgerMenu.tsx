@@ -2,46 +2,22 @@ import React from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
-import { slide as Menu } from 'react-burger-menu';
-import { getPrimaryColor } from '../util/getConfig';
+import { getColorByName } from '../util/getConfig';
+import Modal from 'react-modal';
 
+Modal.setAppElement('#root');
 interface Props {
   createStatic: boolean;
+  onClose: (option) => void;
+  isOpen: boolean;
 }
-
-const toggleMenu = ({ isOpen }, t) => {
-  const closeMenu = document.querySelector('#react-burger-cross-btn');
-  if (closeMenu) {
-    closeMenu.innerHTML = t('menuClose');
-  }
-
-  const elements = {
-    '#create-new-link': [
-      { name: 'aria-hidden', value: isOpen ? 'true' : 'false' },
-      { name: 'tabindex', value: isOpen ? '-1' : '0' },
-    ],
-    '.create-new': [
-      { name: 'aria-hidden', value: 'true' },
-      { name: 'tabindex', value: '-1' },
-    ],
-  };
-
-  Object.keys(elements).forEach(className => {
-    const items = document.querySelectorAll(className);
-    if (items) {
-      items.forEach(item => {
-        elements[className].forEach(attr => {
-          item.setAttribute(attr.name, attr.value);
-        });
-      });
-    }
-  });
-};
 
 const BurgerMenu: React.FC<Props & WithTranslation> = ({
   createStatic,
   t,
   i18n,
+  isOpen,
+  onClose,
 }) => {
   const changeLanguage = (i18n, lang) => {
     i18n.changeLanguage(lang);
@@ -92,29 +68,47 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
     return retValue;
   };
 
+  const modalStyle = {
+    overlay: {
+      backgroundColor: 'none',
+    },
+  };
+
   return (
-    <Menu
-      right
-      width="400px"
-      customCrossIcon={
-        <Icon img="close" color={getPrimaryColor()} width={25} />
-      }
-      disableAutoFocus
-      noOverlay
-      onStateChange={e => toggleMenu(e, t)}
+    <Modal
+      isOpen={isOpen}
+      style={modalStyle}
+      onRequestClose={() => onClose(null)}
     >
-      <section
-        id="languages"
-        style={{ display: 'flex' }}
-        aria-label={t('languageSelection')}
-      >
-        {languageElements()}
-      </section>
-      <section id="links" style={{ display: 'flex' }} aria-label={t('links')}>
-        {linkElements()}
-      </section>
-      <></>
-    </Menu>
+      <div className="container">
+        <section id="close">
+          <button
+            className="close-button"
+            role="button"
+            aria-label={t('menuClose')}
+            onClick={onClose}
+          >
+            <Icon
+              img="close"
+              color={getColorByName('primary')}
+              height={24}
+              width={24}
+            />
+          </button>
+        </section>
+        <section
+          id="languages"
+          style={{ display: 'flex' }}
+          aria-label={t('languageSelection')}
+        >
+          {languageElements()}
+        </section>
+        <section id="links" style={{ display: 'flex' }} aria-label={t('links')}>
+          {linkElements()}
+        </section>
+        <></>
+      </div>
+    </Modal>
   );
 };
 export default withTranslation('translations')(BurgerMenu);

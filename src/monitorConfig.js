@@ -25,16 +25,12 @@ export default {
     uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
     showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
+    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
   },
   jyvaskyla: {
-    fonts: {
-      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
-      narrow:
-        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
-    },
     colors: {
       primary: '#7DC02D',
+      monitorBackground: '#0057a2',
     },
     feedIds: ['LINKKI'],
     modeIcons: {
@@ -48,14 +44,9 @@ export default {
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
+    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
   },
   matka: {
-    fonts: {
-      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
-      narrow:
-        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
-    },
     colors: {
       primary: '#026273',
       monitorBackground: '#0057a2',
@@ -80,11 +71,6 @@ export default {
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
   },
   tampere: {
-    fonts: {
-      normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
-      narrow:
-        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
-    },
     colors: {
       primary: '#1c57cf',
     },
@@ -103,6 +89,6 @@ export default {
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'site', // Possible values are 'front' and 'site'
+    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
   },
 };

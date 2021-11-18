@@ -20,11 +20,13 @@ jobs:
       - run: git config --global user.name 'Digitransit'
       - run: git config --global user.email 'digitransit@hsl.fi'
       if: "contains(github.event.head_commit.message, '[MAJOR]')"
-        - run: npm version major -m "[DEPLOY] %s"
+      - run: npm version major -m "[DEPLOY] %s"
+      - run: git push
       if: "contains(github.event.head_commit.message, '[MINOR]')"
-        - run: npm version minor -m "[DEPLOY] %s"
+      - run: npm version minor -m "[DEPLOY] %s"
+      - run: git push
       if: "!contains(github.event.head_commit.message, '[MAJOR]') && !contains(github.event.head_commit.message, '[MINOR]')"
-        - run: npm version patch -m "[DEPLOY] %s"
+      - run: npm version patch -m "[DEPLOY] %s"
       - run: git push
 
   build-and-deploy:

@@ -16,7 +16,6 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
   const isModify =
     arr.length > 2 || window.location.href.indexOf('cont=') !== -1;
   let crumb;
-
   switch (path) {
     case 'createview':
     case 'createstaticview':

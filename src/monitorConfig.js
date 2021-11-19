@@ -26,6 +26,7 @@ export default {
     showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
+    allowLogin: false,
   },
   jyvaskyla: {
     colors: {
@@ -45,6 +46,7 @@ export default {
     showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
+    allowLogin: false,
   },
   matka: {
     colors: {
@@ -69,6 +71,7 @@ export default {
     showMinutes: '15',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
+    allowLogin: false,
   },
   tampere: {
     colors: {
@@ -90,5 +93,6 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
+    allowLogin: false,
   },
 };

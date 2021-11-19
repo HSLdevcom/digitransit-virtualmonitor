@@ -14,7 +14,8 @@ const LandingPage: React.FC<IProps> = props => {
     urls: ['abcdef', 'ghijk'],
   };
   // ----------                                 ----------
-  const logIn = user.loggedIn && user.urls.length > 0;
+  const logIn =
+    user.loggedIn && user.urls.length > 0 && props.config.allowLogin;
   return (
     <>
       <section aria-label="navigation">

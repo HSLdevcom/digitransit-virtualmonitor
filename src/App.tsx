@@ -60,6 +60,8 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     postfix?: string;
     setName?: string;
   };
+  allowLogin?: boolean;
+
 }
 export interface IMonitorConfig {
   name?: string;
@@ -198,7 +200,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
                   <Breadcrumbs
-                    isLogged={user.loggedIn}
+                    isLogged={user.loggedIn && monitorConfig.allowLogin}
                     start={monitorConfig.breadCrumbsStartPage}
                   />
                 </section>

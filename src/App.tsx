@@ -61,7 +61,6 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     setName?: string;
   };
   allowLogin?: boolean;
-
 }
 export interface IMonitorConfig {
   name?: string;
@@ -143,7 +142,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     ]),
     cache: new InMemoryCache(),
   });
-
 
   const favicon = monitorConfig.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;

@@ -252,8 +252,8 @@ const Icon = (props: ICustomInputProps) => {
   const background = null;
   let img = props.img;
   let fill = props.color;
-  let height = props.height ? `${props.height}` : '24';
-  let width = props.width ? `${props.width}` : '24';
+  let height = props.height ? `${props.height}px` : '24px';
+  let width = props.width ? `${props.width}px` : '24px';
   let stroke = null;
   if (img === 'check') {
     fill = null;
@@ -261,7 +261,6 @@ const Icon = (props: ICustomInputProps) => {
     width = '14';
     stroke = props.color;
   }
-
   const style = {
     fill: fill,
     stroke: stroke,
@@ -280,7 +279,7 @@ const Icon = (props: ICustomInputProps) => {
     img = isFocus ? img.substring(0, img.indexOf('-focus')) : img;
   }
   const icons = IconMap(style);
-  return <React.Fragment>{icons[img]}</React.Fragment>;
+  return <>{icons[img]}</>;
 };
 
 export default Icon;

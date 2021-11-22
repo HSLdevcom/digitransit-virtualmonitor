@@ -21,9 +21,9 @@ const Banner: React.FC<Props & WithTranslation> = ({ config, user, t }) => {
   };
 
   return (
-    <div className="banner">
+    <div className="main-banner">
       <Logo isLandscape monitorConfig={config} />
-      <div>
+      <div className="menu-container">
         <button
           className="menu-button"
           role="button"

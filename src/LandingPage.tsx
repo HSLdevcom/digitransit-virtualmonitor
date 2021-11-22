@@ -21,7 +21,7 @@ const LandingPage: React.FC<IProps> = props => {
       <section aria-label="navigation">
         <Banner config={props.config} user={user} />
         <Breadcrumbs
-          isLogged={user.loggedIn &&  props.config.allowLogin }
+          isLogged={user.loggedIn && props.config.allowLogin}
           start={props.config.breadCrumbsStartPage}
         />
       </section>

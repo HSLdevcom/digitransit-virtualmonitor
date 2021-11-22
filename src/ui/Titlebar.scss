@@ -91,42 +91,42 @@ $preview-container-height: 365px;
       height: calc(0.07 * #{$preview-container-height-portrait}) !important;
     }
   }
-}
 
-.title-logo {
-  min-width: 10vw !important;
-
-  &.hsl {
-    svg {
-      width: 120px;
-      height: 60px;
-    }
-  }
-
-  #logo {
-    width: 10vw !important;
-  }
-
-  &.portrait {
+  .title-logo {
     min-width: 10vw !important;
+
+    &.hsl {
+      svg {
+        width: 120px;
+        height: 60px;
+      }
+    }
 
     #logo {
       width: 10vw !important;
     }
-  }
-
-  &.preview {
-    min-width: calc(0.1 * #{$preview-container-width}) !important;
-
-    #logo {
-      width: calc(0.07 * #{$preview-container-width}) !important;
-    }
 
     &.portrait {
-      width: calc(0.1 * #{$preview-container-width}) !important;
+      min-width: 10vw !important;
 
       #logo {
-        width: calc(0.09 * #{$preview-container-width}) !important;
+        width: 10vw !important;
+      }
+    }
+
+    &.preview {
+      min-width: calc(0.1 * #{$preview-container-width}) !important;
+
+      #logo {
+        width: calc(0.07 * #{$preview-container-width}) !important;
+      }
+
+      &.portrait {
+        width: calc(0.1 * #{$preview-container-width}) !important;
+
+        #logo {
+          width: calc(0.09 * #{$preview-container-width}) !important;
+        }
       }
     }
   }

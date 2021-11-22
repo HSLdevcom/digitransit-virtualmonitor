@@ -5,45 +5,40 @@ $preview-container-width: 640px;
 $preview-container-height: 365px;
 
 .title-bar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 10vh !important;
-  padding: 15px;
+  display: grid;
+  grid-template-columns: 14vw auto 7.3vw 12.5vw;
+  grid-template-rows: 10vh;
+  padding: 0 15px;
   overflow: hidden;
-  font-size: 2.5vw;
 
   .weather-container {
-    display: flex;
-    flex-direction: column;
-    font-size: 11px;
-    padding-right: 10px;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 57% 43%;
 
-    &.preview {
-      padding-right: 5px;
-    }
-
-    svg {
-      height: 4vw !important;
-      width: 4vw !important;
-    }
-
-    .temperature {
+    .temperature-container {
+      display: flex;
+      justify-content: center;
       position: relative;
-      font-size: 1.5vw;
-      bottom: 8px;
-      left: 8px;
+      font-size: 2.1vw;
+    }
+
+    .icon-container {
+      display: flex;
+      justify-content: center;
+
+      svg {
+        height: 100% !important;
+        width: 100% !important;
+      }
     }
   }
 
   &.portrait {
+    grid-template-columns: 14vw auto 12.5vw;
+    grid-template-rows: 1fr;
     font-size: 5vw;
     height: 7vh !important;
-
-    .title-time-container {
-      font-size: min(5vw, 70px);
-      margin-top: 10px;
-    }
 
     .title-text {
       font-size: min(5vw, 80px);
@@ -51,7 +46,7 @@ $preview-container-height: 365px;
 
     .title-logo {
       #logo {
-        width: min(10vw, 330px) !important;
+        width: 100% !important;
       }
 
       &.hsl {
@@ -64,37 +59,48 @@ $preview-container-height: 365px;
   }
 
   &.preview {
-    font-size: calc(0.045 * #{$preview-container-width});
-    height: calc(0.1 * #{$preview-container-height}) !important;
+    display: grid;
+    grid-template-columns: calc(0.14 * #{$preview-container-width}) auto calc(0.073 * #{$preview-container-width}) calc(0.125 * #{$preview-container-width});
+    grid-template-rows: calc(0.1 * #{$preview-container-height});
+    padding: 0 5px;
 
     .weather-container {
-      .temperature {
-        font-size: 17px;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 19.3px 13.3px;
+
+      .temperature-container {
+        display: flex;
+        justify-content: center;
+        position: relative;
+        font-size: 10.5px;
       }
 
-      svg {
-        height: 50px !important;
-        width: 50px !important;
+      .icon-container {
+        display: flex;
+        justify-content: center;
+
+        svg {
+          height: 19.3px !important;
+          width: 19.3px !important;
+        }
       }
     }
 
     &.portrait {
-      .title-text {
-        font-size: 15px !important;
-      }
-
-      .title-time-container {
-        font-size: 25px;
-      }
-
-      font-size: calc(0.05 * #{$preview-container-width-portrait});
-      height: calc(0.07 * #{$preview-container-height-portrait}) !important;
+      display: grid;
+      grid-template-columns: calc(0.14 * #{$preview-container-width-portrait}) auto calc(0.125 * #{$preview-container-width-portrait});
+      grid-template-rows: 1fr;
+      height: calc(0.063 * #{$preview-container-height-portrait}) !important;
+      padding: 0 5px;
     }
   }
 }
 
 .title-logo {
-  min-width: 10vw !important;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 
   &.hsl {
     svg {
@@ -104,31 +110,7 @@ $preview-container-height: 365px;
   }
 
   #logo {
-    width: 10vw !important;
-  }
-
-  &.portrait {
-    min-width: 10vw !important;
-
-    #logo {
-      width: 10vw !important;
-    }
-  }
-
-  &.preview {
-    min-width: calc(0.1 * #{$preview-container-width}) !important;
-
-    #logo {
-      width: calc(0.07 * #{$preview-container-width}) !important;
-    }
-
-    &.portrait {
-      width: calc(0.1 * #{$preview-container-width}) !important;
-
-      #logo {
-        width: calc(0.09 * #{$preview-container-width}) !important;
-      }
-    }
+    width: 100% !important;
   }
 }
 
@@ -137,10 +119,7 @@ $preview-container-height: 365px;
   display: flex;
   flex: 1;
   flex-wrap: wrap;
-  justify-content: center;
   font-weight: bold;
-  font-size: min(5vw, 100px);
-  color: #fff;
   white-space: nowrap;
   overflow: hidden;
   mask-image:
@@ -151,10 +130,16 @@ $preview-container-height: 365px;
       rgba(0, 0, 0, 1) 25px,
       rgba(0, 0, 0, 1)
     );
+  justify-content: center;
+  align-items: center;
+  font-size: 5.375vh;
 
   &.preview {
-    font-size: 29px !important;
-    margin: 0 calc(0.02 * #{$preview-container-width});
+    font-size: 29.25px !important;
+
+    &.portrait {
+      font-size: 25.25px !important;
+    }
   }
 }
 
@@ -216,8 +201,9 @@ $preview-container-height: 365px;
 }
 
 .title-time-container {
-  flex: 0;
+  display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 
 .title-time {
@@ -226,7 +212,7 @@ $preview-container-height: 365px;
   font-size: 4vw;
 
   &.preview {
-    font-size: 30px !important;
+    font-size: 24.67px !important;
   }
 
   flex: 0;

@@ -44,7 +44,12 @@ const MonitorTitlebar: FC<IProps> = ({
         forMonitor={true}
       />
       {!isMultiDisplay && showTitle && (
-        <div className={cx('title-text', { preview: preview })}>
+        <div
+          className={cx('title-text', {
+            preview: preview,
+            portrait: !isLandscape,
+          })}
+        >
           {view.title[currentLang]}
         </div>
       )}
@@ -58,10 +63,16 @@ const MonitorTitlebar: FC<IProps> = ({
           </div>
         </div>
       )}
-      <div className={cx('weather-container', { preview: preview })}>
-        <Icon img={weatherIconString} width={50} height={50} />
-        <span className="temperature">{tempLabel}</span>
-      </div>
+      {weatherData && (
+        <div className={cx('weather-container', { preview: preview })}>
+          <div className="icon-container">
+            <Icon img={weatherIconString} width={10} height={10} />
+          </div>
+          <div className="temperature-container">
+            <span>{tempLabel}</span>
+          </div>
+        </div>
+      )}
       <TitlebarTime
         currentTime={currentTime}
         isPreview={preview}

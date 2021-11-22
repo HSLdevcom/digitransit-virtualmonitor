@@ -1,27 +1,32 @@
-.banner {
+.main-banner {
   background: $primary-color;
   min-width: 100%;
   z-index: 2;
   min-height: 70px !important;
+  display: flex;
 
   .title-logo {
+    flex: 1;
+    width: 200px;
+
     #logo {
       position: absolute;
       max-height: 50px !important;
       top: 10px;
       left: 10px;
-    }
-
-    div {
-      padding: 5px;
+      width: 200px;
     }
   }
 
-  .menu-button {
-    position: relative;
-    top: 0;
-    left: calc(100% - 80px);
-    background: transparent;
-    border: none;
+  .menu-container {
+    display: flex;
+    align-items: center;
+    width: 70px;
+
+    .menu-button {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+    }
   }
 }

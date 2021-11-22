@@ -447,7 +447,6 @@ $preview-grid-divider: 2px;
           display: flex;
 
           .metro-icon {
-            width: 1px; // hack so firefox doesn't go crazy with metro icon size..
             position: relative;
             display: flex;
             margin: 0 3px;
@@ -471,7 +470,6 @@ $preview-grid-divider: 2px;
           display: flex;
 
           .metro-icon-small {
-            width: 1px; // hack so firefox doesn't go crazy with metro icon size..
             position: relative;
             margin: 0 3px;
             display: flex;

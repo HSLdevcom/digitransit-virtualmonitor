@@ -39,10 +39,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
 
   const hash: any = location.search.split('cont=');
 
-  if (hash[1] && !stopCardList) {
-    return null;
-  }
-  if (!hash[1]) {
+  if (!hash[1] || (hash[1] && !stopCardList)) {
     return (
       <ContentContainer>
         <StopCardListContainer

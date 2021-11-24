@@ -303,6 +303,15 @@ const IconMap = (style: IIconMapProps) => {
     weather177: <Weather177 style={style} />,
   };
 };
+
+export const iconExists = key => {
+  const keys = Object.keys(IconMap(null));
+  if (keys.includes(key)) {
+    return true;
+  }
+  return false;
+};
+
 /**
  * Icon renders predefined Svg icons as react component.
  * @example
@@ -318,8 +327,8 @@ const Icon = (props: ICustomInputProps) => {
   const background = null;
   let img = props.img;
   let fill = props.color;
-  let height = props.height ? `${props.height}` : '24';
-  let width = props.width ? `${props.width}` : '24';
+  let height = props.height ? `${props.height}px` : '24px';
+  let width = props.width ? `${props.width}px` : '24px';
   let stroke = null;
   if (img === 'check') {
     fill = null;
@@ -327,7 +336,6 @@ const Icon = (props: ICustomInputProps) => {
     width = '14';
     stroke = props.color;
   }
-
   const style = {
     fill: fill,
     stroke: stroke,
@@ -345,8 +353,9 @@ const Icon = (props: ICustomInputProps) => {
     style['outlineOffset'] = isFocus ? '2px' : 'none';
     img = isFocus ? img.substring(0, img.indexOf('-focus')) : img;
   }
+
   const icons = IconMap(style);
-  return <React.Fragment>{icons[img]}</React.Fragment>;
+  return <>{icons[img]}</>;
 };
 
 export default Icon;

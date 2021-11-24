@@ -23,8 +23,8 @@ class Logo extends React.Component<ICommonProps> {
       ? (this.props as ICommonProps).isLandscape
       : false;
     const forMonitor = (this.props as ICommonProps).forMonitor
-    ? (this.props as ICommonProps).forMonitor
-    : false;
+      ? (this.props as ICommonProps).forMonitor
+      : false;
 
     let logo = undefined;
     let isHsl = false;

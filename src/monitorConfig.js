@@ -4,6 +4,10 @@ export default {
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       narrow:
         '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+      weights: {
+        normal: '400',
+        bigger: '500',
+      },
     },
     colors: {
       primary: '#007ac9',
@@ -26,6 +30,7 @@ export default {
     showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
+    allowLogin: false,
   },
   jyvaskyla: {
     colors: {
@@ -45,6 +50,7 @@ export default {
     showMinutes: '10',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
+    allowLogin: false,
   },
   matka: {
     colors: {
@@ -69,6 +75,7 @@ export default {
     showMinutes: '15',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
+    allowLogin: false,
   },
   tampere: {
     colors: {
@@ -90,5 +97,6 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
+    allowLogin: false,
   },
 };

@@ -1,7 +1,11 @@
 .stop-code {
   border: 1px solid #ddd;
-  font-size: 0.6875rem;
-  font-weight: 700;
+  font-size: 11px;
+  line-height: 13px;
+  display: flex;
+  align-items: center;
+  letter-spacing: -0.015em;
+  font-weight: $font-weight-bigger;
   border-radius: 2px;
   padding: 1px 3px 1px;
   color: #666;

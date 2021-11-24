@@ -74,10 +74,24 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
     },
   };
 
+  const classNames = {
+    base: 'menu-content',
+    afterOpen: 'menu-content-open',
+    beforeClose: 'menu-content-close',
+  };
+  const overlayClassNames = {
+    base: 'menu-background',
+    afterOpen: 'menu-background-open',
+    beforeClose: 'menu-background-close',
+  };
+
   return (
     <Modal
       isOpen={isOpen}
       style={modalStyle}
+      closeTimeoutMS={500}
+      className={classNames}
+      overlayClassName={overlayClassNames}
       onRequestClose={() => onClose(null)}
     >
       <div className="container">

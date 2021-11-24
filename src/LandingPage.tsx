@@ -14,13 +14,14 @@ const LandingPage: React.FC<IProps> = props => {
     urls: ['abcdef', 'ghijk'],
   };
   // ----------                                 ----------
-  const logIn = user.loggedIn && user.urls.length > 0;
+  const logIn =
+    user.loggedIn && user.urls.length > 0 && props.config.allowLogin;
   return (
     <>
       <section aria-label="navigation">
         <Banner config={props.config} user={user} />
         <Breadcrumbs
-          isLogged={user.loggedIn}
+          isLogged={user.loggedIn && props.config.allowLogin}
           start={props.config.breadCrumbsStartPage}
         />
       </section>

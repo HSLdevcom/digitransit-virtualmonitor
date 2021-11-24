@@ -2,7 +2,7 @@
   display: flex;
 
   > span {
-    font-weight: normal;
+    font-weight: $font-weight;
     user-select: none;
   }
 
@@ -10,7 +10,7 @@
     max-height: 55px;
 
     > span {
-      font-weight: 400;
+      font-weight: $font-weight;
       user-select: none;
       line-height: 4;
     }
@@ -42,7 +42,7 @@
           color: $primary-color;
           font-family: $font-family;
           font-size: 1.25em;
-          font-weight: 500;
+          font-weight: $font-weight-bigger;
           line-height: 1;
           margin-left: 0.1em;
           margin-top: 0.2em;

@@ -14,6 +14,8 @@ import {
   defaultColorFont,
   defaultFontNarrow,
   defaultFontNormal,
+  defaultFontWeightNormal,
+  defaultFontWeightBigger,
 } from './ui/DefaultStyles';
 import { Helmet } from 'react-helmet';
 
@@ -36,6 +38,10 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
     normal?: string;
     narrow?: string;
+    weights?: {
+      normal?: string;
+      bigger?: string;
+    }
   };
   colors?: {
     alert?: string;
@@ -60,6 +66,7 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     postfix?: string;
     setName?: string;
   };
+  allowLogin?: boolean;
 }
 export interface IMonitorConfig {
   name?: string;
@@ -118,6 +125,8 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     '--font-color': monitorConfig.colors.font || defaultColorFont,
     '--font-family': monitorConfig.fonts?.normal || defaultFontNormal,
     '--font-family-narrow': monitorConfig.fonts?.narrow || defaultFontNarrow,
+    '--font-weight': monitorConfig.fonts?.weights?.normal || defaultFontWeightNormal,
+    '--font-weight-bigger': monitorConfig.fonts?.weights?.bigger || defaultFontWeightBigger,
     '--monitor-background-color':
       monitorConfig.colors.monitorBackground || monitorConfig.colors.primary,
     '--primary-color': monitorConfig.colors.primary,
@@ -141,7 +150,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     ]),
     cache: new InMemoryCache(),
   });
-
 
   const favicon = monitorConfig.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
@@ -198,7 +206,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
                 <section aria-label="navigation">
                   <Banner config={monitorConfig} />
                   <Breadcrumbs
-                    isLogged={user.loggedIn}
+                    isLogged={user.loggedIn && monitorConfig.allowLogin}
                     start={monitorConfig.breadCrumbsStartPage}
                   />
                 </section>

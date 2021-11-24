@@ -190,9 +190,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   }
 
   let lineLen = departure?.trip?.route.shortName?.length;
-  if (departure) {
-    lineLen = -1;
-  }
   const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
   const stopCodeLen = stopCode?.length;
   const departureTime = getDepartureTime(
@@ -202,6 +199,14 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   );
   const showStopCode = stopSettings?.settings?.showStopNumber;
   const viaSettings = stopSettings?.settings?.showVia;
+
+  if (!lineLen) {
+    if (!departure) {
+      lineLen = 0;
+    } else {
+      lineLen = -1;
+    }
+  }
 
   return (
     <div className="row-with-separator">

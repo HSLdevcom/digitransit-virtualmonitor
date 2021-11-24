@@ -16,7 +16,6 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
   const isModify =
     arr.length > 2 || window.location.href.indexOf('cont=') !== -1;
   let crumb;
-
   switch (path) {
     case 'createview':
     case 'createstaticview':
@@ -56,6 +55,7 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
                 height={14}
                 rotate={'-90'}
                 color={getPrimaryColor()}
+                margin={'0 10px'}
               />
               <Link className="to-home" to={'/?pocLogin'}>
                 {t('breadCrumbsOwnMonitors')}
@@ -69,12 +69,13 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
             height={14}
             rotate={'-90'}
             color={getPrimaryColor()}
+            margin={'0 10px'}
           />
         )}
         {crumb}
       </div>
       <span className="desc">
-        {crumb !== t('breadCrumbsFrontPage') ? crumb : null}
+        {crumb !== t('breadCrumbsFrontPage') ? crumb : t('breadCrumbsCreate')}
       </span>
     </div>
   );

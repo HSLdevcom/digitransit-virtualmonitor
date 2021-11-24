@@ -220,6 +220,11 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         hasRouteColumn.push(true);
       }
     });
+
+    if (stops.length === 0 && hasRouteColumn.length === 0) {
+      hasRouteColumn.push(true);
+    }
+
     const withoutRouteColumn = hasRouteColumn.every(hasColumn);
     return (
       <div
@@ -351,7 +356,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   'no-departures': departuresRight.length > 0,
                 })}
               >
-                {departuresRight.length === 0 &&
+                {departuresRight.length === 0 ||
                 !(departuresLeft.length > leftColumnCount) ? (
                   <>
                     <div className="no-departures-text-container">

@@ -45,7 +45,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   staticUrl,
   staticViewTitle,
 }) => {
-  const pollInterval = 0;
+  const pollInterval = 30000;
   const emptyDepartureArrays = [];
 
   for (let i = 0; i < views.length; i++) {

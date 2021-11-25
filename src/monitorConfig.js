@@ -28,7 +28,7 @@ export default {
     name: 'hsl',
     uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
     showMinutes: '10',
-    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
   },
@@ -47,8 +47,8 @@ export default {
     },
     name: 'jyvaskyla',
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
-    showMinutes: '10',
-    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    showMinutes: '15',
+    alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
   },
@@ -73,7 +73,7 @@ export default {
     name: 'matka',
     uri: 'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql',
     showMinutes: '15',
-    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
   },
@@ -94,8 +94,8 @@ export default {
     },
     name: 'tampere',
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
-    showMinutes: '20',
-    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    showMinutes: '15',
+    alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
   },

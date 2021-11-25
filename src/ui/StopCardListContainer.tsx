@@ -282,12 +282,11 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   const checkNoStops = stopCardList => {
     let noStops = false;
     stopCardList.forEach((stopCard, i) => {
-      if (
-        stopCard.columns.left.stops.length === 0 &&
-        stopCard.columns.right.stops.length === 0
-      ) {
-        noStops = true;
-      }
+      const isMultiDisplay = getLayout(stopCard.layout).isMultiDisplay;
+      noStops = !isMultiDisplay
+        ? stopCard.columns.left.stops.length === 0
+        : stopCard.columns.left.stops.length === 0 ||
+          stopCard.columns.right.stops.length === 0;
     });
     return noStops;
   };

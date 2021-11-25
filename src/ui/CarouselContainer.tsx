@@ -136,9 +136,14 @@ const CarouselContainer: FC<IProps> = ({
       alertRowClass = '';
       break;
   }
-  //const alertOrientation = config.alertOrientation;
-  const orientations = ['vertical', 'horizontal', 'static'];
-  const alertOrientation = orientations[demoOrientation];
+
+  const orientations = ['static', 'vertical', 'horizontal'];
+  const environment = process.env.NODE_ENV;
+  const alertOrientation =
+    environment && environment === 'production'
+      ? config.alertOrientation
+      : orientations[demoOrientation];
+
   if (alerts.length > 0) {
     alertComponent = (
       <div

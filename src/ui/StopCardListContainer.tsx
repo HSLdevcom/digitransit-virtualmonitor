@@ -308,6 +308,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           parentStation: stop.parentStation,
           mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           code: stop.code ? stop.code : null,
+          locality: stop.locality,
         };
       });
       card.columns.right.stops = card.columns.right.stops.map(stop => {
@@ -319,6 +320,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           parentStation: stop.parentStation,
           mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           code: stop.code ? stop.code : null,
+          locality: stop.locality,
         };
       });
     });

@@ -39,7 +39,7 @@
       .lang-select {
         color: $primary-color;
         font-family: $font-family;
-        font-weight: 700;
+        font-weight: $font-weight-bigger;
         padding: 10px 10px;
         text-decoration: none;
         line-height: normal;
@@ -59,7 +59,7 @@
       .link {
         color: $primary-color;
         font-family: $font-family;
-        font-weight: 700;
+        font-weight: $font-weight-bigger;
         line-height: 35px;
         letter-spacing: 0;
         padding: 0.5em 0;

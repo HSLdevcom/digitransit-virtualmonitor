@@ -4,6 +4,10 @@ export default {
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       narrow:
         '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+      weights: {
+        normal: '400',
+        bigger: '500',
+      },
     },
     colors: {
       primary: '#007ac9',

@@ -189,7 +189,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     );
   }
 
-  const lineLen = departure?.trip?.route.shortName?.length;
+  let lineLen = departure?.trip?.route.shortName?.length;
   const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
   const stopCodeLen = stopCode?.length;
   const departureTime = getDepartureTime(
@@ -199,6 +199,15 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   );
   const showStopCode = stopSettings?.settings?.showStopNumber;
   const viaSettings = stopSettings?.settings?.showVia;
+
+  if (!lineLen) {
+    if (!departure) {
+      lineLen = 0;
+    } else {
+      lineLen = -1;
+    }
+  }
+
   return (
     <div className="row-with-separator">
       <div className={cx('separator', { first: isFirst })}></div>
@@ -211,18 +220,18 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           'without-route-column': withoutRouteColumn,
         })}
       >
-        {!withoutRouteColumn && lineLen <= 5 && (
+        {!withoutRouteColumn && lineLen !== -1 && lineLen <= 5 && (
           <div className={cx('grid-col line', `len${lineLen}`)}>
             {line[0]}
             {line.length > 1 && <span className="line-letter">{line[1]}</span>}
           </div>
         )}
-        {!withoutRouteColumn && lineLen > 5 && (
-          <div className={cx('grid-col line', `len${2}`)}>
+        {!withoutRouteColumn && (lineLen === -1 || lineLen > 5) && (
+          <div className={cx('grid-col line icon', `len${2}`)}>
             <Icon
               height={24}
               width={24}
-              img={stopSettings.mode}
+              img={stopSettings?.mode || 'bus'}
               color={getColorByName('monitorBackground')}
             />
           </div>

@@ -17,7 +17,7 @@
         top: 69px;
         font-size: 18px;
         line-height: 22px;
-        font-weight: 400;
+        font-weight: $font-weight;
         font-style: normal;
         letter-spacing: -0.03em;
         text-align: left;
@@ -42,7 +42,7 @@
         .create-new {
           font-size: 1.125em;
           font-style: normal;
-          font-weight: 400;
+          font-weight: $font-weight;
           line-height: 22px;
           letter-spacing: -0.02em;
           text-align: center;

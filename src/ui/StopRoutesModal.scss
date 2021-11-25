@@ -1,7 +1,7 @@
 .modal-stop-routes {
   h2 {
     font-style: normal;
-    font-weight: 400;
+    font-weight: $font-weight;
     font-size: 18px;
     line-height: 22px;
     margin-bottom: 21px;
@@ -98,7 +98,7 @@
 
         .route-number {
           font-style: normal;
-          font-weight: bold;
+          font-weight: $font-weight-bigger;
           font-size: 18px;
           line-height: 22px;
           color: #333;
@@ -155,7 +155,7 @@
           .lang {
             position: absolute;
             font-style: normal;
-            font-weight: normal;
+            font-weight: $font-weight;
             font-size: 13px;
             line-height: 15px;
             letter-spacing: -0.02em;
@@ -202,7 +202,7 @@
     .timeshift {
       p {
         font-style: normal;
-        font-weight: normal;
+        font-weight: $font-weight;
         font-size: 15px;
         line-height: 18px;
         letter-spacing: -0.02em;
@@ -210,7 +210,7 @@
 
       .show-departures-over {
         font-style: normal;
-        font-weight: 700;
+        font-weight: $font-weight-bigger;
         font-size: 15px;
         line-height: 18px;
         color: #333;

@@ -19,7 +19,7 @@
 
     font-size: 21px;
     font-style: normal;
-    font-weight: 400;
+    font-weight: $font-weight;
     line-height: 24px;
     letter-spacing: -0.3px;
     text-align: left;
@@ -36,7 +36,7 @@
 .description {
   font-size: 13px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: $font-weight;
   line-height: 24px;
   letter-spacing: -0.3px;
   text-align: left;

@@ -75,7 +75,7 @@
     position: relative;
     margin-top: 16px;
     font-style: normal;
-    font-weight: normal;
+    font-weight: $font-weight;
     font-size: 13px;
     line-height: 24px;
     letter-spacing: -0.3px;
@@ -84,9 +84,12 @@
   }
 
   .headers {
+    font-weight: $font-weight-bigger;
     display: flex;
     margin-top: 22px;
     font-size: 15px;
+    line-height: 18px;
+    letter-spacing: -0.02em;
 
     .stop {
       width: 440px;

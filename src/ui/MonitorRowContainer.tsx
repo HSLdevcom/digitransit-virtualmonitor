@@ -25,6 +25,7 @@ interface IProps {
   showMinutes?: number;
   closedStopViews: Array<IClosedStop>;
   error?: string;
+  preview: boolean;
 }
 const hasColumn = value => value === false;
 
@@ -44,6 +45,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   showMinutes,
   closedStopViews,
   error,
+  preview,
   t,
 }) => {
   const DATE_FORMAT = 'dd.MM.yyyy HH:mm';
@@ -218,6 +220,11 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         hasRouteColumn.push(true);
       }
     });
+
+    if (stops.length === 0 && hasRouteColumn.length === 0) {
+      hasRouteColumn.push(true);
+    }
+
     const withoutRouteColumn = hasRouteColumn.every(hasColumn);
     return (
       <div
@@ -270,8 +277,10 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   return (
     <div
       className={cx('monitor-container', {
+        preview: preview,
         portrait: !isLandscape,
         'two-cols': withTwoColumns,
+        tightened: isTighten,
       })}
     >
       <div
@@ -347,7 +356,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   'no-departures': departuresRight.length > 0,
                 })}
               >
-                {departuresRight.length === 0 &&
+                {departuresRight.length === 0 ||
                 !(departuresLeft.length > leftColumnCount) ? (
                   <>
                     <div className="no-departures-text-container">

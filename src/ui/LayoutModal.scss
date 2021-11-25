@@ -24,7 +24,7 @@
   .layout-modal-header {
     margin: 0 0 34px 0;
     font-size: 1.5rem;
-    font-weight: 500;
+    font-weight: $font-weight-bigger;
     padding-left: 60px;
   }
 
@@ -38,7 +38,7 @@
     width: 100%;
 
     .row-header {
-      font-weight: normal;
+      font-weight: $font-weight;
       margin: 28px 0 10px;
       font-size: 1.125rem;
     }
@@ -127,7 +127,7 @@
     .close-button {
       font-size: 1.125em;
       font-style: normal;
-      font-weight: 400;
+      font-weight: $font-weight;
       line-height: 22px;
       letter-spacing: -0.02em;
       text-align: center;

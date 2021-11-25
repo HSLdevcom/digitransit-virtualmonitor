@@ -69,7 +69,7 @@ $preview-grid-divider: 2px;
   }
 
   .monitor-container {
-    height: calc(90% + 5px);
+    height: 78.91%;
 
     .grid.two-cols {
       margin: 0 5px;
@@ -173,10 +173,10 @@ $preview-grid-divider: 2px;
 
     &.preview {
       &.portrait {
-        height: calc(100% - 37px);
+        height: 534px;
 
         &.tightened {
-          height: 552px;
+          height: 534px;
         }
       }
     }
@@ -218,7 +218,7 @@ $preview-grid-divider: 2px;
     }
 
     &.portrait {
-      height: calc(100% - 7vh);
+      height: calc(100% - 12.75vh);
     }
 
     .divider {
@@ -239,7 +239,8 @@ $preview-grid-divider: 2px;
       }
     }
 
-    height: calc(100% - 10vh); // 100% - height of logo bar
+    height: 78.91%;
+
     &.two-cols {
       display: flex;
 

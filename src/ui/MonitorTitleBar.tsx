@@ -84,11 +84,7 @@ const MonitorTitlebar: FC<IProps> = ({
               <Icon img={weatherIconString} width={10} height={10} />
             </div>
           )}
-          <div
-            className={cx('temperature-container', {
-              withoutIcon: !weatherIconExists,
-            })}
-          >
+          <div className="temperature-container">
             <span>{temperature}</span>
           </div>
         </div>

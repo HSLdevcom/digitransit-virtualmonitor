@@ -5,6 +5,8 @@ $preview-container-width: 640px;
 $preview-container-height: 365px;
 
 .title-bar {
+  font-family: $monitor-font;
+  font-weight: $monitor-font-weight;
   display: grid;
   grid-template-columns: 14vw auto 7.3vw 14vw;
   grid-template-rows: 16.85vh;
@@ -163,11 +165,11 @@ $preview-container-height: 365px;
 }
 
 .title-text {
-  font-family: $font-family;
+  font-family: $monitor-font;
+  font-weight: $monitor-font-weight-bigger;
   display: flex;
   flex: 1;
   flex-wrap: wrap;
-  font-weight: $font-weight-bigger;
   white-space: nowrap;
   overflow: hidden;
   mask-image:
@@ -193,12 +195,12 @@ $preview-container-height: 365px;
 }
 
 .multi-display-titles {
-  font-family: $font-family;
+  font-family: $monitor-font;
+  font-weight: $monitor-font-weight;
   display: grid;
   grid-template-columns: 1fr 4.5% 1fr;
   margin-right: 0.5em;
   margin-left: 0.5em;
-  font-weight: $font-weight;
   color: #fff;
   width: 100%;
 }
@@ -262,14 +264,14 @@ $preview-container-height: 365px;
 }
 
 .title-time {
-  font-family: $font-family;
+  font-family: $monitor-font;
+  font-weight: $monitor-font-weight;
   display: flex;
   font-size: 4vw;
   flex: 0;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  font-weight: $font-weight;
   border-radius: 0.2em;
   background-color: white;
   color: $monitor-background-color;
@@ -278,6 +280,8 @@ $preview-container-height: 365px;
   padding: 0 1.25vw 0 !important;
 
   &.preview {
+    font-family: $monitor-font;
+    font-weight: $monitor-font-weight;
     padding: 0 calc(0.0125 * #{$preview-container-width}) 0 !important;
     max-width: 100%;
     max-height: 100%;

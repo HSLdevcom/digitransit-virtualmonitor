@@ -185,7 +185,8 @@ $preview-grid-divider: 2px;
 
 .main-content-container {
   background-color: $monitor-background-color;
-  font-family: $font-family-narrow;
+  font-family: $monitor-font;
+  font-weight: $monitor-font-weight;
   letter-spacing: -0.2px;
   color: #fff;
   height: 100%;

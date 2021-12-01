@@ -12,6 +12,7 @@
     font-size: 15px;
     align-items: center;
     text-decoration: none;
+    z-index: -1;
 
     &:focus {
       position: relative;

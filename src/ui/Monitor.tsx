@@ -13,7 +13,6 @@ import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
 import { getColorByName } from '../util/getConfig';
-import { defaultFontNarrow, defaultFontNormal } from './DefaultStyles';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;

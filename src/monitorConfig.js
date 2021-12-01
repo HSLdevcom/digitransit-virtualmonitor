@@ -2,11 +2,13 @@ export default {
   hsl: {
     fonts: {
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
-      narrow:
-        '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
       weights: {
         normal: '400',
         bigger: '500',
+      },
+      monitor: {
+        name: '"Gotham XNarrow SSm A", "Gotham XNarrow SSm B", "Gotham Rounded A", "Gotham Rounded B", Arial, Georgia, serif',
+        weight: '400',
       },
     },
     colors: {
@@ -80,8 +82,15 @@ export default {
   tampere: {
     colors: {
       primary: '#1c57cf',
+      monitorBackground: '#1c57cf',
     },
     feedIds: ['tampere'],
+    fonts: {
+      monitor: {
+        name: 'Lato',
+        weight: '700',
+      },
+    },
     modeIcons: {
       colors: {
         'mode-bus': '#1A4A8F',
@@ -92,11 +101,14 @@ export default {
       postfix: '-waltti',
       setName: 'digitransit',
     },
+    monitorFont: 'Lato',
+    monitorFontWeight: '700',
     name: 'tampere',
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
-    showMinutes: '15',
-    alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
+    showMinutes: '20',
+    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
+    useTilde: false,
   },
 };

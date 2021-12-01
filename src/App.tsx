@@ -42,6 +42,13 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
       normal?: string;
       bigger?: string;
     }
+    monitor?: {
+      name?: string,
+      weights?: {
+        normal?: string;
+        bigger?: string;
+      }
+    }
   };
   colors?: {
     alert?: string;
@@ -129,6 +136,9 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     '--font-weight-bigger': monitorConfig.fonts?.weights?.bigger || defaultFontWeightBigger,
     '--monitor-background-color':
       monitorConfig.colors.monitorBackground || monitorConfig.colors.primary,
+    '--monitor-font': monitorConfig.fonts?.monitor?.name || defaultFontNormal,
+    '--monitor-font-weight': monitorConfig.fonts?.monitor?.weights?.normal || defaultFontWeightNormal,
+    '--monitor-font-weight-bigger': monitorConfig.fonts?.monitor?.weights?.bigger || defaultFontWeightBigger,
     '--primary-color': monitorConfig.colors.primary,
   };
   useEffect(() => {
@@ -166,12 +176,29 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
       href="https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"
     />
   );
+
+  const fontTampere = (
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Lato"
+    />
+  );
+
+  const getAdditionalFont = name => {
+    switch (name) {
+      case 'tampere':
+        return fontTampere;
+      default:
+        return null;
+    }
+  };
   return (
     <div className="App">
       <Helmet>
         <title>{monitorConfig.name} - pysäkkinäyttö</title>
         {faviconLink}
         {monitorConfig.name === 'hsl' ? fontHSL : fontDefault}
+        {getAdditionalFont(monitorConfig.name)}
       </Helmet>
       <ApolloProvider client={client}>
         <Switch>

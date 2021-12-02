@@ -5,7 +5,11 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
 import { capitalize } from '../util/monitorUtils';
-import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
+import {
+  getColorByName,
+  getIconStyleWithColor,
+  useTilde,
+} from '../util/getConfig';
 
 interface IRoute {
   alerts: any;
@@ -196,6 +200,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     departure?.realtimeDeparture,
     showMinutes * 60,
     departure?.serviceDay,
+    useTilde(),
   );
   const showStopCode = stopSettings?.settings?.showStopNumber;
   const viaSettings = stopSettings?.settings?.showVia;
@@ -339,6 +344,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         <div className={cx('grid-col', 'time', `len${departureTime?.length}`)}>
           {!isCancelled &&
             departureTime?.length > 0 &&
+            useTilde() &&
             !departure?.realtime && <span className={cx('tilde')}>~</span>}
           {departureTime}
         </div>

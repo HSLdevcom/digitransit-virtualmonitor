@@ -83,8 +83,11 @@ const CarouselContainer: FC<IProps> = ({
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
 
-  const [demoOrientation, setDemoOrientation] = useState(0);
-
+  const orientations = ['static', 'vertical', 'horizontal'];
+  const config = getConfig();
+  const [demoOrientation, setDemoOrientation] = useState(
+    orientations.indexOf(config.alertOrientation),
+  );
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
@@ -101,7 +104,7 @@ const CarouselContainer: FC<IProps> = ({
   }, [current]);
 
   const index = Math.floor(current / 2) % views.length;
-  const config = getConfig();
+
   const departures = [
     sortAndFilter(
       [...stationDepartures[index][0], ...stopDepartures[index][0]],
@@ -137,7 +140,6 @@ const CarouselContainer: FC<IProps> = ({
       break;
   }
 
-  const orientations = ['static', 'vertical', 'horizontal'];
   const environment = process.env.NODE_ENV;
   const alertOrientation =
     environment && environment === 'production'

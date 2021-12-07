@@ -200,7 +200,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     departure?.realtimeDeparture,
     showMinutes * 60,
     departure?.serviceDay,
-    useTilde(),
   );
   const showStopCode = stopSettings?.settings?.showStopNumber;
   const viaSettings = stopSettings?.settings?.showVia;

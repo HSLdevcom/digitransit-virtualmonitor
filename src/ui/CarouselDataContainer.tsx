@@ -95,7 +95,9 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(newDepartureArray);
       const arr = alerts.concat(a);
-      setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
+      setAlerts(
+        uniqBy(arr, alert => alert.stop?.gtfsId + ':' + alert.alertHeaderText),
+      );
       setStopsFetched(true);
       setClosedStopViews(closedStopViews);
     }

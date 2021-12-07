@@ -6,9 +6,13 @@
   display: flex;
 
   .title-logo {
+    display: flex;
     flex: 1;
     width: 200px;
     z-index: 1;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 30px;
 
     #logo {
       position: absolute;

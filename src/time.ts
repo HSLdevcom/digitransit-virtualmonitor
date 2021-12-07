@@ -34,13 +34,12 @@ export const formatTime = (
     options.showSeconds ? `:${doubleDigit(timeOfDay.seconds)}` : ''
   }`;
 
-export const getDepartureTime = (time, minutesThreshold, serviceDay, showMinutes) => {
+export const getDepartureTime = (time, minutesThreshold, serviceDay) => {
   const secondsFromMidnight = new Date().setHours(0, 0, 0, 0);
   if (
     time - (getCurrentSeconds() - secondsFromMidnight / 1000) <
       minutesThreshold &&
-    serviceDay * 1000 < DateTime.now().ts &&
-    showMinutes 
+    serviceDay * 1000 < DateTime.now().ts
   ) {
     const diffInMinutes = Math.floor(
       (time - (getCurrentSeconds() - secondsFromMidnight / 1000)) / 60,

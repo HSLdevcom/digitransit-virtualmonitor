@@ -225,12 +225,7 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
       );
     });
   });
-  return [
-    stringsToTranslate,
-    departures,
-    uniqBy(alerts, a => a.alertHeaderText),
-    closedStopViews,
-  ];
+  return [stringsToTranslate, departures, alerts, closedStopViews];
 };
 
 export const isInformationDisplay = cards => {

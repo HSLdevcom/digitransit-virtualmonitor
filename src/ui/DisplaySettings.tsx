@@ -4,6 +4,7 @@ import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';
 import { v4 as uuid } from 'uuid';
+import { getPrimaryColor } from '../util/getConfig';
 
 interface IProps {
   languages: Array<string>;
@@ -25,7 +26,10 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
   };
   return (
     <div className="display-settings-container">
-      <div className="display-orientation-container">
+      <section
+        className="display-orientation-container"
+        aria-label={t('displayDirection')}
+      >
         <div className="orientation-header">{t('displayDirection')}</div>
         <div className="orientation-controls">
           <button
@@ -33,6 +37,8 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
               selected: orientation === 'horizontal',
             })}
             onClick={() => handleOrientation('horizontal')}
+            aria-label={t('displayDirection') + ' ' + t('horizontal')}
+            role="button"
           >
             <Icon
               img={
@@ -49,6 +55,8 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
               selected: orientation === 'vertical',
             })}
             onClick={() => handleOrientation('vertical')}
+            aria-label={t('displayDirection') + ' ' + t('vertical')}
+            role="button"
           >
             <Icon
               img={
@@ -60,27 +68,44 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
             />
           </button>
         </div>
-      </div>
-      <div className="display-language-container">
-        <div className="language-header">{t('displayLanguage')}</div>
-        {languages.length < 1 && (
-          <div className="language-alert">{t('chooseOne')}</div>
+      </section>
+      <section
+        className="display-language-container"
+        aria-label={t('displayLanguages')}
+      >
+        <div className="language-header">{t('displayLanguages')}</div>
+        {languages.length === 0 && (
+          <div className="language-alert" aria-hidden="true">
+            {t('chooseOne')}
+          </div>
         )}
         <div className="language-controls">
-          {options.map(option => {
+          {options.map((option, idx) => {
             return (
               <React.Fragment key={uuid()}>
                 <Checkbox
                   name={option}
-                  checked={isChecked(option)}
-                  onChange={handleChange}
-                />
-                <div>{option.toUpperCase()}</div>
+                  isSelected={isChecked(option)}
+                  onChange={() => handleChange(option)}
+                  aria-label={
+                    t('displayLanguage') +
+                    ' ' +
+                    t(
+                      `languageName${
+                        option.charAt(0).toUpperCase() + option.slice(1)
+                      }`,
+                    )
+                  }
+                  color={getPrimaryColor()}
+                  margin={idx !== 0 ? '0 5px 0 5px' : '0 5px 0 0'}
+                >
+                  {option.toUpperCase()}
+                </Checkbox>
               </React.Fragment>
             );
           })}
         </div>
-      </div>
+      </section>
     </div>
   );
 };

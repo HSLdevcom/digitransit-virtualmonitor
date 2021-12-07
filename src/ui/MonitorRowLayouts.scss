@@ -218,10 +218,6 @@
 }
 
 .preview {
-  .grid-row {
-    height: unset !important;
-  }
-
   .rows4 .grid-row {
     grid-template-columns: 160px 1fr 100px;
     font-size: 30px;

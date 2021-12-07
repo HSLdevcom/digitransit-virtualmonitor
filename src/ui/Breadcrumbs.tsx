@@ -6,8 +6,9 @@ import { getPrimaryColor } from '../util/getConfig';
 
 interface IProps {
   isLogged?: boolean;
+  start?: string;
 }
-const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
+const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
   const parser = document.createElement('a');
   parser.href = window.location.href;
   const arr = parser.pathname.split('/');
@@ -15,25 +16,35 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
   const isModify =
     arr.length > 2 || window.location.href.indexOf('cont=') !== -1;
   let crumb;
-
   switch (path) {
     case 'createview':
     case 'createstaticview':
       crumb = !isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify');
       break;
-    case 'help':
-      crumb = t('breadCrumbsHelp');
+    case null:
+      crumb = isLogged
+        ? t('breadCrumbsOwnMonitors')
+        : start === 'front'
+        ? t('breadCrumbsFrontPage')
+        : null;
       break;
     default:
-      crumb = isLogged ? t('breadCrumbsOwnMonitors') : null;
+      crumb = null;
   }
 
   return (
     <div className="breadcrumbs-container">
       <div className="crumbs">
-        <Link className="to-home" to={'/'}>
-          {t('breadCrumbsSite')}
-        </Link>
+        {start === 'site' && (
+          <Link className="to-home" to={'/'}>
+            {t('breadCrumbsSite')}
+          </Link>
+        )}
+        {start === 'front' && path && (
+          <Link className="to-home" to={'/'}>
+            {t('breadCrumbsFrontPage')}
+          </Link>
+        )}
         {isLogged &&
           crumb !== t('breadCrumbsOwnMonitors') &&
           crumb !== t('breadCrumbsHelp') && (
@@ -44,22 +55,28 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, t }) => {
                 height={14}
                 rotate={'-90'}
                 color={getPrimaryColor()}
+                margin={'0 10px'}
               />
               <Link className="to-home" to={'/?pocLogin'}>
                 {t('breadCrumbsOwnMonitors')}
               </Link>
             </>
           )}
-        <Icon
-          img={'arrow-down'}
-          width={14}
-          height={14}
-          rotate={'-90'}
-          color={getPrimaryColor()}
-        />
+        {crumb !== t('breadCrumbsFrontPage') && (
+          <Icon
+            img={'arrow-down'}
+            width={14}
+            height={14}
+            rotate={'-90'}
+            color={getPrimaryColor()}
+            margin={'0 10px'}
+          />
+        )}
         {crumb}
       </div>
-      <span className="desc">{crumb}</span>
+      <span className="desc">
+        {crumb !== t('breadCrumbsFrontPage') ? crumb : t('breadCrumbsCreate')}
+      </span>
     </div>
   );
 };

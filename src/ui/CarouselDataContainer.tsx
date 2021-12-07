@@ -4,6 +4,14 @@ import {
   GET_STOP_DEPARTURES,
   GET_STATION_DEPARTURES,
 } from '../queries/departureQueries';
+import {
+  GetDeparturesForStations,
+  GetDeparturesForStationsVariables,
+} from '../generated/GetDeparturesForStations';
+import {
+  GetDeparturesForStops,
+  GetDeparturesForStopsVariables,
+} from '../generated/GetDeparturesForStops';
 import { getLayout } from '../util/getLayout';
 import { IView, ITrainData } from '../util/Interfaces';
 import {
@@ -59,14 +67,20 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   const [alerts, setAlerts] = useState([]);
   const [closedStopViews, setClosedStopViews] = useState([]);
 
-  const stationsState = useQuery(GET_STATION_DEPARTURES, {
+  const stationsState = useQuery<
+    GetDeparturesForStations,
+    GetDeparturesForStationsVariables
+  >(GET_STATION_DEPARTURES, {
     variables: { ids: stationIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stationIds.length < 1,
     context: { clientName: 'default' },
   });
 
-  const stopsState = useQuery(GET_STOP_DEPARTURES, {
+  const stopsState = useQuery<
+    GetDeparturesForStops,
+    GetDeparturesForStopsVariables
+  >(GET_STOP_DEPARTURES, {
     variables: { ids: stopIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stopIds.length < 1,
@@ -81,7 +95,9 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(newDepartureArray);
       const arr = alerts.concat(a);
-      setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
+      setAlerts(
+        uniqBy(arr, alert => alert.stop?.gtfsId + ':' + alert.alertHeaderText),
+      );
       setStopsFetched(true);
       setClosedStopViews(closedStopViews);
     }

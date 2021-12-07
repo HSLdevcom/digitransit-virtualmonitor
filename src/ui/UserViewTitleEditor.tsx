@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import Icon from './Icon';
 import { WithTranslation, withTranslation } from 'react-i18next';
-import { focusToInput, onClick } from './InputUtils';
+import { focusToInput, onClick } from '../util/InputUtils';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { Redirect } from 'react-router-dom';
 import monitorAPI from '../api';
@@ -71,7 +71,7 @@ const UserViewTitleEditor: FC<IProps & WithTranslation> = ({
           onChange={e => onChange(e)}
           maxLength={25}
           onKeyDown={e => isKeyboardSelectionEvent(e)}
-          onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
+          onBlur={e => onBlur(e)}
           onFocus={e => {
             handleFocus(e);
           }}

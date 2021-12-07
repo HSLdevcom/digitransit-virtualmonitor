@@ -62,12 +62,14 @@ $preview-grid-divider: 2px;
 }
 
 .main-content-container.preview {
+  padding: 0;
+
   .grid-row.alert {
     left: -5px;
   }
 
   .monitor-container {
-    height: calc(90% - 30px);
+    height: 78.91%;
 
     .grid.two-cols {
       margin: 0 5px;
@@ -110,6 +112,14 @@ $preview-grid-divider: 2px;
       }
 
       .grid-row {
+        .grid-col {
+          svg {
+            width: 24px !important;
+            height: 24px !important;
+            display: flex;
+          }
+        }
+
         &.alert {
           font-size: 35px !important;
 
@@ -138,9 +148,14 @@ $preview-grid-divider: 2px;
 
     .grid {
       height: 100%;
+      margin: 0 5px;
 
       .grid-headers {
         height: 25px;
+
+        .grid-row {
+          height: 25px;
+        }
 
         .grid-header {
           font-size: 16px;
@@ -149,10 +164,20 @@ $preview-grid-divider: 2px;
     }
 
     &.portrait {
-      height: calc(95% - 30px);
+      height: calc(100% - 30px);
 
       .grid-rows.tightened {
         height: calc(50% - 12.5px);
+      }
+    }
+
+    &.preview {
+      &.portrait {
+        height: 534px;
+
+        &.tightened {
+          height: 534px;
+        }
       }
     }
   }
@@ -160,10 +185,12 @@ $preview-grid-divider: 2px;
 
 .main-content-container {
   background-color: $monitor-background-color;
-  font-family: $font-family-narrow;
+  font-family: $monitor-font;
+  font-weight: $monitor-font-weight;
   letter-spacing: -0.2px;
   color: #fff;
   height: 100%;
+  padding: 15px 0;
 
   .monitor-container {
     .no-departures-text-container {
@@ -192,7 +219,7 @@ $preview-grid-divider: 2px;
     }
 
     &.portrait {
-      height: calc(100% - 7vh - 30px);
+      height: calc(100% - 12.75vh);
     }
 
     .divider {
@@ -213,7 +240,8 @@ $preview-grid-divider: 2px;
       }
     }
 
-    height: calc(100% - 10vh - 30px); // 100% - height of logo bar
+    height: 78.91%;
+
     &.two-cols {
       display: flex;
 
@@ -395,13 +423,21 @@ $preview-grid-divider: 2px;
       .grid-col {
         align-self: center;
 
+        &.icon {
+          svg {
+            display: flex;
+            width: 7vh !important;
+            height: 7vh !important;
+          }
+        }
+
         .line-letter {
           font-size: smaller;
         }
 
         &.time {
           text-align: end;
-          font-family: $font-family;
+          font-family: $monitor-font;
         }
       }
 
@@ -414,6 +450,9 @@ $preview-grid-divider: 2px;
 
       &.two-rows {
         .destination > .via-destination {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
           white-space: nowrap;
         }
       }
@@ -422,11 +461,15 @@ $preview-grid-divider: 2px;
         svg {
           min-height: 0.9em !important;
           min-width: 0.9em !important;
+          max-height: 0.9em !important;
+          max-width: 0.9em !important;
           align-self: center;
         }
 
         .destination-row {
           display: flex;
+          justify-content: flex-start;
+          align-items: center;
 
           .metro-icon {
             position: relative;

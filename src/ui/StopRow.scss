@@ -33,7 +33,9 @@
 
   .stop-bottom-row {
     color: #666;
-    font-size: 0.8125rem;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: -0.03em;
     display: flex;
 
     .address {
@@ -58,7 +60,10 @@
     padding-top: 2px;
 
     .stop-upper-row {
-      font-size: 0.9375rem;
+      font-weight: $font-weight-bigger;
+      font-size: 13px;
+      line-height: 16px;
+      letter-spacing: -0.03em;
       margin-bottom: 2px;
       display: flex;
 

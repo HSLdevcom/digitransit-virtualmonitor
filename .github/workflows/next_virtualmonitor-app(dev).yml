@@ -1,21 +1,41 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy container app to Azure Web App - DEV Virtual monitor
+name: DEV - increment version and deploy
 
 on:
   push:
-    branches:
-      - next
-  workflow_dispatch:
+   branches:
+     - next
 
 jobs:
-  build-and-deploy:
-    runs-on: 'ubuntu-latest'
+  version-increment: 
+    runs-on: ubuntu-latest
+    if: "!startsWith(github.event.head_commit.message, '[DEPLOY]')"
 
     steps:
-    - uses: actions/checkout@master
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GIT_SECRET }}
+      - run: git config --global user.name 'Digitransit'
+      - run: git config --global user.email 'digitransit@hsl.fi'
+      - name: major 
+        run: npm version major -m "[DEPLOY] %s"
+        if: "contains(github.event.head_commit.message, '[MAJOR]')"
+      - name: minor
+        run: npm version minor -m "[DEPLOY] %s"
+        if: "contains(github.event.head_commit.message, '[MINOR]')"
+      - name: patch
+        run: npm version patch -m "[DEPLOY] %s"
+        if: "!contains(github.event.head_commit.message, '[MAJOR]') && !contains(github.event.head_commit.message, '[MINOR]')"
+      - run: git push
 
+  build-and-deploy:
+    runs-on: 'ubuntu-latest'
+    if: "startsWith(github.event.head_commit.message, '[DEPLOY]')"
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
     - uses: azure/docker-login@v1
       with:
         login-server: https://index.docker.io/v1/

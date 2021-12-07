@@ -1,8 +1,4 @@
-import ApolloBoostClient, { InMemoryCache } from 'apollo-boost';
-
 import ApolloClientsContextCreator from './ApolloClientsContextCreator';
-
-const apolloCache = new InMemoryCache();
 
 // const resolvers = {
 //   Mutation: {

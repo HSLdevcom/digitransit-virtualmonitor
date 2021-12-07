@@ -1,11 +1,60 @@
 import * as React from 'react';
 import Async, { Props as AsyncProps } from 'react-promise';
-
-import { IDisplay } from './ConfigurationList';
 import createUrlCompression from '../urlCompression';
 import OldMonitorParser from './OldMonitorParser';
 import Loading from './Loading';
 
+export interface ILatLon {
+  readonly lat: number;
+  readonly lon: number;
+}
+interface INode {
+  readonly id?: string;
+  readonly __typename?: string;
+}
+
+interface ITranslatedString {
+  readonly [twoLetterLanguageCode: string]: string;
+}
+
+export interface IStop extends INode {
+  readonly gtfsId: string;
+  readonly overrideStopName?: string;
+}
+
+export interface IViewBase extends INode {
+  readonly title?: ITranslatedString;
+  readonly type: string;
+}
+
+export interface IStopTimesView extends IViewBase {
+  readonly displayedRoutes?: number;
+  readonly pierColumnTitle?: string;
+  readonly stops: ReadonlyArray<IStop>;
+}
+
+type AnyView = IStopTimesView;
+
+export interface IViewCarouselElement extends INode {
+  readonly view: AnyView;
+  readonly displaySeconds: number;
+}
+
+export type IViewCarousel = ReadonlyArray<IViewCarouselElement>;
+
+export interface IDisplay extends INode {
+  readonly position?: ILatLon;
+  readonly name: string;
+  readonly viewCarousel: IViewCarousel;
+}
+
+export interface IConfiguration extends INode {
+  readonly name?: string;
+  readonly displays: ReadonlyArray<IDisplay>;
+  readonly position?: ILatLon;
+}
+
+export type IConfigurations = ReadonlyArray<IConfiguration>;
 interface IDisplayUrlCompressionProps {
   readonly version: string;
   readonly packedString: string;

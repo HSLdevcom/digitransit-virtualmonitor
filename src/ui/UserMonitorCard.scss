@@ -94,7 +94,7 @@
             position: relative;
             top: -5px;
             font-style: normal;
-            font-weight: bold;
+            font-weight: $font-weight-bigger;
             font-size: 15px;
             line-height: 24px;
             letter-spacing: -0.03em;
@@ -130,7 +130,7 @@
             }
 
             font-style: normal;
-            font-weight: normal;
+            font-weight: $font-weight;
             font-size: 15px;
             line-height: 18px;
             letter-spacing: -0.03em;

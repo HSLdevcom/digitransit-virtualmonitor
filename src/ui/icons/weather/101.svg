@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="40px" height="40px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>101</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons-night" transform="translate(-25.000000, -6.000000)" fill-rule="nonzero">
+            <g id="101" transform="translate(35.314577, 16.375618)">
+                <ellipse id="Oval" fill="#BEE4F8" cx="10.0428468" cy="10.0399543" rx="10.0428468" ry="10.0399543"></ellipse>
+                <path d="M1.60292571,15.4836779 C3.17213922,16.4985351 5.04256831,17.0877008 7.05063896,17.0877008 C12.5971948,17.0877008 17.0934857,12.5926068 17.0934857,7.04774649 C17.0934857,5.04127169 16.504719,3.17223896 15.4904603,1.60392312 C18.2556592,3.39226597 20.0856935,6.50246649 20.0856935,10.0399543 C20.0856935,15.5848145 15.5894026,20.0798088 10.0428468,20.0798088 C6.50336416,20.0798088 3.39156779,18.2493756 1.60292571,15.4836779 Z" id="Path" fill="#7CCDF9" opacity="0.7"></path>
+            </g>
+        </g>
+    </g>
+</svg>

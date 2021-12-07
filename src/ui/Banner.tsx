@@ -1,71 +1,43 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { IMonitorConfig } from '../App';
-import Icon from './Icon';
 import Logo from './logo/Logo';
-import { slide as Menu } from 'react-burger-menu';
-import { getPrimaryColor } from '../util/getConfig';
+import BurgerMenu from './BurgerMenu';
+import Icon from './Icon';
 
 interface Props {
   config?: IMonitorConfig;
   user?: any; // todo: refactor when we have proper user
 }
-const Banner: React.FC<Props & WithTranslation> = (
-  props: Props & WithTranslation,
-) => {
-  const changeLanguage = (i18n, lang) => {
-    i18n.changeLanguage(lang);
+const Banner: React.FC<Props & WithTranslation> = ({ config, user, t }) => {
+  const [isOpen, changeOpen] = useState(false);
+
+  const setOpen = () => {
+    changeOpen(true);
   };
+
+  const setClose = () => {
+    changeOpen(false);
+  };
+
   return (
-    <div className="banner">
-      <Logo isLandscape monitorConfig={props.config} />
-      <Menu
-        right
-        width="400px"
-        customCrossIcon={
-          <Icon img="close" color={getPrimaryColor()} width={25} />
-        }
-      >
-        <div className="lang-section">
-          <span
-            className="lang-select"
-            onClick={() => changeLanguage(props.i18n, 'fi')}
-          >
-            FI
-          </span>
-          <span
-            className="lang-select"
-            onClick={() => changeLanguage(props.i18n, 'sv')}
-          >
-            SV
-          </span>
-          <span
-            className="lang-select"
-            onClick={() => changeLanguage(props.i18n, 'en')}
-          >
-            EN
-          </span>
-        </div>
-        <div className="link-section">
-          <Link className="link" to={'/'}>
-            {props.t('breadCrumbsSite')}
-          </Link>
-          <Link
-            className="link"
-            to={
-              props.user && props.user.loggedIn
-                ? '/createStaticView'
-                : '/createView'
-            }
-          >
-            {props.t('createViewTitle')}
-          </Link>
-          <Link className="link" to={'/help'}>
-            {props.t('breadCrumbsHelp')}
-          </Link>
-        </div>
-      </Menu>
+    <div className="main-banner">
+      <Logo isLandscape monitorConfig={config} />
+      <div className="menu-container">
+        <button
+          className="menu-button"
+          role="button"
+          aria-label={t('menuOpen')}
+          onClick={setOpen}
+        >
+          <Icon img="menu" width={40} height={40} color={'white'} />
+        </button>
+      </div>
+      <BurgerMenu
+        isOpen={isOpen}
+        onClose={setClose}
+        createStatic={user && user.loggedIn}
+      />
     </div>
   );
 };

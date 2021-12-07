@@ -3,7 +3,7 @@ import Icon from './Icon';
 
 export const horizontalLayouts = [
   {
-    label: 'Yksijakoinen',
+    label: 'one-column',
     options: [
       {
         value: '1',
@@ -13,6 +13,7 @@ export const horizontalLayouts = [
             <span className="label">4</span>
           </>
         ),
+        rows: '4',
       },
       {
         value: '2',
@@ -22,6 +23,7 @@ export const horizontalLayouts = [
             <span className="label">8</span>
           </>
         ),
+        rows: '8',
       },
       {
         value: '3',
@@ -31,11 +33,12 @@ export const horizontalLayouts = [
             <span className="label">12</span>
           </>
         ),
+        rows: '12',
       },
     ],
   },
   {
-    label: 'Kaksijakoinen',
+    label: 'two-columns',
     options: [
       {
         value: '4',
@@ -45,6 +48,7 @@ export const horizontalLayouts = [
             <span className="label">4+4</span>
           </>
         ),
+        rows: '4+4',
       },
       {
         value: '5',
@@ -54,6 +58,7 @@ export const horizontalLayouts = [
             <span className="label">8+8</span>
           </>
         ),
+        rows: '8+8',
       },
       {
         value: '6',
@@ -63,11 +68,12 @@ export const horizontalLayouts = [
             <span className="label">12+12</span>
           </>
         ),
+        rows: '12+12',
       },
     ],
   },
   {
-    label: 'Kaksijakoinen yhdistelmä',
+    label: 'two-columns-combo',
     options: [
       {
         value: '7',
@@ -77,6 +83,7 @@ export const horizontalLayouts = [
             <span className="label">4+8</span>
           </>
         ),
+        rows: '4+8',
       },
       {
         value: '8',
@@ -86,11 +93,12 @@ export const horizontalLayouts = [
             <span className="label">8+12</span>
           </>
         ),
+        rows: '8+12',
       },
     ],
   },
   {
-    label: 'Itään / länteen',
+    label: 'layoutEastWest',
     options: [
       {
         value: '9',
@@ -100,6 +108,7 @@ export const horizontalLayouts = [
             <span className="label">4+4</span>
           </>
         ),
+        rows: '4+4',
       },
       {
         value: '10',
@@ -109,6 +118,7 @@ export const horizontalLayouts = [
             <span className="label">8+8</span>
           </>
         ),
+        rows: '8+8',
       },
       {
         value: '11',
@@ -118,6 +128,7 @@ export const horizontalLayouts = [
             <span className="label">12+12</span>
           </>
         ),
+        rows: '12+12',
       },
     ],
   },
@@ -125,7 +136,7 @@ export const horizontalLayouts = [
 
 export const verticalLayouts = [
   {
-    label: 'Yksinkertainen',
+    label: 'simple',
     options: [
       {
         value: '12',
@@ -135,6 +146,7 @@ export const verticalLayouts = [
             <span className="label">8</span>
           </>
         ),
+        rows: '8',
       },
       {
         value: '13',
@@ -144,6 +156,7 @@ export const verticalLayouts = [
             <span className="label">12</span>
           </>
         ),
+        rows: '12',
       },
       {
         value: '14',
@@ -153,6 +166,7 @@ export const verticalLayouts = [
             <span className="label">16</span>
           </>
         ),
+        rows: '16',
       },
       {
         value: '15',
@@ -162,11 +176,12 @@ export const verticalLayouts = [
             <span className="label">24</span>
           </>
         ),
+        rows: '24',
       },
     ],
   },
   {
-    label: 'Tiivistyvä',
+    label: 'tighten',
     options: [
       {
         value: '16',
@@ -176,6 +191,7 @@ export const verticalLayouts = [
             <span className="label">4+6</span>
           </>
         ),
+        rows: '4+6',
       },
       {
         value: '17',
@@ -185,16 +201,8 @@ export const verticalLayouts = [
             <span className="label">6+12</span>
           </>
         ),
+        rows: '6+12',
       },
-      /*{
-        value: '17',
-        label: (
-          <>
-            <Icon img="layout1" height={90} width={160} />
-            <span className="label">2+4+12</span>
-          </>
-        ),
-      },*/
     ],
   },
 ];

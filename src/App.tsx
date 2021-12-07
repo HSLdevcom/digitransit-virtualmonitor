@@ -1,16 +1,11 @@
 /* eslint-disable no-empty-pattern */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import Breadcrumbs from './ui/Breadcrumbs';
 import Banner from './ui/Banner';
-import ConfigurationDisplay from './ui/ConfigurationDisplay';
-import ConfigurationList from './ui/ConfigurationList';
-import DisplayEditor from './ui/DisplayEditor';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
-import HelpPage from './ui/HelpPage';
-import QuickDisplay from './ui/QuickDisplay';
 import CreateViewPage from './ui/CreateViewPage';
 import Version from './ui/Version';
 import WithDatabaseConnection from './ui/WithDatabaseConnection';
@@ -19,7 +14,10 @@ import {
   defaultColorFont,
   defaultFontNarrow,
   defaultFontNormal,
+  defaultFontWeightNormal,
+  defaultFontWeightBigger,
 } from './ui/DefaultStyles';
+import { Helmet } from 'react-helmet';
 
 import {
   ApolloClient,
@@ -34,10 +32,23 @@ import StopMonitorContainer from './ui/StopMonitorContainer';
 
 import './sass/main.scss';
 
+import SkipToMainContent from './ui/SkipToMainContent';
+
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
     normal?: string;
     narrow?: string;
+    weights?: {
+      normal?: string;
+      bigger?: string;
+    }
+    monitor?: {
+      name?: string,
+      weights?: {
+        normal?: string;
+        bigger?: string;
+      }
+    }
   };
   colors?: {
     alert?: string;
@@ -62,6 +73,7 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     postfix?: string;
     setName?: string;
   };
+  allowLogin?: boolean;
 }
 export interface IMonitorConfig {
   name?: string;
@@ -73,6 +85,7 @@ export interface IMonitorConfig {
   urlParamFindText?: string;
   urlParamFindAltText?: string;
   showMinutes?: string;
+  breadCrumbsStartPage?: string;
 }
 
 export interface IQueryString {
@@ -114,7 +127,25 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
   };
   // ----------                                 ----------
   const monitorConfig: IExtendedMonitorConfig = props.monitorConfig;
-
+  const style = {
+    '--alert-color': monitorConfig.colors.alert || defaultColorAlert,
+    '--font-color': monitorConfig.colors.font || defaultColorFont,
+    '--font-family': monitorConfig.fonts?.normal || defaultFontNormal,
+    '--font-family-narrow': monitorConfig.fonts?.narrow || defaultFontNarrow,
+    '--font-weight': monitorConfig.fonts?.weights?.normal || defaultFontWeightNormal,
+    '--font-weight-bigger': monitorConfig.fonts?.weights?.bigger || defaultFontWeightBigger,
+    '--monitor-background-color':
+      monitorConfig.colors.monitorBackground || monitorConfig.colors.primary,
+    '--monitor-font': monitorConfig.fonts?.monitor?.name || defaultFontNormal,
+    '--monitor-font-weight': monitorConfig.fonts?.monitor?.weights?.normal || defaultFontWeightNormal,
+    '--monitor-font-weight-bigger': monitorConfig.fonts?.monitor?.weights?.bigger || defaultFontWeightBigger,
+    '--primary-color': monitorConfig.colors.primary,
+  };
+  useEffect(() => {
+    for (const i in style) {
+      document.body.style.setProperty(i, style[i]);
+    }
+  }, []);
   const client = new ApolloClient({
     link: ApolloLink.from([
       new MultiAPILink({
@@ -129,39 +160,46 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     ]),
     cache: new InMemoryCache(),
   });
-  let helpPageUrlParamText = '';
-  let helpPageurlMultipleStopsText = '';
-  let helpPageUrlParamFindText = '';
-  let helpPageUrlParamFindAltText = '';
 
-  if (monitorConfig) {
-    // set texts for help page.
-    helpPageUrlParamText = monitorConfig.urlParamUsageText
-      ? monitorConfig.urlParamUsageText
-      : '';
-    helpPageurlMultipleStopsText = monitorConfig.urlMultipleStopsText
-      ? monitorConfig.urlMultipleStopsText
-      : '';
-    helpPageUrlParamFindText = monitorConfig.urlParamFindText
-      ? monitorConfig.urlParamFindText
-      : '';
-    helpPageUrlParamFindAltText = monitorConfig.urlParamFindAltText
-      ? monitorConfig.urlParamFindAltText
-      : '';
-  }
+  const favicon = monitorConfig.name.concat('.png');
+  const faviconLink = <link rel="shortcut icon" href={favicon} />;
+  const fontHSL = (
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cloud.typography.com/6364294/7432412/css/fonts.css"
+    />
+  );
+  const fontDefault = (
+    <link
+      rel="stylesheet"
+      href="https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"
+    />
+  );
 
-  const style = {
-    '--alert-color': monitorConfig.colors.alert || defaultColorAlert,
-    '--font-color': monitorConfig.colors.font || defaultColorFont,
-    '--font-family': monitorConfig.fonts?.normal || defaultFontNormal,
-    '--font-family-narrow': monitorConfig.fonts?.narrow || defaultFontNarrow,
-    '--monitor-background-color':
-      monitorConfig.colors.monitorBackground || monitorConfig.colors.primary,
-    '--primary-color': monitorConfig.colors.primary,
-  } as React.CSSProperties;
+  const fontTampere = (
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Lato"
+    />
+  );
 
+  const getAdditionalFont = name => {
+    switch (name) {
+      case 'tampere':
+        return fontTampere;
+      default:
+        return null;
+    }
+  };
   return (
-    <div className="App" style={style}>
+    <div className="App">
+      <Helmet>
+        <title>{monitorConfig.name} - pysäkkinäyttö</title>
+        {faviconLink}
+        {monitorConfig.name === 'hsl' ? fontHSL : fontDefault}
+        {getAdditionalFont(monitorConfig.name)}
+      </Helmet>
       <ApolloProvider client={client}>
         <Switch>
           <Route
@@ -172,9 +210,14 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
-                <Banner config={monitorConfig} />
-                <Breadcrumbs />
-                <CreateViewPage config={monitorConfig} />
+                <SkipToMainContent />
+                <section aria-label="navigation">
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs start={monitorConfig.breadCrumbsStartPage} />
+                </section>
+                <section role="main" id="mainContent">
+                  <CreateViewPage config={monitorConfig} />
+                </section>
               </>
             )}
           />
@@ -186,40 +229,23 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
-                <Banner config={monitorConfig} />
-                <Breadcrumbs isLogged={user.loggedIn} />
-                <CreateViewPage config={monitorConfig} user={user} />
+                <SkipToMainContent />
+                <section aria-label="navigation">
+                  <Banner config={monitorConfig} />
+                  <Breadcrumbs
+                    isLogged={user.loggedIn && monitorConfig.allowLogin}
+                    start={monitorConfig.breadCrumbsStartPage}
+                  />
+                </section>
+                <section role="main" id="mainContent">
+                  <CreateViewPage config={monitorConfig} user={user} />
+                </section>
               </>
             )}
-          />
-          <Route
-            path={'/quickDisplay/:version?/:packedDisplay?'}
-            component={QuickDisplay}
           />
           <Route path={'/view'} component={WithDatabaseConnection} />
           <Route path={'/static'} component={WithDatabaseConnection} />
           <Route path={'/version'} component={Version} />
-          <Route
-            path={'/help'}
-            // eslint-disable-next-line no-empty-pattern
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <>
-                <Banner config={monitorConfig} />
-                <Breadcrumbs isLogged={user.loggedIn} />
-                <HelpPage
-                  urlParamUsageText={helpPageUrlParamText}
-                  urlMultipleStopsText={helpPageurlMultipleStopsText}
-                  urlParamFindText={helpPageUrlParamFindText}
-                  urlParamFindAltText={helpPageUrlParamFindAltText}
-                  content={props.search.cont}
-                />
-              </>
-            )}
-          />
           <Route
             path={'/urld/:version/:packedDisplay'}
             component={({
@@ -238,19 +264,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
             }}
           />
           <Route
-            path={'/configuration/:configuration/display/:display'}
-            component={({
-              match: {
-                params: { configuration, displayName },
-              },
-            }: RouteComponentProps<IConfigurationDisplayRouteParams>) => (
-              <ConfigurationDisplay
-                configurationName={configuration}
-                displayName={displayName}
-              />
-            )}
-          />
-          <Route
             path={'/stop/:stopId/:layout?'}
             component={({
               match: {
@@ -265,8 +278,6 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               />
             )}
           />
-          <Route path={'/configs/:configName?'} component={ConfigurationList} />
-          <Route path={'/displayEditor/'} component={DisplayEditor} />
           <Route
             path={'/'}
             component={({
@@ -275,6 +286,7 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               },
             }: RouteComponentProps<IMonitorConfig>) => (
               <>
+                <SkipToMainContent />
                 <LandingPage
                   login={props.search?.pocLogin}
                   config={monitorConfig}

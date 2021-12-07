@@ -25,6 +25,7 @@ interface IProps {
   showMinutes?: number;
   closedStopViews: Array<IClosedStop>;
   error?: string;
+  preview: boolean;
 }
 const hasColumn = value => value === false;
 
@@ -44,6 +45,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   showMinutes,
   closedStopViews,
   error,
+  preview,
   t,
 }) => {
   const DATE_FORMAT = 'dd.MM.yyyy HH:mm';
@@ -58,13 +60,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   const nextDayDepartureIndexLeft = departuresLeft
     .slice(0, leftColumnCount)
     .findIndex(departure => departure.serviceDay === nextDay.getTime() / 1000);
-
-  const currentDayDeparturesLeft = departuresLeft
-    .slice(0, leftColumnCount)
-    .filter(departure => departure.serviceDay === currentDay.getTime() / 1000);
-  const nextDayDeparturesLeft = departuresLeft
-    .slice(0, leftColumnCount)
-    .filter(departure => departure.serviceDay === nextDay.getTime() / 1000);
 
   if (nextDayDepartureIndexLeft !== -1) {
     departuresLeft.splice(nextDayDepartureIndexLeft, 0, null);
@@ -136,7 +131,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         stops={leftStops}
         currentLang={currentLang}
         dayForDivider={
-          i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
+          i === nextDayDepartureIndexLeft
+            ? formatDate(nextDay, currentLang)
+            : undefined
         }
         showMinutes={showMinutes || 0}
         withoutRouteColumn={withoutRouteColumn}
@@ -168,7 +165,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             withTwoColumns={withTwoColumns}
             alertState={alertState}
             dayForDivider={
-              i === nextDayDepartureIndexLeft ? formatDate(nextDay) : undefined
+              i === nextDayDepartureIndexLeft
+                ? formatDate(nextDay, currentLang)
+                : undefined
             }
             currentLang={currentLang}
             showMinutes={showMinutes || 0}
@@ -192,7 +191,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
             withTwoColumns={withTwoColumns}
             alertState={alertState}
             dayForDivider={
-              i === nextDayDepartureIndexRight ? formatDate(nextDay) : undefined
+              i === nextDayDepartureIndexRight
+                ? formatDate(nextDay, currentLang)
+                : undefined
             }
             currentLang={currentLang}
             showMinutes={showMinutes || 0}
@@ -219,6 +220,11 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
         hasRouteColumn.push(true);
       }
     });
+
+    if (stops.length === 0 && hasRouteColumn.length === 0) {
+      hasRouteColumn.push(true);
+    }
+
     const withoutRouteColumn = hasRouteColumn.every(hasColumn);
     return (
       <div
@@ -249,7 +255,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           </div>
           {withStopCode && (
             <div className={cx('grid-header', 'platform-code')}>
-              {t('platform/stop', { lng: currentLang })}
+              {t('platform-or-stop', { lng: currentLang })}
             </div>
           )}
           <div className={cx('grid-header', 'time')}>
@@ -271,8 +277,10 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   return (
     <div
       className={cx('monitor-container', {
+        preview: preview,
         portrait: !isLandscape,
         'two-cols': withTwoColumns,
+        tightened: isTighten,
       })}
     >
       <div

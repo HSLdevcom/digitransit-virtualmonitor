@@ -1,5 +1,7 @@
 import React, { useEffect, FC, useState } from 'react';
 import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
+import { stopQuery, stopQueryVariables } from '../generated/stopQuery';
+import { stationQuery, stationQueryVariables } from '../generated/stationQuery';
 import { useQuery } from '@apollo/client';
 import StopCardListContainer from './StopCardListContainer';
 import { sortBy, uniqBy } from 'lodash';
@@ -21,17 +23,16 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
   stopIds,
   stationIds,
   languages,
-  t,
   loading,
   user,
 }) => {
   const [cardList, setCardList] = useState(stopCardList);
-  const stops = useQuery(GET_STOP, {
+  const stops = useQuery<stopQuery, stopQueryVariables>(GET_STOP, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
     context: { clientName: 'default' },
   });
-  const stations = useQuery(GET_STATION, {
+  const stations = useQuery<stationQuery, stationQueryVariables>(GET_STATION, {
     variables: { ids: stationIds },
     skip: stationIds.length < 1,
     context: { clientName: 'default' },
@@ -99,7 +100,6 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
             richCard[j].columns.left.stops[leftIndex] = {
               ...richCard[j].columns.left.stops[leftIndex],
               ...station,
-              code: station.stops[0].code, //t('station'),
               desc: station.stops[0].desc,
               patterns: sortBy(
                 sortBy(patterns, 'pattern.route.shortname'),

@@ -1,12 +1,9 @@
 import React, { FC, useState, useEffect } from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { IStop } from '../util/Interfaces';
-import Icon from './Icon';
 import StopListTitleInput from './StopListTitleInput';
 import StopRow from './StopRow';
 import { v4 as uuid } from 'uuid';
-import cx from 'classnames';
-import { focusToInput, onClick } from './InputUtils';
 import { getLayout } from '../util/getLayout';
 import { ICardInfo } from './CardInfo';
 
@@ -34,19 +31,11 @@ interface Props {
 
 const TitleItem = props => {
   const [titleLeft, setTitleLeft] = useState('');
-  const [titleLang, setTitleLang] = useState('');
   const [changedLeft, setChangedLeft] = useState(false);
   const [titleRight, setTitleRight] = useState('');
   const [changedRight, setChangedRight] = useState(false);
-  const [focus, setFocus] = useState(false);
-  const {
-    cardInfo,
-    side,
-    updateCardInfo,
-    leftItemsHeader,
-    rightItemsHeader,
-    languages,
-  } = props;
+  const { cardInfo, side, updateCardInfo, leftItemsHeader, rightItemsHeader } =
+    props;
 
   const setTitle = (
     side: string,
@@ -137,74 +126,78 @@ const StopList = props => {
   const showStopTitles = getLayout(cardInfo.layout).isMultiDisplay;
 
   return (
-    <div>
+    <>
+      <section id={'left'}>
+        <div>
+          {showStopTitles && (
+            <TitleItem
+              side="left"
+              titleLeft={leftTitle}
+              leftItemsHeader={leftItemsHeader}
+              cardInfo={cardInfo}
+              updateCardInfo={updateCardInfo}
+              languages={languages}
+            />
+          )}
+          {showStopTitles && leftItems.length === 0 && (
+            <StopListPlaceHolder text={leftItemsPlaceHolder} />
+          )}
+          <ul className="stops">
+            {leftItems &&
+              leftItems.map((item, index) => {
+                return (
+                  <li key={`s-${index}`} className="stop">
+                    <StopRow
+                      key={uuid()}
+                      stop={item}
+                      side={'left'}
+                      onStopDelete={props.onStopDelete}
+                      onStopMove={props.onStopMove}
+                      setStops={props.setStops}
+                      rightStops={rightItems}
+                    />
+                  </li>
+                );
+              })}
+          </ul>
+        </div>
+      </section>
       {showStopTitles && (
-        <TitleItem
-          side="left"
-          titleLeft={leftTitle}
-          leftItemsHeader={leftItemsHeader}
-          cardInfo={cardInfo}
-          updateCardInfo={updateCardInfo}
-          languages={languages}
-        />
+        <section id={'right'}>
+          <TitleItem
+            side="right"
+            titleRight={rightTitle}
+            rightItemsHeader={rightItemsHeader}
+            cardInfo={cardInfo}
+            updateCardInfo={updateCardInfo}
+            languages={languages}
+          />
+          {showStopTitles && rightItems.length === 0 && (
+            <StopListPlaceHolder text={rightItemsPlaceHolder} />
+          )}
+          <div>
+            <ul className="stops">
+              {rightItems &&
+                rightItems.map(item => {
+                  return (
+                    <li className="stop" key={uuid()}>
+                      <StopRow
+                        key={uuid()}
+                        stop={item}
+                        side={'right'}
+                        onStopDelete={props.onStopDelete}
+                        onStopMove={props.onStopMove}
+                        setStops={props.setStops}
+                        leftStops={leftItems}
+                      />
+                    </li>
+                  );
+                })}
+            </ul>
+          </div>
+        </section>
       )}
-      {showStopTitles && leftItems.length === 0 && (
-        <StopListPlaceHolder text={leftItemsPlaceHolder} />
-      )}
-      <div>
-        <ul className="stops">
-          {leftItems &&
-            leftItems.map((item, index) => {
-              return (
-                <li key={`s-${index}`} className="stop">
-                  <StopRow
-                    key={uuid()}
-                    stop={item}
-                    side={'left'}
-                    onStopDelete={props.onStopDelete}
-                    onStopMove={props.onStopMove}
-                    setStops={props.setStops}
-                    rightStops={rightItems}
-                  />
-                </li>
-              );
-            })}
-        </ul>
-      </div>
-      {showStopTitles && (
-        <TitleItem
-          side="right"
-          titleRight={rightTitle}
-          rightItemsHeader={rightItemsHeader}
-          cardInfo={cardInfo}
-          updateCardInfo={updateCardInfo}
-          languages={languages}
-        />
-      )}
-      {showStopTitles && rightItems.length === 0 && (
-        <StopListPlaceHolder text={rightItemsPlaceHolder} />
-      )}
-      <div>
-        <ul className="stops">
-          {rightItems &&
-            rightItems.map(item => {
-              return (
-                <li className="stop" key={uuid()}>
-                  <StopRow
-                    key={uuid()}
-                    stop={item}
-                    side={'right'}
-                    onStopDelete={props.onStopDelete}
-                    onStopMove={props.onStopMove}
-                    setStops={props.setStops}
-                    leftStops={leftItems}
-                  />
-                </li>
-              );
-            })}
-        </ul>
-      </div>
-    </div>
+    </>
   );
 };
 

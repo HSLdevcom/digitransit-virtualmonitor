@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { IMonitorConfig, IView, IWeatherData } from '../util/Interfaces';
-import Icon from './Icon';
+import Icon, { iconExists } from './Icon';
 import Logo from './logo/Logo';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
@@ -17,6 +17,7 @@ interface IProps {
   showTitle?: boolean;
   weatherData?: IWeatherData;
 }
+
 const MonitorTitlebar: FC<IProps> = ({
   weatherData,
   currentTime,
@@ -28,22 +29,35 @@ const MonitorTitlebar: FC<IProps> = ({
   currentLang,
   showTitle = false,
 }) => {
+  let temperature;
   let weatherIconString;
-  let tempLabel;
+  let weatherIconExists = false;
+
   if (weatherData) {
     weatherIconString = 'weather'.concat(weatherData.iconId).toString();
-    const temperature = weatherData.temperature;
-    tempLabel = `${Math.round(temperature)}\u00B0C`; // Temperature with Celsius
+    weatherIconExists = iconExists(weatherIconString);
+    temperature = `${Math.round(weatherData.temperature)}\u00B0C`; // Temperature with Celsius
   }
+
   return (
-    <Titlebar isPreview={preview} isLandscape={isLandscape}>
+    <Titlebar
+      isPreview={preview}
+      isLandscape={isLandscape}
+      isMultiDisplay={isMultiDisplay}
+    >
       <Logo
         monitorConfig={config}
         isPreview={preview}
         isLandscape={isLandscape}
+        forMonitor={true}
       />
       {!isMultiDisplay && showTitle && (
-        <div className={cx('title-text', { preview: preview })}>
+        <div
+          className={cx('title-text', {
+            preview: preview,
+            portrait: !isLandscape,
+          })}
+        >
           {view.title[currentLang]}
         </div>
       )}
@@ -52,15 +66,29 @@ const MonitorTitlebar: FC<IProps> = ({
           <div className={cx('left-title', { preview: preview })}>
             {view.columns.left.title[currentLang]}
           </div>
+          <div></div>
           <div className={cx('right-title', { preview: preview })}>
             {view.columns.right.title[currentLang]}
           </div>
         </div>
       )}
-      <div className={cx('weather-container', { preview: preview })}>
-        <Icon img={weatherIconString} width={50} height={50} />
-        <span className="temperature">{tempLabel}</span>
-      </div>
+      {weatherData && (
+        <div
+          className={cx('weather-container', {
+            preview: preview,
+            onlyTemperature: !weatherIconExists,
+          })}
+        >
+          {weatherIconExists && (
+            <div className="icon-container">
+              <Icon img={weatherIconString} width={10} height={10} />
+            </div>
+          )}
+          <div className="temperature-container">
+            <span>{temperature}</span>
+          </div>
+        </div>
+      )}
       <TitlebarTime
         currentTime={currentTime}
         isPreview={preview}

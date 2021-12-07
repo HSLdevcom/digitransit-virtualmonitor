@@ -4,9 +4,6 @@ import { IView, IClosedStop } from '../util/Interfaces';
 import { getWeatherData } from '../util/monitorUtils';
 import { DateTime } from 'luxon';
 import SunCalc from 'suncalc';
-import Titlebar from './Titlebar';
-import TitlebarTime from './TitlebarTime';
-import Logo from './logo/Logo';
 import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
 import { IMonitorConfig } from '../App';
@@ -16,7 +13,6 @@ import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
 import { getColorByName } from '../util/getConfig';
-import { defaultFontNarrow, defaultFontNormal } from './DefaultStyles';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -101,18 +97,14 @@ const Monitor: FC<IProps> = ({
     '--width': `${Number(windowWidth).toFixed(0)}px`,
     '--monitor-background-color':
       getColorByName('monitorBackground') || getColorByName('primary'),
-    '--font-family': defaultFontNormal,
-    '--font-family-narrow': defaultFontNarrow,
   } as React.CSSProperties;
 
-  const coeff = 1000 * 60 * 5;
-  const date = new Date(); //or use any other date
-  const rounded = new Date(Math.round(date.getTime() / coeff) * coeff);
   const isLandscapeByLayout = view.layout <= 11;
   const timem = DateTime.now();
   const from = view.columns.left.stops[0];
-
-  if (!weatherFetched && from) {
+  const layout = getLayout(view.layout);
+  const showWeather = !layout.isMultiDisplay && !layout.isPortrait;
+  if (!weatherFetched && from && showWeather) {
     getWeatherData(timem, from.lat, from.lon).then(res => {
       let weatherData;
       if (Array.isArray(res) && res.length === 3) {
@@ -181,6 +173,7 @@ const Monitor: FC<IProps> = ({
         showMinutes={Number(config.showMinutes)}
         closedStopViews={closedStopViews}
         error={error}
+        preview={isPreview}
       />
     </div>
   );

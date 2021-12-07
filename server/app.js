@@ -10,23 +10,19 @@ const __dirname = fileURLToPath(import.meta.url);
 
 const app = express();
 
-// uncomment after placing your favicon in /public
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../../build')));
-
 // view engine setup
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
 
 app.use('/api', index);
-app.get('/favicon.ico', (req, res) => res.status(200));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));
-  // res.end()
 });
 
 // catch 404 and forward to error handler

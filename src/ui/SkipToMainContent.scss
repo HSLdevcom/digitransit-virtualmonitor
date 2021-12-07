@@ -1,0 +1,25 @@
+.skipLinkDiv {
+  position: absolute;
+  top: 15px;
+  left: 10px;
+
+  a.skipLink {
+    font-family: var(--font-family);
+    transform: translateY(-100%);
+    border: none;
+    border-radius: 5px;
+    color: var(--primary-color);
+    font-size: 15px;
+    align-items: center;
+    text-decoration: none;
+    z-index: -1;
+
+    &:focus {
+      position: relative;
+      z-index: 10000000;
+      transform: translateY(100%);
+      background-color: white;
+      padding: 5px;
+    }
+  }
+}

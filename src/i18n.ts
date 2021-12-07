@@ -53,7 +53,7 @@ i18n.init({
         duration: 'Duration / language',
         'edit-display': 'Edit display',
         frontPageParagraph1:
-          'Create a virtual stop display for your phone or computer and select which stops and routes you are interested in.',
+          'Create a virtual stop display for your computer and select which stops and routes you are interested in.',
         frontPageParagraph2:
           'You can also use the service to generate timetables for nearby stops to be displayed in public spaces or on company intranet.',
         frontPageParagraph3:
@@ -166,7 +166,7 @@ i18n.init({
         duration: 'Kesto / esityskieli',
         'edit-display': 'Muokkaa näyttöä',
         frontPageParagraph1:
-          'Luo itsellesi puhelimen tai tietokoneen ruudulla näkyvä pysäkkinäyttö ja valitse minkä pysäkkien ja linjojen aikatauluista olet kiinnostunut.',
+          'Luo itsellesi tietokoneen ruudulla näkyvä pysäkkinäyttö ja valitse minkä pysäkkien ja linjojen aikatauluista olet kiinnostunut.',
         frontPageParagraph2:
           'Palvelulla voi tuottaa myös julkisten tilojen auloihin tai yritysten intranet-verkkoon kyseisen paikan läheisyydessä olevien pysäkkien aikataulut.',
         frontPageParagraph3:
@@ -279,7 +279,7 @@ i18n.init({
         duration: 'Tid / språk',
         'edit-display': 'Redigera skärmen',
         frontPageParagraph1:
-          'Skapa en virtuell hållplatsskärm för din mobiltelefon eller dator som visar tidtabeller för de hållplatser och linjer som intresserar dig.',
+          'Skapa en virtuell hållplatsskärm för din dator som visar tidtabeller för de hållplatser och linjer som intresserar dig.',
         frontPageParagraph2:
           'Genom tjänsten är det också möjligt att visa tidtabeller för kollektivtrafikens närmaste hållplatser i offentliga lokaler och på företagets intranät.',
         frontPageParagraph3:

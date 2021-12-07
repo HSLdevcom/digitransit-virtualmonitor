@@ -9,7 +9,7 @@ Stop monitor provides both the configuration and displaying of public transit st
 
 ### Creating a new display
 
-A display can show either a single view, or multiple different views that are rotated after a specified time period. To create a new display, navigate to the link http://localhost:3000/createView. Or you can click a button from front page
+A display can show either a single view, or multiple different views that are rotated after a specified time period. To create a new display, navigate to the link http://localhost:3000/createView. Or you can click a button from front page.
 
 The link created in create view is a link to the Stop monitor view of current configuration. Please remember that after the link is copied, it will always show the same configuration, even if changes are made in the editor. Thus remember to always create a new link after each modification. You can also go back from the monitor view
 when you move mouse over the monitor, then go back button appears.

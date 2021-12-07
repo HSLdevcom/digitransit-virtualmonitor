@@ -7,11 +7,11 @@
 }
 
 .rows4 .grid-row {
-  font-size: calc((#{var(--height)} - 30vh) / 10);
+  font-size: calc((#{var(--height)} - 30vh) / 11.5);
 
   .len1,
   .len2 {
-    font-size: calc((#{var(--height)} - 30vh) / 5.2);
+    font-size: calc((#{var(--height)} - 30vh) / 5.4);
   }
 
   &.alert {
@@ -21,7 +21,7 @@
 
 .rows8 .grid-row {
   grid-template-columns: 18vh 1fr 25vh;
-  font-size: calc((#{var(--height)} - 30vh) / 10);
+  font-size: calc((#{var(--height)} - 30vh) / 13);
 
   &.without-route-column {
     grid-template-columns: auto 25vh;
@@ -37,7 +37,7 @@
 }
 
 .rows12 .grid-row {
-  font-size: calc((#{var(--height)} - 30vh) / 14);
+  font-size: calc((#{var(--height)} - 30vh) / 17);
   grid-template-columns: 17vh 1fr 20vh;
 
   &.without-route-column {
@@ -62,26 +62,26 @@
 }
 
 .rows4.two-cols .grid-row {
-  grid-template-columns: 18vh 1fr 21vh;
+  grid-template-columns: 18vh 1fr 19vh;
 
   &.without-route-column {
-    grid-template-columns: auto 21vh;
+    grid-template-columns: auto 19vh;
   }
 }
 
 .rows4.two-cols .grid-row.with-stop-code {
-  grid-template-columns: 18vh 1fr 20vh 21vh;
+  grid-template-columns: 18vh 1fr 17vh 19vh;
 
   &.without-route-column {
-    grid-template-columns: auto 20vh 21vh;
+    grid-template-columns: auto 17vh 19vh;
   }
 }
 
 .rows8.two-cols .grid-row.with-stop-code {
-  grid-template-columns: 18vh 1fr 20vh 22vh;
+  grid-template-columns: 15vh 1fr 17vh 18vh;
 
   &.without-route-column {
-    grid-template-columns: auto 20vh 22vh;
+    grid-template-columns: auto 17vh 18vh;
   }
 }
 
@@ -224,7 +224,7 @@
 
     .len1,
     .len2 {
-      font-size: 50px;
+      font-size: 46px;
     }
 
     &.alert {
@@ -238,7 +238,7 @@
 
   .rows8 .grid-row {
     grid-template-columns: 100px 1fr 70px;
-    font-size: 22px;
+    font-size: 20px;
 
     &.without-route-column {
       grid-template-columns: auto 70px;
@@ -280,23 +280,23 @@
   }
 
   .rows4.two-cols .grid-row {
-    grid-template-columns: 70px 1fr 80px;
+    grid-template-columns: 65px 1fr 75px;
 
     &.without-route-column {
       grid-template-columns: auto 80px;
     }
 
-    font-size: 26px;
+    font-size: 22px;
   }
 
   .rows4.two-cols .grid-row.with-stop-code {
-    grid-template-columns: 70px 1fr 70px 80px;
+    grid-template-columns: 65px 1fr 60px 75px;
 
     &.without-route-column {
       grid-template-columns: auto 70px 80px;
     }
 
-    font-size: 26px;
+    font-size: 22px;
   }
 
   .rows8.two-cols .grid-row {
@@ -308,7 +308,7 @@
   }
 
   .rows8.two-cols .grid-row.with-stop-code {
-    grid-template-columns: 60px 1fr 60px 80px;
+    grid-template-columns: 55px 1fr 60px 75px;
 
     &.without-route-column {
       grid-template-columns: auto 60px 80px;

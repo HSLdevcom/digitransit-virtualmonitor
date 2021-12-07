@@ -41,7 +41,7 @@ const MonitorAlertRow: FC<IProps> = ({
     const windowHeight = preview ? 370 : window.innerWidth;
     setAnimationWidth(width);
     alertOrientation === 'horizontal'
-      ? setSpeed((width / windowWidth) * 5)
+      ? setSpeed((width / windowWidth) * 10) // 10 means that it should take 10 seconds for a word appearing from the right to reach the left side of the screen
       : setSpeed((width / (windowHeight / 6)) * 5);
     setUpdate(true);
   };

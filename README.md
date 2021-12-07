@@ -1,4 +1,4 @@
-# Digitransit Stop monitor
+# Digitransit Stop Monitor
 
 Real-time, updating public transport info display that aggregates OpenTripPlanner schedules for multiple stops.
 Previously known as virtual monitor

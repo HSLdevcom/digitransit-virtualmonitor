@@ -28,11 +28,7 @@ export default (
     );
   }
   return (
-    <svg
-      viewBox="0 0 307 142"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg viewBox="0 0 307 142" fill="none" xmlns="http://www.w3.org/2000/svg">
       <svg x="-40" y="-20">
         <path
           fill-rule="evenodd"

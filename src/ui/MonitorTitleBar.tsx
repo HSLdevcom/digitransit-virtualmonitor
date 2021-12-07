@@ -66,7 +66,6 @@ const MonitorTitlebar: FC<IProps> = ({
           <div className={cx('left-title', { preview: preview })}>
             {view.columns.left.title[currentLang]}
           </div>
-          <div></div>
           <div className={cx('right-title', { preview: preview })}>
             {view.columns.right.title[currentLang]}
           </div>

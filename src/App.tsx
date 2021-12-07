@@ -41,14 +41,14 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     weights?: {
       normal?: string;
       bigger?: string;
-    }
+    };
     monitor?: {
-      name?: string,
+      name?: string;
       weights?: {
         normal?: string;
         bigger?: string;
-      }
-    }
+      };
+    };
   };
   colors?: {
     alert?: string;
@@ -132,13 +132,17 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
     '--font-color': monitorConfig.colors.font || defaultColorFont,
     '--font-family': monitorConfig.fonts?.normal || defaultFontNormal,
     '--font-family-narrow': monitorConfig.fonts?.narrow || defaultFontNarrow,
-    '--font-weight': monitorConfig.fonts?.weights?.normal || defaultFontWeightNormal,
-    '--font-weight-bigger': monitorConfig.fonts?.weights?.bigger || defaultFontWeightBigger,
+    '--font-weight':
+      monitorConfig.fonts?.weights?.normal || defaultFontWeightNormal,
+    '--font-weight-bigger':
+      monitorConfig.fonts?.weights?.bigger || defaultFontWeightBigger,
     '--monitor-background-color':
       monitorConfig.colors.monitorBackground || monitorConfig.colors.primary,
-    '--monitor-font': monitorConfig.fonts?.monitor?.name || defaultFontNormal,
-    '--monitor-font-weight': monitorConfig.fonts?.monitor?.weights?.normal || defaultFontWeightNormal,
-    '--monitor-font-weight-bigger': monitorConfig.fonts?.monitor?.weights?.bigger || defaultFontWeightBigger,
+    '--monitor-font': monitorConfig.fonts?.monitor?.name || defaultFontNarrow,
+    '--monitor-font-weight':
+      monitorConfig.fonts?.monitor?.weights?.normal || defaultFontWeightNormal,
+    '--monitor-font-weight-bigger':
+      monitorConfig.fonts?.monitor?.weights?.bigger || defaultFontWeightBigger,
     '--primary-color': monitorConfig.colors.primary,
   };
   useEffect(() => {

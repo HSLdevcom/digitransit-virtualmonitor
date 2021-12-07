@@ -85,8 +85,10 @@ i18n.init({
         moveViewUp: 'Move stop display {{id}} up',
         'no-departures': 'No known departures',
         noMonitors: 'No stop displays found',
-        notPossibleToCreate: 'Unable to create a new view without {{requirements}}',
-        notPossibleToPreview: 'Unable to display the preview without {{requirements}}',
+        notPossibleToCreate:
+          'Unable to create a new view without {{requirements}}',
+        notPossibleToPreview:
+          'Unable to display the preview without {{requirements}}',
         notPossibleToSave: 'Unable to save the view without {{requirements}}',
         'one-column': 'One column',
         or: 'or',
@@ -199,7 +201,8 @@ i18n.init({
         'no-departures': 'Ei tiedossa olevia lähtöjä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         notPossibleToCreate: 'Ilman {{requirements}} ei voida luoda näkymää',
-        notPossibleToPreview: 'Ilman {{requirements}} ei voida näyttää esikatselua',
+        notPossibleToPreview:
+          'Ilman {{requirements}} ei voida näyttää esikatselua',
         notPossibleToSave: 'Ilman {{requirements}} ei voida tallentaa näkymää',
         'one-column': 'Yksijakoinen',
         or: 'tai',
@@ -222,7 +225,7 @@ i18n.init({
         'search-current-suggestion': 'Tämänhetkinen valinta: {{selection}}',
         settingsChanged: 'Muutettuja asetuksia',
         show: 'Näytä',
-        showEndOfLine: 'Linjat, joille tämä on päätepysäkki',        
+        showEndOfLine: 'Linjat, joille tämä on päätepysäkki',
         showRouteColumn: 'Linja-sarake',
         showStopNumber: 'Pysäkki- tai laiturinumero',
         showVia: 'Kauttakulkutieto (via), jos saatavilla',
@@ -312,7 +315,8 @@ i18n.init({
         'no-departures': 'Inga kända avgångar',
         noMonitors: 'Ingen hållplatsskärm hittades',
         notPossibleToCreate: 'Vyn kan inte skapas utan {{requirements}}',
-        notPossibleToPreview: 'Förhandsgranskning kan inte visas utan {{requirements}}',
+        notPossibleToPreview:
+          'Förhandsgranskning kan inte visas utan {{requirements}}',
         notPossibleToSave: 'Vyn kan inte sparas utan {{requirements}}',
         'one-column': 'En kolumn',
         or: 'eller',

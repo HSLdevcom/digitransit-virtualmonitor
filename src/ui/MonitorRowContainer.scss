@@ -69,8 +69,6 @@ $preview-grid-divider: 2px;
   }
 
   .monitor-container {
-    height: 78.91%;
-
     .grid.two-cols {
       margin: 0 5px;
       width: calc(50% - 8px);
@@ -190,9 +188,12 @@ $preview-grid-divider: 2px;
   letter-spacing: -0.2px;
   color: #fff;
   height: 100%;
-  padding: 15px 0;
+  display: flex;
+  flex-direction: column;
 
   .monitor-container {
+    flex: 1;
+
     .no-departures-text-container {
       flex: 3;
       border-top: calc(0.2 * 1vh) solid #fff;
@@ -239,8 +240,6 @@ $preview-grid-divider: 2px;
         border-top: calc(0.2 * 1vh) solid #fff;
       }
     }
-
-    height: 78.91%;
 
     &.two-cols {
       display: flex;
@@ -545,6 +544,7 @@ $preview-grid-divider: 2px;
 
       .alert-text {
         align-items: flex-start;
+        height: 1px;
 
         .alert-separator {
           margin-top: 10px;

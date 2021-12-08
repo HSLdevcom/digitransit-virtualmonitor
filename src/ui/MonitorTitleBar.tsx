@@ -71,6 +71,14 @@ const MonitorTitlebar: FC<IProps> = ({
           </div>
         </div>
       )}
+      {!weatherData && isLandscape && !isMultiDisplay && (
+        <div
+          className={cx('weather-container', {
+            preview: preview,
+            onlyTemperature: !weatherIconExists,
+          })}
+        ></div>
+      )}
       {weatherData && (
         <div
           className={cx('weather-container', {

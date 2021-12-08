@@ -114,7 +114,13 @@ const getTranslationStringsForStop = (stop, hiddenRoutes) => {
   return stringsToTranslate;
 };
 
-export const createDepartureArray = (views, stops, isStation = false, t) => {
+export const createDepartureArray = (
+  views,
+  stops,
+  isStation = false,
+  t,
+  fromStop = false,
+) => {
   const defaultSettings = {
     hiddenRoutes: [],
     timeshift: 0,
@@ -141,7 +147,9 @@ export const createDepartureArray = (views, stops, isStation = false, t) => {
           lat: stop.lat,
           lon: stop.lon,
         };
-        view.columns[column].stops[stopIndex] = viewStop;
+        if (!fromStop) {
+          view.columns[column].stops[stopIndex] = viewStop;
+        }
         const stopAlerts = [];
         if (!isStation) {
           stopAlerts.push(...stop.alerts);

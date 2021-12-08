@@ -24,6 +24,15 @@ export const GET_STOP = gql`
   }
 `;
 
+const setLayoutByNumber = number => {
+  if (number <= 4) {
+    return 1;
+  } else if (number > 4 && number < 8) {
+    return 2;
+  }
+  return 3;
+};
+
 const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   stopIds,
   layout = 2,
@@ -41,12 +50,14 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
     context: { clientName: 'default' },
   });
 
+  const newLayout = setLayoutByNumber(layout);
+
   useEffect(() => {
     if (data) {
       const card = stopCard.slice();
       if (data.stops.filter(s => s).length > 0) {
         card[0].columns.left.stops = data.stops;
-        card[0].layout = layout;
+        card[0].layout = newLayout;
         if (stopIds.length === 1) {
           card[0].title.fi = urlTitle || data.stops[0]?.name;
         } else {
@@ -64,13 +75,10 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   }
   return (
     <CarouselDataContainer
-      error={
-        !stopsFound
-          ? t('stopRetrieveNotFound', { stopId: stopIds[0] })
-          : undefined
-      }
+      error={!stopsFound ? t('noMonitors') : undefined}
       languages={['fi']}
       views={stopCard}
+      fromStop
     />
   );
 };

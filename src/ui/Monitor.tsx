@@ -103,8 +103,9 @@ const Monitor: FC<IProps> = ({
   const timem = DateTime.now();
   const from = view.columns.left.stops[0];
   const layout = getLayout(view.layout);
-  const showWeather = !layout.isMultiDisplay && !layout.isPortrait;
-  if (!weatherFetched && from && showWeather) {
+  const showWeather =
+    !layout.isMultiDisplay && !layout.isPortrait && from.lat && from.lon;
+  if (!weatherFetched && showWeather) {
     getWeatherData(timem, from.lat, from.lon).then(res => {
       let weatherData;
       if (Array.isArray(res) && res.length === 3) {

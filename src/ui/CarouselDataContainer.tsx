@@ -32,6 +32,7 @@ interface IProps {
   staticContentHash?: string;
   staticUrl?: string;
   staticViewTitle?: string;
+  fromStop?: boolean;
 }
 
 const CarouselDataContainer: FC<IProps & WithTranslation> = ({
@@ -44,6 +45,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   staticContentHash,
   staticUrl,
   staticViewTitle,
+  fromStop,
 }) => {
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
@@ -91,7 +93,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
       const [stringsToTranslate, newDepartureArray, a, closedStopViews] =
-        createDepartureArray(views, stops, false, t);
+        createDepartureArray(views, stops, false, t, fromStop);
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(newDepartureArray);
       const arr = alerts.concat(a);
@@ -111,6 +113,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
         stations,
         true,
         t,
+        fromStop,
       );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStationDepartures(newDepartureArray);

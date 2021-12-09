@@ -56,7 +56,7 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
     if (data) {
       const card = stopCard.slice();
       if (data.stops.filter(s => s).length > 0) {
-        card[0].columns.left.stops = data.stops;
+        card[0].columns.left.stops = data.stops.filter(s => s);
         card[0].layout = newLayout;
         if (stopIds.length === 1) {
           card[0].title.fi = urlTitle || data.stops[0]?.name;

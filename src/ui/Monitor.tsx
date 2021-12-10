@@ -78,7 +78,7 @@ const Monitor: FC<IProps> = ({
   );
   const [weatherFetched, setWeatherFetched] = useState(false);
   const [weatherData, setWeatherData] = useState();
-
+  const [fetchTime, setFetchTime] = useState();
   const { isMultiDisplay } = getLayout(view.layout);
   const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
@@ -105,6 +105,15 @@ const Monitor: FC<IProps> = ({
   const layout = getLayout(view.layout);
   const showWeather =
     !layout.isMultiDisplay && !layout.isPortrait && from.lat && from.lon;
+  // update weather data in 15 minutes interval
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setFetchTime(timem);
+      setWeatherFetched(false);
+    }, 1000 * 60 * 15); // in milliseconds
+    return () => clearInterval(intervalId);
+  }, [fetchTime]);
+
   if (!weatherFetched && showWeather) {
     getWeatherData(timem, from.lat, from.lon).then(res => {
       let weatherData;

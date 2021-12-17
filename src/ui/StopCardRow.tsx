@@ -109,6 +109,18 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
     return null;
   };
 
+  const getVehicleMode = modes => {
+    let mode;
+    if (modes) {
+      mode =
+        modes.length === 1
+          ? modes[0]
+          : 'hybrid-'.concat(modes.sort().join('-'));
+      return mode;
+    }
+    return 'N/A';
+  };
+
   useEffect(() => {
     if (stopState.data && stopState.data.stop) {
       setStops(
@@ -120,7 +132,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             const stopWithGTFS = {
               ...stop,
               locality: autosuggestValue.locality,
-              modes: autosuggestValue.addendum.GTFS.modes,
+              modes: autosuggestValue.addendum?.GTFS.modes,
             };
             const routes = stop.stoptimesForPatterns.map(
               stoptimes => stoptimes.pattern,
@@ -135,10 +147,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               parentStation: stop.parentStation
                 ? stop.parentStation.gtfsId
                 : undefined,
-              vehicleMode:
-                stopWithGTFS.modes.length === 1
-                  ? stopWithGTFS.modes[0]
-                  : 'hybrid-'.concat(stopWithGTFS.modes.sort().join('-')),
+              vehicleMode: getVehicleMode(stopWithGTFS.modes),
             };
           }),
         false,
@@ -164,7 +173,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             const stationWithGTFS = {
               ...station,
               locality: autosuggestValue.locality,
-              modes: autosuggestValue.addendum.GTFS.modes,
+              modes: autosuggestValue.addendum?.GTFS.modes,
             };
             return {
               ...stationWithGTFS,
@@ -175,10 +184,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 'pattern.route.shortname.length',
               ).map(e => e.pattern),
               hiddenRoutes: [],
-              vehicleMode:
-                stationWithGTFS.modes.length === 1
-                  ? stationWithGTFS.modes[0]
-                  : 'hybrid-'.concat(stationWithGTFS.modes.sort().join('-')),
+              vehicleMode: getVehicleMode(stationWithGTFS.modes),
             };
           }),
         false,

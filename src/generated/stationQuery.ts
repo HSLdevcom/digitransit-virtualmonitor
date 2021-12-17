@@ -59,6 +59,7 @@ export interface stationQuery_station_stops_routes {
 }
 
 export interface stationQuery_station_stops {
+  vehicleMode: Mode;
   __typename: "Stop";
   /**
    * Description of the stop, usually a street name

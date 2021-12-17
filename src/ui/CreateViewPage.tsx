@@ -7,6 +7,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
+import { getContentHash } from '../util/monitorUtils';
 interface IConfigWithFeedIs extends IMonitorConfig {
   feedIds?: Array<string>;
 }
@@ -20,10 +21,11 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
   const [languages, setLanguages] = useState(['fi']);
   const [loading, setLoading] = useState(true);
 
+  const hash = getContentHash(location.search);
+
   useEffect(() => {
-    const hash: any = location.search.split('cont=');
-    if (hash[1]) {
-      monitorAPI.get(hash[1]).then((r: any) => {
+    if (hash) {
+      monitorAPI.get(hash).then((r: any) => {
         if (r?.cards?.length) {
           setStopCardList(r.cards);
           if (r.languages) {
@@ -37,9 +39,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
     }
   }, []);
 
-  const hash: any = location.search.split('cont=');
-
-  if (!hash[1] || (hash[1] && !stopCardList)) {
+  if (!hash || (hash && !stopCardList)) {
     return (
       <ContentContainer>
         <StopCardListContainer

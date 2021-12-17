@@ -7,8 +7,7 @@ import InformationDisplayContainer from './InformationDisplayContainer';
 import { getStationIds, isPlatformOrTrackVisible } from '../util/monitorUtils';
 import NoMonitorsFound from './NoMonitorsFound';
 import TrainDataFetcher from './TrainDataFetcher';
-import { uuidValidateV5 } from '../util/monitorUtils';
-import { isConstructorDeclaration } from 'typescript';
+import { uuidValidateV5, getContentHash } from '../util/monitorUtils';
 
 interface Iv {
   columns: ISides;
@@ -40,9 +39,9 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const [hash, setHash] = useState(undefined);
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
-      const hash: Array<string> = location.search.split('cont=');
-      monitorAPI.get(hash[1]).then(r => {
-        setHash(hash[1]);
+      const hash = getContentHash(location.search);
+      monitorAPI.get(hash).then(r => {
+        setHash(hash);
         setFetched(true);
         setView(r);
       });

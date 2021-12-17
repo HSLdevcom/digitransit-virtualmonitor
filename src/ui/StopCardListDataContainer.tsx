@@ -66,7 +66,7 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
               stoptimes => stoptimes.pattern,
             );
             richCard[j].columns.right.stops[rightIndex] = {
-              ...richCard[j].columns.left.stops[rightIndex],
+              ...richCard[j].columns.right.stops[rightIndex],
               ...stop,
               patterns: sortBy(
                 sortBy(routes, 'route.shortName'),
@@ -112,10 +112,12 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
             station.stops.forEach(stop =>
               patterns.push(...stop.stoptimesForPatterns),
             );
+            const vehiMode = station.vehicleMode;
             patterns = uniqBy(patterns, 'pattern.code');
             richCard[j].columns.right.stops[rightIndex] = {
-              ...richCard[j].columns.left.stops[rightIndex],
+              ...richCard[j].columns.right.stops[rightIndex],
               ...stop,
+              vehicleMode: vehiMode,
               patterns: sortBy(
                 sortBy(patterns, 'pattern.route.shortname'),
                 'pattern.route.shortname.length',
@@ -127,7 +129,6 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
       setCardList(richCard);
     }
   }, [stations]);
-
   return (
     <StopCardListContainer
       user={user}

@@ -14,6 +14,7 @@ import isEqual from 'lodash/isEqual';
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
 import { isInformationDisplay } from '../util/monitorUtils';
+import { defaultSettings } from './StopRoutesModal';
 import UserViewTitleEditor from './UserViewTitleEditor';
 import { getCurrentSecondsWithMilliSeconds } from '../time';
 import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
@@ -315,7 +316,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           name: stop.name,
           gtfsId: stop.gtfsId,
           locationType: stop.locationType,
-          settings: stop.settings,
+          settings: stop.settings ? stop.settings : defaultSettings,
           parentStation: stop.parentStation,
           mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           code: stop.code ? stop.code : null,
@@ -337,7 +338,6 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       algorithm: 'md5',
       encoding: 'base64',
     }).replaceAll('/', '-');
-
     if (isNew) {
       monitorAPI.create(newCard).then(res => {
         if (res['status'] === 200 || res['status'] === 409) {

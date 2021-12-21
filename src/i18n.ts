@@ -53,11 +53,11 @@ i18n.init({
         duration: 'Duration / language',
         'edit-display': 'Edit display',
         frontPageParagraph1:
-          'Create a virtual stop display for your computer and select which stops and routes you are interested in.',
+          'Create your own display and select the stops and routes you are interested in',
         frontPageParagraph2:
-          'You can also use the service to generate timetables for nearby stops to be displayed in public spaces or on company intranet.',
+          'You can use the service to generate timetables for nearby stops to be displayed in public spaces, on your information displays or on company intranet.',
         frontPageParagraph3:
-          'Displaying public transport timetables in prominent places encourages the use of public transport. In addition to timetables, the service provides you with service updates and disruption alerts.',
+          'Displaying public transport timetables in prominent places encourages the use of public transport and makes it easier. In addition to timetables, the service provides you with service updates and disruption alerts.',
         headerSideLeft: 'Left column',
         headerSideRight: 'Right column',
         hideAllLines: 'Hide all routes',
@@ -168,11 +168,11 @@ i18n.init({
         duration: 'Kesto / esityskieli',
         'edit-display': 'Muokkaa näyttöä',
         frontPageParagraph1:
-          'Luo itsellesi tietokoneen ruudulla näkyvä pysäkkinäyttö ja valitse minkä pysäkkien ja linjojen aikatauluista olet kiinnostunut.',
+          'Luo itsellesi oma näyttö ja valitse pysäkit ja linjat joiden aikatauluista olet kiinnostunut',
         frontPageParagraph2:
-          'Palvelulla voi tuottaa myös julkisten tilojen auloihin tai yritysten intranet-verkkoon kyseisen paikan läheisyydessä olevien pysäkkien aikataulut.',
+          'Palvelulla voi tuoda esimerkiksi julkisten tilojen auloihin, yritysten infonäytöille tai intranet-verkkoon kyseisen paikan läheisyydessä olevien pysäkkien aikataulut.',
         frontPageParagraph3:
-          'Joukkoliikenteen aikataulut näkyvällä paikalla kannustavat käyttämään joukkoliikennettä ja aikataulujen lisäksi palvelun kautta saat myös liikenne- ja häiriötiedotteet.',
+          'Joukkoliikenteen aikataulut näkyvällä paikalla helpottavat joukkoliikenteen käyttöä ja kannustavat käyttämään joukkoliikennettä. Aikataulujen lisäksi palvelun kautta saat myös ajankohtaiset liikenne- ja häiriötiedotteet.',
         headerSideLeft: 'Vasen palsta',
         headerSideRight: 'Oikea palsta',
         hideAllLines: 'Piilota kaikki linjat',
@@ -282,11 +282,11 @@ i18n.init({
         duration: 'Tid / språk',
         'edit-display': 'Redigera skärmen',
         frontPageParagraph1:
-          'Skapa en virtuell hållplatsskärm för din dator som visar tidtabeller för de hållplatser och linjer som intresserar dig.',
+          'Skapa dig en egen skärm och välj de hållplatser och linjer som intresserar dig',
         frontPageParagraph2:
-          'Genom tjänsten är det också möjligt att visa tidtabeller för kollektivtrafikens närmaste hållplatser i offentliga lokaler och på företagets intranät.',
+          'Med tjänsten kan du visa tidtabeller för närmaste hållplatser t.ex. i offentliga lokaler, på digitala informationsskärmar eller på företagets intranät.',
         frontPageParagraph3:
-          'Kollektivtrafikens tidtabeller på synliga platser uppmuntrar att använda kollektivtrafiktjänster. Genom tjänsten får du också trafikmeddelanden och information om trafikstörningar.',
+          'Kollektivtrafikens tidtabeller på synliga platser gör det lättare att resa kollektivt och uppmuntrar att använda kollektivtrafiktjänster. Genom tjänsten får du även aktuella trafikmeddelanden och information om trafikstörningar.',
         headerSideLeft: 'Vänstra kolumnen',
         headerSideRight: 'Högra kolumnen',
         hideAllLines: 'Dölj alla linjer',

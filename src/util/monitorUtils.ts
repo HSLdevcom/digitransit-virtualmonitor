@@ -84,7 +84,7 @@ export const filterDepartures = (
         stoptimes = stoptimes.filter(s => {
           return (
             s.serviceDay + s.realtimeDeparture >=
-            currentSeconds + parseInt(timeshift) * 60
+            currentSeconds + (parseInt(timeshift) + 1) * 60
           );
         });
       }

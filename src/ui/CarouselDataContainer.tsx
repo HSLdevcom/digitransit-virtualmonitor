@@ -126,7 +126,12 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStationsFetched(true);
     }
-  }, [stationsState]);
+    // Force update interval for itineraries that needs to be filtered by timeShift setting.
+    const intervalId = setInterval(() => {
+      setforceUpdate(!forceUpdate);
+    }, 1000 * 20);
+    return () => clearInterval(intervalId);
+  }, [stationsState, forceUpdate]);
 
   if (!stopsFetched || !stationsFetched) {
     return <Loading />;

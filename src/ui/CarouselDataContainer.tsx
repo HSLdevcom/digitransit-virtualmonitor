@@ -88,7 +88,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
     skip: stopIds.length < 1,
     context: { clientName: 'default' },
   });
-
+  const [forceUpdate, setforceUpdate] = useState(false);
   useEffect(() => {
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
@@ -103,7 +103,12 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       setStopsFetched(true);
       setClosedStopViews(closedStopViews);
     }
-  }, [stopsState]);
+    // Force update interval for itineraries that needs to be filtered by timeShift setting.
+    const intervalId = setInterval(() => {
+      setforceUpdate(!forceUpdate);
+    }, 1000 * 20);
+    return () => clearInterval(intervalId);
+  }, [stopsState, forceUpdate]);
 
   useEffect(() => {
     const stations = stationsState?.data?.stations;
@@ -121,7 +126,12 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
       setStationsFetched(true);
     }
-  }, [stationsState]);
+    // Force update interval for itineraries that needs to be filtered by timeShift setting.
+    const intervalId = setInterval(() => {
+      setforceUpdate(!forceUpdate);
+    }, 1000 * 20);
+    return () => clearInterval(intervalId);
+  }, [stationsState, forceUpdate]);
 
   if (!stopsFetched || !stationsFetched) {
     return <Loading />;

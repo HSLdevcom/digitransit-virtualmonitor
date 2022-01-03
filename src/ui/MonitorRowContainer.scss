@@ -536,6 +536,8 @@ $preview-grid-divider: 2px;
 
       .grid-cols.alert-row {
         width: unset;
+        display: flex;
+        align-items: center;
       }
     }
 

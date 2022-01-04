@@ -108,7 +108,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
   );
 
-  const isCancelled = true; //departure?.realtimeState === 'CANCELED';
+  const isCancelled = departure?.realtimeState === 'CANCELED';
 
   const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')

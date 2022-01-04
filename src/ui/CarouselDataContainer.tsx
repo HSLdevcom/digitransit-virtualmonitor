@@ -23,6 +23,7 @@ import Loading from './Loading';
 import { uniq, uniqBy } from 'lodash';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import CarouselContainer from './CarouselContainer';
+import dummyAlerts from '../testAlert';
 interface IProps {
   views: Array<IView>;
   languages: Array<string>;
@@ -97,8 +98,15 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(newDepartureArray);
       const arr = alerts.concat(a);
+      const now = new Date();
+      const effectiveAlerts = arr.filter(
+        a => a.effectiveEndDate > now.getTime() / 1000,
+      );
       setAlerts(
-        uniqBy(arr, alert => alert.stop?.gtfsId + ':' + alert.alertHeaderText),
+        uniqBy(
+          effectiveAlerts,
+          alert => alert.stop?.gtfsId + ':' + alert.alertHeaderText,
+        ),
       );
       setStopsFetched(true);
       setClosedStopViews(closedStopViews);

@@ -79,6 +79,7 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
       languages={['fi']}
       views={stopCard}
       fromStop
+      initTime={new Date().getTime()}
     />
   );
 };

@@ -229,6 +229,7 @@ const TrainDataFetcher: FC<IProps> = ({
       staticContentHash={staticContentHash}
       staticUrl={staticUrl}
       staticViewTitle={staticViewTitle}
+      initTime={new Date().getTime()}
     />
   );
 };

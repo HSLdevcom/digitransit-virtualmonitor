@@ -85,6 +85,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
               }
               staticUrl={uuidValidateV5(hash) ? hash : undefined}
               staticViewTitle={location?.state?.viewTitle}
+              initTime={new Date().getTime()}
             />
           )}
         </>

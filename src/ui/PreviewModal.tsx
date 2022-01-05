@@ -67,6 +67,7 @@ const PreviewModal: FC<Props & WithTranslation> = ({
                     languages={languages}
                     views={view.cards}
                     preview
+                    initTime={new Date().getTime()}
                   />
                 )}
               </>

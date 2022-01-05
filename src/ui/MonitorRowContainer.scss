@@ -443,7 +443,9 @@ $preview-grid-divider: 2px;
       &.is-cancelled {
         .time,
         .code {
-          text-decoration: line-through $alert-color 0.4vh;
+          text-decoration-line: line-through;
+          text-decoration-color: $alert-color;
+          text-decoration-thickness: 0.4vh;
         }
       }
 

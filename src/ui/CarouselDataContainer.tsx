@@ -23,6 +23,7 @@ import Loading from './Loading';
 import { uniq, uniqBy } from 'lodash';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import CarouselContainer from './CarouselContainer';
+
 interface IProps {
   views: Array<IView>;
   languages: Array<string>;
@@ -33,7 +34,16 @@ interface IProps {
   staticUrl?: string;
   staticViewTitle?: string;
   fromStop?: boolean;
+  initTime: number;
 }
+
+const filterEffectiveAlerts = alerts => {
+  const now = new Date();
+  const effectiveAlerts = alerts.filter(
+    a => a.effectiveEndDate > now.getTime() / 1000,
+  );
+  return effectiveAlerts;
+};
 
 const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   views,
@@ -46,6 +56,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   staticUrl,
   staticViewTitle,
   fromStop,
+  initTime,
 }) => {
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
@@ -93,12 +104,15 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
       const [stringsToTranslate, newDepartureArray, a, closedStopViews] =
-        createDepartureArray(views, stops, false, t, fromStop);
+        createDepartureArray(views, stops, false, t, fromStop, initTime);
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStopDepartures(newDepartureArray);
       const arr = alerts.concat(a);
       setAlerts(
-        uniqBy(arr, alert => alert.stop?.gtfsId + ':' + alert.alertHeaderText),
+        uniqBy(
+          filterEffectiveAlerts(arr),
+          alert => alert.stop?.gtfsId + ':' + alert.alertHeaderText,
+        ),
       );
       setStopsFetched(true);
       setClosedStopViews(closedStopViews);
@@ -119,11 +133,14 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
         true,
         t,
         fromStop,
+        initTime,
       );
       setTranslationIds(translationIds.concat(stringsToTranslate));
       setStationDepartures(newDepartureArray);
       const arr = alerts.concat(a);
-      setAlerts(uniqBy(arr, alert => alert.alertHeaderText));
+      setAlerts(
+        uniqBy(filterEffectiveAlerts(arr), alert => alert.alertHeaderText),
+      );
       setStationsFetched(true);
     }
     // Force update interval for itineraries that needs to be filtered by timeShift setting.

@@ -26,9 +26,11 @@ export const getStopIcon = stop => {
   ];
   if (
     stop.locationType === 'STATION' ||
-    stopWithStationIcons.includes(stop.vehicleMode?.toLowerCase())
+    stopWithStationIcons.includes(stop.vehicleMode?.toLowerCase()) ||
+    stopWithStationIcons.includes(stop.mode?.toLowerCase())
   ) {
-    return `station-${stop.vehicleMode?.toLowerCase()}`;
+    const mode = stop.vehicleMode ? stop.vehicleMode : stop.mode;
+    return `station-${mode?.toLowerCase()}`;
   }
   return `stop-${stop.vehicleMode?.toLowerCase()}`;
 };

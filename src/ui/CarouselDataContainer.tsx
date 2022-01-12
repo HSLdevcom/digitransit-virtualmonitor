@@ -122,7 +122,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       setforceUpdate(!forceUpdate);
     }, 1000 * 20);
     return () => clearInterval(intervalId);
-  }, [stopsState, forceUpdate]);
+  }, [stopsState.data, forceUpdate]);
 
   useEffect(() => {
     const stations = stationsState?.data?.stations;
@@ -148,7 +148,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       setforceUpdate(!forceUpdate);
     }, 1000 * 20);
     return () => clearInterval(intervalId);
-  }, [stationsState, forceUpdate]);
+  }, [stationsState.data, forceUpdate]);
 
   if (!stopsFetched || !stationsFetched) {
     return <Loading />;

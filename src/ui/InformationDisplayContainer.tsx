@@ -73,7 +73,7 @@ const InformationDisplayContainer: FC<IProps> = ({
       setStopAlerts(uniqBy(alerts, alert => alert.alertHeaderText));
       setStopsFetched(true);
     }
-  }, [stopsState]);
+  }, [stopsState.data]);
 
   useEffect(() => {
     const stations = stationsState?.data?.stations;
@@ -82,7 +82,7 @@ const InformationDisplayContainer: FC<IProps> = ({
       setStationAlerts(uniqBy(alerts, alert => alert.alertHeaderText));
       setStationsFetched(true);
     }
-  }, [stationsState]);
+  }, [stationsState.data]);
 
   if (!stopsFetched || !stationsFetched) {
     return <Loading />;

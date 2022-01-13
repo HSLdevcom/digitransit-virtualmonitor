@@ -78,7 +78,7 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
       });
       setCardList(richCard);
     }
-  }, [stops]);
+  }, [stops.data]);
 
   useEffect(() => {
     if (stations.data?.station) {
@@ -128,7 +128,7 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
       });
       setCardList(richCard);
     }
-  }, [stations]);
+  }, [stations.data]);
   return (
     <StopCardListContainer
       user={user}

@@ -4,6 +4,7 @@ import { IClosedStop } from './Interfaces';
 import xmlParser from 'fast-xml-parser';
 import { trainStationMap } from '../util/trainStations';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
+import dummyAlerts, { getDummyAlerts } from '../testAlert';
 
 const WEATHER_URL =
   'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
@@ -84,7 +85,7 @@ export const filterDepartures = (
         stoptimes = stoptimes.filter(s => {
           return (
             s.serviceDay + s.realtimeDeparture >=
-            currentSeconds + parseInt(timeshift) * 60
+            currentSeconds + (parseInt(timeshift) + 1) * 60
           );
         });
       }
@@ -120,6 +121,7 @@ export const createDepartureArray = (
   isStation = false,
   t,
   fromStop = false,
+  initTime,
 ) => {
   const defaultSettings = {
     hiddenRoutes: [],
@@ -233,7 +235,11 @@ export const createDepartureArray = (
       );
     });
   });
-  return [stringsToTranslate, departures, alerts, closedStopViews];
+  let arr = alerts;
+  if (process.env.NODE_ENV === 'development' && dummyAlerts.inUse) {
+    arr = arr.concat(getDummyAlerts(initTime));
+  }
+  return [stringsToTranslate, departures, arr, closedStopViews];
 };
 
 export const isInformationDisplay = cards => {

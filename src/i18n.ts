@@ -9,7 +9,7 @@ i18n.init({
     escapeValue: false,
   },
 
-  lng: 'fi',
+  lng: localStorage.getItem('lang') || 'fi',
 
   ns: ['translations'],
 

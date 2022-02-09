@@ -1,11 +1,10 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
-import { IMonitor } from '../util/Interfaces';
+import { IMonitor, ICard } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Icon from './Icon';
 import cx from 'classnames';
 import InformationDisplayContainer from './InformationDisplayContainer';
-import { getStationIds, isPlatformOrTrackVisible } from '../util/monitorUtils';
 import TrainDataFetcher from './TrainDataFetcher';
 import { withTranslation, WithTranslation } from 'react-i18next';
 
@@ -16,6 +15,10 @@ interface Props {
   isOpen: boolean;
   onClose: (boolean) => void;
   isLandscape: boolean;
+  instance?: string;
+  stations: Array<ICard>;
+  stops: Array<ICard>;
+  showPlatformsOrTracks: boolean;
 }
 const PreviewModal: FC<Props & WithTranslation> = ({
   view,
@@ -23,13 +26,12 @@ const PreviewModal: FC<Props & WithTranslation> = ({
   isOpen,
   onClose,
   isLandscape,
+  instance,
+  stations,
+  stops,
+  showPlatformsOrTracks,
   t,
 }) => {
-  const stationIds = getStationIds(view);
-  const showPlatformsOrTracks = stationIds.length
-    ? isPlatformOrTrackVisible(view)
-    : false;
-
   return (
     <>
       <Modal
@@ -56,11 +58,29 @@ const PreviewModal: FC<Props & WithTranslation> = ({
               <InformationDisplayContainer preview monitor={view} />
             ) : (
               <>
-                {stationIds.length && showPlatformsOrTracks ? (
+                {(stations.length || stops.length) && showPlatformsOrTracks ? (
                   <TrainDataFetcher
                     monitor={view}
-                    stationIds={stationIds}
+                    stations={stations}
+                    stops={stops}
                     preview
+                    fetchOnlyHsl={
+                      instance === 'hsl'
+                        ? true
+                        : stations
+                            .concat(stops)
+                            .every(x => x.gtfsId.startsWith('HSL'))
+                    }
+                    fetchAlsoHsl={
+                      instance === 'hsl'
+                        ? false
+                        : !stations
+                            .concat(stops)
+                            .every(x => x.gtfsId.startsWith('HSL')) &&
+                          stations
+                            .concat(stops)
+                            .some(x => x.gtfsId.startsWith('HSL'))
+                    }
                   />
                 ) : (
                   <CarouselDataContainer

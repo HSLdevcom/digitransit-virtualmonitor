@@ -51,6 +51,8 @@ export const filterDepartures = (
   timeshift,
   showEndOfLine = false,
   renamedDestinations,
+  showStopNumber,
+  showVia,
 ) => {
   const departures = [];
   const arrivalDepartures = [];
@@ -78,6 +80,9 @@ export const filterDepartures = (
         stoptimes.push({
           ...item,
           combinedPattern: combinedPattern,
+          showStopNumber: showStopNumber,
+          showVia: showVia,
+          vehicleMode: stop.vehicleMode?.toLowerCase(),
         }),
       );
 
@@ -190,6 +195,8 @@ export const createDepartureArray = (
               timeShift,
               showEndOfLine,
               renamedDestinations,
+              showStopNumber,
+              showVia,
             } = view.columns[column].stops[stopIndex].settings
               ? view.columns[column].stops[stopIndex].settings
               : defaultSettings;
@@ -216,6 +223,8 @@ export const createDepartureArray = (
                 timeShift,
                 showEndOfLine,
                 renamedDestinations,
+                showStopNumber,
+                showVia,
               ),
             );
           }
@@ -344,36 +353,42 @@ export const capitalize = text => {
   return text;
 };
 
-export const getStationIds = monitor => {
-  const ids = [];
-  monitor.cards.forEach(card => {
+export const getIdAndRoutes = (monitor, locationType) => {
+  const retValue = [];
+  const array = monitor['cards'] ? monitor.cards : monitor;
+  array.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
         if (
-          stop.mode?.toLowerCase() === 'rail' &&
-          stop.gtfsId.startsWith('HSL:')
+          stop.locationType === locationType &&
+          stop.vehicleMode?.toLowerCase() === 'rail'
         ) {
-          ids.push(stop.parentStation ? stop.parentStation : stop.gtfsId);
-        } else if (
-          stop.mode?.toLowerCase() === 'rail' &&
-          stop.gtfsId.startsWith('MATKA:4_')
-        ) {
-          const hslGtfsId = trainStationMap?.find(
-            i => i.shortCode === stop.gtfsId.substring(8),
-          )?.gtfsId;
-          if (hslGtfsId) {
-            ids.push(hslGtfsId);
-          }
+          const isHsl = stop.gtfsId.startsWith('HSL:');
+          const gtfsId =
+            isHsl && stop.parentStation?.gtfsId
+              ? stop.parentStation?.gtfsId
+              : stop.gtfsId;
+
+          retValue.push({
+            gtfsId: gtfsId,
+            shortCode: !isHsl
+              ? gtfsId.substring(8)
+              : trainStationMap?.find(i => i.gtfsId === gtfsId)?.shortCode ||
+                null,
+            source: isHsl ? 'HSL' : 'MATKA',
+            hiddenRoutes: stop.settings?.hiddenRoutes || [],
+          });
         }
       });
     });
   });
-  return ids;
+  return retValue;
 };
 
 export const isPlatformOrTrackVisible = monitor => {
   let showPlatformOrTrack = false;
-  monitor.cards.forEach(card => {
+  const array = monitor['cards'] ? monitor.cards : monitor;
+  array.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
         if (stop.settings && stop.settings.showStopNumber) {

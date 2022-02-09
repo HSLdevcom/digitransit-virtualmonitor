@@ -5,7 +5,6 @@ import StopCardRow from './StopCardRow';
 import hash from 'object-hash';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
-import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
@@ -19,6 +18,7 @@ import UserViewTitleEditor from './UserViewTitleEditor';
 import { getCurrentSecondsWithMilliSeconds } from '../time';
 import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
 import { uuidValidateV5 } from '../util/monitorUtils';
+import PrepareMonitor from './PrepareMonitor';
 
 interface IProps {
   feedIds: Array<string>;
@@ -27,6 +27,7 @@ interface IProps {
   loading?: boolean;
   vertical?: boolean;
   user?: any;
+  instance: string;
 }
 
 const getViewName = title => {
@@ -309,6 +310,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           code: stop.code ? stop.code : null,
           locality: stop.locality,
+          vehicleMode: stop.vehicleMode?.toLowerCase(),
         };
       });
       card.columns.right.stops = card.columns.right.stops.map(stop => {
@@ -321,6 +323,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
           mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           code: stop.code ? stop.code : null,
           locality: stop.locality,
+          vehicleMode: stop.vehicleMode?.toLowerCase(),
         };
       });
     });
@@ -484,12 +487,15 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
         />
       )}
       {isOpen && (
-        <PreviewModal
-          view={cards}
-          languages={languages}
-          isOpen={isOpen}
-          onClose={closePreview}
-          isLandscape={orientation === 'horizontal' ? true : false}
+        <PrepareMonitor
+          preview={{
+            isOpen: isOpen,
+            view: cards,
+            languages: languages,
+            onClose: closePreview,
+            isLandscape: orientation === 'horizontal' ? true : false,
+            instance: props.instance,
+          }}
         />
       )}
       <DisplaySettings

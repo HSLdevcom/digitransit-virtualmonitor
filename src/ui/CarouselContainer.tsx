@@ -43,7 +43,8 @@ const sortAndFilter = (departures, trainsWithTrack) => {
     sortedAndFiltered.forEach(sf => {
       const trackDataFound = trainsWithTrack.filter(
         tt =>
-          tt.lineId === sf.trip.route.shortName &&
+          (tt.lineId === sf.trip.route.shortName ||
+            tt.trainNumber.toString() === sf.trip.route.shortName) &&
           tt.timeInSecs === sf.serviceDay + sf.scheduledDeparture,
       );
       if (trackDataFound.length === 0) {

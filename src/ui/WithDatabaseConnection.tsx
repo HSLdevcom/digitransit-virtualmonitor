@@ -1,10 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
-import { ISides, ITitle } from '../util/Interfaces';
+import { ISides, ITitle, ICard } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
-import { getStationIds, isPlatformOrTrackVisible } from '../util/monitorUtils';
+import { getIdAndRoutes, isPlatformOrTrackVisible } from '../util/monitorUtils';
 import NoMonitorsFound from './NoMonitorsFound';
 import TrainDataFetcher from './TrainDataFetcher';
 import { uuidValidateV5, getContentHash } from '../util/monitorUtils';
@@ -31,9 +31,19 @@ interface ILocation {
 }
 interface IProps {
   readonly location?: ILocation;
+  readonly instance?: string;
+  readonly stations: Array<ICard>;
+  readonly stops: Array<ICard>;
+  readonly showPlatformsOrTracks: boolean;
 }
 
-const WithDatabaseConnection: FC<IProps> = ({ location }) => {
+const WithDatabaseConnection: FC<IProps> = ({
+  location,
+  instance,
+  stations,
+  stops,
+  showPlatformsOrTracks,
+}) => {
   const [view, setView] = useState({});
   const [fetched, setFetched] = useState(false);
   const [hash, setHash] = useState(undefined);
@@ -56,25 +66,37 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
     return <Loading />;
   }
 
-  const stationIds = getStationIds(monitor);
-  const showPlatformsOrTracks = stationIds.length
-    ? isPlatformOrTrackVisible(monitor)
-    : false;
   return (
     <>
       {monitor.isInformationDisplay ? (
         <InformationDisplayContainer monitor={monitor} />
       ) : (
         <>
-          {stationIds.length && showPlatformsOrTracks ? (
+          {(stations.length || stops.length) && showPlatformsOrTracks ? (
             <TrainDataFetcher
               monitor={monitor}
-              stationIds={stationIds}
+              stations={stations}
+              stops={stops}
               staticContentHash={
                 monitor.contenthash ? monitor.contenthash : undefined
               }
               staticUrl={uuidValidateV5(hash) ? hash : undefined}
               staticViewTitle={location?.state?.viewTitle}
+              fetchOnlyHsl={
+                instance === 'hsl'
+                  ? true
+                  : stations
+                      .concat(stops)
+                      .every(x => x.gtfsId.startsWith('HSL'))
+              }
+              fetchAlsoHsl={
+                instance === 'hsl'
+                  ? false
+                  : !stations
+                      .concat(stops)
+                      .every(x => x.gtfsId.startsWith('HSL')) &&
+                    stations.concat(stops).some(x => x.gtfsId.startsWith('HSL'))
+              }
             />
           ) : (
             <CarouselDataContainer

@@ -8,7 +8,6 @@ import Banner from './ui/Banner';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import CreateViewPage from './ui/CreateViewPage';
 import Version from './ui/Version';
-import WithDatabaseConnection from './ui/WithDatabaseConnection';
 import {
   defaultColorAlert,
   defaultColorFont,
@@ -33,6 +32,8 @@ import StopMonitorContainer from './ui/StopMonitorContainer';
 import './sass/main.scss';
 
 import SkipToMainContent from './ui/SkipToMainContent';
+
+import PrepareMonitor from './ui/PrepareMonitor';
 
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
@@ -247,8 +248,8 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
               </>
             )}
           />
-          <Route path={'/view'} component={WithDatabaseConnection} />
-          <Route path={'/static'} component={WithDatabaseConnection} />
+          <Route path={'/view'} component={PrepareMonitor} />
+          <Route path={'/static'} component={PrepareMonitor} />
           <Route path={'/version'} component={Version} />
           <Route
             path={'/urld/:version/:packedDisplay'}

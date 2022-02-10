@@ -2,14 +2,15 @@ import React, { FC } from 'react';
 import PreviewModal from './PreviewModal';
 import WithDatabaseConnection from './WithDatabaseConnection';
 import { getIdAndRoutes, isPlatformOrTrackVisible } from '../util/monitorUtils';
+import { IMonitor } from '../util/Interfaces';
 
 interface IProps {
   readonly location?: any;
   readonly preview?: {
-    view: any;
-    languages: any;
+    view: IMonitor;
+    languages: Array<string>;
     isOpen: boolean;
-    onClose: any;
+    onClose: (boolean) => void;
     isLandscape: boolean;
     instance: string;
   };

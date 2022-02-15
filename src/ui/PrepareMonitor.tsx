@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
 import PreviewModal from './PreviewModal';
 import WithDatabaseConnection from './WithDatabaseConnection';
-import { getIdAndRoutes, isPlatformOrTrackVisible } from '../util/monitorUtils';
+import {
+  getTrainStationData,
+  isPlatformOrTrackVisible,
+} from '../util/monitorUtils';
 import { IMonitor } from '../util/Interfaces';
 
 interface IProps {
@@ -19,22 +22,12 @@ interface IProps {
 const PrepareMonitor: FC<IProps> = ({ location, preview }) => {
   const monitor = location ? location?.state?.view : preview.view;
   const instance = location ? location?.state?.instance : preview.instance;
-  const stations = monitor ? getIdAndRoutes(monitor, 'STATION') : [];
-  const stops = monitor ? getIdAndRoutes(monitor, 'STOP') : [];
+  const stations = monitor ? getTrainStationData(monitor, 'STATION') : [];
+  const stops = monitor ? getTrainStationData(monitor, 'STOP') : [];
   const showPlatformsOrTracks =
     stations.length || stops.length ? isPlatformOrTrackVisible(monitor) : false;
 
-  if (location?.state) {
-    return (
-      <WithDatabaseConnection
-        location={location}
-        instance={instance}
-        stations={stations}
-        stops={stops}
-        showPlatformsOrTracks={showPlatformsOrTracks}
-      />
-    );
-  } else if (preview) {
+  if (preview) {
     return (
       <PreviewModal
         view={preview.view}
@@ -49,7 +42,15 @@ const PrepareMonitor: FC<IProps> = ({ location, preview }) => {
       />
     );
   }
-  return null;
+  return (
+    <WithDatabaseConnection
+      location={location}
+      instance={instance}
+      stations={stations}
+      stops={stops}
+      showPlatformsOrTracks={showPlatformsOrTracks}
+    />
+  );
 };
 
 export default PrepareMonitor;

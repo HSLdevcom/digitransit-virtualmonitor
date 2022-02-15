@@ -353,9 +353,9 @@ export const capitalize = text => {
   return text;
 };
 
-export const getIdAndRoutes = (monitor, locationType) => {
+export const getTrainStationData = (monitor, locationType) => {
   const retValue = [];
-  const array = monitor['cards'] ? monitor.cards : monitor;
+  const array = monitor.cards ? monitor.cards : monitor;
   array.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
@@ -387,7 +387,7 @@ export const getIdAndRoutes = (monitor, locationType) => {
 
 export const isPlatformOrTrackVisible = monitor => {
   let showPlatformOrTrack = false;
-  const array = monitor['cards'] ? monitor.cards : monitor;
+  const array = monitor.cards ? monitor.cards : monitor;
   array.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {

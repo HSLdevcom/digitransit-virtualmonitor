@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { gql, useLazyQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import CarouselDataContainer from './CarouselDataContainer';
 import { IMonitor, ICard } from '../util/Interfaces';
 import Loading from './Loading';
@@ -9,10 +9,9 @@ import {
   formattedDateTimeFromSeconds,
   getTomorrowWithFormat,
 } from '../time';
-import { sortBy, uniqWith } from 'lodash';
+import { sortBy, uniqBy } from 'lodash';
 import { trainStationMap } from '../util/trainStations';
 import { ITrainData } from '../util/Interfaces';
-import { stringifyPattern } from '../util/monitorUtils';
 
 const GET_TRACKS = gql`
   query getTracks(
@@ -63,107 +62,6 @@ const GET_TRACKS = gql`
     }
   }
 `;
-
-const GET_LINE_IDS = gql`
-  query getLineIds($stations: [String]!, $stops: [String]!)
-  @api(contextKey: "clientName") {
-    stations(ids: $stations) {
-      name
-      gtfsId
-      stops {
-        gtfsId
-        name
-        stoptimesForPatterns {
-          pattern {
-            code
-            headsign
-            route {
-              gtfsId
-              shortName
-            }
-          }
-        }
-      }
-    }
-    stops(ids: $stops) {
-      gtfsId
-      name
-      stoptimesForPatterns {
-        pattern {
-          code
-          headsign
-          route {
-            gtfsId
-            shortName
-          }
-        }
-      }
-    }
-  }
-`;
-
-const createLineIdsArray = (
-  data,
-  hiddenRoutes,
-  fetchOnlyHsl,
-  fetchAlsoHsl,
-  secondFetch,
-) => {
-  let filteredHiddenRoutes = hiddenRoutes.reduce((flatten, arr) => [
-    ...flatten,
-    ...arr,
-  ]);
-  if (fetchOnlyHsl || (fetchAlsoHsl && secondFetch)) {
-    filteredHiddenRoutes = filteredHiddenRoutes.filter(f =>
-      f.startsWith('HSL'),
-    );
-  } else if (fetchAlsoHsl && !secondFetch) {
-    filteredHiddenRoutes = filteredHiddenRoutes.filter(
-      f => !f.startsWith('HSL'),
-    );
-  }
-
-  const lineIds = [];
-  if (data) {
-    data.stations
-      .filter(s => s)
-      .forEach(station => {
-        station.stops.forEach(stop => {
-          const routes =
-            stop?.stoptimesForPatterns.map(stoptimes => stoptimes.pattern) ||
-            [];
-          routes.forEach(pattern => {
-            if (!filteredHiddenRoutes.includes(stringifyPattern(pattern))) {
-              lineIds.push({
-                parentStation: station.gtfsId,
-                shortName: pattern.route.shortName,
-                stringifiedPattern: stringifyPattern(pattern),
-              });
-            }
-          });
-        });
-      });
-    data.stops
-      .filter(s => s)
-      .forEach(stop => {
-        const routes =
-          stop?.stoptimesForPatterns.map(stoptimes => stoptimes.pattern) || [];
-        routes.forEach(pattern => {
-          if (!filteredHiddenRoutes.includes(stringifyPattern(pattern))) {
-            lineIds.push({
-              parentStation: stop.parentStation
-                ? stop.parentStation.gtfsId
-                : stop.gtfsId,
-              shortName: pattern.route.shortName,
-              stringifiedPattern: stringifyPattern(pattern),
-            });
-          }
-        });
-      });
-  }
-  return Array.from(new Set(lineIds));
-};
-
 // There could be almost two identical rows
 // (difference only in track - one with number and one with null)
 const removeDuplicatesWithDifferentTracks = (
@@ -185,25 +83,13 @@ const removeDuplicatesWithDifferentTracks = (
   });
   return Array.from(new Set(result));
 };
-
-const uniqueLinesOrTrains = lineIds => {
-  return uniqWith(
-    lineIds,
-    (l1, l2) =>
-      l1.commuterLineid === l2.commuterLineid ||
-      l1.trainNumber === l2.trainNumber,
-  );
-};
 interface IProps {
   monitor: IMonitor;
   stations?: Array<ICard>;
   stops?: Array<ICard>;
   preview?: boolean;
-  staticContentHash?: string;
-  staticUrl?: string;
-  staticViewTitle?: string;
-  fetchOnlyHsl?: boolean;
-  fetchAlsoHsl?: boolean;
+  defaultLines?: any;
+  stopAndRoutes?: any;
 }
 
 const TrainDataFetcher: FC<IProps> = ({
@@ -211,23 +97,11 @@ const TrainDataFetcher: FC<IProps> = ({
   stations,
   stops,
   preview = false,
-  staticContentHash,
-  staticUrl,
-  staticViewTitle,
-  fetchOnlyHsl = false,
-  fetchAlsoHsl = false,
+  stopAndRoutes,
+  defaultLines,
+  ...rest
 }) => {
-  const [getLineIds, lineIdsState] = useLazyQuery(GET_LINE_IDS);
-  const [getHslLineIds, lineHslIdsState] = useLazyQuery(GET_LINE_IDS);
-  const [getTrainsWithTracks, trainsWithTrackState] = useLazyQuery(GET_TRACKS);
-  const [trainsWithTrack, setTrainsWithTrack] = useState([]);
-  const [linesQuery, setLinesQuery] = useState(null);
-  const [stopAndRoutes, setStopAndRoutes] = useState({});
-
-  const ids = stations.concat(stops).map(st => st['gtfsId']);
-  const hiddenRoutes = stations.concat(stops).map(st => st['hiddenRoutes']);
-  let withHslLines;
-
+  const ids = stations.concat(stops).map(st => st.gtfsId);
   const shortCodes = ids
     .map(id => {
       return {
@@ -244,154 +118,43 @@ const TrainDataFetcher: FC<IProps> = ({
     .map(s => {
       return { station: { shortCode: { equals: s.shortCode } } };
     });
-
-  if (!lineIdsState.loading && !lineIdsState.data) {
-    getLineIds({
-      variables: {
-        stations: stations.map(st => st['gtfsId']),
-        stops: stops.map(st => st['gtfsId']),
+  const { data, loading } = useQuery(GET_TRACKS, {
+    variables: {
+      stations: {
+        and: [{ type: { equals: 'DEPARTURE' } }, { or: stationsQuery }],
       },
-      context: { clientName: 'default' },
-    });
-  }
-
-  useEffect(() => {
-    if (lineIdsState.data) {
-      const stopAndRoutes = {};
-      const lineIds = createLineIdsArray(
-        lineIdsState.data,
-        hiddenRoutes,
-        fetchOnlyHsl,
-        fetchAlsoHsl,
-        false,
-      )
-        .map((m, i) => {
-          const r = stopAndRoutes[m['parentStation']]?.routes;
-          const shortCode =
-            shortCodes[
-              shortCodes.findIndex(s => s.gtfsId === m['parentStation'])
-            ].shortCode;
-          if (!r || r.indexOf(m['shortName']) === -1) {
-            stopAndRoutes[m['parentStation']] = {
-              routes:
-                r && r.length > 0
-                  ? r.concat(',').concat(m['shortName'])
-                  : m['shortName'],
-              shortCode: shortCode,
-            };
-          }
-
-          if (fetchAlsoHsl && m.stringifiedPattern.startsWith('HSL')) {
-            return null;
-          } else {
-            if (Number.isInteger(parseInt(m.shortName))) {
-              return { trainNumber: { equals: parseInt(m.shortName) } };
-            }
-            return { commuterLineid: { equals: m.shortName } };
-          }
-        })
-        .filter(x => x);
-      const uniqueLines = uniqueLinesOrTrains(lineIds);
-      setLinesQuery(
-        linesQuery === null ? uniqueLines : linesQuery.concat(uniqueLines),
-      );
-      setStopAndRoutes(stopAndRoutes);
-    }
-  }, [lineIdsState.data]);
-
-  if (
-    !lineIdsState.loading &&
-    lineIdsState.data &&
-    !lineHslIdsState.loading &&
-    !lineHslIdsState.data &&
-    linesQuery !== null
-  ) {
-    if (!fetchOnlyHsl && fetchAlsoHsl) {
-      getHslLineIds({
-        variables: {
-          stations: stations.map(st => st['gtfsId']),
-          stops: stops.map(st => st['gtfsId']),
-        },
-        context: { clientName: 'hsl' },
-      });
-    }
-  }
-
-  useEffect(() => {
-    if (lineHslIdsState.data) {
-      const lineIds = createLineIdsArray(
-        lineHslIdsState.data,
-        hiddenRoutes,
-        fetchOnlyHsl,
-        fetchAlsoHsl,
-        true,
-      )
-        .map(m => {
-          if (!m.stringifiedPattern.startsWith('HSL')) {
-            return null;
-          } else {
-            if (Number.isInteger(parseInt(m.shortName))) {
-              return { trainNumber: { equals: parseInt(m.shortName) } };
-            }
-            return { commuterLineid: { equals: m.shortName } };
-          }
-        })
-        .filter(x => x);
-
-      const uniqueLines = uniqueLinesOrTrains(lineIds);
-      setLinesQuery(
-        linesQuery === null ? uniqueLines : linesQuery.concat(uniqueLines),
-      );
-    }
-  }, [lineHslIdsState.data]);
-
-  useEffect(() => {
-    if (
-      !trainsWithTrackState.loading &&
-      !trainsWithTrackState.data &&
-      !lineIdsState.loading &&
-      lineIdsState.data &&
-      ((!fetchAlsoHsl && !lineHslIdsState.loading && !lineHslIdsState.data) ||
-        (fetchAlsoHsl && !lineHslIdsState.loading && lineHslIdsState.data))
-    ) {
-      getTrainsWithTracks({
-        variables: {
-          stations: {
-            and: [{ type: { equals: 'DEPARTURE' } }, { or: stationsQuery }],
-          },
-          trainClause: {
-            and: [
+      trainClause: {
+        and: [
+          {
+            or: [
               {
-                or: [
-                  {
-                    trainType: {
-                      trainCategory: { name: { equals: 'Commuter' } },
-                    },
-                  },
-                  {
-                    trainType: {
-                      trainCategory: { name: { equals: 'Long-distance' } },
-                    },
-                  },
-                ],
+                trainType: {
+                  trainCategory: { name: { equals: 'Commuter' } },
+                },
               },
-              { or: linesQuery },
+              {
+                trainType: {
+                  trainCategory: { name: { equals: 'Long-distance' } },
+                },
+              },
             ],
           },
-          dateToday: getTodayWithFormat('yyyy-MM-dd'),
-          dateTomorrow: getTomorrowWithFormat('yyyy-MM-dd'),
-        },
-        context: { clientName: 'rail' },
-      });
-    }
-  }, [linesQuery]);
+          { or: defaultLines },
+        ],
+      },
+      dateToday: getTodayWithFormat('yyyy-MM-dd'),
+      dateTomorrow: getTomorrowWithFormat('yyyy-MM-dd'),
+    },
+    context: { clientName: 'rail' },
+  });
+  const [trainsWithTrack, setTrainsWithTrack] = useState([]);
 
   useEffect(() => {
-    if (trainsWithTrackState.data) {
+    if (data) {
       const srArray = Object.keys(stopAndRoutes).map(i => stopAndRoutes[i]);
       const trainsWithTrack = [];
       ['today', 'tomorrow'].forEach(day => {
-        trainsWithTrackState.data[day].forEach(train => {
+        data[day].forEach(train => {
           if (train.timeTableRows !== null) {
             const id =
               train.commuterLineid === ''
@@ -403,8 +166,8 @@ const TrainDataFetcher: FC<IProps> = ({
                 const routes =
                   srArray[
                     srArray.findIndex(x => x.shortCode === t.station.shortCode)
-                  ].routes;
-                if (routes.indexOf(id) !== -1) {
+                  ]?.routes;
+                if (routes?.indexOf(id) !== -1) {
                   idx = i;
                 }
               });
@@ -424,9 +187,9 @@ const TrainDataFetcher: FC<IProps> = ({
       });
       setTrainsWithTrack(trainsWithTrack);
     }
-  }, [trainsWithTrackState.data]);
+  }, [data]);
 
-  if (lineIdsState.loading || trainsWithTrackState.loading) {
+  if (loading) {
     return <Loading />;
   }
 
@@ -438,10 +201,8 @@ const TrainDataFetcher: FC<IProps> = ({
         sortBy(trainsWithTrack, 'timeInSecs'),
       )}
       preview={preview}
-      staticContentHash={staticContentHash}
-      staticUrl={staticUrl}
-      staticViewTitle={staticViewTitle}
       initTime={new Date().getTime()}
+      {...rest}
     />
   );
 };

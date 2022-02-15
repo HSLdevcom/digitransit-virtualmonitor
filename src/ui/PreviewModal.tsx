@@ -7,6 +7,7 @@ import cx from 'classnames';
 import InformationDisplayContainer from './InformationDisplayContainer';
 import TrainDataFetcher from './TrainDataFetcher';
 import { withTranslation, WithTranslation } from 'react-i18next';
+import TrainDataPreparer from './TrainDataPreparer';
 
 Modal.setAppElement('#root');
 interface Props {
@@ -59,28 +60,11 @@ const PreviewModal: FC<Props & WithTranslation> = ({
             ) : (
               <>
                 {(stations.length || stops.length) && showPlatformsOrTracks ? (
-                  <TrainDataFetcher
+                  <TrainDataPreparer
                     monitor={view}
                     stations={stations}
                     stops={stops}
                     preview
-                    fetchOnlyHsl={
-                      instance === 'hsl'
-                        ? true
-                        : stations
-                            .concat(stops)
-                            .every(x => x.gtfsId.startsWith('HSL'))
-                    }
-                    fetchAlsoHsl={
-                      instance === 'hsl'
-                        ? false
-                        : !stations
-                            .concat(stops)
-                            .every(x => x.gtfsId.startsWith('HSL')) &&
-                          stations
-                            .concat(stops)
-                            .some(x => x.gtfsId.startsWith('HSL'))
-                    }
                   />
                 ) : (
                   <CarouselDataContainer

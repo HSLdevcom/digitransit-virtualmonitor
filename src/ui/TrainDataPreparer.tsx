@@ -31,6 +31,9 @@ const GET_LINE_IDS = gql`
     stops(ids: $stops) {
       gtfsId
       name
+      parentStation {
+        gtfsId
+      }
       stoptimesForPatterns {
         pattern {
           code
@@ -88,7 +91,7 @@ const createLineIdsArray = (data, hiddenRoutes) => {
         });
       });
   }
-  return uniqBy(lineIds, 'stringifiedPattern');
+  return lineIds;
 };
 
 interface IProps {
@@ -108,39 +111,29 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
   });
 
   const [defaultLines, setDefaultLines] = useState(null);
-  const [stopAndRoutes, setStopAndRoutes] = useState({});
+  const [stopAndRoutes, setStopAndRoutes] = useState([]);
 
-  const ids = stations.concat(stops).map(st => st.gtfsId);
   const hiddenRoutes = stations.concat(stops).map(st => st.hiddenRoutes);
-
-  const shortCodes = ids
-    .map(id => {
-      return {
-        gtfsId: id,
-        shortCode:
-          trainStationMap?.find(i => i.gtfsId === id)?.shortCode ||
-          id.substring(8),
-      };
-    })
-    .filter(s => s);
 
   useEffect(() => {
     if (defaultState.data) {
-      const stopAndRoutes = {};
+      const stopAndRoutes = [];
       const lineIds = createLineIdsArray(defaultState.data, hiddenRoutes)
         .map(m => {
           const r = stopAndRoutes[m.parentStation]?.routes;
-          const shortCode =
-            shortCodes[shortCodes.findIndex(s => s.gtfsId === m.parentStation)]
-              .shortCode;
+          const hslId = trainStationMap?.find(
+            i => i.gtfsId === m.parentStation,
+          )?.shortCode;
+          const shortCode = hslId ? hslId : undefined;
           if (!r || r.indexOf(m.shortName) === -1) {
-            stopAndRoutes[m.parentStation] = {
+            stopAndRoutes.push({
               routes:
                 r && r.length > 0
                   ? r.concat(',').concat(m.shortName)
                   : m.shortName,
               shortCode: shortCode,
-            };
+              parentStation: m.parentStation,
+            });
           }
           if (Number.isInteger(parseInt(m.shortName))) {
             return { trainNumber: { equals: parseInt(m.shortName) } };

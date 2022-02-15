@@ -85,8 +85,8 @@ const removeDuplicatesWithDifferentTracks = (
 };
 interface IProps {
   monitor: IMonitor;
-  stations?: Array<ICard>;
-  stops?: Array<ICard>;
+  stations?: any; //Array<ICard>;
+  stops?: any; //Array<ICard>;
   preview?: boolean;
   defaultLines?: any;
   stopAndRoutes?: any;
@@ -101,19 +101,17 @@ const TrainDataFetcher: FC<IProps> = ({
   defaultLines,
   ...rest
 }) => {
-  const ids = stations.concat(stops).map(st => st.gtfsId);
+  const ids = stations.concat(stops);
   const shortCodes = ids
-    .map(id => {
+    .map(stop => {
       return {
-        gtfsId: id,
-        shortCode:
-          trainStationMap?.find(i => i.gtfsId === id)?.shortCode ||
-          id.substring(8),
+        gtfsId: stop.parentStation,
+        shortCode: stop?.shortCode || stop.substring(8),
       };
     })
     .filter(s => s);
-
-  const stationsQuery = shortCodes
+  const s = uniqBy(shortCodes, 'shortCode');
+  const stationsQuery = s
     .filter(a => a)
     .map(s => {
       return { station: { shortCode: { equals: s.shortCode } } };

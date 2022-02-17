@@ -263,7 +263,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
       updateCardInfo(
         card.id,
         'layout',
-        orientation === 'horizontal' ? '2' : '12',
+        orientation === 'horizontal' ? '2' : '14',
       ),
     );
   };

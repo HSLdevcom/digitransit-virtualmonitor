@@ -84,7 +84,7 @@ export default {
       primary: '#1c57cf',
       monitorBackground: '#1c57cf',
     },
-    feedIds: ['tampere'],
+    feedIds: ['tampere', 'TampereVR', 'tampereDRT'],
     fonts: {
       monitor: {
         name: 'Lato',

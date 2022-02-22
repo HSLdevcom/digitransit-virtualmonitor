@@ -12,7 +12,7 @@ export const departure: IDeparture = {
   headsign: 'JYVÄSKYLÄ',
   pickupType: 'SCHEDULED',
   realtime: true,
-  route: { alerts: [], shortName: 'Helsinki' },
+  route: { alerts: [], shortName: '123' },
   realtimeDeparture: 51763,
   realtimeState: 'UPDATED',
   serviceDay: 1645480800,
@@ -21,6 +21,6 @@ export const departure: IDeparture = {
     tripHeadsign: 'Helsinki',
     gtfsId: 'HSL:1234trip',
     stops: [stop],
-    route: { alerts: [], shortName: 'Helsinki' },
+    route: { alerts: [], shortName: '123' },
   },
 };

@@ -107,7 +107,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
   );
 
-  const isCancelled = departure?.realtimeState === 'CANCELED' || true;
+  const isCancelled = departure?.realtimeState === 'CANCELED';
 
   const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')
@@ -210,7 +210,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
       lineLen = -1;
     }
   }
-
   return (
     <div className="row-with-separator">
       <div className={cx('separator', { first: isFirst })}></div>

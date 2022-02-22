@@ -22,14 +22,21 @@ const defaultProps = {
 
 it('should render a row correctly', () => {
   const { container } = render(<MonitorRow {...defaultProps} />);
-
+  // destination
   expect(
     container.getElementsByClassName('destination-row')[0].innerHTML,
   ).toEqual('Jyväskylä');
-  // TODO.: add tests for other fields
+  // shortName
+  expect(
+    container.getElementsByClassName('grid-col line')[0].innerHTML,
+  ).toEqual('123');
+  // time,
+  expect(
+    container.getElementsByClassName('grid-col time')[0].innerHTML,
+  ).toEqual('0');
 });
 
-it('should render a cancelled departure', () => {
+it('should render a cancelled departure with the text cancelled', () => {
   const dep = {
     ...departure,
     realtimeState: 'CANCELED',
@@ -56,13 +63,15 @@ it('should render a cancelled departure with alert icon and destination', () => 
   const props = {
     ...defaultProps,
     departure: dep,
-    alertState: 0,
   };
 
   const { container } = render(<MonitorRow {...props} />);
-  //console.log(container.getElementsByClassName('grid-col destination')[0].firstChild)
+
   expect(
     container.getElementsByClassName('destination-row')[0].innerHTML,
   ).toEqual('Jyväskylä');
-  //expect(container.getElementsByClassName('grid-col destination')[0].firstChild.toEqual('svg');
+  expect(
+    container.getElementsByClassName('grid-col destination')[0].children[0]
+      .nodeName,
+  ).toEqual('svg');
 });

@@ -1,7 +1,8 @@
 import React from 'react';
 import reactI18next from 'react-i18next';
 
-const hasChildren = node => node && (node.children || (node.props && node.props.children));
+const hasChildren = node =>
+  node && (node.children || (node.props && node.props.children));
 
 const getChildren = node =>
   node && node.children ? node.children : node.props && node.props.children;
@@ -23,7 +24,10 @@ const renderNodes = reactNodes => {
       return React.cloneElement(child, { ...child.props, key: i }, inner);
     }
     if (typeof child === 'object' && !isElement) {
-      return Object.keys(child).reduce((str, childKey) => `${str}${child[childKey]}`, '');
+      return Object.keys(child).reduce(
+        (str, childKey) => `${str}${child[childKey]}`,
+        '',
+      );
     }
 
     return child;
@@ -36,7 +40,8 @@ useMock.i18n = {};
 
 module.exports = {
   // this mock makes sure any components using the translate HoC receive the t function as a prop
-  withTranslation: () => Component => props => <Component t={k => k} {...props} />,
+  withTranslation: () => Component => props =>
+    <Component t={k => k} {...props} />,
   Trans: ({ children }) =>
     Array.isArray(children) ? renderNodes(children) : renderNodes([children]),
   Translation: ({ children }) => children(k => k, { i18n: {} }),

@@ -14,10 +14,9 @@ import {
 interface IRoute {
   alerts: any;
   shortName: string;
-  patterns?: Array<any>;
 }
 
-interface IStop {
+export interface IStop {
   gtfsId: string;
   code: string;
   platformCode: string;
@@ -108,7 +107,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
   );
 
-  const isCancelled = departure?.realtimeState === 'CANCELED';
+  const isCancelled = departure?.realtimeState === 'CANCELED' || true;
 
   const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')
@@ -265,7 +264,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             ) : (
               <>
                 <Icon img={'alert'} />
-                <div>{t('cancelled', { lng: currentLang })}</div>
+                <div className='cancelled-row'>{t('cancelled', { lng: currentLang })}</div>
               </>
             )
           ) : isTwoRow ? (

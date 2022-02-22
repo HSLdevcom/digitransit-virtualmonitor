@@ -1,22 +1,26 @@
-import { IDeparture, IStop } from '../../ui/MonitorRow'
+import { IDeparture, IStop } from '../../ui/MonitorRow';
 
-export const stop : IStop = {
-  gtfsId: 'HSL:123123', 
-  code:'H1234', 
-  platformCode:'3', 
-  parentStation: null, 
-}
-
+export const stop: IStop = {
+  gtfsId: 'HSL:123123',
+  code: 'H1234',
+  platformCode: '3',
+  parentStation: null,
+};
 
 export const departure: IDeparture = {
-  combinedPattern: "MATKA:60061713:87:Jyväskylä:",
-  headsign: "JYVÄSKYLÄ",
-  pickupType: "SCHEDULED",
+  combinedPattern: 'MATKA:60061713:87:Jyväskylä:',
+  headsign: 'JYVÄSKYLÄ',
+  pickupType: 'SCHEDULED',
   realtime: true,
-  route: {alerts: [], shortName:'Helsinki'},
+  route: { alerts: [], shortName: 'Helsinki' },
   realtimeDeparture: 51763,
-  realtimeState: "UPDATED",
+  realtimeState: 'UPDATED',
   serviceDay: 1645480800,
-  stop: stop,  
-  trip: {tripHeadsign:'Helsinki', gtfsId:'HSL:1234trip', stops:[stop], route: {alerts: [], shortName:'Helsinki'}},
-}
+  stop: stop,
+  trip: {
+    tripHeadsign: 'Helsinki',
+    gtfsId: 'HSL:1234trip',
+    stops: [stop],
+    route: { alerts: [], shortName: 'Helsinki' },
+  },
+};

@@ -30,7 +30,11 @@ export function IndexPage(props: WithTranslation) {
           </div>
         </div>
         <div className="right">
-          <img className={'desktop-img'} src={monitorsImage} alt="monitor-image" />
+          <img
+            className={'desktop-img'}
+            src={monitorsImage}
+            alt="monitor-image"
+          />
         </div>
       </div>
     </ContentContainer>

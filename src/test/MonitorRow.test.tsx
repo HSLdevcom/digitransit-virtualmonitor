@@ -25,7 +25,7 @@ it('should render a row correctly', () => {
 
   expect(
     container.getElementsByClassName('destination-row')[0].innerHTML,
-  ).toEqual('Jyvässsdkylä');
+  ).toEqual('Jyväskylä');
   // TODO.: add tests for other fields
 });
 

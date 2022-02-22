@@ -107,7 +107,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
   );
 
-  const isCancelled = departure?.realtimeState === 'CANCELED' || true;
+  const isCancelled = departure?.realtimeState === 'CANCELED' || true;
 
   const departureDestination =
     departure?.headsign && departure?.headsign.endsWith(' via')
@@ -264,7 +264,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             ) : (
               <>
                 <Icon img={'alert'} />
-                <div className='cancelled-row'>{t('cancelled', { lng: currentLang })}</div>
+                <div className="cancelled-row">
+                  {t('cancelled', { lng: currentLang })}
+                </div>
               </>
             )
           ) : isTwoRow ? (

@@ -14,10 +14,9 @@ import {
 interface IRoute {
   alerts: any;
   shortName: string;
-  patterns?: Array<any>;
 }
 
-interface IStop {
+export interface IStop {
   gtfsId: string;
   code: string;
   platformCode: string;
@@ -211,7 +210,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
       lineLen = -1;
     }
   }
-
   return (
     <div className="row-with-separator">
       <div className={cx('separator', { first: isFirst })}></div>
@@ -265,7 +263,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             ) : (
               <>
                 <Icon img={'alert'} />
-                <div>{t('cancelled', { lng: currentLang })}</div>
+                <div className="cancelled-row">
+                  {t('cancelled', { lng: currentLang })}
+                </div>
               </>
             )
           ) : isTwoRow ? (

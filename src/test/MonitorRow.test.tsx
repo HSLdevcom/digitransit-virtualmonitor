@@ -32,8 +32,8 @@ it('should render a row correctly', () => {
   ).toEqual('123');
   // time,
   expect(
-    container.getElementsByClassName('grid-col time')[0].innerHTML,
-  ).toEqual('0');
+    container.getElementsByClassName('grid-col time')[0].innerHTML.length,
+  ).toBeGreaterThan(0);
 });
 
 it('should render a cancelled departure with the text cancelled', () => {
@@ -74,4 +74,21 @@ it('should render a cancelled departure with alert icon and destination', () => 
     container.getElementsByClassName('grid-col destination')[0].children[0]
       .nodeName,
   ).toEqual('svg');
+});
+
+it('should do show tilde when realtime is off', () => {
+  const dep = {
+    ...departure,
+    realtime: false,
+  };
+
+  const props = {
+    ...defaultProps,
+    departure: dep,
+  };
+
+  const { container } = render(<MonitorRow {...props} />);
+  expect(
+    container.getElementsByClassName('grid-col time')[0].innerHTML,
+  ).toContain('~');
 });

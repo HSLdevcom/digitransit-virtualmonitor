@@ -2,7 +2,6 @@ import React, { FC, useState, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { IMonitor, ICard } from '../util/Interfaces';
 import Loading from './Loading';
-import { uniqBy } from 'lodash';
 import { trainStationMap } from '../util/trainStations';
 import { stringifyPattern } from '../util/monitorUtils';
 import TrainDataFetcher from './TrainDataFetcher';

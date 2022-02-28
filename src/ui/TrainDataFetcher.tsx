@@ -10,7 +10,6 @@ import {
   getTomorrowWithFormat,
 } from '../time';
 import { sortBy, uniqBy } from 'lodash';
-import { trainStationMap } from '../util/trainStations';
 import { ITrainData } from '../util/Interfaces';
 
 const GET_TRACKS = gql`
@@ -85,8 +84,8 @@ const removeDuplicatesWithDifferentTracks = (
 };
 interface IProps {
   monitor: IMonitor;
-  stations?: any; //Array<ICard>;
-  stops?: any; //Array<ICard>;
+  stations?: Array<ICard>;
+  stops?: Array<ICard>;
   preview?: boolean;
   defaultLines?: any;
   stopAndRoutes?: any;
@@ -106,7 +105,7 @@ const TrainDataFetcher: FC<IProps> = ({
     .map(stop => {
       return {
         gtfsId: stop.parentStation,
-        shortCode: stop?.shortCode || stop.substring(8),
+        shortCode: stop?.shortCode || stop.gtfsId.substring(8),
       };
     })
     .filter(s => s);
@@ -149,7 +148,6 @@ const TrainDataFetcher: FC<IProps> = ({
 
   useEffect(() => {
     if (data) {
-      const srArray = Object.keys(stopAndRoutes).map(i => stopAndRoutes[i]);
       const trainsWithTrack = [];
       ['today', 'tomorrow'].forEach(day => {
         data[day].forEach(train => {
@@ -162,8 +160,10 @@ const TrainDataFetcher: FC<IProps> = ({
             if (train.timeTableRows.length > 1) {
               train.timeTableRows.forEach((t, i) => {
                 const routes =
-                  srArray[
-                    srArray.findIndex(x => x.shortCode === t.station.shortCode)
+                  stopAndRoutes[
+                    stopAndRoutes.findIndex(
+                      x => x.shortCode === t.station.shortCode,
+                    )
                   ]?.routes;
                 if (routes?.indexOf(id) !== -1) {
                   idx = i;

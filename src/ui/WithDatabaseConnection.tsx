@@ -1,12 +1,11 @@
 import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
-import { ISides, ITitle } from '../util/Interfaces';
+import { ISides, ITitle, ICard } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
-import { getStationIds, isPlatformOrTrackVisible } from '../util/monitorUtils';
 import NoMonitorsFound from './NoMonitorsFound';
-import TrainDataFetcher from './TrainDataFetcher';
+import TrainDataPreparer from './TrainDataPreparer';
 import { uuidValidateV5, getContentHash } from '../util/monitorUtils';
 
 interface Iv {
@@ -31,9 +30,19 @@ interface ILocation {
 }
 interface IProps {
   readonly location?: ILocation;
+  readonly instance?: string;
+  readonly stations: Array<ICard>;
+  readonly stops: Array<ICard>;
+  readonly showPlatformsOrTracks: boolean;
 }
 
-const WithDatabaseConnection: FC<IProps> = ({ location }) => {
+const WithDatabaseConnection: FC<IProps> = ({
+  location,
+  instance,
+  stations,
+  stops,
+  showPlatformsOrTracks,
+}) => {
   const [view, setView] = useState({});
   const [fetched, setFetched] = useState(false);
   const [hash, setHash] = useState(undefined);
@@ -56,20 +65,17 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
     return <Loading />;
   }
 
-  const stationIds = getStationIds(monitor);
-  const showPlatformsOrTracks = stationIds.length
-    ? isPlatformOrTrackVisible(monitor)
-    : false;
   return (
     <>
       {monitor.isInformationDisplay ? (
         <InformationDisplayContainer monitor={monitor} />
       ) : (
         <>
-          {stationIds.length && showPlatformsOrTracks ? (
-            <TrainDataFetcher
+          {(stations.length || stops.length) && showPlatformsOrTracks ? (
+            <TrainDataPreparer
               monitor={monitor}
-              stationIds={stationIds}
+              stations={stations}
+              stops={stops}
               staticContentHash={
                 monitor.contenthash ? monitor.contenthash : undefined
               }

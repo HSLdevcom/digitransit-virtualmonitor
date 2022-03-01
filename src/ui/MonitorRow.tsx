@@ -39,6 +39,9 @@ export interface IDeparture {
   pickupType: string;
   stop: IStop;
   combinedPattern?: string;
+  showStopNumber: boolean;
+  showVia: boolean;
+  vehicleMode: string;
 }
 
 interface IProps {
@@ -96,12 +99,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   t,
   withoutRouteColumn,
 }) => {
-  const stopSettings = stops.find(s => {
-    const gtfsID = departure?.stop?.parentStation
-      ? departure?.stop.parentStation.gtfsId
-      : departure?.stop.gtfsId;
-    return s.gtfsId === gtfsID;
-  });
   const renamedDestinations = [];
   stops.forEach(s =>
     s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
@@ -200,8 +197,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     showMinutes * 60,
     departure?.serviceDay,
   );
-  const showStopCode = stopSettings?.settings?.showStopNumber;
-  const viaSettings = stopSettings?.settings?.showVia;
+
+  const showStopCode = departure?.showStopNumber;
+  const viaSetting = departure?.showVia;
 
   if (!lineLen) {
     if (!departure) {
@@ -233,7 +231,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             <Icon
               height={24}
               width={24}
-              img={stopSettings?.mode || 'bus'}
+              img={departure?.vehicleMode || 'bus'}
               color={getColorByName('monitorBackground')}
             />
           </div>
@@ -315,7 +313,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
                   </div>
                 )}
               </div>
-              {showVia && viaSettings && (
+              {showVia && viaSetting && (
                 <>
                   <div className="via-destination">
                     {' '.concat(viaDestination)}

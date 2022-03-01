@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
-import { gql, useLazyQuery } from '@apollo/client';
+import { gql, useQuery } from '@apollo/client';
 import CarouselDataContainer from './CarouselDataContainer';
-import { IMonitor } from '../util/Interfaces';
+import { IMonitor, ICard } from '../util/Interfaces';
 import Loading from './Loading';
 import {
   getTodayWithFormat,
@@ -9,8 +9,7 @@ import {
   formattedDateTimeFromSeconds,
   getTomorrowWithFormat,
 } from '../time';
-import { sortBy } from 'lodash';
-import { trainStationMap } from '../util/trainStations';
+import { sortBy, uniqBy } from 'lodash';
 import { ITrainData } from '../util/Interfaces';
 
 const GET_TRACKS = gql`
@@ -18,7 +17,7 @@ const GET_TRACKS = gql`
     $dateToday: Date!
     $dateTomorrow: Date!
     $trainClause: TrainWhere!
-    $stationIds: TimeTableRowWhere!
+    $stations: TimeTableRowWhere!
   ) @api(contextKey: "clientName") {
     today: trainsByDepartureDate(
       departureDate: $dateToday
@@ -28,7 +27,7 @@ const GET_TRACKS = gql`
       trainNumber
       timetableType
       runningCurrently
-      timeTableRows(where: $stationIds) {
+      timeTableRows(where: $stations) {
         commercialStop
         type
         scheduledTime
@@ -36,7 +35,7 @@ const GET_TRACKS = gql`
         actualTime
         commercialTrack
         station {
-          name
+          shortCode
         }
       }
     }
@@ -48,7 +47,7 @@ const GET_TRACKS = gql`
       trainNumber
       timetableType
       runningCurrently
-      timeTableRows(where: $stationIds) {
+      timeTableRows(where: $stations) {
         commercialStop
         type
         scheduledTime
@@ -56,45 +55,12 @@ const GET_TRACKS = gql`
         actualTime
         commercialTrack
         station {
-          name
+          shortCode
         }
       }
     }
   }
 `;
-
-const GET_LINE_IDS = gql`
-  query getLineIds($stationIds: [String]!) @api(contextKey: "clientName") {
-    stations(ids: $stationIds) {
-      name
-      gtfsId
-      stops {
-        patterns {
-          route {
-            shortName
-          }
-        }
-      }
-    }
-  }
-`;
-
-const createLineIdsArray = data => {
-  const lineIds = [];
-  if (data) {
-    data.stations
-      .filter(s => s)
-      .forEach(station => {
-        station.stops.forEach(stop => {
-          stop.patterns.forEach(pattern => {
-            lineIds.push(pattern.route.shortName);
-          });
-        });
-      });
-  }
-  return Array.from(new Set(lineIds));
-};
-
 // There could be almost two identical rows
 // (difference only in track - one with number and one with null)
 const removeDuplicatesWithDifferentTracks = (
@@ -116,105 +82,107 @@ const removeDuplicatesWithDifferentTracks = (
   });
   return Array.from(new Set(result));
 };
-
 interface IProps {
   monitor: IMonitor;
-  stationIds: Array<string>;
   preview?: boolean;
-  staticContentHash?: string;
-  staticUrl?: string;
-  staticViewTitle?: string;
+  defaultLines?: any;
+  stopAndRoutes?: any;
 }
 
 const TrainDataFetcher: FC<IProps> = ({
   monitor,
-  stationIds,
   preview = false,
-  staticContentHash,
-  staticUrl,
-  staticViewTitle,
+  stopAndRoutes,
+  defaultLines,
+  ...rest
 }) => {
-  const [getLineIds, lineIdsState] = useLazyQuery(GET_LINE_IDS);
-  const [getTrainsWithTracks, trainsWithTrackState] = useLazyQuery(GET_TRACKS);
-  const [trainsWithTrack, setTrainsWithTrack] = useState([]);
-  const [queryObjects, setQueryObjects] = useState([]);
-  if (!lineIdsState.loading && !lineIdsState.data) {
-    const ids = stationIds.map(st => st['gtfsId']);
-    getLineIds({
-      variables: { stationIds: stationIds },
-      context: { clientName: 'hsl' },
+  const shortCodes = stopAndRoutes
+    .map(stop => {
+      return {
+        gtfsId: stop.parentStation,
+        shortCode: stop?.shortCode || stop.parentStation.substring(8),
+      };
+    })
+    .filter(s => s);
+  const s = uniqBy(shortCodes, 'shortCode');
+  const stationsQuery = s
+    .filter(a => a)
+    .map(s => {
+      return { station: { shortCode: { equals: s.shortCode } } };
     });
-  }
-
-  useEffect(() => {
-    if (lineIdsState.data) {
-      const shortCodes = stationIds.map(id => {
-        return trainStationMap?.find(i => i.gtfsId === id)?.shortCode;
-      });
-      const stations = shortCodes
-        .filter(a => a)
-        .map(code => {
-          return { station: { shortCode: { equals: code } } };
-        });
-      const lineIds = createLineIdsArray(lineIdsState.data)
-        .map(shortName => {
-          return { commuterLineid: { equals: shortName } };
-        })
-        .filter(x => x);
-
-      setQueryObjects([stations, lineIds]);
-    }
-  }, [lineIdsState.data]);
-  if (
-    !trainsWithTrackState.loading &&
-    !trainsWithTrackState.data &&
-    !lineIdsState.loading &&
-    lineIdsState.data &&
-    queryObjects.length === 2 &&
-    queryObjects[0].length > 0 &&
-    queryObjects[1].length > 0
-  ) {
-    getTrainsWithTracks({
-      variables: {
-        stationIds: {
-          and: [{ type: { equals: 'DEPARTURE' } }, { or: queryObjects[0] }],
-        },
-        trainClause: {
-          and: [
-            { trainType: { trainCategory: { name: { equals: 'Commuter' } } } },
-            { or: queryObjects[1] },
-          ],
-        },
-        dateToday: getTodayWithFormat('yyyy-MM-dd'),
-        dateTomorrow: getTomorrowWithFormat('yyyy-MM-dd'),
+  const { data, loading } = useQuery(GET_TRACKS, {
+    variables: {
+      stations: {
+        and: [{ type: { equals: 'DEPARTURE' } }, { or: stationsQuery }],
       },
-      context: { clientName: 'rail' },
-    });
-  }
+      trainClause: {
+        and: [
+          {
+            or: [
+              {
+                trainType: {
+                  trainCategory: { name: { equals: 'Commuter' } },
+                },
+              },
+              {
+                trainType: {
+                  trainCategory: { name: { equals: 'Long-distance' } },
+                },
+              },
+            ],
+          },
+          { or: defaultLines },
+        ],
+      },
+      dateToday: getTodayWithFormat('yyyy-MM-dd'),
+      dateTomorrow: getTomorrowWithFormat('yyyy-MM-dd'),
+    },
+    context: { clientName: 'rail' },
+  });
+  const [trainsWithTrack, setTrainsWithTrack] = useState([]);
 
   useEffect(() => {
-    if (trainsWithTrackState.data) {
+    if (data) {
       const trainsWithTrack = [];
       ['today', 'tomorrow'].forEach(day => {
-        trainsWithTrackState.data[day].forEach(train => {
+        data[day].forEach(train => {
           if (train.timeTableRows !== null) {
+            const id =
+              train.commuterLineid === ''
+                ? train.trainNumber.toString()
+                : train.commuterLineid;
+            let idx = 0;
+            if (train.timeTableRows.length > 1) {
+              train.timeTableRows.forEach((t, i) => {
+                const routes =
+                  stopAndRoutes[
+                    stopAndRoutes.findIndex(
+                      x => x.shortCode === t.station.shortCode,
+                    )
+                  ]?.routes;
+                if (routes?.indexOf(id) !== -1) {
+                  idx = i;
+                }
+              });
+            }
             trainsWithTrack.push({
               lineId: train.commuterLineid,
+              trainNumber: train.trainNumber,
               time: formattedDateTimeFromSeconds(
-                utcToSeconds(train.timeTableRows[0].scheduledTime),
+                utcToSeconds(train.timeTableRows[idx].scheduledTime),
                 'yyyy-MM-dd HH:mm:ss',
               ),
-              timeInSecs: utcToSeconds(train.timeTableRows[0].scheduledTime),
-              track: train.timeTableRows[0].commercialTrack,
+              timeInSecs: utcToSeconds(train.timeTableRows[idx].scheduledTime),
+              track: train.timeTableRows[idx].commercialTrack,
             });
           }
         });
       });
       setTrainsWithTrack(trainsWithTrack);
     }
-  }, [trainsWithTrackState.data]);
+  }, [data]);
 
-  if (lineIdsState.loading || trainsWithTrackState.loading) {
+  if (loading) {
     return <Loading />;
   }
 
@@ -226,10 +194,8 @@ const TrainDataFetcher: FC<IProps> = ({
         sortBy(trainsWithTrack, 'timeInSecs'),
       )}
       preview={preview}
-      staticContentHash={staticContentHash}
-      staticUrl={staticUrl}
-      staticViewTitle={staticViewTitle}
       initTime={new Date().getTime()}
+      {...rest}
     />
   );
 };

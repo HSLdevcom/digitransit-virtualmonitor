@@ -47,6 +47,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
           languages={languages}
           defaultStopCardList={[defaultStopCard(props.t)]}
           feedIds={props.config.feedIds}
+          instance={props.config.name}
         />
       </ContentContainer>
     );
@@ -79,6 +80,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
         stopCardList={stopCardList}
         feedIds={props.config.feedIds}
         loading={loading}
+        instance={props.config.name}
       />
     </ContentContainer>
   );

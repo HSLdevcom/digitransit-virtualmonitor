@@ -116,3 +116,11 @@ export interface ITrainData {
   timeInSecs: number;
   track: string;
 }
+
+export interface ICard {
+  gtfsId: string;
+  shortCode: string;
+  source: string;
+  parentStation: string;
+  hiddenRoutes: any;
+}

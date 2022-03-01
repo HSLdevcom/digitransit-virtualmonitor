@@ -64,6 +64,7 @@ const createLineIdsArray = (data, hiddenRoutes) => {
           routes.forEach(pattern => {
             if (!filteredHiddenRoutes.includes(stringifyPattern(pattern))) {
               lineIds.push({
+                gtfsId: stop.gtfsId,
                 parentStation: station.gtfsId,
                 shortName: pattern.route.shortName,
                 stringifiedPattern: stringifyPattern(pattern),
@@ -80,6 +81,7 @@ const createLineIdsArray = (data, hiddenRoutes) => {
         routes.forEach(pattern => {
           if (!filteredHiddenRoutes.includes(stringifyPattern(pattern))) {
             lineIds.push({
+              gtfsId: stop.gtfsId,
               parentStation: stop.parentStation
                 ? stop.parentStation.gtfsId
                 : stop.gtfsId,
@@ -151,8 +153,6 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
   return (
     <TrainDataFetcher
       defaultLines={defaultLines ? defaultLines : []}
-      stations={stations}
-      stops={stops}
       stopAndRoutes={stopAndRoutes}
       {...rest}
     />

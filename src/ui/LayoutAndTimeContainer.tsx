@@ -90,7 +90,7 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
       <LayoutModal
         orientation={orientation}
         isOpen={isOpen}
-        option={layout || layouts[0]}
+        option={layout}
         onClose={getLayout}
       />
     </div>

@@ -41,9 +41,9 @@ const LayoutModal: FC<Props & WithTranslation> = ({
     if (layoutBtn) {
       layoutBtn.focus();
     }
-  }, [option]);
+  }, [option, isOpen]);
 
-  const handleClose = () => {
+  const handleSave = () => {
     onClose(selected);
   };
 
@@ -117,7 +117,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
           })}
         </div>
         <div className="button-container">
-          <button className="close-button" onClick={handleClose}>
+          <button className="close-button" onClick={handleSave}>
             {t('save')}
           </button>
         </div>

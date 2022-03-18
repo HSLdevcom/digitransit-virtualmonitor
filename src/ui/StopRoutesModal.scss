@@ -153,7 +153,6 @@
           margin-bottom: 10px;
 
           .lang {
-            position: absolute;
             font-style: normal;
             font-weight: $font-weight;
             font-size: 13px;
@@ -161,16 +160,9 @@
             letter-spacing: -0.02em;
             display: flex;
 
-            &.fi {
-              left: 136px;
-            }
-
+            &.fi,
             &.sv {
-              left: 290px;
-            }
-
-            &.en {
-              left: 444px;
+              margin-right: 144px;
             }
           }
         }

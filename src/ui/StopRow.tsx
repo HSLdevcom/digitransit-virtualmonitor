@@ -38,6 +38,7 @@ interface IProps {
   ) => void;
   readonly leftStops?: Array<IStopInfoPlus>;
   readonly rightStops?: Array<IStopInfoPlus>;
+  readonly languages: Array<string>;
 }
 
 const moveIsPossible = (stop, stopList) => {
@@ -56,6 +57,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
   t,
   leftStops,
   rightStops,
+  languages,
 }) => {
   const [showModal, changeOpen] = useState(false);
   const saveStopSettings = settings => {
@@ -135,6 +137,7 @@ const StopRow: FC<IProps & WithTranslation> = ({
             showModal={showModal}
             stop={stop}
             combinedPatterns={combinedPatterns}
+            languages={languages}
           />
         )}
         <div className="stop-bottom-row">

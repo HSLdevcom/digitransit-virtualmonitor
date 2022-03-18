@@ -26,6 +26,7 @@ interface Props {
   closeModal: (route: IRoute[]) => void;
   stopSettings?: any;
   combinedPatterns: string[];
+  languages: Array<string>;
 }
 export const defaultSettings = {
   hiddenRoutes: [],
@@ -146,9 +147,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
         const inputFI = document?.getElementById(`fi-${p}`) as HTMLInputElement;
         const inputSV = document?.getElementById(`sv-${p}`) as HTMLInputElement;
         const inputEN = document?.getElementById(`en-${p}`) as HTMLInputElement;
-        inputFI.value = '';
-        inputSV.value = '';
-        inputEN.value = '';
+        if (inputFI) inputFI.value = '';
+        if (inputSV) inputSV.value = '';
+        if (inputEN) inputEN.value = '';
       });
       setRenamings([]);
       setShowInputs(false);
@@ -204,6 +205,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     'showEndOfLine',
     'showVia',
   ];
+
+  const isLangSelected = lang => {
+    return props.languages.includes(lang);
+  };
 
   return (
     <Modal
@@ -323,9 +328,15 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
           {(showInputs || renamings.length > 0) && (
             <div className={cx('row', 'small')}>
               <div className="empty-space"></div>
-              <div className={cx('lang', 'fi')}>FI</div>
-              <div className={cx('lang', 'sv')}>SV</div>
-              <div className={cx('lang', 'en')}>EN</div>
+              {isLangSelected('fi') && (
+                <div className={cx('lang', 'fi')}>FI</div>
+              )}
+              {isLangSelected('sv') && (
+                <div className={cx('lang', 'sv')}>SV</div>
+              )}
+              {isLangSelected('en') && (
+                <div className={cx('lang', 'en')}>EN</div>
+              )}
             </div>
           )}
           {props.combinedPatterns.map((pattern, index) => {
@@ -369,38 +380,44 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                   )}
                   {(showInputs || renamedDestination) && (
                     <div className="renamedDestinations">
-                      <input
-                        key={`i-${keyForInput}`}
-                        id={`fi-${pattern}`}
-                        name={pattern}
-                        className={cx('fi', !showInputs ? 'readonly' : '')}
-                        defaultValue={
-                          !showInputs && renamedDestination?.fi
-                            ? renamedDestination?.fi
-                            : undefined
-                        }
-                        onChange={e => handleRenamedDestination(e, 'fi')}
-                        placeholder={patternArray[3]}
-                        readOnly={!showInputs}
-                      />
-                      <input
-                        key={`i-${keyForInput + 1}`}
-                        id={`sv-${pattern}`}
-                        name={pattern}
-                        className={cx('sv', !showInputs ? 'readonly' : '')}
-                        defaultValue={renamedDestination?.sv}
-                        onChange={e => handleRenamedDestination(e, 'sv')}
-                        readOnly={!showInputs}
-                      />
-                      <input
-                        key={`i-${keyForInput + 2}`}
-                        id={`en-${pattern}`}
-                        name={pattern}
-                        className={cx('en', !showInputs ? 'readonly' : '')}
-                        defaultValue={renamedDestination?.en}
-                        onChange={e => handleRenamedDestination(e, 'en')}
-                        readOnly={!showInputs}
-                      />
+                      {isLangSelected('fi') && (
+                        <input
+                          key={`i-${keyForInput}`}
+                          id={`fi-${pattern}`}
+                          name={pattern}
+                          className={cx('fi', !showInputs ? 'readonly' : '')}
+                          defaultValue={
+                            !showInputs && renamedDestination?.fi
+                              ? renamedDestination?.fi
+                              : undefined
+                          }
+                          onChange={e => handleRenamedDestination(e, 'fi')}
+                          placeholder={patternArray[3]}
+                          readOnly={!showInputs}
+                        />
+                      )}
+                      {isLangSelected('sv') && (
+                        <input
+                          key={`i-${keyForInput + 1}`}
+                          id={`sv-${pattern}`}
+                          name={pattern}
+                          className={cx('sv', !showInputs ? 'readonly' : '')}
+                          defaultValue={renamedDestination?.sv}
+                          onChange={e => handleRenamedDestination(e, 'sv')}
+                          readOnly={!showInputs}
+                        />
+                      )}
+                      {isLangSelected('en') && (
+                        <input
+                          key={`i-${keyForInput + 2}`}
+                          id={`en-${pattern}`}
+                          name={pattern}
+                          className={cx('en', !showInputs ? 'readonly' : '')}
+                          defaultValue={renamedDestination?.en}
+                          onChange={e => handleRenamedDestination(e, 'en')}
+                          readOnly={!showInputs}
+                        />
+                      )}
                     </div>
                   )}
                 </Checkbox>

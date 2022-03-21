@@ -8,7 +8,7 @@ import { v4 as uuid } from 'uuid';
 import { getColorByName } from '../util/getConfig';
 import Icon from './Icon';
 
-Modal.setAppElement('#root');
+if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
 interface Option {
   value: string;
@@ -19,6 +19,7 @@ interface Props {
   onClose: (option) => void;
   isOpen: boolean;
   orientation: string;
+  ariaHideApp?: boolean; // For unit testing
 }
 
 const LayoutModal: FC<Props & WithTranslation> = ({
@@ -27,21 +28,22 @@ const LayoutModal: FC<Props & WithTranslation> = ({
   option,
   onClose,
   t,
+  ariaHideApp = true,
 }) => {
   const [selected, setSelected] = useState(option);
-
   useEffect(() => {
-    if (selected) {
-      const layoutBtn = document.getElementById(
-        `layoutBtn-${selected.value}`,
-      ) as HTMLInputElement;
-      if (layoutBtn) {
-        layoutBtn.focus();
-      }
+    if (!isEqual(selected, option)) {
+      setSelected(option);
     }
-  }, [selected]);
+    const layoutBtn = document.getElementById(
+      `layoutBtn-${selected.value}`,
+    ) as HTMLInputElement;
+    if (layoutBtn) {
+      layoutBtn.focus();
+    }
+  }, [option, isOpen]);
 
-  const handleClose = () => {
+  const handleSave = () => {
     onClose(selected);
   };
 
@@ -56,13 +58,13 @@ const LayoutModal: FC<Props & WithTranslation> = ({
   };
   const layouts =
     orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;
-
   return (
     <Modal
       isOpen={isOpen}
       onRequestClose={() => onClose(null)}
       portalClassName="modal"
       style={orientation === 'vertical' ? verticalHeight : undefined}
+      ariaHideApp={ariaHideApp}
     >
       <div className="layout-modal-content-container">
         <section id="close">
@@ -115,7 +117,7 @@ const LayoutModal: FC<Props & WithTranslation> = ({
           })}
         </div>
         <div className="button-container">
-          <button className="close-button" onClick={handleClose}>
+          <button className="close-button" onClick={handleSave}>
             {t('save')}
           </button>
         </div>

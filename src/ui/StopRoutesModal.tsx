@@ -7,7 +7,6 @@ import Icon from './Icon';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { IStop } from '../util/Interfaces';
 import Modal from 'react-modal';
-import { capitalize } from '../util/monitorUtils';
 import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
 import { getStopIcon } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
@@ -206,10 +205,6 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     'showVia',
   ];
 
-  const isLangSelected = lang => {
-    return props.languages.includes(lang);
-  };
-
   return (
     <Modal
       isOpen={props.showModal}
@@ -232,12 +227,12 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             />
           </button>
         </section>
-        <section id="section-with-side-padding">
+        <section className="section-margin-large">
           <div className="title-container">
             <h2 className="title">{text}</h2>
           </div>
         </section>
-        <section id="section-with-side-padding">
+        <section className="section-margin-large">
           <h2 id="show-settings-group-label">{props.t('show')}</h2>
           {showSettings.map(setting => {
             return (
@@ -260,10 +255,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             );
           })}
         </section>
-        <section id="section-with-side-padding">
+        <section className="section-margin-small">
           <div className="divider" />
         </section>
-        <section id="section-with-side-padding" className="timeshift">
+        <section className="section-margin-large timeshift">
           <h2> {props.t('timeShift')}</h2>
           <p>{props.t('timeShiftDescription')}</p>
           <div className="show-departures-over">
@@ -277,13 +272,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             />
           </div>
         </section>
-        <section id="section-with-side-padding">
+        <section className="section-margin-small">
           <div className="divider" />
         </section>
-        <section
-          id="section-with-side-padding"
-          className="title-and-no-renaming"
-        >
+        <section className="section-margin-large title-and-no-renaming">
           <div className="title">
             <h2>
               {props.t('hideLines', {
@@ -311,7 +303,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             </h2>
           </div>
         </section>
-        <section id="section-with-side-padding" className="route-rows">
+        <section className="section-margin-large route-rows">
           <div className="row">
             <Checkbox
               isSelected={hiddenRouteChecked(null)}
@@ -325,18 +317,12 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               <span className="all">{props.t('all')}</span>
             </Checkbox>
           </div>
-          {(showInputs || renamings.length > 0) && (
+          {props.languages.length > 1 && (
             <div className={cx('row', 'small')}>
               <div className="empty-space"></div>
-              {isLangSelected('fi') && (
-                <div className={cx('lang', 'fi')}>FI</div>
-              )}
-              {isLangSelected('sv') && (
-                <div className={cx('lang', 'sv')}>SV</div>
-              )}
-              {isLangSelected('en') && (
-                <div className={cx('lang', 'en')}>EN</div>
-              )}
+              {props.languages.map(lang => (
+                <div className={cx('lang', lang)}>{lang.toUpperCase()}</div>
+              ))}
             </div>
           )}
           {props.combinedPatterns.map((pattern, index) => {
@@ -347,11 +333,9 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             const keyForInput = 3 * index + 1;
             const patternArray = pattern.split(':');
             const iconStyle = getIconStyleWithColor(getStopIcon(props.stop));
-
             return (
-              <div key={`r-${index}`} className="row">
+              <div key={pattern} className="row">
                 <Checkbox
-                  key={`c-${index}`}
                   isSelected={hiddenRouteChecked(pattern)}
                   onChange={() => checkHiddenRoute(pattern)}
                   name={pattern}
@@ -373,66 +357,32 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                     />
                   </div>
                   <div className="route-number">{patternArray[2]}</div>
-                  {!showInputs && !renamedDestination && (
-                    <div className="destination">
-                      {capitalize(patternArray[3])}
-                    </div>
-                  )}
-                  {(showInputs || renamedDestination) && (
-                    <div className="renamedDestinations">
-                      {isLangSelected('fi') && (
-                        <input
-                          key={`i-${keyForInput}`}
-                          id={`fi-${pattern}`}
-                          name={pattern}
-                          className={cx('fi', !showInputs ? 'readonly' : '')}
-                          defaultValue={
-                            !showInputs && renamedDestination?.fi
-                              ? renamedDestination?.fi
-                              : undefined
-                          }
-                          onChange={e => handleRenamedDestination(e, 'fi')}
-                          placeholder={patternArray[3]}
-                          readOnly={!showInputs}
-                        />
-                      )}
-                      {isLangSelected('sv') && (
-                        <input
-                          key={`i-${keyForInput + 1}`}
-                          id={`sv-${pattern}`}
-                          name={pattern}
-                          className={cx('sv', !showInputs ? 'readonly' : '')}
-                          defaultValue={renamedDestination?.sv}
-                          onChange={e => handleRenamedDestination(e, 'sv')}
-                          readOnly={!showInputs}
-                        />
-                      )}
-                      {isLangSelected('en') && (
-                        <input
-                          key={`i-${keyForInput + 2}`}
-                          id={`en-${pattern}`}
-                          name={pattern}
-                          className={cx('en', !showInputs ? 'readonly' : '')}
-                          defaultValue={renamedDestination?.en}
-                          onChange={e => handleRenamedDestination(e, 'en')}
-                          readOnly={!showInputs}
-                        />
-                      )}
-                    </div>
-                  )}
                 </Checkbox>
+                <div className="renamedDestinations">
+                  {props.languages.map(lang => (
+                    <input
+                      key={`${lang}-${pattern}`}
+                      id={`${lang}-${pattern}`}
+                      name={pattern}
+                      className={cx(lang, !showInputs ? 'readonly' : '')}
+                      defaultValue={
+                        renamedDestination?.[lang]
+                          ? renamedDestination[lang]
+                          : undefined
+                      }
+                      onChange={e => handleRenamedDestination(e, lang)}
+                      placeholder={patternArray[3]}
+                      readOnly={!showInputs}
+                    />
+                  ))}
+                </div>
               </div>
             );
           })}
         </section>
-        <section id="section-with-side-padding">
+        <section className="section-margin-small">
           <div className="divider-routes" />
-          <div
-            className={cx(
-              'button-container',
-              props.combinedPatterns.length < 5 ? 'less' : '',
-            )}
-          >
+          <div className="button-container">
             <Button onClick={handleSave} text={props.t('save')} />
           </div>
         </section>

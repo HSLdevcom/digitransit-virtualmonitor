@@ -25,5 +25,5 @@ export const departure: IDeparture = {
     gtfsId: 'HSL:1234trip',
     stops: [stop],
     route: { alerts: [], shortName: '123' },
-  }
+  },
 };

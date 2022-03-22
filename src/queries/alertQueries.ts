@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const GET_STOP_ALERTS = gql`
-  query GetAlertsForStops($ids: [String!]!) {
+  query GetAlertsForStops($ids: [String!]!) @api(contextKey: "clientName") {
     stops: stops(ids: $ids) {
       alerts {
         alertSeverityLevel
@@ -21,6 +21,8 @@ export const GET_STOP_ALERTS = gql`
           code
         }
       }
+      lat
+      lon
       routes {
         alerts {
           alertSeverityLevel
@@ -46,8 +48,10 @@ export const GET_STOP_ALERTS = gql`
 `;
 
 export const GET_STATION_ALERTS = gql`
-  query GetAlertsForStations($ids: [String!]!) {
+  query GetAlertsForStations($ids: [String!]!) @api(contextKey: "clientName") {
     stations: stations(ids: $ids) {
+      lon
+      lat
       stops {
         routes {
           alerts {

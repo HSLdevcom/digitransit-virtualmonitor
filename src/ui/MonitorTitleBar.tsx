@@ -1,6 +1,8 @@
-import React, { FC } from 'react';
-import { IMonitorConfig, IView, IWeatherData } from '../util/Interfaces';
+import React, { FC, useEffect, useState } from 'react';
+import { IMonitorConfig, IView } from '../util/Interfaces';
+import { DateTime } from 'luxon';
 import Icon, { iconExists } from './Icon';
+import { getWeatherData, checkDayNight } from '../util/monitorUtils';
 import Logo from './logo/Logo';
 import Titlebar from './Titlebar';
 import TitlebarTime from './TitlebarTime';
@@ -13,30 +15,64 @@ interface IProps {
   isLandscape?: boolean;
   view: IView;
   currentLang: string;
-  currentTime: number;
-  showTitle?: boolean;
-  weatherData?: IWeatherData;
 }
 
 const MonitorTitlebar: FC<IProps> = ({
-  weatherData,
-  currentTime,
   view,
   config,
   preview,
   isMultiDisplay = false,
   isLandscape = false,
   currentLang,
-  showTitle = false,
 }) => {
+  const location = view.columns.left.stops[0];
+  const showWeather =
+    !isMultiDisplay && isLandscape && location?.lat && location?.lon;
+
   let temperature;
   let weatherIconString;
   let weatherIconExists = false;
 
-  if (weatherData) {
-    weatherIconString = 'weather'.concat(weatherData.iconId).toString();
+  const [weatherFetched, setWeatherFetched] = useState(false);
+  const [weatherData, setWeatherData]: any = useState({});
+  const [fetchTime, setFetchTime] = useState(DateTime.now());
+  // update weather data in 15 minutes interval
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setFetchTime(DateTime.now());
+      setWeatherFetched(false);
+    }, 1000 * 60 * 15); // in milliseconds
+    return () => clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    if (!weatherFetched && showWeather) {
+      getWeatherData(fetchTime, location.lat, location.lon).then(res => {
+        let weatherData;
+        if (Array.isArray(res) && res.length === 3) {
+          weatherData = {
+            temperature: res[0].ParameterValue,
+            windSpeed: res[1].ParameterValue,
+            time: DateTime.now(),
+            // Icon id's and descriptions: https://www.ilmatieteenlaitos.fi/latauspalvelun-pikaohje ->  Sääsymbolien selitykset ennusteissa.
+            iconId: checkDayNight(
+              res[2].ParameterValue,
+              fetchTime,
+              location.lat,
+              location.lon,
+            ),
+          };
+        }
+        setWeatherData(weatherData);
+      });
+      setWeatherFetched(true);
+    }
+  }, [fetchTime]);
+
+  if (weatherData && weatherFetched) {
+    weatherIconString = 'weather'.concat(weatherData?.iconId).toString();
     weatherIconExists = iconExists(weatherIconString);
-    temperature = `${Math.round(weatherData.temperature)}\u00B0C`; // Temperature with Celsius
+    temperature = `${Math.round(weatherData?.temperature)}\u00B0C`; // Temperature with Celsius
   }
 
   return (
@@ -51,7 +87,7 @@ const MonitorTitlebar: FC<IProps> = ({
         isLandscape={isLandscape}
         forMonitor={true}
       />
-      {!isMultiDisplay && showTitle && (
+      {!isMultiDisplay && (
         <div
           className={cx('title-text', {
             preview: preview,
@@ -61,7 +97,7 @@ const MonitorTitlebar: FC<IProps> = ({
           {view.title[currentLang]}
         </div>
       )}
-      {isMultiDisplay && showTitle && (
+      {isMultiDisplay && (
         <div className="multi-display-titles">
           <div className={cx('left-title', { preview: preview })}>
             {view.columns.left.title[currentLang]}
@@ -96,11 +132,7 @@ const MonitorTitlebar: FC<IProps> = ({
           </div>
         </div>
       )}
-      <TitlebarTime
-        currentTime={currentTime}
-        isPreview={preview}
-        isLandscape={isLandscape}
-      />
+      <TitlebarTime isPreview={preview} isLandscape={isLandscape} />
     </Titlebar>
   );
 };

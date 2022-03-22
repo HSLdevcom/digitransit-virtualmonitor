@@ -148,6 +148,14 @@ export interface GetAlertsForStops_stops {
    */
   alerts: (GetAlertsForStops_stops_alerts | null)[] | null;
   /**
+   * Latitude of the stop (WGS 84)
+   */
+  lat: number | null;
+  /**
+   * Longitude of the stop (WGS 84)
+   */
+  lon: number | null;
+  /**
    * Routes which pass through this stop
    */
   routes: GetAlertsForStops_stops_routes[] | null;

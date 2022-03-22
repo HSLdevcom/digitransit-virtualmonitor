@@ -4,13 +4,11 @@ import { EpochMilliseconds, Milliseconds } from '../time';
 import cx from 'classnames';
 
 interface IProps {
-  currentTime?: EpochMilliseconds;
   isPreview?: boolean;
   isLandscape?: boolean;
 }
 
 const TitlebarTime: FC<IProps> = ({
-  currentTime,
   isPreview = false,
   isLandscape = false,
 }) => {
@@ -29,7 +27,7 @@ const TitlebarTime: FC<IProps> = ({
           isLandscape ? '' : 'portrait',
         )}
       >
-        <AutoMoment currentTime={currentTime} />
+        <AutoMoment />
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import React, { FC, useState, useEffect } from 'react';
 import { getConfig } from '../util/getConfig';
 import { IView, IClosedStop, ITrainData } from '../util/Interfaces';
 import Monitor from './Monitor';
-import { EpochMilliseconds } from '../time';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorAlertRow from './MonitorAlertRow';
@@ -19,10 +18,8 @@ interface IProps {
   stopDepartures: Array<Array<Array<IDeparture>>>; // and the final one for the actual departures
   translations?: Array<ITranslation>;
   alerts: any;
-  time?: EpochMilliseconds;
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
-  error?: string;
   trainsWithTrack?: Array<ITrainData>;
   staticContentHash?: string;
   staticUrl?: string;
@@ -70,10 +67,8 @@ const CarouselContainer: FC<IProps> = ({
   languages,
   translations,
   alerts,
-  time,
   preview = false,
   closedStopViews,
-  error,
   trainsWithTrack,
   staticContentHash,
   staticUrl,
@@ -191,13 +186,11 @@ const CarouselContainer: FC<IProps> = ({
         translations ? translations.filter(t => t.lang === lan) : []
       }
       config={config}
-      time={time}
       isPreview={preview}
       alertState={alertState}
       alertComponent={alertComponent}
       alertRowSpan={alertSpan}
       closedStopViews={closedStopViews}
-      error={error}
       staticContentHash={staticContentHash}
       staticUrl={staticUrl}
       staticViewTitle={staticViewTitle}

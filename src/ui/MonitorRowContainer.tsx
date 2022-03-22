@@ -24,7 +24,6 @@ interface IProps {
   alertRowSpan: number;
   showMinutes?: number;
   closedStopViews: Array<IClosedStop>;
-  error?: string;
   preview: boolean;
 }
 const hasColumn = value => value === false;
@@ -44,7 +43,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   alertRowSpan,
   showMinutes,
   closedStopViews,
-  error,
   preview,
   t,
 }) => {
@@ -274,6 +272,10 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     closedStopIndex !== -1 &&
     closedStopViews[closedStopIndex].column === 'right';
 
+  const noDepartures =
+    !departuresLeft.length && !departuresRight.length
+      ? t('noMonitors')
+      : undefined;
   return (
     <div
       className={cx('monitor-container', {
@@ -333,7 +335,9 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                     ),
                   })
                 ) : (
-                  <>{error || t('no-departures', { lng: currentLang })}</>
+                  <>
+                    {noDepartures || t('no-departures', { lng: currentLang })}
+                  </>
                 )}
               </div>
             </div>

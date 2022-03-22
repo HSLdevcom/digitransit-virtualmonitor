@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Async, { Props as AsyncProps } from 'react-promise';
-import createUrlCompression from '../urlCompression';
+//import createUrlCompression from '../urlCompression';
 import OldMonitorParser from './OldMonitorParser';
 import Loading from './Loading';
 
@@ -88,7 +88,7 @@ const renderers = {
   v0: (display: IDisplay) => <OldMonitorParser display={display} />,
 };
 
-type IPair = ReturnType<typeof createUrlCompression>;
+type IPair = ReturnType<any>;
 
 type IPairWithRenderer = IPair & {
   renderer: (display: IDisplay) => React.ReactNode;
@@ -103,7 +103,7 @@ export const pairs: IPairsWithRenderers = Object.entries(renderers).reduce(
     ...acc,
     [version]: {
       renderer,
-      ...createUrlCompression(Buffer.from(displayDictionaries[version])),
+      //...createUrlCompression(Buffer.from(displayDictionaries[version])),
     },
   }),
   {},

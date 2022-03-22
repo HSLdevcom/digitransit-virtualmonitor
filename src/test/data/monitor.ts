@@ -8,6 +8,9 @@ export const stop: IStop = {
 };
 
 export const departure: IDeparture = {
+  showStopNumber: false,
+  showVia: false,
+  vehicleMode: '',
   combinedPattern: 'MATKA:60061713:87:Jyväskylä:',
   headsign: 'JYVÄSKYLÄ',
   pickupType: 'SCHEDULED',

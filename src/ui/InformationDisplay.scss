@@ -10,6 +10,14 @@
     margin-bottom: 7vh;
   }
 
+  .no-alerts-container {
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    font-size: 4vh;
+    align-items: center;
+  }
+
   &.portrait {
     margin: 4vh 2vh;
 
@@ -33,6 +41,13 @@
     .alert-description {
       font-size: 15px;
       margin-bottom: 10px;
+    }
+
+    .no-alerts-container {
+      height: 250px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
   }
 }

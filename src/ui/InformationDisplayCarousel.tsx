@@ -29,8 +29,15 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
         setCurrent(next);
       }, 20000);
       return () => clearTimeout(to);
+    } else if (languages.length) {
+      const next = (current + 1) % languages.length;
+      const to = setTimeout(() => {
+        setCurrent(next);
+      }, 20000);
+      return () => clearTimeout(to);
     }
   }, [current]);
+
   const config = getConfig();
   return (
     <div
@@ -80,7 +87,9 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
             );
           })
         ) : (
-          <div className="no-alerts-container">{t('staticMonitorTitle')}</div>
+          <div className="no-alerts-container">
+            <h2>{t('noAlerts', { lng: languages[current] })}</h2>
+          </div>
         )}
       </div>
     </div>

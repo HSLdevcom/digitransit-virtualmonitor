@@ -29,6 +29,12 @@
       font-size: 2vh;
       margin-bottom: 5vh;
     }
+
+    &.preview {
+      .no-alerts-container h2 {
+        font-size: 41px;
+      }
+    }
   }
 
   &.preview {

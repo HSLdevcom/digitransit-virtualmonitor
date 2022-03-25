@@ -48,7 +48,6 @@ const InformationDisplayContainer: FC<IProps> = ({
 
   const [stopAlerts, setStopAlerts] = useState([]);
   const [stationAlerts, setStationAlerts] = useState([]);
-  const foo = { ...monitor };
   const [view, setView] = useState(cloneDeep(monitor).cards[0]);
 
   const stationsState = useQuery<

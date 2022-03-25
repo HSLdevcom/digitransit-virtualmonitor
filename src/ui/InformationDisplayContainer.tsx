@@ -69,14 +69,14 @@ const InformationDisplayContainer: FC<IProps> = ({
       context: { clientName: 'default' },
     },
   );
-  const getView = arr => {
+  const ViewWithLocation = (lat, lon) => {
     const newView = {
       ...view,
     };
     newView.columns.left.stops[0] = {
       ...newView.columns.left.stops[0],
-      lat: arr[0].lat,
-      lon: arr[0].lon,
+      lat: lat,
+      lon: lon,
     };
     return newView;
   };
@@ -84,7 +84,7 @@ const InformationDisplayContainer: FC<IProps> = ({
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
       const alerts = getStopAlerts(stops);
-      setView(getView(stops));
+      setView(ViewWithLocation(stops[0].lat, stops[0].lon));
       setStopAlerts(
         alerts.length ? uniqBy(alerts, alert => alert.alertHeaderText) : [],
       );
@@ -96,7 +96,7 @@ const InformationDisplayContainer: FC<IProps> = ({
     const stations = stationsState?.data?.stations;
     if (stations?.length > 0) {
       const alerts = getStationAlerts(stations);
-      setView(getView(stations));
+      setView(ViewWithLocation(stations[0].lat, stations[0].lon));
       setStationAlerts(
         alerts.length ? uniqBy(alerts, alert => alert.alertHeaderText) : [],
       );

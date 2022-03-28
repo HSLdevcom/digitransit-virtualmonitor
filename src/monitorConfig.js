@@ -33,6 +33,7 @@ export default {
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
+    useTilde: true,
   },
   jyvaskyla: {
     colors: {
@@ -53,6 +54,7 @@ export default {
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
+    useTilde: true,
   },
   matka: {
     colors: {
@@ -78,6 +80,7 @@ export default {
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
+    useTilde: true,
   },
   tampere: {
     colors: {

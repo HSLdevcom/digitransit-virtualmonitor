@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import { DateTime } from 'luxon';
 
 export type DaySeconds = number;
@@ -34,12 +35,21 @@ export const formatTime = (
     options.showSeconds ? `:${doubleDigit(timeOfDay.seconds)}` : ''
   }`;
 
-export const getDepartureTime = (time, minutesThreshold, serviceDay) => {
+export const getDepartureTime = (
+  time,
+  minutesThreshold,
+  serviceDay,
+  useTilde,
+  realtime,
+) => {
+  // custom logic for tampere, if there is no realtime, we show the full time, ie. 13:53.
+  const withNoTildeRealTimeCombination = realtime || (!useTilde && realtime);
   const secondsFromMidnight = new Date().setHours(0, 0, 0, 0);
   if (
     time - (getCurrentSeconds() - secondsFromMidnight / 1000) <
       minutesThreshold &&
-    serviceDay * 1000 < DateTime.now().ts
+    serviceDay * 1000 < DateTime.now().ts &&
+    withNoTildeRealTimeCombination
   ) {
     const diffInMinutes = Math.floor(
       (time - (getCurrentSeconds() - secondsFromMidnight / 1000)) / 60,

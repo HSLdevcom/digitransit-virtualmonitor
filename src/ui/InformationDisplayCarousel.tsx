@@ -21,6 +21,7 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
   t,
 }) => {
   const [current, setCurrent] = useState(0);
+  const [currentLang, setCurrentLang] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
     if (alerts.length) {
@@ -29,14 +30,15 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
         setCurrent(next);
       }, 20000);
       return () => clearTimeout(to);
-    } else if (languages.length) {
-      const next = (current + 1) % languages.length;
-      const to = setTimeout(() => {
-        setCurrent(next);
-      }, 20000);
-      return () => clearTimeout(to);
     }
   }, [current]);
+  useEffect(() => {
+    const nextLan = (currentLang + 1) % languages.length;
+    const to = setTimeout(() => {
+      setCurrentLang(nextLan);
+    }, view.duration * 1000);
+    return () => clearTimeout(to);
+  }, [currentLang]);
 
   const config = getConfig();
   return (
@@ -55,7 +57,7 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
       <MonitorTitlebar
         isLandscape
         view={view}
-        currentLang={'fi'}
+        currentLang={languages[currentLang]}
         preview={preview}
         config={config}
       />
@@ -88,7 +90,7 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
           })
         ) : (
           <div className="no-alerts-container">
-            <h2>{t('noAlerts', { lng: languages[current] })}</h2>
+            <h2>{t('noAlerts', { lng: languages[currentLang] })}</h2>
           </div>
         )}
       </div>

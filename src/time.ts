@@ -42,18 +42,33 @@ export const getDepartureTime = (
   useTilde,
   realtime,
 ) => {
-  // custom logic for tampere, if there is no realtime, we show the full time, ie. 13:53.
-  const withNoTildeRealTimeCombination = realtime || (!useTilde && realtime);
   const secondsFromMidnight = new Date().setHours(0, 0, 0, 0);
+  const serviceDaySeconds =
+    time - (getCurrentSeconds() - secondsFromMidnight / 1000);
+  // custom logic for tampere, if there is no realtime, we show the full time, ie. 13:53.
+  if (!useTilde) {
+    if (
+      realtime &&
+      serviceDaySeconds < minutesThreshold &&
+      serviceDay * 1000 < DateTime.now().ts
+    ) {
+      const diffInMinutes = Math.floor(serviceDaySeconds / 60);
+      return (diffInMinutes < 0 ? 0 : diffInMinutes).toString();
+    } else {
+      const hours = `0${Math.floor((time / 60 / 60) % 24)}`.slice(-2);
+      const mins = `0${Math.floor(time / 60) % 60}`.slice(-2);
+      if (hours !== 'aN' || mins !== 'aN') {
+        return `${hours}:${mins}`;
+      }
+      return null;
+    }
+  }
+
   if (
-    time - (getCurrentSeconds() - secondsFromMidnight / 1000) <
-      minutesThreshold &&
-    serviceDay * 1000 < DateTime.now().ts &&
-    withNoTildeRealTimeCombination
+    serviceDaySeconds < minutesThreshold &&
+    serviceDay * 1000 < DateTime.now().ts
   ) {
-    const diffInMinutes = Math.floor(
-      (time - (getCurrentSeconds() - secondsFromMidnight / 1000)) / 60,
-    );
+    const diffInMinutes = Math.floor(serviceDaySeconds / 60);
     return (diffInMinutes < 0 ? 0 : diffInMinutes).toString();
   }
   const hours = `0${Math.floor((time / 60 / 60) % 24)}`.slice(-2);

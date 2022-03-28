@@ -28,7 +28,6 @@ interface IProps {
   views: Array<IView>;
   languages: Array<string>;
   preview?: boolean;
-  error?: string;
   trainsWithTrack?: Array<ITrainData>;
   staticContentHash?: string;
   staticUrl?: string;
@@ -49,7 +48,6 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   views,
   languages,
   preview,
-  error,
   t,
   trainsWithTrack,
   staticContentHash,
@@ -89,7 +87,6 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
     skip: stationIds.length < 1,
     context: { clientName: 'default' },
   });
-
   const stopsState = useQuery<
     GetDeparturesForStops,
     GetDeparturesForStopsVariables
@@ -182,7 +179,6 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
       views={views}
       preview={preview}
       closedStopViews={closedStopViews}
-      error={error}
       trainsWithTrack={trainsWithTrack}
       staticContentHash={staticContentHash}
       staticUrl={staticUrl}

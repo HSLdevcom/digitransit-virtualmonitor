@@ -1,14 +1,10 @@
 import React, { FC, useState, useEffect } from 'react';
 import cx from 'classnames';
 import { IView, IClosedStop } from '../util/Interfaces';
-import { getWeatherData } from '../util/monitorUtils';
-import { DateTime } from 'luxon';
-import SunCalc from 'suncalc';
 import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
 import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
-import { EpochMilliseconds } from '../time';
 import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
@@ -29,46 +25,27 @@ interface IProps {
   currentLang: string;
   readonly translatedStrings: Array<ITranslation>;
   readonly config: IMonitorConfig;
-  readonly time?: EpochMilliseconds;
   readonly isPreview: boolean;
   alertComponent: any;
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
-  error?: string;
   staticContentHash?: string;
   staticUrl?: string;
   staticViewTitle?: string;
 }
 let to;
-const checkDayNight = (iconId, timem, lat, lon) => {
-  const dayNightIconIds = [1, 2, 21, 22, 23, 41, 42, 43, 61, 62, 71, 72, 73];
-  const date = timem;
-  const dateMillis = timem.ts;
-  const sunCalcTimes = SunCalc.getTimes(date, lat, lon);
-  const sunrise = sunCalcTimes.sunrise.getTime();
-  const sunset = sunCalcTimes.sunset.getTime();
-  if (
-    (sunrise > dateMillis || sunset < dateMillis) &&
-    dayNightIconIds.includes(iconId)
-  ) {
-    // Night icon = iconId + 100
-    return iconId + 100;
-  }
-  return iconId;
-};
+
 const Monitor: FC<IProps> = ({
   view,
   departures,
   translatedStrings,
   currentLang,
   config,
-  time,
   isPreview,
   alertState,
   alertComponent,
   alertRowSpan,
   closedStopViews,
-  error,
   staticContentHash,
   staticUrl,
   staticViewTitle,
@@ -76,9 +53,6 @@ const Monitor: FC<IProps> = ({
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
-  const [weatherFetched, setWeatherFetched] = useState(false);
-  const [weatherData, setWeatherData] = useState();
-  const [fetchTime, setFetchTime] = useState();
   const { isMultiDisplay } = getLayout(view.layout);
   const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
@@ -87,8 +61,6 @@ const Monitor: FC<IProps> = ({
       setWindowDimensions(getWindowDimensions());
     });
   }, []);
-
-  const currentTime = time ? time : new Date().getTime();
 
   const windowHeight = windowDimensions.height;
   const windowWidth = windowDimensions.width;
@@ -100,41 +72,6 @@ const Monitor: FC<IProps> = ({
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11;
-  const timem = DateTime.now();
-  const from = view.columns.left.stops[0];
-  const layout = getLayout(view.layout);
-  const showWeather =
-    !layout.isMultiDisplay && !layout.isPortrait && from.lat && from.lon;
-  // update weather data in 15 minutes interval
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setFetchTime(timem);
-      setWeatherFetched(false);
-    }, 1000 * 60 * 15); // in milliseconds
-    return () => clearInterval(intervalId);
-  }, [fetchTime]);
-
-  if (!weatherFetched && showWeather) {
-    getWeatherData(timem, from.lat, from.lon).then(res => {
-      let weatherData;
-      if (Array.isArray(res) && res.length === 3) {
-        weatherData = {
-          temperature: res[0].ParameterValue,
-          windSpeed: res[1].ParameterValue,
-          time,
-          // Icon id's and descriptions: https://www.ilmatieteenlaitos.fi/latauspalvelun-pikaohje ->  Sääsymbolien selitykset ennusteissa.
-          iconId: checkDayNight(
-            res[2].ParameterValue,
-            timem,
-            from.lat,
-            from.lon,
-          ),
-        };
-      }
-      setWeatherData(weatherData);
-    });
-    setWeatherFetched(true);
-  }
 
   return (
     <div
@@ -157,15 +94,12 @@ const Monitor: FC<IProps> = ({
         staticContentHash={staticContentHash}
       />
       <MonitorTitlebar
-        weatherData={weatherData}
         config={config}
         isMultiDisplay={isMultiDisplay}
         isLandscape={isLandscapeByLayout}
         preview={isPreview}
         view={view}
         currentLang={currentLang}
-        currentTime={currentTime}
-        showTitle
       />
       <MonitorRowContainer
         viewId={view['id']}
@@ -182,7 +116,6 @@ const Monitor: FC<IProps> = ({
         alertRowSpan={alertRowSpan}
         showMinutes={Number(config.showMinutes)}
         closedStopViews={closedStopViews}
-        error={error}
         preview={isPreview}
       />
     </div>

@@ -99,6 +99,23 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   t,
   withoutRouteColumn,
 }) => {
+  if (departure === null && dayForDivider) {
+    return (
+      <div className="row-with-separator">
+        <div className={cx('grid-row day', { 'two-cols': withTwoColumns })}>
+          <div className="day-row">{dayForDivider}</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!departure) {
+    return (
+      <div className="row-with-separator">
+        <div className={cx('separator', { first: isFirst })}></div>
+      </div>
+    );
+  }
   const renamedDestinations = [];
   stops.forEach(s =>
     s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
@@ -177,16 +194,6 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   if (viaMetroStringIdx !== -1) {
     replaceViaMetroStringWithIcon = true;
     viaDestination = viaDestination.substring(0, viaMetroStringIdx).trimEnd();
-  }
-
-  if (departure === null && dayForDivider) {
-    return (
-      <div className="row-with-separator">
-        <div className={cx('grid-row day', { 'two-cols': withTwoColumns })}>
-          <div className="day-row">{dayForDivider}</div>
-        </div>
-      </div>
-    );
   }
 
   let lineLen = departure?.trip?.route.shortName?.length;

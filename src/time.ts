@@ -1,4 +1,3 @@
-import { randomBytes } from 'crypto';
 import { DateTime } from 'luxon';
 
 export type DaySeconds = number;
@@ -42,6 +41,8 @@ export const getDepartureTime = (
   useTilde,
   realtime,
 ) => {
+  // Format to default hh:mm from serviceday + time from day's start
+  const d = DateTime.fromSeconds(serviceDay + time).toFormat('hh:mm');
   const secondsFromMidnight = new Date().setHours(0, 0, 0, 0);
   const serviceDaySeconds =
     time - (getCurrentSeconds() - secondsFromMidnight / 1000);
@@ -54,16 +55,9 @@ export const getDepartureTime = (
     ) {
       const diffInMinutes = Math.floor(serviceDaySeconds / 60);
       return (diffInMinutes < 0 ? 0 : diffInMinutes).toString();
-    } else {
-      const hours = `0${Math.floor((time / 60 / 60) % 24)}`.slice(-2);
-      const mins = `0${Math.floor(time / 60) % 60}`.slice(-2);
-      if (hours !== 'aN' || mins !== 'aN') {
-        return `${hours}:${mins}`;
-      }
-      return null;
     }
+    return d.toString();
   }
-
   if (
     serviceDaySeconds < minutesThreshold &&
     serviceDay * 1000 < DateTime.now().ts
@@ -71,12 +65,7 @@ export const getDepartureTime = (
     const diffInMinutes = Math.floor(serviceDaySeconds / 60);
     return (diffInMinutes < 0 ? 0 : diffInMinutes).toString();
   }
-  const hours = `0${Math.floor((time / 60 / 60) % 24)}`.slice(-2);
-  const mins = `0${Math.floor(time / 60) % 60}`.slice(-2);
-  if (hours !== 'aN' || mins !== 'aN') {
-    return `${hours}:${mins}`;
-  }
-  return null;
+  return d.toString();
 };
 
 export const formatDate = (date, locale) => {

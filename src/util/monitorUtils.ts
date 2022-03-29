@@ -5,6 +5,7 @@ import xmlParser from 'fast-xml-parser';
 import { trainStationMap } from '../util/trainStations';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import dummyAlerts, { getDummyAlerts } from '../testAlert';
+import SunCalc from 'suncalc';
 
 const WEATHER_URL =
   'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
@@ -50,7 +51,6 @@ export const filterDepartures = (
   hiddenRoutes,
   timeshift,
   showEndOfLine = false,
-  renamedDestinations,
   showStopNumber,
   showVia,
 ) => {
@@ -194,7 +194,6 @@ export const createDepartureArray = (
               hiddenRoutes,
               timeShift,
               showEndOfLine,
-              renamedDestinations,
               showStopNumber,
               showVia,
             } = view.columns[column].stops[stopIndex].settings
@@ -222,7 +221,6 @@ export const createDepartureArray = (
                 hiddenRoutes,
                 timeShift,
                 showEndOfLine,
-                renamedDestinations,
                 showStopNumber,
                 showVia,
               ),
@@ -332,6 +330,23 @@ export const retryFetch = (URL, options = {}, retryCount, retryDelay) =>
     };
     retry(retryCount);
   });
+
+export const checkDayNight = (iconId, timem, lat, lon) => {
+  const dayNightIconIds = [1, 2, 21, 22, 23, 41, 42, 43, 61, 62, 71, 72, 73];
+  const date = timem;
+  const dateMillis = timem.ts;
+  const sunCalcTimes = SunCalc.getTimes(date, lat, lon);
+  const sunrise = sunCalcTimes.sunrise.getTime();
+  const sunset = sunCalcTimes.sunset.getTime();
+  if (
+    (sunrise > dateMillis || sunset < dateMillis) &&
+    dayNightIconIds.includes(iconId)
+  ) {
+    // Night icon = iconId + 100
+    return iconId + 100;
+  }
+  return iconId;
+};
 
 export const capitalize = text => {
   if (text && text !== null) {

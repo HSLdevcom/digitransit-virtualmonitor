@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { IAlert, IView } from '../util/Interfaces';
 import cx from 'classnames';
+import { withTranslation, WithTranslation } from 'react-i18next';
 import MonitorTitlebar from './MonitorTitleBar';
 import { getConfig } from '../util/getConfig';
 import MonitorOverlay from './MonitorOverlay';
@@ -12,21 +13,33 @@ interface IProps {
   view: IView;
 }
 let to;
-const InformationDisplayCarousel: FC<IProps> = ({
+const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
   view,
   alerts,
   languages,
   preview = false,
+  t,
 }) => {
   const [current, setCurrent] = useState(0);
+  const [currentLang, setCurrentLang] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
-    const next = (current + 1) % alerts.length;
-    const to = setTimeout(() => {
-      setCurrent(next);
-    }, 20000);
-    return () => clearTimeout(to);
+    if (alerts.length) {
+      const next = (current + 1) % alerts.length;
+      const to = setTimeout(() => {
+        setCurrent(next);
+      }, 20000);
+      return () => clearTimeout(to);
+    }
   }, [current]);
+  useEffect(() => {
+    const nextLan = (currentLang + 1) % languages.length;
+    const to = setTimeout(() => {
+      setCurrentLang(nextLan);
+    }, view.duration * 1000);
+    return () => clearTimeout(to);
+  }, [currentLang]);
+
   const config = getConfig();
   return (
     <div
@@ -44,10 +57,9 @@ const InformationDisplayCarousel: FC<IProps> = ({
       <MonitorTitlebar
         isLandscape
         view={view}
-        currentLang={'fi'}
+        currentLang={languages[currentLang]}
         preview={preview}
         config={config}
-        currentTime={new Date().getTime()}
       />
       <div
         className={cx('information-monitor-container', {
@@ -55,29 +67,35 @@ const InformationDisplayCarousel: FC<IProps> = ({
           portrait: view.layout > 11,
         })}
       >
-        {languages.map(language => {
-          const header = alerts[current].alertHeaderTextTranslations.find(
-            a => a.language === language,
-          ).text;
-          const description = alerts[
-            current
-          ].alertDescriptionTextTranslations.find(
-            a => a.language === language,
-          ).text;
-          return (
-            <>
-              <h2 className="alert-header">
-                {description.includes(header) ? description : header}
-              </h2>
-              {!description.includes(header) && (
-                <div className="alert-description">{description}</div>
-              )}
-            </>
-          );
-        })}
+        {alerts.length ? (
+          languages.map(language => {
+            const header = alerts[current].alertHeaderTextTranslations.find(
+              a => a.language === language,
+            ).text;
+            const description = alerts[
+              current
+            ].alertDescriptionTextTranslations.find(
+              a => a.language === language,
+            ).text;
+            return (
+              <>
+                <h2 className="alert-header">
+                  {description.includes(header) ? description : header}
+                </h2>
+                {!description.includes(header) && (
+                  <div className="alert-description">{description}</div>
+                )}
+              </>
+            );
+          })
+        ) : (
+          <div className="no-alerts-container">
+            <h2>{t('noAlerts', { lng: languages[currentLang] })}</h2>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default InformationDisplayCarousel;
+export default withTranslation('translations')(InformationDisplayCarousel);

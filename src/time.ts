@@ -11,7 +11,7 @@ export const getDepartureTime = (
   realtime,
 ) => {
   // Format to default hh:mm from serviceday + time from day's start
-  const d = DateTime.fromSeconds(serviceDay + time).toFormat('hh:mm');
+  const d = DateTime.fromSeconds(serviceDay + time).toFormat('HH:mm');
   const secondsFromMidnight = new Date().setHours(0, 0, 0, 0);
   const serviceDaySeconds =
     time - (getCurrentSeconds() - secondsFromMidnight / 1000);

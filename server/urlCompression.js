@@ -1,34 +1,34 @@
-import { deflate, inflate } from 'browserify-zlib';
+import { deflate, inflate } from 'zlib';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-const createUrlCompression = <T extends object>(
-  dictionary: Buffer = new Buffer(''),
+const createUrlCompression = (
+  dictionary = new Buffer.from(''),
 ) => ({
-  unpack(packed: string): Promise<T> {
+  unpack(packed) {
     if (!packed) {
-      throw TypeError('Invalid 1st argument for genericUnpack');
+      return reject('no string provided');
     }
     return new Promise((resolve, reject) =>
       inflate(
         Buffer.from(packed, 'base64'),
         { dictionary },
-        (err: Error | null, buffer: Buffer) => {
+        (err, buffer) => {
           if (err) {
-            return reject(Error);
+            return reject(err);
           }
           return resolve(JSON.parse(buffer.toString()));
         },
       ),
     );
   },
-  pack(objectToPack: T): Promise<string> {
+  pack(objectToPack) {
     return new Promise((resolve, reject) =>
       deflate(
         JSON.stringify(objectToPack),
         { dictionary },
-        (err: Error | null, buffer: Buffer) => {
+        (err, buffer) => {
           if (err) {
-            reject(Error);
+            reject();
           }
           resolve(buffer.toString('base64'));
         },

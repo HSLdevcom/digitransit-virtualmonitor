@@ -1,7 +1,11 @@
 import express from 'express';
 import { getTranslations, getTranslations3 } from 'gtfs';
-
+import createUrlCompression from './urlCompression.js';
 import monitorService from './monitorService.js';
+
+const displayDictionaries = {
+  v0: '{"displaySeconds":,"view":{"pierColumnTitle":","stops":[","},"title":{"fi","en"}}]}},"type":"stopTimes"HSL:10"]}',
+};
 
 const router = express.Router();
 
@@ -26,6 +30,17 @@ router.get('/translations/:recordIds', (req, res) => {
   getTranslations({ trans_id: ids }).then(t => {
     res.json(t);
   });
+});
+
+router.post('/decompress/', (req, res) => {
+  try {
+    const decompresser = createUrlCompression(Buffer.from(displayDictionaries['v0']))
+    decompresser.unpack(req.body.payload).then(t => {
+      res.json(t);
+    }).catch((e) => console.log(e));
+  } catch (e) {
+    console.log(e)
+  }
 });
 
 router.put('/staticmonitor', (req, res) => {

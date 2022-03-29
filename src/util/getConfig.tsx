@@ -110,9 +110,5 @@ export const getFontByName = name => {
 };
 
 export const useTilde = () => {
-  const config = getConfig();
-  if (config.useTilde !== undefined) {
-    return config.useTilde;
-  }
-  return true;
+  return getConfig().useTilde;
 };

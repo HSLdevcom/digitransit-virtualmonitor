@@ -21,8 +21,8 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
   const [languages, setLanguages] = useState(['fi']);
   const [loading, setLoading] = useState(true);
 
-  const hash = getContentHash(location.search);
-
+  const h = getContentHash(location.search);
+  const hash = h === 'undefined' ? null : h;
   useEffect(() => {
     if (hash) {
       monitorAPI.get(hash).then((r: any) => {

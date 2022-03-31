@@ -35,39 +35,37 @@ const MonitorTitlebar: FC<IProps> = ({
 
   const [weatherFetched, setWeatherFetched] = useState(false);
   const [weatherData, setWeatherData]: any = useState({});
-  const [fetchTime, setFetchTime] = useState(DateTime.now());
   // update weather data in 15 minutes interval
+
+  const fetchWeather = () => {
+    getWeatherData(DateTime.now(), location.lat, location.lon).then(res => {
+      let weatherData;
+      if (Array.isArray(res) && res.length === 3) {
+        weatherData = {
+          temperature: res[0].ParameterValue,
+          windSpeed: res[1].ParameterValue,
+          time: DateTime.now(),
+          // Icon id's and descriptions: https://www.ilmatieteenlaitos.fi/latauspalvelun-pikaohje ->  Sääsymbolien selitykset ennusteissa.
+          iconId: checkDayNight(
+            res[2].ParameterValue,
+            DateTime.now(),
+            location.lat,
+            location.lon,
+          ),
+        };
+      }
+      setWeatherData(weatherData);
+      setWeatherFetched(true);
+    });
+  };
   useEffect(() => {
+    fetchWeather();
     const intervalId = setInterval(() => {
-      setFetchTime(DateTime.now());
+      fetchWeather();
       setWeatherFetched(false);
     }, 1000 * 60 * 15); // in milliseconds
     return () => clearInterval(intervalId);
   }, []);
-
-  useEffect(() => {
-    if (!weatherFetched && showWeather) {
-      getWeatherData(fetchTime, location.lat, location.lon).then(res => {
-        let weatherData;
-        if (Array.isArray(res) && res.length === 3) {
-          weatherData = {
-            temperature: res[0].ParameterValue,
-            windSpeed: res[1].ParameterValue,
-            time: DateTime.now(),
-            // Icon id's and descriptions: https://www.ilmatieteenlaitos.fi/latauspalvelun-pikaohje ->  Sääsymbolien selitykset ennusteissa.
-            iconId: checkDayNight(
-              res[2].ParameterValue,
-              fetchTime,
-              location.lat,
-              location.lon,
-            ),
-          };
-        }
-        setWeatherData(weatherData);
-      });
-      setWeatherFetched(true);
-    }
-  }, [fetchTime]);
 
   if (weatherData && weatherFetched) {
     weatherIconString = 'weather'.concat(weatherData?.iconId).toString();
@@ -107,7 +105,7 @@ const MonitorTitlebar: FC<IProps> = ({
           </div>
         </div>
       )}
-      {!weatherData && isLandscape && !isMultiDisplay && (
+      {!weatherData && showWeather && (
         <div
           className={cx('weather-container', {
             preview: preview,
@@ -115,7 +113,7 @@ const MonitorTitlebar: FC<IProps> = ({
           })}
         ></div>
       )}
-      {weatherData && (
+      {weatherData && showWeather && (
         <div
           className={cx('weather-container', {
             preview: preview,

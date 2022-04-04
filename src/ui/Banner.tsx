@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { IMonitorConfig } from '../App';
 import Logo from './logo/Logo';

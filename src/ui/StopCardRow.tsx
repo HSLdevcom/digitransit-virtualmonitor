@@ -78,9 +78,11 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
 }) => {
   const [getStop, stopState] = useLazyQuery(GET_STOP, {
     fetchPolicy: 'network-only',
+    context: { clientName: 'default' },
   });
   const [getStation, stationState] = useLazyQuery(GET_STATION, {
     fetchPolicy: 'network-only',
+    context: { clientName: 'default' },
   });
   const [autosuggestValue, setAutosuggestValue] = useState(null);
 
@@ -91,13 +93,11 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
       case 'stop':
         getStop({
           variables: { ids: getGTFSId(properties.id) },
-          context: { clientName: 'default' },
         });
         break;
       case 'station':
         getStation({
           variables: { ids: getGTFSId(properties.id) },
-          context: { clientName: 'default' },
         });
         break;
       default:

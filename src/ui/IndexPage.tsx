@@ -5,7 +5,7 @@ import ContentContainer from './ContentContainer';
 import monitorsImage from './icons/create-monitor.svg';
 import cx from 'classnames';
 
-function IndexPage(props: WithTranslation) {
+export function IndexPage(props: WithTranslation) {
   return (
     <ContentContainer longContainer>
       <div className="index">
@@ -30,7 +30,11 @@ function IndexPage(props: WithTranslation) {
           </div>
         </div>
         <div className="right">
-          <img className={'desktop-img'} src={monitorsImage} alt="" />
+          <img
+            className={'desktop-img'}
+            src={monitorsImage}
+            alt="monitor-image"
+          />
         </div>
       </div>
     </ContentContainer>

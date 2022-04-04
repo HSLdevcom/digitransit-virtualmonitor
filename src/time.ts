@@ -1,57 +1,40 @@
 import { DateTime } from 'luxon';
 
-export type DaySeconds = number;
-export type Hours = number;
-export type Minutes = number;
-export type Seconds = number;
 export type Milliseconds = number;
 export type EpochMilliseconds = Milliseconds;
-export type EpochSecondsLocal = Seconds;
 
-export interface ITimeOfDay {
-  hours: Hours;
-  minutes: Minutes;
-  seconds: Seconds;
-}
-
-export const parseDaySeconds = (daySeconds: DaySeconds): ITimeOfDay => ({
-  hours: Math.floor(daySeconds / (60 * 60)),
-  minutes: Math.floor(daySeconds / 60) % 60,
-  seconds: daySeconds % 60,
-});
-
-const doubleDigit = (num: string | number) => num.toString().padStart(2, '0');
-
-export interface IFormatTimeOptions {
-  showSeconds?: boolean;
-}
-
-export const formatTime = (
-  timeOfDay: ITimeOfDay,
-  options: IFormatTimeOptions = {},
-): string =>
-  `${doubleDigit(timeOfDay.hours)}:${doubleDigit(timeOfDay.minutes)}${
-    options.showSeconds ? `:${doubleDigit(timeOfDay.seconds)}` : ''
-  }`;
-
-export const getDepartureTime = (time, minutesThreshold, serviceDay) => {
+export const getDepartureTime = (
+  time,
+  minutesThreshold,
+  serviceDay,
+  useTilde,
+  realtime,
+) => {
+  // Format to default hh:mm from serviceday + time from day's start
+  const d = DateTime.fromSeconds(serviceDay + time).toFormat('HH:mm');
   const secondsFromMidnight = new Date().setHours(0, 0, 0, 0);
+  const serviceDaySeconds =
+    time - (getCurrentSeconds() - secondsFromMidnight / 1000);
+  // custom logic for tampere, if there is no realtime, we show the full time, ie. 13:53.
+  if (!useTilde) {
+    if (
+      realtime &&
+      serviceDaySeconds < minutesThreshold &&
+      serviceDay * 1000 < DateTime.now().ts
+    ) {
+      const diffInMinutes = Math.floor(serviceDaySeconds / 60);
+      return (diffInMinutes < 0 ? 0 : diffInMinutes).toString();
+    }
+    return d.toString();
+  }
   if (
-    time - (getCurrentSeconds() - secondsFromMidnight / 1000) <
-      minutesThreshold &&
+    serviceDaySeconds < minutesThreshold &&
     serviceDay * 1000 < DateTime.now().ts
   ) {
-    const diffInMinutes = Math.floor(
-      (time - (getCurrentSeconds() - secondsFromMidnight / 1000)) / 60,
-    );
+    const diffInMinutes = Math.floor(serviceDaySeconds / 60);
     return (diffInMinutes < 0 ? 0 : diffInMinutes).toString();
   }
-  const hours = `0${Math.floor((time / 60 / 60) % 24)}`.slice(-2);
-  const mins = `0${Math.floor(time / 60) % 60}`.slice(-2);
-  if (hours !== 'aN' || mins !== 'aN') {
-    return `${hours}:${mins}`;
-  }
-  return null;
+  return d.toString();
 };
 
 export const formatDate = (date, locale) => {

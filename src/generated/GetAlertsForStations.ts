@@ -156,6 +156,14 @@ export interface GetAlertsForStations_stations_stops {
 export interface GetAlertsForStations_stations {
   __typename: "Stop";
   /**
+   * Longitude of the stop (WGS 84)
+   */
+  lon: number | null;
+  /**
+   * Latitude of the stop (WGS 84)
+   */
+  lat: number | null;
+  /**
    * Returns all stops that are children of this station (Only applicable for stations)
    */
   stops: (GetAlertsForStations_stations_stops | null)[] | null;

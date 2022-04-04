@@ -9,7 +9,7 @@ i18n.init({
     escapeValue: false,
   },
 
-  lng: 'fi',
+  lng: localStorage.getItem('lang') || 'fi',
 
   ns: ['translations'],
 
@@ -85,6 +85,7 @@ i18n.init({
         moveViewUp: 'Move stop display {{id}} up',
         'no-departures': 'No known departures',
         noMonitors: 'No stop displays found',
+        noAlerts: 'No alerts found',
         notPossibleToCreate:
           'Unable to create a new view without {{requirements}}',
         notPossibleToPreview:
@@ -200,6 +201,7 @@ i18n.init({
         moveViewUp: 'Siirrä pysäkkinäkymä {{id}} ylemmäksi',
         'no-departures': 'Ei tiedossa olevia lähtöjä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
+        noAlerts: 'Tiedotteita ei löytynyt',
         notPossibleToCreate: 'Ilman {{requirements}} ei voida luoda näkymää',
         notPossibleToPreview:
           'Ilman {{requirements}} ei voida näyttää esikatselua',
@@ -314,6 +316,7 @@ i18n.init({
         moveViewUp: 'Flytta hållplatsvy {{id}} uppåt',
         'no-departures': 'Inga kända avgångar',
         noMonitors: 'Ingen hållplatsskärm hittades',
+        noAlerts: 'Ingen  information om trafikstörningar hittades',
         notPossibleToCreate: 'Vyn kan inte skapas utan {{requirements}}',
         notPossibleToPreview:
           'Förhandsgranskning kan inte visas utan {{requirements}}',

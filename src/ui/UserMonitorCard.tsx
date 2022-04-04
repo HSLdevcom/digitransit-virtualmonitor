@@ -7,6 +7,10 @@ import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
 import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
 import StopCode from './StopCode';
+import {
+  getTrainStationData,
+  isPlatformOrTrackVisible,
+} from '../util/monitorUtils';
 
 interface IView {
   name?: string;
@@ -69,6 +73,11 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
     languages: languages,
     isInformationDisplay: isInformationDisplay(cards),
   };
+
+  const stations = v ? getTrainStationData(v, 'STATION') : [];
+  const stops = v ? getTrainStationData(v, 'STOP') : [];
+  const showPlatformsOrTracks =
+    stations.length || stops.length ? isPlatformOrTrackVisible(v) : false;
 
   const getTitles = obj => {
     let titles = '';
@@ -147,6 +156,9 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
           isOpen={isOpen}
           onClose={onClose}
           isLandscape={layout < 11}
+          stations={stations}
+          stops={stops}
+          showPlatformsOrTracks={showPlatformsOrTracks}
         />
       )}
       <div className="main-container">

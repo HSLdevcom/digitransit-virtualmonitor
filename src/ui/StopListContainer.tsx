@@ -155,6 +155,7 @@ const StopList = props => {
                       onStopMove={props.onStopMove}
                       setStops={props.setStops}
                       rightStops={rightItems}
+                      languages={languages}
                     />
                   </li>
                 );
@@ -189,6 +190,7 @@ const StopList = props => {
                         onStopMove={props.onStopMove}
                         setStops={props.setStops}
                         leftStops={leftItems}
+                        languages={languages}
                       />
                     </li>
                   );

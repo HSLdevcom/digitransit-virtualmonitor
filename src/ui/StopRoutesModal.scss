@@ -16,21 +16,23 @@
     border: none !important;
     border-radius: 5px !important;
     width: 720px !important;
-    height: 80% !important;
-    overflow-x: hidden !important;
+    height: 93% !important;
     top: 50% !important;
     left: 50% !important;
+    overflow: hidden !important;
     margin-right: -50%;
     margin-bottom: -50%;
     transform: translate(-50%, -50%);
     display: flex;
     justify-content: center;
     animation: none;
+    padding: 0 !important;
   }
 
   #close {
-    display: flex;
-    justify-content: flex-end;
+    position: absolute;
+    top: 30px;
+    right: 30px;
 
     .close-button {
       background: transparent;
@@ -39,12 +41,16 @@
     }
   }
 
-  #section-with-side-padding {
-    padding: 0 40px;
+  .section-margin-small {
+    margin: 0 60px;
+  }
+
+  .section-margin-large {
+    margin: 0 80px;
   }
 
   .title-container {
-    margin-bottom: 22px;
+    margin: 64px 0 22px 0;
 
     .title {
       font-size: 22px;
@@ -59,16 +65,17 @@
 
   .modal {
     padding-top: 0;
-    width: 600px;
+    width: 720px;
     font-family: $font-family;
     margin: 0;
+    overflow-y: auto;
 
     .route-rows {
       display: flex;
       flex-direction: column;
       overflow-y: auto;
       overflow-x: hidden;
-      max-height: 380px;
+      max-height: 325px;
 
       .row {
         min-height: 30px;
@@ -76,9 +83,15 @@
         align-items: center;
         margin: 10px 0;
 
+        .check-box {
+          svg {
+            flex: none;
+          }
+        }
+
         .empty-space,
         .reserved-space {
-          width: 146px;
+          width: 160px;
         }
 
         .option-checkbox-container {
@@ -102,7 +115,7 @@
           font-size: 18px;
           line-height: 22px;
           color: #333;
-          min-width: 60px;
+          min-width: 85px;
         }
 
         .destination {
@@ -117,11 +130,11 @@
           .en,
           .fi,
           .sv {
-            width: 130px;
+            width: 105px;
 
             &.readonly {
               font-size: 16px;
-              width: 132px;
+              width: 109px;
               border: 0;
 
               &::placeholder {
@@ -136,7 +149,7 @@
 
           .fi,
           .sv {
-            margin-right: 18px;
+            margin-right: 13px;
           }
 
           .fi {
@@ -153,7 +166,6 @@
           margin-bottom: 10px;
 
           .lang {
-            position: absolute;
             font-style: normal;
             font-weight: $font-weight;
             font-size: 13px;
@@ -161,16 +173,9 @@
             letter-spacing: -0.02em;
             display: flex;
 
-            &.fi {
-              left: 136px;
-            }
-
+            &.fi,
             &.sv {
-              left: 290px;
-            }
-
-            &.en {
-              left: 444px;
+              margin-right: 114px;
             }
           }
         }

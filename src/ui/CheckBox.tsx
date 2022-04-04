@@ -1,10 +1,7 @@
 import React from 'react';
 import { useCheckbox } from '@react-aria/checkbox';
 import { useToggleState } from '@react-stately/toggle';
-
-import { VisuallyHidden } from '@react-aria/visually-hidden';
 import { useFocusRing } from '@react-aria/focus';
-
 import Icon from './Icon';
 
 function Checkbox(props) {
@@ -17,10 +14,11 @@ function Checkbox(props) {
     isFocusVisible ? '-focus' : ''
   }`;
   return (
-    <label style={{ display: 'flex', alignItems: 'center' }}>
-      <VisuallyHidden>
-        <input {...inputProps} {...focusProps} ref={ref} />
-      </VisuallyHidden>
+    <label
+      className="check-box"
+      style={{ display: 'flex', alignItems: 'center' }}
+    >
+      <input {...inputProps} {...focusProps} ref={ref} />
       <Icon
         img={img}
         width={props.width ? props.width : 20}

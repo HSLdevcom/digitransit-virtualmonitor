@@ -21,6 +21,9 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
 }) => {
   const changeLanguage = (i18n, lang) => {
     i18n.changeLanguage(lang);
+    if (lang !== localStorage.getItem('lang')) {
+      localStorage.setItem('lang', lang);
+    }
   };
 
   const languageCodes = ['fi', 'sv', 'en'];

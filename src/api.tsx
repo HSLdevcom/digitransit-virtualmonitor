@@ -75,6 +75,25 @@ const monitorAPI = {
         });
     });
   },
+  decompress(base64string) {
+    return new Promise((resolve, reject) => {
+      fetch(`${baseAPI}/decompress`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          payload: base64string,
+        }),
+      })
+        .then(result => result.json())
+        .then(result => resolve(result))
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
   createStatic(hash, url, title) {
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/staticmonitor`, {

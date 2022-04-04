@@ -1,36 +1,26 @@
-import * as React from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { DateTime } from 'luxon';
 
-import NtpSyncContext from '../ntp/NtpSyncContext';
-import { EpochMilliseconds } from '../time';
+const AutoMoment: FC = () => {
+  const [time, setTime] = useState(new Date().getTime());
 
-export interface ITimeProps {
-  readonly currentTime?: EpochMilliseconds;
-}
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setTime(new Date().getTime());
+    }, 1000);
+    return () => clearInterval(intervalId);
+  }, []);
 
-class AutoMoment extends React.Component<ITimeProps, any> {
-  constructor(props: ITimeProps) {
-    super(props);
-  }
-
-  static get contextType() {
-    return NtpSyncContext;
-  }
-
-  public render() {
-    const dt = DateTime.fromMillis(
-      this.props.currentTime + this.context.deltaMilliseconds,
-    );
-    const hours = dt.toFormat('HH');
-    const minutes = dt.toFormat('mm');
-    return (
-      <time>
-        {hours}
-        <span>:</span>
-        {minutes}
-      </time>
-    );
-  }
-}
+  const dt = DateTime.fromMillis(time);
+  const hours = dt.toFormat('HH');
+  const minutes = dt.toFormat('mm');
+  return (
+    <time>
+      {hours}
+      <span>:</span>
+      {minutes}
+    </time>
+  );
+};
 
 export default AutoMoment;

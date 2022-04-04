@@ -10,6 +10,15 @@
     margin-bottom: 7vh;
   }
 
+  .no-alerts-container {
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    font-size: 4vh;
+    align-items: center;
+    text-align: center;
+  }
+
   &.portrait {
     margin: 4vh 2vh;
 
@@ -20,6 +29,12 @@
     .alert-description {
       font-size: 2vh;
       margin-bottom: 5vh;
+    }
+
+    &.preview {
+      .no-alerts-container h2 {
+        font-size: 41px;
+      }
     }
   }
 

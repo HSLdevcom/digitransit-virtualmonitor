@@ -10,13 +10,13 @@ import {
   GetAlertsForStops,
   GetAlertsForStopsVariables,
 } from '../generated/GetAlertsForStops';
-import { uniqBy } from 'lodash';
+import { uniqBy, cloneDeep } from 'lodash';
 import Loading from './Loading';
 import InformationDisplayCarousel from './InformationDisplayCarousel';
 import { IMonitor } from '../util/Interfaces';
 
 interface IProps {
-  monitor: IMonitor;
+  readonly monitor: IMonitor;
   preview?: boolean;
 }
 
@@ -48,6 +48,7 @@ const InformationDisplayContainer: FC<IProps> = ({
 
   const [stopAlerts, setStopAlerts] = useState([]);
   const [stationAlerts, setStationAlerts] = useState([]);
+  const [view, setView] = useState(cloneDeep(monitor).cards[0]);
 
   const stationsState = useQuery<
     GetAlertsForStations,
@@ -56,6 +57,7 @@ const InformationDisplayContainer: FC<IProps> = ({
     variables: { ids: stationIds },
     pollInterval: 180000,
     skip: stationIds.length < 1,
+    context: { clientName: 'default' },
   });
 
   const stopsState = useQuery<GetAlertsForStops, GetAlertsForStopsVariables>(
@@ -64,13 +66,28 @@ const InformationDisplayContainer: FC<IProps> = ({
       variables: { ids: stopIds },
       pollInterval: 180000,
       skip: stopIds.length < 1,
+      context: { clientName: 'default' },
     },
   );
+  const ViewWithLocation = (lat, lon) => {
+    const newView = {
+      ...view,
+    };
+    newView.columns.left.stops[0] = {
+      ...newView.columns.left.stops[0],
+      lat: lat,
+      lon: lon,
+    };
+    return newView;
+  };
   useEffect(() => {
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
       const alerts = getStopAlerts(stops);
-      setStopAlerts(uniqBy(alerts, alert => alert.alertHeaderText));
+      setView(ViewWithLocation(stops[0].lat, stops[0].lon));
+      setStopAlerts(
+        alerts.length ? uniqBy(alerts, alert => alert.alertHeaderText) : [],
+      );
       setStopsFetched(true);
     }
   }, [stopsState.data]);
@@ -79,7 +96,10 @@ const InformationDisplayContainer: FC<IProps> = ({
     const stations = stationsState?.data?.stations;
     if (stations?.length > 0) {
       const alerts = getStationAlerts(stations);
-      setStationAlerts(uniqBy(alerts, alert => alert.alertHeaderText));
+      setView(ViewWithLocation(stations[0].lat, stations[0].lon));
+      setStationAlerts(
+        alerts.length ? uniqBy(alerts, alert => alert.alertHeaderText) : [],
+      );
       setStationsFetched(true);
     }
   }, [stationsState.data]);
@@ -89,7 +109,7 @@ const InformationDisplayContainer: FC<IProps> = ({
   }
   return (
     <InformationDisplayCarousel
-      view={monitor.cards[0]}
+      view={view}
       alerts={[...stopAlerts, ...stationAlerts]}
       languages={monitor.languages}
       preview={preview}

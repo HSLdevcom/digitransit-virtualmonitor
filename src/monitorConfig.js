@@ -33,6 +33,7 @@ export default {
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
+    useTilde: true,
   },
   jyvaskyla: {
     colors: {
@@ -53,6 +54,7 @@ export default {
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
+    useTilde: true,
   },
   matka: {
     colors: {
@@ -78,13 +80,14 @@ export default {
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
+    useTilde: true,
   },
   tampere: {
     colors: {
       primary: '#1c57cf',
       monitorBackground: '#1c57cf',
     },
-    feedIds: ['tampere'],
+    feedIds: ['tampere', 'TampereVR', 'tampereDRT'],
     fonts: {
       monitor: {
         name: 'Lato',

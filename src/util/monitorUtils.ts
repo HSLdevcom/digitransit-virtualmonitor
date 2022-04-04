@@ -5,6 +5,7 @@ import xmlParser from 'fast-xml-parser';
 import { trainStationMap } from '../util/trainStations';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import dummyAlerts, { getDummyAlerts } from '../testAlert';
+import SunCalc from 'suncalc';
 
 const WEATHER_URL =
   'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
@@ -50,7 +51,8 @@ export const filterDepartures = (
   hiddenRoutes,
   timeshift,
   showEndOfLine = false,
-  renamedDestinations,
+  showStopNumber,
+  showVia,
 ) => {
   const departures = [];
   const arrivalDepartures = [];
@@ -78,6 +80,9 @@ export const filterDepartures = (
         stoptimes.push({
           ...item,
           combinedPattern: combinedPattern,
+          showStopNumber: showStopNumber,
+          showVia: showVia,
+          vehicleMode: stop.vehicleMode?.toLowerCase(),
         }),
       );
 
@@ -189,7 +194,8 @@ export const createDepartureArray = (
               hiddenRoutes,
               timeShift,
               showEndOfLine,
-              renamedDestinations,
+              showStopNumber,
+              showVia,
             } = view.columns[column].stops[stopIndex].settings
               ? view.columns[column].stops[stopIndex].settings
               : defaultSettings;
@@ -215,7 +221,8 @@ export const createDepartureArray = (
                 hiddenRoutes,
                 timeShift,
                 showEndOfLine,
-                renamedDestinations,
+                showStopNumber,
+                showVia,
               ),
             );
           }
@@ -324,6 +331,23 @@ export const retryFetch = (URL, options = {}, retryCount, retryDelay) =>
     retry(retryCount);
   });
 
+export const checkDayNight = (iconId, timem, lat, lon) => {
+  const dayNightIconIds = [1, 2, 21, 22, 23, 41, 42, 43, 61, 62, 71, 72, 73];
+  const date = timem;
+  const dateMillis = timem.ts;
+  const sunCalcTimes = SunCalc.getTimes(date, lat, lon);
+  const sunrise = sunCalcTimes.sunrise.getTime();
+  const sunset = sunCalcTimes.sunset.getTime();
+  if (
+    (sunrise > dateMillis || sunset < dateMillis) &&
+    dayNightIconIds.includes(iconId)
+  ) {
+    // Night icon = iconId + 100
+    return iconId + 100;
+  }
+  return iconId;
+};
+
 export const capitalize = text => {
   if (text && text !== null) {
     const textArray = text.split(' ');
@@ -344,36 +368,42 @@ export const capitalize = text => {
   return text;
 };
 
-export const getStationIds = monitor => {
-  const ids = [];
-  monitor.cards.forEach(card => {
+export const getTrainStationData = (monitor, locationType) => {
+  const retValue = [];
+  const array = monitor.cards ? monitor.cards : monitor;
+  array.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
         if (
-          stop.mode?.toLowerCase() === 'rail' &&
-          stop.gtfsId.startsWith('HSL:')
+          stop.locationType === locationType &&
+          stop.vehicleMode?.toLowerCase() === 'rail'
         ) {
-          ids.push(stop.parentStation ? stop.parentStation : stop.gtfsId);
-        } else if (
-          stop.mode?.toLowerCase() === 'rail' &&
-          stop.gtfsId.startsWith('MATKA:4_')
-        ) {
-          const hslGtfsId = trainStationMap?.find(
-            i => i.shortCode === stop.gtfsId.substring(8),
-          )?.gtfsId;
-          if (hslGtfsId) {
-            ids.push(hslGtfsId);
-          }
+          const isHsl = stop.gtfsId.startsWith('HSL:');
+          const gtfsId =
+            isHsl && stop.parentStation?.gtfsId
+              ? stop.parentStation?.gtfsId
+              : stop.gtfsId;
+
+          retValue.push({
+            gtfsId: gtfsId,
+            shortCode: !isHsl
+              ? gtfsId.substring(8)
+              : trainStationMap?.find(i => i.gtfsId === gtfsId)?.shortCode ||
+                null,
+            source: isHsl ? 'HSL' : 'MATKA',
+            hiddenRoutes: stop.settings?.hiddenRoutes || [],
+          });
         }
       });
     });
   });
-  return ids;
+  return retValue;
 };
 
 export const isPlatformOrTrackVisible = monitor => {
   let showPlatformOrTrack = false;
-  monitor.cards.forEach(card => {
+  const array = monitor.cards ? monitor.cards : monitor;
+  array.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
         if (stop.settings && stop.settings.showStopNumber) {

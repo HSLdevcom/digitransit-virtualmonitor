@@ -39,6 +39,7 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
             onClick={() => handleOrientation('horizontal')}
             aria-label={t('displayDirection') + ' ' + t('horizontal')}
             role="button"
+            disabled={orientation === 'horizontal'}
           >
             <Icon
               img={
@@ -57,6 +58,7 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
             onClick={() => handleOrientation('vertical')}
             aria-label={t('displayDirection') + ' ' + t('vertical')}
             role="button"
+            disabled={orientation === 'vertical'}
           >
             <Icon
               img={

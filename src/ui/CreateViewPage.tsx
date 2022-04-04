@@ -21,8 +21,8 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
   const [languages, setLanguages] = useState(['fi']);
   const [loading, setLoading] = useState(true);
 
-  const hash = getContentHash(location.search);
-
+  const h = getContentHash(location.search);
+  const hash = h === 'undefined' ? null : h;
   useEffect(() => {
     if (hash) {
       monitorAPI.get(hash).then((r: any) => {
@@ -47,6 +47,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
           languages={languages}
           defaultStopCardList={[defaultStopCard(props.t)]}
           feedIds={props.config.feedIds}
+          instance={props.config.name}
         />
       </ContentContainer>
     );
@@ -79,6 +80,7 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
         stopCardList={stopCardList}
         feedIds={props.config.feedIds}
         loading={loading}
+        instance={props.config.name}
       />
     </ContentContainer>
   );

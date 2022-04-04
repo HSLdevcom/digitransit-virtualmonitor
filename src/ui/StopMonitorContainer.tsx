@@ -37,12 +37,10 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   stopIds,
   layout = 2,
   urlTitle,
-  config,
   t,
 }) => {
   const [stopCard, setStopCard] = useState([defaultStopCard(t)]);
   const [fetched, setFetched] = useState(false);
-  const [stopsFound, setStopsFound] = useState(true);
 
   const { data, loading } = useQuery<GetStops, GetStopsVariables>(GET_STOP, {
     variables: { ids: stopIds },
@@ -55,16 +53,12 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   useEffect(() => {
     if (data) {
       const card = stopCard.slice();
-      if (data.stops.filter(s => s).length > 0) {
-        card[0].columns.left.stops = data.stops.filter(s => s);
-        card[0].layout = newLayout;
-        if (stopIds.length === 1) {
-          card[0].title.fi = urlTitle || data.stops[0]?.name;
-        } else {
-          card[0].title.fi = urlTitle;
-        }
+      card[0].columns.left.stops = data.stops.filter(s => s);
+      card[0].layout = newLayout;
+      if (stopIds.length === 1) {
+        card[0].title.fi = urlTitle || data.stops[0]?.name;
       } else {
-        setStopsFound(false);
+        card[0].title.fi = urlTitle;
       }
       setStopCard(card);
       setFetched(true);
@@ -75,7 +69,6 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   }
   return (
     <CarouselDataContainer
-      error={!stopsFound ? t('noMonitors') : undefined}
       languages={['fi']}
       views={stopCard}
       fromStop

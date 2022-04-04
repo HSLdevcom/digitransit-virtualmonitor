@@ -127,9 +127,8 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
             i => i.gtfsId === m.parentStation,
           )?.shortCode;
           const shortCode = hslId ? hslId : undefined;
-          const number = m.shortName.match(/\d+$/)?.[0];
+
           if (!r || r.indexOf(m.shortName) === -1) {
-            const d = Number.isInteger(parseInt(number)) ? number : m.shortName;
             stopAndRoutes.push({
               routes:
                 r && r.length > 0
@@ -139,7 +138,9 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
               parentStation: m.parentStation,
             });
           }
-
+          // get the number at the end of the shortname (IC 149 -> 149)
+          const number = m.shortName.match(/\d+$/)?.[0];
+          // if the shortname has a number we assume it's a long distance train
           if (Number.isInteger(parseInt(number))) {
             return { trainNumber: { equals: parseInt(number) } };
           }

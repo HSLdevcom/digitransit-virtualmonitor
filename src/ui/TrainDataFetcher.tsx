@@ -100,7 +100,7 @@ const TrainDataFetcher: FC<IProps> = ({
     .map(stop => {
       return {
         gtfsId: stop.parentStation,
-        shortCode: stop?.shortCode || stop.parentStation.substring(8),
+        shortCode: stop?.shortCode || stop.parentStation.slice(-3),
       };
     })
     .filter(s => s);
@@ -165,8 +165,12 @@ const TrainDataFetcher: FC<IProps> = ({
                 }
               });
             }
+            const lineasd = Number.isInteger(parseInt(id))
+              ? stopAndRoutes.find(el => el.routes.match(/\d+$/)?.[0] === id)
+                  ?.routes
+              : train.commuterLineid;
             trainsWithTrack.push({
-              lineId: train.commuterLineid,
+              lineId: lineasd,
               trainNumber: train.trainNumber,
               time: formattedDateTimeFromSeconds(
                 utcToSeconds(train.timeTableRows[idx].scheduledTime),

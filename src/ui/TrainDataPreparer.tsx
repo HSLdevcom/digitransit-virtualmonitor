@@ -1,6 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { IMonitor, ICard } from '../util/Interfaces';
+import { uniqWith, isEqual } from 'lodash';
 import Loading from './Loading';
 import { trainStationMap } from '../util/trainStations';
 import { stringifyPattern } from '../util/monitorUtils';
@@ -126,6 +127,7 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
             i => i.gtfsId === m.parentStation,
           )?.shortCode;
           const shortCode = hslId ? hslId : undefined;
+
           if (!r || r.indexOf(m.shortName) === -1) {
             stopAndRoutes.push({
               routes:
@@ -136,8 +138,11 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
               parentStation: m.parentStation,
             });
           }
-          if (Number.isInteger(parseInt(m.shortName))) {
-            return { trainNumber: { equals: parseInt(m.shortName) } };
+          // get the number at the end of the shortname (IC 149 -> 149)
+          const number = m.shortName.match(/\d+$/)?.[0];
+          // if the shortname has a number we assume it's a long distance train
+          if (Number.isInteger(parseInt(number))) {
+            return { trainNumber: { equals: parseInt(number) } };
           }
           return { commuterLineid: { equals: m.shortName } };
         })
@@ -150,6 +155,7 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
   if (defaultState.loading) {
     return <Loading />;
   }
+  const lines = uniqWith(defaultLines, isEqual);
   return (
     <TrainDataFetcher
       defaultLines={defaultLines ? defaultLines : []}

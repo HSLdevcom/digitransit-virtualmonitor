@@ -100,7 +100,7 @@ const TrainDataFetcher: FC<IProps> = ({
     .map(stop => {
       return {
         gtfsId: stop.parentStation,
-        shortCode: stop?.shortCode || stop.parentStation.substring(8),
+        shortCode: stop?.shortCode || stop.parentStation.slice(-3),
       };
     })
     .filter(s => s);
@@ -165,8 +165,15 @@ const TrainDataFetcher: FC<IProps> = ({
                 }
               });
             }
+            // match rail api data to otp data with route.shortName and train.trainnumber .
+            // these don't always fully match (ie. IC 149 -> 149) so check against the number.
+            // OTP might return the data in either of the formats, rail api returns only the number.
+            const line = Number.isInteger(parseInt(id))
+              ? stopAndRoutes.find(el => el.routes.match(/\d+$/)?.[0] === id)
+                  ?.routes
+              : train.commuterLineid;
             trainsWithTrack.push({
-              lineId: train.commuterLineid,
+              lineId: line,
               trainNumber: train.trainNumber,
               time: formattedDateTimeFromSeconds(
                 utcToSeconds(train.timeTableRows[idx].scheduledTime),

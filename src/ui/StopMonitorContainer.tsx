@@ -20,6 +20,8 @@ export const GET_STOP = gql`
       name
       gtfsId
       locationType
+      lat
+      lon
     }
   }
 `;

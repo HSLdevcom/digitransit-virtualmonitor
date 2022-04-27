@@ -68,7 +68,6 @@ import { ReactComponent as Weather2 } from './icons/weather/2.svg';
 import { ReactComponent as Weather3 } from './icons/weather/3.svg';
 import { ReactComponent as Weather4 } from './icons/weather/4.svg';
 import { ReactComponent as Weather6 } from './icons/weather/6.svg';
-import { ReactComponent as Weather7 } from './icons/weather/7.svg';
 import { ReactComponent as Weather9 } from './icons/weather/9.svg';
 import { ReactComponent as Weather11 } from './icons/weather/11.svg';
 import { ReactComponent as Weather14 } from './icons/weather/14.svg';
@@ -82,8 +81,6 @@ import { ReactComponent as Weather31 } from './icons/weather/31.svg';
 import { ReactComponent as Weather32 } from './icons/weather/32.svg';
 import { ReactComponent as Weather33 } from './icons/weather/33.svg';
 import { ReactComponent as Weather34 } from './icons/weather/34.svg';
-import { ReactComponent as Weather35 } from './icons/weather/35.svg';
-import { ReactComponent as Weather36 } from './icons/weather/36.svg';
 import { ReactComponent as Weather37 } from './icons/weather/37.svg';
 import { ReactComponent as Weather38 } from './icons/weather/38.svg';
 import { ReactComponent as Weather39 } from './icons/weather/39.svg';
@@ -91,11 +88,6 @@ import { ReactComponent as Weather41 } from './icons/weather/41.svg';
 import { ReactComponent as Weather42 } from './icons/weather/42.svg';
 import { ReactComponent as Weather43 } from './icons/weather/43.svg';
 import { ReactComponent as Weather44 } from './icons/weather/44.svg';
-import { ReactComponent as Weather45 } from './icons/weather/45.svg';
-import { ReactComponent as Weather46 } from './icons/weather/46.svg';
-import { ReactComponent as Weather47 } from './icons/weather/47.svg';
-import { ReactComponent as Weather48 } from './icons/weather/48.svg';
-import { ReactComponent as Weather49 } from './icons/weather/49.svg';
 import { ReactComponent as Weather51 } from './icons/weather/51.svg';
 import { ReactComponent as Weather52 } from './icons/weather/52.svg';
 import { ReactComponent as Weather53 } from './icons/weather/53.svg';
@@ -113,8 +105,6 @@ import { ReactComponent as Weather67 } from './icons/weather/67.svg';
 import { ReactComponent as Weather71 } from './icons/weather/71.svg';
 import { ReactComponent as Weather72 } from './icons/weather/72.svg';
 import { ReactComponent as Weather73 } from './icons/weather/73.svg';
-import { ReactComponent as Weather74 } from './icons/weather/74.svg';
-import { ReactComponent as Weather77 } from './icons/weather/77.svg';
 import { ReactComponent as Weather81 } from './icons/weather/81.svg';
 import { ReactComponent as Weather82 } from './icons/weather/82.svg';
 import { ReactComponent as Weather83 } from './icons/weather/83.svg';
@@ -132,14 +122,10 @@ import { ReactComponent as Weather131 } from './icons/weather/131.svg';
 import { ReactComponent as Weather132 } from './icons/weather/132.svg';
 import { ReactComponent as Weather133 } from './icons/weather/133.svg';
 import { ReactComponent as Weather134 } from './icons/weather/134.svg';
-import { ReactComponent as Weather135 } from './icons/weather/135.svg';
-import { ReactComponent as Weather136 } from './icons/weather/136.svg';
 import { ReactComponent as Weather141 } from './icons/weather/141.svg';
 import { ReactComponent as Weather142 } from './icons/weather/142.svg';
 import { ReactComponent as Weather143 } from './icons/weather/143.svg';
 import { ReactComponent as Weather144 } from './icons/weather/144.svg';
-import { ReactComponent as Weather145 } from './icons/weather/145.svg';
-import { ReactComponent as Weather146 } from './icons/weather/146.svg';
 import { ReactComponent as Weather151 } from './icons/weather/151.svg';
 import { ReactComponent as Weather152 } from './icons/weather/152.svg';
 import { ReactComponent as Weather153 } from './icons/weather/153.svg';
@@ -151,7 +137,6 @@ import { ReactComponent as Weather162 } from './icons/weather/162.svg';
 import { ReactComponent as Weather171 } from './icons/weather/171.svg';
 import { ReactComponent as Weather172 } from './icons/weather/172.svg';
 import { ReactComponent as Weather173 } from './icons/weather/173.svg';
-import { ReactComponent as Weather174 } from './icons/weather/174.svg';
 import { ReactComponent as Weather177 } from './icons/weather/177.svg';
 
 export interface IIconMapProps {
@@ -250,7 +235,6 @@ const IconMap = (style: IIconMapProps) => {
     weather3: <Weather3 style={style} />,
     weather4: <Weather4 style={style} />,
     weather6: <Weather6 style={style} />,
-    weather7: <Weather7 style={style} />,
     weather9: <Weather9 style={style} />,
     weather11: <Weather11 style={style} />,
     weather14: <Weather14 style={style} />,
@@ -264,8 +248,6 @@ const IconMap = (style: IIconMapProps) => {
     weather32: <Weather32 style={style} />,
     weather33: <Weather33 style={style} />,
     weather34: <Weather34 style={style} />,
-    weather35: <Weather35 style={style} />,
-    weather36: <Weather36 style={style} />,
     weather37: <Weather37 style={style} />,
     weather38: <Weather38 style={style} />,
     weather39: <Weather39 style={style} />,
@@ -273,11 +255,6 @@ const IconMap = (style: IIconMapProps) => {
     weather42: <Weather42 style={style} />,
     weather43: <Weather43 style={style} />,
     weather44: <Weather44 style={style} />,
-    weather45: <Weather45 style={style} />,
-    weather46: <Weather46 style={style} />,
-    weather47: <Weather47 style={style} />,
-    weather48: <Weather48 style={style} />,
-    weather49: <Weather49 style={style} />,
     weather51: <Weather51 style={style} />,
     weather52: <Weather52 style={style} />,
     weather53: <Weather53 style={style} />,
@@ -295,8 +272,6 @@ const IconMap = (style: IIconMapProps) => {
     weather71: <Weather71 style={style} />,
     weather72: <Weather72 style={style} />,
     weather73: <Weather73 style={style} />,
-    weather74: <Weather74 style={style} />,
-    weather77: <Weather77 style={style} />,
     weather81: <Weather81 style={style} />,
     weather82: <Weather82 style={style} />,
     weather83: <Weather83 style={style} />,
@@ -314,14 +289,10 @@ const IconMap = (style: IIconMapProps) => {
     weather132: <Weather132 style={style} />,
     weather133: <Weather133 style={style} />,
     weather134: <Weather134 style={style} />,
-    weather135: <Weather135 style={style} />,
-    weather136: <Weather136 style={style} />,
     weather141: <Weather141 style={style} />,
     weather142: <Weather142 style={style} />,
     weather143: <Weather143 style={style} />,
     weather144: <Weather144 style={style} />,
-    weather145: <Weather145 style={style} />,
-    weather146: <Weather146 style={style} />,
     weather151: <Weather151 style={style} />,
     weather152: <Weather152 style={style} />,
     weather153: <Weather153 style={style} />,
@@ -333,7 +304,6 @@ const IconMap = (style: IIconMapProps) => {
     weather171: <Weather171 style={style} />,
     weather172: <Weather172 style={style} />,
     weather173: <Weather173 style={style} />,
-    weather174: <Weather174 style={style} />,
     weather177: <Weather177 style={style} />,
   };
 };

@@ -38,25 +38,27 @@ const MonitorTitlebar: FC<IProps> = ({
   // update weather data in 15 minutes interval
 
   const fetchWeather = () => {
-    getWeatherData(DateTime.now(), location.lat, location.lon).then(res => {
-      let weatherData;
-      if (Array.isArray(res) && res.length === 3) {
-        weatherData = {
-          temperature: res[0].ParameterValue,
-          windSpeed: res[1].ParameterValue,
-          time: DateTime.now(),
-          // Icon id's and descriptions: https://www.ilmatieteenlaitos.fi/latauspalvelun-pikaohje ->  Sääsymbolien selitykset ennusteissa.
-          iconId: checkDayNight(
-            res[2].ParameterValue,
-            DateTime.now(),
-            location.lat,
-            location.lon,
-          ),
-        };
-      }
-      setWeatherData(weatherData);
-      setWeatherFetched(true);
-    });
+    if (showWeather) {
+      getWeatherData(DateTime.now(), location.lat, location.lon).then(res => {
+        let weatherData;
+        if (Array.isArray(res) && res.length === 3) {
+          weatherData = {
+            temperature: res[0].ParameterValue,
+            windSpeed: res[1].ParameterValue,
+            time: DateTime.now(),
+            // Icon id's and descriptions: https://www.ilmatieteenlaitos.fi/latauspalvelun-pikaohje ->  Sääsymbolien selitykset ennusteissa.
+            iconId: checkDayNight(
+              res[2].ParameterValue,
+              DateTime.now(),
+              location.lat,
+              location.lon,
+            ),
+          };
+        }
+        setWeatherData(weatherData);
+        setWeatherFetched(true);
+      });
+    }
   };
   useEffect(() => {
     fetchWeather();

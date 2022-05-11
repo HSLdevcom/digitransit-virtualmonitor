@@ -16,6 +16,12 @@ export interface stationQuery_station_stops_stoptimesForPatterns_pattern_route {
    */
   mode: Mode | null;
   /**
+   * The raw GTFS route type as a integer. For the list of possible values, see:
+   * https: // developers.google.com/transit/gtfs/reference/#routestxt and
+   * https: // developers.google.com/transit/gtfs/reference/extended-route-types
+   */
+  type: number | null;
+  /**
    * Short name of the route, usually a line number, e.g. 550
    */
   shortName: string | null;

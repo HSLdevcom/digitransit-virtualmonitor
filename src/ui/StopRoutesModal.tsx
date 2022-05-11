@@ -21,7 +21,7 @@ interface IRoute {
 
 interface Props {
   showModal: boolean;
-  stop: IStop;
+  stop: any;
   closeModal: (route: IRoute[]) => void;
   stopSettings?: any;
   combinedPatterns: string[];
@@ -330,8 +330,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               d => d.pattern === pattern,
             );
             const patternArray = pattern.split(':');
-            const s = [patternArray[0], patternArray[1]].join(':');
-            const route = props.stop.routes.find(r => r.gtfsId === s);
+            const gtfsID = [patternArray[0], patternArray[1]].join(':');
+            const { route } = props.stop.patterns.find(
+              p => p.route.gtfsId === gtfsID,
+            );
             const iconStyle = getIconStyleWithColor(getRouteMode(route));
             return (
               <div key={pattern} className="row">

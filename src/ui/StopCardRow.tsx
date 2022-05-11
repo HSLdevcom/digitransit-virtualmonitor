@@ -160,7 +160,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             const stationWithGTFS = {
               ...station,
               locality: autosuggestValue.locality,
-              mode: getModeFromAddendum(autosuggestValue.addendum?.GTFS.modes),
+              mode: autosuggestValue.addendum?.GTFS.modes[0],
             };
             return {
               ...stationWithGTFS,

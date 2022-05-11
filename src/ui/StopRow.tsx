@@ -11,7 +11,7 @@ import { sortBy, uniqWith, isEqual } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
 import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
-import { getModeFromAddendum, getStopIcon } from '../util/stopCardUtil';
+import { getStopIcon } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 
 interface IStopInfoPlus extends IStop {

@@ -28,6 +28,8 @@ export const GET_STOP = gql`
       routes {
         shortName
         gtfsId
+        mode
+        type
       }
     }
   }
@@ -60,6 +62,8 @@ export const GET_STATION = gql`
         routes {
           shortName
           gtfsId
+          mode
+          type
         }
       }
     }

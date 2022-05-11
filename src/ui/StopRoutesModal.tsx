@@ -8,7 +8,7 @@ import { withTranslation, WithTranslation } from 'react-i18next';
 import { IStop } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
-import { getStopIcon } from '../util/stopCardUtil';
+import { getStopIcon, getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 
 Modal.setAppElement('#root');
@@ -329,10 +329,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             const renamedDestination = renamings?.find(
               d => d.pattern === pattern,
             );
-
-            const keyForInput = 3 * index + 1;
             const patternArray = pattern.split(':');
-            const iconStyle = getIconStyleWithColor(getStopIcon(props.stop));
+            const s = [patternArray[0], patternArray[1]].join(':');
+            const route = props.stop.routes.find(r => r.gtfsId === s);
+            const iconStyle = getIconStyleWithColor(getRouteMode(route));
             return (
               <div key={pattern} className="row">
                 <Checkbox
@@ -348,7 +348,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                     <Icon
                       img={
                         !iconStyle.postfix
-                          ? getStopIcon(props.stop)
+                          ? getRouteMode(route)
                           : getStopIcon(props.stop) + iconStyle.postfix
                       }
                       width={24}

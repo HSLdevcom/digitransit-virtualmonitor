@@ -16,7 +16,8 @@
     border: none !important;
     border-radius: 5px !important;
     width: 720px !important;
-    height: 93% !important;
+    max-height: 93% !important;
+    height: fit-content;
     top: 50% !important;
     left: 50% !important;
     overflow: hidden !important;

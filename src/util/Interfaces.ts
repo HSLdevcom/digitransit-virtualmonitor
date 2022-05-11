@@ -8,6 +8,7 @@ export interface IStop {
   name: string;
   settings: ISettings;
   mode?: string;
+  routes?: Array<any>;
   parentStation?: string;
 }
 export interface ISettings {

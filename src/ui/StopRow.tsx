@@ -11,7 +11,7 @@ import { sortBy, uniqWith, isEqual } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
 import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
-import { getStopIcon } from '../util/stopCardUtil';
+import { getModeFromAddendum, getStopIcon } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 
 interface IStopInfoPlus extends IStop {
@@ -21,6 +21,7 @@ interface IStopInfoPlus extends IStop {
   locality?: string;
   patterns: Array<IPattern>;
   id?: string;
+  modes: Array<string>;
 }
 
 interface IProps {
@@ -89,12 +90,10 @@ const StopRow: FC<IProps & WithTranslation> = ({
   const isDefaultSettings =
     isEqual(defaultSettings, stop.settings) || !stop.settings;
 
-  const iconStyle = getIconStyleWithColor(getStopIcon(stop));
-
+  const iconStyle = getIconStyleWithColor(stop.mode);
   const moveBetweenColumns = getLayout(stop.layout).isMultiDisplay
     ? moveIsPossible(stop, side === 'left' ? rightStops : leftStops)
     : false;
-
   return (
     <div className="stop-row-container">
       <div className="stop-row-stop icon">

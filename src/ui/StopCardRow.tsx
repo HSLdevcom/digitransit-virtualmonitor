@@ -112,6 +112,9 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   const getVehicleMode = modes => {
     let mode;
     if (modes) {
+      if (modes.includes('BUS-EXPRESS')) {
+        return 'BUS-EXPRESS';
+      }
       mode =
         modes.length === 1
           ? modes[0]

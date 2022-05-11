@@ -34,6 +34,7 @@ import { ReactComponent as StationRailWaltti } from './icons/station-rail-waltti
 import { ReactComponent as StationSubway } from './icons/station-subway.svg';
 import { ReactComponent as StationSubwayWaltti } from './icons/station-subway-waltti.svg';
 import { ReactComponent as StopBus } from './icons/stop-bus.svg';
+import { ReactComponent as StopBusExpress } from './icons/stop-bus-express.svg';
 import { ReactComponent as StopBusWaltti } from './icons/stop-bus-waltti.svg';
 import { ReactComponent as StopRail } from './icons/stop-rail.svg';
 import { ReactComponent as StopRailWaltti } from './icons/stop-rail-waltti.svg';
@@ -153,6 +154,7 @@ const IconMap = (style: IIconMapProps) => {
     layout17: <Layout16 style={style} />,
     menu: <Menu style={style} />,
     'stop-bus': <StopBus style={style} />,
+    'stop-bus-express': <StopBusExpress style={style} />,
     'stop-bus-waltti': <StopBusWaltti style={style} />,
     'stop-rail': <StopRail style={style} />,
     'stop-rail-waltti': <StopRailWaltti style={style} />,

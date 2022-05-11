@@ -20,6 +20,7 @@ export default {
     modeIcons: {
       colors: {
         'mode-bus': '#007ac9',
+        'mode-bus-express': '#CA4000',
         'mode-rail': '#8c4799',
         'mode-tram': '#008151',
         'mode-ferry': '#007A97',

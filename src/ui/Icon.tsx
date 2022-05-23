@@ -195,6 +195,7 @@ const IconMap = (style: IIconMapProps) => {
     subway: <Metro style={style} />,
     'airplane-waltti': <Airplane style={style} />,
     'bus-waltti': <BusWaltti style={style} />,
+    'bus-express-waltti': <BusWaltti style={style} />,
     'ferry-waltti': <FerryWaltti style={style} />,
     'tram-waltti': <TramWaltti style={style} />,
     'rail-waltti': <RailWaltti style={style} />,

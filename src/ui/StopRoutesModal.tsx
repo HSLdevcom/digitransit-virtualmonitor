@@ -351,7 +351,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                       img={
                         !iconStyle.postfix
                           ? getRouteMode(route)
-                          : getStopIcon(props.stop) + iconStyle.postfix
+                          : getRouteMode(route) + iconStyle.postfix
                       }
                       width={24}
                       height={24}

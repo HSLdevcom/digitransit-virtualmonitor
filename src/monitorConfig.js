@@ -67,6 +67,7 @@ export default {
       colors: {
         'mode-airplane': '#0046AD',
         'mode-bus': '#007ac9',
+        'mode-bus-express': '#007ac9',
         'mode-tram': '#5E7921',
         'mode-subway': '#CA4000',
         'mode-rail': '#8E5EA0',

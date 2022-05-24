@@ -44,6 +44,9 @@ export const getModeFromAddendum = modes => {
     if (modes.includes('BUS-EXPRESS')) {
       return 'BUS-EXPRESS';
     }
+    if (modes.includes('BUS-LOCAL')) {
+      return 'BUS';
+    }
     mode =
       modes.length === 1 ? modes[0] : 'hybrid-'.concat(modes.sort().join('-'));
     return mode;

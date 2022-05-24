@@ -5,10 +5,10 @@ import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { IStop } from '../util/Interfaces';
+import { IStop, IPattern } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
-import { getStopIcon, getRouteMode } from '../util/stopCardUtil';
+import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 
 Modal.setAppElement('#root');
@@ -19,9 +19,13 @@ interface IRoute {
   code?: string;
 }
 
+interface IStopPlus extends IStop {
+  patterns: Array<IPattern>;
+}
+
 interface Props {
   showModal: boolean;
-  stop: any;
+  stop: IStopPlus;
   closeModal: (route: IRoute[]) => void;
   stopSettings?: any;
   combinedPatterns: string[];

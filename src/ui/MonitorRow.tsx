@@ -121,19 +121,19 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
   );
 
-  const isCancelled = departure?.realtimeState === 'CANCELED';
+  const isCancelled = departure.realtimeState === 'CANCELED';
 
   const departureDestination =
-    departure?.headsign && departure?.headsign.endsWith(' via')
-      ? departure?.headsign.substring(0, departure?.headsign.indexOf(' via'))
-      : departure?.headsign || departure?.trip?.tripHeadsign;
+    departure.headsign && departure.headsign.endsWith(' via')
+      ? departure.headsign.substring(0, departure.headsign.indexOf(' via'))
+      : departure.headsign || departure.trip?.tripHeadsign;
 
   const d = translations?.find(
     t => t.trans_id === departureDestination?.split(' via')[0],
   );
 
   const renamedDestination = renamedDestinations.find(
-    dest => dest.pattern === departure?.combinedPattern,
+    dest => dest.pattern === departure.combinedPattern,
   );
 
   let destination = '';
@@ -171,14 +171,14 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
         )
       : '';
   }
-  if (departure?.pickupType === 'NONE') {
-    const lastStop = departure?.trip?.stops?.slice(-1).pop().gtfsId;
+  if (departure.pickupType === 'NONE') {
+    const lastStop = departure.trip?.stops?.slice(-1).pop().gtfsId;
     if (departure.stop.gtfsId === lastStop) {
       destination = `${t('endStopArrive')}/${t('endStopTerminus')}`;
     }
   }
 
-  const line = processLine(departure?.trip?.route.shortName);
+  const line = processLine(departure.trip?.route.shortName);
   if (destination?.indexOf(' via') !== -1) {
     destination = destination?.substring(0, destination.indexOf(' via'));
   }
@@ -196,19 +196,19 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
     viaDestination = viaDestination.substring(0, viaMetroStringIdx).trimEnd();
   }
 
-  let lineLen = departure?.trip?.route.shortName?.length;
-  const stopCode = departure?.stop?.platformCode || departure?.stop?.code;
+  let lineLen = departure.trip?.route.shortName?.length;
+  const stopCode = departure.stop?.platformCode || departure.stop?.code;
   const stopCodeLen = stopCode?.length;
   const departureTime = getDepartureTime(
-    departure?.realtimeDeparture,
+    departure.realtimeDeparture,
     showMinutes * 60,
-    departure?.serviceDay,
+    departure.serviceDay,
     useTilde(),
-    departure?.realtime,
+    departure.realtime,
   );
 
-  const showStopCode = departure?.showStopNumber;
-  const viaSetting = departure?.showVia;
+  const showStopCode = departure.showStopNumber;
+  const viaSetting = departure.showVia;
 
   if (!lineLen) {
     if (!departure) {
@@ -240,7 +240,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
             <Icon
               height={24}
               width={24}
-              img={departure?.vehicleMode || 'bus'}
+              img={departure.vehicleMode || 'bus'}
               color={getColorByName('monitorBackground')}
             />
           </div>
@@ -351,7 +351,7 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
           {!isCancelled &&
             departureTime?.length > 0 &&
             useTilde() &&
-            !departure?.realtime && <span className={cx('tilde')}>~</span>}
+            !departure.realtime && <span className={cx('tilde')}>~</span>}
           {departureTime}
         </div>
       </div>

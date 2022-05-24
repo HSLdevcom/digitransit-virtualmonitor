@@ -77,12 +77,8 @@ export const GET_STOP_DEPARTURES = gql`
           realtime
           pickupType
           serviceDay
-          scheduledArrival
-          realtimeArrival
-          arrivalDelay
           scheduledDeparture
           realtimeDeparture
-          departureDelay
           realtimeState
           headsign
           trip {
@@ -178,13 +174,9 @@ export const GET_STATION_DEPARTURES = gql`
           realtime
           pickupType
           serviceDay
-          scheduledArrival
-          realtimeArrival
-          arrivalDelay
           scheduledDeparture
           realtimeDeparture
           realtimeState
-          departureDelay
           headsign
           trip {
             tripHeadsign

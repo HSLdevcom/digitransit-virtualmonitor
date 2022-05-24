@@ -78,10 +78,7 @@ export const getColorByName = name => {
 };
 
 export const getIconStyleWithColor = modeIn => {
-  let mode = modeIn;
-  if (modeIn && modeIn.indexOf('-') !== -1) {
-    mode = modeIn.substring(modeIn.indexOf('-') + 1);
-  }
+  const mode = modeIn.toLowerCase();
   const config = getConfig();
   const style = { ...defaultModeIcons.modeIcons, ...config.modeIcons };
   return {

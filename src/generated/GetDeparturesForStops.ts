@@ -262,19 +262,6 @@ export interface GetDeparturesForStops_stops_stoptimesForPatterns_stoptimes {
    */
   serviceDay: any | null;
   /**
-   * Scheduled arrival time. Format: seconds since midnight of the departure date
-   */
-  scheduledArrival: number | null;
-  /**
-   * Realtime prediction of arrival time. Format: seconds since midnight of the departure date
-   */
-  realtimeArrival: number | null;
-  /**
-   * The offset from the scheduled arrival time in seconds. Negative values
-   * indicate that the trip is running ahead of schedule.
-   */
-  arrivalDelay: number | null;
-  /**
    * Scheduled departure time. Format: seconds since midnight of the departure date
    */
   scheduledDeparture: number | null;
@@ -282,11 +269,6 @@ export interface GetDeparturesForStops_stops_stoptimesForPatterns_stoptimes {
    * Realtime prediction of departure time. Format: seconds since midnight of the departure date
    */
   realtimeDeparture: number | null;
-  /**
-   * The offset from the scheduled departure time in seconds. Negative values
-   * indicate that the trip is running ahead of schedule
-   */
-  departureDelay: number | null;
   /**
    * State of real-time data
    */

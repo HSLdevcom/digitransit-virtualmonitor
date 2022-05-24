@@ -21,6 +21,7 @@ interface IStopInfoPlus extends IStop {
   locality?: string;
   patterns: Array<IPattern>;
   id?: string;
+  modes: Array<string>;
 }
 
 interface IProps {
@@ -89,12 +90,10 @@ const StopRow: FC<IProps & WithTranslation> = ({
   const isDefaultSettings =
     isEqual(defaultSettings, stop.settings) || !stop.settings;
 
-  const iconStyle = getIconStyleWithColor(getStopIcon(stop));
-
+  const iconStyle = getIconStyleWithColor(stop.mode);
   const moveBetweenColumns = getLayout(stop.layout).isMultiDisplay
     ? moveIsPossible(stop, side === 'left' ? rightStops : leftStops)
     : false;
-
   return (
     <div className="stop-row-container">
       <div className="stop-row-stop icon">

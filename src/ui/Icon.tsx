@@ -34,6 +34,7 @@ import { ReactComponent as StationRailWaltti } from './icons/station-rail-waltti
 import { ReactComponent as StationSubway } from './icons/station-subway.svg';
 import { ReactComponent as StationSubwayWaltti } from './icons/station-subway-waltti.svg';
 import { ReactComponent as StopBus } from './icons/stop-bus.svg';
+import { ReactComponent as StopBusExpress } from './icons/stop-bus-express.svg';
 import { ReactComponent as StopBusWaltti } from './icons/stop-bus-waltti.svg';
 import { ReactComponent as StopRail } from './icons/stop-rail.svg';
 import { ReactComponent as StopRailWaltti } from './icons/stop-rail-waltti.svg';
@@ -53,6 +54,7 @@ import { ReactComponent as Settings } from './icons/settings.svg';
 import { ReactComponent as Clock } from './icons/clock.svg';
 import { ReactComponent as Airplane } from './icons/mode-airplane.svg';
 import { ReactComponent as Bus } from './icons/mode-bus.svg';
+import { ReactComponent as BusExpress } from './icons/mode-bus-express.svg';
 import { ReactComponent as Ferry } from './icons/mode-ferry.svg';
 import { ReactComponent as Metro } from './icons/mode-metro.svg';
 import { ReactComponent as Rail } from './icons/mode-rail.svg';
@@ -153,6 +155,7 @@ const IconMap = (style: IIconMapProps) => {
     layout17: <Layout16 style={style} />,
     menu: <Menu style={style} />,
     'stop-bus': <StopBus style={style} />,
+    'stop-bus-express': <StopBusExpress style={style} />,
     'stop-bus-waltti': <StopBusWaltti style={style} />,
     'stop-rail': <StopRail style={style} />,
     'stop-rail-waltti': <StopRailWaltti style={style} />,
@@ -185,12 +188,14 @@ const IconMap = (style: IIconMapProps) => {
     clock: <Clock style={style} />,
     airplane: <Airplane style={style} />,
     bus: <Bus style={style} />,
+    'bus-express': <BusExpress style={style} />,
     ferry: <Ferry style={style} />,
     tram: <Tram style={style} />,
     rail: <Rail style={style} />,
     subway: <Metro style={style} />,
     'airplane-waltti': <Airplane style={style} />,
     'bus-waltti': <BusWaltti style={style} />,
+    'bus-express-waltti': <BusWaltti style={style} />,
     'ferry-waltti': <FerryWaltti style={style} />,
     'tram-waltti': <TramWaltti style={style} />,
     'rail-waltti': <RailWaltti style={style} />,

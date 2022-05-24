@@ -20,6 +20,7 @@ export const GET_STOP = gql`
           headsign
           route {
             mode
+            type
             shortName
             gtfsId
           }
@@ -52,6 +53,7 @@ export const GET_STATION = gql`
             headsign
             route {
               mode
+              type
               shortName
               gtfsId
             }

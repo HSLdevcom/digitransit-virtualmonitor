@@ -55,6 +55,7 @@ import { ReactComponent as Clock } from './icons/clock.svg';
 import { ReactComponent as Airplane } from './icons/mode-airplane.svg';
 import { ReactComponent as Bus } from './icons/mode-bus.svg';
 import { ReactComponent as BusExpress } from './icons/mode-bus-express.svg';
+import { ReactComponent as BusLocal } from './icons/mode-bus-local.svg';
 import { ReactComponent as Ferry } from './icons/mode-ferry.svg';
 import { ReactComponent as Metro } from './icons/mode-metro.svg';
 import { ReactComponent as Rail } from './icons/mode-rail.svg';
@@ -189,6 +190,7 @@ const IconMap = (style: IIconMapProps) => {
     airplane: <Airplane style={style} />,
     bus: <Bus style={style} />,
     'bus-express': <BusExpress style={style} />,
+    'bus-local': <BusLocal style={style} />,
     ferry: <Ferry style={style} />,
     tram: <Tram style={style} />,
     rail: <Rail style={style} />,
@@ -196,6 +198,7 @@ const IconMap = (style: IIconMapProps) => {
     'airplane-waltti': <Airplane style={style} />,
     'bus-waltti': <BusWaltti style={style} />,
     'bus-express-waltti': <BusWaltti style={style} />,
+    'bus-local-waltti': <BusWaltti style={style} />,
     'ferry-waltti': <FerryWaltti style={style} />,
     'tram-waltti': <TramWaltti style={style} />,
     'rail-waltti': <RailWaltti style={style} />,

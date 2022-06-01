@@ -35,7 +35,14 @@ export const getStopIcon = stop => {
 };
 
 export const getRouteMode = route => {
-  return route.type === 702 ? 'bus-express' : route.mode?.toLowerCase();
+  switch (route.type) {
+    case 702:
+      return 'bus-express';
+    case 704:
+      return 'bus-local';
+    default:
+      return route.mode?.toLowerCase();
+  }
 };
 
 export const getModeFromAddendum = modes => {

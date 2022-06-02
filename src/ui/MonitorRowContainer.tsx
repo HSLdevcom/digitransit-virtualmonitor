@@ -309,7 +309,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               portrait: !isLandscape,
               'two-cols': withTwoColumns,
               tightened: isTighten,
-              'no-departures': isClosedStopOnLeft,
+              'no-departures': isClosedStopOnLeft || noKnownDeparturesLeft,
             },
           )}
         >
@@ -355,7 +355,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               <div
                 className={cx('grid-rows', `rows${rightColumnCount}`, {
                   'two-cols': withTwoColumns,
-                  'no-departures': departuresRight.length > 0,
+                  'no-departures':
+                    isClosedStopOnRight || noKnownDeparturesRight,
                 })}
               >
                 {isClosedStopOnRight || noKnownDeparturesRight ? (

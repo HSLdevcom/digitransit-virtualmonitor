@@ -248,12 +248,17 @@ export const createDepartureArray = (
   }
   return [stringsToTranslate, departures, arr, closedStopViews];
 };
-
+/*
+ * An infromation display is a display that only shows alerts for the selected stops.
+ * It is created by making a single view stop monitor with default settings and hiding all
+ * of the departures on every stop.
+ */
 export const isInformationDisplay = cards => {
   return (
     cards.length === 1 &&
     cards[0].columns.left.stops.length &&
-    cards[0].columns.left.stops.every(stop => stop.settings?.allRoutesHidden)
+    cards[0].columns.left.stops.every(stop => stop.settings?.allRoutesHidden) &&
+    cards[0].layout === 1
   );
 };
 

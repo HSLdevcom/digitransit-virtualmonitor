@@ -75,6 +75,7 @@ $preview-grid-divider: 2px;
 
       .row-with-separator.alert {
         width: calc(200% + 35px) !important;
+        left: -9px;
       }
     }
 
@@ -193,6 +194,14 @@ $preview-grid-divider: 2px;
 
   .monitor-container {
     flex: 1;
+
+    .rows8 .no-departures-text-container {
+      flex: 6;
+    }
+
+    .rows12 .no-departures-text-container {
+      flex: 9;
+    }
 
     .no-departures-text-container {
       flex: 3;
@@ -396,7 +405,7 @@ $preview-grid-divider: 2px;
 
       &.alert {
         position: relative;
-        left: -15px;
+        left: -13px;
         width: calc(100% + 30px);
 
         .grid-row {

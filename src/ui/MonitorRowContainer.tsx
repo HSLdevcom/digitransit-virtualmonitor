@@ -201,7 +201,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       }
     }
   }
-
   const headers = (columns, stops) => {
     let withStopCode = false;
     stops.forEach(s => {
@@ -272,10 +271,13 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
     closedStopIndex !== -1 &&
     closedStopViews[closedStopIndex].column === 'right';
 
-  const noDepartures =
-    !departuresLeft.length && !departuresRight.length
-      ? t('noMonitors')
-      : undefined;
+  const noKnownDeparturesLeft =
+    !departuresLeft.length &&
+    !leftStops.every(s => s.settings?.allRoutesHidden);
+  const noKnownDeparturesRight =
+    !departuresRight.length &&
+    !rightStops.every(s => s.settings?.allRoutesHidden);
+
   return (
     <div
       className={cx('monitor-container', {
@@ -307,11 +309,11 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
               portrait: !isLandscape,
               'two-cols': withTwoColumns,
               tightened: isTighten,
-              'no-departures': departuresLeft.length === 0,
+              'no-departures': isClosedStopOnLeft,
             },
           )}
         >
-          {departuresLeft.length > 0 ? (
+          {!isClosedStopOnLeft && !noKnownDeparturesLeft ? (
             <>{isTighten ? leftColumn.slice(tighten[0]) : leftColumn}</>
           ) : (
             <div className="no-departures-text-container">
@@ -320,25 +322,21 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   'closed-stop': isClosedStopOnLeft,
                 })}
               >
-                {isClosedStopOnLeft ? (
-                  t('closedStopWithRange', {
-                    lng: currentLang,
-                    name: closedStopViews[closedStopIndex].name,
-                    code: closedStopViews[closedStopIndex].code,
-                    startTime: formattedDateTimeFromSeconds(
-                      closedStopViews[closedStopIndex].startTime,
-                      DATE_FORMAT,
-                    ),
-                    endTime: formattedDateTimeFromSeconds(
-                      closedStopViews[closedStopIndex].endTime,
-                      DATE_FORMAT,
-                    ),
-                  })
-                ) : (
-                  <>
-                    {noDepartures || t('no-departures', { lng: currentLang })}
-                  </>
-                )}
+                {isClosedStopOnLeft
+                  ? t('closedStopWithRange', {
+                      lng: currentLang,
+                      name: closedStopViews[closedStopIndex].name,
+                      code: closedStopViews[closedStopIndex].code,
+                      startTime: formattedDateTimeFromSeconds(
+                        closedStopViews[closedStopIndex].startTime,
+                        DATE_FORMAT,
+                      ),
+                      endTime: formattedDateTimeFromSeconds(
+                        closedStopViews[closedStopIndex].endTime,
+                        DATE_FORMAT,
+                      ),
+                    })
+                  : t('no-departures', { lng: currentLang })}
               </div>
             </div>
           )}
@@ -360,8 +358,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                   'no-departures': departuresRight.length > 0,
                 })}
               >
-                {departuresRight.length === 0 &&
-                !(departuresLeft.length > leftColumnCount) ? (
+                {isClosedStopOnRight || noKnownDeparturesRight ? (
                   <>
                     <div className="no-departures-text-container">
                       <div
@@ -386,7 +383,6 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
                           : t('no-departures', { lng: currentLang })}
                       </div>
                     </div>
-
                     {alertComponent && <div className="alert-padding"></div>}
                   </>
                 ) : (

@@ -30,6 +30,9 @@ export default {
     },
     name: 'hsl',
     uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+    bannersUri: 'https://content.hsl.fi/api/v1/banners?',
+    HSLUri: 'https://test.hslfi.hsldev.com/',
+    suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'

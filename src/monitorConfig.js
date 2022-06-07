@@ -20,6 +20,8 @@ export default {
     modeIcons: {
       colors: {
         'mode-bus': '#007ac9',
+        'mode-bus-express': '#CA4000',
+        'mode-bus-local': '#007ac9',
         'mode-rail': '#8c4799',
         'mode-tram': '#008151',
         'mode-ferry': '#007A97',
@@ -66,6 +68,8 @@ export default {
       colors: {
         'mode-airplane': '#0046AD',
         'mode-bus': '#007ac9',
+        'mode-bus-express': '#007ac9',
+        'mode-bus-local': '#007ac9',
         'mode-tram': '#5E7921',
         'mode-subway': '#CA4000',
         'mode-rail': '#8E5EA0',

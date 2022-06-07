@@ -8,6 +8,7 @@ import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
 import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
 import { setSearchContextWithFeedIds } from './searchContext';
+import { getModeFromAddendum } from '../util/stopCardUtil';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import { ICardInfo } from './CardInfo';
@@ -109,18 +110,6 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
     return null;
   };
 
-  const getVehicleMode = modes => {
-    let mode;
-    if (modes) {
-      mode =
-        modes.length === 1
-          ? modes[0]
-          : 'hybrid-'.concat(modes.sort().join('-'));
-      return mode;
-    }
-    return 'N/A';
-  };
-
   useEffect(() => {
     if (stopState.data && stopState.data.stop) {
       setStops(
@@ -132,7 +121,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             const stopWithGTFS = {
               ...stop,
               locality: autosuggestValue.locality,
-              modes: autosuggestValue.addendum?.GTFS.modes,
+              mode: getModeFromAddendum(autosuggestValue.addendum?.GTFS.modes),
             };
             const routes = stop.stoptimesForPatterns.map(
               stoptimes => stoptimes.pattern,
@@ -147,7 +136,6 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
               parentStation: stop.parentStation
                 ? stop.parentStation.gtfsId
                 : undefined,
-              vehicleMode: getVehicleMode(stopWithGTFS.modes),
             };
           }),
         false,
@@ -165,7 +153,6 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
           .filter(s => s && !columns['left'].stops.some(el => el.id === s.id))
           .map(station => {
             let patterns = [];
-
             station.stops.forEach(stop =>
               patterns.push(...stop.stoptimesForPatterns),
             );
@@ -173,7 +160,7 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
             const stationWithGTFS = {
               ...station,
               locality: autosuggestValue.locality,
-              modes: autosuggestValue.addendum?.GTFS.modes,
+              mode: autosuggestValue.addendum?.GTFS.modes[0],
             };
             return {
               ...stationWithGTFS,
@@ -184,7 +171,6 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
                 'pattern.route.shortname.length',
               ).map(e => e.pattern),
               hiddenRoutes: [],
-              vehicleMode: getVehicleMode(stationWithGTFS.modes),
             };
           }),
         false,

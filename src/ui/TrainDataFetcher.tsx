@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import CarouselDataContainer from './CarouselDataContainer';
-import { IMonitor, ICard } from '../util/Interfaces';
+import { IMonitor } from '../util/Interfaces';
 import Loading from './Loading';
 import {
   getTodayWithFormat,
@@ -25,14 +25,9 @@ const GET_TRACKS = gql`
     ) {
       commuterLineid
       trainNumber
-      timetableType
-      runningCurrently
       timeTableRows(where: $stations) {
-        commercialStop
         type
         scheduledTime
-        trainStopping
-        actualTime
         commercialTrack
         station {
           shortCode
@@ -45,14 +40,9 @@ const GET_TRACKS = gql`
     ) {
       commuterLineid
       trainNumber
-      timetableType
-      runningCurrently
       timeTableRows(where: $stations) {
-        commercialStop
         type
         scheduledTime
-        trainStopping
-        actualTime
         commercialTrack
         station {
           shortCode

@@ -5,10 +5,10 @@ import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { IStop } from '../util/Interfaces';
+import { IStop, IPattern } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
-import { getStopIcon } from '../util/stopCardUtil';
+import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 
 Modal.setAppElement('#root');
@@ -19,9 +19,13 @@ interface IRoute {
   code?: string;
 }
 
+interface IStopPlus extends IStop {
+  patterns: Array<IPattern>;
+}
+
 interface Props {
   showModal: boolean;
-  stop: IStop;
+  stop: IStopPlus;
   closeModal: (route: IRoute[]) => void;
   stopSettings?: any;
   combinedPatterns: string[];
@@ -329,10 +333,12 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             const renamedDestination = renamings?.find(
               d => d.pattern === pattern,
             );
-
-            const keyForInput = 3 * index + 1;
             const patternArray = pattern.split(':');
-            const iconStyle = getIconStyleWithColor(getStopIcon(props.stop));
+            const gtfsID = [patternArray[0], patternArray[1]].join(':');
+            const { route } = props.stop.patterns.find(
+              p => p.route.gtfsId === gtfsID,
+            );
+            const iconStyle = getIconStyleWithColor(getRouteMode(route));
             return (
               <div key={pattern} className="row">
                 <Checkbox
@@ -348,8 +354,8 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                     <Icon
                       img={
                         !iconStyle.postfix
-                          ? getStopIcon(props.stop)
-                          : getStopIcon(props.stop) + iconStyle.postfix
+                          ? getRouteMode(route)
+                          : getRouteMode(route) + iconStyle.postfix
                       }
                       width={24}
                       height={24}

@@ -26,11 +26,37 @@ export const getStopIcon = stop => {
   ];
   if (
     stop.locationType === 'STATION' ||
-    stopWithStationIcons.includes(stop.vehicleMode?.toLowerCase()) ||
     stopWithStationIcons.includes(stop.mode?.toLowerCase())
   ) {
-    const mode = stop.vehicleMode ? stop.vehicleMode : stop.mode;
+    const mode = stop.mode;
     return `station-${mode?.toLowerCase()}`;
   }
   return `stop-${stop.vehicleMode?.toLowerCase()}`;
+};
+
+export const getRouteMode = route => {
+  switch (route.type) {
+    case 702:
+      return 'bus-express';
+    case 704:
+      return 'bus-local';
+    default:
+      return route.mode?.toLowerCase();
+  }
+};
+
+export const getModeFromAddendum = modes => {
+  let mode;
+  if (modes) {
+    if (modes.includes('BUS-EXPRESS')) {
+      return 'BUS-EXPRESS';
+    }
+    if (modes.includes('BUS-LOCAL')) {
+      return 'BUS';
+    }
+    mode =
+      modes.length === 1 ? modes[0] : 'hybrid-'.concat(modes.sort().join('-'));
+    return mode;
+  }
+  return 'N/A';
 };

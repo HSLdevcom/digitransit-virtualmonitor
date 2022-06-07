@@ -23,6 +23,14 @@ export interface GetStops_stops {
    * Identifies whether this stop represents a stop or station.
    */
   locationType: LocationType | null;
+  /**
+   * Latitude of the stop (WGS 84)
+   */
+  lat: number | null;
+  /**
+   * Longitude of the stop (WGS 84)
+   */
+  lon: number | null;
 }
 
 export interface GetStops {

@@ -9,7 +9,8 @@
     border: none !important;
     border-radius: 5px !important;
     width: 680px !important;
-    height: 90% !important;
+    max-height: 90% !important;
+    height: fit-content;
     overflow-x: hidden !important;
     top: 50% !important;
     left: 50% !important;

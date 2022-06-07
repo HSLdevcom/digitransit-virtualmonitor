@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import MonitorOverlay from './MonitorOverlay';
 
-
 const NoMonitorsFound = () => {
   const [t] = useTranslation();
   const [showOverlay, setShowOverlay] = useState(false);

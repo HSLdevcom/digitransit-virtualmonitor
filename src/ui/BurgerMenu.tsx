@@ -1,5 +1,5 @@
-import React from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import { getColorByName } from '../util/getConfig';
@@ -12,13 +12,8 @@ interface Props {
   isOpen: boolean;
 }
 
-const BurgerMenu: React.FC<Props & WithTranslation> = ({
-  createStatic,
-  t,
-  i18n,
-  isOpen,
-  onClose,
-}) => {
+const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
+  const [t, i18n] = useTranslation();
   const changeLanguage = (i18n, lang) => {
     i18n.changeLanguage(lang);
     if (lang !== localStorage.getItem('lang')) {
@@ -128,4 +123,4 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
     </Modal>
   );
 };
-export default withTranslation('translations')(BurgerMenu);
+export default BurgerMenu;

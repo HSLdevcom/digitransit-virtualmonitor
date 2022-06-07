@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from 'react';
 import { IAlert, IView } from '../util/Interfaces';
 import cx from 'classnames';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import MonitorTitlebar from './MonitorTitleBar';
 import { getConfig } from '../util/getConfig';
 import MonitorOverlay from './MonitorOverlay';
@@ -13,13 +13,13 @@ interface IProps {
   view: IView;
 }
 let to;
-const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
+const InformationDisplayCarousel: FC<IProps> = ({
   view,
   alerts,
   languages,
   preview = false,
-  t,
 }) => {
+  const [t] = useTranslation();
   const [current, setCurrent] = useState(0);
   const [currentLang, setCurrentLang] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -98,4 +98,4 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(InformationDisplayCarousel);
+export default InformationDisplayCarousel;

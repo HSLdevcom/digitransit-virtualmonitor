@@ -1,15 +1,17 @@
-export const defaultStopCard = t => ({
+import i18n from '../i18n';
+
+export const defaultStopCard = () => ({
   id: 1,
-  title: { fi: t('viewEditorName'), sv: '', en: '' },
+  title: { fi: i18n.t('viewEditorName'), sv: '', en: '' },
   columns: {
     left: {
       inUse: true,
-      title: { fi: t('sideLeft'), sv: '', en: '' },
+      title: { fi: i18n.t('sideLeft'), sv: '', en: '' },
       stops: [],
     },
     right: {
       inUse: false,
-      title: { fi: t('sideRight'), sv: '', en: '' },
+      title: { fi: i18n.t('sideRight'), sv: '', en: '' },
       stops: [],
     },
   },

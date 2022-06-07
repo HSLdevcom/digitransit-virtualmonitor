@@ -5,8 +5,7 @@ import CarouselDataContainer from './CarouselDataContainer';
 import Icon from './Icon';
 import cx from 'classnames';
 import InformationDisplayContainer from './InformationDisplayContainer';
-import TrainDataFetcher from './TrainDataFetcher';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import TrainDataPreparer from './TrainDataPreparer';
 
 Modal.setAppElement('#root');
@@ -16,23 +15,21 @@ interface Props {
   isOpen: boolean;
   onClose: (boolean) => void;
   isLandscape: boolean;
-  instance?: string;
   stations: Array<ICard>;
   stops: Array<ICard>;
   showPlatformsOrTracks: boolean;
 }
-const PreviewModal: FC<Props & WithTranslation> = ({
+const PreviewModal: FC<Props> = ({
   view,
   languages,
   isOpen,
   onClose,
   isLandscape,
-  instance,
   stations,
   stops,
   showPlatformsOrTracks,
-  t,
 }) => {
+  const [t] = useTranslation();
   return (
     <>
       <Modal
@@ -83,4 +80,4 @@ const PreviewModal: FC<Props & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(PreviewModal);
+export default PreviewModal;

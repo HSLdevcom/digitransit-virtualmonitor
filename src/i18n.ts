@@ -1,6 +1,7 @@
 import i18n from 'i18next';
+import { initReactI18next } from "react-i18next";
 
-i18n.init({
+i18n.use(initReactI18next).init({
   debug: false,
   defaultNS: 'translations',
   fallbackLng: 'fi',
@@ -11,16 +12,15 @@ i18n.init({
 
   lng: localStorage.getItem('lang') || 'fi',
 
-  ns: ['translations'],
-
   react: {
     nsMode: 'default',
-    wait: false,
+    wait: true,
+    useSuspense: false,
   },
 
   resources: {
     en: {
-      translations: {
+      translation: {
         'add-at-least-one-stop': 'Add at least one stop',
         all: 'All',
         arriveTerminal: 'Arrives / Terminus',
@@ -136,7 +136,7 @@ i18n.init({
       },
     },
     fi: {
-      translations: {
+      translation: {
         'add-at-least-one-stop': 'Lisää vähintään yksi pysäkki',
         all: 'Kaikki',
         arriveTerminal: 'Saapuu / Päätepysäkki',
@@ -251,7 +251,7 @@ i18n.init({
       },
     },
     sv: {
-      translations: {
+      translation: {
         'add-at-least-one-stop': 'Lägg till åtminstone en hållplats',
         all: 'Alla',
         arriveTerminal: 'Anländer / Ändhållplats',

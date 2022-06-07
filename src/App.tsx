@@ -1,6 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import React, { useEffect } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import React, { FC, useEffect } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
@@ -104,22 +103,12 @@ interface ICompressedDisplayRouteParams {
   packedDisplay: string;
 }
 
-interface IConfigurationDisplayRouteParams {
-  configuration: string;
-  displayName: string;
-}
-
 interface IStopMonitorProps {
   stopId: string;
   layout?: string;
 }
 
-export type combinedConfigurationAndInjected = IConfigurationProps &
-  WithTranslation;
-
-const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
-  props: combinedConfigurationAndInjected & WithTranslation,
-) => {
+const App: FC<IConfigurationProps> = (props) => {
   // ---------- TODO: POC / DEBUG PURPOSES ONLY ----------
   const user = {
     loggedIn: true,
@@ -295,4 +284,4 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
   );
 };
 
-export default withTranslation('translations')(App);
+export default App;

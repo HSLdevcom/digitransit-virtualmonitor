@@ -30,7 +30,6 @@ interface ILocation {
 }
 interface IProps {
   readonly location?: ILocation;
-  readonly instance?: string;
   readonly stations: Array<ICard>;
   readonly stops: Array<ICard>;
   readonly showPlatformsOrTracks: boolean;
@@ -38,7 +37,6 @@ interface IProps {
 
 const WithDatabaseConnection: FC<IProps> = ({
   location,
-  instance,
   stations,
   stops,
   showPlatformsOrTracks,

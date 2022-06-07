@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   show: boolean;
@@ -12,7 +12,7 @@ interface IProps {
   buttonTranslationKey?: string;
   createNew?: boolean;
 }
-const MonitorOverlay: FC<IProps & WithTranslation> = ({
+const MonitorOverlay: FC<IProps> = ({
   isPreview,
   show,
   staticUrl,
@@ -20,8 +20,8 @@ const MonitorOverlay: FC<IProps & WithTranslation> = ({
   staticContentHash,
   buttonTranslationKey,
   createNew,
-  t,
 }) => {
+  const { t } = useTranslation();
   const text = t(buttonTranslationKey) || t('edit-display');
   const to = createNew
     ? '/createView'
@@ -41,4 +41,4 @@ const MonitorOverlay: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(MonitorOverlay);
+export default MonitorOverlay;

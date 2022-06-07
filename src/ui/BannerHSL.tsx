@@ -1,11 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
-//import SiteHeader from '@hsl-fi/site-header';
-import { withTranslation, WithTranslation } from 'react-i18next';
-import LazilyLoad, { importLazy } from './LazilyLoad';
-
-const modules = {
-  SiteHeader: () => importLazy(import('@hsl-fi/site-header')),
-};
+import React, { FC, useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import SiteHeader from '@hsl-fi/site-header';
 
 const notificationAPI = '/api/user/notifications';
 
@@ -15,33 +10,28 @@ interface Props {
   config: any;
 }
 
-const BannerHSL: React.FC<Props & WithTranslation> = ({
-  config,
-  user,
-  favourites,
-  t,
-  i18n,
-}) => {
+const BannerHSL: FC<Props> = ({ config, user, favourites }) => {
+  const { t, i18n } = useTranslation();
+  const [banners, setBanners] = useState([]);
   const notificationApiUrls = {
     get: `${notificationAPI}?language=${i18n.language}`,
     post: `${notificationAPI}?language=${i18n.language}`,
   };
 
   const changeLanguage = lang => {
-    i18n.changeLanguage(lang);
-    if (lang !== localStorage.getItem('lang')) {
-      localStorage.setItem('lang', lang);
-    }
+    // i18n.changeLanguage(lang);
+    // if (lang !== localStorage.getItem('lang')) {
+    //   localStorage.setItem('lang', lang);
+    // }
   };
-  const [banners, setBanners] = useState([]);
 
-  useEffect(() => {
-    if (config.bannersUri) {
-      fetch(`${config.bannersUri}language=${i18n.language}`)
-        .then(res => res.json())
-        .then(data => setBanners(data));
-    }
-  }, [i18n.language]);
+  // useEffect(() => {
+  //   if (config.bannersUri) {
+  //     fetch(`${config.bannersUri}language=${i18n.language}`)
+  //       .then(res => res.json())
+  //       .then(data => setBanners(data));
+  //   }
+  // }, [i18n.language]);
 
   const languages = [
     {
@@ -112,22 +102,18 @@ const BannerHSL: React.FC<Props & WithTranslation> = ({
 
   return (
     <>
-      <LazilyLoad modules={modules}>
-        {({ SiteHeader }) => (
-          <SiteHeader
-            //ref={siteHeaderRef}
-            hslFiUrl={config.HSLUri}
-            lang={i18n.language}
-            //userMenu={{}}
-            languageMenu={languages}
-            banners={banners}
-            suggestionsApiUrl={config.suggestionsUri}
-            notificationApiUrls={notificationApiUrls}
-          />
-        )}
-      </LazilyLoad>
+      <SiteHeader
+        //ref={siteHeaderRef}
+        hslFiUrl={config.HSLUri}
+        lang={i18n.language}
+        //userMenu={{}}
+        languageMenu={languages}
+        banners={banners}
+        suggestionsApiUrl={config.suggestionsUri}
+        notificationApiUrls={notificationApiUrls}
+      />
     </>
   );
 };
 
-export default withTranslation('translations')(BannerHSL);
+export default BannerHSL;

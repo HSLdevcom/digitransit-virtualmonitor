@@ -1,12 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import MonitorOverlay from './MonitorOverlay';
 
-interface IProps {
-  white?: boolean;
-  isPreview?: boolean;
-}
-const NoMonitorsFound: FC<IProps & WithTranslation> = props => {
+
+const NoMonitorsFound = () => {
+  const [t] = useTranslation();
   const [showOverlay, setShowOverlay] = useState(false);
 
   let to;
@@ -25,8 +23,8 @@ const NoMonitorsFound: FC<IProps & WithTranslation> = props => {
         isPreview={false}
         buttonTranslationKey={'quickDisplayCreate'}
       />
-      <span> {props.t('noMonitors')} </span>
+      <span>{t('noMonitors')}</span>
     </div>
   );
 };
-export default withTranslation('translations')(NoMonitorsFound);
+export default NoMonitorsFound;

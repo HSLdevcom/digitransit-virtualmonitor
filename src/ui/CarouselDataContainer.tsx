@@ -21,7 +21,7 @@ import {
 import TranslationContainer from './TranslationContainer';
 import Loading from './Loading';
 import { uniq, uniqBy } from 'lodash';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import CarouselContainer from './CarouselContainer';
 
 interface IProps {
@@ -44,11 +44,10 @@ const filterEffectiveAlerts = alerts => {
   return effectiveAlerts;
 };
 
-const CarouselDataContainer: FC<IProps & WithTranslation> = ({
+const CarouselDataContainer: FC<IProps> = ({
   views,
   languages,
   preview,
-  t,
   trainsWithTrack,
   staticContentHash,
   staticUrl,
@@ -56,6 +55,7 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   fromStop,
   initTime,
 }) => {
+  const [t] = useTranslation();
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
 
@@ -187,4 +187,4 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(CarouselDataContainer);
+export default CarouselDataContainer;

@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 import Select from 'react-select';
 import Icon from './Icon';
@@ -31,7 +31,7 @@ interface NestedOption {
   value: number;
 }
 
-const Dropdown: FC<IProps & WithTranslation> = ({
+const Dropdown: FC<IProps> = ({
   name,
   indicatorColor,
   isSearchable,
@@ -39,8 +39,8 @@ const Dropdown: FC<IProps & WithTranslation> = ({
   placeholder,
   handleChange,
   isDisabled = false,
-  t,
 }) => {
+  const [t] = useTranslation();
   const ddIndicator = (
     <Icon
       img="arrow-down"
@@ -77,4 +77,4 @@ const Dropdown: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(Dropdown);
+export default Dropdown;

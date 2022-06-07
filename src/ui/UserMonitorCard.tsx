@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Redirect } from 'react-router-dom';
 import { isInformationDisplay } from '../util/monitorUtils';
 import Icon from './Icon';
@@ -24,7 +24,8 @@ interface IProps {
   view: IView;
 }
 
-const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
+const UserMonitorCard: React.FC<IProps> = props => {
+  const [t] = useTranslation();
   const { cards, name, contenthash, languages, url } = props.view;
   const [redirect, setRedirect] = useState(false);
   const [isOpen, setOpen] = useState(false);
@@ -173,10 +174,10 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
         <span className="monitor-name">{name}</span>
         <div className="control-buttons">
           <button className="button" onClick={() => setOpen(true)}>
-            {props.t('preview')}
+            {t('preview')}
           </button>
           <button className="edit-button" onClick={goToEdit}>
-            {props.t('modify')}
+            {t('modify')}
           </button>
           <div className="delete-icon" onClick={onDelete}>
             <Icon img="delete" color={getPrimaryColor()} />
@@ -197,4 +198,4 @@ const UserMonitorCard: React.FC<IProps & WithTranslation> = props => {
   );
 };
 
-export default withTranslation('translations')(UserMonitorCard);
+export default UserMonitorCard;

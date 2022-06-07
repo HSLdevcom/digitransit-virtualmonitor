@@ -72,12 +72,13 @@ const StopViewTitleEditor: FC<IProps> = ({
             onClick={e => onClick(e)}
             onChange={e => onChange(e)}
             maxLength={15}
+            placeholder={t('viewEditorName')}
             onKeyDown={e => isKeyboardSelectionEvent(e)}
             onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
             onFocus={e => {
               handleFocus(e);
             }}
-            value={titleChanged ? newTitle[lang] : title[lang]}
+            value={newTitle[lang]}
           />
         )}
         {isMultiDisplay && (

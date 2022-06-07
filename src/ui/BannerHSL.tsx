@@ -19,10 +19,10 @@ const BannerHSL: FC<Props> = ({ config, user, favourites }) => {
   };
 
   const changeLanguage = lang => {
-    // i18n.changeLanguage(lang);
-    // if (lang !== localStorage.getItem('lang')) {
-    //   localStorage.setItem('lang', lang);
-    // }
+    i18n.changeLanguage(lang);
+    if (lang !== localStorage.getItem('lang')) {
+      localStorage.setItem('lang', lang);
+    }
   };
 
   // useEffect(() => {

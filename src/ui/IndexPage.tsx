@@ -6,7 +6,7 @@ import monitorsImage from './icons/create-monitor.svg';
 import cx from 'classnames';
 
 const IndexPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   return (
     <ContentContainer longContainer>
       <div className="index">

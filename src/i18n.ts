@@ -2,20 +2,19 @@ import i18n from 'i18next';
 import { initReactI18next } from "react-i18next";
 
 i18n.use(initReactI18next).init({
-  debug: false,
-  defaultNS: 'translations',
+
+  debug: true,
   fallbackLng: 'fi',
 
   interpolation: {
     escapeValue: false,
   },
-
-  lng: localStorage.getItem('lang') || 'fi',
+  supportedLngs: ['en', 'sv', 'fi'],
+  lng: window.localStorage.getItem('lang') || 'fi',
 
   react: {
     nsMode: 'default',
-    wait: true,
-    useSuspense: false,
+    useSuspense: true,
   },
 
   resources: {
@@ -116,8 +115,8 @@ i18n.use(initReactI18next).init({
         showRouteColumn: 'Route column',
         showStopNumber: 'Stop or platform number',
         showVia: 'Via information, if available',
-        sideLeft: 'Left headline',
-        sideRight: 'Right headline',
+        sideleft: 'Left headline',
+        sideright: 'Right headline',
         simple: 'Simple',
         'skip-to-main-content': 'Go to the main content of this page',
         staticMonitorTitle: 'Name of the display',
@@ -231,8 +230,8 @@ i18n.use(initReactI18next).init({
         showRouteColumn: 'Linja-sarake',
         showStopNumber: 'Pysäkki- tai laiturinumero',
         showVia: 'Kauttakulkutieto (via), jos saatavilla',
-        sideLeft: 'Vasen otsikko',
-        sideRight: 'Oikea otsikko',
+        sideleft: 'Vasen otsikko',
+        sideright: 'Oikea otsikko',
         simple: 'Yksinkertainen',
         'skip-to-main-content': 'Siirry sivun pääsisältöön',
         staticMonitorTitle: 'Näytön nimi',
@@ -346,8 +345,8 @@ i18n.use(initReactI18next).init({
         showRouteColumn: 'Linjekolumn',
         showStopNumber: 'Hållplats- eller plattformsnummer',
         showVia: 'Via-information, om tillgänglig',
-        sideLeft: 'Vänstra rubriken',
-        sideRight: 'Högra rubriken',
+        sideleft: 'Vänstra rubriken',
+        sideright: 'Högra rubriken',
         simple: 'Enkel',
         'skip-to-main-content': 'Gå till sidans huvudinnehåll',
         staticMonitorTitle: 'Skärmens namn',

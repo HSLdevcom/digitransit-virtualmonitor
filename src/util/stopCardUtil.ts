@@ -1,17 +1,15 @@
-import i18n from '../i18n';
-
 export const defaultStopCard = () => ({
   id: 1,
-  title: { fi: i18n.t('viewEditorName'), sv: '', en: '' },
+  title: { fi: '', sv: '', en: '' },
   columns: {
     left: {
       inUse: true,
-      title: { fi: i18n.t('sideLeft'), sv: '', en: '' },
+      title: { fi: '', sv: '', en: '' },
       stops: [],
     },
     right: {
       inUse: false,
-      title: { fi: i18n.t('sideRight'), sv: '', en: '' },
+      title: { fi: '', sv: '', en: '' },
       stops: [],
     },
   },

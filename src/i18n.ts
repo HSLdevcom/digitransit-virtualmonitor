@@ -5,6 +5,7 @@ i18n.use(initReactI18next).init({
 
   debug: false,
   fallbackLng: 'fi',
+  keySeparator: false,
 
   interpolation: {
     escapeValue: false,
@@ -103,6 +104,7 @@ i18n.use(initReactI18next).init({
         renameDestinations: 'Edit destination',
         requirementLanguage: 'a language',
         requirementStop: 'a stop',
+        rows: 'rows',
         save: 'Save',
         'search-autosuggest-label':
           'Place, route and stop search. Navigate with arrow keys, press Enter to select',
@@ -218,6 +220,7 @@ i18n.use(initReactI18next).init({
         renameDestinations: 'Muokkaa määränpää-tekstejä',
         requirementLanguage: 'kieltä',
         requirementStop: 'pysäkkiä',
+        rows: 'riviä',
         save: 'Tallenna',
         'search-autosuggest-label':
           'Paikka, linja ja pysäkkihaku. Navigoi listassa nuolinäppäimillä ja valitse enterillä',
@@ -333,6 +336,7 @@ i18n.use(initReactI18next).init({
         renameDestinations: 'Redigera destination',
         requirementLanguage: 'språk',
         requirementStop: 'hållplats',
+        rows: 'rader',
         save: 'Spara',
         'search-autosuggest-label':
           'Plats, linje och hållplatssökning. Navigera i listan med hjälp av piltangenterna. Välj genom att trycka på Enter.',
@@ -365,6 +369,6 @@ i18n.use(initReactI18next).init({
       },
     },
   },
-});
+}).then(_ => console.log("INITIN ITNITNTITNI NI"));
 
 export default i18n;

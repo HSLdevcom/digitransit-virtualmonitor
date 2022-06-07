@@ -28,6 +28,7 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
     languageCodes.forEach(language => {
       retValue.push(
         <Link
+          key={language}
           className="lang-select"
           onClick={() => changeLanguage(i18n, language)}
           to={window.location.pathname}
@@ -58,7 +59,7 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
     const retValue = [];
     links.forEach(link => {
       retValue.push(
-        <Link className="link" to={link.to}>
+        <Link key={link.to} className="link" to={link.to}>
           {link.text}
         </Link>,
       );

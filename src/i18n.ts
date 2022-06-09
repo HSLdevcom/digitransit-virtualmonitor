@@ -369,6 +369,6 @@ i18n.use(initReactI18next).init({
       },
     },
   },
-}).then(_ => console.log("INITIN ITNITNTITNI NI"));
+});
 
 export default i18n;

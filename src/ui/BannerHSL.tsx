@@ -36,21 +36,18 @@ const BannerHSL: FC<Props> = ({ config, user, favourites }) => {
   const languages = [
     {
       name: 'fi',
-      //url: `/fi`,
       onClick: () => {
         changeLanguage('fi');
       },
     },
     {
       name: 'sv',
-      //url: `/sv`,
       onClick: () => {
         changeLanguage('sv');
       },
     },
     {
       name: 'en',
-      //url: `/en`,
       onClick: () => {
         changeLanguage('en');
       },

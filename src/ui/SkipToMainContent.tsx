@@ -1,7 +1,8 @@
-import React, { FC } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-const SkipToMainContent: FC<WithTranslation> = ({ t }) => {
+const SkipToMainContent = () => {
+  const [t] = useTranslation();
   return (
     <div className="skipLinkDiv">
       <a className="skipLink" href="#mainContent">
@@ -10,4 +11,4 @@ const SkipToMainContent: FC<WithTranslation> = ({ t }) => {
     </div>
   );
 };
-export default withTranslation('translations')(SkipToMainContent);
+export default SkipToMainContent;

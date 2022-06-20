@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { IMonitorConfig } from '../App';
 import StopCardListContainer from './StopCardListContainer';
 import ContentContainer from './ContentContainer';
 import monitorAPI from '../api';
-import { withTranslation, WithTranslation } from 'react-i18next';
 import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
@@ -16,7 +15,7 @@ interface IProps {
   user?: any; // todo: refactor when we have proper user
 }
 
-const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
+const CreateViewPage: FC<IProps> = props => {
   const [stopCardList, setStopCardList] = useState(null);
   const [languages, setLanguages] = useState(['fi']);
   const [loading, setLoading] = useState(true);
@@ -45,9 +44,8 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
         <StopCardListContainer
           user={props.user}
           languages={languages}
-          defaultStopCardList={[defaultStopCard(props.t)]}
+          defaultStopCardList={[defaultStopCard()]}
           feedIds={props.config.feedIds}
-          instance={props.config.name}
         />
       </ContentContainer>
     );
@@ -80,9 +78,8 @@ const CreateViewPage: React.FC<IProps & WithTranslation> = props => {
         stopCardList={stopCardList}
         feedIds={props.config.feedIds}
         loading={loading}
-        instance={props.config.name}
       />
     </ContentContainer>
   );
 };
-export default withTranslation('translations')(CreateViewPage);
+export default CreateViewPage;

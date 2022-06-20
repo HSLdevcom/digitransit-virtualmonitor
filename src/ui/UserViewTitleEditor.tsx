@@ -1,6 +1,5 @@
 import React, { FC, useState } from 'react';
 import Icon from './Icon';
-import { WithTranslation, withTranslation } from 'react-i18next';
 import { focusToInput, onClick } from '../util/InputUtils';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { Redirect } from 'react-router-dom';
@@ -16,14 +15,13 @@ interface IProps {
   isNew: boolean;
 }
 
-const UserViewTitleEditor: FC<IProps & WithTranslation> = ({
+const UserViewTitleEditor: FC<IProps> = ({
   title,
   updateViewTitle,
   backToList,
   isNew,
   contentHash,
   url,
-  t,
 }) => {
   const [newTitle, setNewTitle] = useState(title);
   const [isFocus, setFocus] = useState(false);
@@ -95,4 +93,4 @@ const UserViewTitleEditor: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(UserViewTitleEditor);
+export default UserViewTitleEditor;

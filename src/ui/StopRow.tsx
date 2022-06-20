@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import React, { FC, useState } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { IPattern, ISettings } from '../util/Interfaces';
 import StopRoutesModal from './StopRoutesModal';
 import StopCode from './StopCode';
@@ -49,17 +49,17 @@ const moveIsPossible = (stop, stopList) => {
   return true;
 };
 
-const StopRow: FC<IProps & WithTranslation> = ({
+const StopRow: FC<IProps> = ({
   side,
   stop,
   onStopDelete,
   onStopMove,
   setStops,
-  t,
   leftStops,
   rightStops,
   languages,
 }) => {
+  const [t] = useTranslation();
   const [showModal, changeOpen] = useState(false);
   const saveStopSettings = settings => {
     if (settings) {
@@ -190,4 +190,4 @@ const StopRow: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(StopRow);
+export default StopRow;

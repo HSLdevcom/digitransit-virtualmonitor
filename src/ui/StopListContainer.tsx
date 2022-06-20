@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { IStop } from '../util/Interfaces';
 import StopListTitleInput from './StopListTitleInput';
 import StopRow from './StopRow';
@@ -216,7 +216,8 @@ const addInfoToItems = (props, items, side) => {
   return modifiedItems;
 };
 
-const StopListContainer: FC<Props & WithTranslation> = props => {
+const StopListContainer: FC<Props> = props => {
+  const [t] = useTranslation();
   const [leftItems, setLeftItems] = useState([]);
   const [rightItems, setRightItems] = useState([]);
 
@@ -232,13 +233,13 @@ const StopListContainer: FC<Props & WithTranslation> = props => {
     <div className="stop-list">
       <StopList
         leftItems={addInfoToItems(props, leftItems, 'left')}
-        leftItemsHeader={props.t('headerSideLeft')}
-        leftItemsPlaceHolder={props.t('placeholderSideLeft')}
+        leftItemsHeader={t('headerSideLeft')}
+        leftItemsPlaceHolder={t('placeholderSideLeft')}
         leftTitle={props.stops['left'].title}
         leftStops={leftItems}
         rightItems={addInfoToItems(props, rightItems, 'right')}
-        rightItemsHeader={props.t('headerSideRight')}
-        rightItemsPlaceHolder={props.t('placeholderSideRight', {
+        rightItemsHeader={t('headerSideRight')}
+        rightItemsPlaceHolder={t('placeholderSideRight', {
           title: props.stops['left'].title,
         })}
         rightTitle={props.stops['right'].title}
@@ -254,4 +255,4 @@ const StopListContainer: FC<Props & WithTranslation> = props => {
   );
 };
 
-export default withTranslation('translations')(StopListContainer);
+export default StopListContainer;

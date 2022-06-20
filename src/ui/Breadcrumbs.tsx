@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import { getPrimaryColor } from '../util/getConfig';
@@ -8,7 +8,8 @@ interface IProps {
   isLogged?: boolean;
   start?: string;
 }
-const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
+const Breadcrumbs: FC<IProps> = ({ isLogged, start }) => {
+  const [t] = useTranslation();
   const parser = document.createElement('a');
   parser.href = window.location.href;
   const arr = parser.pathname.split('/');
@@ -81,4 +82,4 @@ const Breadcrumbs: FC<IProps & WithTranslation> = ({ isLogged, start, t }) => {
   );
 };
 
-export default withTranslation('translations')(Breadcrumbs);
+export default Breadcrumbs;

@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
 import { defaultStopCard } from '../util/stopCardUtil';
 import { gql, useQuery } from '@apollo/client';
 import monitorAPI from '../api';
@@ -79,10 +78,10 @@ const getStops = display => {
   return stopIds;
 };
 
-const OldMonitorParser: FC<IProps & WithTranslation> = ({ display, t }) => {
+const OldMonitorParser: FC<IProps> = ({ display }) => {
   const stopIds = getStops(display);
   const [newCard, setNewCard] = useState({
-    cards: [defaultStopCard(t)],
+    cards: [defaultStopCard()],
     languages: ['fi'],
     contenthash: '',
   });
@@ -123,4 +122,4 @@ const OldMonitorParser: FC<IProps & WithTranslation> = ({ display, t }) => {
     );
   }
 };
-export default withTranslation('translations')(OldMonitorParser);
+export default OldMonitorParser;

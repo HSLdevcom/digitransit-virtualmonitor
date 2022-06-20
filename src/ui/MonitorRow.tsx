@@ -1,7 +1,6 @@
 import React, { FC } from 'react';
 import { getDepartureTime } from '../time';
 import cx from 'classnames';
-import { WithTranslation, withTranslation } from 'react-i18next';
 import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
 import { capitalize } from '../util/monitorUtils';
@@ -10,6 +9,7 @@ import {
   getIconStyleWithColor,
   useTilde,
 } from '../util/getConfig';
+import { useTranslation } from 'react-i18next';
 
 interface IRoute {
   alerts: any;
@@ -84,7 +84,7 @@ const processLine = inputText => {
   return [''];
 };
 
-const MonitorRow: FC<IProps & WithTranslation> = ({
+const MonitorRow: FC<IProps> = ({
   departure,
   isFirst = false,
   showVia = true,
@@ -96,9 +96,9 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   translations,
   dayForDivider,
   showMinutes,
-  t,
   withoutRouteColumn,
 }) => {
+  const [t] = useTranslation();
   if (departure === null && dayForDivider) {
     return (
       <div className="row-with-separator">
@@ -359,4 +359,4 @@ const MonitorRow: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(MonitorRow);
+export default MonitorRow;

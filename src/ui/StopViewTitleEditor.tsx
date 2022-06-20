@@ -2,7 +2,7 @@ import cx from 'classnames';
 import React, { FC, useState } from 'react';
 import { ITitle } from '../util/Interfaces';
 import Icon from './Icon';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { focusToInput, onClick } from '../util/InputUtils';
 import { getLayout } from '../util/getLayout';
 import { isKeyboardSelectionEvent } from '../util/browser';
@@ -22,16 +22,16 @@ interface IProps {
   index: number;
 }
 
-const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
+const StopViewTitleEditor: FC<IProps> = ({
   id,
   layout,
   title,
   updateCardInfo,
   lang,
   index,
-  t,
 }) => {
-  const { isMultiDisplay, isPortrait } = getLayout(layout);
+  const [t] = useTranslation();
+  const { isMultiDisplay } = getLayout(layout);
   const [titleChanged, setTitleChanged] = useState(false);
   const [newTitle, setNewTitle] = useState(
     isMultiDisplay ? t('layout') : title,
@@ -72,12 +72,13 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
             onClick={e => onClick(e)}
             onChange={e => onChange(e)}
             maxLength={15}
+            placeholder={t('viewEditorName')}
             onKeyDown={e => isKeyboardSelectionEvent(e)}
             onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
             onFocus={e => {
               handleFocus(e);
             }}
-            value={titleChanged ? newTitle[lang] : title[lang]}
+            value={newTitle[lang]}
           />
         )}
         {isMultiDisplay && (
@@ -109,4 +110,4 @@ const StopViewTitleEditor: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(StopViewTitleEditor);
+export default StopViewTitleEditor;

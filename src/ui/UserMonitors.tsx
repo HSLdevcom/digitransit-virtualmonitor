@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
 import UserMonitorCard from './UserMonitorCard';
@@ -31,7 +31,8 @@ interface IProps {
   user: any; // todo: refactor when we have proper user
 }
 
-const UserMonitors: React.FC<IProps & WithTranslation> = props => {
+const UserMonitors: React.FC<IProps> = props => {
+  const [t] = useTranslation();
   const [views, setViews] = useState({});
 
   useEffect(() => {
@@ -56,11 +57,11 @@ const UserMonitors: React.FC<IProps & WithTranslation> = props => {
         })}
       <Link to={'/createStaticView'}>
         <span className="create-container">
-          <button className="btn"> {props.t('quickDisplayCreate')} </button>
+          <button className="btn"> {t('quickDisplayCreate')} </button>
         </span>
       </Link>
     </ContentContainer>
   );
 };
 
-export default withTranslation('translations')(UserMonitors);
+export default UserMonitors;

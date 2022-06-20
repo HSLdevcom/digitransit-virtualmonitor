@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';
@@ -13,13 +13,13 @@ interface IProps {
   handleOrientation: (orientation: string) => void;
 }
 
-const DisplaySettings: FC<IProps & WithTranslation> = ({
+const DisplaySettings: FC<IProps> = ({
   languages,
   orientation,
   handleOrientation,
   handleChange,
-  t,
 }) => {
+  const [t] = useTranslation();
   const options = ['fi', 'sv', 'en'];
   const isChecked = (option: string) => {
     return languages.includes(option);
@@ -112,4 +112,4 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(DisplaySettings);
+export default DisplaySettings;

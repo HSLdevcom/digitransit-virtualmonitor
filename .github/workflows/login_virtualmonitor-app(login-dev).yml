@@ -30,7 +30,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_6b5e01eccaae47b08187c1feee8237ee }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
+        tags: index.docker.io/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -48,4 +48,4 @@ jobs:
         app-name: 'virtualmonitor-app'
         slot-name: 'login-dev'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_e63317ffc1b84f30a47d682d9b7a27cd }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_6b5e01eccaae47b08187c1feee8237ee }}/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'
+        images: 'index.docker.io/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'

@@ -1,6 +1,21 @@
 const baseAPI = '/api';
 
 const monitorAPI = {
+  getUser() {
+    return new Promise((resolve, reject) => {
+      fetch(`${baseAPI}/user`, {
+        credentials: 'include',
+        headers: {
+          accepts: 'application/json',
+        },
+      })
+        .then(result => result.json())
+        .then(json => resolve(json))
+        .catch(err => {
+          reject(err);
+        });
+    });
+  },
   get(monitor) {
     return new Promise((resolve, reject) => {
       fetch(`${baseAPI}/monitor/${monitor}`, {

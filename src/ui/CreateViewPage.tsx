@@ -19,7 +19,6 @@ const CreateViewPage: FC<IProps> = props => {
   const [stopCardList, setStopCardList] = useState(null);
   const [languages, setLanguages] = useState(['fi']);
   const [loading, setLoading] = useState(true);
-
   const h = getContentHash(location.search);
   const hash = h === 'undefined' ? null : h;
   useEffect(() => {

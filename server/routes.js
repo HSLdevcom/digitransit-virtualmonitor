@@ -1,5 +1,5 @@
 import express from 'express';
-import { getTranslations, getTranslations3 } from 'gtfs';
+import { getTranslations } from 'gtfs';
 import createUrlCompression from './urlCompression.js';
 import monitorService from './monitorService.js';
 
@@ -11,6 +11,10 @@ const router = express.Router();
 
 router.get('/monitor/:id', (req, res) => {
   monitorService.get(req, res);
+});
+
+router.get('/login', (req, res) => {
+  console.log("login", req)
 });
 
 router.get('/usermonitors/:id', (req, res) => {

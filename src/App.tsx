@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState, createContext } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
@@ -23,7 +23,7 @@ import {
   ApolloLink,
   createHttpLink,
 } from '@apollo/client';
-
+import monitorAPI from './api';
 import { MultiAPILink } from '@habx/apollo-multi-endpoint-link';
 import StopMonitorContainer from './ui/StopMonitorContainer';
 
@@ -32,6 +32,9 @@ import './sass/main.scss';
 import SkipToMainContent from './ui/SkipToMainContent';
 
 import PrepareMonitor from './ui/PrepareMonitor';
+import RandomComponent from './RandomComponent';
+
+export const UserContext = createContext(null);
 
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
@@ -109,12 +112,9 @@ interface IStopMonitorProps {
 }
 
 const App: FC<IConfigurationProps> = (props) => {
+  const [user, setUser] = useState({});
   // ---------- TODO: POC / DEBUG PURPOSES ONLY ----------
-  const user = {
-    loggedIn: true,
-    urls: ['abcdef', 'ghijk'],
-  };
-  console.log("render app")
+
   // ----------                                 ----------
   const monitorConfig: IExtendedMonitorConfig = props.monitorConfig;
   const style = {
@@ -139,6 +139,7 @@ const App: FC<IConfigurationProps> = (props) => {
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }
+    monitorAPI.getUser().then(user => setUser(user))
   }, []);
   const client = new ApolloClient({
     link: ApolloLink.from([
@@ -195,6 +196,7 @@ const App: FC<IConfigurationProps> = (props) => {
         {getAdditionalFont(monitorConfig.name)}
       </Helmet>
       <ApolloProvider client={client}>
+        <UserContext.Provider value={user}>
         <Switch>
           <Route
             path={'/createView'}
@@ -209,6 +211,18 @@ const App: FC<IConfigurationProps> = (props) => {
                 <section role="main" id="mainContent">
                   <CreateViewPage config={monitorConfig} />
                 </section>
+              </>
+            )}
+          />
+          <Route
+            path={'/login'}
+            component={({
+              match: {
+                params: {},
+              },
+            }: RouteComponentProps<IMonitorConfig>) => (
+              <>
+                <RandomComponent />
               </>
             )}
           />
@@ -280,6 +294,7 @@ const App: FC<IConfigurationProps> = (props) => {
             )}
           />
         </Switch>
+        </UserContext.Provider>
       </ApolloProvider>
     </div>
   );

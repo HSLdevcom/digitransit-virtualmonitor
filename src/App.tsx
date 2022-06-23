@@ -114,7 +114,6 @@ const App: FC<IConfigurationProps> = (props) => {
     loggedIn: true,
     urls: ['abcdef', 'ghijk'],
   };
-  console.log("render app")
   // ----------                                 ----------
   const monitorConfig: IExtendedMonitorConfig = props.monitorConfig;
   const style = {

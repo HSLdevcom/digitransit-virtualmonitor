@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { verticalLayouts, horizontalLayouts } from './Layouts';
 import Dropdown from './Dropdown';
 import LayoutModal from './LayoutModal';
@@ -24,13 +24,13 @@ const durations = [
   { value: 15, label: '15s' },
 ];
 
-const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
+const LayoutAndTimeContainer: FC<IProps> = ({
   cardInfo,
   updateCardInfo,
   orientation,
   durationEditable,
-  t,
 }) => {
+  const [t] = useTranslation();
   const placeHolder = durations.find(
     duration => duration.value === cardInfo.duration,
   ).label;
@@ -97,4 +97,4 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(LayoutAndTimeContainer);
+export default LayoutAndTimeContainer;

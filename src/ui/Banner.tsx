@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import React, { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { IMonitorConfig } from '../App';
 import Logo from './logo/Logo';
 import BurgerMenu from './BurgerMenu';
@@ -9,9 +9,9 @@ interface Props {
   config?: IMonitorConfig;
   user?: any; // todo: refactor when we have proper user
 }
-const Banner: React.FC<Props & WithTranslation> = ({ config, user, t }) => {
+const Banner: FC<Props> = ({ config, user }) => {
+  const [t] = useTranslation();
   const [isOpen, changeOpen] = useState(false);
-
   const setOpen = () => {
     changeOpen(true);
   };
@@ -41,4 +41,4 @@ const Banner: React.FC<Props & WithTranslation> = ({ config, user, t }) => {
     </div>
   );
 };
-export default withTranslation('translations')(Banner);
+export default Banner;

@@ -3,7 +3,7 @@ import { IStop, IMonitor } from '../util/Interfaces';
 import React, { FC, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import hash from 'object-hash';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
 import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
@@ -27,7 +27,6 @@ interface IProps {
   loading?: boolean;
   vertical?: boolean;
   user?: any;
-  instance: string;
 }
 
 const getViewName = title => {
@@ -74,13 +73,13 @@ const createUUID = (startTime, hash) => {
   );
 };
 
-const StopCardListContainer: FC<IProps & WithTranslation> = ({
+const StopCardListContainer: FC<IProps> = ({
   feedIds,
-  t,
   defaultStopCardList,
   loading = false,
   ...props
 }) => {
+  const [t] = useTranslation();
   const [startTime, setStartTime] = useState(
     getCurrentSecondsWithMilliSeconds(),
   );
@@ -238,7 +237,7 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
     while (cnt > 0) {
       if (stopCardList.filter(s => s.id === cnt).length === 0) {
         const newCard = {
-          ...defaultStopCard(t),
+          ...defaultStopCard(),
           id: cnt,
         };
         setStopCardList(stopCardList.concat(newCard));
@@ -492,7 +491,6 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
             languages: languages,
             onClose: closePreview,
             isLandscape: orientation === 'horizontal' ? true : false,
-            instance: props.instance,
           }}
         />
       )}
@@ -580,4 +578,4 @@ const StopCardListContainer: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(StopCardListContainer);
+export default StopCardListContainer;

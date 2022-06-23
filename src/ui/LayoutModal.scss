@@ -1,10 +1,6 @@
 @import '../index';
 
 .modal {
-  .ReactModal__Overlay {
-    z-index: 10;
-  }
-
   .ReactModal__Content {
     border: none !important;
     border-radius: 5px !important;

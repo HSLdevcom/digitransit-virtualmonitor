@@ -1,26 +1,26 @@
 import i18n from 'i18next';
+import { initReactI18next } from "react-i18next";
 
-i18n.init({
+i18n.use(initReactI18next).init({
+
   debug: false,
-  defaultNS: 'translations',
   fallbackLng: 'fi',
+  keySeparator: false,
 
   interpolation: {
     escapeValue: false,
   },
-
-  lng: localStorage.getItem('lang') || 'fi',
-
-  ns: ['translations'],
+  supportedLngs: ['en', 'sv', 'fi'],
+  lng: window.localStorage.getItem('lang') || 'fi',
 
   react: {
     nsMode: 'default',
-    wait: false,
+    useSuspense: true,
   },
 
   resources: {
     en: {
-      translations: {
+      translation: {
         'add-at-least-one-stop': 'Add at least one stop',
         all: 'All',
         arriveTerminal: 'Arrives / Terminus',
@@ -104,6 +104,7 @@ i18n.init({
         renameDestinations: 'Edit destination',
         requirementLanguage: 'a language',
         requirementStop: 'a stop',
+        rows: 'rows',
         save: 'Save',
         'search-autosuggest-label':
           'Place, route and stop search. Navigate with arrow keys, press Enter to select',
@@ -116,8 +117,8 @@ i18n.init({
         showRouteColumn: 'Route column',
         showStopNumber: 'Stop or platform number',
         showVia: 'Via information, if available',
-        sideLeft: 'Left headline',
-        sideRight: 'Right headline',
+        sideleft: 'Left headline',
+        sideright: 'Right headline',
         simple: 'Simple',
         'skip-to-main-content': 'Go to the main content of this page',
         staticMonitorTitle: 'Name of the display',
@@ -136,7 +137,7 @@ i18n.init({
       },
     },
     fi: {
-      translations: {
+      translation: {
         'add-at-least-one-stop': 'Lisää vähintään yksi pysäkki',
         all: 'Kaikki',
         arriveTerminal: 'Saapuu / Päätepysäkki',
@@ -219,6 +220,7 @@ i18n.init({
         renameDestinations: 'Muokkaa määränpää-tekstejä',
         requirementLanguage: 'kieltä',
         requirementStop: 'pysäkkiä',
+        rows: 'riviä',
         save: 'Tallenna',
         'search-autosuggest-label':
           'Paikka, linja ja pysäkkihaku. Navigoi listassa nuolinäppäimillä ja valitse enterillä',
@@ -231,8 +233,8 @@ i18n.init({
         showRouteColumn: 'Linja-sarake',
         showStopNumber: 'Pysäkki- tai laiturinumero',
         showVia: 'Kauttakulkutieto (via), jos saatavilla',
-        sideLeft: 'Vasen otsikko',
-        sideRight: 'Oikea otsikko',
+        sideleft: 'Vasen otsikko',
+        sideright: 'Oikea otsikko',
         simple: 'Yksinkertainen',
         'skip-to-main-content': 'Siirry sivun pääsisältöön',
         staticMonitorTitle: 'Näytön nimi',
@@ -251,7 +253,7 @@ i18n.init({
       },
     },
     sv: {
-      translations: {
+      translation: {
         'add-at-least-one-stop': 'Lägg till åtminstone en hållplats',
         all: 'Alla',
         arriveTerminal: 'Anländer / Ändhållplats',
@@ -334,6 +336,7 @@ i18n.init({
         renameDestinations: 'Redigera destination',
         requirementLanguage: 'språk',
         requirementStop: 'hållplats',
+        rows: 'rader',
         save: 'Spara',
         'search-autosuggest-label':
           'Plats, linje och hållplatssökning. Navigera i listan med hjälp av piltangenterna. Välj genom att trycka på Enter.',
@@ -346,8 +349,8 @@ i18n.init({
         showRouteColumn: 'Linjekolumn',
         showStopNumber: 'Hållplats- eller plattformsnummer',
         showVia: 'Via-information, om tillgänglig',
-        sideLeft: 'Vänstra rubriken',
-        sideRight: 'Högra rubriken',
+        sideleft: 'Vänstra rubriken',
+        sideright: 'Högra rubriken',
         simple: 'Enkel',
         'skip-to-main-content': 'Gå till sidans huvudinnehåll',
         staticMonitorTitle: 'Skärmens namn',

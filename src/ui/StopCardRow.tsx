@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useLazyQuery } from '@apollo/client';
 import { IColumn, IStop } from '../util/Interfaces';
 import Icon from './Icon';
@@ -61,7 +61,7 @@ interface IProps {
   languages: Array<string>;
 }
 
-const StopCardRow: FC<IProps & WithTranslation> = ({
+const StopCardRow: FC<IProps> = ({
   orientation,
   feedIds,
   cards,
@@ -75,8 +75,8 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   updateCardInfo,
   languages,
   noStopsSelected,
-  t,
 }) => {
+  const [t] = useTranslation();
   const [getStop, stopState] = useLazyQuery(GET_STOP, {
     fetchPolicy: 'network-only',
     context: { clientName: 'default' },
@@ -401,4 +401,4 @@ const StopCardRow: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(StopCardRow);
+export default StopCardRow;

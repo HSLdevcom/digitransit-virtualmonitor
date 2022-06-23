@@ -2,7 +2,6 @@ import React, { FC, useState, useEffect } from 'react';
 import { IMonitorConfig } from '../App';
 import CarouselDataContainer from './CarouselDataContainer';
 import { defaultStopCard } from '../util/stopCardUtil';
-import { withTranslation, WithTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import Loading from './Loading';
 import { GetStops, GetStopsVariables } from '../generated/GetStops';
@@ -35,13 +34,12 @@ const setLayoutByNumber = number => {
   return 3;
 };
 
-const StopMonitorContainer: FC<IProps & WithTranslation> = ({
+const StopMonitorContainer: FC<IProps> = ({
   stopIds,
   layout = 2,
   urlTitle,
-  t,
 }) => {
-  const [stopCard, setStopCard] = useState([defaultStopCard(t)]);
+  const [stopCard, setStopCard] = useState([defaultStopCard()]);
   const [fetched, setFetched] = useState(false);
 
   const { data, loading } = useQuery<GetStops, GetStopsVariables>(GET_STOP, {
@@ -79,4 +77,4 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(StopMonitorContainer);
+export default StopMonitorContainer;

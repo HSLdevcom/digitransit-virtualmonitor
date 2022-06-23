@@ -5,7 +5,6 @@ import { stationQuery, stationQueryVariables } from '../generated/stationQuery';
 import { useQuery } from '@apollo/client';
 import StopCardListContainer from './StopCardListContainer';
 import { sortBy, uniqBy } from 'lodash';
-import { withTranslation, WithTranslation } from 'react-i18next';
 
 interface IProps {
   stopCardList: any;
@@ -15,10 +14,9 @@ interface IProps {
   languages: Array<string>;
   loading: boolean;
   user?: any;
-  instance: string;
 }
 
-const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
+const StopCardListDataContainer: FC<IProps> = ({
   feedIds,
   stopCardList,
   stopIds,
@@ -26,7 +24,6 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
   languages,
   loading,
   user,
-  instance,
 }) => {
   const [cardList, setCardList] = useState(stopCardList);
   const stops = useQuery<stopQuery, stopQueryVariables>(GET_STOP, {
@@ -139,9 +136,8 @@ const StopCardListDataContainer: FC<IProps & WithTranslation> = ({
       vertical={stopCardList[0].layout > 11}
       feedIds={feedIds}
       defaultStopCardList={cardList}
-      instance={instance}
     />
   );
 };
 
-export default withTranslation('translations')(StopCardListDataContainer);
+export default StopCardListDataContainer;

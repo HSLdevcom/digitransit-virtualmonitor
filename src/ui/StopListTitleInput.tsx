@@ -4,6 +4,7 @@ import Icon from './Icon';
 import { focusToInput, onClick } from '../util/InputUtils';
 import { getPrimaryColor } from '../util/getConfig';
 import { isKeyboardSelectionEvent } from '../util/browser';
+import { useTranslation } from 'react-i18next';
 
 function StopListTitleInput(props: {
   lang: string;
@@ -21,6 +22,7 @@ function StopListTitleInput(props: {
   itemsHeader: string;
   value: string;
 }) {
+  const [t] = useTranslation();
   const [titleLeft, setTitleLeft] = useState(props.titleLeft);
   const [titleRight, setTitleRight] = useState(props.titleRight);
   const [focus, setFocus] = useState(false);
@@ -59,6 +61,7 @@ function StopListTitleInput(props: {
           onClick={onClick}
           onFocus={() => setFocus(true)}
           onKeyDown={e => isKeyboardSelectionEvent(e)}
+          placeholder={t(`side${props.side}`)}
           maxLength={13}
           onBlur={onBlur}
           onChange={e => onChange(e, props.side)}

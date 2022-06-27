@@ -1,5 +1,5 @@
-import React, { FC, useState, useEffect } from 'react';
-import { getConfig } from '../util/getConfig';
+import React, { FC, useState, useEffect, useContext } from 'react';
+import { ConfigContext } from '../index';
 import { IView, IClosedStop, ITrainData } from '../util/Interfaces';
 import Monitor from './Monitor';
 import { IDeparture } from './MonitorRow';
@@ -80,7 +80,7 @@ const CarouselContainer: FC<IProps> = ({
   const [language, setLanguage] = useState(0);
 
   const orientations = ['static', 'vertical', 'horizontal'];
-  const config = getConfig();
+  const config = useContext(ConfigContext);
   const [demoOrientation, setDemoOrientation] = useState(
     orientations.indexOf(config.alertOrientation),
   );
@@ -185,7 +185,6 @@ const CarouselContainer: FC<IProps> = ({
       translatedStrings={
         translations ? translations.filter(t => t.lang === lan) : []
       }
-      config={config}
       isPreview={preview}
       alertState={alertState}
       alertComponent={alertComponent}

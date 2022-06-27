@@ -1,9 +1,9 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import { IAlert, IView } from '../util/Interfaces';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 import MonitorTitlebar from './MonitorTitleBar';
-import { getConfig } from '../util/getConfig';
+import { ConfigContext } from '../index';
 import MonitorOverlay from './MonitorOverlay';
 
 interface IProps {
@@ -23,6 +23,7 @@ const InformationDisplayCarousel: FC<IProps> = ({
   const [current, setCurrent] = useState(0);
   const [currentLang, setCurrentLang] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
+  const config = useContext(ConfigContext);
   useEffect(() => {
     if (alerts.length) {
       const next = (current + 1) % alerts.length;
@@ -40,7 +41,6 @@ const InformationDisplayCarousel: FC<IProps> = ({
     return () => clearTimeout(to);
   }, [currentLang]);
 
-  const config = getConfig();
   return (
     <div
       className={cx('main-content-container', {
@@ -59,7 +59,6 @@ const InformationDisplayCarousel: FC<IProps> = ({
         view={view}
         currentLang={languages[currentLang]}
         preview={preview}
-        config={config}
       />
       <div
         className={cx('information-monitor-container', {

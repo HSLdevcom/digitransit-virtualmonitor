@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
+import { UserContext } from '../App';
 
 interface Iv {
   columns: ISides;
@@ -28,12 +29,12 @@ interface ILocation {
 interface IProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly location?: ILocation;
-  user: any; // todo: refactor when we have proper user
 }
 
 const UserMonitors: React.FC<IProps> = props => {
   const [t] = useTranslation();
   const [views, setViews] = useState({});
+  const user = useContext(UserContext);
 
   useEffect(() => {
     monitorAPI.getAllMonitorsForUser().then(r => {

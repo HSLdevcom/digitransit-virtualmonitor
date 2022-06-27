@@ -22,7 +22,7 @@ const Banner: FC<Props> = ({ config, user }) => {
 
   return (
     <div className="main-banner">
-      <Logo isLandscape monitorConfig={config} />
+      <Logo isLandscape />
       <div className="menu-container">
         <button
           className="menu-button"

@@ -1,5 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
-import { IMonitorConfig } from '../App';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import StopCardListContainer from './StopCardListContainer';
 import ContentContainer from './ContentContainer';
 import monitorAPI from '../api';
@@ -7,15 +6,13 @@ import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
 import { getContentHash } from '../util/monitorUtils';
-interface IConfigWithFeedIs extends IMonitorConfig {
-  feedIds?: Array<string>;
-}
+import { ConfigContext } from '..';
 interface IProps {
-  config: IConfigWithFeedIs;
   user?: any; // todo: refactor when we have proper user
 }
 
 const CreateViewPage: FC<IProps> = props => {
+  const config = useContext(ConfigContext);
   const [stopCardList, setStopCardList] = useState(null);
   const [languages, setLanguages] = useState(['fi']);
   const [loading, setLoading] = useState(true);
@@ -44,7 +41,7 @@ const CreateViewPage: FC<IProps> = props => {
           user={props.user}
           languages={languages}
           defaultStopCardList={[defaultStopCard()]}
-          feedIds={props.config.feedIds}
+          feedIds={config.feedIds}
         />
       </ContentContainer>
     );
@@ -75,7 +72,7 @@ const CreateViewPage: FC<IProps> = props => {
         stopIds={stopIds}
         stationIds={stationIds}
         stopCardList={stopCardList}
-        feedIds={props.config.feedIds}
+        feedIds={config.feedIds}
         loading={loading}
       />
     </ContentContainer>

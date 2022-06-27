@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import index from './routes.js';
-import setUpOIDC from '../../oidc-auth/lib/openidConnect.js';
+import setUpOIDC from './auth/openidConnect.js';
 
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
@@ -34,7 +34,6 @@ const displayDictionaries = {
 //const router = express.Router();
 
 app.get('/api/monitor/:id', (req, res) => {
-  console.log("monitritrinairng")
   monitorService.get(req, res);
 });
 
@@ -80,9 +79,8 @@ app.delete('/api/staticmonitor', (req, res) => {
   monitorService.deleteStatic(req, res);
 });
 function setUpOpenId() {
-
-  setUpOIDC(app, port, '', ['https://virtualmonitor-app-login-dev.azurewebsites.net/']);
-  console.log("SETTING UP UOPEND ID MUUMI")
+  const localPort = process.env.NODE_ENV === 'production' ? null : 3000;
+  setUpOIDC(app, port, '', ['https://virtualmonitor-app-login-dev.azurewebsites.net/'], localPort);
 }
 
 setUpOpenId();
@@ -112,5 +110,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-// module.exports = app;
 export default app;

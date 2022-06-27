@@ -1,19 +1,17 @@
-import React, { FC, useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import SiteHeader from '@hsl-fi/site-header';
 import { UserContext } from '../App';
+import { ConfigContext } from '..';
 
 const notificationAPI = '/api/user/notifications';
+//TODO:
+const favourites = [];
 
-interface Props {
-  user: any;
-  favourites: any;
-  config: any;
-}
-
-const BannerHSL: FC<Props> = ({ config, favourites }) => {
+const BannerHSL = () => {
   const { t, i18n } = useTranslation();
   const user = useContext(UserContext);
+  const config = useContext(ConfigContext);
   const [banners, setBanners] = useState([]);
   const notificationApiUrls = {
     get: `${notificationAPI}?language=${i18n.language}`,
@@ -72,16 +70,16 @@ const BannerHSL: FC<Props> = ({ config, favourites }) => {
             isLoading: false, // When fetching for login-information, `isLoading`-property can be set to true. Spinner will be shown.
             isAuthenticated: !!user.sub, // If user is authenticated, set `isAuthenticated`-property to true.
             isSelected: false,
-            loginUrl: `http://localhost:3001/login`, //login?url=${url}&${params}`, // Url that user will be redirect to when Person-icon is pressed and user is not logged in.
+            loginUrl: `login?url=${url}&${params}`, // Url that user will be redirect to when Person-icon is pressed and user is not logged in.
             initials: initials,
             menuItems: [
               {
-                name: 'userifon',
+                name: t('userinfo'),
                 url: `${config.HSLUri}/omat-tiedot`,
                 //onClick: () => {},
               },
               {
-                name: 'kiirjaudu ulos',
+                name: t('logout'),
                 url: '/logout',
                 //onClick: () => clearStorages(context),
               },
@@ -91,12 +89,14 @@ const BannerHSL: FC<Props> = ({ config, favourites }) => {
       : {};
 
   const siteHeaderRef = useRef(null);
-  useEffect(() => siteHeaderRef.current?.fetchNotifications()[favourites]);
+  useEffect(() => {
+    siteHeaderRef.current?.fetchNotifications();
+  }, [favourites]);
 
   return (
     <>
       <SiteHeader
-        //ref={siteHeaderRef}
+        ref={siteHeaderRef}
         hslFiUrl={config.HSLUri}
         lang={i18n.language}
         {...userMenu}

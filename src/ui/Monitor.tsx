@@ -1,14 +1,14 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import cx from 'classnames';
 import { IView, IClosedStop } from '../util/Interfaces';
 import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
-import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
 import { getColorByName } from '../util/getConfig';
+import { ConfigContext } from '..';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -24,7 +24,6 @@ interface IProps {
   readonly departures: Array<Array<IDeparture>>;
   currentLang: string;
   readonly translatedStrings: Array<ITranslation>;
-  readonly config: IMonitorConfig;
   readonly isPreview: boolean;
   alertComponent: any;
   alertRowSpan: number;
@@ -40,7 +39,6 @@ const Monitor: FC<IProps> = ({
   departures,
   translatedStrings,
   currentLang,
-  config,
   isPreview,
   alertState,
   alertComponent,
@@ -50,6 +48,7 @@ const Monitor: FC<IProps> = ({
   staticUrl,
   staticViewTitle,
 }) => {
+  const config = useContext(ConfigContext);
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
@@ -94,7 +93,6 @@ const Monitor: FC<IProps> = ({
         staticContentHash={staticContentHash}
       />
       <MonitorTitlebar
-        config={config}
         isMultiDisplay={isMultiDisplay}
         isLandscape={isLandscapeByLayout}
         preview={isPreview}

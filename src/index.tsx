@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext } from 'react';
 import * as ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
@@ -7,15 +7,17 @@ import { getParams } from './util/queryUtils';
 import { getConfig } from './util/getConfig';
 import './i18n'
 
-const monitorConfig = getConfig();
+export const ConfigContext = createContext(null);
 
 ReactDOM.render(
   <NtpSyncComponent>
     <BrowserRouter>
-      <App
-        monitorConfig={monitorConfig}
+      <ConfigContext.Provider value={getConfig()}>
+        <App
         search={getParams(window.location.search)}
       />
+      </ConfigContext.Provider>
+      
       </BrowserRouter>
   </NtpSyncComponent>,
   document.getElementById('root') as HTMLElement,

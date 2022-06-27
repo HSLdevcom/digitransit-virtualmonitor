@@ -1,25 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ConfigContext } from '.';
+import { UserContext } from './App';
 import BannerContainer from './ui/BannerContainer';
 import IndexPage from './ui/IndexPage';
 import UserMonitors from './ui/UserMonitors';
-interface IProps {
-  login: boolean;
-  config: any;
-}
-const LandingPage: React.FC<IProps> = ({config, login}) => {
-  // ---------- TODO: POC / DEBUG PURPOSES ONLY ----------
-  const user = {
-    loggedIn: login,
-    urls: ['abcdef', 'ghijk'],
-  };
-  // ----------                                 ----------
+
+const LandingPage = () => {
+
+  const user = useContext(UserContext);
+  const config = useContext(ConfigContext);
   const logIn =
     user.loggedIn && user.urls.length > 0 && config.allowLogin;
   return (
     <>
-      <BannerContainer login={logIn} config={config}/>
+      <BannerContainer />
       <section role="main" id="mainContent">
-        {logIn && <UserMonitors user={user} />}
+        {logIn && <UserMonitors />}
         {!logIn && <IndexPage />}
       </section>
     </>

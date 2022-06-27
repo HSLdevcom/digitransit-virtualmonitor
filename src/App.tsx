@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import React, { FC, useEffect, useState, createContext } from 'react';
+import React, { FC, useEffect, useState, createContext, useContext } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
@@ -32,7 +32,7 @@ import './sass/main.scss';
 import SkipToMainContent from './ui/SkipToMainContent';
 
 import PrepareMonitor from './ui/PrepareMonitor';
-import RandomComponent from './RandomComponent';
+import { ConfigContext } from '.';
 
 export const UserContext = createContext(null);
 
@@ -97,7 +97,6 @@ export interface IQueryString {
 }
 
 export interface IConfigurationProps {
-  monitorConfig?: IMonitorConfig;
   search?: IQueryString;
 }
 
@@ -113,39 +112,37 @@ interface IStopMonitorProps {
 
 const App: FC<IConfigurationProps> = (props) => {
   const [user, setUser] = useState({});
-  // ---------- TODO: POC / DEBUG PURPOSES ONLY ----------
 
-  // ----------                                 ----------
-  const monitorConfig: IExtendedMonitorConfig = props.monitorConfig;
+  const config = useContext(ConfigContext);
   const style = {
-    '--alert-color': monitorConfig.colors.alert || defaultColorAlert,
-    '--font-color': monitorConfig.colors.font || defaultColorFont,
-    '--font-family': monitorConfig.fonts?.normal || defaultFontNormal,
-    '--font-family-narrow': monitorConfig.fonts?.narrow || defaultFontNarrow,
+    '--alert-color': config.colors.alert || defaultColorAlert,
+    '--font-color': config.colors.font || defaultColorFont,
+    '--font-family': config.fonts?.normal || defaultFontNormal,
+    '--font-family-narrow': config.fonts?.narrow || defaultFontNarrow,
     '--font-weight':
-      monitorConfig.fonts?.weights?.normal || defaultFontWeightNormal,
+      config.fonts?.weights?.normal || defaultFontWeightNormal,
     '--font-weight-bigger':
-      monitorConfig.fonts?.weights?.bigger || defaultFontWeightBigger,
+      config.fonts?.weights?.bigger || defaultFontWeightBigger,
     '--monitor-background-color':
-      monitorConfig.colors.monitorBackground || monitorConfig.colors.primary,
-    '--monitor-font': monitorConfig.fonts?.monitor?.name || defaultFontNarrow,
+      config.colors.monitorBackground || config.colors.primary,
+    '--monitor-font': config.fonts?.monitor?.name || defaultFontNarrow,
     '--monitor-font-weight':
-      monitorConfig.fonts?.monitor?.weights?.normal || defaultFontWeightNormal,
+      config.fonts?.monitor?.weights?.normal || defaultFontWeightNormal,
     '--monitor-font-weight-bigger':
-      monitorConfig.fonts?.monitor?.weights?.bigger || defaultFontWeightBigger,
-    '--primary-color': monitorConfig.colors.primary,
+      config.fonts?.monitor?.weights?.bigger || defaultFontWeightBigger,
+    '--primary-color': config.colors.primary,
   };
   useEffect(() => {
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }
-    monitorAPI.getUser().then(user => setUser(user))
+    monitorAPI.getUser().then(user => setUser(user)).catch(() => setUser({notLogged: true}))
   }, []);
   const client = new ApolloClient({
     link: ApolloLink.from([
       new MultiAPILink({
         endpoints: {
-          default: monitorConfig.uri,
+          default: config.uri,
           hsl: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
           rail: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
         },
@@ -156,7 +153,7 @@ const App: FC<IConfigurationProps> = (props) => {
     cache: new InMemoryCache(),
   });
 
-  const favicon = monitorConfig.name.concat('.png');
+  const favicon = config.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
   const fontHSL = (
     <link
@@ -190,10 +187,10 @@ const App: FC<IConfigurationProps> = (props) => {
   return (
     <div className="App">
       <Helmet>
-        <title>{monitorConfig.name} - pysäkkinäyttö</title>
+        <title>{config.name} - pysäkkinäyttö</title>
         {faviconLink}
-        {monitorConfig.name === 'hsl' ? fontHSL : fontDefault}
-        {getAdditionalFont(monitorConfig.name)}
+        {config.name === 'hsl' ? fontHSL : fontDefault}
+        {getAdditionalFont(config.name)}
       </Helmet>
       <ApolloProvider client={client}>
         <UserContext.Provider value={user}>
@@ -204,25 +201,13 @@ const App: FC<IConfigurationProps> = (props) => {
               match: {
                 params: {},
               },
-            }: RouteComponentProps<IMonitorConfig>) => (
+            }: RouteComponentProps) => (
               <>
                 <SkipToMainContent />
-                <BannerContainer login={monitorConfig.allowLogin} config={monitorConfig}/>
+                <BannerContainer />
                 <section role="main" id="mainContent">
-                  <CreateViewPage config={monitorConfig} />
+                  <CreateViewPage />
                 </section>
-              </>
-            )}
-          />
-          <Route
-            path={'/login'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <>
-                <RandomComponent />
               </>
             )}
           />
@@ -232,12 +217,12 @@ const App: FC<IConfigurationProps> = (props) => {
               match: {
                 params: {},
               },
-            }: RouteComponentProps<IMonitorConfig>) => (
+            }: RouteComponentProps) => (
               <>
                 <SkipToMainContent />
-                <BannerContainer login={monitorConfig.allowLogin} config={monitorConfig}/>
+                <BannerContainer />
                 <section role="main" id="mainContent">
-                  <CreateViewPage config={monitorConfig} user={user} />
+                  <CreateViewPage  />
                 </section>
               </>
             )}
@@ -272,7 +257,6 @@ const App: FC<IConfigurationProps> = (props) => {
               <StopMonitorContainer
                 stopIds={stopId.split(',')}
                 layout={layout ? Number(layout) : 2}
-                config={monitorConfig}
                 urlTitle={props.search?.title}
               />
             )}
@@ -283,13 +267,10 @@ const App: FC<IConfigurationProps> = (props) => {
               match: {
                 params: {},
               },
-            }: RouteComponentProps<IMonitorConfig>) => (
+            }: RouteComponentProps) => (
               <>
                 <SkipToMainContent />
-                <LandingPage
-                  login={props.search?.pocLogin}
-                  config={monitorConfig}
-                />
+                <LandingPage />
               </>
             )}
           />

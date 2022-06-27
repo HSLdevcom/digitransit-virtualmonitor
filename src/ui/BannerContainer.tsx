@@ -1,22 +1,15 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import Breadcrumbs from './Breadcrumbs';
 import Banner from './Banner';
 import BannerHSL from './BannerHSL';
+import { ConfigContext } from '..';
 
-interface Props {
-  login: boolean;
-  config: any;
-}
-
-const BannerContainer: FC<Props> = ({ config, login }) => {
+const BannerContainer = () => {
+  const config = useContext(ConfigContext);
   return (
     <section aria-label="navigation">
-      {config.name === 'hsl' ? (
-        <BannerHSL config={config} user={{}} favourites={[]} />
-      ) : (
-        <Banner config={config} user={{}} />
-      )}
-      <Breadcrumbs isLogged={login} start={config.breadCrumbsStartPage} />
+      {config.name === 'hsl' ? <BannerHSL /> : <Banner />}
+      <Breadcrumbs start={config.breadCrumbsStartPage} />
     </section>
   );
 };

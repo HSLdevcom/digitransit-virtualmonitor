@@ -79,7 +79,7 @@ app.delete('/api/staticmonitor', (req, res) => {
   monitorService.deleteStatic(req, res);
 });
 function setUpOpenId() {
-  const localPort = process.env.NODE_ENV === 'production' ? null : 3000;
+  const localPort = null; //process.env.NODE_ENV === 'production' ? null : 3000;
   setUpOIDC(app, port, '', ['https://virtualmonitor-app-login-dev.azurewebsites.net/'], localPort);
 }
 

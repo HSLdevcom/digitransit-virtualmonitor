@@ -158,6 +158,7 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
   // users will be redirected to hsl.id and once authenticated
   // they will be returned to the callback handler below
   app.get('/login', (req, res) => {
+    console.log("LOGIN")
     const { url, favouriteModalAction, ...rest } = req.query;
     if (favouriteModalAction) {
       req.session.returnTo = `/${indexPath}?favouriteModalAction=${favouriteModalAction}`;
@@ -268,6 +269,7 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
 
   /* GET the profile of the current authenticated user */
   app.get('/api/user', function (req, res) {
+    console.log("USER: ",req.user.token.access_token, req.user )
     axios
       .get(`${OIDCHost}/openid/userinfo`, {
         headers: { Authorization: `Bearer ${req.user.token.access_token}` },
@@ -286,6 +288,7 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
 
   // Temporary solution for checking if user is authenticated
   const userAuthenticated = function (req, res, next) {
+    console.log("Userauthenticated")
     axios
       .get(`${OIDCHost}/openid/userinfo`, {
         headers: { Authorization: `Bearer ${req.user.token.access_token}` },

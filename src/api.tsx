@@ -2,13 +2,14 @@ const baseAPI = '/api';
 
 const fetchData = (path, options) => {
   return new Promise((resolve, reject) => {
+    const get = !options.method || options.method === 'POST'
     fetch(`${baseAPI}/${path}`, {
       headers: {
         accepts: 'application/json',
       },
       ...options,
     })
-      .then(result => result.json())
+      .then(result => get ? result.json() : result)
       .then(json => resolve(json))
       .catch(err => {
         reject(err);
@@ -35,11 +36,11 @@ const monitorAPI = {
   create(monitor) {
     const options = {
       method: 'PUT',
-        body: JSON.stringify(monitor),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
+      body: JSON.stringify(monitor),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
     }
     return fetchData(`monitor`, options);
   },

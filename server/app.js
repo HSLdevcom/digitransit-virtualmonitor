@@ -12,9 +12,10 @@ const port = process.env.PORT || 3001;
 const app = express();
 
 app.use(logger('dev'));
+app.use(function(req,res,next){console.log(req.headers);next();});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser(process.env.SESSION_SECRET || 'reittiopas_secret'));
 app.use(express.static(path.join(__dirname, '../../build')));
 // view engine setup
 app.set('views', path.join(__dirname, '../views'));

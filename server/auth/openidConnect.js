@@ -123,6 +123,10 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
     return next();
   };
 
+  if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', 1);
+  }
+
   // Passport requires session to persist the authentication
   app.use(
     session({

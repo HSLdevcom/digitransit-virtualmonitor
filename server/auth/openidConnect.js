@@ -31,6 +31,7 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
   const RedisHost = process.env.REDIS_HOST || '127.0.0.1';
   const RedisPort = process.env.REDIS_PORT || 6379;
   const RedisKey = process.env.REDIS_KEY;
+  console.log(RedisHost, RedisPort, RedisKey)
   const RedisClient = RedisKey
     ? redis.createClient(RedisPort, RedisHost, {
         auth_pass: RedisKey,
@@ -38,7 +39,6 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
       })
     : redis.createClient(RedisPort, RedisHost);
 
-  //RedisClient.connect();
   const redirectUris = hostnames.map(host => `${host}${callbackPath}`);
   const postLogoutRedirectUris = hostnames.map(
     host => `${host}${logoutCallbackPath}`,
@@ -169,6 +169,7 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
         .join('&');
       req.session.returnTo = localPort ? `http://localhost:${localPort}${url}?${restParams}` : `${url}?${restParams}`;
     }
+    console.log(req.session.returnTo)
     passport.authenticate('passport-openid-connect', {
       scope: 'profile',
       successReturnToOrRedirect: '/',
@@ -176,14 +177,15 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
   });
 
   // Callback handler that will redirect back to application after successfull authentication
-  app.get(
-    callbackPath,
+  app.get(callbackPath, (req, res) => {
+    console.log("REQUEST: ", req.headers)
+    console.log("RESPONSE: ", res.headers)
     passport.authenticate('passport-openid-connect', {
       callback: true,
       successReturnToOrRedirect: localPort ? `http://localhost:${localPort}/${indexPath}` : `/${indexPath}`,
       failureRedirect: '/login',
-    }),
-  );
+    })(req, res);
+  });
 
   app.get('/logout', function (req, res) {
     const cookieLang = req.cookies.lang || 'fi';

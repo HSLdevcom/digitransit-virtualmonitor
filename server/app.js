@@ -80,9 +80,8 @@ app.delete('/api/staticmonitor', (req, res) => {
 });
 function setUpOpenId() {
   const localPort = process.env.NODE_ENV === 'production' ? null : 3000;
-  console.log(localPort)
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = 1;
-  setUpOIDC(app, port, '', ['https://virtualmonitor-app-login-dev.azurewebsites.net/'], localPort);
+  setUpOIDC(app, port, '', ['https://virtualmonitor-app-login-dev.azurewebsites.net/', 'http://virtualmonitor-app-login-dev.azurewebsites.net/'], localPort);
 }
 
 setUpOpenId();

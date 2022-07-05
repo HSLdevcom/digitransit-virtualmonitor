@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { isInformationDisplay } from '../util/monitorUtils';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
 import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
-import StopCode from './StopCode';
 import {
   getTrainStationData,
   isPlatformOrTrackVisible,
@@ -27,17 +26,10 @@ interface IProps {
 const UserMonitorCard: React.FC<IProps> = props => {
   const [t] = useTranslation();
   const { cards, name, contenthash, languages, url } = props.view;
-  const [redirect, setRedirect] = useState(false);
   const [isOpen, setOpen] = useState(false);
   const [isDelete, setDelete] = useState(false);
   const layout = cards[0].layout;
 
-  const layouts = cards.map(c => {
-    return c.layout;
-  });
-  const goToEdit = () => {
-    setRedirect(true);
-  };
   const onClose = () => {
     setOpen(false);
   };
@@ -59,16 +51,6 @@ const UserMonitorCard: React.FC<IProps> = props => {
     );
   }
 
-  if (redirect) {
-    return (
-      <Redirect
-        to={{
-          pathname: '/createStaticView',
-          search: `?name=${name}&url=${url}&cont=${contenthash}`,
-        }}
-      />
-    );
-  }
   const v = {
     cards: cards,
     languages: languages,
@@ -110,25 +92,13 @@ const UserMonitorCard: React.FC<IProps> = props => {
               <div className="card-title">{colTitles[c]}</div>
               <div className="stop-list">
                 {colStop.map((stop, j) => {
-                  const icon =
-                    `${stop.locationType}-${stop.mode}`.toLowerCase();
-                  const iconStyle = getIconStyleWithColor(icon);
                   const stopTitle = stop.name
                     .concat(stop.code ? ' (' + stop.code + ')' : '')
                     .concat(' - ')
                     .concat(stop.gtfsId);
                   return (
                     <li key={`stop#${j}`} title={stopTitle}>
-                      <div className="icon">
-                        <Icon
-                          img={icon + iconStyle.postfix}
-                          width={16}
-                          height={16}
-                          color={iconStyle.color}
-                        />
-                        {stop.name}
-                        <StopCode code={stop.code} />
-                      </div>
+                      {`${stop.name} (${stop.code})`}
                     </li>
                   );
                 })}
@@ -140,12 +110,12 @@ const UserMonitorCard: React.FC<IProps> = props => {
     );
 
     return (
-      <>
+      <div key={`c#${i}`} className="card-item">
         <div className="card-container">
-          <Icon img={'layout'.concat(layouts[i])} />
+          <Icon img={'layout'.concat(c.layout)} />
           <div className="data">{titlesAndStops}</div>
         </div>
-      </>
+      </div>
     );
   });
   return (
@@ -163,37 +133,31 @@ const UserMonitorCard: React.FC<IProps> = props => {
         />
       )}
       <div className="main-container">
-        <span className="layout-img">
+        <div className="layout-img">
           <Icon
-            img={layouts[0] < 11 ? 'rectangle-selected' : 'vertical-selected'}
+            img={
+              cards[0].layout < 11 ? 'rectangle-selected' : 'vertical-selected'
+            }
             height={32}
             width={32}
             color={getPrimaryColor()}
           />
-        </span>
-        <span className="monitor-name">{name}</span>
-        <div className="control-buttons">
-          <button className="button" onClick={() => setOpen(true)}>
-            {t('preview')}
-          </button>
-          <button className="edit-button" onClick={goToEdit}>
-            {t('modify')}
-          </button>
-          <div className="delete-icon" onClick={onDelete}>
-            <Icon img="delete" color={getPrimaryColor()} />
-          </div>
+        </div>
+        <div className="monitor-name">{name}</div>
+        <button className="round-button" onClick={() => setOpen(true)}>
+          {t('preview')}
+        </button>
+        <Link
+          className="round-button"
+          to={`/monitors/createView?&cont=${contenthash}`}
+        >
+          {t('modify')}
+        </Link>
+        <div className="delete-icon" onClick={onDelete}>
+          <Icon img="delete" color={getPrimaryColor()} />
         </div>
       </div>
-      <div className="cards">
-        {Array.isArray(crds) &&
-          crds.map((c, x) => {
-            return (
-              <div key={`c#${x}`} className="card-item">
-                {c}
-              </div>
-            );
-          })}
-      </div>
+      <div className="cards">{crds}</div>
     </div>
   );
 };

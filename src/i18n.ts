@@ -52,6 +52,8 @@ i18n.use(initReactI18next).init({
         displayLanguages: 'Languages',
         duration: 'Duration / language',
         'edit-display': 'Edit display',
+        'front-page-no-sign-in-button': 'Jatka kirjautumatta',
+        'front-page-sign-in-button': 'Kirjaudu ja luo näyttö',
         frontPageParagraph1:
           'Create your own display and select the stops and routes you are interested in',
         frontPageParagraph2:
@@ -171,6 +173,8 @@ i18n.use(initReactI18next).init({
         displayLanguages: 'Esityskielet',
         duration: 'Kesto / esityskieli',
         'edit-display': 'Muokkaa näyttöä',
+        'front-page-no-sign-in-button': 'Jatka kirjautumatta',
+        'front-page-sign-in-button': 'Kirjaudu ja luo näyttö',
         frontPageParagraph1:
           'Luo itsellesi oma näyttö ja valitse pysäkit ja linjat joiden aikatauluista olet kiinnostunut',
         frontPageParagraph2:
@@ -289,6 +293,8 @@ i18n.use(initReactI18next).init({
         displayLanguages: 'Språk',
         duration: 'Tid / språk',
         'edit-display': 'Redigera skärmen',
+        'front-page-no-sign-in-button': 'Jatka kirjautumatta',
+        'front-page-sign-in-button': 'Kirjaudu ja luo näyttö',
         frontPageParagraph1:
           'Skapa dig en egen skärm och välj de hållplatser och linjer som intresserar dig',
         frontPageParagraph2:

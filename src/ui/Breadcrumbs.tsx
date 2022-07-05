@@ -1,78 +1,60 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import { getPrimaryColor } from '../util/getConfig';
 
-interface IProps {
-  isLogged?: boolean;
-  start?: string;
-}
-const Breadcrumbs: FC<IProps> = ({ isLogged, start }) => {
+const Breadcrumbs = () => {
   const [t] = useTranslation();
   const parser = document.createElement('a');
   parser.href = window.location.href;
   const arr = parser.pathname.split('/');
-  const path = arr[1] ? arr[1].toLowerCase() : null;
-  const isModify =
-    arr.length > 2 || window.location.href.indexOf('cont=') !== -1;
-  let crumb;
-  switch (path) {
-    case 'createview':
-    case 'createstaticview':
-      crumb = !isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify');
-      break;
-    case 'monitors':
-      crumb = t('breadCrumbsOwnMonitors');
-
-      break;
-    default:
-      crumb = null;
-  }
+  const isModify = window.location.href.indexOf('cont=') !== -1;
+  const crumbs = arr.map(path => {
+    switch (path) {
+      case 'createView':
+      case 'createstaticview':
+        return !isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify');
+      case 'monitors':
+        return t('breadCrumbsOwnMonitors');
+      case '':
+        return null; //t('breadCrumbsFrontPage');
+      default:
+        return null;
+    }
+  });
 
   return (
     <div className="breadcrumbs-container">
       <div className="crumbs">
-        {start === 'site' && (
-          <Link className="to-home" to={'/'}>
-            {t('breadCrumbsSite')}
-          </Link>
-        )}
-        {start === 'front' && path && (
-          <Link className="to-home" to={'/'}>
-            {t('breadCrumbsFrontPage')}
-          </Link>
-        )}
-        {isLogged &&
-          crumb !== t('breadCrumbsOwnMonitors') &&
-          crumb !== t('breadCrumbsHelp') && (
+        {crumbs.map((crumb, i) => {
+          if (i === 0) {
+            crumb = 'breadCrumbsFrontPage';
+          }
+          return (
             <>
-              <Icon
-                img={'arrow-down'}
-                width={14}
-                height={14}
-                rotate={'-90'}
-                color={getPrimaryColor()}
-                margin={'0 10px'}
-              />
-              <Link className="to-home" to={'/?pocLogin'}>
-                {t('breadCrumbsOwnMonitors')}
-              </Link>
+              {i !== 0 && (
+                <Icon
+                  img={'arrow-down'}
+                  width={14}
+                  height={14}
+                  rotate={'-90'}
+                  color={getPrimaryColor()}
+                  margin={'0 10px'}
+                />
+              )}
+              {i === crumbs.length - 1 ? (
+                t(crumb)
+              ) : (
+                <Link className="to-home" to={`/${arr[i]}`}>
+                  {t(crumb)}
+                </Link>
+              )}
             </>
-          )}
-        {crumb !== t('breadCrumbsFrontPage') && (
-          <Icon
-            img={'arrow-down'}
-            width={14}
-            height={14}
-            rotate={'-90'}
-            color={getPrimaryColor()}
-            margin={'0 10px'}
-          />
-        )}
-        {crumb}
+          );
+        })}
       </div>
-      <span className="main-header">{t(crumb)}</span>
+      <span className="main-header">{t(crumbs[crumbs.length - 1])}</span>
     </div>
   );
 };

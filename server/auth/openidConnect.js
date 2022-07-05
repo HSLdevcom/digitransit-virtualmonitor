@@ -368,56 +368,50 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
 
 const getMonitors = async (req, res) => {
   try {
+    let dataStorage
     console.log("fetching all user monitors for", req?.user?.data.sub);
-    const dataStorage = await getDataStorage(req?.user?.data.sub);
-    console.log(dataStorage)
-    const options = {
-      endpoint: `/api/rest/v1/datastorage/${dataStorage.id}/data`,
-    };
-    const response = await makeHslIdRequest(options);
-  
-    console.log(response.data);
-    const monitors = Object.keys(response.data).map(key => key);
-    console.log(monitors)
-    monitorService.getMonitorsForUser(req, res, monitors);
+    dataStorage = await getDataStorage(req?.user?.data.sub);
+    if (dataStorage) {
+      console.log("found data storage: ", dataStorage)
+      const options = {
+        endpoint: `/api/rest/v1/datastorage/${dataStorage.id}/data`,
+      };
+      const response = await makeHslIdRequest(options);
+      console.log(response.data);
+      const monitors = Object.keys(response.data).map(key => key);
+      console.log(monitors)
+      monitorService.getMonitorsForUser(req, res, monitors);
+    } else {
+      console.log("no data storage found, user doesn't have any monitors")
+      res.json({})
+    }
   } catch {
     console.log("Error fetching monitors")
   }
-
-
 }
 
 const createMonitor = async (req, res) => {
-
-    try {
-      const userId = req?.user?.data.sub;
-      const store = req?.query?.store;
-      const type = req?.query?.type;
-      const schema = {
-        body: req?.body,
-        hslId: userId,
-        store: store && String(store),
-      };
-      //validate(updateSchema, schema);
-      const dataStorage = {
-        id: '',
-      };
-      //console.log('searching existing datastorage');
-      let dataS = await getDataStorage(userId);//.then(res => {
-      if (dataS) {
-        dataStorage.id = dataS.id;
-        console.log("existing data storage found");
-      } else {
-        console.log("no data storage, creating one")
-        dataS = await createDataStorage(userId);
-      }
-      console.log("adding monitor to data storage")
-      console.log(req.body)
-      const res = await updateMonitors(dataS.id, req.body);
-
-    } catch (e) {
-      console.log("some error", e)
+  try {
+    const userId = req?.user?.data.sub;
+    //validate(updateSchema, schema);
+    const dataStorage = {
+      id: '',
+    };
+    //console.log('searching existing datastorage');
+    let dataS = await getDataStorage(userId);//.then(res => {
+    if (dataS) {
+      dataStorage.id = dataS.id;
+      console.log("existing data storage found");
+    } else {
+      console.log("no data storage, creating one")
+      dataS = await createDataStorage(userId);
+      dataStorage.id = dataS;
     }
+    console.log("adding monitor to data storage: ", dataStorage.id)
+    const res = await updateMonitors(dataStorage.id, req.body);
+  } catch (e) {
+    console.log("Error creating monitor", e)
+  }
 }
 
 const makeHslIdRequest = async (
@@ -470,8 +464,13 @@ const createDataStorage = async (id) => {
       writeAccess: [CLIENT_ID, id],
     },
   };
-  const response = await makeHslIdRequest(options);
-  return response.data.id;
+  try {
+    const response = await makeHslIdRequest(options);
+    console.log("created, res:", response.data)
+    return response.data.id;
+  } catch (e) {
+    console.log("error creating data storage", e)
+  }
 }
 
 export const getDataStorage = async (id) => {
@@ -491,7 +490,7 @@ export const getDataStorage = async (id) => {
     if (dataStorage) {
       return dataStorage;
     } else {
-      console.log( 'error, DataStorage not found');
+      throw "Datastorage not found"
     }
   } catch (error) {
     console.log('error, DataStorage not found');

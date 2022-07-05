@@ -22,12 +22,9 @@ const Breadcrumbs: FC<IProps> = ({ isLogged, start }) => {
     case 'createstaticview':
       crumb = !isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify');
       break;
-    case null:
-      crumb = isLogged
-        ? t('breadCrumbsOwnMonitors')
-        : start === 'front'
-        ? t('breadCrumbsFrontPage')
-        : null;
+    case 'monitors':
+      crumb = t('breadCrumbsOwnMonitors');
+
       break;
     default:
       crumb = null;
@@ -75,9 +72,7 @@ const Breadcrumbs: FC<IProps> = ({ isLogged, start }) => {
         )}
         {crumb}
       </div>
-      <span className="desc">
-        {crumb !== t('breadCrumbsFrontPage') ? crumb : t('breadCrumbsCreate')}
-      </span>
+      <span className="main-header">{t(crumb)}</span>
     </div>
   );
 };

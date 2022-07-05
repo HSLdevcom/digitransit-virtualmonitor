@@ -43,20 +43,15 @@ const UserMonitors: React.FC<IProps> = props => {
   }, []);
 
   const monitors = Array.isArray(views)
-    ? views.map(view => {
-        return <UserMonitorCard view={view} />;
+    ? views.map((view, i) => {
+        return <UserMonitorCard key={`monitor#${i}`} view={view} />;
       })
     : [];
-  if (!monitors || !monitors.length) {
-    return null;
-  }
+
   return (
     <ContentContainer>
-      {Array.isArray(monitors) &&
-        monitors.map((monitor, i) => {
-          return <div key={`monitor#${i}`}>{monitor}</div>;
-        })}
-      <Link to={'/createStaticView'}>
+      <div className="cards-container">{monitors}</div>
+      <Link to={'/monitors/createView'}>
         <span className="create-container">
           <button className="btn"> {t('quickDisplayCreate')} </button>
         </span>

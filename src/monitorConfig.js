@@ -37,7 +37,7 @@ export default {
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
-    allowLogin: false,
+    allowLogin: true,
     useTilde: true,
   },
   jyvaskyla: {

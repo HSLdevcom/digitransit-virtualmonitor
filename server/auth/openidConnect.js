@@ -6,6 +6,10 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import connectRedis from 'connect-redis';
 import Strategy from './Strategy.js';
+import monitorService from '../monitorService.js';
+
+const CLIENT_ID = process.env.MANAGEMENT_API_ID;
+const CLIENT_SECRET = process.env.MANAGEMENT_API_SECRET;
 
 const RedisStore = connectRedis(session);
 
@@ -272,7 +276,6 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
 
   /* GET the profile of the current authenticated user */
   app.get('/api/user', function (req, res) {
-    console.log("USER: ",req.user.token.access_token, req.user )
     axios
       .get(`${OIDCHost}/openid/userinfo`, {
         headers: { Authorization: `Bearer ${req.user.token.access_token}` },
@@ -291,7 +294,6 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
 
   // Temporary solution for checking if user is authenticated
   const userAuthenticated = function (req, res, next) {
-    console.log("Userauthenticated")
     axios
       .get(`${OIDCHost}/openid/userinfo`, {
         headers: { Authorization: `Bearer ${req.user.token.access_token}` },
@@ -323,8 +325,16 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
       });
   });
 
-  app.use('/api/user/notifications', userAuthenticated, function (req, res) {
+  app.put('/api/staticmonitor', userAuthenticated, (req, res) => {
+    createMonitor(req, res);
+    monitorService.createStatic(req, res);
+  });
 
+  app.get('/api/usermonitors', userAuthenticated, (req, res) => {
+    getMonitors(req,res)
+  });
+
+  app.use('/api/user/notifications', userAuthenticated, function (req, res) {
     const params = Object.keys(req.query)
       .map(k => `${k}=${req.query[k]}`)
       .join('&');
@@ -355,5 +365,132 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
       });
   });
 }
+
+const getMonitors = async (req, res) => {
+  try {
+    console.log("fetching all user monitors for", req?.user?.data.sub);
+    const dataStorage = await getDataStorage(req?.user?.data.sub);
+    console.log(dataStorage)
+    const options = {
+      endpoint: `/api/rest/v1/datastorage/${dataStorage.id}/data`,
+    };
+    const response = await makeHslIdRequest(options);
+  
+    console.log(response.data);
+    const monitors = Object.keys(response.data).map(key => key);
+    console.log(monitors)
+    monitorService.getMonitorsForUser(req, res, monitors);
+  } catch {
+    console.log("Error fetching monitors")
+  }
+
+
+}
+
+const createMonitor = async (req, res) => {
+
+    try {
+      const userId = req?.user?.data.sub;
+      const store = req?.query?.store;
+      const type = req?.query?.type;
+      const schema = {
+        body: req?.body,
+        hslId: userId,
+        store: store && String(store),
+      };
+      //validate(updateSchema, schema);
+      const dataStorage = {
+        id: '',
+      };
+      //console.log('searching existing datastorage');
+      let dataS = await getDataStorage(userId);//.then(res => {
+      if (dataS) {
+        dataStorage.id = dataS.id;
+        console.log("existing data storage found");
+      } else {
+        console.log("no data storage, creating one")
+        dataS = await createDataStorage(userId);
+      }
+      console.log("adding monitor to data storage")
+      console.log(req.body)
+      const res = await updateMonitors(dataS.id, req.body);
+
+    } catch (e) {
+      console.log("some error", e)
+    }
+}
+
+const makeHslIdRequest = async (
+  options,
+) => {
+  const hslIdUrl = 'https://hslid-uat.cinfra.fi';
+  const credentials = `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`;
+  options.url = `${hslIdUrl}${options.endpoint}`;
+  options.headers = {
+    Authorization: credentials,
+    'Content-Type': 'application/json',
+  };
+  const response = axios(options);
+  return response;
+};
+
+export const updateMonitors = async (
+  dataStorageId,
+  monitor,
+) => {
+  try {
+    console.log("UPDATING MONITOR TO", dataStorageId)
+    const options = {
+      method: 'PUT',
+      endpoint: `/api/rest/v1/datastorage/${dataStorageId}/data/${monitor.url}`,
+      data: {'value': monitor.monitorContenthash},
+    };
+    const response = await makeHslIdRequest(options);
+    return response;
+  } catch (err) {
+    console.log("Error updating data storage", err)
+  }
+};
+
+const createDataStorage = async (id) => {
+  const options = {
+    method: 'POST',
+    endpoint: `/api/rest/v1/datastorage`,
+    data: {
+      name: `monitors-${CLIENT_ID || ''}`,
+      description: 'Pysäkkinäytöt',
+      ownerId: id,
+      adminAccess: [CLIENT_ID],
+      readAccess: [CLIENT_ID, id],
+      writeAccess: [CLIENT_ID, id],
+    },
+  };
+  const response = await makeHslIdRequest(options);
+  return response.data.id;
+}
+
+export const getDataStorage = async (id) => {
+
+  const options = {
+    method: 'GET',
+    endpoint: '/api/rest/v1/datastorage',
+    params: {
+      dsfilter: `ownerId eq "${id}" and name eq "monitors-${
+        CLIENT_ID || ''
+      }"`,
+    },
+  };
+  try {
+    const response = await makeHslIdRequest(options);
+    const dataStorage = response.data.resources[0];
+    if (dataStorage) {
+      return dataStorage;
+    } else {
+      console.log( 'error, DataStorage not found');
+    }
+  } catch (error) {
+    console.log('error, DataStorage not found');
+  }
+};
 
 export default setUpOIDC;

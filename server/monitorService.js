@@ -119,10 +119,12 @@ const monitorService = {
       res.status(500).send(e);
     }
   },
-  getMonitorsForUser: async function get(req, res) {
+  getMonitorsForUser: async function get(req, res, ids) {
     try {
+      const monitors = [];
+      const contenthashes = [];
       const cont = database.container('staticMonitors');
-      const urls = req.params.id.split(',');
+      const urls = ids?.length ? ids : req.params.id.split(',');
       // query to return all items
       const querySpec = {
         query:
@@ -136,8 +138,7 @@ const monitorService = {
       };
       // read all items in the Items container
       const { resources: items } = await cont.items.query(querySpec).fetchAll();
-      const monitors = [];
-      const contenthashes = [];
+
       items.forEach(item => {
         monitors.push(item);
         contenthashes.push(item.monitorContenthash);
@@ -179,6 +180,8 @@ const monitorService = {
     }
   },
   create: async function create(req, res) {
+    console.log("creating monitor")
+    console.log(req.body);
     try {
       await Promise.resolve(container.items.create(req.body));
       res.send('OK');
@@ -190,6 +193,8 @@ const monitorService = {
     }
   },
   createStatic: async function createStaticMonitor(req, res) {
+    console.log("creating static")
+    console.log(req.body)
     try {
       const container = database.container('staticMonitors');
       await Promise.resolve(container.items.create(req.body));

@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import { IStop, IMonitor } from '../util/Interfaces';
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import hash from 'object-hash';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,7 @@ import { getCurrentSecondsWithMilliSeconds } from '../time';
 import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
 import { uuidValidateV5 } from '../util/monitorUtils';
 import PrepareMonitor from './PrepareMonitor';
+import { UserContext } from '../App';
 
 interface IProps {
   feedIds: Array<string>;
@@ -26,7 +27,6 @@ interface IProps {
   languages: Array<string>;
   loading?: boolean;
   vertical?: boolean;
-  user?: any;
 }
 
 const getViewName = title => {
@@ -79,6 +79,7 @@ const StopCardListContainer: FC<IProps> = ({
   loading = false,
   ...props
 }) => {
+  const user = useContext(UserContext);
   const [t] = useTranslation();
   const [startTime, setStartTime] = useState(
     getCurrentSecondsWithMilliSeconds(),
@@ -280,6 +281,7 @@ const StopCardListContainer: FC<IProps> = ({
     };
   });
 
+  // TODO: BUG, will only return the condition for last card
   const checkNoStops = stopCardList => {
     let noStops = false;
     stopCardList.forEach((stopCard, i) => {
@@ -339,9 +341,9 @@ const StopCardListContainer: FC<IProps> = ({
       encoding: 'base64',
     }).replaceAll('/', '-');
     if (isNew) {
-      monitorAPI.create(newCard).then(res => {
-        if (res['status'] === 200 || res['status'] === 409) {
-          if (getPath() === '/createStaticView') {
+      monitorAPI.create(newCard).then((res: any) => {
+        if (res.status === 200 || res.status === 409) {
+          if (getPath() === '/monitors/createView') {
             const newUuid = createUUID(newCard.contenthash, startTime);
             monitorAPI
               .createStatic(newCard.contenthash, newUuid, viewTitle)
@@ -384,25 +386,24 @@ const StopCardListContainer: FC<IProps> = ({
     }
   };
 
-  const checkIfModify = () => {
-    if (
-      window &&
-      (window.location.href.indexOf('cont=') !== -1 ||
-        window.location.pathname.split('/').length > 2) &&
-      getPath() === '/createStaticView'
-    ) {
-      return true;
-    }
-    return false;
-  };
+  // const checkIfModify = () => {
+  //   if (
+  //     window &&
+  //     (window.location.href.indexOf('cont=') !== -1 ||
+  //       window.location.pathname.split('/').length > 2) &&
+  //     getPath() === '/monitor/createView'
+  //   ) {
+  //     return true;
+  //   }
+  //   return false;
+  // };
 
   if (!redirect && view && uuid) {
     setRedirect(true);
   }
-
   if (redirect && view) {
     let search;
-    const isStatic = getPath() === '/createStaticView';
+    const isStatic = getPath() === '/monitors/createView';
     const url = uuid ? uuid : getUuid();
     if (isStatic && url && uuidValidateV5(url)) {
       search = `?cont=${url}`;
@@ -451,7 +452,7 @@ const StopCardListContainer: FC<IProps> = ({
 
   const noStops = checkNoStops(modifiedStopCardList);
   const makeButtonsDisabled = !(languages.length > 0 && !noStops);
-  const isModifyView = checkIfModify();
+  const isModifyView = false;
 
   const buttonsRequirements = [];
   if (languages.length === 0) {
@@ -473,7 +474,7 @@ const StopCardListContainer: FC<IProps> = ({
 
   return (
     <div className="stop-card-list-container">
-      {props.user && props.user.loggedIn && (
+      {user?.sub && (
         <UserViewTitleEditor
           title={viewTitle}
           updateViewTitle={updateViewTitle}

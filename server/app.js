@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import index from './routes.js';
+import axios from 'axios';
 import setUpOIDC from './auth/openidConnect.js';
 
 const __dirname = fileURLToPath(import.meta.url);
@@ -12,7 +13,7 @@ const port = process.env.PORT || 3001;
 const app = express();
 
 app.use(logger('dev'));
-app.use(function(req,res,next){console.log(req.headers);next();});
+//app.use(function(req,res,next){console.log(req.headers);next();});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.SESSION_SECRET || 'reittiopas_secret'));
@@ -42,9 +43,9 @@ app.get('/api/usermonitors/:id', (req, res) => {
   monitorService.getMonitorsForUser(req, res);
 });
 
-app.get('/api/usermonitors', (req, res) => {
-  monitorService.getAllMonitorsForUser(req, res);
-});
+// app.get('/api/usermonitors', (req, res) => {
+//   monitorService.getAllMonitorsForUser(req, res);
+// });
 
 app.put('/api/monitor', (req, res) => {
   monitorService.create(req, res);
@@ -66,10 +67,6 @@ app.post('/api/decompress/', (req, res) => {
   } catch (e) {
     console.log(e)
   }
-});
-
-app.put('/api/staticmonitor', (req, res) => {
-  monitorService.createStatic(req, res);
 });
 
 app.post('/api/staticmonitor', (req, res) => {
@@ -111,5 +108,6 @@ app.use((err, req, res, next) => {
     error: err,
   });
 });
+
 
 export default app;

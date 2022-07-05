@@ -33,6 +33,8 @@ import SkipToMainContent from './ui/SkipToMainContent';
 
 import PrepareMonitor from './ui/PrepareMonitor';
 import { ConfigContext } from '.';
+import Loading from './ui/Loading';
+import UserMonitors from './ui/UserMonitors';
 
 export const UserContext = createContext(null);
 
@@ -112,6 +114,7 @@ interface IStopMonitorProps {
 
 const App: FC<IConfigurationProps> = (props) => {
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const config = useContext(ConfigContext);
   const style = {
@@ -136,7 +139,7 @@ const App: FC<IConfigurationProps> = (props) => {
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }
-    monitorAPI.getUser().then(user => setUser(user)).catch(() => setUser({notLogged: true}))
+    monitorAPI.getUser().then(user => {setUser(user); setLoading(false);}).catch(() => {setUser({notLogged: true}); setLoading(false);})
   }, []);
   const client = new ApolloClient({
     link: ApolloLink.from([
@@ -175,7 +178,10 @@ const App: FC<IConfigurationProps> = (props) => {
       href="https://fonts.googleapis.com/css?family=Lato"
     />
   );
-
+  if (loading)
+ {
+   return <Loading white/>
+ }
   const getAdditionalFont = name => {
     switch (name) {
       case 'tampere':
@@ -212,7 +218,7 @@ const App: FC<IConfigurationProps> = (props) => {
             )}
           />
           <Route
-            path={'/createStaticView'}
+            path={'/monitors/createView'}
             component={({
               match: {
                 params: {},
@@ -230,6 +236,12 @@ const App: FC<IConfigurationProps> = (props) => {
           <Route path={'/view'} component={PrepareMonitor} />
           <Route path={'/static'} component={PrepareMonitor} />
           <Route path={'/version'} component={Version} />
+          <Route path={'/monitors'} component={() => (
+            <>
+              <BannerContainer header={''}/>
+              <UserMonitors />
+            </>
+          )} />
           <Route
             path={'/urld/:version/:packedDisplay'}
             component={({

@@ -130,7 +130,6 @@ const StopCardListDataContainer: FC<IProps> = ({
   }, [stations.data]);
   return (
     <StopCardListContainer
-      user={user}
       loading={stations.loading || stops.loading || loading}
       languages={languages}
       vertical={stopCardList[0].layout > 11}

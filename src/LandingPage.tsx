@@ -3,20 +3,24 @@ import { ConfigContext } from '.';
 import { UserContext } from './App';
 import BannerContainer from './ui/BannerContainer';
 import IndexPage from './ui/IndexPage';
-import UserMonitors from './ui/UserMonitors';
+import { Redirect } from 'react-router-dom';
 
 const LandingPage = () => {
 
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
   const logIn =
-    user.loggedIn && user.urls.length > 0 && config.allowLogin;
+    user.sub && config.allowLogin;
   return (
     <>
       <BannerContainer />
       <section role="main" id="mainContent">
-        {logIn && <UserMonitors />}
-        {!logIn && <IndexPage />}
+      {logIn ? <Redirect
+        to={{
+          pathname: '/monitors',
+        }}
+      /> : 
+        <IndexPage />}
       </section>
     </>
   );

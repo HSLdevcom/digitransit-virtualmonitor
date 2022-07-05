@@ -38,7 +38,6 @@ const CreateViewPage: FC<IProps> = props => {
     return (
       <ContentContainer>
         <StopCardListContainer
-          user={props.user}
           languages={languages}
           defaultStopCardList={[defaultStopCard()]}
           feedIds={config.feedIds}
@@ -67,7 +66,6 @@ const CreateViewPage: FC<IProps> = props => {
   return (
     <ContentContainer>
       <StopCardListDataContainer
-        user={props.user}
         languages={languages}
         stopIds={stopIds}
         stationIds={stationIds}

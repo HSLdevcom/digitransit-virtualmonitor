@@ -63,6 +63,7 @@ const monitorAPI = {
   createStatic(hash, url, title) {
     const options = {
       method: 'PUT',
+      credentials: 'include',
       body: JSON.stringify({
         id: hash,
         monitorContenthash: hash,

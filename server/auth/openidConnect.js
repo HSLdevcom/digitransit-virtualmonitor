@@ -423,15 +423,20 @@ const createMonitor = async (req, res) => {
 const makeHslIdRequest = async (
   options,
 ) => {
-  const hslIdUrl = 'https://hslid-uat.cinfra.fi';
-  const credentials = `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`;
-  options.url = `${hslIdUrl}${options.endpoint}`;
-  options.headers = {
-    Authorization: credentials,
-    'Content-Type': 'application/json',
-  };
-  const response = axios(options);
-  return response;
+  try {
+    const hslIdUrl = 'https://hslid-uat.cinfra.fi';
+    const credentials = `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`;
+    options.url = `${hslIdUrl}${options.endpoint}`;
+    options.headers = {
+      Authorization: credentials,
+      'Content-Type': 'application/json',
+    };
+    const response = axios(options);
+    return response;
+  } catch (err) {
+    console.log("error making hslid request");
+  }
+  
 };
 
 export const updateMonitors = async (

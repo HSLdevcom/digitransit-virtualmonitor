@@ -3,7 +3,7 @@ import { IAlert, IView } from '../util/Interfaces';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 import MonitorTitlebar from './MonitorTitleBar';
-import { ConfigContext } from '../index';
+import { ConfigContext } from '../contexts';
 import MonitorOverlay from './MonitorOverlay';
 
 interface IProps {

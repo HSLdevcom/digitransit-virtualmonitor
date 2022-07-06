@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import ContentContainer from './ContentContainer';
 import monitorsImage from './icons/create-monitor.svg';
 import cx from 'classnames';
-import { ConfigContext } from '..';
+import { ConfigContext } from '../contexts';
 
 const IndexPage = () => {
   const { t, i18n } = useTranslation();

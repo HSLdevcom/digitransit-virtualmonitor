@@ -8,7 +8,7 @@ import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
 import { getColorByName } from '../util/getConfig';
-import { ConfigContext } from '..';
+import { ConfigContext } from '../contexts';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;

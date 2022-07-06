@@ -15,7 +15,6 @@ import {
   defaultFontWeightBigger,
 } from './ui/DefaultStyles';
 import { Helmet } from 'react-helmet';
-
 import {
   ApolloClient,
   InMemoryCache,
@@ -26,13 +25,10 @@ import {
 import monitorAPI from './api';
 import { MultiAPILink } from '@habx/apollo-multi-endpoint-link';
 import StopMonitorContainer from './ui/StopMonitorContainer';
-
 import './sass/main.scss';
-
 import SkipToMainContent from './ui/SkipToMainContent';
-
 import PrepareMonitor from './ui/PrepareMonitor';
-import { ConfigContext } from '.';
+import { ConfigContext } from './contexts';
 import Loading from './ui/Loading';
 import UserMonitors from './ui/UserMonitors';
 

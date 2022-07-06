@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
-import { ConfigContext } from '../index';
+import { ConfigContext } from '../contexts';
 import { IView, IClosedStop, ITrainData } from '../util/Interfaces';
 import Monitor from './Monitor';
 import { IDeparture } from './MonitorRow';

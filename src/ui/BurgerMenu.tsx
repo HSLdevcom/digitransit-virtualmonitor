@@ -5,7 +5,7 @@ import Icon from './Icon';
 import { getColorByName } from '../util/getConfig';
 import Modal from 'react-modal';
 
-Modal.setAppElement('#root');
+if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
   createStatic: boolean;
   onClose: (option) => void;

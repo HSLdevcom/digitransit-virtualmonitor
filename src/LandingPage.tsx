@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { ConfigContext } from '.';
+import { ConfigContext } from './contexts';
 import { UserContext } from './App';
 import BannerContainer from './ui/BannerContainer';
 import IndexPage from './ui/IndexPage';

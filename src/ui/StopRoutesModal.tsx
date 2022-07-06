@@ -11,7 +11,7 @@ import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
 import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 
-Modal.setAppElement('#root');
+if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
 interface IRoute {
   gtfsId?: string;

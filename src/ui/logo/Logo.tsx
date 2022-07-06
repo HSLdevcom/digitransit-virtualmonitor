@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import cx from 'classnames';
-import { ConfigContext } from '../../index';
+import { ConfigContext } from '../../contexts';
 import HslLogo from './HslLogo';
 import LinkkiLogo from './LinkkiLogo';
 import MatkaLogo from './MatkaLogo';

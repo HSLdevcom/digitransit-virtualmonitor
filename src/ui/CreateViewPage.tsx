@@ -6,7 +6,7 @@ import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
 import { getContentHash } from '../util/monitorUtils';
-import { ConfigContext } from '..';
+import { ConfigContext } from '../contexts';
 interface IProps {
   user?: any; // todo: refactor when we have proper user
 }

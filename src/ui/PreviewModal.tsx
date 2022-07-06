@@ -8,7 +8,7 @@ import InformationDisplayContainer from './InformationDisplayContainer';
 import { useTranslation } from 'react-i18next';
 import TrainDataPreparer from './TrainDataPreparer';
 
-Modal.setAppElement('#root');
+if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
   view: IMonitor;
   languages: Array<string>;

@@ -50,12 +50,14 @@ const UserMonitors: React.FC<IProps> = props => {
 
   return (
     <ContentContainer>
-      <div className="cards-container">{monitors}</div>
-      <Link to={'/monitors/createView'}>
-        <span className="create-container">
-          <button className="btn"> {t('quickDisplayCreate')} </button>
-        </span>
-      </Link>
+      <div className="user-monitors-container">
+        <div className="cards-container">{monitors}</div>
+        <div className="button-container">
+          <Link to={'/monitors/createView'} className="monitor-button blue">
+            {t('quickDisplayCreate')}
+          </Link>
+        </div>
+      </div>
     </ContentContainer>
   );
 };

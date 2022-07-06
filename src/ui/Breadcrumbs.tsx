@@ -28,8 +28,10 @@ const Breadcrumbs = () => {
     <div className="breadcrumbs-container">
       <div className="crumbs">
         {crumbs.map((crumb, i) => {
+          let path = arr[i];
           if (i === 0) {
             crumb = 'breadCrumbsFrontPage';
+            path = '';
           }
           return (
             <>
@@ -46,7 +48,7 @@ const Breadcrumbs = () => {
               {i === crumbs.length - 1 ? (
                 t(crumb)
               ) : (
-                <Link className="to-home" to={`/${arr[i]}`}>
+                <Link className="to-home" to={`/${path}`}>
                   {t(crumb)}
                 </Link>
               )}

@@ -5,11 +5,11 @@ import { isKeyboardSelectionEvent } from '../util/browser';
 import { Redirect } from 'react-router-dom';
 import monitorAPI from '../api';
 import { getPrimaryColor } from '../util/getConfig';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   title: string;
   updateViewTitle: (newTitle: string) => void;
-  backToList: () => void;
   contentHash?: string;
   url?: string;
   isNew: boolean;
@@ -18,7 +18,6 @@ interface IProps {
 const UserViewTitleEditor: FC<IProps> = ({
   title,
   updateViewTitle,
-  backToList,
   isNew,
   contentHash,
   url,
@@ -26,6 +25,7 @@ const UserViewTitleEditor: FC<IProps> = ({
   const [newTitle, setNewTitle] = useState(title);
   const [isFocus, setFocus] = useState(false);
   const [isDeleted, setDeleted] = useState(false);
+  const [t] = useTranslation();
 
   const onBlur = event => {
     setFocus(false);
@@ -70,6 +70,7 @@ const UserViewTitleEditor: FC<IProps> = ({
           maxLength={25}
           onKeyDown={e => isKeyboardSelectionEvent(e)}
           onBlur={e => onBlur(e)}
+          placeholder={t('staticMonitorTitle')}
           onFocus={e => {
             handleFocus(e);
           }}
@@ -85,9 +86,9 @@ const UserViewTitleEditor: FC<IProps> = ({
             <Icon img="edit" color={getPrimaryColor()} />
           </div>
         )}
-        <div className="delete-icon" onClick={isNew ? backToList : onDelete}>
-          <Icon img="delete" color={getPrimaryColor()} />
-        </div>
+      </div>
+      <div className="delete-icon" onClick={onDelete}>
+        <Icon img="delete" color={getPrimaryColor()} />
       </div>
     </div>
   );

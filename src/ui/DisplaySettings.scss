@@ -1,7 +1,5 @@
 .display-settings-container {
   display: flex;
-  margin: 26px 0 0 60px;
-  width: 780px;
   justify-content: space-between;
   font-family: $font-family;
 }
@@ -15,7 +13,7 @@
     position: absolute;
     color: #dc0451;
     right: 0;
-    top: -1.5em;
+    top: -1.4em;
     font-size: 0.813rem;
   }
 

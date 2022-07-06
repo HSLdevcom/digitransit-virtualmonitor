@@ -6,7 +6,7 @@ import hash from 'object-hash';
 import { useTranslation } from 'react-i18next';
 import { ICardInfo } from './CardInfo';
 import monitorAPI from '../api';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getLayout';
 import isEqual from 'lodash/isEqual';
@@ -386,18 +386,6 @@ const StopCardListContainer: FC<IProps> = ({
     }
   };
 
-  // const checkIfModify = () => {
-  //   if (
-  //     window &&
-  //     (window.location.href.indexOf('cont=') !== -1 ||
-  //       window.location.pathname.split('/').length > 2) &&
-  //     getPath() === '/monitor/createView'
-  //   ) {
-  //     return true;
-  //   }
-  //   return false;
-  // };
-
   if (!redirect && view && uuid) {
     setRedirect(true);
   }
@@ -442,17 +430,13 @@ const StopCardListContainer: FC<IProps> = ({
     );
   }
 
-  const backToList = () => {
-    window.location.href = '/?pocLogin';
-  };
-
   const updateViewTitle = newTitle => {
     setViewTitle(newTitle);
   };
 
   const noStops = checkNoStops(modifiedStopCardList);
   const makeButtonsDisabled = !(languages.length > 0 && !noStops);
-  const isModifyView = false;
+  const isModifyView = window.location.href.indexOf('cont=') !== -1;
 
   const buttonsRequirements = [];
   if (languages.length === 0) {
@@ -478,7 +462,6 @@ const StopCardListContainer: FC<IProps> = ({
         <UserViewTitleEditor
           title={viewTitle}
           updateViewTitle={updateViewTitle}
-          backToList={backToList}
           contentHash={getHash()}
           url={getUuid()}
           isNew={!isModifyView}
@@ -543,7 +526,7 @@ const StopCardListContainer: FC<IProps> = ({
         </div>
         <button
           disabled={makeButtonsDisabled}
-          className="button preview"
+          className="button"
           onClick={openPreview}
           aria-label={ariaLabelForPreview}
         >
@@ -552,7 +535,7 @@ const StopCardListContainer: FC<IProps> = ({
         {!isModifyView && (
           <button
             disabled={makeButtonsDisabled}
-            className="button create"
+            className="button blue"
             onClick={() => createOrSaveMonitor(true)}
             aria-label={ariaLabelForCreate}
           >
@@ -561,12 +544,12 @@ const StopCardListContainer: FC<IProps> = ({
         )}
         {isModifyView && (
           <>
-            <button className="button" onClick={backToList}>
+            <Link className="button" to={'/monitors'}>
               <span>{t('cancel')}</span>
-            </button>
+            </Link>
             <button
               disabled={makeButtonsDisabled}
-              className="button"
+              className="button blue"
               onClick={() => createOrSaveMonitor(false)}
               aria-label={ariaLabelForSave}
             >

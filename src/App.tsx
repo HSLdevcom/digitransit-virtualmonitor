@@ -234,7 +234,7 @@ const App: FC<IConfigurationProps> = (props) => {
           <Route path={'/version'} component={Version} />
           <Route path={'/monitors'} component={() => (
             <>
-              <BannerContainer header={''}/>
+              <BannerContainer />
               <UserMonitors />
             </>
           )} />

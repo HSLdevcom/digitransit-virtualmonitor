@@ -6,7 +6,7 @@ import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
 import NoMonitorsFound from './NoMonitorsFound';
 import TrainDataPreparer from './TrainDataPreparer';
-import { uuidValidateV5, getContentHash } from '../util/monitorUtils';
+import { getContentHash, getStaticUrl } from '../util/monitorUtils';
 
 interface Iv {
   columns: ISides;
@@ -43,15 +43,21 @@ const WithDatabaseConnection: FC<IProps> = ({
 }) => {
   const [view, setView] = useState({});
   const [fetched, setFetched] = useState(false);
-  const [hash, setHash] = useState(undefined);
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
       const hash = getContentHash(location.search);
-      monitorAPI.get(hash).then(r => {
-        setHash(hash);
-        setFetched(true);
-        setView(r);
-      });
+      const url = getStaticUrl(location.search);
+      if (hash) {
+        monitorAPI.get(hash).then(r => {
+          setFetched(true);
+          setView(r);
+        });
+      } else if (url) {
+        monitorAPI.getStatic(url).then(r => {
+          setFetched(true);
+          setView(r);
+        });
+      }
     }
   }, []);
 
@@ -74,21 +80,11 @@ const WithDatabaseConnection: FC<IProps> = ({
               monitor={monitor}
               stations={stations}
               stops={stops}
-              staticContentHash={
-                monitor.contenthash ? monitor.contenthash : undefined
-              }
-              staticUrl={uuidValidateV5(hash) ? hash : undefined}
-              staticViewTitle={location?.state?.viewTitle}
             />
           ) : (
             <CarouselDataContainer
               views={monitor.cards}
               languages={monitor.languages}
-              staticContentHash={
-                monitor.contenthash ? monitor.contenthash : undefined
-              }
-              staticUrl={uuidValidateV5(hash) ? hash : undefined}
-              staticViewTitle={location?.state?.viewTitle}
               initTime={new Date().getTime()}
             />
           )}

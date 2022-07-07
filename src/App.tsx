@@ -31,6 +31,7 @@ import PrepareMonitor from './ui/PrepareMonitor';
 import { ConfigContext } from './contexts';
 import Loading from './ui/Loading';
 import UserMonitors from './ui/UserMonitors';
+import ProtectedRoute from './ProtectedRoute';
 
 export const UserContext = createContext(null);
 
@@ -109,7 +110,7 @@ interface IStopMonitorProps {
 }
 
 const App: FC<IConfigurationProps> = (props) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState<any>({});
   const [loading, setLoading] = useState(true);
 
   const config = useContext(ConfigContext);
@@ -231,13 +232,28 @@ const App: FC<IConfigurationProps> = (props) => {
           />
           <Route path={'/view'} component={PrepareMonitor} />
           <Route path={'/static'} component={PrepareMonitor} />
-          <Route path={'/version'} component={Version} />
-          <Route path={'/monitors'} component={() => (
+          <ProtectedRoute
+            path={'/monitors/createView'}
+            component={({
+              match: {
+                params: {},
+              },
+            }: RouteComponentProps) => (
+              <>
+                <SkipToMainContent />
+                <BannerContainer />
+                <section role="main" id="mainContent">
+                  <CreateViewPage  />
+                </section>
+              </>
+            )}
+          />
+          <ProtectedRoute path={'/monitors'} component={() => (
             <>
               <BannerContainer />
               <UserMonitors />
             </>
-          )} />
+          )} />       
           <Route
             path={'/urld/:version/:packedDisplay'}
             component={({
@@ -269,6 +285,7 @@ const App: FC<IConfigurationProps> = (props) => {
               />
             )}
           />
+          <Route path={'/version'} component={Version} />
           <Route
             path={'/'}
             component={({

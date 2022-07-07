@@ -15,9 +15,6 @@ interface IProps {
   closedStopViews: Array<IClosedStop>;
   error?: string;
   trainsWithTrack?: any;
-  staticContentHash?: string;
-  staticUrl?: string;
-  staticViewTitle?: string;
 }
 
 export interface ITranslation {

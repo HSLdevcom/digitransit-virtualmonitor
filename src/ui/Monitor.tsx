@@ -28,9 +28,6 @@ interface IProps {
   alertComponent: any;
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
-  staticContentHash?: string;
-  staticUrl?: string;
-  staticViewTitle?: string;
 }
 let to;
 
@@ -44,9 +41,6 @@ const Monitor: FC<IProps> = ({
   alertComponent,
   alertRowSpan,
   closedStopViews,
-  staticContentHash,
-  staticUrl,
-  staticViewTitle,
 }) => {
   const config = useContext(ConfigContext);
   const [windowDimensions, setWindowDimensions] = useState(
@@ -85,13 +79,7 @@ const Monitor: FC<IProps> = ({
         to = setTimeout(() => setShowOverlay(false), 3000);
       }}
     >
-      <MonitorOverlay
-        show={showOverlay}
-        isPreview={isPreview}
-        staticUrl={staticUrl}
-        staticViewTitle={staticViewTitle}
-        staticContentHash={staticContentHash}
-      />
+      <MonitorOverlay show={showOverlay} isPreview={isPreview} />
       <MonitorTitlebar
         isMultiDisplay={isMultiDisplay}
         isLandscape={isLandscapeByLayout}

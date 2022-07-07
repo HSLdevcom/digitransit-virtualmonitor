@@ -1,40 +1,75 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import StopCardListContainer from './StopCardListContainer';
 import ContentContainer from './ContentContainer';
 import monitorAPI from '../api';
 import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
-import { getContentHash } from '../util/monitorUtils';
+import { getContentHash, getStaticUrl } from '../util/monitorUtils';
 import { ConfigContext } from '../contexts';
-interface IProps {
-  user?: any; // todo: refactor when we have proper user
-}
+import { useHistory, useLocation } from 'react-router-dom';
 
-const CreateViewPage: FC<IProps> = props => {
+const CreateViewPage = () => {
   const config = useContext(ConfigContext);
+  const location = useLocation();
+  const history = useHistory();
   const [stopCardList, setStopCardList] = useState(null);
   const [languages, setLanguages] = useState(['fi']);
+  const [staticMonitorProperties, setStaticMonitorProperties] = useState(null);
   const [loading, setLoading] = useState(true);
-  const h = getContentHash(location.search);
-  const hash = h === 'undefined' ? null : h;
+  const [noMonitorFound, setNoMonitorFound] = useState(false);
+  const hash = getContentHash(location.search);
+  const url = getStaticUrl(location.search);
+
+  useEffect(() => {
+    if (noMonitorFound) {
+      const queryParams = new URLSearchParams(location.search);
+      queryParams.forEach((_, key, s) => {
+        s.delete(key);
+      });
+      history.replace({
+        search: queryParams.toString(),
+      });
+    }
+  }, [noMonitorFound]);
+
   useEffect(() => {
     if (hash) {
-      monitorAPI.get(hash).then((r: any) => {
-        if (r?.cards?.length) {
-          setStopCardList(r.cards);
-          if (r.languages) {
-            setLanguages(r.languages);
+      monitorAPI
+        .get(hash)
+        .then((r: any) => {
+          if (r?.cards?.length) {
+            setStopCardList(r.cards);
+            if (r.languages) {
+              setLanguages(r.languages);
+            }
           }
-        }
-        setLoading(false);
-      });
+          setLoading(false);
+        })
+        .catch(() => setNoMonitorFound(true));
+    } else if (url) {
+      monitorAPI
+        .getStatic(url)
+        .then((r: any) => {
+          if (r?.cards?.length) {
+            setStopCardList(r.cards);
+            if (r.languages) {
+              setLanguages(r.languages);
+            }
+            setStaticMonitorProperties({ name: r.name, id: r.id });
+          }
+          if (!r.cards) {
+            setNoMonitorFound(true);
+          }
+          setLoading(false);
+        })
+        .catch(() => setNoMonitorFound(true));
     } else {
       setLoading(false);
     }
   }, []);
 
-  if (!hash || (hash && !stopCardList)) {
+  if ((!hash && !url) || noMonitorFound) {
     return (
       <ContentContainer>
         <StopCardListContainer
@@ -44,6 +79,9 @@ const CreateViewPage: FC<IProps> = props => {
         />
       </ContentContainer>
     );
+  }
+  if (loading) {
+    return <Loading white />;
   }
   const stopIds = [];
   const stationIds = [];
@@ -59,14 +97,12 @@ const CreateViewPage: FC<IProps> = props => {
         : stationIds.push(s.gtfsId),
     );
   });
-  if (loading) {
-    return <Loading white />;
-  }
 
   return (
     <ContentContainer>
       <StopCardListDataContainer
         languages={languages}
+        staticMonitor={staticMonitorProperties}
         stopIds={stopIds}
         stationIds={stationIds}
         stopCardList={stopCardList}

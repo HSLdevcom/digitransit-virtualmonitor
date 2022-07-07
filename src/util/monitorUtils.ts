@@ -429,5 +429,13 @@ export const getContentHash = locationSearch => {
   const hash = paramArray?.find(p => {
     return p.includes('cont=');
   });
-  return decodeURIComponent(hash?.substring(5));
+  return hash ? decodeURIComponent(hash?.substring(5)) : null;
+};
+
+export const getStaticUrl = locationSearch => {
+  const paramArray = locationSearch.substring(1).split('&');
+  const hash = paramArray?.find(p => {
+    return p.includes('url=');
+  });
+  return hash ? decodeURIComponent(hash?.substring(4)) : null;
 };

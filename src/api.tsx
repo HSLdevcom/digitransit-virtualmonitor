@@ -27,6 +27,9 @@ const monitorAPI = {
   get(monitor) {
     return fetchData(`monitor/${monitor}`, {});
   },
+  getStatic(monitor) {
+    return fetchData(`staticmonitor/${monitor}`, {});
+  },
   getAllMonitorsForUser() {
     return fetchData(`usermonitors`, {});
   },
@@ -60,16 +63,11 @@ const monitorAPI = {
     }
     return fetchData(`decompress`, options);
   },
-  createStatic(hash, url, title) {
+  createStatic(monitor) {
     const options = {
       method: 'PUT',
       credentials: 'include',
-      body: JSON.stringify({
-        id: hash,
-        monitorContenthash: hash,
-        name: title,
-        url: url,
-      }),
+      body: JSON.stringify(monitor),
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -77,15 +75,10 @@ const monitorAPI = {
     }
     return fetchData(`staticmonitor`, options);
   },
-  updateStatic(oldHash, url, newHash, title) {
+  updateStatic(monitor) {
     const options = {
       method: 'POST',
-        body: JSON.stringify({
-          id: oldHash,
-          url: url,
-          hash: newHash,
-          name: title,
-        }),
+        body: JSON.stringify(monitor),
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',

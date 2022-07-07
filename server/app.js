@@ -4,8 +4,6 @@ import logger from 'morgan';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
-import index from './routes.js';
-import axios from 'axios';
 import setUpOIDC from './auth/openidConnect.js';
 
 const __dirname = fileURLToPath(import.meta.url);
@@ -43,10 +41,6 @@ app.get('/api/usermonitors/:id', (req, res) => {
   monitorService.getMonitorsForUser(req, res);
 });
 
-// app.get('/api/usermonitors', (req, res) => {
-//   monitorService.getAllMonitorsForUser(req, res);
-// });
-
 app.put('/api/monitor', (req, res) => {
   monitorService.create(req, res);
 });
@@ -57,6 +51,10 @@ app.get('/api/translations/:recordIds', (req, res) => {
     res.json(t);
   });
 });
+
+app.get('/api/staticmonitor/:id', (req, res) => {
+  monitorService.getStatic(req, res);
+})
 
 app.post('/api/decompress/', (req, res) => {
   try {
@@ -73,9 +71,6 @@ app.post('/api/staticmonitor', (req, res) => {
   monitorService.updateStatic(req, res);
 });
 
-app.delete('/api/staticmonitor', (req, res) => {
-  monitorService.deleteStatic(req, res);
-});
 function setUpOpenId() {
   const localPort = process.env.NODE_ENV === 'production' ? null : 3000;
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = 1;

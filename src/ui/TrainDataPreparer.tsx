@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import { IMonitor, ICard } from '../util/Interfaces';
-import { uniqWith, isEqual } from 'lodash';
 import Loading from './Loading';
 import { trainStationMap } from '../util/trainStations';
 import { stringifyPattern } from '../util/monitorUtils';
@@ -155,7 +154,6 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
   if (defaultState.loading) {
     return <Loading />;
   }
-  const lines = uniqWith(defaultLines, isEqual);
   return (
     <TrainDataFetcher
       defaultLines={defaultLines ? defaultLines : []}

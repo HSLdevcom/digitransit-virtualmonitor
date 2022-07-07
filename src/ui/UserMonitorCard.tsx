@@ -5,7 +5,7 @@ import { isInformationDisplay } from '../util/monitorUtils';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
-import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
+import { getPrimaryColor } from '../util/getConfig';
 import {
   getTrainStationData,
   isPlatformOrTrackVisible,
@@ -17,6 +17,7 @@ interface IView {
   cards?: any;
   contenthash?: string;
   url?: string;
+  id: string;
 }
 
 interface IProps {
@@ -35,7 +36,7 @@ const UserMonitorCard: React.FC<IProps> = props => {
   };
 
   const onDelete = () => {
-    monitorAPI.deleteStatic(contenthash, url).then(res => {
+    monitorAPI.deleteStatic(props.view.id, url).then(res => {
       setDelete(true);
     });
   };
@@ -135,9 +136,8 @@ const UserMonitorCard: React.FC<IProps> = props => {
       <div className="main-container">
         <div className="layout-img">
           <Icon
-            img={
-              cards[0].layout < 11 ? 'rectangle-selected' : 'vertical-selected'
-            }
+            img={'rectangle-selected'}
+            rotate={cards[0].layout < 11 ? '0' : '90'}
             height={32}
             width={32}
             color={getPrimaryColor()}
@@ -147,10 +147,7 @@ const UserMonitorCard: React.FC<IProps> = props => {
         <button className="round-button" onClick={() => setOpen(true)}>
           {t('preview')}
         </button>
-        <Link
-          className="round-button"
-          to={`/monitors/createView?&cont=${contenthash}`}
-        >
+        <Link className="round-button" to={`/monitors/createView?&url=${url}`}>
           {t('modify')}
         </Link>
         <div className="delete-icon" onClick={onDelete}>

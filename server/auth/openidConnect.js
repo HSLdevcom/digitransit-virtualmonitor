@@ -325,6 +325,12 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
       });
   });
 
+  app.delete('/api/staticmonitor', userAuthenticated, (req, res) => {
+    console.log("deleting monitor! ", req.body)
+    deleteMonitor(req, res);
+
+  });
+
   app.put('/api/staticmonitor', userAuthenticated, (req, res) => {
     createMonitor(req, res);
     monitorService.createStatic(req, res);
@@ -390,6 +396,20 @@ const getMonitors = async (req, res) => {
   }
 }
 
+const deleteMonitor = async (req, res) => {
+  try {
+    const userId = req?.user?.data.sub;
+    let dataS = await getDataStorage(userId);
+    if (dataS) {
+
+      const response = await deleteMonitorHSL(dataS.id, req.body.url)
+      monitorService.deleteStatic(req,res);
+    }
+  } catch {
+    console.log("error deleting monitor")
+  }
+}
+
 const createMonitor = async (req, res) => {
   try {
     const userId = req?.user?.data.sub;
@@ -431,6 +451,23 @@ const makeHslIdRequest = async (
     console.log("error making hslid request");
   }
   
+};
+
+export const deleteMonitorHSL = async (
+  dataStorageId,
+  monitor,
+) => {
+  try {
+    console.log("Deleting  MONITOR from", dataStorageId)
+    const options = {
+      method: 'DELETE',
+      endpoint: `/api/rest/v1/datastorage/${dataStorageId}/data/${monitor}`,
+    };
+    const response = await makeHslIdRequest(options);
+    return response;
+  } catch (err) {
+    console.log("Error updating data storage", err)
+  }
 };
 
 export const updateMonitors = async (

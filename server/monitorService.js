@@ -1,5 +1,4 @@
 import cosmosClient from '@azure/cosmos';
-import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import config from './config.js';
 
 const { CosmosClient } = cosmosClient;
@@ -9,10 +8,6 @@ const client = new CosmosClient({ endpoint, key });
 
 const database = client.database(databaseId);
 const container = database.container(containerId);
-
-function uuidValidateV5(uuid) {
-  return uuidValidate(uuid) && uuidVersion(uuid) === 5;
-}
 
 async function getMonitor(hash) {
   try {
@@ -40,24 +35,6 @@ const monitorService = {
   get: async function get(req, res) {
     try {
       let contentHash = req.params.id;
-      const isValidUuid = uuidValidateV5(req.params.id);
-      if (isValidUuid) {
-        const container = database.container('staticMonitors');
-        const url = req.params.id;
-        const querySpec = {
-          query: 'SELECT c.monitorContenthash from c WHERE c.url = @url',
-          parameters: [
-            {
-              name: '@url',
-              value: url,
-            },
-          ],
-        };
-        const { resources: items } = await container.items
-          .query(querySpec)
-          .fetchAll();
-        contentHash = items[0].monitorContenthash;
-      }
       const items = await getMonitor(contentHash);
       if (items == null || !items.length) {
         res.json({});
@@ -121,14 +98,12 @@ const monitorService = {
   },
   getMonitorsForUser: async function get(req, res, ids) {
     try {
-      const monitors = [];
-      const contenthashes = [];
       const cont = database.container('staticMonitors');
       const urls = ids?.length ? ids : req.params.id.split(',');
       // query to return all items
       const querySpec = {
         query:
-          'SELECT c.name, c.monitorContenthash, c.url from c WHERE ARRAY_CONTAINS(@urls, c.url)',
+          'SELECT * from c WHERE ARRAY_CONTAINS(@urls, c.url)',
         parameters: [
           {
             name: '@urls',
@@ -139,40 +114,10 @@ const monitorService = {
       // read all items in the Items container
       const { resources: items } = await cont.items.query(querySpec).fetchAll();
 
-      items.forEach(item => {
-        monitors.push(item);
-        contenthashes.push(item.monitorContenthash);
-      });
       if (!items.length) {
         res.json({});
       } else {
-        const queryS = {
-          query:
-            'SELECT * from c WHERE ARRAY_CONTAINS (@hashes, c.contenthash)',
-          parameters: [
-            {
-              name: '@hashes',
-              value: contenthashes,
-            },
-          ],
-        };
-
-        const { resources: items } = await container.items
-          .query(queryS)
-          .fetchAll();
-        if (items == null || !items.length) {
-          res.json({});
-        } else {
-          const userMonitors = items;
-          userMonitors.forEach(mon => {
-            const monitor = monitors.find(
-              m => m.monitorContenthash === mon.contenthash,
-            );
-            mon.name = monitor.name;
-            mon.url = monitor.url;
-          });
-          res.json(userMonitors);
-        }
+        res.json(items);
       }
     } catch (e) {
       console.log(e);
@@ -192,6 +137,31 @@ const monitorService = {
       res.send(e);
     }
   },
+  getStatic: async function getStaticMonitor(req, res) {
+    console.log("url:", req.params.id);
+    const container = database.container('staticMonitors');
+    const url = req.params.id;
+    const querySpec = {
+      query: 'SELECT * from c WHERE c.url = @url',
+      parameters: [
+        {
+          name: '@url',
+          value: url,
+        },
+      ],
+    };
+
+    const { resources: items } = await container.items
+      .query(querySpec)
+      .fetchAll();
+      console.log("items",items)
+    if (items.length) {
+      res.json(items[0]);
+    } else {
+      res.json({});
+    }
+
+  },
   createStatic: async function createStaticMonitor(req, res) {
     console.log("creating static")
     console.log(req.body)
@@ -209,23 +179,12 @@ const monitorService = {
   updateStatic: async function updateStaticMonitor(req, res) {
     try {
       const container = database.container('staticMonitors');
-      const itemToUpdate = await container
+      console.log("updating monitor:",req.body)
+      const { resource: updatedItem } = await container
         .item(req.body.id, req.body.url)
-        .read();
-      if (!itemToUpdate) {
-        res.json({});
-      } else {
-        const newData = {
-          ...itemToUpdate.resource,
-          id: req.body.hash,
-          name: req.body.name,
-          monitorContenthash: req.body.hash,
-        };
-        const { resource: updatedItem } = await container
-          .item(req.body.id, req.body.url)
-          .replace(newData);
-        res.json(updatedItem);
-      }
+        .replace(req.body);
+      console.log("updated:" ,updatedItem)
+      res.json(updatedItem);
     } catch (e) {
       console.log(e);
       res.send(e);

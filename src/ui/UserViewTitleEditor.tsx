@@ -6,33 +6,33 @@ import { Redirect } from 'react-router-dom';
 import monitorAPI from '../api';
 import { getPrimaryColor } from '../util/getConfig';
 import { useTranslation } from 'react-i18next';
+import { getStaticUrl } from '../util/monitorUtils';
 
 interface IProps {
   title: string;
   updateViewTitle: (newTitle: string) => void;
   contentHash?: string;
-  url?: string;
-  isNew: boolean;
+  monitorId?: string;
 }
 
 const UserViewTitleEditor: FC<IProps> = ({
   title,
   updateViewTitle,
-  isNew,
   contentHash,
-  url,
+  monitorId,
 }) => {
   const [newTitle, setNewTitle] = useState(title);
   const [isFocus, setFocus] = useState(false);
   const [isDeleted, setDeleted] = useState(false);
   const [t] = useTranslation();
 
+  const url = getStaticUrl(window.location.pathname);
   const onBlur = event => {
     setFocus(false);
     updateViewTitle(newTitle);
   };
 
-  function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
+  function handleFocus() {
     setFocus(true);
   }
 
@@ -42,9 +42,11 @@ const UserViewTitleEditor: FC<IProps> = ({
 
   const onDelete = () => {
     if (contentHash && url) {
-      monitorAPI.deleteStatic(contentHash, url).then(res => {
+      monitorAPI.deleteStatic(monitorId, url).then(res => {
         setDeleted(true);
       });
+    } else {
+      setDeleted(true);
     }
   };
 
@@ -52,8 +54,7 @@ const UserViewTitleEditor: FC<IProps> = ({
     return (
       <Redirect
         to={{
-          pathname: '/',
-          search: `?pocLogin`,
+          pathname: '/monitors',
         }}
       />
     );
@@ -71,8 +72,8 @@ const UserViewTitleEditor: FC<IProps> = ({
           onKeyDown={e => isKeyboardSelectionEvent(e)}
           onBlur={e => onBlur(e)}
           placeholder={t('staticMonitorTitle')}
-          onFocus={e => {
-            handleFocus(e);
+          onFocus={() => {
+            handleFocus();
           }}
           value={newTitle}
         />

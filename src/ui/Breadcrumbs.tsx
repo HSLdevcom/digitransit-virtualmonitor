@@ -9,7 +9,9 @@ const Breadcrumbs = () => {
   const parser = document.createElement('a');
   parser.href = window.location.href;
   const arr = parser.pathname.split('/');
-  const isModify = window.location.href.indexOf('cont=') !== -1;
+  const isModify =
+    window.location.href.indexOf('cont=') !== -1 ||
+    window.location.href.indexOf('url=') !== -1;
   const crumbs = arr.map(path => {
     switch (path) {
       case 'createView':
@@ -18,7 +20,7 @@ const Breadcrumbs = () => {
       case 'monitors':
         return t('breadCrumbsOwnMonitors');
       case '':
-        return null; //t('breadCrumbsFrontPage');
+        return null;
       default:
         return null;
     }

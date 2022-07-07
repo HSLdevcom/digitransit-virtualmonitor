@@ -13,7 +13,7 @@ interface IProps {
   stationIds: Array<string>;
   languages: Array<string>;
   loading: boolean;
-  user?: any;
+  staticMonitor?: any;
 }
 
 const StopCardListDataContainer: FC<IProps> = ({
@@ -23,7 +23,7 @@ const StopCardListDataContainer: FC<IProps> = ({
   stationIds,
   languages,
   loading,
-  user,
+  staticMonitor,
 }) => {
   const [cardList, setCardList] = useState(stopCardList);
   const stops = useQuery<stopQuery, stopQueryVariables>(GET_STOP, {
@@ -135,6 +135,7 @@ const StopCardListDataContainer: FC<IProps> = ({
       vertical={stopCardList[0].layout > 11}
       feedIds={feedIds}
       defaultStopCardList={cardList}
+      staticMonitor={staticMonitor}
     />
   );
 };

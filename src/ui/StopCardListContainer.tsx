@@ -9,10 +9,9 @@ import monitorAPI from '../api';
 import { Link, Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getLayout';
-import isEqual from 'lodash/isEqual';
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
-import { isInformationDisplay } from '../util/monitorUtils';
+import { getStaticUrl, isInformationDisplay } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
 import UserViewTitleEditor from './UserViewTitleEditor';
 import { getCurrentSecondsWithMilliSeconds } from '../time';
@@ -27,33 +26,14 @@ interface IProps {
   languages: Array<string>;
   loading?: boolean;
   vertical?: boolean;
+  staticMonitor?: any;
 }
-
-const getViewName = title => {
-  if (window && window.location && window.location.search) {
-    const params = window.location.search.split('&');
-    if (params.length > 0 && params[0].startsWith('?name=')) {
-      return decodeURI(params[0].substring(6));
-    }
-  }
-  return title;
-};
 
 const getHash = () => {
   if (window && window.location && window.location.search) {
     const params = window.location.search.split('cont=');
     if (params[1]) {
       return params[1];
-    }
-  }
-  return undefined;
-};
-
-const getUuid = () => {
-  if (window && window.location && window.location.search) {
-    const params = window.location.search.split('&');
-    if (params[1] && params[1].startsWith('url=')) {
-      return params[1].substring(4);
     }
   }
   return undefined;
@@ -93,9 +73,8 @@ const StopCardListContainer: FC<IProps> = ({
   const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);
 
-  const [uuid, setUuid] = useState(getUuid());
   const [viewTitle, setViewTitle] = useState(
-    getViewName(t('staticMonitorTitle')),
+    props.staticMonitor ? props.staticMonitor.name : null,
   );
 
   const openPreview = () => {
@@ -341,60 +320,54 @@ const StopCardListContainer: FC<IProps> = ({
       encoding: 'base64',
     }).replaceAll('/', '-');
     if (isNew) {
-      monitorAPI.create(newCard).then((res: any) => {
-        if (res.status === 200 || res.status === 409) {
-          if (getPath() === '/monitors/createView') {
-            const newUuid = createUUID(newCard.contenthash, startTime);
-            monitorAPI
-              .createStatic(newCard.contenthash, newUuid, viewTitle)
-              .then(res => {
-                setUuid(newUuid);
-                setView(newCard);
-              });
-          } else {
+      if (user?.sub) {
+        const newUuid = createUUID(newCard.contenthash, startTime);
+        const newStaticMonitor = {
+          ...newCard,
+          name: viewTitle,
+          url: newUuid,
+        };
+        monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
+          if (res.status === 200 || res.status === 409) {
+            setView(newStaticMonitor);
             setRedirect(true);
-            setView(newCard);
           }
-        }
-      });
-    } else {
-      const hashChanged = !isEqual(getHash(), newCard.contenthash);
-      const titleChanged = !isEqual(
-        getViewName(t('staticMonitorTitle')),
-        viewTitle,
-      );
-      if (hashChanged) {
-        monitorAPI.create(newCard).then(res => {
-          monitorAPI
-            .updateStatic(getHash(), getUuid(), newCard.contenthash, viewTitle)
-            .then(res => {
-              setRedirect(true);
-              setView(newCard);
-            });
         });
-      } else if (!hashChanged && titleChanged) {
-        monitorAPI
-          .updateStatic(getHash(), getUuid(), getHash(), viewTitle)
-          .then(res => {
-            setRedirect(true);
-            setView(newCard);
-          });
       } else {
-        setRedirect(true);
-        setView(newCard);
+        monitorAPI.create(newCard).then((res: any) => {
+          if (res.status === 200 || res.status === 409) {
+            setView(newCard);
+            setRedirect(true);
+          }
+        });
+      }
+    } else {
+      if (user?.sub) {
+        const newStaticMonitor = {
+          ...newCard,
+          name: viewTitle,
+          id: props.staticMonitor.id,
+          url: getStaticUrl(window.location.search),
+        };
+        monitorAPI.updateStatic(newStaticMonitor).then(res => {
+          setView(newCard);
+          setRedirect(true);
+        });
+      } else {
+        monitorAPI.create(newCard).then(res => {
+          setView(newCard);
+          setRedirect(true);
+        });
       }
     }
   };
 
-  if (!redirect && view && uuid) {
-    setRedirect(true);
-  }
   if (redirect && view) {
     let search;
-    const isStatic = getPath() === '/monitors/createView';
-    const url = uuid ? uuid : getUuid();
+    const isStatic = window.location.pathname === '/monitors/createView';
+    const url = view.url ? view.url : getStaticUrl(window.location.search);
     if (isStatic && url && uuidValidateV5(url)) {
-      search = `?cont=${url}`;
+      search = `?url=${url}`;
     } else {
       search = `?cont=${view.contenthash}`;
     }
@@ -436,7 +409,9 @@ const StopCardListContainer: FC<IProps> = ({
 
   const noStops = checkNoStops(modifiedStopCardList);
   const makeButtonsDisabled = !(languages.length > 0 && !noStops);
-  const isModifyView = window.location.href.indexOf('cont=') !== -1;
+  const isModifyView =
+    window.location.href.indexOf('cont=') !== -1 ||
+    window.location.href.indexOf('url=') !== -1;
 
   const buttonsRequirements = [];
   if (languages.length === 0) {
@@ -463,8 +438,6 @@ const StopCardListContainer: FC<IProps> = ({
           title={viewTitle}
           updateViewTitle={updateViewTitle}
           contentHash={getHash()}
-          url={getUuid()}
-          isNew={!isModifyView}
         />
       )}
       {isOpen && (

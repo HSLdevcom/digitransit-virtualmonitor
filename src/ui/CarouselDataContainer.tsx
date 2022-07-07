@@ -29,9 +29,6 @@ interface IProps {
   languages: Array<string>;
   preview?: boolean;
   trainsWithTrack?: Array<ITrainData>;
-  staticContentHash?: string;
-  staticUrl?: string;
-  staticViewTitle?: string;
   fromStop?: boolean;
   initTime: number;
 }
@@ -49,9 +46,6 @@ const CarouselDataContainer: FC<IProps> = ({
   languages,
   preview,
   trainsWithTrack,
-  staticContentHash,
-  staticUrl,
-  staticViewTitle,
   fromStop,
   initTime,
 }) => {
@@ -163,9 +157,6 @@ const CarouselDataContainer: FC<IProps> = ({
         preview={preview}
         closedStopViews={closedStopViews}
         trainsWithTrack={trainsWithTrack}
-        staticContentHash={staticContentHash}
-        staticUrl={staticUrl}
-        staticViewTitle={staticViewTitle}
       />
     );
   }
@@ -180,9 +171,6 @@ const CarouselDataContainer: FC<IProps> = ({
       preview={preview}
       closedStopViews={closedStopViews}
       trainsWithTrack={trainsWithTrack}
-      staticContentHash={staticContentHash}
-      staticUrl={staticUrl}
-      staticViewTitle={staticViewTitle}
     />
   );
 };

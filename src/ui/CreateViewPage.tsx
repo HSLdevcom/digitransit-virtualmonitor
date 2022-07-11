@@ -23,6 +23,8 @@ const CreateViewPage = () => {
 
   useEffect(() => {
     if (noMonitorFound) {
+      // The monitor we are trying to access doesn't exist, show empty
+      // create page and silently clean up url params
       const queryParams = new URLSearchParams(location.search);
       queryParams.forEach((_, key, s) => {
         s.delete(key);

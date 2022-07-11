@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { isInformationDisplay } from '../util/monitorUtils';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
@@ -22,35 +22,24 @@ interface IView {
 
 interface IProps {
   view: IView;
+  onDelete: any;
 }
 
-const UserMonitorCard: React.FC<IProps> = props => {
+const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
   const [t] = useTranslation();
-  const { cards, name, contenthash, languages, url } = props.view;
+  const { cards, name, languages, url } = view;
   const [isOpen, setOpen] = useState(false);
-  const [isDelete, setDelete] = useState(false);
   const layout = cards[0].layout;
 
   const onClose = () => {
     setOpen(false);
   };
 
-  const onDelete = () => {
-    monitorAPI.deleteStatic(props.view.id, url).then(res => {
-      setDelete(true);
+  const onDeleteCallBack = () => {
+    monitorAPI.deleteStatic(view.id, url).then(res => {
+      onDelete(true);
     });
   };
-
-  if (isDelete) {
-    return (
-      <Redirect
-        to={{
-          pathname: '/',
-          search: `?pocLogin`,
-        }}
-      />
-    );
-  }
 
   const v = {
     cards: cards,
@@ -93,13 +82,14 @@ const UserMonitorCard: React.FC<IProps> = props => {
               <div className="card-title">{colTitles[c]}</div>
               <div className="stop-list">
                 {colStop.map((stop, j) => {
+                  const stopCode = `(${stop.code})`;
                   const stopTitle = stop.name
-                    .concat(stop.code ? ' (' + stop.code + ')' : '')
+                    .concat(stop.code ? stopCode : '')
                     .concat(' - ')
                     .concat(stop.gtfsId);
                   return (
                     <li key={`stop#${j}`} title={stopTitle}>
-                      {`${stop.name} (${stop.code})`}
+                      {`${stop.name} ${stop.code ? stopCode : ''}`}
                     </li>
                   );
                 })}
@@ -120,14 +110,14 @@ const UserMonitorCard: React.FC<IProps> = props => {
     );
   });
   return (
-    <div className={'card'}>
+    <>
       {isOpen && (
         <PreviewModal
           languages={languages}
           view={v}
           isOpen={isOpen}
           onClose={onClose}
-          isLandscape={layout < 11}
+          isLandscape={layout < 12}
           stations={stations}
           stops={stops}
           showPlatformsOrTracks={showPlatformsOrTracks}
@@ -137,7 +127,7 @@ const UserMonitorCard: React.FC<IProps> = props => {
         <div className="layout-img">
           <Icon
             img={'rectangle-selected'}
-            rotate={cards[0].layout < 11 ? '0' : '90'}
+            rotate={cards[0].layout < 12 ? '0' : '90'}
             height={32}
             width={32}
             color={getPrimaryColor()}
@@ -150,12 +140,12 @@ const UserMonitorCard: React.FC<IProps> = props => {
         <Link className="round-button" to={`/monitors/createView?&url=${url}`}>
           {t('modify')}
         </Link>
-        <div className="delete-icon" onClick={onDelete}>
+        <div className="delete-icon" onClick={onDeleteCallBack}>
           <Icon img="delete" color={getPrimaryColor()} />
         </div>
       </div>
       <div className="cards">{crds}</div>
-    </div>
+    </>
   );
 };
 

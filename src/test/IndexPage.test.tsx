@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Router, MemoryRouter } from 'react-router-dom';
+import { Router, MemoryRouter, Link } from 'react-router-dom';
 import { createMemoryHistory } from 'history';
 import IndexPage from '../ui/IndexPage';
 import userEvent from '@testing-library/user-event';
@@ -14,7 +14,19 @@ const mockConfig = {
 const withContext = () => {
   return (
     <ConfigContext.Provider value={mockConfig}>
-      <IndexPage />
+      <IndexPage
+        buttons={
+          <Link
+            to={'/createView'}
+            id="create-new-link"
+            aria-label={'quickDisplayCreate'}
+          >
+            <button className="monitor-button blue">
+              {'quickDisplayCreate'}
+            </button>
+          </Link>
+        }
+      />
     </ConfigContext.Provider>
   );
 };

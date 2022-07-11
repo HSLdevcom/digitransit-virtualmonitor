@@ -39,13 +39,6 @@ const getHash = () => {
   return undefined;
 };
 
-const getPath = () => {
-  if (window && window.location) {
-    return window.location.pathname;
-  }
-  return undefined;
-};
-
 const createUUID = (startTime, hash) => {
   return uuidv5(
     startTime + getCurrentSecondsWithMilliSeconds() + hash,
@@ -396,11 +389,7 @@ const StopCardListContainer: FC<IProps> = ({
     languages: languages,
   };
   if (loading) {
-    return (
-      <div className="stop-card-list-container">
-        <Loading white />
-      </div>
-    );
+    return <Loading white />;
   }
 
   const updateViewTitle = newTitle => {
@@ -433,13 +422,22 @@ const StopCardListContainer: FC<IProps> = ({
 
   return (
     <div className="stop-card-list-container">
-      {user?.sub && (
-        <UserViewTitleEditor
-          title={viewTitle}
-          updateViewTitle={updateViewTitle}
-          contentHash={getHash()}
+      <div className="animate-in">
+        {user?.sub && (
+          <UserViewTitleEditor
+            title={viewTitle}
+            updateViewTitle={updateViewTitle}
+            contentHash={getHash()}
+          />
+        )}
+        <DisplaySettings
+          orientation={orientation}
+          handleOrientation={handleOrientation}
+          languages={languages}
+          handleChange={handleLanguageChange}
         />
-      )}
+      </div>
+
       {isOpen && (
         <PrepareMonitor
           preview={{
@@ -451,12 +449,6 @@ const StopCardListContainer: FC<IProps> = ({
           }}
         />
       )}
-      <DisplaySettings
-        orientation={orientation}
-        handleOrientation={handleOrientation}
-        languages={languages}
-        handleChange={handleLanguageChange}
-      />
       <ul className="stopcards">
         {modifiedStopCardList.map((item, index) => {
           const noStops =

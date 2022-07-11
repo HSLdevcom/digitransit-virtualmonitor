@@ -37,3 +37,15 @@ li {
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.4) !important;
 }
+
+.animate-in {
+  animation-duration: 0.5s;
+  animation-name: animate-in;
+  animation-delay: var(--delayLength);
+  animation-fill-mode: backwards;
+}
+    
+@keyframes animate-in {
+    0% { opacity: 0; }
+  100% { opacity: 1; }
+}

@@ -14,7 +14,7 @@ router.get('/monitor/:id', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  console.log("login", req)
+  console.log('login', req);
 });
 
 router.get('/usermonitors/:id', (req, res) => {
@@ -38,12 +38,17 @@ router.get('/translations/:recordIds', (req, res) => {
 
 router.post('/decompress/', (req, res) => {
   try {
-    const decompresser = createUrlCompression(Buffer.from(displayDictionaries['v0']))
-    decompresser.unpack(req.body.payload).then(t => {
-      res.json(t);
-    }).catch((e) => console.log(e));
+    const decompresser = createUrlCompression(
+      Buffer.from(displayDictionaries.v0),
+    );
+    decompresser
+      .unpack(req.body.payload)
+      .then(t => {
+        res.json(t);
+      })
+      .catch((e) => console.log(e));
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 });
 

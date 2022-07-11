@@ -34,7 +34,7 @@ async function getMonitor(hash) {
 const monitorService = {
   get: async function get(req, res) {
     try {
-      let contentHash = req.params.id;
+      const contentHash = req.params.id;
       const items = await getMonitor(contentHash);
       if (items == null || !items.length) {
         res.json({});
@@ -99,25 +99,25 @@ const monitorService = {
   getMonitorsForUser: async function get(req, res, ids) {
     try {
       const cont = database.container('staticMonitors');
-      const urls = ids?.length ? ids : req.params.id.split(',');
+      const urls = ids;
       // query to return all items
-      const querySpec = {
-        query:
-          'SELECT * from c WHERE ARRAY_CONTAINS(@urls, c.url)',
-        parameters: [
-          {
-            name: '@urls',
-            value: urls,
-          },
-        ],
-      };
-      // read all items in the Items container
-      const { resources: items } = await cont.items.query(querySpec).fetchAll();
-
-      if (!items.length) {
-        res.json({});
-      } else {
+      if (urls.length) {
+        const querySpec = {
+          query: 'SELECT * from c WHERE ARRAY_CONTAINS(@urls, c.url)',
+          parameters: [
+            {
+              name: '@urls',
+              value: urls,
+            },
+          ],
+        };
+        // read all items in the Items container
+        const { resources: items } = await cont.items
+          .query(querySpec)
+          .fetchAll();
         res.json(items);
+      } else {
+        res.json([]);
       }
     } catch (e) {
       console.log(e);
@@ -125,7 +125,7 @@ const monitorService = {
     }
   },
   create: async function create(req, res) {
-    console.log("creating monitor")
+    console.log('creating monitor');
     console.log(req.body);
     try {
       await Promise.resolve(container.items.create(req.body));
@@ -138,7 +138,7 @@ const monitorService = {
     }
   },
   getStatic: async function getStaticMonitor(req, res) {
-    console.log("url:", req.params.id);
+    console.log('url:', req.params.id);
     const container = database.container('staticMonitors');
     const url = req.params.id;
     const querySpec = {
@@ -154,17 +154,16 @@ const monitorService = {
     const { resources: items } = await container.items
       .query(querySpec)
       .fetchAll();
-      console.log("items",items)
+    console.log('items', items);
     if (items.length) {
       res.json(items[0]);
     } else {
       res.json({});
     }
-
   },
   createStatic: async function createStaticMonitor(req, res) {
-    console.log("creating static")
-    console.log(req.body)
+    console.log('creating static');
+    console.log(req.body);
     try {
       const container = database.container('staticMonitors');
       await Promise.resolve(container.items.create(req.body));
@@ -179,11 +178,11 @@ const monitorService = {
   updateStatic: async function updateStaticMonitor(req, res) {
     try {
       const container = database.container('staticMonitors');
-      console.log("updating monitor:",req.body)
+      console.log('updating monitor:', req.body);
       const { resource: updatedItem } = await container
         .item(req.body.id, req.body.url)
         .replace(req.body);
-      console.log("updated:" ,updatedItem)
+      console.log('updated:', updatedItem);
       res.json(updatedItem);
     } catch (e) {
       console.log(e);

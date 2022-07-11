@@ -389,7 +389,7 @@ const getMonitors = async (req, res) => {
       monitorService.getMonitorsForUser(req, res, monitors);
     } else {
       console.log("no data storage found, user doesn't have any monitors")
-      res.json({})
+      res.json([])
     }
   } catch {
     console.log("Error fetching monitors")

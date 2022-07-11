@@ -1,12 +1,16 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import ContentContainer from './ContentContainer';
 import monitorsImage from './icons/create-monitor.svg';
 import cx from 'classnames';
 import { ConfigContext } from '../contexts';
 
-const IndexPage = () => {
+interface IProps {
+  buttons: any;
+  renderLogInMessage?: boolean;
+}
+
+const IndexPage: FC<IProps> = ({ buttons, renderLogInMessage = false }) => {
   const { t, i18n } = useTranslation();
   const config = useContext(ConfigContext);
   return (
@@ -18,40 +22,12 @@ const IndexPage = () => {
             <div className="text">{t('frontPageParagraph2')}</div>
             <div className="text">{t('frontPageParagraph3')}</div>
             {config.frontPageContent &&
+              renderLogInMessage &&
               config.frontPageContent.map(text => {
                 return <div className="text bold">{text[i18n.language]}</div>;
               })}
             <div className="button-container" tabIndex={-1}>
-              {config.allowLogin ? (
-                <>
-                  <a
-                    href={'login?url=/&'}
-                    aria-label={t('front-page-sign-in-button')}
-                  >
-                    <div className="monitor-button blue">
-                      {t('front-page-sign-in-button')}
-                    </div>
-                  </a>
-                  <Link
-                    to={'/createView'}
-                    aria-label={t('front-page-no-sign-in-button')}
-                  >
-                    <div className="monitor-button white">
-                      {t('front-page-no-sign-in-button')}
-                    </div>
-                  </Link>
-                </>
-              ) : (
-                <Link
-                  to={'/createView'}
-                  id="create-new-link"
-                  aria-label={t('quickDisplayCreate')}
-                >
-                  <button className="monitor-button blue">
-                    {t('quickDisplayCreate')}
-                  </button>
-                </Link>
-              )}
+              {buttons}
             </div>
           </div>
         </div>

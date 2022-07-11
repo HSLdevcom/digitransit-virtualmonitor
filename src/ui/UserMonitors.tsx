@@ -1,11 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
-import { UserContext } from '../App';
+import monitorsImage from './icons/create-monitor.svg';
+import IndexPage from './IndexPage';
+import Loading from './Loading';
 
 interface Iv {
   columns: ISides;
@@ -33,30 +35,51 @@ interface IProps {
 
 const UserMonitors: React.FC<IProps> = props => {
   const [t] = useTranslation();
-  const [views, setViews] = useState({});
-  const user = useContext(UserContext);
+  const [loading, setLoading] = useState(true);
+  const [views, setViews] = useState([]);
+  const [changed, setChanged] = useState(false);
 
   useEffect(() => {
-    monitorAPI.getAllMonitorsForUser().then(r => {
+    monitorAPI.getAllMonitorsForUser().then((r: Array<Iv>) => {
       setViews(r);
+      setChanged(false);
+      setLoading(false);
     });
-  }, []);
+  }, [changed]);
 
-  const monitors = Array.isArray(views)
-    ? views.map((view, i) => {
-        return <UserMonitorCard key={`monitor#${i}`} view={view} />;
-      })
-    : [];
+  if (loading) {
+    return <Loading white />;
+  }
+  const button = (
+    <Link to={'/monitors/createView'} className="monitor-button blue">
+      {t('quickDisplayCreate')}
+    </Link>
+  );
+
+  const monitors = views.length ? (
+    views.map((view, i) => {
+      const style = { '--delayLength': `0.${3 + i}s` } as React.CSSProperties;
+      return (
+        <div className={'card animate-in'} style={style}>
+          <UserMonitorCard
+            key={`monitor#${i}`}
+            onDelete={() => setChanged(true)}
+            view={view}
+          />
+        </div>
+      );
+    })
+  ) : (
+    <IndexPage buttons={button} />
+  );
 
   return (
     <ContentContainer>
       <div className="user-monitors-container">
         <div className="cards-container">{monitors}</div>
-        <div className="button-container">
-          <Link to={'/monitors/createView'} className="monitor-button blue">
-            {t('quickDisplayCreate')}
-          </Link>
-        </div>
+        {!!views.length && (
+          <div className="create-button-container">{button}</div>
+        )}
       </div>
     </ContentContainer>
   );

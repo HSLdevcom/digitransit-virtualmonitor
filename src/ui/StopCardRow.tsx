@@ -190,8 +190,15 @@ const StopCardRow: FC<IProps> = ({
       return !columns['left'].stops.some(s => s.gtfsId === gtfsId);
     });
   };
+  const style = {
+    '--delayLength': `0.${3 + cardInfo.index}s`,
+  } as React.CSSProperties;
   return (
-    <li className="stopcard" id={`stopcard_${cardInfo.id}`}>
+    <li
+      className="stopcard animate-in"
+      id={`stopcard_${cardInfo.id}`}
+      style={style}
+    >
       <div className="stopcard-row-container">
         <div className="title-with-icons">
           {languages.includes('fi') && (

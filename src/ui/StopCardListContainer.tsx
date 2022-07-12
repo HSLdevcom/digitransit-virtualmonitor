@@ -11,7 +11,7 @@ import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getLayout';
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
-import { getStaticUrl, isInformationDisplay } from '../util/monitorUtils';
+import { isInformationDisplay } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
 import UserViewTitleEditor from './UserViewTitleEditor';
 import { getCurrentSecondsWithMilliSeconds } from '../time';
@@ -19,6 +19,7 @@ import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
 import { uuidValidateV5 } from '../util/monitorUtils';
 import PrepareMonitor from './PrepareMonitor';
 import { UserContext } from '../App';
+import { getParams } from '../util/queryUtils';
 
 interface IProps {
   feedIds: Array<string>;
@@ -28,16 +29,6 @@ interface IProps {
   vertical?: boolean;
   staticMonitor?: any;
 }
-
-const getHash = () => {
-  if (window && window.location && window.location.search) {
-    const params = window.location.search.split('cont=');
-    if (params[1]) {
-      return params[1];
-    }
-  }
-  return undefined;
-};
 
 const createUUID = (startTime, hash) => {
   return uuidv5(
@@ -340,7 +331,7 @@ const StopCardListContainer: FC<IProps> = ({
           ...newCard,
           name: viewTitle,
           id: props.staticMonitor.id,
-          url: getStaticUrl(window.location.search),
+          url: getParams(window.location.search).url,
         };
         monitorAPI.updateStatic(newStaticMonitor).then(res => {
           setView(newCard);
@@ -358,7 +349,7 @@ const StopCardListContainer: FC<IProps> = ({
   if (redirect && view) {
     let search;
     const isStatic = window.location.pathname === '/monitors/createView';
-    const url = view.url ? view.url : getStaticUrl(window.location.search);
+    const url = view.url ? view.url : getParams(window.location.search).url;
     if (isStatic && url && uuidValidateV5(url)) {
       search = `?url=${url}`;
     } else {
@@ -398,9 +389,7 @@ const StopCardListContainer: FC<IProps> = ({
 
   const noStops = checkNoStops(modifiedStopCardList);
   const makeButtonsDisabled = !(languages.length > 0 && !noStops);
-  const isModifyView =
-    window.location.href.indexOf('cont=') !== -1 ||
-    window.location.href.indexOf('url=') !== -1;
+  const isModifyView = window.location.href.indexOf('url=') !== -1;
 
   const buttonsRequirements = [];
   if (languages.length === 0) {
@@ -423,11 +412,11 @@ const StopCardListContainer: FC<IProps> = ({
   return (
     <div className="stop-card-list-container">
       <div className="animate-in">
-        {user?.sub && (
+        {user?.sub && window.location.pathname === '/monitors/createView' && (
           <UserViewTitleEditor
             title={viewTitle}
             updateViewTitle={updateViewTitle}
-            contentHash={getHash()}
+            monitorId={props.staticMonitor?.id}
           />
         )}
         <DisplaySettings

@@ -6,7 +6,7 @@ import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
 import NoMonitorsFound from './NoMonitorsFound';
 import TrainDataPreparer from './TrainDataPreparer';
-import { getContentHash, getStaticUrl } from '../util/monitorUtils';
+import { getParams } from '../util/queryUtils';
 
 interface Iv {
   columns: ISides;
@@ -45,8 +45,7 @@ const WithDatabaseConnection: FC<IProps> = ({
   const [fetched, setFetched] = useState(false);
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
-      const hash = getContentHash(location.search);
-      const url = getStaticUrl(location.search);
+      const { url, cont: hash } = getParams(location.search);
       if (hash) {
         monitorAPI.get(hash).then(r => {
           setFetched(true);

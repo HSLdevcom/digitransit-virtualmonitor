@@ -10,6 +10,7 @@ import {
   getTrainStationData,
   isPlatformOrTrackVisible,
 } from '../util/monitorUtils';
+import DeleteModal from './DeleteModal';
 
 interface IView {
   name?: string;
@@ -29,6 +30,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
   const [t] = useTranslation();
   const { cards, name, languages, url } = view;
   const [isOpen, setOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const layout = cards[0].layout;
 
   const onClose = () => {
@@ -38,6 +40,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
   const onDeleteCallBack = () => {
     monitorAPI.deleteStatic(view.id, url).then(res => {
       onDelete(true);
+      setDeleteModalOpen(false);
     });
   };
 
@@ -123,6 +126,13 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
           showPlatformsOrTracks={showPlatformsOrTracks}
         />
       )}
+      {deleteModalOpen && (
+        <DeleteModal
+          name={name}
+          onDeleteCallBack={onDeleteCallBack}
+          setDeleteModalOpen={setDeleteModalOpen}
+        />
+      )}
       <div className="main-container">
         <div className="layout-img">
           <Icon
@@ -140,7 +150,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
         <Link className="round-button" to={`/monitors/createView?&url=${url}`}>
           {t('modify')}
         </Link>
-        <div className="delete-icon" onClick={onDeleteCallBack}>
+        <div className="delete-icon" onClick={() => setDeleteModalOpen(true)}>
           <Icon img="delete" color={getPrimaryColor()} />
         </div>
       </div>

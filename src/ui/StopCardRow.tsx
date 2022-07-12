@@ -191,7 +191,7 @@ const StopCardRow: FC<IProps> = ({
     });
   };
   const style = {
-    '--delayLength': `0.${3 + cardInfo.index}s`,
+    '--delayLength': `0.${1 + cardInfo.index}s`,
   } as React.CSSProperties;
   return (
     <li

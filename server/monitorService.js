@@ -36,6 +36,7 @@ const monitorService = {
     try {
       const contentHash = req.params.id;
       const items = await getMonitor(contentHash);
+      console.log(items, contentHash)
       if (items == null || !items.length) {
         res.json({});
       } else {

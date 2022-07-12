@@ -58,7 +58,7 @@ const UserMonitors: React.FC<IProps> = props => {
 
   const monitors = views.length ? (
     views.map((view, i) => {
-      const style = { '--delayLength': `0.${3 + i}s` } as React.CSSProperties;
+      const style = { '--delayLength': `0.${1 + i}s` } as React.CSSProperties;
       return (
         <div className={'card animate-in'} style={style}>
           <UserMonitorCard

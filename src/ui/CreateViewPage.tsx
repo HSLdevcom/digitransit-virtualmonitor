@@ -5,9 +5,9 @@ import monitorAPI from '../api';
 import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
-import { getContentHash, getStaticUrl } from '../util/monitorUtils';
 import { ConfigContext } from '../contexts';
 import { useHistory, useLocation } from 'react-router-dom';
+import { getParams } from '../util/queryUtils';
 
 const CreateViewPage = () => {
   const config = useContext(ConfigContext);
@@ -18,8 +18,7 @@ const CreateViewPage = () => {
   const [staticMonitorProperties, setStaticMonitorProperties] = useState(null);
   const [loading, setLoading] = useState(true);
   const [noMonitorFound, setNoMonitorFound] = useState(false);
-  const hash = getContentHash(location.search);
-  const url = getStaticUrl(location.search);
+  const { url, cont: hash } = getParams(location.search);
 
   useEffect(() => {
     if (noMonitorFound) {

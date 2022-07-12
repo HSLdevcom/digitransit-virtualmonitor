@@ -102,3 +102,22 @@
     }
   }
 }
+
+.delete-modal-content {
+  .message {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 45px;
+  }
+
+  .delete-modal-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .monitor-button {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

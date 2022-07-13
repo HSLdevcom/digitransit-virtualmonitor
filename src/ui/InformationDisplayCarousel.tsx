@@ -23,7 +23,6 @@ const InformationDisplayCarousel: FC<IProps> = ({
   const [current, setCurrent] = useState(0);
   const [currentLang, setCurrentLang] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
-  const config = useContext(ConfigContext);
   useEffect(() => {
     if (alerts.length) {
       const next = (current + 1) % alerts.length;
@@ -53,7 +52,7 @@ const InformationDisplayCarousel: FC<IProps> = ({
         to = setTimeout(() => setShowOverlay(false), 3000);
       }}
     >
-      <MonitorOverlay show={showOverlay} isPreview={preview} />
+      {!preview && <MonitorOverlay show={showOverlay} />}
       <MonitorTitlebar
         isLandscape
         view={view}

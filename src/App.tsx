@@ -214,22 +214,6 @@ const App: FC<IConfigurationProps> = (props) => {
               </>
             )}
           />
-          <Route
-            path={'/monitors/createView'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps) => (
-              <>
-                <SkipToMainContent />
-                <BannerContainer />
-                <section role="main" id="mainContent">
-                  <CreateViewPage  />
-                </section>
-              </>
-            )}
-          />
           <Route path={'/view'} component={PrepareMonitor} />
           <Route path={'/static'} component={PrepareMonitor} />
           <ProtectedRoute

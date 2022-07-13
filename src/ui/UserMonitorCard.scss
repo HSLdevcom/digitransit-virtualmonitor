@@ -1,9 +1,36 @@
+.alert-modal {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  height: 50px;
+  padding: 0 20px;
+  color: $primary-color;
+}
+
 .card {
   width: 720px;
   background-color: #fff;
   padding: 0 30px;
   margin-bottom: 10px;
   border-radius: 5px;
+
+  .buttons-container {
+    display: flex;
+    border-top: 1px solid #ddd;
+    height: 80px;
+    align-items: center;
+    justify-content: flex-end;
+
+    .monitor-button {
+      height: 40px;
+      font-size: 16px;
+      margin-bottom: 0;
+    }
+  }
 
   .main-container > * {
     height: 40px;
@@ -35,15 +62,10 @@
       justify-content: center;
     }
 
-    .round-button {
+    .monitor-button {
       font-size: 16px;
-      padding: 0 28px;
-      background: #fff;
-      border: 1px solid #888;
       border-radius: 40px;
-      cursor: pointer;
-      margin-right: 10px;
-      color: $primary-color;
+      margin-bottom: 0;
     }
   }
 
@@ -84,10 +106,15 @@
           }
 
           .stop-list {
-            ul,
             li {
-              list-style-type: disc;
-              margin-left: 20px;
+              display: flex;
+              align-items: center;
+
+              svg {
+                height: 16px !important;
+                width: 16px !important;
+                padding: 0 10px 0 3px;
+              }
             }
 
             font-style: normal;

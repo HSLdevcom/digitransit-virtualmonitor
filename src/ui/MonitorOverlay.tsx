@@ -6,34 +6,43 @@ import { UserContext } from '../App';
 
 interface IProps {
   show: boolean;
-  isPreview: boolean;
   buttonTranslationKey?: string;
   createNew?: boolean;
 }
 const MonitorOverlay: FC<IProps> = ({
-  isPreview,
   show,
   buttonTranslationKey,
   createNew,
 }) => {
   const { t } = useTranslation();
   const user = useContext(UserContext);
-  const text = t(buttonTranslationKey) || t('edit-display');
-  const to = createNew
-    ? '/createView'
-    : window.location.href.indexOf('cont=') !== -1 && !user?.sub
-    ? `/createView${window.location.search}`
-    : `/monitors/createView${window.location.search}`;
+  let text = t(buttonTranslationKey) || t('edit-display');
+  let to;
+  if (createNew) {
+    to = '/createView';
+  } else {
+    if (!user?.sub) {
+      if (window.location.href.indexOf('cont=') !== -1) {
+        to = `/createView${window.location.search}`;
+      } else {
+        to = '/';
+        text = t('login');
+      }
+    } else {
+      if (window.location.href.indexOf('url=') !== -1) {
+        to = `/monitors/createView${window.location.search}`;
+      } else {
+        to = '/monitors/createView';
+      }
+    }
+  }
+
   return (
-    <>
-      {!isPreview && (
-        <div className={cx('monitor-overlay', show ? 'show' : 'hide')}>
-          <Link className="link" to={to}>
-            <span>{text}</span>
-          </Link>
-        </div>
-      )}
-    </>
+    <div className={cx('monitor-overlay', show ? 'show' : 'hide')}>
+      <Link className="link" to={to}>
+        <span>{text}</span>
+      </Link>
+    </div>
   );
 };
 

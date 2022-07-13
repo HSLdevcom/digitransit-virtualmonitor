@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { isInformationDisplay } from '../util/monitorUtils';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
@@ -11,6 +11,7 @@ import {
   isPlatformOrTrackVisible,
 } from '../util/monitorUtils';
 import DeleteModal from './DeleteModal';
+import { ConfigContext } from '../contexts';
 
 interface IView {
   name?: string;
@@ -27,15 +28,26 @@ interface IProps {
 }
 
 const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
+  let to;
   const [t] = useTranslation();
+  const config = useContext(ConfigContext);
   const { cards, name, languages, url } = view;
   const [isOpen, setOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const layout = cards[0].layout;
+  const [showModal, setShowModal] = useState(false);
 
   const onClose = () => {
     setOpen(false);
   };
+
+  // useEffect(() => {
+
+  //   const to = setTimeout(() => {
+  //     setShowModal(false)
+  //   }, 3000)
+  //   return () =>  clearTimeout(to);
+  // }, [showModal])
 
   const onDeleteCallBack = () => {
     monitorAPI.deleteStatic(view.id, url).then(res => {
@@ -82,7 +94,9 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
         {colStops.map((colStop, c) => {
           return (
             <>
-              <div className="card-title">{colTitles[c]}</div>
+              <div key={`display${c}`} className="card-title">
+                {colTitles[c]}
+              </div>
               <div className="stop-list">
                 {colStop.map((stop, j) => {
                   const stopCode = `(${stop.code})`;
@@ -90,8 +104,20 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
                     .concat(stop.code ? stopCode : '')
                     .concat(' - ')
                     .concat(stop.gtfsId);
+                  const icon =
+                    stop.locationType === 'STATION' || stop.mode === 'SUBWAY'
+                      ? `station-${stop.mode.toLowerCase()}`
+                      : `stop-${stop.mode.toLowerCase()}`;
                   return (
                     <li key={`stop#${j}`} title={stopTitle}>
+                      <Icon
+                        img={icon}
+                        color={
+                          config.modeIcons.colors[
+                            `mode-${stop.mode.toLowerCase()}`
+                          ]
+                        }
+                      />
                       {`${stop.name} ${stop.code ? stopCode : ''}`}
                     </li>
                   );
@@ -114,26 +140,31 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
   });
   return (
     <>
-      {isOpen && (
-        <PreviewModal
-          languages={languages}
-          view={v}
-          isOpen={isOpen}
-          onClose={onClose}
-          isLandscape={layout < 12}
-          stations={stations}
-          stops={stops}
-          showPlatformsOrTracks={showPlatformsOrTracks}
-        />
-      )}
-      {deleteModalOpen && (
-        <DeleteModal
-          name={name}
-          onDeleteCallBack={onDeleteCallBack}
-          setDeleteModalOpen={setDeleteModalOpen}
-        />
-      )}
       <div className="main-container">
+        {showModal && (
+          <div className="alert-modal animate-in">
+            Linkki kopioitu leikepöydälle
+          </div>
+        )}
+        {isOpen && (
+          <PreviewModal
+            languages={languages}
+            view={v}
+            isOpen={isOpen}
+            onClose={onClose}
+            isLandscape={layout < 12}
+            stations={stations}
+            stops={stops}
+            showPlatformsOrTracks={showPlatformsOrTracks}
+          />
+        )}
+        {deleteModalOpen && (
+          <DeleteModal
+            name={name}
+            onDeleteCallBack={onDeleteCallBack}
+            setDeleteModalOpen={setDeleteModalOpen}
+          />
+        )}
         <div className="layout-img">
           <Icon
             img={'rectangle-selected'}
@@ -144,10 +175,13 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
           />
         </div>
         <div className="monitor-name">{name}</div>
-        <button className="round-button" onClick={() => setOpen(true)}>
+        <button className="monitor-button white" onClick={() => setOpen(true)}>
           {t('preview')}
         </button>
-        <Link className="round-button" to={`/monitors/createView?&url=${url}`}>
+        <Link
+          className="monitor-button white"
+          to={`/monitors/createView?&url=${url}`}
+        >
           {t('modify')}
         </Link>
         <div className="delete-icon" onClick={() => setDeleteModalOpen(true)}>
@@ -155,6 +189,34 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
         </div>
       </div>
       <div className="cards">{crds}</div>
+      <div className="buttons-container">
+        {/* <button className="monitor-button white" onClick={() => setOpen(true)}>
+          {t('preview')}
+        </button>
+        <Link className="monitor-button white" to={`/monitors/createView?&url=${url}`}>
+          {t('modify')}
+        </Link> */}
+        <button
+          className="monitor-button white"
+          onClick={() => {
+            navigator.clipboard.writeText(
+              `${window.location.host}/static?url=${url}`,
+            );
+            setShowModal(true);
+            clearTimeout(to);
+            to = setTimeout(() => setShowModal(false), 3000);
+          }}
+        >
+          {t('copy')}
+        </button>
+        <Link
+          role="button"
+          className="monitor-button white"
+          to={`/static?&url=${url}`}
+        >
+          {t('open')}
+        </Link>
+      </div>
     </>
   );
 };

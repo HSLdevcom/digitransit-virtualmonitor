@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import { getPrimaryColor } from '../util/getConfig';
+import { UserContext } from '../App';
 
 const Breadcrumbs = () => {
   const [t] = useTranslation();
+  const user = useContext(UserContext);
   const parser = document.createElement('a');
   parser.href = window.location.href;
   const arr = parser.pathname.split('/');
@@ -26,12 +28,16 @@ const Breadcrumbs = () => {
     }
   });
 
+  if (user.sub) {
+    crumbs.shift();
+  }
+
   return (
     <div className="breadcrumbs-container">
       <div className="crumbs">
         {crumbs.map((crumb, i) => {
           let path = arr[i];
-          if (i === 0) {
+          if (crumb === null) {
             crumb = 'breadCrumbsFrontPage';
             path = '';
           }

@@ -79,7 +79,8 @@ const Monitor: FC<IProps> = ({
         to = setTimeout(() => setShowOverlay(false), 3000);
       }}
     >
-      <MonitorOverlay show={showOverlay} isPreview={isPreview} />
+      {!isPreview && <MonitorOverlay show={showOverlay} />}
+
       <MonitorTitlebar
         isMultiDisplay={isMultiDisplay}
         isLandscape={isLandscapeByLayout}

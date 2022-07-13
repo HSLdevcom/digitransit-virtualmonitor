@@ -60,7 +60,7 @@ const UserMonitors: React.FC<IProps> = props => {
     views.map((view, i) => {
       const style = { '--delayLength': `0.${1 + i}s` } as React.CSSProperties;
       return (
-        <div className={'card animate-in'} style={style}>
+        <div key={`card${i}`} className={'card animate-in'} style={style}>
           <UserMonitorCard
             key={`monitor#${i}`}
             onDelete={() => setChanged(true)}

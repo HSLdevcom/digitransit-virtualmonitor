@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import SiteHeader from '@hsl-fi/site-header';
-import { UserContext } from '../App';
-import { ConfigContext } from '../contexts';
+import { UserContext, ConfigContext } from '../contexts';
 
 const notificationAPI = '/api/user/notifications';
 //TODO:

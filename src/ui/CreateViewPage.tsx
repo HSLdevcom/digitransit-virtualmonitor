@@ -5,12 +5,11 @@ import monitorAPI from '../api';
 import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
-import { ConfigContext } from '../contexts';
+import { ConfigContext, UserContext } from '../contexts';
 import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import { getParams } from '../util/queryUtils';
 import Modal from '@hsl-fi/modal';
 import { useTranslation } from 'react-i18next';
-import { UserContext } from '../App';
 
 const CreateViewPage = () => {
   const [t] = useTranslation();

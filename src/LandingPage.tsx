@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
-import { ConfigContext } from './contexts';
-import { UserContext } from './App';
+import { ConfigContext, UserContext } from './contexts';
 import BannerContainer from './ui/BannerContainer';
 import IndexPage from './ui/IndexPage';
 import { Redirect } from 'react-router-dom';

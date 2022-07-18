@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { UserContext } from '../App';
+import { UserContext } from '../contexts';
 import Logo from './logo/Logo';
 import BurgerMenu from './BurgerMenu';
 import Icon from './Icon';

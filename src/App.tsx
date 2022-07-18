@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import React, { FC, useEffect, useState, createContext, useContext } from 'react';
+import React, { FC, useEffect, useState, useContext } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
@@ -28,12 +28,10 @@ import StopMonitorContainer from './ui/StopMonitorContainer';
 import './sass/main.scss';
 import SkipToMainContent from './ui/SkipToMainContent';
 import PrepareMonitor from './ui/PrepareMonitor';
-import { ConfigContext } from './contexts';
+import { ConfigContext, UserContext } from './contexts';
 import Loading from './ui/Loading';
 import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
-
-export const UserContext = createContext(null);
 
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {

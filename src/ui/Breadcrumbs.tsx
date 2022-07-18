@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import { getPrimaryColor } from '../util/getConfig';
-import { UserContext } from '../App';
+import { UserContext } from '../contexts';
 
 const Breadcrumbs = () => {
   const [t] = useTranslation();

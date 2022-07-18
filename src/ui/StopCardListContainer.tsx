@@ -18,7 +18,7 @@ import { getCurrentSecondsWithMilliSeconds } from '../time';
 import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
 import { uuidValidateV5 } from '../util/monitorUtils';
 import PrepareMonitor from './PrepareMonitor';
-import { UserContext } from '../App';
+import { UserContext } from '../contexts';
 import { getParams } from '../util/queryUtils';
 
 interface IProps {

@@ -96,7 +96,6 @@ const createLineIdsArray = (data, hiddenRoutes) => {
 };
 
 interface IProps {
-  monitor: IMonitor;
   stations?: Array<ICard>;
   stops?: Array<ICard>;
   [x: string]: any;

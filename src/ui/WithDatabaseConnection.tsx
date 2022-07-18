@@ -72,21 +72,13 @@ const WithDatabaseConnection: FC<IProps> = ({
   return (
     <MonitorContext.Provider value={monitor}>
       {monitor.isInformationDisplay ? (
-        <InformationDisplayContainer monitor={monitor} />
+        <InformationDisplayContainer />
       ) : (
         <>
           {(stations.length || stops.length) && showPlatformsOrTracks ? (
-            <TrainDataPreparer
-              monitor={monitor}
-              stations={stations}
-              stops={stops}
-            />
+            <TrainDataPreparer stations={stations} stops={stops} />
           ) : (
-            <CarouselDataContainer
-              views={monitor.cards}
-              languages={monitor.languages}
-              initTime={new Date().getTime()}
-            />
+            <CarouselDataContainer initTime={new Date().getTime()} />
           )}
         </>
       )}

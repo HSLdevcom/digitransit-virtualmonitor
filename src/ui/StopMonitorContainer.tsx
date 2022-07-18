@@ -65,14 +65,7 @@ const StopMonitorContainer: FC<IProps> = ({
   if (loading || !fetched) {
     return <Loading />;
   }
-  return (
-    <CarouselDataContainer
-      languages={['fi']}
-      views={stopCard}
-      fromStop
-      initTime={new Date().getTime()}
-    />
-  );
+  return <CarouselDataContainer fromStop initTime={new Date().getTime()} />;
 };
 
 export default StopMonitorContainer;

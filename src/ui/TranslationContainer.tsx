@@ -5,9 +5,7 @@ import monitorAPI from '../api';
 import { IDeparture } from './MonitorRow';
 
 interface IProps {
-  views: Array<IView>;
   preview?: boolean;
-  languages: Array<string>;
   translationIds: Array<string>;
   stationDepartures: Array<Array<Array<IDeparture>>>;
   stopDepartures: Array<Array<Array<IDeparture>>>;
@@ -23,11 +21,7 @@ export interface ITranslation {
   translation: string;
 }
 
-const TranslationContainer: FC<IProps> = ({
-  languages,
-  translationIds,
-  ...rest
-}) => {
+const TranslationContainer: FC<IProps> = ({ translationIds, ...rest }) => {
   const getTranslations = () => {
     return monitorAPI
       .getTranslations(translationIds)
@@ -50,13 +44,7 @@ const TranslationContainer: FC<IProps> = ({
       return () => clearInterval(intervalId); //This is important
     }
   }, []);
-  return (
-    <CarouselContainer
-      languages={languages}
-      translations={translations}
-      {...rest}
-    />
-  );
+  return <CarouselContainer translations={translations} {...rest} />;
 };
 
 export default TranslationContainer;

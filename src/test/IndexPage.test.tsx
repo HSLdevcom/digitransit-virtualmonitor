@@ -17,7 +17,7 @@ const withContext = () => {
       <IndexPage
         buttons={
           <Link
-            to={'/createView'}
+            to={'/createview'}
             id="create-new-link"
             aria-label={'quickDisplayCreate'}
           >
@@ -39,7 +39,7 @@ it('should add createView to path when the button is clicked', () => {
 
   const screen = render(<Router history={history}>{withContext()}</Router>);
   userEvent.click(screen.getByText('quickDisplayCreate'));
-  expect(history.push).toHaveBeenCalledWith('/createView');
+  expect(history.push).toHaveBeenCalledWith('/createview');
 });
 
 it('render an image', () => {

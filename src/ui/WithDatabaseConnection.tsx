@@ -7,6 +7,7 @@ import InformationDisplayContainer from './InformationDisplayContainer';
 import NoMonitorsFound from './NoMonitorsFound';
 import TrainDataPreparer from './TrainDataPreparer';
 import { getParams } from '../util/queryUtils';
+import { MonitorContext } from '../contexts';
 
 interface Iv {
   columns: ISides;
@@ -69,7 +70,7 @@ const WithDatabaseConnection: FC<IProps> = ({
   }
 
   return (
-    <>
+    <MonitorContext.Provider value={monitor}>
       {monitor.isInformationDisplay ? (
         <InformationDisplayContainer monitor={monitor} />
       ) : (
@@ -89,7 +90,7 @@ const WithDatabaseConnection: FC<IProps> = ({
           )}
         </>
       )}
-    </>
+    </MonitorContext.Provider>
   );
 };
 

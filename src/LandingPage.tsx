@@ -28,7 +28,7 @@ const LandingPage = () => {
           </div>
         </a>
         <Link
-          to={'/createView'}
+          to={'/createview'}
           aria-label={t('front-page-no-sign-in-button')}
         >
           <div className="monitor-button white">
@@ -38,7 +38,7 @@ const LandingPage = () => {
       </>
     ) : (
       <Link
-        to={'/createView'}
+        to={'/createview'}
         id="create-new-link"
         aria-label={t('quickDisplayCreate')}
       >

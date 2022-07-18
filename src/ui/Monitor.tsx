@@ -49,10 +49,11 @@ const Monitor: FC<IProps> = ({
   const { isMultiDisplay } = getLayout(view.layout);
   const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
-    setWindowDimensions(getWindowDimensions());
-    window.addEventListener('resize', () => {
+    const setDimensions = () => {
       setWindowDimensions(getWindowDimensions());
-    });
+    };
+    window.addEventListener('resize', setDimensions);
+    return () => window.removeEventListener('resize', setDimensions);
   }, []);
 
   const windowHeight = windowDimensions.height;
@@ -80,7 +81,6 @@ const Monitor: FC<IProps> = ({
       }}
     >
       {!isPreview && <MonitorOverlay show={showOverlay} />}
-
       <MonitorTitlebar
         isMultiDisplay={isMultiDisplay}
         isLandscape={isLandscapeByLayout}

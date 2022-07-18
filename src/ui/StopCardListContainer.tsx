@@ -45,9 +45,7 @@ const StopCardListContainer: FC<IProps> = ({
 }) => {
   const user = useContext(UserContext);
   const [t] = useTranslation();
-  const [startTime, setStartTime] = useState(
-    getCurrentSecondsWithMilliSeconds(),
-  );
+  const startTime = getCurrentSecondsWithMilliSeconds();
   const [stopCardList, setStopCardList] = useState(defaultStopCardList);
   const [languages, setLanguages] = useState(props.languages);
   const [orientation, setOrientation] = useState(
@@ -348,7 +346,7 @@ const StopCardListContainer: FC<IProps> = ({
 
   if (redirect && view) {
     let search;
-    const isStatic = window.location.pathname === '/monitors/createView';
+    const isStatic = window.location.pathname === '/monitors/createview';
     const url = view.url ? view.url : getParams(window.location.search).url;
     if (isStatic && url && uuidValidateV5(url)) {
       search = `?url=${url}`;
@@ -356,16 +354,26 @@ const StopCardListContainer: FC<IProps> = ({
       search = `?cont=${view.contenthash}`;
     }
     return (
-      <Redirect
-        to={{
-          pathname: isStatic ? '/static' : '/view',
-          search: search,
-          state: {
-            view: view.cards,
-            viewTitle: viewTitle,
-          },
-        }}
-      />
+      <>
+        {isStatic ? (
+          <Redirect
+            to={{
+              pathname: '/monitors',
+            }}
+          />
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/view',
+              search: search,
+              state: {
+                view: view.cards,
+                viewTitle: viewTitle,
+              },
+            }}
+          />
+        )}
+      </>
     );
   }
 
@@ -412,7 +420,7 @@ const StopCardListContainer: FC<IProps> = ({
   return (
     <div className="stop-card-list-container">
       <div className="animate-in">
-        {user?.sub && window.location.pathname === '/monitors/createView' && (
+        {user?.sub && window.location.pathname === '/monitors/createview' && (
           <UserViewTitleEditor
             title={viewTitle}
             updateViewTitle={updateViewTitle}

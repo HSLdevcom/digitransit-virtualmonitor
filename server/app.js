@@ -71,10 +71,6 @@ app.post('/api/decompress/', (req, res) => {
   }
 });
 
-app.post('/api/staticmonitor', (req, res) => {
-  monitorService.updateStatic(req, res);
-});
-
 function setUpOpenId() {
   const localPort = process.env.NODE_ENV === 'production' ? null : 3000;
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = 1;

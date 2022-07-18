@@ -13,7 +13,6 @@ const defaultColors: IExtendedMonitorConfig = {
 
 const defaultModeIcons: IExtendedMonitorConfig = {
   modeIcons: {
-    borderRadius: undefined,
     colors: {
       'mode-airplane': '#0046ad',
       'mode-bus': '#0088ce',
@@ -82,7 +81,6 @@ export const getIconStyleWithColor = modeIn => {
   const config = getConfig();
   const style = { ...defaultModeIcons.modeIcons, ...config.modeIcons };
   return {
-    borderRadius: mode === 'subway' ? '' : style.borderRadius,
     color: style.colors[`mode-${mode}`],
     postfix: mode === 'airplane' || mode === 'subway' ? '' : style.postfix,
   };

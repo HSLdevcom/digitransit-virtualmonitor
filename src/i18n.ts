@@ -93,6 +93,7 @@ i18n.use(initReactI18next).init({
         'no-departures': 'No known departures',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
+        'non-logged-in-monitor-info': 'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
         notPossibleToCreate:
           'Unable to create a new view without {{requirements}}',
         notPossibleToPreview:
@@ -100,6 +101,7 @@ i18n.use(initReactI18next).init({
         notPossibleToSave: 'Unable to save the view without {{requirements}}',
         'one-column': 'One column',
         open: 'Avaa näyttö',
+        ok: 'OK',
         or: 'or',
         placeholderSideLeft: 'No stops selected',
         placeholderSideRight: 'No stops selected',
@@ -138,6 +140,7 @@ i18n.use(initReactI18next).init({
         timeShiftDescription:
           'You can exclude departures that are too soon to catch from the location of the stop display.',
         timeShiftShow: 'Only show departures departing in more than',
+        'to-own-displays': 'Siirry omiin näyttöihin',
         'two-columns': 'Two columns',
         'two-columns-combo': 'Combination based on two columns',
         userinfo: 'My information',
@@ -219,12 +222,14 @@ i18n.use(initReactI18next).init({
         'no-departures': 'Ei tiedossa olevia lähtöjä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
+        'non-logged-in-monitor-info': 'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
         notPossibleToCreate: 'Ilman {{requirements}} ei voida luoda näkymää',
         notPossibleToPreview:
           'Ilman {{requirements}} ei voida näyttää esikatselua',
         notPossibleToSave: 'Ilman {{requirements}} ei voida tallentaa näkymää',
         'one-column': 'Yksijakoinen',
         open: 'Avaa näyttö',
+        ok: 'OK',
         or: 'tai',
         placeholderSideLeft: 'Ei valittuja pysäkkejä',
         placeholderSideRight: 'Ei valittuja pysäkkejä',
@@ -263,6 +268,7 @@ i18n.use(initReactI18next).init({
         timeShiftDescription:
           'Voit rajata esityksestä lähdöt, joihin pysäkkinäytön sijainnista ei\nole mahdollista ehtiä kyytiin.',
         timeShiftShow: 'Näytä vain lähdöt, joiden lähtöön on yli',
+        'to-own-displays': 'Siirry omiin näyttöihin',
         'two-columns': 'Kaksijakoinen',
         'two-columns-combo': 'Kaksijakoinen yhdistelmä',
         userinfo: 'Omat tiedot',
@@ -344,12 +350,14 @@ i18n.use(initReactI18next).init({
         'no-departures': 'Inga kända avgångar',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen  information om trafikstörningar hittades',
+        'non-logged-in-monitor-info': 'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
         notPossibleToCreate: 'Vyn kan inte skapas utan {{requirements}}',
         notPossibleToPreview:
           'Förhandsgranskning kan inte visas utan {{requirements}}',
         notPossibleToSave: 'Vyn kan inte sparas utan {{requirements}}',
         'one-column': 'En kolumn',
         open: 'Avaa näyttö',
+        ok: 'OK',
         or: 'eller',
         placeholderSideLeft: 'Inga valda hållplatser',
         placeholderSideRight: 'Inga valda hållplatser',
@@ -388,6 +396,7 @@ i18n.use(initReactI18next).init({
         timeShiftDescription:
           'Du kan välja bort de avgångstider som inte är anpassade till dig.',
         timeShiftShow: 'Visa endast avgångar som avgår om minst',
+        'to-own-displays': 'Siirry omiin näyttöihin',
         'two-columns': 'Två kolumner',
         'two-columns-combo': 'Kombination av två kolumner',
         userinfo: 'Mina uppgifter',

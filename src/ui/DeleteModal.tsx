@@ -25,11 +25,11 @@ const DeleteModal: FC<IProps> = ({
       shouldCloseOnEsc
       shouldCloseOnOverlayClick
     >
-      <div className="delete-modal-content">
+      <div className="monitor-modal-content">
         <div className="message">
           {t('delete-confirmation', { monitor: name })}
         </div>
-        <div className="delete-modal-buttons">
+        <div className="monitor-modal-buttons">
           <button className="monitor-button blue" onClick={onDeleteCallBack}>
             {t('delete')}
           </button>

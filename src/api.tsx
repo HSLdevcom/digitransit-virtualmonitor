@@ -27,6 +27,12 @@ const monitorAPI = {
   get(monitor) {
     return fetchData(`monitor/${monitor}`, {});
   },
+  isUserOwned(monitor) {
+    const options = {
+      method: 'GET',
+    }
+    return fetchData(`userowned/${monitor}`, options);
+  },
   getStatic(monitor) {
     return fetchData(`staticmonitor/${monitor}`, {});
   },

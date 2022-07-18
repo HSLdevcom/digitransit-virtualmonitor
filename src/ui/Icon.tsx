@@ -114,7 +114,6 @@ export interface IIconMapProps {
   rotate?: string;
   stroke?: string;
   width?: string;
-  borderRadius?: string;
   margin?: string;
 }
 export interface ICustomInputProps {
@@ -124,7 +123,6 @@ export interface ICustomInputProps {
   img: string;
   rotate?: string;
   width?: number;
-  borderRadius?: string;
   margin?: string;
 }
 
@@ -285,7 +283,6 @@ const Icon = (props: ICustomInputProps) => {
     width: width,
     transform: props.rotate ? `rotate(${props.rotate}deg)` : null,
     background: background,
-    borderRadius: props.borderRadius ? props.borderRadius : null,
     margin: props.margin ? `${props.margin}` : '0',
   };
 

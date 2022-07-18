@@ -175,15 +175,6 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
           />
         </div>
         <div className="monitor-name">{name}</div>
-        <button className="monitor-button white" onClick={() => setOpen(true)}>
-          {t('preview')}
-        </button>
-        <Link
-          className="monitor-button white"
-          to={`/monitors/createView?&url=${url}`}
-        >
-          {t('modify')}
-        </Link>
         <div className="delete-icon" onClick={() => setDeleteModalOpen(true)}>
           <Icon img="delete" color={getPrimaryColor()} />
         </div>
@@ -193,9 +184,30 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
         {/* <button className="monitor-button white" onClick={() => setOpen(true)}>
           {t('preview')}
         </button>
-        <Link className="monitor-button white" to={`/monitors/createView?&url=${url}`}>
+        <Link className="monitor-button white" to={`/monitors/createview?&url=${url}`}>
           {t('modify')}
         </Link> */}
+        <div className="main-buttons-container">
+          <button
+            className="monitor-button white"
+            onClick={() => setOpen(true)}
+          >
+            {t('preview')}
+          </button>
+          <Link
+            className="monitor-button white"
+            to={`/monitors/createview?&url=${url}`}
+          >
+            {t('modify')}
+          </Link>
+          <Link
+            role="button"
+            className="monitor-button white"
+            to={`/static?&url=${url}`}
+          >
+            {t('open')}
+          </Link>
+        </div>
         <button
           className="monitor-button white"
           onClick={() => {
@@ -209,13 +221,6 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
         >
           {t('copy')}
         </button>
-        <Link
-          role="button"
-          className="monitor-button white"
-          to={`/static?&url=${url}`}
-        >
-          {t('open')}
-        </Link>
       </div>
     </>
   );

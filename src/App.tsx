@@ -60,7 +60,6 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
   };
   alertOrientation?: string;
   modeIcons?: {
-    borderRadius?: string;
     colors?: {
       'mode-airplane'?: string;
       'mode-bus'?: string;
@@ -199,7 +198,7 @@ const App: FC<IConfigurationProps> = (props) => {
         <UserContext.Provider value={user}>
         <Switch>
           <Route
-            path={'/createView'}
+            path={'/createview'}
             component={({
               match: {
                 params: {},
@@ -217,7 +216,7 @@ const App: FC<IConfigurationProps> = (props) => {
           <Route path={'/view'} component={PrepareMonitor} />
           <Route path={'/static'} component={PrepareMonitor} />
           <ProtectedRoute
-            path={'/monitors/createView'}
+            path={'/monitors/createview'}
             component={({
               match: {
                 params: {},

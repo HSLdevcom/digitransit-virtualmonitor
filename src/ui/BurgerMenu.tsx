@@ -51,7 +51,7 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
     { text: t('breadCrumbsFrontPage'), to: '/' },
     {
       text: t('createViewTitle'),
-      to: createStatic ? '/createStaticView' : '/createView',
+      to: '/createview',
     },
   ];
 

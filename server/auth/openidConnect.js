@@ -328,7 +328,10 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
   app.delete('/api/staticmonitor', userAuthenticated, (req, res) => {
     console.log("deleting monitor! ", req.body)
     deleteMonitor(req, res);
+  });
 
+  app.post('/api/staticmonitor', userAuthenticated, (req, res) => {
+    updateStaticMonitor(req, res)
   });
 
   app.put('/api/staticmonitor', userAuthenticated, (req, res) => {
@@ -337,7 +340,11 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
   });
 
   app.get('/api/usermonitors', userAuthenticated, (req, res) => {
-    getMonitors(req,res)
+    getMonitors(req,res);
+  });
+
+  app.get('/api/userowned/:id', userAuthenticated, (req, res) => {
+    isUserOwnedMonitor(req, res)
   });
 
   app.use('/api/user/notifications', userAuthenticated, function (req, res) {
@@ -372,7 +379,34 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
   });
 }
 
+const isUserOwnedMonitor = async (req, res) => {
+  const userMonitors = await getDataStorageMonitors(req, res)
+  if (userMonitors.includes(req.params.id)) {
+    res.status(200).send({msg: 'OK'});
+  } else {
+    res.status(401).send({msg: 'Unauthorized'});
+  }
+}
+
+const updateStaticMonitor = async (req, res) => {
+  const userMonitors = await getDataStorageMonitors(req, res)
+  if (userMonitors.includes(req.body.url)) {
+    monitorService.updateStatic(req, res);
+  } else {
+    res.status(401).send("Unauthorized");
+  }
+}
+
 const getMonitors = async (req, res) => {
+  try {
+    const monitors = await getDataStorageMonitors(req, res)
+    monitorService.getMonitorsForUser(req, res, monitors);
+  } catch {
+    console.log("error")
+  }
+}
+
+const getDataStorageMonitors = async (req, res) => {
   try {
     let dataStorage
     console.log("fetching all user monitors for", req?.user?.data.sub);
@@ -383,10 +417,7 @@ const getMonitors = async (req, res) => {
         endpoint: `/api/rest/v1/datastorage/${dataStorage.id}/data`,
       };
       const response = await makeHslIdRequest(options);
-      console.log(response.data);
-      const monitors = Object.keys(response.data).map(key => key);
-      console.log(monitors)
-      monitorService.getMonitorsForUser(req, res, monitors);
+      return Object.keys(response.data).map(key => key);
     } else {
       console.log("no data storage found, user doesn't have any monitors")
       res.json([])
@@ -401,9 +432,17 @@ const deleteMonitor = async (req, res) => {
     const userId = req?.user?.data.sub;
     let dataS = await getDataStorage(userId);
     if (dataS) {
-
-      const response = await deleteMonitorHSL(dataS.id, req.body.url)
-      monitorService.deleteStatic(req,res);
+      const options = {
+        endpoint: `/api/rest/v1/datastorage/${dataS.id}/data`,
+      };
+      const response = await makeHslIdRequest(options);
+      const monitors = Object.keys(response.data).map(key => key);
+      if (monitors.includes(req.body.url)) {
+        const response = await deleteMonitorHSL(dataS.id, req.body.url)
+        monitorService.deleteStatic(req,res);
+      } else {
+        console.log("not authorised")
+      }
     }
   } catch {
     console.log("error deleting monitor")

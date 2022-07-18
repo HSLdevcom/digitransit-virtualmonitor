@@ -14,21 +14,26 @@ const Breadcrumbs = () => {
   const isModify =
     window.location.href.indexOf('cont=') !== -1 ||
     window.location.href.indexOf('url=') !== -1;
-  const crumbs = arr.map(path => {
+
+  if (arr.every(e => !e) && arr.length === 2) {
+    arr.pop();
+  }
+  const crumbs = arr.map((path, i) => {
     switch (path) {
-      case 'createView':
+      case 'createview':
       case 'createstaticview':
-        return !isModify ? t('breadCrumbsCreate') : t('breadCrumbsModify');
+        return !isModify ? 'breadCrumbsCreate' : 'breadCrumbsModify';
       case 'monitors':
-        return t('breadCrumbsOwnMonitors');
+        return 'breadCrumbsOwnMonitors';
       case '':
-        return null;
+        return arr.length === 1 ? 'breadCrumbsCreate' : 'breadCrumbsFrontPage';
       default:
         return null;
     }
   });
 
   if (user.sub) {
+    // if user is logged in we don't show front page in the breadcrumbs
     crumbs.shift();
   }
 
@@ -38,11 +43,11 @@ const Breadcrumbs = () => {
         {crumbs.map((crumb, i) => {
           let path = arr[i];
           if (crumb === null) {
-            crumb = 'breadCrumbsFrontPage';
+            crumb = 'breadCrumbsCreate';
             path = '';
           }
           return (
-            <>
+            <React.Fragment key={`crumb${i}`}>
               {i !== 0 && (
                 <Icon
                   img={'arrow-down'}
@@ -60,7 +65,7 @@ const Breadcrumbs = () => {
                   {t(crumb)}
                 </Link>
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </div>

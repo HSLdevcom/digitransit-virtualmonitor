@@ -25,6 +25,11 @@
     align-items: center;
     justify-content: flex-end;
 
+    .main-buttons-container {
+      display: flex;
+      flex: 1;
+    }
+
     .monitor-button {
       height: 40px;
       font-size: 16px;
@@ -130,14 +135,14 @@
   }
 }
 
-.delete-modal-content {
+.monitor-modal-content {
   .message {
     font-size: 18px;
     font-weight: 500;
     margin-bottom: 45px;
   }
 
-  .delete-modal-buttons {
+  .monitor-modal-buttons {
     display: flex;
     flex-direction: column;
     justify-content: center;

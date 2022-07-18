@@ -5,7 +5,6 @@ import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
-import monitorsImage from './icons/create-monitor.svg';
 import IndexPage from './IndexPage';
 import Loading from './Loading';
 
@@ -51,7 +50,7 @@ const UserMonitors: React.FC<IProps> = props => {
     return <Loading white />;
   }
   const button = (
-    <Link to={'/monitors/createView'} className="monitor-button blue">
+    <Link to={'/monitors/createview'} className="monitor-button blue">
       {t('quickDisplayCreate')}
     </Link>
   );

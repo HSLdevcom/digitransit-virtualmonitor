@@ -88,6 +88,7 @@ const LayoutModal: FC<Props> = ({
             return (
               <div className="row" key={uuid()}>
                 <h3 className="row-header">{t(l.label)}</h3>
+                <div className="row-info">{t(l.infoText)}</div>
                 <div className="options">
                   {l.options.map(option => {
                     return (

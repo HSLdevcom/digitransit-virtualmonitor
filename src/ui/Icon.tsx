@@ -22,6 +22,8 @@ import { ReactComponent as Layout14 } from './icons/layout14.svg';
 import { ReactComponent as Layout15 } from './icons/layout15.svg';
 import { ReactComponent as Layout16 } from './icons/layout16.svg';
 import { ReactComponent as Layout17 } from './icons/layout17.svg';
+import { ReactComponent as Layout18 } from './icons/layout18.svg';
+import { ReactComponent as Layout19 } from './icons/layout19.svg';
 import { ReactComponent as StationAirplane } from './icons/station-airplane-waltti.svg';
 import { ReactComponent as StationAirplaneWaltti } from './icons/station-airplane-waltti.svg';
 import { ReactComponent as StationBus } from './icons/station-bus.svg';
@@ -151,7 +153,9 @@ const IconMap = (style: IIconMapProps) => {
     layout14: <Layout14 style={style} />,
     layout15: <Layout15 style={style} />,
     layout16: <Layout16 style={style} />,
-    layout17: <Layout16 style={style} />,
+    layout17: <Layout17 style={style} />,
+    layout18: <Layout18 style={style} />,
+    layout19: <Layout19 style={style} />,
     menu: <Menu style={style} />,
     'stop-bus': <StopBus style={style} />,
     'stop-bus-express': <StopBusExpress style={style} />,

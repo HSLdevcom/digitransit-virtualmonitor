@@ -89,9 +89,11 @@ const CreateViewPage = () => {
   if (
     stopCardList &&
     user.sub &&
-    location.pathname.toLowerCase() === '/create' &&
+    location.pathname.toLowerCase() === '/createview' &&
     location.search.indexOf('cont=') != -1
   ) {
+    // user is logged in and is attempting to modify a monitor created without logging in.
+    // redirect and render pre-filled create new monitor-page
     return (
       <Redirect
         to={{

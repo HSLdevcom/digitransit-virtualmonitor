@@ -1,6 +1,6 @@
 import cx from 'classnames';
-import React, { FC, useState } from 'react';
-import { ITitle } from '../util/Interfaces';
+import React, { FC, useEffect, useState } from 'react';
+import { ICardInfo } from '../util/Interfaces';
 import Icon from './Icon';
 import { useTranslation } from 'react-i18next';
 import { focusToInput, onClick } from '../util/InputUtils';
@@ -9,40 +9,34 @@ import { isKeyboardSelectionEvent } from '../util/browser';
 import { getPrimaryColor } from '../util/getConfig';
 
 interface IProps {
-  id: number;
-  layout: number;
-  title: ITitle;
+  card: ICardInfo;
   updateCardInfo?: (
     cardId: number,
     type: string,
     value: string,
     lang?: string,
   ) => void;
-  lang: 'fi' | 'sv' | 'en';
-  index: number;
+  lang: string;
 }
 
-const StopViewTitleEditor: FC<IProps> = ({
-  id,
-  layout,
-  title,
-  updateCardInfo,
-  lang,
-  index,
-}) => {
+const StopViewTitleEditor: FC<IProps> = ({ card, updateCardInfo, lang }) => {
+  const { index, layout, id, title } = card;
   const [t] = useTranslation();
   const { isMultiDisplay } = getLayout(layout);
-  const [titleChanged, setTitleChanged] = useState(false);
   const [newTitle, setNewTitle] = useState(
-    isMultiDisplay ? t('layout') : title,
+    isMultiDisplay ? t('layout') : title[lang],
   );
+
+  useEffect(() => {
+    setNewTitle(isMultiDisplay ? t('layout') : title[lang]);
+  }, [card]);
+
   const [isFocus, setisFocus] = useState(false);
 
   const onBlur = event => {
     setisFocus(false);
     if (updateCardInfo) {
       updateCardInfo(id, 'title', event.target.value, lang);
-      setTitleChanged(false);
     }
   };
   const layoutTitle = t('layoutEastWest');
@@ -52,8 +46,7 @@ const StopViewTitleEditor: FC<IProps> = ({
   }
 
   const onChange = e => {
-    setNewTitle({ ...newTitle, [lang]: e.target.value });
-    setTitleChanged(true);
+    setNewTitle(e.target.value);
   };
 
   const titleDescription = t('stoptitle')
@@ -78,7 +71,7 @@ const StopViewTitleEditor: FC<IProps> = ({
             onFocus={e => {
               handleFocus(e);
             }}
-            value={newTitle[lang]}
+            value={newTitle}
           />
         )}
         {isMultiDisplay && (

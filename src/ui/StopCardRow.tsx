@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLazyQuery } from '@apollo/client';
-import { IColumn, IStop } from '../util/Interfaces';
+import { ICardInfo, IStop } from '../util/Interfaces';
 import Icon from './Icon';
 import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
 import { uniqBy, sortBy } from 'lodash';
@@ -11,7 +11,6 @@ import { setSearchContextWithFeedIds } from './searchContext';
 import { getModeFromAddendum } from '../util/stopCardUtil';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
-import { ICardInfo } from './CardInfo';
 import cx from 'classnames';
 import {
   getAllIconStyleWithColor,
@@ -19,6 +18,7 @@ import {
   getModeSet,
 } from '../util/getConfig';
 import { isKeyboardSelectionEvent } from '../util/browser';
+import { ConfigContext } from '../contexts';
 
 const getGTFSId = id => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -32,11 +32,8 @@ const getGTFSId = id => {
 
 interface IProps {
   readonly orientation: string;
-  readonly noStopsSelected: boolean;
-  readonly feedIds: Array<string>;
   readonly cards: Array<any>;
-  readonly cardInfo: ICardInfo;
-  readonly columns: Array<IColumn>;
+  readonly item: ICardInfo;
   readonly onCardDelete?: (id: number) => void;
   readonly onCardMove?: (oldIndex: number, newIndex: number) => void;
   readonly onStopDelete?: (
@@ -63,10 +60,8 @@ interface IProps {
 
 const StopCardRow: FC<IProps> = ({
   orientation,
-  feedIds,
   cards,
-  cardInfo,
-  columns,
+  item,
   onCardDelete,
   onCardMove,
   onStopDelete,
@@ -74,8 +69,8 @@ const StopCardRow: FC<IProps> = ({
   setStops,
   updateCardInfo,
   languages,
-  noStopsSelected,
 }) => {
+  const { feedIds } = useContext(ConfigContext);
   const [t] = useTranslation();
   const [getStop, stopState] = useLazyQuery(GET_STOP, {
     fetchPolicy: 'network-only',
@@ -86,7 +81,9 @@ const StopCardRow: FC<IProps> = ({
     context: { clientName: 'default' },
   });
   const [autosuggestValue, setAutosuggestValue] = useState(null);
-
+  const { id, index, layout, columns } = item;
+  const noStops =
+    columns.left.stops.length === 0 && columns.right.stops.length === 0;
   const onSelect = selected => {
     const properties = selected.properties;
     setAutosuggestValue(properties);
@@ -113,10 +110,10 @@ const StopCardRow: FC<IProps> = ({
   useEffect(() => {
     if (stopState.data && stopState.data.stop) {
       setStops(
-        cardInfo.id,
+        id,
         'left',
         stopState.data.stop
-          .filter(s => s && !columns['left'].stops.some(el => el.id === s.id))
+          .filter(s => s && !columns.left.stops.some(el => el.id === s.id))
           .map(stop => {
             const stopWithGTFS = {
               ...stop,
@@ -147,10 +144,10 @@ const StopCardRow: FC<IProps> = ({
   useEffect(() => {
     if (stationState.data && stationState.data.station) {
       setStops(
-        cardInfo.id,
+        id,
         'left',
         stationState.data.station
-          .filter(s => s && !columns['left'].stops.some(el => el.id === s.id))
+          .filter(s => s && !columns.left.stops.some(el => el.id === s.id))
           .map(station => {
             let patterns = [];
             station.stops.forEach(stop =>
@@ -180,79 +177,51 @@ const StopCardRow: FC<IProps> = ({
   }, [stationState.data]);
 
   const lang = t('languageCode');
-  const isFirst = cardInfo.index === 0;
-  const isLast = cardInfo.index === cards.length - 1;
-  const isEastWest = cardInfo.layout >= 9 && cardInfo.layout <= 11;
+  const isFirst = index === 0;
+  const isLast = index === cards.length - 1;
+  const isEastWest = layout >= 9 && layout <= 11;
+  const possibleToMove = cards.length > 1;
 
   const filterSearchResults = results => {
     return results.filter(result => {
       const gtfsId = getGTFSId(result.properties.id);
-      return !columns['left'].stops.some(s => s.gtfsId === gtfsId);
+      return !columns.left.stops.some(s => s.gtfsId === gtfsId);
     });
   };
   const style = {
-    '--delayLength': `0.${1 + cardInfo.index}s`,
+    '--delayLength': `0.${1 + index}s`,
   } as React.CSSProperties;
   return (
-    <li
-      className="stopcard animate-in"
-      id={`stopcard_${cardInfo.id}`}
-      style={style}
-    >
+    <li className="stopcard animate-in" id={`stopcard_${id}`} style={style}>
       <div className="stopcard-row-container">
         <div className="title-with-icons">
-          {languages.includes('fi') && (
-            <StopViewTitleEditor
-              id={cardInfo.id}
-              layout={cardInfo.layout}
-              title={cardInfo.title}
-              updateCardInfo={updateCardInfo}
-              lang={'fi'}
-              index={cardInfo.index}
-            />
-          )}
-          {languages.includes('sv') &&
-            (!isEastWest || !languages.includes('fi')) && (
-              <StopViewTitleEditor
-                id={cardInfo.id}
-                layout={cardInfo.layout}
-                title={cardInfo.title}
-                updateCardInfo={updateCardInfo}
-                lang={'sv'}
-                index={cardInfo.index}
-              />
-            )}
-          {languages.includes('en') &&
-            (!isEastWest ||
-              (!languages.includes('fi') && !languages.includes('sv'))) && (
-              <StopViewTitleEditor
-                id={cardInfo.id}
-                layout={cardInfo.layout}
-                title={cardInfo.title}
-                updateCardInfo={updateCardInfo}
-                lang={'en'}
-                index={cardInfo.index}
-              />
-            )}
+          {languages.map((lan, i) => {
+            return (
+              ((isEastWest && i === 0) || !isEastWest) && (
+                <StopViewTitleEditor
+                  card={item}
+                  updateCardInfo={updateCardInfo}
+                  lang={lan}
+                />
+              )
+            );
+          })}
           <div className="icons">
             {cards.length > 1 && (
               <div
-                className={cx(
-                  'delete icon',
-                  cardInfo.possibleToMove ? '' : 'move-end',
-                )}
+                className={cx('delete icon', possibleToMove ? '' : 'move-end')}
                 tabIndex={0}
                 role="button"
-                aria-label={t('deleteView', { id: `${cardInfo.index + 1}` })}
-                onClick={() => onCardDelete(cardInfo.id)}
+                aria-label={t('deleteView', { id: `${index + 1}` })}
+                onClick={() => onCardDelete(id)}
                 onKeyPress={e =>
-                  isKeyboardSelectionEvent(e, true) && onCardDelete(cardInfo.id)
+                  isKeyboardSelectionEvent(e, true) && onCardDelete(id)
                 }
               >
                 <Icon img="delete" color={getPrimaryColor()} />
               </div>
             )}
-            {cardInfo.possibleToMove && (
+            {possibleToMove && (
               <div
                 className={cx(
                   'move icon',
@@ -264,14 +233,12 @@ const StopCardRow: FC<IProps> = ({
                     tabIndex={0}
                     role="button"
                     aria-label={t('moveViewDown', {
-                      id: `${cardInfo.index + 1}`,
+                      id: `${index + 1}`,
                     })}
-                    onClick={() =>
-                      onCardMove(cardInfo.index, cardInfo.index + 1)
-                    }
+                    onClick={() => onCardMove(index, index + 1)}
                     onKeyPress={e =>
                       isKeyboardSelectionEvent(e, true) &&
-                      onCardMove(cardInfo.index, cardInfo.index + 1)
+                      onCardMove(index, index + 1)
                     }
                   >
                     <Icon
@@ -287,14 +254,12 @@ const StopCardRow: FC<IProps> = ({
                     tabIndex={0}
                     role="button"
                     aria-label={t('moveViewUp', {
-                      id: `${cardInfo.index + 1}`,
+                      id: `${index + 1}`,
                     })}
-                    onClick={() =>
-                      onCardMove(cardInfo.index, cardInfo.index - 1)
-                    }
+                    onClick={() => onCardMove(index, index - 1)}
                     onKeyPress={e =>
                       isKeyboardSelectionEvent(e, true) &&
-                      onCardMove(cardInfo.index, cardInfo.index - 1)
+                      onCardMove(index, index - 1)
                     }
                   >
                     <Icon
@@ -311,14 +276,12 @@ const StopCardRow: FC<IProps> = ({
                       tabIndex={0}
                       role="button"
                       aria-label={t('moveViewUp', {
-                        id: `${cardInfo.index + 1}`,
+                        id: `${index + 1}`,
                       })}
-                      onClick={() =>
-                        onCardMove(cardInfo.index, cardInfo.index - 1)
-                      }
+                      onClick={() => onCardMove(index, index - 1)}
                       onKeyPress={e =>
                         isKeyboardSelectionEvent(e, true) &&
-                        onCardMove(cardInfo.index, cardInfo.index - 1)
+                        onCardMove(index, index - 1)
                       }
                     >
                       <Icon
@@ -335,14 +298,12 @@ const StopCardRow: FC<IProps> = ({
                       tabIndex={0}
                       role="button"
                       aria-label={t('moveViewDown', {
-                        id: `${cardInfo.index + 1}`,
+                        id: `${index + 1}`,
                       })}
-                      onClick={() =>
-                        onCardMove(cardInfo.index, cardInfo.index + 1)
-                      }
+                      onClick={() => onCardMove(index, index + 1)}
                       onKeyPress={e =>
                         isKeyboardSelectionEvent(e, true) &&
-                        onCardMove(cardInfo.index, cardInfo.index + 1)
+                        onCardMove(index, index + 1)
                       }
                       className="move-down"
                     >
@@ -367,7 +328,7 @@ const StopCardRow: FC<IProps> = ({
         <div className="search-stop-with-layout-and-time">
           <div className="search-stop">
             <div className="add-stop-alert" aria-hidden="true">
-              {noStopsSelected ? t('add-at-least-one-stop') : ''}
+              {noStops ? t('add-at-least-one-stop') : ''}
             </div>
             <DTAutosuggest
               appElement={'root'}
@@ -389,17 +350,16 @@ const StopCardRow: FC<IProps> = ({
           </div>
           <LayoutAndTimeContainer
             orientation={orientation}
-            cardInfo={cardInfo}
+            cardInfo={item}
             updateCardInfo={updateCardInfo}
             durationEditable={cards.length !== 1 || languages.length > 1}
           />
         </div>
         <StopListContainer
-          stops={columns}
           onStopDelete={onStopDelete}
           onStopMove={onStopMove}
           setStops={setStops}
-          cardInfo={cardInfo}
+          card={item}
           updateCardInfo={updateCardInfo}
           languages={languages}
         />

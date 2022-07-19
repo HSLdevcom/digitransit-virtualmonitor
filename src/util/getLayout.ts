@@ -128,6 +128,17 @@ export const getLayout = (layout: number): ILayout => {
         tighten: [6, 12],
         alertSpan: 1,
       };
+    case 18:
+      return {
+        leftColumnCount: 0,
+        rightColumnCount: 0,
+      };
+    case 19:
+      return {
+        leftColumnCount: 0,
+        rightColumnCount: 0,
+        isPortrait: true,
+      };
   }
 };
 

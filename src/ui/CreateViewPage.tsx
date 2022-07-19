@@ -120,7 +120,6 @@ const CreateViewPage = () => {
         <StopCardListContainer
           languages={languages}
           defaultStopCardList={[defaultStopCard()]}
-          feedIds={config.feedIds}
         />
       </ContentContainer>
     );
@@ -175,7 +174,6 @@ const CreateViewPage = () => {
         stopIds={stopIds}
         stationIds={stationIds}
         stopCardList={stopCardList}
-        feedIds={config.feedIds}
         loading={loading}
       />
     </ContentContainer>

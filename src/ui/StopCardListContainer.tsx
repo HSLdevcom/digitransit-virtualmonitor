@@ -4,7 +4,6 @@ import React, { FC, useContext, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import hash from 'object-hash';
 import { useTranslation } from 'react-i18next';
-import { ICardInfo } from './CardInfo';
 import monitorAPI from '../api';
 import { Link, Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
@@ -22,7 +21,6 @@ import { UserContext } from '../contexts';
 import { getParams } from '../util/queryUtils';
 
 interface IProps {
-  feedIds: Array<string>;
   defaultStopCardList: any;
   languages: Array<string>;
   loading?: boolean;
@@ -38,7 +36,6 @@ const createUUID = (startTime, hash) => {
 };
 
 const StopCardListContainer: FC<IProps> = ({
-  feedIds,
   defaultStopCardList,
   loading = false,
   ...props
@@ -124,7 +121,7 @@ const StopCardListContainer: FC<IProps> = ({
   const updateCardInfo = (
     cardId: number,
     type: string,
-    value: string,
+    value: number | string,
     lang = '',
   ) => {
     const cardIndex = stopCardList.findIndex(card => card.id === cardId);
@@ -173,13 +170,16 @@ const StopCardListContainer: FC<IProps> = ({
     } else if (type === 'layout') {
       if (
         getLayout(stopCardList[cardIndex].layout).isMultiDisplay &&
-        !getLayout(Number(value)).isMultiDisplay
+        !getLayout(+value).isMultiDisplay
       ) {
         stopCardList[cardIndex].columns.left.stops = stopCardList[
           cardIndex
         ].columns.left.stops.concat(
-          stopCardList[cardIndex].columns.right.stops.filter(rs =>
-            stopCardList[cardIndex].columns.left.stops.includes(rs.gtfsId),
+          stopCardList[cardIndex].columns.right.stops.filter(
+            rs =>
+              !stopCardList[cardIndex].columns.left.stops.find(
+                s => s.gtfsId === rs.gtfsId,
+              ),
           ),
         );
         stopCardList[cardIndex].columns.right.stops = [];
@@ -187,9 +187,9 @@ const StopCardListContainer: FC<IProps> = ({
         stopCardList[cardIndex].columns.right.title[lang] = t('sideRight');
         stopCardList[cardIndex].columns.right.inUse = true;
       }
-      stopCardList[cardIndex].layout = Number(value);
+      stopCardList[cardIndex].layout = +value;
     } else if (type === 'duration') {
-      stopCardList[cardIndex].duration = Number(value);
+      stopCardList[cardIndex].duration = value;
     }
     setStopCardList(stopCardList.slice());
   };
@@ -222,37 +222,18 @@ const StopCardListContainer: FC<IProps> = ({
   const handleOrientation = (orientation: string) => {
     setOrientation(orientation);
     stopCardList.forEach(card =>
-      updateCardInfo(
-        card.id,
-        'layout',
-        orientation === 'horizontal' ? '2' : '14',
-      ),
+      updateCardInfo(card.id, 'layout', orientation === 'horizontal' ? 2 : 14),
     );
   };
 
-  const modifiedStopCardList = stopCardList.map(card => {
-    return {
-      ...card,
-      onCardDelete: onCardDelete,
-      onCardMove: onCardMove,
-      onStopDelete: onStopDelete,
-      onStopMove: onStopMove,
-      setStops: setStops,
-      updateCardInfo: updateCardInfo,
-    };
-  });
-
-  // TODO: BUG, will only return the condition for last card
   const checkNoStops = stopCardList => {
-    let noStops = false;
-    stopCardList.forEach((stopCard, i) => {
+    return stopCardList.some((stopCard, i) => {
       const isMultiDisplay = getLayout(stopCard.layout).isMultiDisplay;
-      noStops = !isMultiDisplay
+      return !isMultiDisplay
         ? stopCard.columns.left.stops.length === 0
         : stopCard.columns.left.stops.length === 0 ||
-          stopCard.columns.right.stops.length === 0;
+            stopCard.columns.right.stops.length === 0;
     });
-    return noStops;
   };
 
   const createOrSaveMonitor = isNew => {
@@ -395,7 +376,7 @@ const StopCardListContainer: FC<IProps> = ({
     setViewTitle(newTitle);
   };
 
-  const noStops = checkNoStops(modifiedStopCardList);
+  const noStops = checkNoStops(stopCardList);
   const makeButtonsDisabled = !(languages.length > 0 && !noStops);
   const isModifyView = window.location.href.indexOf('url=') !== -1;
 
@@ -447,34 +428,23 @@ const StopCardListContainer: FC<IProps> = ({
         />
       )}
       <ul className="stopcards">
-        {modifiedStopCardList.map((item, index) => {
-          const noStops =
-            item.columns.left.stops.length === 0 &&
-            item.columns.right.stops.length === 0;
-          const cardInfo: ICardInfo = {
-            feedIds: feedIds,
+        {stopCardList.map((item, index) => {
+          const card: any = {
             index: index,
-            id: item.id,
-            title: item.title,
-            layout: item.layout,
-            duration: item.duration,
-            possibleToMove: modifiedStopCardList.length > 1,
+            ...item,
           };
           return (
             <StopCardRow
               key={`stopcard-${index}`}
-              noStopsSelected={noStops}
-              cardInfo={cardInfo}
-              feedIds={feedIds}
+              item={card}
               orientation={orientation}
-              cards={modifiedStopCardList}
-              columns={item.columns}
-              onCardDelete={item.onCardDelete}
-              onCardMove={item.onCardMove}
-              setStops={item.setStops}
-              onStopDelete={item.onStopDelete}
-              onStopMove={item.onStopMove}
-              updateCardInfo={item.updateCardInfo}
+              cards={stopCardList}
+              onCardDelete={onCardDelete}
+              onCardMove={onCardMove}
+              setStops={setStops}
+              onStopDelete={onStopDelete}
+              onStopMove={onStopMove}
+              updateCardInfo={updateCardInfo}
               languages={languages}
             />
           );

@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 import { verticalLayouts, horizontalLayouts } from './Layouts';
 import Dropdown from './Dropdown';
 import LayoutModal from './LayoutModal';
-import { ICardInfo } from './CardInfo';
+import { ICardInfo } from '../util/Interfaces';
 
 interface IProps {
   cardInfo: ICardInfo;
   updateCardInfo: (
     cardId: number,
     type: string,
-    value: string,
+    value: string | number,
     lang?: string,
   ) => void;
   orientation: string;
@@ -54,7 +54,7 @@ const LayoutAndTimeContainer: FC<IProps> = ({
   const getLayout = option => {
     if (option) {
       if (updateCardInfo) {
-        updateCardInfo(cardInfo.id, 'layout', option.value.toString());
+        updateCardInfo(cardInfo.id, 'layout', +option.value);
       }
     }
     changeOpen(false);

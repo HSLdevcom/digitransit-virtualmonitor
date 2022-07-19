@@ -1,4 +1,5 @@
 export interface IStop {
+  id?: string;
   code: string;
   desc: string;
   gtfsId: string;
@@ -124,4 +125,13 @@ export interface ICard {
   source: string;
   parentStation: string;
   hiddenRoutes: any;
+}
+export interface ICardInfo {
+  index: number;
+  id: number;
+  layout?: number;
+  duration?: number;
+  title?: ITitle;
+  possibleToMove: boolean;
+  columns?: IColumn;
 }

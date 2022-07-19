@@ -8,7 +8,6 @@ import { sortBy, uniqBy } from 'lodash';
 
 interface IProps {
   stopCardList: any;
-  feedIds: Array<string>;
   stopIds: Array<string>;
   stationIds: Array<string>;
   languages: Array<string>;
@@ -17,7 +16,6 @@ interface IProps {
 }
 
 const StopCardListDataContainer: FC<IProps> = ({
-  feedIds,
   stopCardList,
   stopIds,
   stationIds,
@@ -133,7 +131,6 @@ const StopCardListDataContainer: FC<IProps> = ({
       loading={stations.loading || stops.loading || loading}
       languages={languages}
       vertical={stopCardList[0].layout > 11}
-      feedIds={feedIds}
       defaultStopCardList={cardList}
       staticMonitor={staticMonitor}
     />

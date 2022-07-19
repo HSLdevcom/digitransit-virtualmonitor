@@ -75,6 +75,8 @@ export const horizontalLayouts = [
     ],
   },
   {
+    label: '',
+    infoText: '',
     options: [
       {
         value: '7',
@@ -136,6 +138,7 @@ export const horizontalLayouts = [
   },
   {
     label: 'information-display',
+    infoText: '',
     options: [
       {
         value: '18',
@@ -145,6 +148,7 @@ export const horizontalLayouts = [
             <span className="label"></span>
           </>
         ),
+        rows: '',
       },
     ],
   },
@@ -153,6 +157,7 @@ export const horizontalLayouts = [
 export const verticalLayouts = [
   {
     label: 'simple',
+    infoText: '',
     options: [
       {
         value: '12',
@@ -198,6 +203,7 @@ export const verticalLayouts = [
   },
   {
     label: 'tighten',
+    infoText: '',
     options: [
       {
         value: '16',
@@ -223,6 +229,7 @@ export const verticalLayouts = [
   },
   {
     label: 'information-display',
+    infoText: '',
     options: [
       {
         value: '19',
@@ -232,6 +239,7 @@ export const verticalLayouts = [
             <span className="label"></span>
           </>
         ),
+        rows: '',
       },
     ],
   },

@@ -73,7 +73,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
 
   const crds = cards.map((c, i) => {
     const cols = c.columns;
-    const multipleCols = layout >= 9 && layout <= 11;
+    const multipleCols = c.layout >= 9 && c.layout <= 11;
     const colStops = multipleCols
       ? [cols.left.stops, cols.right.stops]
       : [cols.left.stops];

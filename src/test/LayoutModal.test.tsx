@@ -1,16 +1,18 @@
 import React from 'react';
-import { render } from '@testing-library/react';
 import LayoutModal from '../ui/LayoutModal';
-import { mount, shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import Modal from 'react-modal';
 
 const defaultProps = {
   option: { rows: '16', value: '14', label: undefined },
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onClose: () => {},
-  isOpen: true,
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  onSave: () => {},
+  open: true,
   orientation: 'horizontal',
   ariaHideApp: false,
+  allowInformationDisplay: true,
 };
 
 it('should render', () => {

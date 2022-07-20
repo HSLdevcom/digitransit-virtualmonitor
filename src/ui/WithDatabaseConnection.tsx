@@ -71,7 +71,7 @@ const WithDatabaseConnection: FC<IProps> = ({
 
   return (
     <MonitorContext.Provider value={monitor}>
-      {monitor.isInformationDisplay ? (
+      {monitor.cards[0].layout > 17 ? (
         <InformationDisplayContainer />
       ) : (
         <>

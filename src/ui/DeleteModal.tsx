@@ -1,17 +1,20 @@
 import React, { FC } from 'react';
 import Modal from '@hsl-fi/modal';
 import { useTranslation } from 'react-i18next';
+import Loading from './Loading';
 
 interface IProps {
   name: string;
   setDeleteModalOpen: any;
   onDeleteCallBack: any;
+  loading?: boolean;
 }
 
 const DeleteModal: FC<IProps> = ({
   name,
   setDeleteModalOpen,
   onDeleteCallBack,
+  loading,
 }) => {
   const [t] = useTranslation();
   return (
@@ -30,8 +33,12 @@ const DeleteModal: FC<IProps> = ({
           {t('delete-confirmation', { monitor: name })}
         </div>
         <div className="monitor-modal-buttons">
-          <button className="monitor-button blue" onClick={onDeleteCallBack}>
-            {t('delete')}
+          <button
+            disabled={loading}
+            className="monitor-button blue"
+            onClick={onDeleteCallBack}
+          >
+            {loading ? <Loading small primary /> : <>{t('delete')}</>}
           </button>
           <button
             className="monitor-button white"

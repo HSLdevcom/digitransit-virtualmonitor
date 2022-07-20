@@ -34,6 +34,7 @@ interface IProps {
   readonly orientation: string;
   readonly cards: Array<any>;
   readonly item: ICardInfo;
+  updateLayout: (cardId: number, layout: number) => void;
   readonly onCardDelete?: (id: number) => void;
   readonly onCardMove?: (oldIndex: number, newIndex: number) => void;
   readonly onStopDelete?: (
@@ -65,6 +66,7 @@ const StopCardRow: FC<IProps> = ({
   onCardDelete,
   onCardMove,
   onStopDelete,
+  updateLayout,
   onStopMove,
   setStops,
   updateCardInfo,
@@ -352,7 +354,9 @@ const StopCardRow: FC<IProps> = ({
             orientation={orientation}
             cardInfo={item}
             updateCardInfo={updateCardInfo}
+            updateLayout={updateLayout}
             durationEditable={cards.length !== 1 || languages.length > 1}
+            allowInformationDisplay={cards.length === 1}
           />
         </div>
         <StopListContainer

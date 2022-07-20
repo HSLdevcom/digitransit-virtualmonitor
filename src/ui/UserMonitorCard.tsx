@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
-import { isInformationDisplay } from '../util/monitorUtils';
+import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
@@ -36,30 +35,24 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const layout = cards[0].layout;
   const [showModal, setShowModal] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const onClose = () => {
     setOpen(false);
   };
 
-  // useEffect(() => {
-
-  //   const to = setTimeout(() => {
-  //     setShowModal(false)
-  //   }, 3000)
-  //   return () =>  clearTimeout(to);
-  // }, [showModal])
-
   const onDeleteCallBack = () => {
+    setDeleting(true);
     monitorAPI.deleteStatic(view.id, url).then(res => {
       onDelete(true);
       setDeleteModalOpen(false);
+      setDeleting(false);
     });
   };
 
   const v = {
     cards: cards,
     languages: languages,
-    isInformationDisplay: isInformationDisplay(cards),
   };
 
   const stations = v ? getTrainStationData(v, 'STATION') : [];
@@ -80,7 +73,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
 
   const crds = cards.map((c, i) => {
     const cols = c.columns;
-    const multipleCols = cols.right.inUse;
+    const multipleCols = layout >= 9 && layout <= 11;
     const colStops = multipleCols
       ? [cols.left.stops, cols.right.stops]
       : [cols.left.stops];
@@ -138,13 +131,12 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
       </div>
     );
   });
+  const isHorizontal = layout < 12 || layout === 18;
   return (
     <>
       <div className="main-container">
         {showModal && (
-          <div className="alert-modal animate-in">
-            Linkki kopioitu leikepöydälle
-          </div>
+          <div className="alert-modal animate-in">{t('link-copied')}</div>
         )}
         {isOpen && (
           <PreviewModal
@@ -152,7 +144,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
             view={v}
             isOpen={isOpen}
             onClose={onClose}
-            isLandscape={layout < 12}
+            isLandscape={isHorizontal}
             stations={stations}
             stops={stops}
             showPlatformsOrTracks={showPlatformsOrTracks}
@@ -163,12 +155,13 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
             name={name}
             onDeleteCallBack={onDeleteCallBack}
             setDeleteModalOpen={setDeleteModalOpen}
+            loading={deleting}
           />
         )}
         <div className="layout-img">
           <Icon
             img={'rectangle-selected'}
-            rotate={cards[0].layout < 12 ? '0' : '90'}
+            rotate={isHorizontal ? '0' : '90'}
             height={32}
             width={32}
             color={getPrimaryColor()}
@@ -181,12 +174,6 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
       </div>
       <div className="cards">{crds}</div>
       <div className="buttons-container">
-        {/* <button className="monitor-button white" onClick={() => setOpen(true)}>
-          {t('preview')}
-        </button>
-        <Link className="monitor-button white" to={`/monitors/createview?&url=${url}`}>
-          {t('modify')}
-        </Link> */}
         <div className="main-buttons-container">
           <button
             className="monitor-button white"

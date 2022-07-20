@@ -5,7 +5,7 @@ import monitorAPI from '../api';
 import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
-import { ConfigContext, UserContext } from '../contexts';
+import { UserContext } from '../contexts';
 import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import { getParams } from '../util/queryUtils';
 import Modal from '@hsl-fi/modal';
@@ -13,7 +13,6 @@ import { useTranslation } from 'react-i18next';
 
 const CreateViewPage = () => {
   const [t] = useTranslation();
-  const config = useContext(ConfigContext);
   const user = useContext(UserContext);
   const location: any = useLocation();
   const history = useHistory();
@@ -119,7 +118,7 @@ const CreateViewPage = () => {
       <ContentContainer>
         <StopCardListContainer
           languages={languages}
-          defaultStopCardList={[defaultStopCard()]}
+          stopCards={[defaultStopCard()]}
         />
       </ContentContainer>
     );

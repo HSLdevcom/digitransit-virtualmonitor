@@ -63,7 +63,6 @@ export interface IMonitor {
   cards: Array<IView>;
   languages: Array<string>;
   contenthash?: string;
-  isInformationDisplay: boolean;
 }
 
 export interface IAlertDescriptionTextTranslation {

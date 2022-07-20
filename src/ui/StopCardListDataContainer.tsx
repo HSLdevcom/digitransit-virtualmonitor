@@ -131,7 +131,7 @@ const StopCardListDataContainer: FC<IProps> = ({
       loading={stations.loading || stops.loading || loading}
       languages={languages}
       vertical={stopCardList[0].layout > 11}
-      defaultStopCardList={cardList}
+      stopCards={cardList}
       staticMonitor={staticMonitor}
     />
   );

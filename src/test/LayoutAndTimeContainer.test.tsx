@@ -25,6 +25,9 @@ const defaultProps = {
   cardInfo: cardInfo,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   updateCardInfo: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  updateLayout: () => {},
+  allowInformationDisplay: true,
   orientation: 'horizontal',
   durationEditable: false,
 };

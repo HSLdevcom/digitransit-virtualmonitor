@@ -24,6 +24,7 @@ const UserViewTitleEditor: FC<IProps> = ({
   const [isFocus, setFocus] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDeleted, setDeleted] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [t] = useTranslation();
 
   const { url } = getParams(window.location.search);
@@ -42,9 +43,11 @@ const UserViewTitleEditor: FC<IProps> = ({
   };
 
   const onDelete = () => {
+    setDeleting(true);
     if (monitorId && url) {
       monitorAPI.deleteStatic(monitorId, url).then(res => {
         setDeleted(true);
+        setDeleting(false);
       });
     } else {
       setDeleted(true);
@@ -65,6 +68,7 @@ const UserViewTitleEditor: FC<IProps> = ({
     <div className="user-view-title">
       {deleteModalOpen && (
         <DeleteModal
+          loading={deleting}
           name={newTitle}
           setDeleteModalOpen={setDeleteModalOpen}
           onDeleteCallBack={onDelete}

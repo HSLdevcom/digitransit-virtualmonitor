@@ -57,7 +57,7 @@ const PreviewModal: FC<Props> = ({
         </div>
         <section id={isLandscape ? 'previewMonitor' : 'previewMonitorPortrait'}>
           <div className="carouselContainer">
-            {view.isInformationDisplay ? (
+            {view.cards[0].layout > 17 ? (
               <InformationDisplayContainer preview />
             ) : (
               <>

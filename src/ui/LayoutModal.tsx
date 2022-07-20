@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { v4 as uuid } from 'uuid';
 import { getColorByName } from '../util/getConfig';
 import Icon from './Icon';
+import { ICardInfo } from '../util/Interfaces';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
@@ -16,21 +17,27 @@ interface Option {
 }
 interface Props {
   option: Option;
-  onClose: (option) => void;
-  isOpen: boolean;
+  open: boolean;
+  onSave: (option: number) => void;
+  onClose: () => void;
   orientation: string;
   ariaHideApp?: boolean; // For unit testing
+  allowInformationDisplay: boolean;
 }
 
 const LayoutModal: FC<Props> = ({
   orientation,
-  isOpen,
   option,
   onClose,
+  onSave,
+  open,
   ariaHideApp = true,
+  allowInformationDisplay,
 }) => {
   const [t] = useTranslation();
+
   const [selected, setSelected] = useState(option);
+
   useEffect(() => {
     if (!isEqual(selected, option)) {
       setSelected(option);
@@ -41,15 +48,7 @@ const LayoutModal: FC<Props> = ({
     if (layoutBtn) {
       layoutBtn.focus();
     }
-  }, [option, isOpen]);
-
-  const handleSave = () => {
-    onClose(selected);
-  };
-
-  const handleSelect = option => {
-    setSelected(option);
-  };
+  }, [option, open]);
 
   const verticalHeight = {
     content: {
@@ -60,8 +59,8 @@ const LayoutModal: FC<Props> = ({
     orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;
   return (
     <Modal
-      isOpen={isOpen}
-      onRequestClose={() => onClose(null)}
+      isOpen={open}
+      onRequestClose={() => onClose()}
       portalClassName="modal"
       style={orientation === 'vertical' ? verticalHeight : undefined}
       ariaHideApp={ariaHideApp}
@@ -72,7 +71,7 @@ const LayoutModal: FC<Props> = ({
             className="close-button"
             role="button"
             aria-label={t('close')}
-            onClick={() => onClose(null)}
+            onClick={() => onClose()}
           >
             <Icon
               img="close"
@@ -89,6 +88,12 @@ const LayoutModal: FC<Props> = ({
               <div className="row" key={uuid()}>
                 <h3 className="row-header">{t(l.label)}</h3>
                 <div className="row-info">{t(l.infoText)}</div>
+                {l.label === 'information-display' &&
+                  !allowInformationDisplay && (
+                    <div className="info-display-warning">
+                      {t('info-display-only-one')}
+                    </div>
+                  )}
                 <div className="options">
                   {l.options.map(option => {
                     return (
@@ -100,7 +105,10 @@ const LayoutModal: FC<Props> = ({
                             ? 'label-selected'
                             : '',
                         )}
-                        onClick={() => handleSelect(option)}
+                        disabled={
+                          +option.value > 17 && !allowInformationDisplay
+                        }
+                        onClick={() => setSelected(option)}
                         id={`layoutBtn-${option.value}`}
                         key={uuid()}
                         role="button"
@@ -118,7 +126,10 @@ const LayoutModal: FC<Props> = ({
           })}
         </div>
         <div className="button-container">
-          <button className="close-button" onClick={handleSave}>
+          <button
+            className="close-button"
+            onClick={() => onSave(+selected.value)}
+          >
             {t('save')}
           </button>
         </div>

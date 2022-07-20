@@ -10,7 +10,6 @@ import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getLayout';
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
-import { isInformationDisplay } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
 import UserViewTitleEditor from './UserViewTitleEditor';
 import { getCurrentSecondsWithMilliSeconds } from '../time';
@@ -21,7 +20,7 @@ import { UserContext } from '../contexts';
 import { getParams } from '../util/queryUtils';
 
 interface IProps {
-  defaultStopCardList: any;
+  stopCards: any;
   languages: Array<string>;
   loading?: boolean;
   vertical?: boolean;
@@ -36,17 +35,20 @@ const createUUID = (startTime, hash) => {
 };
 
 const StopCardListContainer: FC<IProps> = ({
-  defaultStopCardList,
+  stopCards,
   loading = false,
   ...props
 }) => {
   const user = useContext(UserContext);
   const [t] = useTranslation();
   const startTime = getCurrentSecondsWithMilliSeconds();
-  const [stopCardList, setStopCardList] = useState(defaultStopCardList);
+  const [stopCardList, setStopCardList] = useState(stopCards);
   const [languages, setLanguages] = useState(props.languages);
+
+  const isHorizontal =
+    stopCardList[0].layout < 12 || stopCardList[0].layout === 18;
   const [orientation, setOrientation] = useState(
-    defaultStopCardList[0].layout > 11 ? 'vertical' : 'horizontal',
+    !isHorizontal ? 'vertical' : 'horizontal',
   );
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
@@ -118,6 +120,28 @@ const StopCardListContainer: FC<IProps> = ({
     }
   };
 
+  const updateLayout = (cardId: number, value: number) => {
+    const cardIndex = stopCardList.findIndex(card => card.id === cardId);
+    if (
+      getLayout(stopCardList[cardIndex].layout).isMultiDisplay &&
+      !getLayout(+value).isMultiDisplay
+    ) {
+      stopCardList[cardIndex].columns.left.stops = stopCardList[
+        cardIndex
+      ].columns.left.stops.concat(
+        stopCardList[cardIndex].columns.right.stops.filter(
+          rs =>
+            !stopCardList[cardIndex].columns.left.stops.find(
+              s => s.gtfsId === rs.gtfsId,
+            ),
+        ),
+      );
+      stopCardList[cardIndex].columns.right.stops = [];
+    }
+    stopCardList[cardIndex].layout = value;
+    setStopCardList(stopCardList.slice());
+  };
+
   const updateCardInfo = (
     cardId: number,
     type: string,
@@ -167,27 +191,6 @@ const StopCardListContainer: FC<IProps> = ({
       } else {
         stopCardList[cardIndex].columns['right'].title[lang] = value;
       }
-    } else if (type === 'layout') {
-      if (
-        getLayout(stopCardList[cardIndex].layout).isMultiDisplay &&
-        !getLayout(+value).isMultiDisplay
-      ) {
-        stopCardList[cardIndex].columns.left.stops = stopCardList[
-          cardIndex
-        ].columns.left.stops.concat(
-          stopCardList[cardIndex].columns.right.stops.filter(
-            rs =>
-              !stopCardList[cardIndex].columns.left.stops.find(
-                s => s.gtfsId === rs.gtfsId,
-              ),
-          ),
-        );
-        stopCardList[cardIndex].columns.right.stops = [];
-        stopCardList[cardIndex].columns.left.title[lang] = t('sideLeft');
-        stopCardList[cardIndex].columns.right.title[lang] = t('sideRight');
-        stopCardList[cardIndex].columns.right.inUse = true;
-      }
-      stopCardList[cardIndex].layout = +value;
     } else if (type === 'duration') {
       stopCardList[cardIndex].duration = value;
     }
@@ -222,7 +225,7 @@ const StopCardListContainer: FC<IProps> = ({
   const handleOrientation = (orientation: string) => {
     setOrientation(orientation);
     stopCardList.forEach(card =>
-      updateCardInfo(card.id, 'layout', orientation === 'horizontal' ? 2 : 14),
+      updateLayout(card.id, orientation === 'horizontal' ? 2 : 14),
     );
   };
 
@@ -240,9 +243,6 @@ const StopCardListContainer: FC<IProps> = ({
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
     cardArray.forEach(card => {
-      if (card.layout >= 9 && card.layout < 11) {
-        card.columns.right.inUse = true;
-      }
       card.columns.left.stops = card.columns.left.stops.map(stop => {
         return {
           name: stop.name,
@@ -275,7 +275,6 @@ const StopCardListContainer: FC<IProps> = ({
     const newCard: IMonitor = {
       cards: cards,
       languages: languageArray.filter(lan => languages.includes(lan)),
-      isInformationDisplay: isInformationDisplay(cardArray),
       contenthash: '',
     };
     newCard.contenthash = hash(newCard, {
@@ -365,7 +364,6 @@ const StopCardListContainer: FC<IProps> = ({
 
   const cards: IMonitor = {
     cards: stopCardList,
-    isInformationDisplay: isInformationDisplay(stopCardList),
     languages: languages,
   };
   if (loading) {
@@ -444,6 +442,7 @@ const StopCardListContainer: FC<IProps> = ({
               setStops={setStops}
               onStopDelete={onStopDelete}
               onStopMove={onStopMove}
+              updateLayout={updateLayout}
               updateCardInfo={updateCardInfo}
               languages={languages}
             />
@@ -452,7 +451,11 @@ const StopCardListContainer: FC<IProps> = ({
       </ul>
       <div className="buttons">
         <div className="wide">
-          <button className={cx('button', 'add-new-view')} onClick={addNew}>
+          <button
+            disabled={stopCardList.find(c => c.layout > 17)}
+            className={cx('button', 'add-new-view')}
+            onClick={addNew}
+          >
             <span>{t('prepareDisplay')} </span>
           </button>
         </div>

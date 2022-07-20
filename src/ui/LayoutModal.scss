@@ -40,6 +40,10 @@
       font-size: 1.125rem;
     }
 
+    .info-display-warning {
+      font-size: 14px;
+    }
+
     .row-info {
       margin-bottom: 10px;
     }
@@ -71,11 +75,22 @@
       .options {
         display: flex;
 
+        .option:disabled::after {
+          position: absolute;
+          content: '';
+          height: 100%;
+          width: 100%;
+          background-color: rgba(221, 221, 221, 0.7);
+        }
+
         .option {
+          position: relative;
           display: flex;
           flex-direction: column;
+          align-items: center;
           border: 1px solid #ddd;
           border-radius: 4px;
+          padding: 0;
 
           svg {
             position: relative;
@@ -86,11 +101,6 @@
             height: 210px;
             width: 121px;
             margin-right: 20px;
-
-            svg {
-              top: 10px;
-              left: 10px;
-            }
           }
 
           &.label-selected {

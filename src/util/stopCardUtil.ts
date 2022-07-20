@@ -3,12 +3,10 @@ export const defaultStopCard = () => ({
   title: { fi: '', sv: '', en: '' },
   columns: {
     left: {
-      inUse: true,
       title: { fi: '', sv: '', en: '' },
       stops: [],
     },
     right: {
-      inUse: false,
       title: { fi: '', sv: '', en: '' },
       stops: [],
     },

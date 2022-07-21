@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { IStop, ICardInfo } from '../util/Interfaces';
 import StopListTitleInput from './StopListTitleInput';
 import StopRow from './StopRow';
-import { v4 as uuid } from 'uuid';
 import { getLayout } from '../util/getLayout';
 
 interface Props {
@@ -120,7 +119,6 @@ const StopList = props => {
                 return (
                   <li key={`s-${index}`} className="stop">
                     <StopRow
-                      key={uuid()}
                       stop={item}
                       side={'left'}
                       onStopDelete={props.onStopDelete}
@@ -151,11 +149,10 @@ const StopList = props => {
           <div>
             <ul className="stops">
               {rightItems &&
-                rightItems.map(item => {
+                rightItems.map((item, index) => {
                   return (
-                    <li className="stop" key={uuid()}>
+                    <li className="stop" key={`s-${index}`}>
                       <StopRow
-                        key={uuid()}
                         stop={item}
                         side={'right'}
                         onStopDelete={props.onStopDelete}

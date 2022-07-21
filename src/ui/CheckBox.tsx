@@ -14,17 +14,13 @@ function Checkbox(props) {
     isFocusVisible ? '-focus' : ''
   }`;
   return (
-    <label
-      className="check-box"
-      style={{ display: 'flex', alignItems: 'center' }}
-    >
+    <label className="check-box">
       <input {...inputProps} {...focusProps} ref={ref} />
       <Icon
         img={img}
         width={props.width ? props.width : 20}
         height={props.height ? props.height : 20}
         color={props.color ? props.color : 'none'}
-        margin={props.margin ? props.margin : '0'}
       />
       {props.children}
     </label>

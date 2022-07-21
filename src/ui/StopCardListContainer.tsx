@@ -377,6 +377,7 @@ const StopCardListContainer: FC<IProps> = ({
   const noStops = checkNoStops(stopCardList);
   const makeButtonsDisabled = !(languages.length > 0 && !noStops);
   const isModifyView = window.location.href.indexOf('url=') !== -1;
+  const newDisplayDisabled = stopCardList.find(c => c.layout > 17);
 
   const buttonsRequirements = [];
   if (languages.length === 0) {
@@ -394,7 +395,10 @@ const StopCardListContainer: FC<IProps> = ({
     : t('previewView');
   const ariaLabelForSave = makeButtonsDisabled
     ? createAriaLabel('Save', buttonsRequirements, t)
-    : t('previewView');
+    : t('save');
+  const ariaNewDisplay = newDisplayDisabled
+    ? t('new-display-disabled')
+    : t('prepareDisplay');
 
   return (
     <div className="stop-card-list-container">
@@ -452,9 +456,11 @@ const StopCardListContainer: FC<IProps> = ({
       <div className="buttons">
         <div className="wide">
           <button
-            disabled={stopCardList.find(c => c.layout > 17)}
+            disabled={newDisplayDisabled}
             className={cx('button', 'add-new-view')}
             onClick={addNew}
+            aria-label={ariaNewDisplay}
+            title={newDisplayDisabled ? ariaNewDisplay : undefined}
           >
             <span>{t('prepareDisplay')} </span>
           </button>
@@ -463,6 +469,7 @@ const StopCardListContainer: FC<IProps> = ({
           disabled={makeButtonsDisabled}
           className="button"
           onClick={openPreview}
+          title={makeButtonsDisabled ? ariaLabelForPreview : undefined}
           aria-label={ariaLabelForPreview}
         >
           <span>{t('previewView')}</span>
@@ -473,18 +480,20 @@ const StopCardListContainer: FC<IProps> = ({
             className="button blue"
             onClick={() => createOrSaveMonitor(true)}
             aria-label={ariaLabelForCreate}
+            title={makeButtonsDisabled ? ariaLabelForCreate : undefined}
           >
             <span>{t('displayEditorStaticLink')}</span>
           </button>
         )}
         {isModifyView && (
           <>
-            <Link className="button" to={'/monitors'}>
+            <Link className="button" role="link" to={'/monitors'}>
               <span>{t('cancel')}</span>
             </Link>
             <button
               disabled={makeButtonsDisabled}
               className="button blue"
+              title={makeButtonsDisabled ? ariaLabelForSave : undefined}
               onClick={() => createOrSaveMonitor(false)}
               aria-label={ariaLabelForSave}
             >

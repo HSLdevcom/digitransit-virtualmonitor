@@ -168,9 +168,12 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
           />
         </div>
         <div className="monitor-name">{name}</div>
-        <div className="delete-icon" onClick={() => setDeleteModalOpen(true)}>
+        <button
+          className="delete-icon"
+          onClick={() => setDeleteModalOpen(true)}
+        >
           <Icon img="delete" color={getPrimaryColor()} />
-        </div>
+        </button>
       </div>
       <div className="cards">{crds}</div>
       <div className="buttons-container">
@@ -182,15 +185,18 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
             {t('preview')}
           </button>
           <Link
+            tabIndex={0}
+            role="button"
             className="monitor-button white"
-            to={`/monitors/createview?&url=${url}`}
+            to={{ pathname: `monitors/createview?&url=${url}` }}
           >
             {t('modify')}
           </Link>
           <Link
+            tabIndex={0}
             role="button"
             className="monitor-button white"
-            to={`/static?&url=${url}`}
+            to={`static?&url=${url}`}
           >
             {t('open')}
           </Link>

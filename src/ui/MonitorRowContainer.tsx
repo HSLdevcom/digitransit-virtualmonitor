@@ -5,7 +5,6 @@ import cx from 'classnames';
 import { formatDate, setDate, formattedDateTimeFromSeconds } from '../time';
 import { getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
-import { v4 as uuid } from 'uuid';
 import { IClosedStop } from '../util/Interfaces';
 import { useTranslation } from 'react-i18next';
 
@@ -111,7 +110,7 @@ const MonitorRowContainer: FC<IProps> = ({
       i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
     leftColumn.push(
       <MonitorRow
-        key={departure ? departure.trip.gtfsId : uuid()}
+        key={departure ? departure.trip.gtfsId : `row_l${i}`}
         departure={departure}
         translations={translatedStrings}
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
@@ -150,7 +149,7 @@ const MonitorRowContainer: FC<IProps> = ({
           i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
         rightColumn.push(
           <MonitorRow
-            key={departure ? departure.trip.gtfsId : uuid()}
+            key={departure ? departure.trip.gtfsId : `row_c${i}`}
             departure={departure}
             translations={translatedStrings}
             isFirst={
@@ -179,7 +178,7 @@ const MonitorRowContainer: FC<IProps> = ({
           i !== nextDayDepartureIndexRight ? departuresRight[i] : null;
         rightColumn.push(
           <MonitorRow
-            key={departure ? departure.trip.gtfsId : uuid()}
+            key={departure ? departure.trip.gtfsId : `row_r${i}`}
             departure={departure}
             isTwoRow={rightColumnCount === 4 || layout === 12}
             stops={rightStops}

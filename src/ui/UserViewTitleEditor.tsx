@@ -100,9 +100,9 @@ const UserViewTitleEditor: FC<IProps> = ({
           </div>
         )}
       </div>
-      <div className="delete-icon" onClick={() => setDeleteModalOpen(true)}>
+      <button className="delete-icon" onClick={() => setDeleteModalOpen(true)}>
         <Icon img="delete" color={getPrimaryColor()} />
-      </div>
+      </button>
     </div>
   );
 };

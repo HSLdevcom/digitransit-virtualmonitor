@@ -13,7 +13,7 @@
     "@habx/apollo-multi-endpoint-link": "^2.5.0",
     "@hsl-fi/modal": "^0.3.1",
     "@hsl-fi/site-header": "^4.0.0-rc17",
-    "@react-aria/checkbox": "^3.2.3",
+    "@react-aria/checkbox": "^3.4.1",
     "@react-aria/focus": "^3.5.0",
     "@react-stately/toggle": "^3.2.3",
     "@types/graphql": "^14.5.0",

@@ -249,7 +249,6 @@ const StopRoutesModal: FC<Props> = props => {
                   }
                   onChange={() => checkShowSetting(setting)}
                   aria-label={`${t('show')} ${t(setting)}`}
-                  margin={'0 10px 5px 0'}
                   color={getColorByName('primary')}
                 >
                   {t(setting)}

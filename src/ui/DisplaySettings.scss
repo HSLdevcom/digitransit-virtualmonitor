@@ -27,6 +27,12 @@
     background-color: white;
     align-items: center;
 
+    label {
+      svg {
+        margin-right: 5px !important;
+      }
+    }
+
     div {
       margin-right: 10px;
     }

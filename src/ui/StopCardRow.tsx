@@ -191,7 +191,7 @@ const StopCardRow: FC<IProps> = ({
     });
   };
   const style = {
-    '--delayLength': `0.${1 + index}s`,
+    '--delayLength': `0.0s`,
   } as React.CSSProperties;
   return (
     <li className="stopcard animate-in" id={`stopcard_${id}`} style={style}>

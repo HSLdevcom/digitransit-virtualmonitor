@@ -4,10 +4,8 @@ import { horizontalLayouts, verticalLayouts } from './Layouts';
 import isEqual from 'lodash/isEqual';
 import Modal from 'react-modal';
 import { useTranslation } from 'react-i18next';
-import { v4 as uuid } from 'uuid';
 import { getColorByName } from '../util/getConfig';
 import Icon from './Icon';
-import { ICardInfo } from '../util/Interfaces';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
@@ -85,7 +83,7 @@ const LayoutModal: FC<Props> = ({
         <div className="layouts">
           {layouts.map(l => {
             return (
-              <div className="row" key={uuid()}>
+              <div className="row" key={`layoutrow_${l.label}`}>
                 <h3 className="row-header">{t(l.label)}</h3>
                 <div className="row-info">{t(l.infoText)}</div>
                 {l.label === 'information-display' &&
@@ -110,7 +108,7 @@ const LayoutModal: FC<Props> = ({
                         }
                         onClick={() => setSelected(option)}
                         id={`layoutBtn-${option.value}`}
-                        key={uuid()}
+                        key={`button_${option}`}
                         role="button"
                         aria-label={`${t(orientation)} ${t(l.label)} ${
                           option.rows

@@ -188,7 +188,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
             tabIndex={0}
             role="button"
             className="monitor-button white"
-            to={{ pathname: `monitors/createview?&url=${url}` }}
+            to={`/monitors/createview?&url=${url}`}
           >
             {t('modify')}
           </Link>
@@ -196,7 +196,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
             tabIndex={0}
             role="button"
             className="monitor-button white"
-            to={`static?&url=${url}`}
+            to={`/static?&url=${url}`}
           >
             {t('open')}
           </Link>

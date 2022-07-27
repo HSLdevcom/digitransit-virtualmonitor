@@ -1,13 +1,14 @@
-export function getSearchContext() {
+export function getSearchContext(config) {
   const searchContext = {
+    URL_PELIAS: 'https://api.digitransit.fi/geocoding/v1/search',
+    URL_PELIAS_PLACE: 'https://api.digitransit.fi/geocoding/v1/place',
     isPeliasLocationAware: false, // true / false does Let Pelias suggest based on current user location
     minimalRegexp: undefined, // used for testing min. regexp. For example: new RegExp('.{2,}'),
     lineRegexp: new RegExp(
       '(^[0-9]+[a-z]?$|^[yuleapinkrtdz]$|(^m[12]?b?$))',
       'i',
     ),
-    URL_PELIAS: '', // url for pelias searches
-    feedIDs: ['HSL', 'tampere'], // FeedId's like  [HSL, HSLLautta]
+    feedIDs: config.feedIds, // FeedId's like  [HSL, HSLLautta]
     geocodingSources: ['oa', 'osm', 'nlsfi'], // sources for geocoding
     geocodingSearchParams: undefined, // Searchparmas fro geocoding
     getFavouriteLocations: () => ({}), // Function that returns array of favourite locations.
@@ -17,7 +18,9 @@ export function getSearchContext() {
     getPositions: () => ({}), // Function that returns user's geolocation.
     getRoutesQuery: () => ({}), // Function that returns query for fetching routes.
     getAllBikeRentalStations: () => ({}), // Function that returns all bike rental stations from graphql API.
-    getStopAndStationsQuery: () => ({}), // Function that fetches favourite stops and stations from graphql API.
+    getStopAndStationsQuery: s => {
+      return Promise.resolve(s);
+    }, // Function that fetches favourite stops and stations from graphql API.
     getFavouriteRoutesQuery: () => ({}), // Function that returns query for fetching favourite routes.
     getFavouriteBikeRentalStations: () => ({}), // Function that returns favourite bike rental station.
     getFavouriteBikeRentalStationsQuery: () => ({}), // Function that returns query for fetching favourite bike rental stations.
@@ -30,12 +33,4 @@ export function getSearchContext() {
   };
 
   return { ...searchContext };
-}
-
-export function setSearchContextWithFeedIds(feedIds: Array<string>) {
-  const searchContext = getSearchContext();
-  return {
-    ...searchContext,
-    feedIDs: feedIds,
-  };
 }

@@ -6,11 +6,10 @@ import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
 import { getTranslations } from 'gtfs';
 import setUpOIDC from './auth/openidConnect.js';
-
-// app.use('/api', index);
-
+import { userAuthenticated } from './auth/openidConnect.js';
 import createUrlCompression from './urlCompression.js';
 import monitorService from './monitorService.js';
+import { getMonitors, isUserOwnedMonitor,updateStaticMonitor, deleteMonitor, createMonitor } from './hslID.js';
 
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
@@ -36,9 +35,9 @@ app.get('/api/monitor/:id', (req, res) => {
   monitorService.get(req, res);
 });
 
-app.get('/api/usermonitors/:id', (req, res) => {
-  monitorService.getMonitorsForUser(req, res);
-});
+// app.get('/api/usermonitors/:id', (req, res) => {
+//   monitorService.getMonitorsForUser(req, res);
+// });
 
 app.put('/api/monitor', (req, res) => {
   monitorService.create(req, res);
@@ -82,11 +81,38 @@ function setUpOpenId() {
       'https://virtualmonitor-app-login-dev.azurewebsites.net/',
       'http://virtualmonitor-app-login-dev.azurewebsites.net/',
     ],
+    [
+      '/static/',
+      '/view/',
+      '/createview/',
+    ],
     localPort,
   );
 }
 
 setUpOpenId();
+
+app.delete('/api/staticmonitor', userAuthenticated, (req, res) => {
+  deleteMonitor(req, res);
+});
+
+app.post('/api/staticmonitor', userAuthenticated, (req, res) => {
+  updateStaticMonitor(req, res)
+});
+
+app.put('/api/staticmonitor', userAuthenticated, (req, res) => {
+  createMonitor(req, res);
+  monitorService.createStatic(req, res);
+});
+
+app.get('/api/usermonitors', userAuthenticated, (req, res) => {
+  console.log("usermonitors")
+  getMonitors(req,res);
+});
+
+app.get('/api/userowned/:id', userAuthenticated, (req, res) => {
+  isUserOwnedMonitor(req, res)
+});
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../../build', 'index.html'));

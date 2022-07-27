@@ -6,10 +6,21 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import connectRedis from 'connect-redis';
 import Strategy from './Strategy.js';
-import monitorService from '../monitorService.js';
 
-const CLIENT_ID = process.env.MANAGEMENT_API_ID;
-const CLIENT_SECRET = process.env.MANAGEMENT_API_SECRET;
+const OIDCHost = process.env.OIDCHOST || 'https://hslid-dev.t5.fi';
+
+export const userAuthenticated = function (req, res, next) {
+  axios
+    .get(`${OIDCHost}/openid/userinfo`, {
+      headers: { Authorization: `Bearer ${req.user.token.access_token}` },
+    })
+    .then(function () {
+      next();
+    })
+    .catch(function (err) {
+      errorHandler(res, err);
+    });
+};
 
 const RedisStore = connectRedis(session);
 
@@ -19,12 +30,11 @@ const debugLogging = process.env.DEBUGLOGGING;
 
 axios.defaults.timeout = 12000;
 
-function setUpOIDC(app, port, indexPath, hostnames, localPort) {
+function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   /* ********* Setup OpenID Connect ********* */
   const callbackPath = '/oid_callback'; // connect callback path
   const logoutCallbackPath = '/logout/callback';
   // Use Passport with OpenId Connect strategy to authenticate users
-  const OIDCHost = process.env.OIDCHOST || 'https://hslid-dev.t5.fi';
   const FavouriteHost =
     process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
 
@@ -35,7 +45,6 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
   const RedisHost = process.env.REDIS_HOST || '127.0.0.1';
   const RedisPort = process.env.REDIS_PORT || 6379;
   const RedisKey = process.env.REDIS_KEY;
-  console.log(RedisHost, RedisPort, RedisKey)
   const RedisClient = RedisKey
     ? redis.createClient(RedisPort, RedisHost, {
         auth_pass: RedisKey,
@@ -75,17 +84,6 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
 
   const redirectToLogin = function (req, res, next) {
     const { ssoValidTo, ssoToken } = req.session;
-    const paths = [
-      '/fi/',
-      '/en/',
-      '/sv/',
-      '/reitti/',
-      '/pysakit/',
-      '/linjat/',
-      '/terminaalit/',
-      '/pyoraasemat/',
-      '/lahellasi/',
-    ];
     // Only allow sso login when user navigates to certain paths
     // Query parameter is string type
     if (
@@ -166,7 +164,6 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
   // users will be redirected to hsl.id and once authenticated
   // they will be returned to the callback handler below
   app.get('/login', (req, res) => {
-    console.log("LOGIN")
     const { url, favouriteModalAction, ...rest } = req.query;
     if (favouriteModalAction) {
       req.session.returnTo = `/${indexPath}?favouriteModalAction=${favouriteModalAction}`;
@@ -276,6 +273,7 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
 
   /* GET the profile of the current authenticated user */
   app.get('/api/user', function (req, res) {
+    console.log("getuser, ", req.user)
     axios
       .get(`${OIDCHost}/openid/userinfo`, {
         headers: { Authorization: `Bearer ${req.user.token.access_token}` },
@@ -293,20 +291,9 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
   });
 
   // Temporary solution for checking if user is authenticated
-  const userAuthenticated = function (req, res, next) {
-    axios
-      .get(`${OIDCHost}/openid/userinfo`, {
-        headers: { Authorization: `Bearer ${req.user.token.access_token}` },
-      })
-      .then(function () {
-        next();
-      })
-      .catch(function (err) {
-        errorHandler(res, err);
-      });
-  };
 
   app.use('/api/user/favourites', userAuthenticated, function (req, res) {
+    console.log("getting favourites", req.user.token.access_token, req.user.data.sub)
     axios({
       headers: { Authorization: `Bearer ${req.user.token.access_token}` },
       method: req.method,
@@ -323,28 +310,6 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
       .catch(function (err) {
         errorHandler(res, err);
       });
-  });
-
-  app.delete('/api/staticmonitor', userAuthenticated, (req, res) => {
-    console.log("deleting monitor! ", req.body)
-    deleteMonitor(req, res);
-  });
-
-  app.post('/api/staticmonitor', userAuthenticated, (req, res) => {
-    updateStaticMonitor(req, res)
-  });
-
-  app.put('/api/staticmonitor', userAuthenticated, (req, res) => {
-    createMonitor(req, res);
-    monitorService.createStatic(req, res);
-  });
-
-  app.get('/api/usermonitors', userAuthenticated, (req, res) => {
-    getMonitors(req,res);
-  });
-
-  app.get('/api/userowned/:id', userAuthenticated, (req, res) => {
-    isUserOwnedMonitor(req, res)
   });
 
   app.use('/api/user/notifications', userAuthenticated, function (req, res) {
@@ -378,199 +343,5 @@ function setUpOIDC(app, port, indexPath, hostnames, localPort) {
       });
   });
 }
-
-const isUserOwnedMonitor = async (req, res) => {
-  const userMonitors = await getDataStorageMonitors(req, res)
-  if (userMonitors.includes(req.params.id)) {
-    res.status(200).send({msg: 'OK'});
-  } else {
-    res.status(401).send({msg: 'Unauthorized'});
-  }
-}
-
-const updateStaticMonitor = async (req, res) => {
-  const userMonitors = await getDataStorageMonitors(req, res)
-  if (userMonitors.includes(req.body.url)) {
-    monitorService.updateStatic(req, res);
-  } else {
-    res.status(401).send("Unauthorized");
-  }
-}
-
-const getMonitors = async (req, res) => {
-  try {
-    const monitors = await getDataStorageMonitors(req, res)
-    monitorService.getMonitorsForUser(req, res, monitors);
-  } catch {
-    console.log("error")
-  }
-}
-
-const getDataStorageMonitors = async (req, res) => {
-  try {
-    let dataStorage
-    console.log("fetching all user monitors for", req?.user?.data.sub);
-    dataStorage = await getDataStorage(req?.user?.data.sub);
-    if (dataStorage) {
-      console.log("found data storage: ", dataStorage)
-      const options = {
-        endpoint: `/api/rest/v1/datastorage/${dataStorage.id}/data`,
-      };
-      const response = await makeHslIdRequest(options);
-      return Object.keys(response.data).map(key => key);
-    } else {
-      console.log("no data storage found, user doesn't have any monitors")
-      res.json([])
-    }
-  } catch {
-    console.log("Error fetching monitors")
-  }
-}
-
-const deleteMonitor = async (req, res) => {
-  try {
-    const userId = req?.user?.data.sub;
-    let dataS = await getDataStorage(userId);
-    if (dataS) {
-      const options = {
-        endpoint: `/api/rest/v1/datastorage/${dataS.id}/data`,
-      };
-      const response = await makeHslIdRequest(options);
-      const monitors = Object.keys(response.data).map(key => key);
-      if (monitors.includes(req.body.url)) {
-        const response = await deleteMonitorHSL(dataS.id, req.body.url)
-        monitorService.deleteStatic(req,res);
-      } else {
-        console.log("not authorised")
-      }
-    }
-  } catch {
-    console.log("error deleting monitor")
-  }
-}
-
-const createMonitor = async (req, res) => {
-  try {
-    const userId = req?.user?.data.sub;
-    //validate(updateSchema, schema);
-    const dataStorage = {
-      id: '',
-    };
-    //console.log('searching existing datastorage');
-    let dataS = await getDataStorage(userId);//.then(res => {
-    if (dataS) {
-      dataStorage.id = dataS.id;
-      console.log("existing data storage found");
-    } else {
-      console.log("no data storage, creating one")
-      dataS = await createDataStorage(userId);
-      dataStorage.id = dataS;
-    }
-    console.log("adding monitor to data storage: ", dataStorage.id)
-    const res = await updateMonitors(dataStorage.id, req.body);
-  } catch (e) {
-    console.log("Error creating monitor", e)
-  }
-}
-
-const makeHslIdRequest = async (
-  options,
-) => {
-  try {
-    const hslIdUrl = 'https://hslid-uat.cinfra.fi';
-    const credentials = `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`;
-    options.url = `${hslIdUrl}${options.endpoint}`;
-    options.headers = {
-      Authorization: credentials,
-      'Content-Type': 'application/json',
-    };
-    const response = axios(options);
-    return response;
-  } catch (err) {
-    console.log("error making hslid request");
-  }
-  
-};
-
-export const deleteMonitorHSL = async (
-  dataStorageId,
-  monitor,
-) => {
-  try {
-    console.log("Deleting  MONITOR from", dataStorageId)
-    const options = {
-      method: 'DELETE',
-      endpoint: `/api/rest/v1/datastorage/${dataStorageId}/data/${monitor}`,
-    };
-    const response = await makeHslIdRequest(options);
-    return response;
-  } catch (err) {
-    console.log("Error updating data storage", err)
-  }
-};
-
-export const updateMonitors = async (
-  dataStorageId,
-  monitor,
-) => {
-  try {
-    console.log("UPDATING MONITOR TO", dataStorageId)
-    const options = {
-      method: 'PUT',
-      endpoint: `/api/rest/v1/datastorage/${dataStorageId}/data/${monitor.url}`,
-      data: {'value': monitor.monitorContenthash},
-    };
-    const response = await makeHslIdRequest(options);
-    return response;
-  } catch (err) {
-    console.log("Error updating data storage", err)
-  }
-};
-
-const createDataStorage = async (id) => {
-  const options = {
-    method: 'POST',
-    endpoint: `/api/rest/v1/datastorage`,
-    data: {
-      name: `monitors-${CLIENT_ID || ''}`,
-      description: 'Pysäkkinäytöt',
-      ownerId: id,
-      adminAccess: [CLIENT_ID],
-      readAccess: [CLIENT_ID, id],
-      writeAccess: [CLIENT_ID, id],
-    },
-  };
-  try {
-    const response = await makeHslIdRequest(options);
-    console.log("created, res:", response.data)
-    return response.data.id;
-  } catch (e) {
-    console.log("error creating data storage", e)
-  }
-}
-
-export const getDataStorage = async (id) => {
-
-  const options = {
-    method: 'GET',
-    endpoint: '/api/rest/v1/datastorage',
-    params: {
-      dsfilter: `ownerId eq "${id}" and name eq "monitors-${
-        CLIENT_ID || ''
-      }"`,
-    },
-  };
-  try {
-    const response = await makeHslIdRequest(options);
-    const dataStorage = response.data.resources[0];
-    if (dataStorage) {
-      return dataStorage;
-    } else {
-      throw "Datastorage not found"
-    }
-  } catch (error) {
-    console.log('error, DataStorage not found');
-  }
-};
 
 export default setUpOIDC;

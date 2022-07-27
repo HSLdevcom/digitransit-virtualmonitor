@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import SiteHeader from '@hsl-fi/site-header';
-import { UserContext, ConfigContext } from '../contexts';
+import { UserContext, ConfigContext, FavouritesContext } from '../contexts';
 
 const notificationAPI = '/api/user/notifications';
-//TODO:
-const favourites = [];
 
 const BannerHSL = () => {
   const { t, i18n } = useTranslation();
+  const favourites = useContext(FavouritesContext);
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
   const [banners, setBanners] = useState([]);
@@ -24,13 +23,13 @@ const BannerHSL = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (config.bannersUri) {
-  //     fetch(`${config.bannersUri}language=${i18n.language}`)
-  //       .then(res => res.json())
-  //       .then(data => setBanners(data));
-  //   }
-  // }, [i18n.language]);
+  useEffect(() => {
+    if (config.bannersUri) {
+      fetch(`${config.bannersUri}language=${i18n.language}`)
+        .then(res => res.json())
+        .then(data => setBanners(data));
+    }
+  }, [i18n.language]);
 
   const languages = [
     {

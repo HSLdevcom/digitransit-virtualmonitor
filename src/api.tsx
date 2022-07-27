@@ -24,6 +24,9 @@ const monitorAPI = {
     }
     return fetchData('user', options);
   },
+  getFavourites() {
+    return fetchData('user/favourites', {});
+  },
   get(monitor) {
     return fetchData(`monitor/${monitor}`, {});
   },

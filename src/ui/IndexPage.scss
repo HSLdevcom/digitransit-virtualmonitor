@@ -1,5 +1,7 @@
 
 .monitor-button {
+  text-align: center;
+  white-space: nowrap;
   font-size: 1.125em;
   font-style: normal;
   font-weight: $font-weight;
@@ -72,16 +74,16 @@
   }
 
   .right {
-    .desktop-img {
-      padding-top: 72px;
-      justify-content: center;
-    }
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 
-@media screen and (max-width: 1100px) {
+@media screen and (max-width: 1200px) {
   .right {
-    display: none;
+    display: none !important;
     width: 0;
   }
 

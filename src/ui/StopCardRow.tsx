@@ -7,7 +7,7 @@ import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
 import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
 import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
-import { setSearchContextWithFeedIds } from './searchContext';
+import { getSearchContext } from './searchContext';
 import { getModeFromAddendum } from '../util/stopCardUtil';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
@@ -18,7 +18,7 @@ import {
   getModeSet,
 } from '../util/getConfig';
 import { isKeyboardSelectionEvent } from '../util/browser';
-import { ConfigContext } from '../contexts';
+import { ConfigContext, FavouritesContext } from '../contexts';
 
 const getGTFSId = id => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -72,7 +72,8 @@ const StopCardRow: FC<IProps> = ({
   updateCardInfo,
   languages,
 }) => {
-  const { feedIds } = useContext(ConfigContext);
+  const config = useContext(ConfigContext);
+  const favourites = useContext(FavouritesContext);
   const [t] = useTranslation();
   const [getStop, stopState] = useLazyQuery(GET_STOP, {
     fetchPolicy: 'network-only',
@@ -95,9 +96,19 @@ const StopCardRow: FC<IProps> = ({
           variables: { ids: getGTFSId(properties.id) },
         });
         break;
+      case 'favouriteStop':
+        getStop({
+          variables: { ids: properties.gtfsId },
+        });
+        break;
       case 'station':
         getStation({
           variables: { ids: getGTFSId(properties.id) },
+        });
+        break;
+      case 'favouriteStation':
+        getStation({
+          variables: { ids: properties.gtfsId },
         });
         break;
       default:
@@ -107,6 +118,17 @@ const StopCardRow: FC<IProps> = ({
 
   const onClear = () => {
     return null;
+  };
+
+  const getLocality = () => {
+    if (
+      autosuggestValue.layer === 'favouriteStop' ||
+      autosuggestValue.layer === 'favouriteStation'
+    ) {
+      const arr = autosuggestValue.address.split(',');
+      return arr[arr.length - 1];
+    }
+    return autosuggestValue.locality;
   };
 
   useEffect(() => {
@@ -119,7 +141,7 @@ const StopCardRow: FC<IProps> = ({
           .map(stop => {
             const stopWithGTFS = {
               ...stop,
-              locality: autosuggestValue.locality,
+              locality: getLocality(),
               mode: getModeFromAddendum(autosuggestValue.addendum?.GTFS.modes),
             };
             const routes = stop.stoptimesForPatterns.map(
@@ -158,7 +180,7 @@ const StopCardRow: FC<IProps> = ({
             patterns = uniqBy(patterns, 'pattern.code');
             const stationWithGTFS = {
               ...station,
-              locality: autosuggestValue.locality,
+              locality: getLocality(),
               mode: autosuggestValue.addendum?.GTFS.modes[0],
             };
             return {
@@ -184,7 +206,7 @@ const StopCardRow: FC<IProps> = ({
   const isEastWest = layout >= 9 && layout <= 11;
   const possibleToMove = cards.length > 1;
 
-  const filterSearchResults = results => {
+  const filterSearchResults = (results, x) => {
     return results.filter(result => {
       const gtfsId = getGTFSId(result.properties.id);
       return !columns.left.stops.some(s => s.gtfsId === gtfsId);
@@ -193,6 +215,12 @@ const StopCardRow: FC<IProps> = ({
   const style = {
     '--delayLength': `0.0s`,
   } as React.CSSProperties;
+
+  const searchContext = {
+    ...getSearchContext(config),
+    getFavouriteStops: () =>
+      favourites.filter(f => f.type === 'stop' || f.type === 'station'),
+  };
   return (
     <li className="stopcard animate-in" id={`stopcard_${id}`} style={style}>
       <div className="stopcard-row-container">
@@ -334,7 +362,7 @@ const StopCardRow: FC<IProps> = ({
             </div>
             <DTAutosuggest
               appElement={'root'}
-              searchContext={setSearchContextWithFeedIds(feedIds)}
+              searchContext={searchContext}
               icon="search"
               id={'search'}
               placeholder={'autosuggestPlaceHolder'}
@@ -344,7 +372,7 @@ const StopCardRow: FC<IProps> = ({
               onClear={onClear}
               autoFocus={false}
               lang={lang}
-              sources={['Datasource']}
+              sources={['Datasource', 'Favourite']}
               targets={['Stops']}
               modeIconColors={getAllIconStyleWithColor()}
               modeSet={getModeSet()}

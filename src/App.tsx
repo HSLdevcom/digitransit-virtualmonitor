@@ -28,7 +28,7 @@ import StopMonitorContainer from './ui/StopMonitorContainer';
 import './sass/main.scss';
 import SkipToMainContent from './ui/SkipToMainContent';
 import PrepareMonitor from './ui/PrepareMonitor';
-import { ConfigContext, UserContext } from './contexts';
+import { ConfigContext, UserContext, FavouritesContext } from './contexts';
 import Loading from './ui/Loading';
 import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
@@ -108,6 +108,7 @@ interface IStopMonitorProps {
 
 const App: FC<IConfigurationProps> = (props) => {
   const [user, setUser] = useState<any>({});
+  const [favourites, setFavourites] = useState<any>([]);
   const [loading, setLoading] = useState(true);
 
   const config = useContext(ConfigContext);
@@ -133,7 +134,21 @@ const App: FC<IConfigurationProps> = (props) => {
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }
-    monitorAPI.getUser().then(user => {setUser(user); setLoading(false);}).catch(() => {setUser({notLogged: true}); setLoading(false);})
+    if (config.allowLogin) {
+      monitorAPI.getUser().then(user => {
+        setUser(user); 
+        setLoading(false);
+      }).catch(() => {
+        setUser({notLogged: true}); 
+        setLoading(false);
+      })
+      monitorAPI.getFavourites().then(favs => {
+        setFavourites(favs)
+      }).catch(e => {
+        console.log(e)
+      })
+    }
+    
   }, []);
   const client = new ApolloClient({
     link: ApolloLink.from([
@@ -172,10 +187,9 @@ const App: FC<IConfigurationProps> = (props) => {
       href="https://fonts.googleapis.com/css?family=Lato"
     />
   );
-  if (loading)
- {
-   return <Loading white/>
- }
+  if (loading) {
+    return <Loading white/>
+  }
   const getAdditionalFont = name => {
     switch (name) {
       case 'tampere':
@@ -194,6 +208,7 @@ const App: FC<IConfigurationProps> = (props) => {
       </Helmet>
       <ApolloProvider client={client}>
         <UserContext.Provider value={user}>
+          <FavouritesContext.Provider value={favourites}>
         <Switch>
           <Route
             path={'/createview'}
@@ -281,6 +296,7 @@ const App: FC<IConfigurationProps> = (props) => {
             )}
           />
         </Switch>
+        </FavouritesContext.Provider>
         </UserContext.Provider>
       </ApolloProvider>
     </div>

@@ -16,6 +16,7 @@ const port = process.env.PORT || 3001;
 const app = express();
 
 app.use(logger('dev'));
+// app.use(function(req,res,next){console.log(req.headers);next();});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.SESSION_SECRET || 'reittiopas_secret'));
@@ -28,9 +29,15 @@ const displayDictionaries = {
   v0: '{"displaySeconds":,"view":{"pierColumnTitle":","stops":[","},"title":{"fi","en"}}]}},"type":"stopTimes"HSL:10"]}',
 };
 
+// const router = express.Router();
+
 app.get('/api/monitor/:id', (req, res) => {
   monitorService.get(req, res);
 });
+
+// app.get('/api/usermonitors/:id', (req, res) => {
+//   monitorService.getMonitorsForUser(req, res);
+// });
 
 app.put('/api/monitor', (req, res) => {
   monitorService.create(req, res);
@@ -72,6 +79,7 @@ function setUpOpenId() {
     '',
     [
       'https://virtualmonitor-app-login-dev.azurewebsites.net/',
+      'http://virtualmonitor-app-login-dev.azurewebsites.net/',
     ],
     [
       '/static/',

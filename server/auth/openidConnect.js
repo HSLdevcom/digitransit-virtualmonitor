@@ -30,7 +30,7 @@ const debugLogging = process.env.DEBUGLOGGING;
 
 axios.defaults.timeout = 12000;
 
-function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
+async function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   /* ********* Setup OpenID Connect ********* */
   const callbackPath = '/oid_callback'; // connect callback path
   const logoutCallbackPath = '/logout/callback';
@@ -51,7 +51,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
         tls: { servername: RedisHost },
       })
     : redis.createClient(RedisPort, RedisHost);
-
+  //await RedisClient.connect()
   const redirectUris = hostnames.map(host => `${host}${callbackPath}`);
   const postLogoutRedirectUris = hostnames.map(
     host => `${host}${logoutCallbackPath}`,

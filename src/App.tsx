@@ -147,6 +147,9 @@ const App: FC<IConfigurationProps> = (props) => {
       }).catch(e => {
         console.log(e)
       })
+    } else {
+      setUser({notLogged: true}); 
+      setLoading(false);
     }
     
   }, []);

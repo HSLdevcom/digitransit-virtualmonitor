@@ -116,8 +116,6 @@ export default {
       postfix: '-waltti',
       setName: 'digitransit',
     },
-    monitorFont: 'Lato',
-    monitorFontWeight: '700',
     name: 'tampere',
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
@@ -126,4 +124,33 @@ export default {
     allowLogin: false,
     useTilde: false,
   },
+  vaasa: {
+    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    name: 'vaasa',
+    allowLogin: false,
+    feedIds: ['vaasa'],
+    colors: {
+      primary: '#000a8c',
+      monitorBackground: '#000a8c',
+    },
+    fonts: {
+      monitor: {
+        name: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
+        weight: '700',
+      },
+    },
+    modeIcons: {
+      colors: {
+        'mode-bus': '#000a8c',
+      },
+      postfix: '-waltti',
+      setName: 'digitransit',
+    },
+    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    showMinutes: '20',
+    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
+    allowLogin: false,
+    useTilde: true,
+  }
 };

@@ -116,7 +116,7 @@ const LayoutModal: FC<Props> = ({
                         }
                         onClick={() => setSelected(option)}
                         id={`layoutBtn-${option.value}`}
-                        key={`button_${option}`}
+                        key={`button_${option.value}`}
                         role="button"
                         aria-label={`${t(orientation)} ${t(l.label)} ${
                           option.rows

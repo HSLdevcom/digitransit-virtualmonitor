@@ -24,7 +24,7 @@ export const updateStaticMonitor = async (req, res) => {
 
 export const getMonitors = async (req, res) => {
   try {
-    const monitors = await getDataStorageMonitors(req, res)
+    const monitors = await getDataStorageMonitors(req, res);
     monitorService.getMonitorsForUser(req, res, monitors);
   } catch {
     console.log("error")
@@ -44,7 +44,7 @@ const getDataStorageMonitors = async (req, res) => {
       return Object.keys(response.data).map(key => key);
     } else {
       console.log("no data storage found, user doesn't have any monitors")
-      res.json([])
+      return [];
     }
   } catch {
     console.log("Error fetching monitors")

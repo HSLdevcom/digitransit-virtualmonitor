@@ -21,6 +21,8 @@ export default {
       hover: '#0062a1',
       monitorBackground: '#0057a2',
     },
+    postfix: '',
+    setName: '',
     feedIds: ['HSL'],
     modeIcons: {
       colors: {

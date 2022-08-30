@@ -1,10 +1,10 @@
 import cx from 'classnames';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Icon from './Icon';
 import { focusToInput, onClick } from '../util/InputUtils';
-import { getPrimaryColor } from '../util/getConfig';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { useTranslation } from 'react-i18next';
+import { ConfigContext } from '../contexts';
 
 function StopListTitleInput(props: {
   lang: string;
@@ -23,8 +23,7 @@ function StopListTitleInput(props: {
   value: string;
 }) {
   const [t] = useTranslation();
-  const [titleLeft, setTitleLeft] = useState(props.titleLeft);
-  const [titleRight, setTitleRight] = useState(props.titleRight);
+  const config = useContext(ConfigContext);
   const [focus, setFocus] = useState(false);
 
   const onBlur = () => {
@@ -33,10 +32,8 @@ function StopListTitleInput(props: {
 
   const onChange = (e, side) => {
     if (side === 'left') {
-      setTitleLeft(e.target.value);
       props.setTitle('left', true, e.target.value);
     } else {
-      setTitleRight(e.target.value);
       props.setTitle('right', true, e.target.value);
     }
     if (props.updateCardInfo) {
@@ -74,7 +71,12 @@ function StopListTitleInput(props: {
               focusToInput(`stop-list-title-input-${props.side}-${props.lang}`)
             }
           >
-            <Icon img="edit" color={getPrimaryColor()} width={20} height={20} />
+            <Icon
+              img="edit"
+              color={config.colors.primary}
+              width={20}
+              height={20}
+            />
           </div>
         )}
       </div>

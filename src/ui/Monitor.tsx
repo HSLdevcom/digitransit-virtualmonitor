@@ -7,7 +7,6 @@ import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
-import { getColorByName } from '../util/getConfig';
 import { ConfigContext } from '../contexts';
 
 const getWindowDimensions = () => {
@@ -62,7 +61,7 @@ const Monitor: FC<IProps> = ({
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,
     '--monitor-background-color':
-      getColorByName('monitorBackground') || getColorByName('primary'),
+      config.colors.monitorBackground || config.colors.primary,
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11;

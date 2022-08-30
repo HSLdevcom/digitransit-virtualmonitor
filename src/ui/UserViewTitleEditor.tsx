@@ -1,13 +1,13 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import Icon from './Icon';
 import { focusToInput, onClick } from '../util/InputUtils';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { Redirect } from 'react-router-dom';
 import monitorAPI from '../api';
-import { getPrimaryColor } from '../util/getConfig';
 import { useTranslation } from 'react-i18next';
 import DeleteModal from './DeleteModal';
 import { getParams } from '../util/queryUtils';
+import { ConfigContext } from '../contexts';
 
 interface IProps {
   title: string;
@@ -20,6 +20,7 @@ const UserViewTitleEditor: FC<IProps> = ({
   updateViewTitle,
   monitorId,
 }) => {
+  const config = useContext(ConfigContext);
   const [newTitle, setNewTitle] = useState(title);
   const [isFocus, setFocus] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -96,12 +97,12 @@ const UserViewTitleEditor: FC<IProps> = ({
             role="button"
             onClick={() => focusToInput('user-view-title-input')}
           >
-            <Icon img="edit" color={getPrimaryColor()} />
+            <Icon img="edit" color={config.colors.primary} />
           </div>
         )}
       </div>
       <button className="delete-icon" onClick={() => setDeleteModalOpen(true)}>
-        <Icon img="delete" color={getPrimaryColor()} />
+        <Icon img="delete" color={config.colors.primary} />
       </button>
     </div>
   );

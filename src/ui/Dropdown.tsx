@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 import Select from 'react-select';
 import Icon from './Icon';
 import { v4 as uuid } from 'uuid';
-import { getPrimaryColor } from '../util/getConfig';
+import { ConfigContext } from '../contexts';
 
 interface IOption {
   value: string;
@@ -41,10 +41,11 @@ const Dropdown: FC<IProps> = ({
   isDisabled = false,
 }) => {
   const [t] = useTranslation();
+  const config = useContext(ConfigContext);
   const ddIndicator = (
     <Icon
       img="arrow-down"
-      color={indicatorColor ? indicatorColor : getPrimaryColor()}
+      color={indicatorColor ? indicatorColor : config.colors.primary}
     />
   );
 

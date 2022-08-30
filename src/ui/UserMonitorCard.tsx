@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
-import { getPrimaryColor } from '../util/getConfig';
 import {
   getTrainStationData,
   isPlatformOrTrackVisible,
@@ -164,7 +163,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
             rotate={isHorizontal ? '0' : '90'}
             height={32}
             width={32}
-            color={getPrimaryColor()}
+            color={config.colors.primary}
           />
         </div>
         <div className="monitor-name">{name}</div>
@@ -172,7 +171,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
           className="delete-icon"
           onClick={() => setDeleteModalOpen(true)}
         >
-          <Icon img="delete" color={getPrimaryColor()} />
+          <Icon img="delete" color={config.colors.primary} />
         </button>
       </div>
       <div className="cards">{crds}</div>

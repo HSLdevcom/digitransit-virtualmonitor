@@ -12,11 +12,6 @@ import { getModeFromAddendum } from '../util/stopCardUtil';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import cx from 'classnames';
-import {
-  getAllIconStyleWithColor,
-  getPrimaryColor,
-  getModeSet,
-} from '../util/getConfig';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext, FavouritesContext } from '../contexts';
 
@@ -248,7 +243,7 @@ const StopCardRow: FC<IProps> = ({
                   isKeyboardSelectionEvent(e, true) && onCardDelete(id)
                 }
               >
-                <Icon img="delete" color={getPrimaryColor()} />
+                <Icon img="delete" color={config.colors.primary} />
               </div>
             )}
             {possibleToMove && (
@@ -273,7 +268,7 @@ const StopCardRow: FC<IProps> = ({
                   >
                     <Icon
                       img="move-both-down"
-                      color={getPrimaryColor()}
+                      color={config.colors.primary}
                       width={30}
                       height={40}
                     />
@@ -294,7 +289,7 @@ const StopCardRow: FC<IProps> = ({
                   >
                     <Icon
                       img="move-both-up"
-                      color={getPrimaryColor()}
+                      color={config.colors.primary}
                       width={30}
                       height={40}
                     />
@@ -316,7 +311,7 @@ const StopCardRow: FC<IProps> = ({
                     >
                       <Icon
                         img="move-up"
-                        color={getPrimaryColor()}
+                        color={config.colors.primary}
                         width={16}
                         height={16}
                       />
@@ -339,7 +334,7 @@ const StopCardRow: FC<IProps> = ({
                     >
                       <Icon
                         img="move-down"
-                        color={getPrimaryColor()}
+                        color={config.colors.primary}
                         width={16}
                         height={16}
                       />
@@ -374,8 +369,8 @@ const StopCardRow: FC<IProps> = ({
               lang={lang}
               sources={['Datasource', 'Favourite']}
               targets={['Stops']}
-              modeIconColors={getAllIconStyleWithColor()}
-              modeSet={getModeSet()}
+              modeIconColors={config.modeIcons.colors}
+              modeSet={config.modeIcons.setName}
             />
           </div>
           <LayoutAndTimeContainer

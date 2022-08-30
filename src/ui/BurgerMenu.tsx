@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
-import { getColorByName } from '../util/getConfig';
 import Modal from 'react-modal';
+import { ConfigContext } from '../contexts';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
 
 const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
   const [t, i18n] = useTranslation();
+  const config = useContext(ConfigContext);
   const changeLanguage = (i18n, lang) => {
     i18n.changeLanguage(lang);
     if (lang !== localStorage.getItem('lang')) {
@@ -103,7 +104,7 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
           >
             <Icon
               img="close"
-              color={getColorByName('primary')}
+              color={config.colors.primary}
               height={24}
               width={24}
             />

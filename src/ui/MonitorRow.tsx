@@ -4,7 +4,6 @@ import cx from 'classnames';
 import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
 import { capitalize } from '../util/monitorUtils';
-import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from '../contexts';
 
@@ -239,7 +238,7 @@ const MonitorRow: FC<IProps> = ({
               height={24}
               width={24}
               img={departure.vehicleMode || 'bus'}
-              color={getColorByName('monitorBackground')}
+              color={config.colors.monitorBackground}
             />
           </div>
         )}
@@ -255,7 +254,7 @@ const MonitorRow: FC<IProps> = ({
                         img={'subway'}
                         height={16}
                         width={16}
-                        color={getIconStyleWithColor('subway').color}
+                        color={config.modeIcons.colors['mode-subway']}
                       />
                     </div>
                   )}
@@ -283,7 +282,7 @@ const MonitorRow: FC<IProps> = ({
                       img={'subway'}
                       height={16}
                       width={16}
-                      color={getIconStyleWithColor('subway').color}
+                      color={config.modeIcons.colors['mode-subway']}
                     />
                   </div>
                 )}
@@ -298,7 +297,7 @@ const MonitorRow: FC<IProps> = ({
                       img={'subway'}
                       height={12}
                       width={12}
-                      color={getIconStyleWithColor('subway').color}
+                      color={config.modeIcons.colors['mode-subway']}
                     />
                   </div>
                 )}
@@ -315,7 +314,7 @@ const MonitorRow: FC<IProps> = ({
                       img={'subway'}
                       height={16}
                       width={16}
-                      color={getIconStyleWithColor('subway').color}
+                      color={config.modeIcons.colors['mode-subway']}
                     />
                   </div>
                 )}
@@ -330,7 +329,7 @@ const MonitorRow: FC<IProps> = ({
                           img={'subway'}
                           height={12}
                           width={12}
-                          color={getIconStyleWithColor('subway').color}
+                          color={config.modeIcons.colors['mode-subway']}
                         />
                       </div>
                     )}

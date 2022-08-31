@@ -101,8 +101,8 @@ export const horizontalLayouts = [
     ],
   },
   {
-    label: 'layoutEastWest',
-    infoText: 'info-text-east-west',
+    label: 'layout-double',
+    infoText: 'info-text-double',
     options: [
       {
         value: '9',
@@ -138,7 +138,7 @@ export const horizontalLayouts = [
   },
   {
     label: 'information-display',
-    infoText: '',
+    infoText: 'information-display-info',
     options: [
       {
         value: '18',
@@ -157,7 +157,7 @@ export const horizontalLayouts = [
 export const verticalLayouts = [
   {
     label: 'simple',
-    infoText: '',
+    infoText: 'info-text-short',
     options: [
       {
         value: '12',
@@ -203,7 +203,7 @@ export const verticalLayouts = [
   },
   {
     label: 'tighten',
-    infoText: '',
+    infoText: 'info-text-short',
     options: [
       {
         value: '16',
@@ -229,7 +229,7 @@ export const verticalLayouts = [
   },
   {
     label: 'information-display',
-    infoText: '',
+    infoText: 'information-display-info',
     options: [
       {
         value: '19',

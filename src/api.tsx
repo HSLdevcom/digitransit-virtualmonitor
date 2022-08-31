@@ -2,14 +2,14 @@ const baseAPI = '/api';
 
 const fetchData = (path, options) => {
   return new Promise((resolve, reject) => {
-    const get = !options.method || options.method === 'POST'
+    const jsonResponse = !options.method || options.method === 'POST'
     fetch(`${baseAPI}/${path}`, {
       headers: {
         accepts: 'application/json',
       },
       ...options,
     })
-      .then(result => get ? result.json() : result)
+      .then(result => jsonResponse ? result.json() : result)
       .then(json => resolve(json))
       .catch(e => {
         reject(e);

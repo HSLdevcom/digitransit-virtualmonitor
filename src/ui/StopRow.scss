@@ -75,7 +75,7 @@
           cursor: pointer;
         }
 
-        &.east-west {
+        &.double {
           svg {
             left: 588px;
           }
@@ -83,7 +83,7 @@
       }
 
       .changed-settings {
-        &.east-west {
+        &.double {
           right: 148px;
         }
 

@@ -156,7 +156,6 @@ app.use('/api/user/notifications', userAuthenticated, function (req, res) {
         res.status(response.status).send(response.data);
       } else {
         errorHandler(res);
-        console.log("ERROR")
       }
     })
     .catch(function (err) {

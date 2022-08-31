@@ -39,7 +39,7 @@ const StopViewTitleEditor: FC<IProps> = ({ card, updateCardInfo, lang }) => {
       updateCardInfo(id, 'title', event.target.value, lang);
     }
   };
-  const layoutTitle = t('layoutEastWest');
+  const layoutTitle = t('layout-double');
 
   function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
     setisFocus(true);
@@ -76,7 +76,7 @@ const StopViewTitleEditor: FC<IProps> = ({ card, updateCardInfo, lang }) => {
         )}
         {isMultiDisplay && (
           <input
-            className={cx('stop-title-input', 'east-west')}
+            className={cx('stop-title-input', 'double')}
             id={`stop-title-input${id}-${lang}`}
             value={layoutTitle}
             readOnly

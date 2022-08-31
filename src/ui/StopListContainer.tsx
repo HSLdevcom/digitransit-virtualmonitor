@@ -47,7 +47,7 @@ const TitleItem = props => {
   const valueLeft = changedLeft ? titleLeft : props.titleLeft;
   const valueRight = changedRight ? titleRight : props.titleRight;
   return (
-    <div className="east-west-inputs">
+    <div className="double-inputs">
       {props.languages?.map(lan => (
         <StopListTitleInput
           key={`lan${lan}`}

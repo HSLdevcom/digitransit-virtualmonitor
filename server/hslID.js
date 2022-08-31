@@ -123,7 +123,6 @@ const deleteMonitorHSL = async (
   monitor,
 ) => {
   try {
-    console.log("Deleting  MONITOR from", dataStorageId)
     const options = {
       method: 'DELETE',
       endpoint: `/api/rest/v1/datastorage/${dataStorageId}/data/${monitor}`,

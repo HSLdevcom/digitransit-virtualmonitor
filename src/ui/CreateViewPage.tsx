@@ -10,11 +10,20 @@ import { Redirect, useHistory, useLocation } from 'react-router-dom';
 import { getParams } from '../util/queryUtils';
 import Modal from '@hsl-fi/modal';
 import { useTranslation } from 'react-i18next';
+import { IMonitor } from '../util/Interfaces';
+
+interface Location {
+  pathname: string;
+  search: string;
+  state: {
+    view: IMonitor;
+  };
+}
 
 const CreateViewPage = () => {
   const [t] = useTranslation();
   const user = useContext(UserContext);
-  const location: any = useLocation();
+  const location: Location = useLocation();
   const history = useHistory();
   const [stopCardList, setStopCardList] = useState(
     location?.state?.view ? location.state.view.cards : null,

@@ -89,7 +89,6 @@ export interface IMonitorConfig {
 export interface IQueryString {
   title?: string;
   cont?: string;
-  pocLogin?: boolean;
 }
 
 export interface IConfigurationProps {

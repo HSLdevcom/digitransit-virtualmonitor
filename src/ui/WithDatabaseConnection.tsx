@@ -43,27 +43,33 @@ const WithDatabaseConnection: FC<IProps> = ({
   showPlatformsOrTracks,
 }) => {
   const [view, setView] = useState({});
-  const [fetched, setFetched] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
       const { url, cont: hash } = getParams(location.search);
       if (hash) {
-        monitorAPI.get(hash).then(r => {
-          setFetched(true);
-          setView(r);
-        });
+        monitorAPI
+          .get(hash)
+          .then(r => {
+            setLoading(false);
+            setView(r);
+          })
+          .catch(() => setLoading(false));
       } else if (url) {
-        monitorAPI.getStatic(url).then(r => {
-          setFetched(true);
-          setView(r);
-        });
+        monitorAPI
+          .getStatic(url)
+          .then(r => {
+            setLoading(false);
+            setView(r);
+          })
+          .catch(() => setLoading(false));
       }
     }
   }, []);
 
-  const monitor = fetched ? view : location?.state?.view.cards;
-  if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
-    if (fetched) {
+  const monitor = !loading ? view : location?.state?.view.cards;
+  if ((loading && !location?.state?.view?.cards) || !monitor?.contenthash) {
+    if (!loading) {
       return <NoMonitorsFound />;
     }
     return <Loading />;

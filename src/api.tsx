@@ -11,8 +11,8 @@ const fetchData = (path, options) => {
     })
       .then(result => get ? result.json() : result)
       .then(json => resolve(json))
-      .catch(err => {
-        reject(err);
+      .catch(e => {
+        reject(e);
       });
   });
 }

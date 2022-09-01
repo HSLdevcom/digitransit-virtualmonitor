@@ -5,6 +5,7 @@ import HslLogo from './HslLogo';
 import LinkkiLogo from './LinkkiLogo';
 import MatkaLogo from './MatkaLogo';
 import NysseLogo from './NysseLogo';
+import Vaasalogo from './VaasaLogo';
 
 interface ICommonProps {
   readonly isPreview?: boolean;
@@ -20,10 +21,10 @@ const Logo: FC<ICommonProps> = (props) => {
   let isHsl = false;
 
   if (config) {
-    const feedIds = config.feedIds;
-    const feedId = feedIds[0].toLowerCase();
-
-    switch (feedId) {
+    switch (config.name) {
+      case 'vaasa':
+        logo = <Vaasalogo />;
+        break;
       case 'tampere':
         logo = <NysseLogo />;
         break;

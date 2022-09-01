@@ -34,7 +34,7 @@ import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
 
 export interface IExtendedMonitorConfig extends IMonitorConfig {
-  fonts?: {
+  fonts: {
     normal?: string;
     narrow?: string;
     weights?: {
@@ -43,20 +43,16 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     };
     monitor?: {
       name?: string;
-      weights?: {
-        normal?: string;
-        bigger?: string;
-      };
+      weight?: string;
     };
   };
-  colors?: {
+  colors: {
     alert?: string;
-    font?: string;
     hover?: string;
-    monitorBackground?: string;
-    primary?: string;
+    monitorBackground: string;
+    primary: string;
   };
-  alertOrientation?: string;
+  alertOrientation: string;
   modeIcons?: {
     colors?: {
       'mode-airplane'?: string;
@@ -71,7 +67,7 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     postfix?: string;
     setName?: string;
   };
-  allowLogin?: boolean;
+  allowLogin: boolean;
 }
 export interface IMonitorConfig {
   name?: string;
@@ -114,20 +110,17 @@ const App: FC<IConfigurationProps> = (props) => {
   const config = useContext(ConfigContext);
   const style = {
     '--alert-color': config.colors.alert || defaultColorAlert,
-    '--font-color': config.colors.font || defaultColorFont,
+    '--font-color': defaultColorFont,
     '--font-family': config.fonts?.normal || defaultFontNormal,
     '--font-family-narrow': config.fonts?.narrow || defaultFontNarrow,
     '--font-weight':
       config.fonts?.weights?.normal || defaultFontWeightNormal,
     '--font-weight-bigger':
       config.fonts?.weights?.bigger || defaultFontWeightBigger,
-    '--monitor-background-color':
-      config.colors.monitorBackground || config.colors.primary,
+    '--monitor-background-color': config.colors.monitorBackground,
     '--monitor-font': config.fonts?.monitor?.name || defaultFontNarrow,
     '--monitor-font-weight':
-      config.fonts?.monitor?.weights?.normal || defaultFontWeightNormal,
-    '--monitor-font-weight-bigger':
-      config.fonts?.monitor?.weights?.bigger || defaultFontWeightBigger,
+      config.fonts?.monitor?.weight || defaultFontWeightNormal,
     '--primary-color': config.colors.primary,
   };
   useEffect(() => {
@@ -170,44 +163,25 @@ const App: FC<IConfigurationProps> = (props) => {
 
   const favicon = config.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
-  const fontHSL = (
+  
+  const fonts = config.fonts.externalFonts.map(font => (
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://cloud.typography.com/6364294/7432412/css/fonts.css"
+      href={font}
     />
-  );
-  const fontDefault = (
-    <link
-      rel="stylesheet"
-      href="https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"
-    />
-  );
+  ));
 
-  const fontTampere = (
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Lato"
-    />
-  );
   if (loading) {
     return <Loading white/>
   }
-  const getAdditionalFont = name => {
-    switch (name) {
-      case 'tampere':
-        return fontTampere;
-      default:
-        return null;
-    }
-  };
+
   return (
     <div className="App">
       <Helmet>
         <title>{config.name} - pysäkkinäyttö</title>
         {faviconLink}
-        {config.name === 'hsl' ? fontHSL : fontDefault}
-        {getAdditionalFont(config.name)}
+        {fonts}
       </Helmet>
       <ApolloProvider client={client}>
         <UserContext.Provider value={user}>

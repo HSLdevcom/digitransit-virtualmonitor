@@ -6,6 +6,7 @@ export default {
       en: "Create a stop display while logged in so you can edit it later.",
     }],
     fonts: {
+      externalFonts: ["https://cloud.typography.com/6364294/7432412/css/fonts.css"],
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       weights: {
         normal: '400',
@@ -48,6 +49,9 @@ export default {
     useTilde: true,
   },
   jyvaskyla: {
+    fonts: {
+      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
+    },
     colors: {
       primary: '#7DC02D',
       monitorBackground: '#0057a2',
@@ -74,6 +78,9 @@ export default {
       monitorBackground: '#0057a2',
     },
     feedIds: ['MATKA', 'HSL', 'tampere', 'LINKKI', 'lautta', 'OULU'],
+    fonts: {
+      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
+    },
     modeIcons: {
       colors: {
         'mode-airplane': '#0046AD',
@@ -103,6 +110,7 @@ export default {
     },
     feedIds: ['tampere', 'TampereVR', 'tampereDRT'],
     fonts: {
+      externalFonts: ['https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css', 'https://fonts.googleapis.com/css?family=Lato'],
       monitor: {
         name: 'Lato',
         weight: '700',
@@ -136,8 +144,10 @@ export default {
       monitorBackground: '#000a8c',
     },
     fonts: {
+      externalFonts: ['https://fonts.googleapis.com/css?family=Source+Sans+Pro'],
+      normal: '"Source Sans Pro", Arial, Georgia, Serif',
       monitor: {
-        name: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
+        name: '"Source Sans Pro", Arial, Georgia, Serif',
         weight: '700',
       },
     },

@@ -1,11 +1,19 @@
 import config from '../monitorConfig.js';
+import defaultConfig from '../defaultConfig.js';
+import { mergeWith } from 'lodash';
 
 export const getConfig = () => {
+  const merger = (destination, source) => {
+    // don't merge arrays
+    if (Array.isArray(source)) {
+      return source;
+    }
+  };
   // When developing locally, you can define REACT_APP_CONFIG env variable. Use themes assinged below.
   const env = process.env.REACT_APP_CONFIG;
   const allowedThemes = ['hsl', 'matka', 'tampere', 'jyvaskyla', 'vaasa'];
   if (env && allowedThemes.indexOf(env) > -1) {
-    return config[env];
+    return mergeWith(defaultConfig, config[env], merger);
   }
   const domain = window.location.hostname;
   let theme;
@@ -23,5 +31,5 @@ export const getConfig = () => {
   } else {
     theme = 'hsl';
   }
-  return config[theme];
+  return mergeWith(defaultConfig, config[theme], merger);
 };

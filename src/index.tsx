@@ -12,9 +12,7 @@ ReactDOM.render(
   <NtpSyncComponent>
     <BrowserRouter>
       <ConfigContext.Provider value={getConfig()}>
-        <App
-        search={getParams(window.location.search)}
-      />
+        <App search={getParams(window.location.search)} />
       </ConfigContext.Provider>
     </BrowserRouter>
   </NtpSyncComponent>,

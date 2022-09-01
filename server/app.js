@@ -80,7 +80,7 @@ function setUpOpenId() {
     '',
     [
       'https://virtualmonitor-app-login-dev.azurewebsites.net/',
-      'http://virtualmonitor-app-login-dev.azurewebsites.net/',
+      'https://dev-hslmonitori.digitransit.fi/'
     ],
     [
       '/static/',

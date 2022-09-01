@@ -80,7 +80,7 @@ const StopRow: FC<IProps> = ({
       changeOpen(true);
     }
   };
-  const isEastWest = stop.layout > 8 && stop.layout < 12;
+  const isDouble = stop.layout > 8 && stop.layout < 12;
 
   const stopPatterns = sortBy(stop.patterns, 'route.shortName').map(pattern => {
     return stringifyPattern(pattern);
@@ -113,7 +113,7 @@ const StopRow: FC<IProps> = ({
         <div className="stop-upper-row">
           {stop.name}
           <div
-            className={cx('settings', isEastWest && 'east-west')}
+            className={cx('settings', isDouble && 'double')}
             tabIndex={0}
             role="button"
             aria-label={t('stopSettings', {
@@ -126,7 +126,7 @@ const StopRow: FC<IProps> = ({
           >
             <Icon img="settings" color={config.colors.primary} />
           </div>
-          <div className={cx('changed-settings', isEastWest && 'east-west')}>
+          <div className={cx('changed-settings', isDouble && 'double')}>
             {!isDefaultSettings && <span> {t('settingsChanged')}</span>}
           </div>
         </div>

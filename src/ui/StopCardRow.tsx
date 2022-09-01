@@ -198,7 +198,7 @@ const StopCardRow: FC<IProps> = ({
   const lang = t('languageCode');
   const isFirst = index === 0;
   const isLast = index === cards.length - 1;
-  const isEastWest = layout >= 9 && layout <= 11;
+  const isDouble = layout >= 9 && layout <= 11;
   const possibleToMove = cards.length > 1;
 
   const filterSearchResults = (results, x) => {
@@ -222,7 +222,7 @@ const StopCardRow: FC<IProps> = ({
         <div className="title-with-icons">
           {languages.map((lan, i) => {
             return (
-              ((isEastWest && i === 0) || !isEastWest) && (
+              ((isDouble && i === 0) || !isDouble) && (
                 <StopViewTitleEditor
                   card={item}
                   updateCardInfo={updateCardInfo}

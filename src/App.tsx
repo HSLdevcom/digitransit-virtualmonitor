@@ -85,7 +85,6 @@ export interface IMonitorConfig {
 export interface IQueryString {
   title?: string;
   cont?: string;
-  pocLogin?: boolean;
 }
 
 export interface IConfigurationProps {
@@ -102,9 +101,18 @@ interface IStopMonitorProps {
   layout?: string;
 }
 
+interface User {
+  sub?: string;
+  notLogged?: boolean
+}
+
+interface Favourite {
+  type: string;
+}
+
 const App: FC<IConfigurationProps> = (props) => {
-  const [user, setUser] = useState<any>({});
-  const [favourites, setFavourites] = useState<any>([]);
+  const [user, setUser] = useState<User>({});
+  const [favourites, setFavourites] = useState<Array<Favourite>>([]);
   const [loading, setLoading] = useState(true);
 
   const config = useContext(ConfigContext);
@@ -135,7 +143,7 @@ const App: FC<IConfigurationProps> = (props) => {
         setUser({notLogged: true}); 
         setLoading(false);
       })
-      monitorAPI.getFavourites().then(favs => {
+      monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
         setFavourites(favs)
       }).catch(e => {
         console.log(e)

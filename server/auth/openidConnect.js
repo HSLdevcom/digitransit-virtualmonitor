@@ -172,9 +172,9 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   // they will be returned to the callback handler below
   app.get('/login', (req, res) => {
     const { url, favouriteModalAction, ...rest } = req.query;
-    if (favouriteModalAction) {
-      req.session.returnTo = `/${indexPath}?favouriteModalAction=${favouriteModalAction}`;
-    }
+    // if (favouriteModalAction) {
+    //   req.session.returnTo = `/${indexPath}?favouriteModalAction=${favouriteModalAction}`;
+    // }
     if (url) {
       const restParams = Object.keys(rest)
         .map(k => `${k}=${rest[k]}`)

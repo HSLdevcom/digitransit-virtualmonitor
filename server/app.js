@@ -24,7 +24,6 @@ const port = process.env.PORT || 3001;
 const app = express();
 
 app.use(logger('dev'));
-// app.use(function(req,res,next){console.log(req.headers);next();});
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.SESSION_SECRET || 'reittiopas_secret'));
@@ -37,26 +36,26 @@ const displayDictionaries = {
   v0: '{"displaySeconds":,"view":{"pierColumnTitle":","stops":[","},"title":{"fi","en"}}]}},"type":"stopTimes"HSL:10"]}',
 };
 
-app.get('/api/monitor/:id', (req, res) => {
-  monitorService.get(req, res);
+app.get('/api/monitor/:id', (req, res, next) => {
+  monitorService.get(req, res, next);
 });
 
-app.put('/api/monitor', (req, res) => {
-  monitorService.create(req, res);
+app.put('/api/monitor', (req, res, next) => {
+  monitorService.create(req, res, next);
 });
 
-app.get('/api/translations/:recordIds', (req, res) => {
+app.get('/api/translations/:recordIds', (req, res, next) => {
   const ids = req.params.recordIds.split(',');
   getTranslations({ trans_id: ids }).then(t => {
     res.json(t);
-  });
+  }).catch(e => next(e));
 });
 
-app.get('/api/staticmonitor/:id', (req, res) => {
-  monitorService.getStatic(req, res);
+app.get('/api/staticmonitor/:id', (req, res, next) => {
+  monitorService.getStatic(req, res, next);
 });
 
-app.post('/api/decompress/', (req, res) => {
+app.post('/api/decompress/', (req, res, next) => {
   try {
     const decompresser = createUrlCompression(
       Buffer.from(displayDictionaries.v0),
@@ -68,7 +67,7 @@ app.post('/api/decompress/', (req, res) => {
       })
       .catch((e) => console.log(e));
   } catch (e) {
-    console.log(e);
+    next(e)
   }
 });
 
@@ -94,26 +93,25 @@ function setUpOpenId() {
 
 setUpOpenId();
 
-app.delete('/api/staticmonitor', userAuthenticated, (req, res) => {
-  deleteMonitor(req, res);
+app.delete('/api/staticmonitor', userAuthenticated, (req, res, next) => {
+  deleteMonitor(req, res, next);
 });
 
-app.post('/api/staticmonitor', userAuthenticated, (req, res) => {
-  updateStaticMonitor(req, res)
+app.post('/api/staticmonitor', userAuthenticated, (req, res, next) => {
+  updateStaticMonitor(req, res, next)
 });
 
-app.put('/api/staticmonitor', userAuthenticated, (req, res) => {
-  createMonitor(req, res);
-  monitorService.createStatic(req, res);
+app.put('/api/staticmonitor', userAuthenticated, (req, res, next) => {
+  createMonitor(req, res, next);
+  monitorService.createStatic(req, res, next);
 });
 
-app.get('/api/usermonitors', userAuthenticated, (req, res) => {
-  console.log("usermonitors")
-  getMonitors(req,res);
+app.get('/api/usermonitors', userAuthenticated, (req, res, next) => {
+  getMonitors(req, res, next);
 });
 
-app.get('/api/userowned/:id', userAuthenticated, (req, res) => {
-  isUserOwnedMonitor(req, res)
+app.get('/api/userowned/:id', userAuthenticated, (req, res, next) => {
+  isUserOwnedMonitor(req, res, next)
 });
 
 app.use('/api/user/favourites', userAuthenticated, function (req, res) {
@@ -158,7 +156,6 @@ app.use('/api/user/notifications', userAuthenticated, function (req, res) {
         res.status(response.status).send(response.data);
       } else {
         errorHandler(res);
-        console.log("ERROR")
       }
     })
     .catch(function (err) {
@@ -184,11 +181,7 @@ app.use((err, req, res, next) => {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: err,
-  });
+  res.status(err.status || 500).send(err.message);
 });
 
 export default app;

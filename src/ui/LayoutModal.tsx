@@ -1,11 +1,17 @@
-import React, { ClassAttributes, FC, useState, useEffect } from 'react';
+import React, {
+  ClassAttributes,
+  FC,
+  useState,
+  useEffect,
+  useContext,
+} from 'react';
 import cx from 'classnames';
 import { horizontalLayouts, verticalLayouts } from './Layouts';
 import isEqual from 'lodash/isEqual';
 import Modal from 'react-modal';
 import { useTranslation } from 'react-i18next';
-import { getColorByName } from '../util/getConfig';
 import Icon from './Icon';
+import { ConfigContext } from '../contexts';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
@@ -33,6 +39,8 @@ const LayoutModal: FC<Props> = ({
   allowInformationDisplay,
 }) => {
   const [t] = useTranslation();
+
+  const config = useContext(ConfigContext);
 
   const [selected, setSelected] = useState(option);
 
@@ -73,7 +81,7 @@ const LayoutModal: FC<Props> = ({
           >
             <Icon
               img="close"
-              color={getColorByName('primary')}
+              color={config.colors.primary}
               height={24}
               width={24}
             />
@@ -108,7 +116,7 @@ const LayoutModal: FC<Props> = ({
                         }
                         onClick={() => setSelected(option)}
                         id={`layoutBtn-${option.value}`}
-                        key={`button_${option}`}
+                        key={`button_${option.value}`}
                         role="button"
                         aria-label={`${t(orientation)} ${t(l.label)} ${
                           option.rows

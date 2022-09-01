@@ -56,6 +56,10 @@ $preview-container-height: 365px;
         width: min(100%, 18vh);
       }
 
+      .vaasa {
+        width: min(100%, 12vh);
+      }
+
       .linkki {
         width: min(100%, 7vh);
       }
@@ -116,13 +120,6 @@ $preview-container-height: 365px;
     justify-content: flex-start;
     align-items: center;
 
-    &.hsl {
-      svg {
-        width: calc(2 * min(9.48vh, 7vw)) !important;
-        height: min(9.48vh, 7vw) !important;
-      }
-    }
-
     &.portrait {
       &.hsl {
         svg {
@@ -136,8 +133,20 @@ $preview-container-height: 365px;
       width: min(100%, 20vh);
     }
 
+    &.hsl {
+      svg {
+        width: calc(2 * min(9.48vh, 7vw)) !important;
+        height: min(9.48vh, 7vw) !important;
+      }
+    }
+
     .linkki {
       width: min(100%, 10vh);
+    }
+
+    .vaasa {
+      width: min(100%, 20vh);
+      padding-left: 0.4vw;
     }
 
     &.preview {

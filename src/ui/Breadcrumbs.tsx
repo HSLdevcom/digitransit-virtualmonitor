@@ -2,12 +2,12 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
-import { getPrimaryColor } from '../util/getConfig';
-import { UserContext } from '../contexts';
+import { ConfigContext, UserContext } from '../contexts';
 
 const Breadcrumbs = () => {
   const [t] = useTranslation();
   const user = useContext(UserContext);
+  const config = useContext(ConfigContext);
   const parser = document.createElement('a');
   parser.href = window.location.href;
   const arr = parser.pathname.split('/');
@@ -54,7 +54,7 @@ const Breadcrumbs = () => {
                   width={14}
                   height={14}
                   rotate={'-90'}
-                  color={getPrimaryColor()}
+                  color={config.colors.primary}
                   margin={'0 10px'}
                 />
               )}

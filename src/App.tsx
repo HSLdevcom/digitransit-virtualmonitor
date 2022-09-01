@@ -6,14 +6,6 @@ import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import CreateViewPage from './ui/CreateViewPage';
 import Version from './ui/Version';
 import BannerContainer from './ui/BannerContainer';
-import {
-  defaultColorAlert,
-  defaultColorFont,
-  defaultFontNarrow,
-  defaultFontNormal,
-  defaultFontWeightNormal,
-  defaultFontWeightBigger,
-} from './ui/DefaultStyles';
 import { Helmet } from 'react-helmet';
 import {
   ApolloClient,
@@ -34,31 +26,27 @@ import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
 
 export interface IExtendedMonitorConfig extends IMonitorConfig {
-  fonts?: {
-    normal?: string;
-    narrow?: string;
-    weights?: {
-      normal?: string;
-      bigger?: string;
+  fonts: {
+    normal: string;
+    narrow: string;
+    weights: {
+      normal: string;
+      bigger: string;
     };
-    monitor?: {
-      name?: string;
-      weights?: {
-        normal?: string;
-        bigger?: string;
-      };
+    monitor: {
+      name: string;
+      weight: string;
     };
   };
-  colors?: {
-    alert?: string;
-    font?: string;
+  colors: {
+    alert: string;
     hover?: string;
-    monitorBackground?: string;
-    primary?: string;
+    monitorBackground: string;
+    primary: string;
   };
-  alertOrientation?: string;
-  modeIcons?: {
-    colors?: {
+  alertOrientation: string;
+  modeIcons: {
+    colors: {
       'mode-airplane'?: string;
       'mode-bus'?: string;
       'mode-tram'?: string;
@@ -68,10 +56,10 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
       'mode-citybike'?: string;
       'mode-citybike-secondary'?: string;
     };
-    postfix?: string;
-    setName?: string;
+    postfix: string;
+    setName: string;
   };
-  allowLogin?: boolean;
+  allowLogin: boolean;
 }
 export interface IMonitorConfig {
   name?: string;
@@ -83,7 +71,6 @@ export interface IMonitorConfig {
   urlParamFindText?: string;
   urlParamFindAltText?: string;
   showMinutes?: string;
-  breadCrumbsStartPage?: string;
 }
 
 export interface IQueryString {
@@ -121,21 +108,14 @@ const App: FC<IConfigurationProps> = (props) => {
 
   const config = useContext(ConfigContext);
   const style = {
-    '--alert-color': config.colors.alert || defaultColorAlert,
-    '--font-color': config.colors.font || defaultColorFont,
-    '--font-family': config.fonts?.normal || defaultFontNormal,
-    '--font-family-narrow': config.fonts?.narrow || defaultFontNarrow,
-    '--font-weight':
-      config.fonts?.weights?.normal || defaultFontWeightNormal,
-    '--font-weight-bigger':
-      config.fonts?.weights?.bigger || defaultFontWeightBigger,
-    '--monitor-background-color':
-      config.colors.monitorBackground || config.colors.primary,
-    '--monitor-font': config.fonts?.monitor?.name || defaultFontNarrow,
-    '--monitor-font-weight':
-      config.fonts?.monitor?.weights?.normal || defaultFontWeightNormal,
-    '--monitor-font-weight-bigger':
-      config.fonts?.monitor?.weights?.bigger || defaultFontWeightBigger,
+    '--alert-color': config.colors.alert,
+    '--font-family': config.fonts.normal,
+    '--font-family-narrow': config.fonts?.narrow,
+    '--font-weight': config.fonts.weights.normal,
+    '--font-weight-bigger': config.fonts.weights.bigger,
+    '--monitor-background-color': config.colors.monitorBackground,
+    '--monitor-font': config.fonts.monitor.name,
+    '--monitor-font-weight': config.fonts.monitor.weight,
     '--primary-color': config.colors.primary,
   };
   useEffect(() => {
@@ -178,44 +158,25 @@ const App: FC<IConfigurationProps> = (props) => {
 
   const favicon = config.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
-  const fontHSL = (
+  
+  const fonts = config.fonts.externalFonts.map(font => (
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://cloud.typography.com/6364294/7432412/css/fonts.css"
+      href={font}
     />
-  );
-  const fontDefault = (
-    <link
-      rel="stylesheet"
-      href="https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"
-    />
-  );
+  ));
 
-  const fontTampere = (
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Lato"
-    />
-  );
   if (loading) {
     return <Loading white/>
   }
-  const getAdditionalFont = name => {
-    switch (name) {
-      case 'tampere':
-        return fontTampere;
-      default:
-        return null;
-    }
-  };
+
   return (
     <div className="App">
       <Helmet>
         <title>{config.name} - pysäkkinäyttö</title>
         {faviconLink}
-        {config.name === 'hsl' ? fontHSL : fontDefault}
-        {getAdditionalFont(config.name)}
+        {fonts}
       </Helmet>
       <ApolloProvider client={client}>
         <UserContext.Provider value={user}>

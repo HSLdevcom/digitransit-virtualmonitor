@@ -1,9 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';
-import { getPrimaryColor } from '../util/getConfig';
+import { ConfigContext } from '../contexts';
 
 interface IProps {
   languages: Array<string>;
@@ -18,6 +18,7 @@ const DisplaySettings: FC<IProps> = ({
   handleOrientation,
   handleChange,
 }) => {
+  const config = useContext(ConfigContext);
   const [t] = useTranslation();
   const options = ['fi', 'sv', 'en'];
   const isChecked = (option: string) => {
@@ -97,7 +98,7 @@ const DisplaySettings: FC<IProps> = ({
                     }`,
                   )
                 }
-                color={getPrimaryColor()}
+                color={config.colors.primary}
               >
                 {option.toUpperCase()}
               </Checkbox>

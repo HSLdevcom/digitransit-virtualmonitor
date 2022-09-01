@@ -1,12 +1,12 @@
 import cx from 'classnames';
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { ICardInfo } from '../util/Interfaces';
 import Icon from './Icon';
 import { useTranslation } from 'react-i18next';
 import { focusToInput, onClick } from '../util/InputUtils';
 import { getLayout } from '../util/getLayout';
 import { isKeyboardSelectionEvent } from '../util/browser';
-import { getPrimaryColor } from '../util/getConfig';
+import { ConfigContext } from '../contexts';
 
 interface IProps {
   card: ICardInfo;
@@ -22,6 +22,7 @@ interface IProps {
 const StopViewTitleEditor: FC<IProps> = ({ card, updateCardInfo, lang }) => {
   const { index, layout, id, title } = card;
   const [t] = useTranslation();
+  const config = useContext(ConfigContext);
   const { isMultiDisplay } = getLayout(layout);
   const [newTitle, setNewTitle] = useState(
     isMultiDisplay ? t('layout') : title[lang],
@@ -95,7 +96,7 @@ const StopViewTitleEditor: FC<IProps> = ({ card, updateCardInfo, lang }) => {
               t(`languageName${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
             }
           >
-            <Icon img="edit" color={getPrimaryColor()} />
+            <Icon img="edit" color={config.colors.primary} />
           </div>
         )}
       </div>

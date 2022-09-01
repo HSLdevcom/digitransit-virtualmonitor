@@ -1,15 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { getDepartureTime } from '../time';
 import cx from 'classnames';
 import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
 import { capitalize } from '../util/monitorUtils';
-import {
-  getColorByName,
-  getIconStyleWithColor,
-  useTilde,
-} from '../util/getConfig';
 import { useTranslation } from 'react-i18next';
+import { ConfigContext } from '../contexts';
 
 interface IRoute {
   alerts: any;
@@ -98,6 +94,7 @@ const MonitorRow: FC<IProps> = ({
   showMinutes,
   withoutRouteColumn,
 }) => {
+  const config = useContext(ConfigContext);
   const [t] = useTranslation();
   if (departure === null && dayForDivider) {
     return (
@@ -203,7 +200,7 @@ const MonitorRow: FC<IProps> = ({
     departure.realtimeDeparture,
     showMinutes * 60,
     departure.serviceDay,
-    useTilde(),
+    config.useTilde,
     departure.realtime,
   );
 
@@ -241,7 +238,7 @@ const MonitorRow: FC<IProps> = ({
               height={24}
               width={24}
               img={departure.vehicleMode || 'bus'}
-              color={getColorByName('monitorBackground')}
+              color={config.colors.monitorBackground}
             />
           </div>
         )}
@@ -257,7 +254,7 @@ const MonitorRow: FC<IProps> = ({
                         img={'subway'}
                         height={16}
                         width={16}
-                        color={getIconStyleWithColor('subway').color}
+                        color={config.modeIcons.colors['mode-subway']}
                       />
                     </div>
                   )}
@@ -285,7 +282,7 @@ const MonitorRow: FC<IProps> = ({
                       img={'subway'}
                       height={16}
                       width={16}
-                      color={getIconStyleWithColor('subway').color}
+                      color={config.modeIcons.colors['mode-subway']}
                     />
                   </div>
                 )}
@@ -300,7 +297,7 @@ const MonitorRow: FC<IProps> = ({
                       img={'subway'}
                       height={12}
                       width={12}
-                      color={getIconStyleWithColor('subway').color}
+                      color={config.modeIcons.colors['mode-subway']}
                     />
                   </div>
                 )}
@@ -317,7 +314,7 @@ const MonitorRow: FC<IProps> = ({
                       img={'subway'}
                       height={16}
                       width={16}
-                      color={getIconStyleWithColor('subway').color}
+                      color={config.modeIcons.colors['mode-subway']}
                     />
                   </div>
                 )}
@@ -332,7 +329,7 @@ const MonitorRow: FC<IProps> = ({
                           img={'subway'}
                           height={12}
                           width={12}
-                          color={getIconStyleWithColor('subway').color}
+                          color={config.modeIcons.colors['mode-subway']}
                         />
                       </div>
                     )}
@@ -350,7 +347,7 @@ const MonitorRow: FC<IProps> = ({
         <div className={cx('grid-col', 'time', `len${departureTime?.length}`)}>
           {!isCancelled &&
             departureTime?.length > 0 &&
-            useTilde() &&
+            config.useTilde &&
             !departure.realtime && <span className={cx('tilde')}>~</span>}
           {departureTime}
         </div>

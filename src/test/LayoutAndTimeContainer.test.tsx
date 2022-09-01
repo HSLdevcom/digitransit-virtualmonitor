@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import LayoutAndTimeContainer from '../ui/LayoutAndTimeContainer';
+import { ConfigContext } from '../contexts';
 
 const title = {
   fi: 'foo',
@@ -27,8 +28,22 @@ const defaultProps = {
   durationEditable: false,
 };
 
+const mockConfig = {
+  colors: {
+    primary: '#000000',
+  },
+};
+
+const withContext = () => {
+  return (
+    <ConfigContext.Provider value={mockConfig}>
+      <LayoutAndTimeContainer {...defaultProps} />
+    </ConfigContext.Provider>
+  );
+};
+
 it('should have default label visible', () => {
-  const container = render(<LayoutAndTimeContainer {...defaultProps} />);
+  const container = render(withContext());
   expect(
     container.container.getElementsByClassName('label')[0].innerHTML,
   ).toEqual('8');

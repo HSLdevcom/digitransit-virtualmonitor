@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import Button from './Button';
 import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';
@@ -7,9 +7,9 @@ import Icon from './Icon';
 import { useTranslation } from 'react-i18next';
 import { IStop, IPattern } from '../util/Interfaces';
 import Modal from 'react-modal';
-import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
 import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
+import { ConfigContext } from '../contexts';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
@@ -43,6 +43,7 @@ export const defaultSettings = {
 };
 
 const StopRoutesModal: FC<Props> = props => {
+  const config = useContext(ConfigContext);
   const [t] = useTranslation();
   const [showInputs, setShowInputs] = useState(false);
   const [settings, setSettings] = useState(
@@ -224,7 +225,7 @@ const StopRoutesModal: FC<Props> = props => {
           >
             <Icon
               img="close"
-              color={getColorByName('primary')}
+              color={config.colors.primary}
               height={24}
               width={24}
             />
@@ -249,7 +250,7 @@ const StopRoutesModal: FC<Props> = props => {
                   }
                   onChange={() => checkShowSetting(setting)}
                   aria-label={`${t('show')} ${t(setting)}`}
-                  color={getColorByName('primary')}
+                  color={config.colors.primary}
                 >
                   {t(setting)}
                 </Checkbox>
@@ -311,7 +312,7 @@ const StopRoutesModal: FC<Props> = props => {
               name={'all'}
               width={30}
               height={30}
-              color={getColorByName('primary')}
+              color={config.colors.primary}
               aria-label={t('hideAllLines')}
             >
               <span className="all">{t('all')}</span>
@@ -334,7 +335,7 @@ const StopRoutesModal: FC<Props> = props => {
             const { route } = props.stop.patterns.find(
               p => p.route.gtfsId === gtfsID,
             );
-            const iconStyle = getIconStyleWithColor(getRouteMode(route));
+            const alternateIcon = config.modeIcons.postfix;
             return (
               <div key={pattern} className="row">
                 <Checkbox
@@ -343,19 +344,21 @@ const StopRoutesModal: FC<Props> = props => {
                   name={pattern}
                   width={30}
                   height={30}
-                  color={getColorByName('primary')}
+                  color={config.colors.primary}
                   aria-label={t('hideLine', { line: patternArray[2] })}
                 >
                   <div className="vehicle">
                     <Icon
                       img={
-                        !iconStyle.postfix
+                        !alternateIcon
                           ? getRouteMode(route)
-                          : getRouteMode(route) + iconStyle.postfix
+                          : getRouteMode(route) + alternateIcon
                       }
                       width={24}
                       height={24}
-                      color={iconStyle.color}
+                      color={
+                        config.modeIcons.colors[`mode-${getRouteMode(route)}`]
+                      }
                     />
                   </div>
                   <div className="route-number">{patternArray[2]}</div>

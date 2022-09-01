@@ -1,70 +1,31 @@
 import cx from 'classnames';
 import { IStop, IMonitor } from '../util/Interfaces';
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import hash from 'object-hash';
 import { useTranslation } from 'react-i18next';
-import { ICardInfo } from './CardInfo';
 import monitorAPI from '../api';
-import { Redirect } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getLayout';
-import isEqual from 'lodash/isEqual';
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
-import { isInformationDisplay } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
 import UserViewTitleEditor from './UserViewTitleEditor';
 import { getCurrentSecondsWithMilliSeconds } from '../time';
 import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
 import { uuidValidateV5 } from '../util/monitorUtils';
 import PrepareMonitor from './PrepareMonitor';
+import { UserContext } from '../contexts';
+import { getParams } from '../util/queryUtils';
 
 interface IProps {
-  feedIds: Array<string>;
-  defaultStopCardList: any;
+  stopCards: any;
   languages: Array<string>;
   loading?: boolean;
   vertical?: boolean;
-  user?: any;
+  staticMonitor?: any;
 }
-
-const getViewName = title => {
-  if (window && window.location && window.location.search) {
-    const params = window.location.search.split('&');
-    if (params.length > 0 && params[0].startsWith('?name=')) {
-      return decodeURI(params[0].substring(6));
-    }
-  }
-  return title;
-};
-
-const getHash = () => {
-  if (window && window.location && window.location.search) {
-    const params = window.location.search.split('cont=');
-    if (params[1]) {
-      return params[1];
-    }
-  }
-  return undefined;
-};
-
-const getUuid = () => {
-  if (window && window.location && window.location.search) {
-    const params = window.location.search.split('&');
-    if (params[1] && params[1].startsWith('url=')) {
-      return params[1].substring(4);
-    }
-  }
-  return undefined;
-};
-
-const getPath = () => {
-  if (window && window.location) {
-    return window.location.pathname;
-  }
-  return undefined;
-};
 
 const createUUID = (startTime, hash) => {
   return uuidv5(
@@ -74,27 +35,27 @@ const createUUID = (startTime, hash) => {
 };
 
 const StopCardListContainer: FC<IProps> = ({
-  feedIds,
-  defaultStopCardList,
+  stopCards,
   loading = false,
   ...props
 }) => {
+  const user = useContext(UserContext);
   const [t] = useTranslation();
-  const [startTime, setStartTime] = useState(
-    getCurrentSecondsWithMilliSeconds(),
-  );
-  const [stopCardList, setStopCardList] = useState(defaultStopCardList);
+  const startTime = getCurrentSecondsWithMilliSeconds();
+  const [stopCardList, setStopCardList] = useState(stopCards);
   const [languages, setLanguages] = useState(props.languages);
+
+  const isHorizontal =
+    stopCardList[0].layout < 12 || stopCardList[0].layout === 18;
   const [orientation, setOrientation] = useState(
-    defaultStopCardList[0].layout > 11 ? 'vertical' : 'horizontal',
+    !isHorizontal ? 'vertical' : 'horizontal',
   );
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);
 
-  const [uuid, setUuid] = useState(getUuid());
   const [viewTitle, setViewTitle] = useState(
-    getViewName(t('staticMonitorTitle')),
+    props.staticMonitor ? props.staticMonitor.name : null,
   );
 
   const openPreview = () => {
@@ -159,10 +120,32 @@ const StopCardListContainer: FC<IProps> = ({
     }
   };
 
+  const updateLayout = (cardId: number, value: number) => {
+    const cardIndex = stopCardList.findIndex(card => card.id === cardId);
+    if (
+      getLayout(stopCardList[cardIndex].layout).isMultiDisplay &&
+      !getLayout(+value).isMultiDisplay
+    ) {
+      stopCardList[cardIndex].columns.left.stops = stopCardList[
+        cardIndex
+      ].columns.left.stops.concat(
+        stopCardList[cardIndex].columns.right.stops.filter(
+          rs =>
+            !stopCardList[cardIndex].columns.left.stops.find(
+              s => s.gtfsId === rs.gtfsId,
+            ),
+        ),
+      );
+      stopCardList[cardIndex].columns.right.stops = [];
+    }
+    stopCardList[cardIndex].layout = value;
+    setStopCardList(stopCardList.slice());
+  };
+
   const updateCardInfo = (
     cardId: number,
     type: string,
-    value: string,
+    value: number | string,
     lang = '',
   ) => {
     const cardIndex = stopCardList.findIndex(card => card.id === cardId);
@@ -208,26 +191,8 @@ const StopCardListContainer: FC<IProps> = ({
       } else {
         stopCardList[cardIndex].columns['right'].title[lang] = value;
       }
-    } else if (type === 'layout') {
-      if (
-        getLayout(stopCardList[cardIndex].layout).isMultiDisplay &&
-        !getLayout(Number(value)).isMultiDisplay
-      ) {
-        stopCardList[cardIndex].columns.left.stops = stopCardList[
-          cardIndex
-        ].columns.left.stops.concat(
-          stopCardList[cardIndex].columns.right.stops.filter(rs =>
-            stopCardList[cardIndex].columns.left.stops.includes(rs.gtfsId),
-          ),
-        );
-        stopCardList[cardIndex].columns.right.stops = [];
-        stopCardList[cardIndex].columns.left.title[lang] = t('sideLeft');
-        stopCardList[cardIndex].columns.right.title[lang] = t('sideRight');
-        stopCardList[cardIndex].columns.right.inUse = true;
-      }
-      stopCardList[cardIndex].layout = Number(value);
     } else if (type === 'duration') {
-      stopCardList[cardIndex].duration = Number(value);
+      stopCardList[cardIndex].duration = value;
     }
     setStopCardList(stopCardList.slice());
   };
@@ -260,45 +225,24 @@ const StopCardListContainer: FC<IProps> = ({
   const handleOrientation = (orientation: string) => {
     setOrientation(orientation);
     stopCardList.forEach(card =>
-      updateCardInfo(
-        card.id,
-        'layout',
-        orientation === 'horizontal' ? '2' : '14',
-      ),
+      updateLayout(card.id, orientation === 'horizontal' ? 2 : 14),
     );
   };
 
-  const modifiedStopCardList = stopCardList.map(card => {
-    return {
-      ...card,
-      onCardDelete: onCardDelete,
-      onCardMove: onCardMove,
-      onStopDelete: onStopDelete,
-      onStopMove: onStopMove,
-      setStops: setStops,
-      updateCardInfo: updateCardInfo,
-    };
-  });
-
   const checkNoStops = stopCardList => {
-    let noStops = false;
-    stopCardList.forEach((stopCard, i) => {
+    return stopCardList.some((stopCard, i) => {
       const isMultiDisplay = getLayout(stopCard.layout).isMultiDisplay;
-      noStops = !isMultiDisplay
+      return !isMultiDisplay
         ? stopCard.columns.left.stops.length === 0
         : stopCard.columns.left.stops.length === 0 ||
-          stopCard.columns.right.stops.length === 0;
+            stopCard.columns.right.stops.length === 0;
     });
-    return noStops;
   };
 
   const createOrSaveMonitor = isNew => {
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
     cardArray.forEach(card => {
-      if (card.layout >= 9 && card.layout < 11) {
-        card.columns.right.inUse = true;
-      }
       card.columns.left.stops = card.columns.left.stops.map(stop => {
         return {
           name: stop.name,
@@ -331,7 +275,6 @@ const StopCardListContainer: FC<IProps> = ({
     const newCard: IMonitor = {
       cards: cards,
       languages: languageArray.filter(lan => languages.includes(lan)),
-      isInformationDisplay: isInformationDisplay(cardArray),
       contenthash: '',
     };
     newCard.contenthash = hash(newCard, {
@@ -339,87 +282,78 @@ const StopCardListContainer: FC<IProps> = ({
       encoding: 'base64',
     }).replaceAll('/', '-');
     if (isNew) {
-      monitorAPI.create(newCard).then(res => {
-        if (res['status'] === 200 || res['status'] === 409) {
-          if (getPath() === '/createStaticView') {
-            const newUuid = createUUID(newCard.contenthash, startTime);
-            monitorAPI
-              .createStatic(newCard.contenthash, newUuid, viewTitle)
-              .then(res => {
-                setUuid(newUuid);
-                setView(newCard);
-              });
-          } else {
+      if (user?.sub) {
+        const newUuid = createUUID(newCard.contenthash, startTime);
+        const newStaticMonitor = {
+          ...newCard,
+          name: viewTitle,
+          url: newUuid,
+        };
+        monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
+          if (res.status === 200 || res.status === 409) {
+            setView(newStaticMonitor);
             setRedirect(true);
-            setView(newCard);
           }
-        }
-      });
-    } else {
-      const hashChanged = !isEqual(getHash(), newCard.contenthash);
-      const titleChanged = !isEqual(
-        getViewName(t('staticMonitorTitle')),
-        viewTitle,
-      );
-      if (hashChanged) {
-        monitorAPI.create(newCard).then(res => {
-          monitorAPI
-            .updateStatic(getHash(), getUuid(), newCard.contenthash, viewTitle)
-            .then(res => {
-              setRedirect(true);
-              setView(newCard);
-            });
         });
-      } else if (!hashChanged && titleChanged) {
-        monitorAPI
-          .updateStatic(getHash(), getUuid(), getHash(), viewTitle)
-          .then(res => {
-            setRedirect(true);
-            setView(newCard);
-          });
       } else {
-        setRedirect(true);
-        setView(newCard);
+        monitorAPI.create(newCard).then((res: any) => {
+          if (res.status === 200 || res.status === 409) {
+            setView(newCard);
+            setRedirect(true);
+          }
+        });
+      }
+    } else {
+      if (user?.sub) {
+        const newStaticMonitor = {
+          ...newCard,
+          name: viewTitle,
+          id: props.staticMonitor.id,
+          url: getParams(window.location.search).url,
+        };
+        monitorAPI.updateStatic(newStaticMonitor).then(res => {
+          setView(newCard);
+          setRedirect(true);
+        });
+      } else {
+        monitorAPI.create(newCard).then(res => {
+          setView(newCard);
+          setRedirect(true);
+        });
       }
     }
   };
 
-  const checkIfModify = () => {
-    if (
-      window &&
-      (window.location.href.indexOf('cont=') !== -1 ||
-        window.location.pathname.split('/').length > 2) &&
-      getPath() === '/createStaticView'
-    ) {
-      return true;
-    }
-    return false;
-  };
-
-  if (!redirect && view && uuid) {
-    setRedirect(true);
-  }
-
   if (redirect && view) {
     let search;
-    const isStatic = getPath() === '/createStaticView';
-    const url = uuid ? uuid : getUuid();
+    const isStatic = window.location.pathname === '/monitors/createview';
+    const url = view.url ? view.url : getParams(window.location.search).url;
     if (isStatic && url && uuidValidateV5(url)) {
-      search = `?cont=${url}`;
+      search = `?url=${url}`;
     } else {
       search = `?cont=${view.contenthash}`;
     }
     return (
-      <Redirect
-        to={{
-          pathname: isStatic ? '/static' : '/view',
-          search: search,
-          state: {
-            view: view.cards,
-            viewTitle: viewTitle,
-          },
-        }}
-      />
+      <>
+        {isStatic ? (
+          <Redirect
+            to={{
+              pathname: '/monitors',
+            }}
+          />
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/view',
+              search: search,
+              state: {
+                view: view.cards,
+                viewTitle: viewTitle,
+              },
+            }}
+          />
+        )}
+      </>
     );
   }
 
@@ -430,28 +364,20 @@ const StopCardListContainer: FC<IProps> = ({
 
   const cards: IMonitor = {
     cards: stopCardList,
-    isInformationDisplay: isInformationDisplay(stopCardList),
     languages: languages,
   };
   if (loading) {
-    return (
-      <div className="stop-card-list-container">
-        <Loading white />
-      </div>
-    );
+    return <Loading white />;
   }
-
-  const backToList = () => {
-    window.location.href = '/?pocLogin';
-  };
 
   const updateViewTitle = newTitle => {
     setViewTitle(newTitle);
   };
 
-  const noStops = checkNoStops(modifiedStopCardList);
+  const noStops = checkNoStops(stopCardList);
   const makeButtonsDisabled = !(languages.length > 0 && !noStops);
-  const isModifyView = checkIfModify();
+  const isModifyView = window.location.href.indexOf('url=') !== -1;
+  const newDisplayDisabled = stopCardList.find(c => c.layout > 17);
 
   const buttonsRequirements = [];
   if (languages.length === 0) {
@@ -469,20 +395,29 @@ const StopCardListContainer: FC<IProps> = ({
     : t('previewView');
   const ariaLabelForSave = makeButtonsDisabled
     ? createAriaLabel('Save', buttonsRequirements, t)
-    : t('previewView');
+    : t('save');
+  const ariaNewDisplay = newDisplayDisabled
+    ? t('new-display-disabled')
+    : t('prepareDisplay');
 
   return (
     <div className="stop-card-list-container">
-      {props.user && props.user.loggedIn && (
-        <UserViewTitleEditor
-          title={viewTitle}
-          updateViewTitle={updateViewTitle}
-          backToList={backToList}
-          contentHash={getHash()}
-          url={getUuid()}
-          isNew={!isModifyView}
+      <div className="animate-in">
+        {user?.sub && window.location.pathname === '/monitors/createview' && (
+          <UserViewTitleEditor
+            title={viewTitle}
+            updateViewTitle={updateViewTitle}
+            monitorId={props.staticMonitor?.id}
+          />
+        )}
+        <DisplaySettings
+          orientation={orientation}
+          handleOrientation={handleOrientation}
+          languages={languages}
+          handleChange={handleLanguageChange}
         />
-      )}
+      </div>
+
       {isOpen && (
         <PrepareMonitor
           preview={{
@@ -494,41 +429,25 @@ const StopCardListContainer: FC<IProps> = ({
           }}
         />
       )}
-      <DisplaySettings
-        orientation={orientation}
-        handleOrientation={handleOrientation}
-        languages={languages}
-        handleChange={handleLanguageChange}
-      />
       <ul className="stopcards">
-        {modifiedStopCardList.map((item, index) => {
-          const noStops =
-            item.columns.left.stops.length === 0 &&
-            item.columns.right.stops.length === 0;
-          const cardInfo: ICardInfo = {
-            feedIds: feedIds,
+        {stopCardList.map((item, index) => {
+          const card: any = {
             index: index,
-            id: item.id,
-            title: item.title,
-            layout: item.layout,
-            duration: item.duration,
-            possibleToMove: modifiedStopCardList.length > 1,
+            ...item,
           };
           return (
             <StopCardRow
               key={`stopcard-${index}`}
-              noStopsSelected={noStops}
-              cardInfo={cardInfo}
-              feedIds={feedIds}
+              item={card}
               orientation={orientation}
-              cards={modifiedStopCardList}
-              columns={item.columns}
-              onCardDelete={item.onCardDelete}
-              onCardMove={item.onCardMove}
-              setStops={item.setStops}
-              onStopDelete={item.onStopDelete}
-              onStopMove={item.onStopMove}
-              updateCardInfo={item.updateCardInfo}
+              cards={stopCardList}
+              onCardDelete={onCardDelete}
+              onCardMove={onCardMove}
+              setStops={setStops}
+              onStopDelete={onStopDelete}
+              onStopMove={onStopMove}
+              updateLayout={updateLayout}
+              updateCardInfo={updateCardInfo}
               languages={languages}
             />
           );
@@ -536,14 +455,21 @@ const StopCardListContainer: FC<IProps> = ({
       </ul>
       <div className="buttons">
         <div className="wide">
-          <button className={cx('button', 'add-new-view')} onClick={addNew}>
+          <button
+            disabled={newDisplayDisabled}
+            className={cx('button', 'add-new-view')}
+            onClick={addNew}
+            aria-label={ariaNewDisplay}
+            title={newDisplayDisabled ? ariaNewDisplay : undefined}
+          >
             <span>{t('prepareDisplay')} </span>
           </button>
         </div>
         <button
           disabled={makeButtonsDisabled}
-          className="button preview"
+          className="button"
           onClick={openPreview}
+          title={makeButtonsDisabled ? ariaLabelForPreview : undefined}
           aria-label={ariaLabelForPreview}
         >
           <span>{t('previewView')}</span>
@@ -551,21 +477,23 @@ const StopCardListContainer: FC<IProps> = ({
         {!isModifyView && (
           <button
             disabled={makeButtonsDisabled}
-            className="button create"
+            className="button blue"
             onClick={() => createOrSaveMonitor(true)}
             aria-label={ariaLabelForCreate}
+            title={makeButtonsDisabled ? ariaLabelForCreate : undefined}
           >
             <span>{t('displayEditorStaticLink')}</span>
           </button>
         )}
         {isModifyView && (
           <>
-            <button className="button" onClick={backToList}>
+            <Link className="button" role="link" to={'/monitors'}>
               <span>{t('cancel')}</span>
-            </button>
+            </Link>
             <button
               disabled={makeButtonsDisabled}
-              className="button"
+              className="button blue"
+              title={makeButtonsDisabled ? ariaLabelForSave : undefined}
               onClick={() => createOrSaveMonitor(false)}
               aria-label={ariaLabelForSave}
             >

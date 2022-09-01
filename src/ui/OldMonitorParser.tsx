@@ -54,11 +54,9 @@ const migrateMonitor = (display, stops): any => {
       },
       columns: {
         left: {
-          inUse: true,
           stops: newStops,
         },
         right: {
-          inUse: false,
           stops: [],
         },
       },

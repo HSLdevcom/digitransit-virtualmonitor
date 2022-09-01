@@ -8,6 +8,16 @@
     color: #333;
   }
 
+  .section-margin-large {
+    margin: 0 80px;
+
+    label {
+      svg {
+        margin-right: 10px !important;
+      }
+    }
+  }
+
   .ReactModal__Content {
     border: none !important;
     border-radius: 5px !important;
@@ -40,10 +50,6 @@
 
   .section-margin-small {
     margin: 0 60px;
-  }
-
-  .section-margin-large {
-    margin: 0 80px;
   }
 
   .title-container {

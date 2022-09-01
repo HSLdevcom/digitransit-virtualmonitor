@@ -1,12 +1,18 @@
-import React from 'react';
+import React, { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import ContentContainer from './ContentContainer';
 import monitorsImage from './icons/create-monitor.svg';
 import cx from 'classnames';
+import { ConfigContext } from '../contexts';
 
-const IndexPage = () => {
-  const { t } = useTranslation();
+interface IProps {
+  buttons: any;
+  renderLogInMessage?: boolean;
+}
+
+const IndexPage: FC<IProps> = ({ buttons, renderLogInMessage = false }) => {
+  const { t, i18n } = useTranslation();
+  const config = useContext(ConfigContext);
   return (
     <ContentContainer longContainer>
       <div className="index">
@@ -15,16 +21,17 @@ const IndexPage = () => {
             <h1 className={cx('text', 'bigger')}>{t('frontPageParagraph1')}</h1>
             <div className="text">{t('frontPageParagraph2')}</div>
             <div className="text">{t('frontPageParagraph3')}</div>
+            {config.frontPageContent &&
+              renderLogInMessage &&
+              config.frontPageContent.map((text, i) => {
+                return (
+                  <div key={`text${i}`} className="text bold">
+                    {text[i18n.language]}
+                  </div>
+                );
+              })}
             <div className="button-container" tabIndex={-1}>
-              <Link
-                to={'/createView'}
-                id="create-new-link"
-                aria-label={t('quickDisplayCreate')}
-              >
-                <button className="create-new">
-                  {t('quickDisplayCreate')}
-                </button>
-              </Link>
+              {buttons}
             </div>
           </div>
         </div>

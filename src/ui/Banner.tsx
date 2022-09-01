@@ -1,15 +1,12 @@
-import React, { FC, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IMonitorConfig } from '../App';
+import { UserContext } from '../contexts';
 import Logo from './logo/Logo';
 import BurgerMenu from './BurgerMenu';
 import Icon from './Icon';
 
-interface Props {
-  config?: IMonitorConfig;
-  user?: any; // todo: refactor when we have proper user
-}
-const Banner: FC<Props> = ({ config, user }) => {
+const Banner = () => {
+  const user = useContext(UserContext);
   const [t] = useTranslation();
   const [isOpen, changeOpen] = useState(false);
   const setOpen = () => {
@@ -22,7 +19,7 @@ const Banner: FC<Props> = ({ config, user }) => {
 
   return (
     <div className="main-banner">
-      <Logo isLandscape monitorConfig={config} />
+      <Logo isLandscape />
       <div className="menu-container">
         <button
           className="menu-button"

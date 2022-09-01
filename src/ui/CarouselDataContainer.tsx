@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import { useQuery } from '@apollo/client';
 import {
   GET_STOP_DEPARTURES,
@@ -13,7 +13,7 @@ import {
   GetDeparturesForStopsVariables,
 } from '../generated/GetDeparturesForStops';
 import { getLayout } from '../util/getLayout';
-import { IView, ITrainData } from '../util/Interfaces';
+import { ITrainData } from '../util/Interfaces';
 import {
   getStopsAndStationsFromViews,
   createDepartureArray,
@@ -23,15 +23,11 @@ import Loading from './Loading';
 import { uniq, uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import CarouselContainer from './CarouselContainer';
+import { MonitorContext } from '../contexts';
 
 interface IProps {
-  views: Array<IView>;
-  languages: Array<string>;
   preview?: boolean;
   trainsWithTrack?: Array<ITrainData>;
-  staticContentHash?: string;
-  staticUrl?: string;
-  staticViewTitle?: string;
   fromStop?: boolean;
   initTime: number;
 }
@@ -45,16 +41,12 @@ const filterEffectiveAlerts = alerts => {
 };
 
 const CarouselDataContainer: FC<IProps> = ({
-  views,
-  languages,
   preview,
   trainsWithTrack,
-  staticContentHash,
-  staticUrl,
-  staticViewTitle,
   fromStop,
   initTime,
 }) => {
+  const { cards: views, languages } = useContext(MonitorContext);
   const [t] = useTranslation();
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
@@ -154,35 +146,25 @@ const CarouselDataContainer: FC<IProps> = ({
   if (languages.indexOf('sv') !== -1) {
     return (
       <TranslationContainer
-        languages={languages}
         translationIds={uniq(translationIds)}
         stopDepartures={stopDepartures}
         stationDepartures={stationDepartures}
         alerts={alerts}
-        views={views}
         preview={preview}
         closedStopViews={closedStopViews}
         trainsWithTrack={trainsWithTrack}
-        staticContentHash={staticContentHash}
-        staticUrl={staticUrl}
-        staticViewTitle={staticViewTitle}
       />
     );
   }
 
   return (
     <CarouselContainer
-      languages={languages}
       stopDepartures={stopDepartures}
       stationDepartures={stationDepartures}
       alerts={alerts}
-      views={views}
       preview={preview}
       closedStopViews={closedStopViews}
       trainsWithTrack={trainsWithTrack}
-      staticContentHash={staticContentHash}
-      staticUrl={staticUrl}
-      staticViewTitle={staticViewTitle}
     />
   );
 };

@@ -1,14 +1,13 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import cx from 'classnames';
 import { IView, IClosedStop } from '../util/Interfaces';
 import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
-import { IMonitorConfig } from '../App';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
-import { getColorByName } from '../util/getConfig';
+import { ConfigContext } from '../contexts';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -24,14 +23,10 @@ interface IProps {
   readonly departures: Array<Array<IDeparture>>;
   currentLang: string;
   readonly translatedStrings: Array<ITranslation>;
-  readonly config: IMonitorConfig;
   readonly isPreview: boolean;
   alertComponent: any;
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
-  staticContentHash?: string;
-  staticUrl?: string;
-  staticViewTitle?: string;
 }
 let to;
 
@@ -40,26 +35,24 @@ const Monitor: FC<IProps> = ({
   departures,
   translatedStrings,
   currentLang,
-  config,
   isPreview,
   alertState,
   alertComponent,
   alertRowSpan,
   closedStopViews,
-  staticContentHash,
-  staticUrl,
-  staticViewTitle,
 }) => {
+  const config = useContext(ConfigContext);
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
   const { isMultiDisplay } = getLayout(view.layout);
   const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
-    setWindowDimensions(getWindowDimensions());
-    window.addEventListener('resize', () => {
+    const setDimensions = () => {
       setWindowDimensions(getWindowDimensions());
-    });
+    };
+    window.addEventListener('resize', setDimensions);
+    return () => window.removeEventListener('resize', setDimensions);
   }, []);
 
   const windowHeight = windowDimensions.height;
@@ -68,7 +61,7 @@ const Monitor: FC<IProps> = ({
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,
     '--monitor-background-color':
-      getColorByName('monitorBackground') || getColorByName('primary'),
+      config.colors.monitorBackground || config.colors.primary,
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11;
@@ -86,15 +79,8 @@ const Monitor: FC<IProps> = ({
         to = setTimeout(() => setShowOverlay(false), 3000);
       }}
     >
-      <MonitorOverlay
-        show={showOverlay}
-        isPreview={isPreview}
-        staticUrl={staticUrl}
-        staticViewTitle={staticViewTitle}
-        staticContentHash={staticContentHash}
-      />
+      {!isPreview && <MonitorOverlay show={showOverlay} />}
       <MonitorTitlebar
-        config={config}
         isMultiDisplay={isMultiDisplay}
         isLandscape={isLandscapeByLayout}
         preview={isPreview}

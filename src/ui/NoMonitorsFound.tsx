@@ -19,7 +19,6 @@ const NoMonitorsFound = () => {
       <MonitorOverlay
         show={showOverlay}
         createNew
-        isPreview={false}
         buttonTranslationKey={'quickDisplayCreate'}
       />
       <span>{t('noMonitors')}</span>

@@ -5,6 +5,8 @@ import monitorAPI from '../api';
 import { ISides, ITitle } from '../util/Interfaces';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
+import IndexPage from './IndexPage';
+import Loading from './Loading';
 
 interface Iv {
   columns: ISides;
@@ -28,38 +30,56 @@ interface ILocation {
 interface IProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly location?: ILocation;
-  user: any; // todo: refactor when we have proper user
 }
 
 const UserMonitors: React.FC<IProps> = props => {
   const [t] = useTranslation();
-  const [views, setViews] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [views, setViews] = useState([]);
+  const [changed, setChanged] = useState(false);
 
   useEffect(() => {
-    monitorAPI.getAllMonitorsForUser().then(r => {
+    monitorAPI.getAllMonitorsForUser().then((r: Array<Iv>) => {
       setViews(r);
+      setChanged(false);
+      setLoading(false);
     });
-  }, []);
+  }, [changed]);
 
-  const monitors = Array.isArray(views)
-    ? views.map(view => {
-        return <UserMonitorCard view={view} />;
-      })
-    : [];
-  if (!monitors || !monitors.length) {
-    return null;
+  if (loading) {
+    return <Loading white />;
   }
+  const button = (
+    <Link to={'/monitors/createview'} className="monitor-button blue">
+      {t('quickDisplayCreate')}
+    </Link>
+  );
+
+  const monitors = views.length ? (
+    views.map((view, i) => {
+      const style = { '--delayLength': `0.${1 + i}s` } as React.CSSProperties;
+      return (
+        <div key={`card${i}`} className={'card animate-in'} style={style}>
+          <UserMonitorCard
+            key={`monitor#${i}`}
+            onDelete={() => setChanged(true)}
+            view={view}
+          />
+        </div>
+      );
+    })
+  ) : (
+    <IndexPage buttons={button} />
+  );
+
   return (
     <ContentContainer>
-      {Array.isArray(monitors) &&
-        monitors.map((monitor, i) => {
-          return <div key={`monitor#${i}`}>{monitor}</div>;
-        })}
-      <Link to={'/createStaticView'}>
-        <span className="create-container">
-          <button className="btn"> {t('quickDisplayCreate')} </button>
-        </span>
-      </Link>
+      <div className="user-monitors-container">
+        <div className="cards-container">{monitors}</div>
+        {!!views.length && (
+          <div className="create-button-container">{button}</div>
+        )}
+      </div>
     </ContentContainer>
   );
 };

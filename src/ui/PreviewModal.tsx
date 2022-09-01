@@ -7,8 +7,9 @@ import cx from 'classnames';
 import InformationDisplayContainer from './InformationDisplayContainer';
 import { useTranslation } from 'react-i18next';
 import TrainDataPreparer from './TrainDataPreparer';
+import { MonitorContext } from '../contexts';
 
-Modal.setAppElement('#root');
+if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
   view: IMonitor;
   languages: Array<string>;
@@ -30,8 +31,12 @@ const PreviewModal: FC<Props> = ({
   showPlatformsOrTracks,
 }) => {
   const [t] = useTranslation();
+  const monitor = {
+    ...view,
+    languages,
+  };
   return (
-    <>
+    <MonitorContext.Provider value={monitor}>
       <Modal
         isOpen={isOpen}
         onRequestClose={() => onClose(false)}
@@ -52,21 +57,18 @@ const PreviewModal: FC<Props> = ({
         </div>
         <section id={isLandscape ? 'previewMonitor' : 'previewMonitorPortrait'}>
           <div className="carouselContainer">
-            {view.isInformationDisplay ? (
-              <InformationDisplayContainer preview monitor={view} />
+            {view.cards[0].layout > 17 ? (
+              <InformationDisplayContainer preview />
             ) : (
               <>
                 {(stations.length || stops.length) && showPlatformsOrTracks ? (
                   <TrainDataPreparer
-                    monitor={view}
                     stations={stations}
                     stops={stops}
                     preview
                   />
                 ) : (
                   <CarouselDataContainer
-                    languages={languages}
-                    views={view.cards}
                     preview
                     initTime={new Date().getTime()}
                   />
@@ -76,7 +78,7 @@ const PreviewModal: FC<Props> = ({
           </div>
         </section>
       </Modal>
-    </>
+    </MonitorContext.Provider>
   );
 };
 

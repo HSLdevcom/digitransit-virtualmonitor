@@ -1,6 +1,5 @@
 .stopcards {
   padding-top: 26px;
-  padding-left: 60px;
   margin-block-start: 0;
   margin-block-end: 0;
 }
@@ -9,14 +8,13 @@
   min-height: 400px;
   display: flex;
   flex-direction: column;
+  width: 780px;
+  margin-left: 60px;
 }
 
 .buttons {
   display: flex;
-  width: 780px;
-  padding-left: 60px;
-  padding-top: 30px;
-  padding-bottom: 40px;
+  padding: 20px 15px 40px 10px;
   justify-content: center;
 
   .wide {
@@ -26,6 +24,7 @@
 
 .button {
   display: flex;
+  margin: 0 5px;
   flex-direction: row;
   justify-content: center;
   align-items: center;
@@ -45,7 +44,7 @@
     white-space: nowrap;
   }
 
-  &.create {
+  &.blue {
     background: $primary-color;
     margin-left: 5px;
 
@@ -63,10 +62,5 @@
     span {
       color: #fff;
     }
-  }
-
-  &.preview {
-    margin-left: 5px;
-    margin-right: 5px;
   }
 }

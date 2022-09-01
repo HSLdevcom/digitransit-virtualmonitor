@@ -1,86 +1,91 @@
+.alert-modal {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  height: 50px;
+  padding: 0 20px;
+  color: $primary-color;
+}
+
 .card {
   width: 720px;
   background-color: #fff;
-  margin: 20px;
-  padding-left: 10px;
+  padding: 0 30px;
+  margin-bottom: 10px;
   border-radius: 5px;
+
+  .buttons-container {
+    display: flex;
+    border-top: 1px solid #ddd;
+    height: 80px;
+    align-items: center;
+    justify-content: flex-end;
+
+    .main-buttons-container {
+      display: flex;
+      flex: 1;
+    }
+
+    .monitor-button {
+      height: 40px;
+      font-size: 16px;
+      margin-bottom: 0;
+    }
+  }
+
+  .main-container > * {
+    height: 40px;
+    display: flex;
+    align-items: center;
+  }
 
   .main-container {
     height: 80px;
-    width: 98%;
     display: flex;
+    align-items: center;
     border-bottom: 1px solid #ddd;
 
     .monitor-name {
-      position: relative;
-      right: 300px;
-      top: 29px;
+      flex: 1;
     }
 
     .layout-img {
-      margin-right: 320px;
-      margin-top: 22px;
-      margin-left: 33px;
+      margin: 0 15px 0 0;
     }
 
     .delete-icon {
       cursor: pointer;
-      width: 50px;
-      padding-top: 8px;
+      width: 40px;
+      padding-left: 8px;
       text-align: center;
       border-left: 1px solid #ddd;
-      margin-left: 4px;
-      height: 40px;
-      padding-left: 10px;
+      margin-left: 9px;
+      justify-content: center;
     }
 
-    .control-buttons {
-      display: flex;
-      width: 10px;
-      margin-top: 22px;
-      position: absolute;
-      left: 426px;
-
-      .button {
-        margin-right: 4px;
-        color: $primary-color;
-        position: relative;
-        right: 6px;
-        font-size: 16px;
-      }
-
-      .edit-button {
-        font-size: 16px;
-        padding: 0 28px;
-        height: 40px;
-        background: #fff;
-        border: 1px solid #888;
-        box-sizing: border-box;
-        border-radius: 40px;
-        cursor: pointer;
-        margin-right: 4px;
-        margin-left: 0;
-        color: $primary-color;
-      }
+    .monitor-button {
+      font-size: 16px;
+      border-radius: 40px;
+      margin-bottom: 0;
     }
   }
 
   .cards {
-    .card:not(:first-child) {
-      border-top: 1px solid #ddd;
-      width: 80%;
-      right: 0;
-      position: relative;
+    .card-item:not(:last-of-type) {
+      border-bottom: 1px solid #ddd;
     }
 
     .card-item {
       .card-container {
         display: flex;
-        padding-top: 19px;
+        padding: 19px 0 16px 0;
 
         svg {
           padding-right: 23px;
-          padding-left: 33px;
           height: 36px !important;
           width: 64px !important;
         }
@@ -106,26 +111,14 @@
           }
 
           .stop-list {
-            ul,
             li {
-              list-style: none;/* disc inside none; */
-              .icon {
-                svg {
-                  padding-right: 5px;
-                  padding-left: 0;
-                  height: 16px !important;
-                  width: 16px !important;
-                  position: relative;
-                  top: 2px;
-                }
+              display: flex;
+              align-items: center;
 
-                span {
-                  margin-left: 5px;
-                }
-              }
-
-              &:last-child {
-                padding-bottom: 10px;
+              svg {
+                height: 16px !important;
+                width: 16px !important;
+                padding: 0 10px 0 3px;
               }
             }
 
@@ -135,10 +128,28 @@
             line-height: 18px;
             letter-spacing: -0.03em;
             color: #333;
-            // margin-top: -11px;
           }
         }
       }
+    }
+  }
+}
+
+.monitor-modal-content {
+  .message {
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 45px;
+  }
+
+  .monitor-modal-buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .monitor-button {
+      width: 100%;
+      justify-content: center;
     }
   }
 }

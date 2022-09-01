@@ -1,15 +1,11 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IStop } from '../util/Interfaces';
+import { IStop, ICardInfo } from '../util/Interfaces';
 import StopListTitleInput from './StopListTitleInput';
 import StopRow from './StopRow';
-import { v4 as uuid } from 'uuid';
 import { getLayout } from '../util/getLayout';
-import { ICardInfo } from './CardInfo';
 
 interface Props {
-  side?: string;
-  stops: any;
   onStopDelete?: (cardId: number, side: string, gtfsId: string) => void;
   onStopMove?: (cardId: number, side: string, gtfsId: string) => void;
   setStops?: (
@@ -19,7 +15,7 @@ interface Props {
     reorder: boolean,
     gtfsIdForHidden: string,
   ) => void;
-  cardInfo: ICardInfo;
+  card: ICardInfo;
   updateCardInfo?: (
     cardId: number,
     type: string,
@@ -51,10 +47,11 @@ const TitleItem = props => {
   const valueLeft = changedLeft ? titleLeft : props.titleLeft;
   const valueRight = changedRight ? titleRight : props.titleRight;
   return (
-    <div className="east-west-inputs">
-      {props.languages?.includes('fi') && (
+    <div className="double-inputs">
+      {props.languages?.map(lan => (
         <StopListTitleInput
-          lang="fi"
+          key={`lan${lan}`}
+          lang={lan}
           side={side}
           titleLeft={titleLeft}
           titleRight={titleRight}
@@ -64,33 +61,7 @@ const TitleItem = props => {
           itemsHeader={side == 'left' ? leftItemsHeader : rightItemsHeader}
           value={side === 'left' ? valueLeft : valueRight}
         />
-      )}
-      {props.languages?.includes('sv') && (
-        <StopListTitleInput
-          lang="sv"
-          side={side}
-          titleLeft={titleLeft}
-          titleRight={titleRight}
-          updateCardInfo={updateCardInfo}
-          cardInfoId={cardInfo.id}
-          setTitle={setTitle}
-          itemsHeader={side == 'left' ? leftItemsHeader : rightItemsHeader}
-          value={side === 'left' ? valueLeft : valueRight}
-        />
-      )}
-      {props.languages?.includes('en') && (
-        <StopListTitleInput
-          lang="en"
-          side={side}
-          titleLeft={titleLeft}
-          titleRight={titleRight}
-          updateCardInfo={updateCardInfo}
-          cardInfoId={cardInfo.id}
-          setTitle={setTitle}
-          itemsHeader={side == 'left' ? leftItemsHeader : rightItemsHeader}
-          value={side === 'left' ? valueLeft : valueRight}
-        />
-      )}
+      ))}
     </div>
   );
 };
@@ -148,7 +119,6 @@ const StopList = props => {
                 return (
                   <li key={`s-${index}`} className="stop">
                     <StopRow
-                      key={uuid()}
                       stop={item}
                       side={'left'}
                       onStopDelete={props.onStopDelete}
@@ -179,11 +149,10 @@ const StopList = props => {
           <div>
             <ul className="stops">
               {rightItems &&
-                rightItems.map(item => {
+                rightItems.map((item, index) => {
                   return (
-                    <li className="stop" key={uuid()}>
+                    <li className="stop" key={`s-${index}`}>
                       <StopRow
-                        key={uuid()}
                         stop={item}
                         side={'right'}
                         onStopDelete={props.onStopDelete}
@@ -203,53 +172,52 @@ const StopList = props => {
   );
 };
 
-const addInfoToItems = (props, items, side) => {
+const addInfoToItems = (card, items, side) => {
   const modifiedItems =
     items.length > 0
       ? items.map(item => ({
           ...item,
           side: side,
-          cardId: props.cardInfo.id,
-          layout: props.cardInfo.layout,
+          cardId: card.id,
+          layout: card.layout,
         }))
       : [];
   return modifiedItems;
 };
 
-const StopListContainer: FC<Props> = props => {
+const StopListContainer: FC<Props> = ({
+  card,
+  onStopDelete,
+  onStopMove,
+  updateCardInfo,
+  languages,
+  setStops,
+}) => {
   const [t] = useTranslation();
-  const [leftItems, setLeftItems] = useState([]);
-  const [rightItems, setRightItems] = useState([]);
-
-  useEffect(() => {
-    setLeftItems(props.stops['left'].stops);
-  }, [props.stops['left'].stops]);
-
-  useEffect(() => {
-    setRightItems(props.stops['right'].stops);
-  }, [props.stops['right'].stops]);
+  const leftItems = card.columns.left.stops;
+  const rightItems = card.columns.right.stops;
 
   return (
     <div className="stop-list">
       <StopList
-        leftItems={addInfoToItems(props, leftItems, 'left')}
+        leftItems={addInfoToItems(card, leftItems, 'left')}
         leftItemsHeader={t('headerSideLeft')}
         leftItemsPlaceHolder={t('placeholderSideLeft')}
-        leftTitle={props.stops['left'].title}
+        leftTitle={card.columns.left.title}
         leftStops={leftItems}
-        rightItems={addInfoToItems(props, rightItems, 'right')}
+        rightItems={addInfoToItems(card, rightItems, 'right')}
         rightItemsHeader={t('headerSideRight')}
         rightItemsPlaceHolder={t('placeholderSideRight', {
-          title: props.stops['left'].title,
+          title: card.columns.left.title,
         })}
-        rightTitle={props.stops['right'].title}
+        rightTitle={card.columns.right.title}
         rightStops={rightItems}
-        onStopDelete={props.onStopDelete}
-        onStopMove={props.onStopMove}
-        setStops={props.setStops}
-        cardInfo={props.cardInfo}
-        updateCardInfo={props.updateCardInfo}
-        languages={props.languages}
+        onStopDelete={onStopDelete}
+        onStopMove={onStopMove}
+        setStops={setStops}
+        cardInfo={card}
+        updateCardInfo={updateCardInfo}
+        languages={languages}
       />
     </div>
   );

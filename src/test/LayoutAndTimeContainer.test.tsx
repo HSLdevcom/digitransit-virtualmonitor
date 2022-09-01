@@ -1,12 +1,8 @@
-import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { render } from '@testing-library/react';
-import Dropdown from '../ui/Dropdown';
 import LayoutAndTimeContainer from '../ui/LayoutAndTimeContainer';
-import { mount, shallow } from 'enzyme';
-import LayoutModal from '../ui/LayoutModal';
-import MonitorRow from '../ui/MonitorRow';
-import { ITitle } from '../util/Interfaces';
+import { ConfigContext } from '../contexts';
+
 const title = {
   fi: 'foo',
   sv: 'föö',
@@ -25,12 +21,29 @@ const defaultProps = {
   cardInfo: cardInfo,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   updateCardInfo: () => {},
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  updateLayout: () => {},
+  allowInformationDisplay: true,
   orientation: 'horizontal',
   durationEditable: false,
 };
 
+const mockConfig = {
+  colors: {
+    primary: '#000000',
+  },
+};
+
+const withContext = () => {
+  return (
+    <ConfigContext.Provider value={mockConfig}>
+      <LayoutAndTimeContainer {...defaultProps} />
+    </ConfigContext.Provider>
+  );
+};
+
 it('should have default label visible', () => {
-  const container = render(<LayoutAndTimeContainer {...defaultProps} />);
+  const container = render(withContext());
   expect(
     container.container.getElementsByClassName('label')[0].innerHTML,
   ).toEqual('8');

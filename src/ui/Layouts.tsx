@@ -4,6 +4,7 @@ import Icon from './Icon';
 export const horizontalLayouts = [
   {
     label: 'one-column',
+    infoText: 'info-text-one-column',
     options: [
       {
         value: '1',
@@ -39,6 +40,7 @@ export const horizontalLayouts = [
   },
   {
     label: 'two-columns',
+    infoText: 'info-text-two-columns',
     options: [
       {
         value: '4',
@@ -73,7 +75,8 @@ export const horizontalLayouts = [
     ],
   },
   {
-    label: 'two-columns-combo',
+    label: '',
+    infoText: '',
     options: [
       {
         value: '7',
@@ -98,7 +101,8 @@ export const horizontalLayouts = [
     ],
   },
   {
-    label: 'layoutEastWest',
+    label: 'layout-double',
+    infoText: 'info-text-double',
     options: [
       {
         value: '9',
@@ -132,11 +136,28 @@ export const horizontalLayouts = [
       },
     ],
   },
+  {
+    label: 'information-display',
+    infoText: 'information-display-info',
+    options: [
+      {
+        value: '18',
+        label: (
+          <>
+            <Icon img="layout18" height={90} width={160} />
+            <span className="label"></span>
+          </>
+        ),
+        rows: '',
+      },
+    ],
+  },
 ];
 
 export const verticalLayouts = [
   {
     label: 'simple',
+    infoText: 'info-text-short',
     options: [
       {
         value: '12',
@@ -182,6 +203,7 @@ export const verticalLayouts = [
   },
   {
     label: 'tighten',
+    infoText: 'info-text-short',
     options: [
       {
         value: '16',
@@ -202,6 +224,22 @@ export const verticalLayouts = [
           </>
         ),
         rows: '6+12',
+      },
+    ],
+  },
+  {
+    label: 'information-display',
+    infoText: 'information-display-info',
+    options: [
+      {
+        value: '19',
+        label: (
+          <>
+            <Icon img="layout19" height={160} width={90} />
+            <span className="label"></span>
+          </>
+        ),
+        rows: '',
       },
     ],
   },

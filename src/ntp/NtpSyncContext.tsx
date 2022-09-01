@@ -4,6 +4,4 @@ export interface INtpSyncContext {
   deltaMilliseconds: number;
 }
 
-export default React.createContext({
-  deltaMilliseconds: 0,
-});
+export default React.createContext(0);

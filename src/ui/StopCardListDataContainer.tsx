@@ -8,22 +8,20 @@ import { sortBy, uniqBy } from 'lodash';
 
 interface IProps {
   stopCardList: any;
-  feedIds: Array<string>;
   stopIds: Array<string>;
   stationIds: Array<string>;
   languages: Array<string>;
   loading: boolean;
-  user?: any;
+  staticMonitor?: any;
 }
 
 const StopCardListDataContainer: FC<IProps> = ({
-  feedIds,
   stopCardList,
   stopIds,
   stationIds,
   languages,
   loading,
-  user,
+  staticMonitor,
 }) => {
   const [cardList, setCardList] = useState(stopCardList);
   const stops = useQuery<stopQuery, stopQueryVariables>(GET_STOP, {
@@ -130,12 +128,11 @@ const StopCardListDataContainer: FC<IProps> = ({
   }, [stations.data]);
   return (
     <StopCardListContainer
-      user={user}
       loading={stations.loading || stops.loading || loading}
       languages={languages}
       vertical={stopCardList[0].layout > 11}
-      feedIds={feedIds}
-      defaultStopCardList={cardList}
+      stopCards={cardList}
+      staticMonitor={staticMonitor}
     />
   );
 };

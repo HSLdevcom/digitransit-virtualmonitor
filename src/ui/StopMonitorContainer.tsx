@@ -1,5 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
-import { IMonitorConfig } from '../App';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import CarouselDataContainer from './CarouselDataContainer';
 import { defaultStopCard } from '../util/stopCardUtil';
 import { gql, useQuery } from '@apollo/client';
@@ -9,7 +8,6 @@ import { GetStops, GetStopsVariables } from '../generated/GetStops';
 interface IProps {
   stopIds: Array<string>;
   layout?: number;
-  config: IMonitorConfig;
   urlTitle?: string;
 }
 
@@ -67,14 +65,7 @@ const StopMonitorContainer: FC<IProps> = ({
   if (loading || !fetched) {
     return <Loading />;
   }
-  return (
-    <CarouselDataContainer
-      languages={['fi']}
-      views={stopCard}
-      fromStop
-      initTime={new Date().getTime()}
-    />
-  );
+  return <CarouselDataContainer fromStop initTime={new Date().getTime()} />;
 };
 
 export default StopMonitorContainer;

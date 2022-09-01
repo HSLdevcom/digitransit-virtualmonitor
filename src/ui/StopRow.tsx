@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IPattern, ISettings } from '../util/Interfaces';
 import StopRoutesModal from './StopRoutesModal';
@@ -10,9 +10,9 @@ import { getLayout } from '../util/getLayout';
 import { sortBy, uniqWith, isEqual } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
-import { getPrimaryColor, getIconStyleWithColor } from '../util/getConfig';
 import { getStopIcon } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
+import { ConfigContext } from '../contexts';
 
 interface IStopInfoPlus extends IStop {
   cardId?: number;
@@ -60,6 +60,7 @@ const StopRow: FC<IProps> = ({
   languages,
 }) => {
   const [t] = useTranslation();
+  const config = useContext(ConfigContext);
   const [showModal, changeOpen] = useState(false);
   const saveStopSettings = settings => {
     if (settings) {
@@ -79,7 +80,7 @@ const StopRow: FC<IProps> = ({
       changeOpen(true);
     }
   };
-  const isEastWest = stop.layout > 8 && stop.layout < 12;
+  const isDouble = stop.layout > 8 && stop.layout < 12;
 
   const stopPatterns = sortBy(stop.patterns, 'route.shortName').map(pattern => {
     return stringifyPattern(pattern);
@@ -90,29 +91,29 @@ const StopRow: FC<IProps> = ({
   const isDefaultSettings =
     isEqual(defaultSettings, stop.settings) || !stop.settings;
 
-  const iconStyle = getIconStyleWithColor(stop.mode);
   const moveBetweenColumns = getLayout(stop.layout).isMultiDisplay
     ? moveIsPossible(stop, side === 'left' ? rightStops : leftStops)
     : false;
+  const alternateIcon = config.modeIcons.postfix;
   return (
     <div className="stop-row-container">
       <div className="stop-row-stop icon">
         <Icon
           img={
-            !iconStyle.postfix
+            !alternateIcon
               ? getStopIcon(stop)
-              : getStopIcon(stop) + iconStyle.postfix
+              : getStopIcon(stop) + alternateIcon
           }
           width={32}
           height={32}
-          color={iconStyle.color}
+          color={config.modeIcons.colors[`mode-${stop.mode.toLowerCase()}`]}
         />
       </div>
       <div className="stop-row-main">
         <div className="stop-upper-row">
           {stop.name}
           <div
-            className={cx('settings', isEastWest && 'east-west')}
+            className={cx('settings', isDouble && 'double')}
             tabIndex={0}
             role="button"
             aria-label={t('stopSettings', {
@@ -123,9 +124,9 @@ const StopRow: FC<IProps> = ({
               isKeyboardSelectionEvent(e, true) && handleClick(e, true)
             }
           >
-            <Icon img="settings" color={getPrimaryColor()} />
+            <Icon img="settings" color={config.colors.primary} />
           </div>
-          <div className={cx('changed-settings', isEastWest && 'east-west')}>
+          <div className={cx('changed-settings', isDouble && 'double')}>
             {!isDefaultSettings && <span> {t('settingsChanged')}</span>}
           </div>
         </div>
@@ -155,7 +156,7 @@ const StopRow: FC<IProps> = ({
           onStopDelete(stop.cardId, side, stop.gtfsId)
         }
       >
-        <Icon img="delete" color={getPrimaryColor()} />
+        <Icon img="delete" color={config.colors.primary} />
       </div>
       {getLayout(stop.layout).isMultiDisplay && (
         <div
@@ -180,7 +181,7 @@ const StopRow: FC<IProps> = ({
         >
           <Icon
             img={side === 'left' ? 'move-both-down' : 'move-both-up'}
-            color={moveBetweenColumns ? getPrimaryColor() : '#AAAAAA'}
+            color={moveBetweenColumns ? config.colors.primary : '#AAAAAA'}
             width={30}
             height={40}
           />

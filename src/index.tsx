@@ -5,18 +5,16 @@ import App from './App';
 import NtpSyncComponent from './ntp/NtpSyncComponent';
 import { getParams } from './util/queryUtils';
 import { getConfig } from './util/getConfig';
+import { ConfigContext } from './contexts';
 import './i18n'
-
-const monitorConfig = getConfig();
 
 ReactDOM.render(
   <NtpSyncComponent>
     <BrowserRouter>
-      <App
-        monitorConfig={monitorConfig}
-        search={getParams(window.location.search)}
-      />
-      </BrowserRouter>
+      <ConfigContext.Provider value={getConfig()}>
+        <App search={getParams(window.location.search)} />
+      </ConfigContext.Provider>
+    </BrowserRouter>
   </NtpSyncComponent>,
   document.getElementById('root') as HTMLElement,
 );

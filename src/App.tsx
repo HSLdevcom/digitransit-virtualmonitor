@@ -79,7 +79,6 @@ export interface IMonitorConfig {
   urlParamFindText?: string;
   urlParamFindAltText?: string;
   showMinutes?: string;
-  breadCrumbsStartPage?: string;
 }
 
 export interface IQueryString {

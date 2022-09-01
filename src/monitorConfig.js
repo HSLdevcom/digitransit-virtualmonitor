@@ -44,7 +44,6 @@ export default {
     suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: true,
     useTilde: true,
   },
@@ -68,7 +67,6 @@ export default {
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
     useTilde: true,
   },
@@ -99,7 +97,6 @@ export default {
     uri: 'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
     useTilde: true,
   },
@@ -130,7 +127,6 @@ export default {
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
     useTilde: false,
   },
@@ -161,7 +157,6 @@ export default {
     uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
     useTilde: true,
   }

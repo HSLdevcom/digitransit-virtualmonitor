@@ -188,7 +188,7 @@ const getDataStorage = async (id) => {
     if (dataStorage) {
       return dataStorage;
     } else {
-      throw "Datastorage not found"
+      return undefined;
     }
   } catch (error) {
     throw error;

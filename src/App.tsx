@@ -105,7 +105,6 @@ const App: FC<IConfigurationProps> = (props) => {
   const [user, setUser] = useState<User>({});
   const [favourites, setFavourites] = useState<Array<Favourite>>([]);
   const [loading, setLoading] = useState(true);
-
   const config = useContext(ConfigContext);
   const style = {
     '--alert-color': config.colors.alert,
@@ -161,6 +160,7 @@ const App: FC<IConfigurationProps> = (props) => {
   
   const fonts = config.fonts.externalFonts.map(font => (
     <link
+      key={`header-${font}`}
       rel="stylesheet"
       type="text/css"
       href={font}

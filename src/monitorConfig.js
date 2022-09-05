@@ -1,10 +1,6 @@
 export default {
   hsl: {
-    frontPageContent: [{
-      fi: "Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.",
-      sv: "Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.",
-      en: "Create a stop display while logged in so you can edit it later.",
-    }],
+    frontPageContent: 'front-page-paragraph-hsl',
     fonts: {
       externalFonts: ["https://cloud.typography.com/6364294/7432412/css/fonts.css"],
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',

@@ -37,13 +37,16 @@ const UserMonitors: React.FC<IProps> = props => {
   const [loading, setLoading] = useState(true);
   const [views, setViews] = useState([]);
   const [changed, setChanged] = useState(false);
-
   useEffect(() => {
-    monitorAPI.getAllMonitorsForUser().then((r: Array<Iv>) => {
+    const controller = new AbortController();
+    monitorAPI.getAllMonitorsForUser(controller.signal).then((r: Array<Iv>) => {
       setViews(r);
       setChanged(false);
       setLoading(false);
     });
+    return () => {
+      controller.abort();
+    };
   }, [changed]);
 
   if (loading) {

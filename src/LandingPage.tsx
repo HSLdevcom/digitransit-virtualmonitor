@@ -13,7 +13,6 @@ const LandingPage = () => {
   const logIn =
     user.sub && config.allowLogin;
 
-
   const buttons = (
     <>
     {config.allowLogin ? (

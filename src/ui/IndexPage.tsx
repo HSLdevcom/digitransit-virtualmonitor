@@ -21,15 +21,13 @@ const IndexPage: FC<IProps> = ({ buttons, renderLogInMessage = false }) => {
             <h1 className={cx('text', 'bigger')}>{t('frontPageParagraph1')}</h1>
             <div className="text">{t('frontPageParagraph2')}</div>
             <div className="text">{t('frontPageParagraph3')}</div>
-            {config.frontPageContent &&
-              renderLogInMessage &&
-              config.frontPageContent.map((text, i) => {
-                return (
-                  <div key={`text${i}`} className="text bold">
-                    {text[i18n.language]}
-                  </div>
-                );
-              })}
+            <>
+              {config.frontPageContent && renderLogInMessage && (
+                <span className="text bold">
+                  {t('front-page-paragraph-hsl')}
+                </span>
+              )}
+            </>
             <div className="button-container" tabIndex={-1}>
               {buttons}
             </div>

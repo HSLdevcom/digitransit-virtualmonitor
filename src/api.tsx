@@ -1,6 +1,6 @@
 const baseAPI = '/api';
 
-const fetchData = (path, options) => {
+const fetchData = (path, options, signal = undefined) => {
   return new Promise((resolve, reject) => {
     const jsonResponse = !options.method || options.method === 'POST'
     fetch(`${baseAPI}/${path}`, {
@@ -8,6 +8,7 @@ const fetchData = (path, options) => {
         accepts: 'application/json',
       },
       ...options,
+      signal: signal ?? undefined,
     })
       .then(result => jsonResponse ? result.json() : result)
       .then(json => resolve(json))
@@ -27,20 +28,20 @@ const monitorAPI = {
   getFavourites() {
     return fetchData('user/favourites', {});
   },
-  get(monitor) {
-    return fetchData(`monitor/${monitor}`, {});
+  get(monitor, signal = undefined) {
+    return fetchData(`monitor/${monitor}`, {}, signal);
   },
-  isUserOwned(monitor) {
+  isUserOwned(monitor, signal = undefined) {
     const options = {
       method: 'GET',
     }
-    return fetchData(`userowned/${monitor}`, options);
+    return fetchData(`userowned/${monitor}`, options, signal);
   },
-  getStatic(monitor) {
-    return fetchData(`staticmonitor/${monitor}`, {});
+  getStatic(monitor, signal = undefined) {
+    return fetchData(`staticmonitor/${monitor}`, {}, signal);
   },
-  getAllMonitorsForUser() {
-    return fetchData(`usermonitors`, {});
+  getAllMonitorsForUser(signal) {
+    return fetchData(`usermonitors`, {}, signal);
   },
   getMonitorsForUser(urls) {
     return fetchData(`usermonitors/${urls}`, {});

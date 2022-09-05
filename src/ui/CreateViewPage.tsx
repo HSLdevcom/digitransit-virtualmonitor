@@ -51,9 +51,10 @@ const CreateViewPage = () => {
   }, [noMonitorFound]);
 
   useEffect(() => {
+    const controller = new AbortController();
     if (hash) {
       monitorAPI
-        .get(hash)
+        .get(hash, controller.signal)
         .then((r: any) => {
           if (r?.cards?.length) {
             setStopCardList(r.cards);
@@ -65,10 +66,10 @@ const CreateViewPage = () => {
         })
         .catch(() => setNoMonitorFound(true));
     } else if (url && user.sub) {
-      monitorAPI.isUserOwned(url).then((res: Response) => {
+      monitorAPI.isUserOwned(url, controller.signal).then((res: Response) => {
         if (res.status === 200) {
           monitorAPI
-            .getStatic(url)
+            .getStatic(url, controller.signal)
             .then((r: any) => {
               if (r?.cards?.length) {
                 setStopCardList(r.cards);
@@ -93,6 +94,9 @@ const CreateViewPage = () => {
       }
       setLoading(false);
     }
+    return () => {
+      controller.abort();
+    };
   }, []);
   if (
     stopCardList &&

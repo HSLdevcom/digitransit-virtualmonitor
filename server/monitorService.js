@@ -76,7 +76,11 @@ const monitorService = {
       await Promise.resolve(container.items.create(req.body));
       res.send('OK');
     } catch (e) {
-      next(e);
+      if (e.code === 409) {
+        res.status(409).send('OK');
+      } else {
+        next(e);
+      }
     }
   },
   getStatic: async function getStaticMonitor(req, res, next) {

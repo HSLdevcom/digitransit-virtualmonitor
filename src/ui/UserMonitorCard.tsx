@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
@@ -39,6 +39,9 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
   const onClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    return () => clearTimeout(to);
+  }, []);
 
   const onDeleteCallBack = () => {
     setDeleting(true);
@@ -85,10 +88,8 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
       <ul key={`card#${i}`}>
         {colStops.map((colStop, c) => {
           return (
-            <>
-              <div key={`display${c}`} className="card-title">
-                {colTitles[c]}
-              </div>
+            <React.Fragment key={`display${c}`}>
+              <div className="card-title">{colTitles[c]}</div>
               <div className="stop-list">
                 {colStop.map((stop, j) => {
                   const stopCode = `(${stop.code})`;
@@ -115,7 +116,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
                   );
                 })}
               </div>
-            </>
+            </React.Fragment>
           );
         })}
       </ul>

@@ -224,6 +224,7 @@ const StopCardRow: FC<IProps> = ({
             return (
               ((isDouble && i === 0) || !isDouble) && (
                 <StopViewTitleEditor
+                  key={`lan-${lan}`}
                   card={item}
                   updateCardInfo={updateCardInfo}
                   lang={lan}

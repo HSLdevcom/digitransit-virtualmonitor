@@ -37,7 +37,7 @@ export default {
       setName: 'default',
     },
     name: 'hsl',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+    uri: 'routing/v1/routers/hsl/index/graphql',
     bannersUri: 'https://content.hsl.fi/api/v1/banners?',
     HSLUri: 'https://test.hslfi.hsldev.com/',
     suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',
@@ -65,7 +65,7 @@ export default {
       setName: 'digitransit',
     },
     name: 'jyvaskyla',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     allowLogin: false,
@@ -101,7 +101,7 @@ export default {
       setName: 'digitransit',
     },
     name: 'tampere',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     allowLogin: false,

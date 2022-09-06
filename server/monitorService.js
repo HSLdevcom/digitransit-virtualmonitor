@@ -68,7 +68,7 @@ const monitorService = {
         res.json([]);
       }
     } catch (e) {
-      next(e)
+      next(e);
     }
   },
   create: async function create(req, res, next) {
@@ -105,7 +105,7 @@ const monitorService = {
         res.json({});
       }
     } catch (err) {
-      next(err)
+      next(err);
     }
   },
   createStatic: async function createStaticMonitor(req, res, next) {

@@ -35,7 +35,7 @@ const Logo: FC<ICommonProps> = props => {
       case 'matka':
         logo = <MatkaLogo />;
         break;
-      case 'linkki':
+      case 'jyvaskyla':
         logo = <LinkkiLogo />;
         break;
       default:

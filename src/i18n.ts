@@ -1,8 +1,7 @@
 import i18n from 'i18next';
-import { initReactI18next } from "react-i18next";
+import { initReactI18next } from 'react-i18next';
 
 i18n.use(initReactI18next).init({
-
   debug: false,
   fallbackLng: 'fi',
   keySeparator: false,
@@ -42,7 +41,7 @@ i18n.use(initReactI18next).init({
         continue: 'Continue',
         copy: 'Copy link',
         createViewTitle: 'Creation of a new view',
-        'delete': 'Delete',
+        delete: 'Delete',
         'delete-confirmation': 'Are you sure you want to delete this monitor',
         deleteRenamings: 'Clear text changes',
         deleteStop: 'Remove stop {{stop}}',
@@ -63,20 +62,25 @@ i18n.use(initReactI18next).init({
           'You can use the service to generate timetables for nearby stops to be displayed in public spaces, on your information displays or on company intranet.',
         frontPageParagraph3:
           'Displaying public transport timetables in prominent places encourages the use of public transport and makes it easier. In addition to timetables, the service provides you with service updates and disruption alerts.',
-        'front-page-paragraph-hsl': 'When you log in using your HSL account before creating a display, you can later edit the display.',
+        'front-page-paragraph-hsl':
+          'When you log in using your HSL account before creating a display, you can later edit the display.',
         headerSideLeft: 'Left column',
         headerSideRight: 'Right column',
         hideAllLines: 'Hide all routes',
         hideLine: 'Hide route {{line}}',
         hideLines: 'Hide routes {{hidden}} / {{all}}',
         horizontal: 'Horizontal',
-        'info-display-only-one': 'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
+        'info-display-only-one':
+          'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
         'info-text-short': 'Departures in a chronological order',
-        'info-text-one-column': 'Departures in a chronological order in one column',
-        'info-text-two-columns': 'Departures in a chronological order in two columns',
+        'info-text-one-column':
+          'Departures in a chronological order in one column',
+        'info-text-two-columns':
+          'Departures in a chronological order in two columns',
         'info-text-double': 'Display with two views',
         'information-display': 'Service update view',
-        'information-display-info': 'Displays service updates for selected stops and routes',
+        'information-display-info':
+          'Displays service updates for selected stops and routes',
         languageCode: 'en',
         languageNameEn: 'English',
         languageNameFi: 'Finnish',
@@ -98,11 +102,13 @@ i18n.use(initReactI18next).init({
         moveStopToRightCol: 'Move stop {{stop}} to the right column',
         moveViewDown: 'Move stop display {{id}} down',
         moveViewUp: 'Move stop display {{id}} up',
-        'new-display-disabled': 'Et voi lisätä useampia näkymiä tiedotenäyttöön',
+        'new-display-disabled':
+          'Et voi lisätä useampia näkymiä tiedotenäyttöön',
         'no-departures': 'No known departures',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
-        'non-logged-in-monitor-info': 'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
+        'non-logged-in-monitor-info':
+          'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
         notPossibleToCreate:
           'Unable to create a new view without {{requirements}}',
         notPossibleToPreview:
@@ -179,8 +185,9 @@ i18n.use(initReactI18next).init({
         continue: 'Jatka',
         copy: 'Kopioi linkki',
         createViewTitle: 'Uuden näkymän luonti',
-        'delete': 'Poista',
-        'delete-confirmation': 'Oletko varma, että haluat poistaa näytön "{{monitor}}"?',
+        delete: 'Poista',
+        'delete-confirmation':
+          'Oletko varma, että haluat poistaa näytön "{{monitor}}"?',
         deleteRenamings: 'Tyhjennä tekstimuutokset',
         deleteStop: 'Poista pysäkki {{stop}}',
         deleteView: 'Poista pysäkkinäkymä {{id}}',
@@ -200,20 +207,24 @@ i18n.use(initReactI18next).init({
           'Palvelulla voi tuoda esimerkiksi julkisten tilojen auloihin, yritysten infonäytöille tai intranet-verkkoon kyseisen paikan läheisyydessä olevien pysäkkien aikataulut.',
         frontPageParagraph3:
           'Joukkoliikenteen aikataulut näkyvällä paikalla helpottavat joukkoliikenteen käyttöä ja kannustavat käyttämään joukkoliikennettä. Aikataulujen lisäksi palvelun kautta saat myös ajankohtaiset liikenne- ja häiriötiedotteet.',
-        'front-page-paragraph-hsl': 'Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.',
+        'front-page-paragraph-hsl':
+          'Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.',
         headerSideLeft: 'Vasen palsta',
         headerSideRight: 'Oikea palsta',
         hideAllLines: 'Piilota kaikki linjat',
         hideLine: 'Piilota linja {{line}}',
         hideLines: 'Piilota linjoja {{hidden}} / {{all}}',
         horizontal: 'Vaaka',
-        'info-display-only-one': 'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
+        'info-display-only-one':
+          'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
         'info-text-short': 'Lähdöt aikajärjestyksessä',
         'info-text-one-column': 'Lähdöt aikajärjestyksessä yhdellä sarakkeella',
-        'info-text-two-columns': 'Lähdöt aikajärjestysessä kahdella sarakkeella',
+        'info-text-two-columns':
+          'Lähdöt aikajärjestysessä kahdella sarakkeella',
         'info-text-double': 'Kaksi näkymää yhdellä näytöllä',
         'information-display': 'Tiedotenäyttö',
-        'information-display-info': 'Esittää tiedotteita valituista pysäkeistä ja linjoista',
+        'information-display-info':
+          'Esittää tiedotteita valituista pysäkeistä ja linjoista',
         languageCode: 'fi',
         languageNameEn: 'Englanti',
         languageNameFi: 'Suomi',
@@ -235,11 +246,13 @@ i18n.use(initReactI18next).init({
         moveStopToRightCol: 'Siirrä pysäkki {{stop}} oikeaan palstaan',
         moveViewDown: 'Siirrä pysäkkinäkymä {{id}} alemmaksi',
         moveViewUp: 'Siirrä pysäkkinäkymä {{id}} ylemmäksi',
-        'new-display-disabled': 'Et voi lisätä useampia näkymiä tiedotenäyttöön',
+        'new-display-disabled':
+          'Et voi lisätä useampia näkymiä tiedotenäyttöön',
         'no-departures': 'Ei tiedossa olevia lähtöjä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
-        'non-logged-in-monitor-info': 'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
+        'non-logged-in-monitor-info':
+          'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
         notPossibleToCreate: 'Ilman {{requirements}} ei voida luoda näkymää',
         notPossibleToPreview:
           'Ilman {{requirements}} ei voida näyttää esikatselua',
@@ -315,8 +328,9 @@ i18n.use(initReactI18next).init({
         continue: 'Fortsätt',
         copy: 'Kopiera länken',
         createViewTitle: 'Skapa ny vy',
-        'delete': 'Ta bort',
-        'delete-confirmation': 'Är du säker på att du vill ta bort skärmen "{{monitor}}"?',
+        delete: 'Ta bort',
+        'delete-confirmation':
+          'Är du säker på att du vill ta bort skärmen "{{monitor}}"?',
         deleteRenamings: 'Rensa alla textändringar',
         deleteStop: 'Ta bort hållplats {{stop}}',
         deleteView: 'Ta bort hållplatsvy {{id}}',
@@ -336,20 +350,24 @@ i18n.use(initReactI18next).init({
           'Med tjänsten kan du visa tidtabeller för närmaste hållplatser t.ex. i offentliga lokaler, på digitala informationsskärmar eller på företagets intranät.',
         frontPageParagraph3:
           'Kollektivtrafikens tidtabeller på synliga platser gör det lättare att resa kollektivt och uppmuntrar att använda kollektivtrafiktjänster. Genom tjänsten får du även aktuella trafikmeddelanden och information om trafikstörningar.',
-        'front-page-paragraph-hsl': 'Skapa en skärmvy genom att logga in med HRT-konto så du kan senare redigera hålplatsskärmvy du skapat.',
-          headerSideLeft: 'Vänstra kolumnen',
+        'front-page-paragraph-hsl':
+          'Skapa en skärmvy genom att logga in med HRT-konto så du kan senare redigera hålplatsskärmvy du skapat.',
+        headerSideLeft: 'Vänstra kolumnen',
         headerSideRight: 'Högra kolumnen',
         hideAllLines: 'Dölj alla linjer',
         hideLine: 'Dölj linje {{line}}',
         hideLines: 'Dölj linjer {{hidden}} / {{all}}',
         horizontal: 'Horisontell',
-        'info-display-only-one': 'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
+        'info-display-only-one':
+          'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
         'info-text-short': 'Avgångarna i kronologisk ordning',
         'info-text-one-column': 'Avgångarna i kronologisk ordning i en kolumn',
-        'info-text-two-columns': 'Avgångarna i kronologisk ordning i två kolumner',
+        'info-text-two-columns':
+          'Avgångarna i kronologisk ordning i två kolumner',
         'info-text-double': 'Två vyer i en och samma display',
         'information-display': 'Informationsskärm',
-        'information-display-info': 'Visar meddelanden om de valda hållplatserna och linjerna',
+        'information-display-info':
+          'Visar meddelanden om de valda hållplatserna och linjerna',
         languageCode: 'sv',
         languageNameEn: 'engelska',
         languageNameFi: 'finska',
@@ -371,11 +389,13 @@ i18n.use(initReactI18next).init({
         moveStopToRightCol: 'Flytta hållplats {{stop}} till högra kolumnen',
         moveViewDown: 'Flytta hållplatsvy {{id}} nedåt',
         moveViewUp: 'Flytta hållplatsvy {{id}} uppåt',
-        'new-display-disabled': 'Et voi lisätä useampia näkymiä tiedotenäyttöön',
+        'new-display-disabled':
+          'Et voi lisätä useampia näkymiä tiedotenäyttöön',
         'no-departures': 'Inga kända avgångar',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',
-        'non-logged-in-monitor-info': 'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
+        'non-logged-in-monitor-info':
+          'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
         notPossibleToCreate: 'Vyn kan inte skapas utan {{requirements}}',
         notPossibleToPreview:
           'Förhandsgranskning kan inte visas utan {{requirements}}',

@@ -16,7 +16,9 @@ export default {
     },
     normal: '"Roboto", arial, georgia, serif',
     narrow: '"Roboto Condensed", "Arial Condensed", arial, georgia, serif',
-    externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
+    externalFonts: [
+      'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+    ],
   },
   modeIcons: {
     colors: {
@@ -38,4 +40,4 @@ export default {
   alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
   allowLogin: false,
   useTilde: true,
-}
+};

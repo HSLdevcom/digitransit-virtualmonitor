@@ -59,8 +59,8 @@
     "eject": "react-scripts eject",
     "lint": "npm-run-all lint-ts lint-scss",
     "lint-test": "npm-run-all lint-ts-test lint-scss-test",
-    "lint-ts": "eslint ./src/**/*{ts,tsx,js} --fix --quiet",
-    "lint-scss": "stylelint src/**/*.{scss,sass} --fix --quiet",
+    "lint-ts": "eslint src --ext .js,.tsx,.ts --fix --quiet",
+    "lint-scss": "stylelint **/*.{css,scss,sass} --fix --quiet",
     "lint-ts-test": "eslint ./src/**/*{ts,tsx,js} --quiet",
     "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet",
     "apollo-codegen": "apollo client:codegen --target=typescript ./src/generated/ --outputFlat --watch"

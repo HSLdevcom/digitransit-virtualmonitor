@@ -33,8 +33,8 @@ li {
   animation-delay: var(--delayLength);
   animation-fill-mode: backwards;
 }
-    
+
 @keyframes animate-in {
-    0% { opacity: 0; }
+  0% { opacity: 0; }
   100% { opacity: 1; }
 }

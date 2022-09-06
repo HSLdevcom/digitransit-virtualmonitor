@@ -13,7 +13,7 @@ interface ICommonProps {
   readonly forMonitor?: boolean;
 }
 
-const Logo: FC<ICommonProps> = (props) => {
+const Logo: FC<ICommonProps> = props => {
   const config = useContext(ConfigContext);
   const { isPreview, isLandscape, forMonitor } = props;
 
@@ -57,6 +57,6 @@ const Logo: FC<ICommonProps> = (props) => {
     );
   }
   return null;
-}
+};
 
 export default Logo;

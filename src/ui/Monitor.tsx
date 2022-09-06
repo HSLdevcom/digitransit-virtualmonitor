@@ -47,12 +47,19 @@ const Monitor: FC<IProps> = ({
   );
   const { isMultiDisplay } = getLayout(view.layout);
   const [showOverlay, setShowOverlay] = useState(false);
+
   useEffect(() => {
     const setDimensions = () => {
       setWindowDimensions(getWindowDimensions());
     };
     window.addEventListener('resize', setDimensions);
     return () => window.removeEventListener('resize', setDimensions);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(to);
+    };
   }, []);
 
   const windowHeight = windowDimensions.height;

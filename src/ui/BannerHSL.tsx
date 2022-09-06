@@ -24,11 +24,15 @@ const BannerHSL = () => {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
     if (config.bannersUri) {
       fetch(`${config.bannersUri}language=${i18n.language}`)
         .then(res => res.json())
-        .then(data => setBanners(data));
+        .then(data => {
+          setBanners(data);
+        });
     }
+    return () => controller.abort();
   }, [i18n.language]);
 
   const languages = [

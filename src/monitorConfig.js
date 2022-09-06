@@ -1,12 +1,10 @@
 export default {
   hsl: {
-    frontPageContent: [{
-      fi: "Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.",
-      sv: "Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.",
-      en: "Create a stop display while logged in so you can edit it later.",
-    }],
+    frontPageContent: 'front-page-paragraph-hsl',
     fonts: {
-      externalFonts: ["https://cloud.typography.com/6364294/7432412/css/fonts.css"],
+      externalFonts: [
+        'https://cloud.typography.com/6364294/7432412/css/fonts.css',
+      ],
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       weights: {
         normal: '400',
@@ -50,7 +48,9 @@ export default {
   },
   jyvaskyla: {
     fonts: {
-      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
+      externalFonts: [
+        'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+      ],
     },
     colors: {
       primary: '#7DC02D',
@@ -81,7 +81,10 @@ export default {
     },
     feedIds: ['tampere', 'TampereVR', 'tampereDRT'],
     fonts: {
-      externalFonts: ['https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css', 'https://fonts.googleapis.com/css?family=Lato'],
+      externalFonts: [
+        'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+        'https://fonts.googleapis.com/css?family=Lato',
+      ],
       monitor: {
         name: 'Lato',
         weight: '700',
@@ -105,7 +108,7 @@ export default {
     useTilde: false,
   },
   vaasa: {
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
     allowLogin: false,
     feedIds: ['vaasa'],
@@ -114,7 +117,9 @@ export default {
       monitorBackground: '#000a8c',
     },
     fonts: {
-      externalFonts: ['https://fonts.googleapis.com/css?family=Source+Sans+Pro'],
+      externalFonts: [
+        'https://fonts.googleapis.com/css?family=Source+Sans+Pro',
+      ],
       normal: '"Source Sans Pro", Arial, Georgia, Serif',
       narrow: '"Source Sans Pro", Arial, Georgia, Serif',
       monitor: {
@@ -129,10 +134,8 @@ export default {
       postfix: '-waltti',
       setName: 'digitransit',
     },
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
     useTilde: true,
-  }
+  },
 };

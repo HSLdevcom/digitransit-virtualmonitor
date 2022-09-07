@@ -108,7 +108,7 @@ export default {
     useTilde: false,
   },
   vaasa: {
-    uri: 'routing/v1/routers/waltti/index/graphql',
+    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
     allowLogin: false,
     feedIds: ['vaasa'],

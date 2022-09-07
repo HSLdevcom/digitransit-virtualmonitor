@@ -64,8 +64,8 @@ i18n.use(initReactI18next).init({
           'Displaying public transport timetables in prominent places encourages the use of public transport and makes it easier. In addition to timetables, the service provides you with service updates and disruption alerts.',
         'front-page-paragraph-hsl':
           'When you log in using your HSL account before creating a display, you can later edit the display.',
-        headerSideLeft: 'Left column',
-        headerSideRight: 'Right column',
+        'header-side-left': 'Left column',
+        'header-side-right': 'Right column',
         hideAllLines: 'Hide all routes',
         hideLine: 'Hide route {{line}}',
         hideLines: 'Hide routes {{hidden}} / {{all}}',
@@ -105,6 +105,7 @@ i18n.use(initReactI18next).init({
         'new-display-disabled':
           'Et voi lisätä useampia näkymiä tiedotenäyttöön',
         'no-departures': 'No known departures',
+        'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
         'non-logged-in-monitor-info':
@@ -118,8 +119,6 @@ i18n.use(initReactI18next).init({
         open: 'Open display',
         ok: 'OK',
         or: 'or',
-        placeholderSideLeft: 'No stops selected',
-        placeholderSideRight: 'No stops selected',
         'platform-or-stop': 'Platform/Stop',
         prepareDisplay: 'Add new stop view',
         prepareStop: 'Add stop',
@@ -209,8 +208,8 @@ i18n.use(initReactI18next).init({
           'Joukkoliikenteen aikataulut näkyvällä paikalla helpottavat joukkoliikenteen käyttöä ja kannustavat käyttämään joukkoliikennettä. Aikataulujen lisäksi palvelun kautta saat myös ajankohtaiset liikenne- ja häiriötiedotteet.',
         'front-page-paragraph-hsl':
           'Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.',
-        headerSideLeft: 'Vasen palsta',
-        headerSideRight: 'Oikea palsta',
+        'header-side-left': 'Vasen palsta',
+        'header-side-right': 'Oikea palsta',
         hideAllLines: 'Piilota kaikki linjat',
         hideLine: 'Piilota linja {{line}}',
         hideLines: 'Piilota linjoja {{hidden}} / {{all}}',
@@ -249,6 +248,7 @@ i18n.use(initReactI18next).init({
         'new-display-disabled':
           'Et voi lisätä useampia näkymiä tiedotenäyttöön',
         'no-departures': 'Ei tiedossa olevia lähtöjä',
+        'no-stops-selected': 'Ei valittuja pysäkkejä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
         'non-logged-in-monitor-info':
@@ -261,8 +261,6 @@ i18n.use(initReactI18next).init({
         open: 'Avaa näyttö',
         ok: 'OK',
         or: 'tai',
-        placeholderSideLeft: 'Ei valittuja pysäkkejä',
-        placeholderSideRight: 'Ei valittuja pysäkkejä',
         'platform-or-stop': 'Lait./Pys.',
         prepareDisplay: 'Lisää uusi pysäkkinäkymä',
         prepareStop: 'Lisää pysäkki',
@@ -352,8 +350,8 @@ i18n.use(initReactI18next).init({
           'Kollektivtrafikens tidtabeller på synliga platser gör det lättare att resa kollektivt och uppmuntrar att använda kollektivtrafiktjänster. Genom tjänsten får du även aktuella trafikmeddelanden och information om trafikstörningar.',
         'front-page-paragraph-hsl':
           'Skapa en skärmvy genom att logga in med HRT-konto så du kan senare redigera hålplatsskärmvy du skapat.',
-        headerSideLeft: 'Vänstra kolumnen',
-        headerSideRight: 'Högra kolumnen',
+        'header-side-left': 'Vänstra kolumnen',
+        'header-side-right': 'Högra kolumnen',
         hideAllLines: 'Dölj alla linjer',
         hideLine: 'Dölj linje {{line}}',
         hideLines: 'Dölj linjer {{hidden}} / {{all}}',
@@ -392,6 +390,7 @@ i18n.use(initReactI18next).init({
         'new-display-disabled':
           'Et voi lisätä useampia näkymiä tiedotenäyttöön',
         'no-departures': 'Inga kända avgångar',
+        'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',
         'non-logged-in-monitor-info':
@@ -404,8 +403,6 @@ i18n.use(initReactI18next).init({
         open: 'Öppna skärmen',
         ok: 'OK',
         or: 'eller',
-        placeholderSideLeft: 'Inga valda hållplatser',
-        placeholderSideRight: 'Inga valda hållplatser',
         'platform-or-stop': 'Plattf./Hållpl.',
         prepareDisplay: 'Lägg till ny hållplatsskärm',
         prepareStop: 'Lägg till hållplats',

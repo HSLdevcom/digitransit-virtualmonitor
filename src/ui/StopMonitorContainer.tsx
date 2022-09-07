@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useContext } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import CarouselDataContainer from './CarouselDataContainer';
 import { defaultStopCard } from '../util/stopCardUtil';
 import { gql, useQuery } from '@apollo/client';

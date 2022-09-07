@@ -42,7 +42,6 @@ interface IProps {
     cardId: number,
     side: string,
     stops: Array<IStop>,
-    reorder: boolean,
     gtfsIdForHidden: string,
   ) => void;
   readonly updateCardInfo?: (
@@ -154,7 +153,6 @@ const StopCardRow: FC<IProps> = ({
                 : undefined,
             };
           }),
-        false,
         undefined,
       );
     }
@@ -189,7 +187,6 @@ const StopCardRow: FC<IProps> = ({
               hiddenRoutes: [],
             };
           }),
-        false,
         undefined,
       );
     }

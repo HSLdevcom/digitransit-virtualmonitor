@@ -12,6 +12,15 @@ export interface IStop {
   routes?: Array<any>;
   parentStation?: string;
 }
+export interface IStopInfoPlus extends IStop {
+  cardId?: number;
+  settings: ISettings;
+  layout: number;
+  locality?: string;
+  patterns?: Array<IPattern>;
+  id?: string;
+  modes?: Array<string>;
+}
 export interface ISettings {
   hiddenRoutes: Array<IHiddenRoute>;
   showStopNumber: boolean;

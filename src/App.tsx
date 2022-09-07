@@ -94,14 +94,14 @@ interface IStopMonitorProps {
 
 interface User {
   sub?: string;
-  notLogged?: boolean
+  notLogged?: boolean;
 }
 
 interface Favourite {
   type: string;
 }
 
-const App: FC<IConfigurationProps> = (props) => {
+const App: FC<IConfigurationProps> = props => {
   const [user, setUser] = useState<User>({});
   const [favourites, setFavourites] = useState<Array<Favourite>>([]);
   const [loading, setLoading] = useState(true);
@@ -122,23 +122,25 @@ const App: FC<IConfigurationProps> = (props) => {
       document.body.style.setProperty(i, style[i]);
     }
     if (config.allowLogin) {
-      monitorAPI.getUser().then(user => {
-        setUser(user); 
-        setLoading(false);
-      }).catch(() => {
-        setUser({notLogged: true}); 
-        setLoading(false);
-      })
-      monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
-        setFavourites(favs)
-      }).catch(e => {
-        console.log(e)
-      })
+      monitorAPI
+        .getUser()
+        .then(user => {
+          setUser(user);
+          setLoading(false);
+        })
+        .catch(() => {
+          setUser({ notLogged: true });
+          setLoading(false);
+        });
+      monitorAPI
+        .getFavourites()
+        .then((favs: Array<Favourite>) => {
+          setFavourites(favs);
+        })
     } else {
-      setUser({notLogged: true}); 
+      setUser({ notLogged: true });
       setLoading(false);
     }
-    
   }, []);
   const client = new ApolloClient({
     link: ApolloLink.from([
@@ -157,18 +159,13 @@ const App: FC<IConfigurationProps> = (props) => {
 
   const favicon = config.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
-  
+
   const fonts = config.fonts.externalFonts.map(font => (
-    <link
-      key={`header-${font}`}
-      rel="stylesheet"
-      type="text/css"
-      href={font}
-    />
+    <link key={`header-${font}`} rel="stylesheet" type="text/css" href={font} />
   ));
 
   if (loading) {
-    return <Loading white/>
+    return <Loading white />;
   }
 
   return (
@@ -181,94 +178,97 @@ const App: FC<IConfigurationProps> = (props) => {
       <ApolloProvider client={client}>
         <UserContext.Provider value={user}>
           <FavouritesContext.Provider value={favourites}>
-        <Switch>
-          <Route
-            path={'/createview'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps) => (
-              <>
-                <SkipToMainContent />
-                <BannerContainer />
-                <section role="main" id="mainContent">
-                  <CreateViewPage />
-                </section>
-              </>
-            )}
-          />
-          <Route path={'/view'} component={PrepareMonitor} />
-          <Route path={'/static'} component={PrepareMonitor} />
-          <ProtectedRoute
-            path={'/monitors/createview'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps) => (
-              <>
-                <SkipToMainContent />
-                <BannerContainer />
-                <section role="main" id="mainContent">
-                  <CreateViewPage  />
-                </section>
-              </>
-            )}
-          />
-          <ProtectedRoute path={'/monitors'} component={() => (
-            <>
-              <BannerContainer />
-              <UserMonitors />
-            </>
-          )} />       
-          <Route
-            path={'/urld/:version/:packedDisplay'}
-            component={({
-              match: {
-                params: { version, packedDisplay },
-              },
-            }: RouteComponentProps<ICompressedDisplayRouteParams>) => {
-              return (
-                <>
-                  <DisplayUrlCompression
-                    version={decodeURIComponent(version)}
-                    packedString={decodeURIComponent(packedDisplay)}
-                  />
-                </>
-              );
-            }}
-          />
-          <Route
-            path={'/stop/:stopId/:layout?'}
-            component={({
-              match: {
-                params: { stopId, layout },
-              },
-            }: RouteComponentProps<IStopMonitorProps>) => (
-              <StopMonitorContainer
-                stopIds={stopId.split(',')}
-                layout={layout ? Number(layout) : 2}
-                urlTitle={props.search?.title}
+            <Switch>
+              <Route
+                path={'/createview'}
+                component={({
+                  match: {
+                    params: {},
+                  },
+                }: RouteComponentProps) => (
+                  <>
+                    <SkipToMainContent />
+                    <BannerContainer />
+                    <section role="main" id="mainContent">
+                      <CreateViewPage />
+                    </section>
+                  </>
+                )}
               />
-            )}
-          />
-          <Route path={'/version'} component={Version} />
-          <Route
-            path={'/'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps) => (
-              <>
-                <SkipToMainContent />
-                <LandingPage />
-              </>
-            )}
-          />
-        </Switch>
-        </FavouritesContext.Provider>
+              <Route path={'/view'} component={PrepareMonitor} />
+              <Route path={'/static'} component={PrepareMonitor} />
+              <ProtectedRoute
+                path={'/monitors/createview'}
+                component={({
+                  match: {
+                    params: {},
+                  },
+                }: RouteComponentProps) => (
+                  <>
+                    <SkipToMainContent />
+                    <BannerContainer />
+                    <section role="main" id="mainContent">
+                      <CreateViewPage />
+                    </section>
+                  </>
+                )}
+              />
+              <ProtectedRoute
+                path={'/monitors'}
+                component={() => (
+                  <>
+                    <BannerContainer />
+                    <UserMonitors />
+                  </>
+                )}
+              />
+              <Route
+                path={'/urld/:version/:packedDisplay'}
+                component={({
+                  match: {
+                    params: { version, packedDisplay },
+                  },
+                }: RouteComponentProps<ICompressedDisplayRouteParams>) => {
+                  return (
+                    <>
+                      <DisplayUrlCompression
+                        version={decodeURIComponent(version)}
+                        packedString={decodeURIComponent(packedDisplay)}
+                      />
+                    </>
+                  );
+                }}
+              />
+              <Route
+                path={'/stop/:stopId/:layout?'}
+                component={({
+                  match: {
+                    params: { stopId, layout },
+                  },
+                }: RouteComponentProps<IStopMonitorProps>) => (
+                  <StopMonitorContainer
+                    stopIds={stopId.split(',')}
+                    layout={layout ? Number(layout) : 2}
+                    urlTitle={props.search?.title}
+                  />
+                )}
+              />
+              <Route path={'/version'} component={Version} />
+              <Route
+                path={'/'}
+                component={({
+                  match: {
+                    params: {},
+                  },
+                }: RouteComponentProps) => (
+                  <>
+                    <SkipToMainContent />
+                    <LandingPage />
+                  </>
+                )}
+              />
+            </Switch>
+          </FavouritesContext.Provider>
         </UserContext.Provider>
       </ApolloProvider>
     </div>

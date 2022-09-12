@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLazyQuery } from '@apollo/client';
 import { ICardInfo, IStop } from '../util/Interfaces';
 import Icon from './Icon';
-import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
+import { StopQueryDocument, StationQueryDocument } from '../generated';
 import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
 import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
@@ -69,11 +69,11 @@ const StopCardRow: FC<IProps> = ({
   const config = useContext(ConfigContext);
   const favourites = useContext(FavouritesContext);
   const [t] = useTranslation();
-  const [getStop, stopState] = useLazyQuery(GET_STOP, {
+  const [getStop, stopState] = useLazyQuery(StopQueryDocument, {
     fetchPolicy: 'network-only',
     context: { clientName: 'default' },
   });
-  const [getStation, stationState] = useLazyQuery(GET_STATION, {
+  const [getStation, stationState] = useLazyQuery(StationQueryDocument, {
     fetchPolicy: 'network-only',
     context: { clientName: 'default' },
   });

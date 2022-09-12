@@ -1,7 +1,5 @@
 import React, { useEffect, FC, useState } from 'react';
-import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
-import { stopQuery, stopQueryVariables } from '../generated/stopQuery';
-import { stationQuery, stationQueryVariables } from '../generated/stationQuery';
+import { StopQueryDocument, StationQueryDocument } from '../generated';
 import { useQuery } from '@apollo/client';
 import StopCardListContainer from './StopCardListContainer';
 import { sortBy, uniqBy } from 'lodash';
@@ -24,12 +22,12 @@ const StopCardListDataContainer: FC<IProps> = ({
   staticMonitor,
 }) => {
   const [cardList, setCardList] = useState(stopCardList);
-  const stops = useQuery<stopQuery, stopQueryVariables>(GET_STOP, {
+  const stops = useQuery(StopQueryDocument, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
     context: { clientName: 'default' },
   });
-  const stations = useQuery<stationQuery, stationQueryVariables>(GET_STATION, {
+  const stations = useQuery(StationQueryDocument, {
     variables: { ids: stationIds },
     skip: stationIds.length < 1,
     context: { clientName: 'default' },

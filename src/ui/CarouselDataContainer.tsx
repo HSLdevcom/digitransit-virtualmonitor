@@ -1,17 +1,9 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
 import { useQuery } from '@apollo/client';
 import {
-  GET_STOP_DEPARTURES,
-  GET_STATION_DEPARTURES,
-} from '../queries/departureQueries';
-import {
-  GetDeparturesForStations,
-  GetDeparturesForStationsVariables,
-} from '../generated/GetDeparturesForStations';
-import {
-  GetDeparturesForStops,
-  GetDeparturesForStopsVariables,
-} from '../generated/GetDeparturesForStops';
+  GetDeparturesForStopsDocument,
+  GetDeparturesForStationsDocument,
+} from '../generated';
 import { getLayout } from '../util/getLayout';
 import { ITrainData } from '../util/Interfaces';
 import {
@@ -70,19 +62,13 @@ const CarouselDataContainer: FC<IProps> = ({
   const [alerts, setAlerts] = useState([]);
   const [closedStopViews, setClosedStopViews] = useState([]);
 
-  const stationsState = useQuery<
-    GetDeparturesForStations,
-    GetDeparturesForStationsVariables
-  >(GET_STATION_DEPARTURES, {
+  const stationsState = useQuery(GetDeparturesForStationsDocument, {
     variables: { ids: stationIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stationIds.length < 1,
     context: { clientName: 'default' },
   });
-  const stopsState = useQuery<
-    GetDeparturesForStops,
-    GetDeparturesForStopsVariables
-  >(GET_STOP_DEPARTURES, {
+  const stopsState = useQuery(GetDeparturesForStopsDocument, {
     variables: { ids: stopIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stopIds.length < 1,

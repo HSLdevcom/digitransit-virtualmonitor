@@ -1,0 +1,38 @@
+query getLineIds($stations: [String]!, $stops: [String]!)
+@api(contextKey: "clientName") {
+  stations(ids: $stations) {
+    name
+    gtfsId
+    stops {
+      gtfsId
+      name
+      stoptimesForPatterns {
+        pattern {
+          code
+          headsign
+          route {
+            gtfsId
+            shortName
+          }
+        }
+      }
+    }
+  }
+  stops(ids: $stops) {
+    gtfsId
+    name
+    parentStation {
+      gtfsId
+    }
+    stoptimesForPatterns {
+      pattern {
+        code
+        headsign
+        route {
+          gtfsId
+          shortName
+        }
+      }
+    }
+  }
+}

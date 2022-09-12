@@ -1,21 +1,21 @@
 export interface IStop {
   id?: string;
-  code: string;
-  desc: string;
-  gtfsId: string;
-  locationType: string;
-  lat: number;
-  lon: number;
-  name: string;
-  settings: ISettings;
+  code?: string;
+  desc?: string;
+  gtfsId?: string;
+  locationType?: string;
+  lat?: number;
+  lon?: number;
+  name?: string;
+  settings?: ISettings;
   mode?: string;
   routes?: Array<any>;
   parentStation?: string;
 }
 export interface IStopInfoPlus extends IStop {
   cardId?: number;
-  settings: ISettings;
-  layout: number;
+  settings?: ISettings;
+  layout?: number;
   locality?: string;
   patterns?: Array<IPattern>;
   id?: string;

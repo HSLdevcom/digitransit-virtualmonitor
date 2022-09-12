@@ -1,7 +1,6 @@
 import cx from 'classnames';
 import React, { FC, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IPattern, ISettings } from '../util/Interfaces';
 import StopRoutesModal from './StopRoutesModal';
 import StopCode from './StopCode';
 import Icon from './Icon';

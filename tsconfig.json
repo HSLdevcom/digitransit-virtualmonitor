@@ -26,5 +26,5 @@
     "typeRoots": ["./src/@types", "./node_modules/@types"],
   },
   "include": [
-    "src", "apollo.config.js"  ]
+    "src", "apollo.config.js"  ],
 }

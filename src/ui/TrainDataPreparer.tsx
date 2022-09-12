@@ -1,51 +1,11 @@
 import React, { FC, useState, useEffect } from 'react';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { ICard } from '../util/Interfaces';
 import Loading from './Loading';
 import { trainStationMap } from '../util/trainStations';
 import { stringifyPattern } from '../util/monitorUtils';
 import TrainDataFetcher from './TrainDataFetcher';
-
-const GET_LINE_IDS = gql`
-  query getLineIds($stations: [String]!, $stops: [String]!)
-  @api(contextKey: "clientName") {
-    stations(ids: $stations) {
-      name
-      gtfsId
-      stops {
-        gtfsId
-        name
-        stoptimesForPatterns {
-          pattern {
-            code
-            headsign
-            route {
-              gtfsId
-              shortName
-            }
-          }
-        }
-      }
-    }
-    stops(ids: $stops) {
-      gtfsId
-      name
-      parentStation {
-        gtfsId
-      }
-      stoptimesForPatterns {
-        pattern {
-          code
-          headsign
-          route {
-            gtfsId
-            shortName
-          }
-        }
-      }
-    }
-  }
-`;
+import { GetLineIdsDocument } from '../generated';
 
 const createLineIdsArray = (data, hiddenRoutes) => {
   const filteredHiddenRoutes = hiddenRoutes.reduce((flatten, arr) => [
@@ -102,7 +62,7 @@ interface IProps {
 }
 
 const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
-  const defaultState = useQuery(GET_LINE_IDS, {
+  const defaultState = useQuery(GetLineIdsDocument, {
     variables: {
       stations: stations.map(st => st.gtfsId),
       stops: stops.map(st => st.gtfsId),

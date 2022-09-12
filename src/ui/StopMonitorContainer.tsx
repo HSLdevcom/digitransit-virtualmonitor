@@ -1,27 +1,15 @@
 import React, { FC, useState, useEffect } from 'react';
 import CarouselDataContainer from './CarouselDataContainer';
 import { defaultStopCard } from '../util/stopCardUtil';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import Loading from './Loading';
-import { GetStops, GetStopsVariables } from '../generated/GetStops';
+import { GetStopsForStopMonitorDocument } from '../generated';
 
 interface IProps {
   stopIds: Array<string>;
   layout?: number;
   urlTitle?: string;
 }
-
-export const GET_STOP = gql`
-  query GetStops($ids: [String!]!) @api(contextKey: "clientName") {
-    stops: stops(ids: $ids) {
-      name
-      gtfsId
-      locationType
-      lat
-      lon
-    }
-  }
-`;
 
 const setLayoutByNumber = number => {
   if (number <= 4) {
@@ -40,7 +28,7 @@ const StopMonitorContainer: FC<IProps> = ({
   const [stopCard, setStopCard] = useState([defaultStopCard()]);
   const [fetched, setFetched] = useState(false);
 
-  const { data, loading } = useQuery<GetStops, GetStopsVariables>(GET_STOP, {
+  const { data, loading } = useQuery(GetStopsForStopMonitorDocument, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
     context: { clientName: 'default' },

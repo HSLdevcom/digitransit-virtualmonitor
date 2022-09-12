@@ -1,0 +1,91 @@
+query GetDeparturesForStops($ids: [String!]!, $numberOfDepartures: Int!)
+@api(contextKey: "clientName") {
+  stops: stops(ids: $ids) {
+    name
+    code
+    gtfsId
+    lat
+    lon
+    patterns {
+      headsign
+    }
+    alerts {
+      alertSeverityLevel
+      alertHeaderText
+      alertHeaderTextTranslations {
+        text
+        language
+      }
+      alertDescriptionTextTranslations {
+        text
+        language
+      }
+      effectiveEndDate
+      effectiveStartDate
+      stop {
+        gtfsId
+        code
+      }
+    }
+    routes {
+      alerts {
+        alertSeverityLevel
+        alertHeaderText
+        alertHeaderTextTranslations {
+          text
+          language
+        }
+        alertDescriptionTextTranslations {
+          text
+          language
+        }
+        effectiveEndDate
+        effectiveStartDate
+        stop {
+          gtfsId
+          code
+        }
+      }
+      longName
+      id
+    }
+    stoptimesForPatterns(
+      numberOfDepartures: $numberOfDepartures
+      omitCanceled: false
+    ) {
+      pattern {
+        code
+        directionId
+        headsign
+        route {
+          gtfsId
+          shortName
+        }
+      }
+      stoptimes {
+        stop {
+          gtfsId
+          code
+          platformCode
+          parentStation {
+            gtfsId
+          }
+        }
+        realtime
+        pickupType
+        serviceDay
+        scheduledDeparture
+        realtimeDeparture
+        realtimeState
+        headsign
+        trip {
+          tripHeadsign
+          gtfsId
+          route {
+            shortName
+          }
+        }
+      }
+    }
+  }
+}

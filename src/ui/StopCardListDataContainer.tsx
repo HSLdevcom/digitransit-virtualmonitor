@@ -2,7 +2,8 @@ import React, { useEffect, FC, useState } from 'react';
 import { StopQueryDocument, StationQueryDocument } from '../generated';
 import { useQuery } from '@apollo/client';
 import StopCardListContainer from './StopCardListContainer';
-import { sortBy, uniqBy } from 'lodash';
+import { sortBy } from 'lodash';
+import { stringifyPattern } from '../util/monitorUtils';
 
 interface IProps {
   stopCardList: any;
@@ -32,6 +33,42 @@ const StopCardListDataContainer: FC<IProps> = ({
     skip: stationIds.length < 1,
     context: { clientName: 'default' },
   });
+  const getHiddenRoutes = (hiddenRoutes, patterns) => {
+    return hiddenRoutes.filter(route => {
+      return patterns.some(pattern => stringifyPattern(pattern) === route);
+    });
+  };
+  const getStopForMonitor = (savedStop, otpStop) => {
+    const hiddenRoutes = savedStop.settings?.hiddenRoutes;
+    if (hiddenRoutes?.length) {
+      savedStop.settings.hiddenRoutes = getHiddenRoutes(
+        hiddenRoutes,
+        otpStop.patterns,
+      );
+    }
+    return {
+      ...savedStop,
+      ...otpStop,
+      patterns: sortBy(otpStop.patterns, 'route.shortName'),
+    };
+  };
+  const getStationForMonitor = (savedStation, otpStation) => {
+    const patterns = [];
+    otpStation.stops.forEach(stop => patterns.push(...stop.patterns));
+    const hiddenRoutes = savedStation.settings?.hiddenRoutes;
+    if (hiddenRoutes?.length) {
+      savedStation.settings.hiddenRoutes = getHiddenRoutes(
+        hiddenRoutes,
+        patterns,
+      );
+    }
+    return {
+      ...savedStation,
+      ...otpStation,
+      desc: otpStation.stops[0].desc,
+      patterns: sortBy(patterns, 'route.shortName'),
+    };
+  };
   useEffect(() => {
     if (stops.data?.stop) {
       const richCard = cardList.slice();
@@ -44,30 +81,16 @@ const StopCardListDataContainer: FC<IProps> = ({
             .map(s => s.gtfsId)
             .indexOf(stop.gtfsId);
           if (leftIndex > -1) {
-            const routes = stop.stoptimesForPatterns.map(
-              stoptimes => stoptimes.pattern,
+            richCard[j].columns.left.stops[leftIndex] = getStopForMonitor(
+              richCard[j].columns.left.stops[leftIndex],
+              stop,
             );
-            richCard[j].columns.left.stops[leftIndex] = {
-              ...richCard[j].columns.left.stops[leftIndex],
-              ...stop,
-              patterns: sortBy(
-                sortBy(routes, 'route.shortName'),
-                'shortName.length',
-              ),
-            };
           }
           if (rightIndex > -1) {
-            const routes = stop.stoptimesForPatterns.map(
-              stoptimes => stoptimes.pattern,
+            richCard[j].columns.right.stops[rightIndex] = getStopForMonitor(
+              richCard[j].columns.right.stops[rightIndex],
+              stop,
             );
-            richCard[j].columns.right.stops[rightIndex] = {
-              ...richCard[j].columns.right.stops[rightIndex],
-              ...stop,
-              patterns: sortBy(
-                sortBy(routes, 'route.shortName'),
-                'shortName.length',
-              ),
-            };
           }
         });
       });
@@ -87,37 +110,16 @@ const StopCardListDataContainer: FC<IProps> = ({
             .map(s => s.gtfsId)
             .indexOf(station.gtfsId);
           if (leftIndex > -1) {
-            let patterns = [];
-            station.stops.forEach(stop =>
-              patterns.push(...stop.stoptimesForPatterns),
+            richCard[j].columns.left.stops[leftIndex] = getStationForMonitor(
+              richCard[j].columns.left.stops[leftIndex],
+              station,
             );
-            patterns = uniqBy(patterns, 'pattern.code');
-            richCard[j].columns.left.stops[leftIndex] = {
-              ...richCard[j].columns.left.stops[leftIndex],
-              ...station,
-              desc: station.stops[0].desc,
-              patterns: sortBy(
-                sortBy(patterns, 'pattern.route.shortname'),
-                'pattern.route.shortname.length',
-              ).map(e => e.pattern),
-            };
           }
           if (rightIndex > -1) {
-            let patterns = [];
-            station.stops.forEach(stop =>
-              patterns.push(...stop.stoptimesForPatterns),
+            richCard[j].columns.right.stops[rightIndex] = getStationForMonitor(
+              richCard[j].columns.right.stops[rightIndex],
+              station,
             );
-            const vehiMode = station.vehicleMode;
-            patterns = uniqBy(patterns, 'pattern.code');
-            richCard[j].columns.right.stops[rightIndex] = {
-              ...richCard[j].columns.right.stops[rightIndex],
-              ...stop,
-              vehicleMode: vehiMode,
-              patterns: sortBy(
-                sortBy(patterns, 'pattern.route.shortname'),
-                'pattern.route.shortname.length',
-              ).map(e => e.pattern),
-            };
           }
         });
       });

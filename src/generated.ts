@@ -1,15 +1,9 @@
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -113,7 +107,7 @@ export enum AlertCauseType {
   /** UNKNOWN_CAUSE */
   UnknownCause = 'UNKNOWN_CAUSE',
   /** WEATHER */
-  Weather = 'WEATHER',
+  Weather = 'WEATHER'
 }
 
 /** Effect of a alert */
@@ -137,7 +131,7 @@ export enum AlertEffectType {
   /** STOP_MOVED */
   StopMoved = 'STOP_MOVED',
   /** UNKNOWN_EFFECT */
-  UnknownEffect = 'UNKNOWN_EFFECT',
+  UnknownEffect = 'UNKNOWN_EFFECT'
 }
 
 /** Severity level of a alert */
@@ -149,32 +143,32 @@ export enum AlertSeverityLevelType {
   /** Severity of alert is unknown */
   UnknownSeverity = 'UNKNOWN_SEVERITY',
   /** Warning alerts are used when a single stop or route has a disruption that can affect user's journey, for example: All trams on a specific route are running with irregular schedules. */
-  Warning = 'WARNING',
+  Warning = 'WARNING'
 }
 
 /** Bike park represents a location where bicycles can be parked. */
-export type BikePark = Node &
-  PlaceInterface & {
-    __typename?: 'BikePark';
-    /** ID of the bike park */
-    bikeParkId?: Maybe<Scalars['String']>;
-    /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-    id: Scalars['ID'];
-    /** Latitude of the bike park (WGS 84) */
-    lat?: Maybe<Scalars['Float']>;
-    /** Longitude of the bike park (WGS 84) */
-    lon?: Maybe<Scalars['Float']>;
-    /** Name of the bike park */
-    name: Scalars['String'];
-    /** Opening hours for the selected dates using the local time of the park. Each date can have multiple time spans. */
-    openingHours?: Maybe<Array<Maybe<LocalTimeSpanDate>>>;
-    /** If true, value of `spacesAvailable` is updated from a real-time source. */
-    realtime?: Maybe<Scalars['Boolean']>;
-    /** Number of spaces available for bikes */
-    spacesAvailable?: Maybe<Scalars['Int']>;
-    /** Additional information labels (tags) for the Bike park */
-    tags?: Maybe<Array<Maybe<Scalars['String']>>>;
-  };
+export type BikePark = Node & PlaceInterface & {
+  __typename?: 'BikePark';
+  /** ID of the bike park */
+  bikeParkId?: Maybe<Scalars['String']>;
+  /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
+  id: Scalars['ID'];
+  /** Latitude of the bike park (WGS 84) */
+  lat?: Maybe<Scalars['Float']>;
+  /** Longitude of the bike park (WGS 84) */
+  lon?: Maybe<Scalars['Float']>;
+  /** Name of the bike park */
+  name: Scalars['String'];
+  /** Opening hours for the selected dates using the local time of the park. Each date can have multiple time spans. */
+  openingHours?: Maybe<Array<Maybe<LocalTimeSpanDate>>>;
+  /** If true, value of `spacesAvailable` is updated from a real-time source. */
+  realtime?: Maybe<Scalars['Boolean']>;
+  /** Number of spaces available for bikes */
+  spacesAvailable?: Maybe<Scalars['Int']>;
+  /** Additional information labels (tags) for the Bike park */
+  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 
 /** Bike park represents a location where bicycles can be parked. */
 export type BikeParkOpeningHoursArgs = {
@@ -182,42 +176,41 @@ export type BikeParkOpeningHoursArgs = {
 };
 
 /** Bike rental station represents a location where users can rent bicycles for a fee. */
-export type BikeRentalStation = Node &
-  PlaceInterface & {
-    __typename?: 'BikeRentalStation';
-    /** If true, bikes can be returned to this station. */
-    allowDropoff?: Maybe<Scalars['Boolean']>;
-    /** If true, bikes can be returned even if spacesAvailable is zero or bikes > capacity. */
-    allowOverloading?: Maybe<Scalars['Boolean']>;
-    /** Number of bikes currently available on the rental station. */
-    bikesAvailable?: Maybe<Scalars['Int']>;
-    /** Nominal capacity (number of racks) of the rental station. */
-    capacity?: Maybe<Scalars['Int']>;
-    /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-    id: Scalars['ID'];
-    /** If true, this is a car rental system station. */
-    isCarStation?: Maybe<Scalars['Boolean']>;
-    /** If true, this is a free floating bike. */
-    isFloatingBike?: Maybe<Scalars['Boolean']>;
-    /** Latitude of the bike rental station (WGS 84) */
-    lat?: Maybe<Scalars['Float']>;
-    /** Longitude of the bike rental station (WGS 84) */
-    lon?: Maybe<Scalars['Float']>;
-    /** Name of the bike rental station */
-    name: Scalars['String'];
-    networks?: Maybe<Array<Maybe<Scalars['String']>>>;
-    /** If true, values of `bikesAvailable` and `spacesAvailable` are updated from a real-time source. If false, values of `bikesAvailable` and `spacesAvailable` are always the total capacity divided by two. */
-    realtime?: Maybe<Scalars['Boolean']>;
-    /**
-     * Number of free spaces currently available on the rental station.
-     *  Note that this value being 0 does not necessarily indicate that bikes cannot be returned to this station, as it might be possible to leave the bike in the vicinity of the rental station, even if the bike racks don't have any spaces available (see field `allowDropoff`).
-     */
-    spacesAvailable?: Maybe<Scalars['Int']>;
-    /** A description of the current state of this bike rental station, e.g. "Station on" */
-    state?: Maybe<Scalars['String']>;
-    /** ID of the bike rental station */
-    stationId?: Maybe<Scalars['String']>;
-  };
+export type BikeRentalStation = Node & PlaceInterface & {
+  __typename?: 'BikeRentalStation';
+  /** If true, bikes can be returned to this station. */
+  allowDropoff?: Maybe<Scalars['Boolean']>;
+  /** If true, bikes can be returned even if spacesAvailable is zero or bikes > capacity. */
+  allowOverloading?: Maybe<Scalars['Boolean']>;
+  /** Number of bikes currently available on the rental station. */
+  bikesAvailable?: Maybe<Scalars['Int']>;
+  /** Nominal capacity (number of racks) of the rental station. */
+  capacity?: Maybe<Scalars['Int']>;
+  /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
+  id: Scalars['ID'];
+  /** If true, this is a car rental system station. */
+  isCarStation?: Maybe<Scalars['Boolean']>;
+  /** If true, this is a free floating bike. */
+  isFloatingBike?: Maybe<Scalars['Boolean']>;
+  /** Latitude of the bike rental station (WGS 84) */
+  lat?: Maybe<Scalars['Float']>;
+  /** Longitude of the bike rental station (WGS 84) */
+  lon?: Maybe<Scalars['Float']>;
+  /** Name of the bike rental station */
+  name: Scalars['String'];
+  networks?: Maybe<Array<Maybe<Scalars['String']>>>;
+  /** If true, values of `bikesAvailable` and `spacesAvailable` are updated from a real-time source. If false, values of `bikesAvailable` and `spacesAvailable` are always the total capacity divided by two. */
+  realtime?: Maybe<Scalars['Boolean']>;
+  /**
+   * Number of free spaces currently available on the rental station.
+   *  Note that this value being 0 does not necessarily indicate that bikes cannot be returned to this station, as it might be possible to leave the bike in the vicinity of the rental station, even if the bike racks don't have any spaces available (see field `allowDropoff`).
+   */
+  spacesAvailable?: Maybe<Scalars['Int']>;
+  /** A description of the current state of this bike rental station, e.g. "Station on" */
+  state?: Maybe<Scalars['String']>;
+  /** ID of the bike rental station */
+  stationId?: Maybe<Scalars['String']>;
+};
 
 export enum BikesAllowed {
   /** The vehicle being used on this particular trip can accommodate at least one bicycle. */
@@ -225,34 +218,34 @@ export enum BikesAllowed {
   /** No bicycles are allowed on this trip. */
   NotAllowed = 'NOT_ALLOWED',
   /** There is no bike information for the trip. */
-  NoInformation = 'NO_INFORMATION',
+  NoInformation = 'NO_INFORMATION'
 }
 
 /** Car park represents a location where cars can be parked. */
-export type CarPark = Node &
-  PlaceInterface & {
-    __typename?: 'CarPark';
-    /** ID of the car park */
-    carParkId?: Maybe<Scalars['String']>;
-    /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-    id: Scalars['ID'];
-    /** Latitude of the car park (WGS 84) */
-    lat?: Maybe<Scalars['Float']>;
-    /** Longitude of the car park (WGS 84) */
-    lon?: Maybe<Scalars['Float']>;
-    /** Number of parking spaces at the car park */
-    maxCapacity?: Maybe<Scalars['Int']>;
-    /** Name of the car park */
-    name: Scalars['String'];
-    /** Opening hours for the selected dates using the local time of the park. Each date can have multiple time spans. */
-    openingHours?: Maybe<Array<Maybe<LocalTimeSpanDate>>>;
-    /** If true, value of `spacesAvailable` is updated from a real-time source. */
-    realtime?: Maybe<Scalars['Boolean']>;
-    /** Number of currently available parking spaces at the car park */
-    spacesAvailable?: Maybe<Scalars['Int']>;
-    /** Additional information labels (tags) for the car park */
-    tags?: Maybe<Array<Maybe<Scalars['String']>>>;
-  };
+export type CarPark = Node & PlaceInterface & {
+  __typename?: 'CarPark';
+  /** ID of the car park */
+  carParkId?: Maybe<Scalars['String']>;
+  /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
+  id: Scalars['ID'];
+  /** Latitude of the car park (WGS 84) */
+  lat?: Maybe<Scalars['Float']>;
+  /** Longitude of the car park (WGS 84) */
+  lon?: Maybe<Scalars['Float']>;
+  /** Number of parking spaces at the car park */
+  maxCapacity?: Maybe<Scalars['Int']>;
+  /** Name of the car park */
+  name: Scalars['String'];
+  /** Opening hours for the selected dates using the local time of the park. Each date can have multiple time spans. */
+  openingHours?: Maybe<Array<Maybe<LocalTimeSpanDate>>>;
+  /** If true, value of `spacesAvailable` is updated from a real-time source. */
+  realtime?: Maybe<Scalars['Boolean']>;
+  /** Number of currently available parking spaces at the car park */
+  spacesAvailable?: Maybe<Scalars['Int']>;
+  /** Additional information labels (tags) for the car park */
+  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
 
 /** Car park represents a location where cars can be parked. */
 export type CarParkOpeningHoursArgs = {
@@ -285,22 +278,22 @@ export type Coordinates = {
 };
 
 /** Departure row is a location, which lists departures of a certain pattern from a stop. Departure rows are identified with the pattern, so querying departure rows will return only departures from one stop per pattern */
-export type DepartureRow = Node &
-  PlaceInterface & {
-    __typename?: 'DepartureRow';
-    /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-    id: Scalars['ID'];
-    /** Latitude of the stop (WGS 84) */
-    lat?: Maybe<Scalars['Float']>;
-    /** Longitude of the stop (WGS 84) */
-    lon?: Maybe<Scalars['Float']>;
-    /** Pattern of the departure row */
-    pattern?: Maybe<Pattern>;
-    /** Stop from which the departures leave */
-    stop?: Maybe<Stop>;
-    /** Departures of the pattern from the stop */
-    stoptimes?: Maybe<Array<Maybe<Stoptime>>>;
-  };
+export type DepartureRow = Node & PlaceInterface & {
+  __typename?: 'DepartureRow';
+  /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
+  id: Scalars['ID'];
+  /** Latitude of the stop (WGS 84) */
+  lat?: Maybe<Scalars['Float']>;
+  /** Longitude of the stop (WGS 84) */
+  lon?: Maybe<Scalars['Float']>;
+  /** Pattern of the departure row */
+  pattern?: Maybe<Pattern>;
+  /** Stop from which the departures leave */
+  stop?: Maybe<Stop>;
+  /** Departures of the pattern from the stop */
+  stoptimes?: Maybe<Array<Maybe<Stoptime>>>;
+};
+
 
 /** Departure row is a location, which lists departures of a certain pattern from a stop. Departure rows are identified with the pattern, so querying departure rows will return only departures from one stop per pattern */
 export type DepartureRowStoptimesArgs = {
@@ -330,7 +323,7 @@ export enum FilterPlaceType {
   /** Departure rows */
   DepartureRow = 'DEPARTURE_ROW',
   /** Stops */
-  Stop = 'STOP',
+  Stop = 'STOP'
 }
 
 export type Geometry = {
@@ -527,7 +520,7 @@ export enum LocationType {
   /** A physical structure or area that contains one or more stop. */
   Station = 'STATION',
   /** A location where passengers board or disembark from a transit vehicle. */
-  Stop = 'STOP',
+  Stop = 'STOP'
 }
 
 export enum Mode {
@@ -558,7 +551,7 @@ export enum Mode {
   /** A special transport mode, which includes all public transport. */
   Transit = 'TRANSIT',
   /** WALK */
-  Walk = 'WALK',
+  Walk = 'WALK'
 }
 
 /** An object with an ID */
@@ -580,7 +573,7 @@ export enum OptimizeType {
   /** Deprecated, use argument `transferPenalty` to optimize for less transfers. */
   Transfers = 'TRANSFERS',
   /** **TRIANGLE** optimization type can be used to set relative preferences of optimization factors. See argument `triangle`. */
-  Triangle = 'TRIANGLE',
+  Triangle = 'TRIANGLE'
 }
 
 /** Information about pagination in a connection. */
@@ -629,6 +622,7 @@ export type Pattern = Node & {
   tripsForDate?: Maybe<Array<Trip>>;
 };
 
+
 /** Pattern is sequence of stops used by trips on a specific direction and variant of a route. Most routes have only two patterns: one for outbound trips and one for inbound trips */
 export type PatternTripsForDateArgs = {
   serviceDate?: InputMaybe<Scalars['String']>;
@@ -643,7 +637,7 @@ export enum PickupDropoffType {
   /** No pickup / drop off available. */
   None = 'NONE',
   /** Regularly scheduled pickup / drop off. */
-  Scheduled = 'SCHEDULED',
+  Scheduled = 'SCHEDULED'
 }
 
 export type Place = {
@@ -722,7 +716,7 @@ export enum Qualifier {
   /** The user can be picked up by someone else riding a vehicle */
   Pickup = 'PICKUP',
   /** The vehicle used for transport can be rented */
-  Rent = 'RENT',
+  Rent = 'RENT'
 }
 
 export type QueryType = {
@@ -795,9 +789,11 @@ export type QueryType = {
   viewer?: Maybe<QueryType>;
 };
 
+
 export type QueryTypeAgencyArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryTypeAlertsArgs = {
   cause?: InputMaybe<Array<AlertCauseType>>;
@@ -808,17 +804,21 @@ export type QueryTypeAlertsArgs = {
   stop?: InputMaybe<Array<Scalars['String']>>;
 };
 
+
 export type QueryTypeBikeParkArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryTypeBikeRentalStationArgs = {
   id: Scalars['String'];
 };
 
+
 export type QueryTypeBikeRentalStationsArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
+
 
 export type QueryTypeCancelledTripTimesArgs = {
   feeds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -833,21 +833,26 @@ export type QueryTypeCancelledTripTimesArgs = {
   trips?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
+
 export type QueryTypeCarParkArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryTypeCarParksArgs = {
   ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
 };
 
+
 export type QueryTypeClusterArgs = {
   id: Scalars['String'];
 };
 
+
 export type QueryTypeDepartureRowArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryTypeFuzzyTripArgs = {
   date: Scalars['String'];
@@ -855,6 +860,7 @@ export type QueryTypeFuzzyTripArgs = {
   route: Scalars['String'];
   time: Scalars['Int'];
 };
+
 
 export type QueryTypeNearestArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -870,13 +876,16 @@ export type QueryTypeNearestArgs = {
   maxResults?: InputMaybe<Scalars['Int']>;
 };
 
+
 export type QueryTypeNodeArgs = {
   id: Scalars['ID'];
 };
 
+
 export type QueryTypePatternArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryTypePlanArgs = {
   alightSlack?: InputMaybe<Scalars['Int']>;
@@ -935,9 +944,11 @@ export type QueryTypePlanArgs = {
   wheelchair?: InputMaybe<Scalars['Boolean']>;
 };
 
+
 export type QueryTypeRouteArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryTypeRoutesArgs = {
   feeds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -947,9 +958,11 @@ export type QueryTypeRoutesArgs = {
   transportModes?: InputMaybe<Array<InputMaybe<Mode>>>;
 };
 
+
 export type QueryTypeStationArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryTypeStationsArgs = {
   feeds?: InputMaybe<Array<Scalars['String']>>;
@@ -958,9 +971,11 @@ export type QueryTypeStationsArgs = {
   name?: InputMaybe<Scalars['String']>;
 };
 
+
 export type QueryTypeStopArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryTypeStopsArgs = {
   feeds?: InputMaybe<Array<Scalars['String']>>;
@@ -968,6 +983,7 @@ export type QueryTypeStopsArgs = {
   maxResults?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
 };
+
 
 export type QueryTypeStopsByBboxArgs = {
   agency?: InputMaybe<Scalars['String']>;
@@ -977,6 +993,7 @@ export type QueryTypeStopsByBboxArgs = {
   minLat: Scalars['Float'];
   minLon: Scalars['Float'];
 };
+
 
 export type QueryTypeStopsByRadiusArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -990,9 +1007,11 @@ export type QueryTypeStopsByRadiusArgs = {
   radius: Scalars['Int'];
 };
 
+
 export type QueryTypeTripArgs = {
   id: Scalars['String'];
 };
+
 
 export type QueryTypeTripsArgs = {
   feeds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
@@ -1008,7 +1027,7 @@ export enum RealtimeState {
   /** The trip information comes from the GTFS feed, i.e. no real-time update has been applied. */
   Scheduled = 'SCHEDULED',
   /** The trip information has been updated, but the trip pattern stayed the same as the trip pattern of the scheduled trip. */
-  Updated = 'UPDATED',
+  Updated = 'UPDATED'
 }
 
 /** Route represents a public transportation service, usually from point A to point B and *back*, shown to customers under a single name, e.g. bus 550. Routes contain patterns (see field `patterns`), which describe different variants of the route, e.g. outbound pattern from point A to point B and inbound pattern from point B to point A. */
@@ -1046,64 +1065,64 @@ export type Route = Node & {
 };
 
 /** Stop can represent either a single public transport stop, where passengers can board and/or disembark vehicles, or a station, which contains multiple stops. See field `locationType`. */
-export type Stop = Node &
-  PlaceInterface & {
-    __typename?: 'Stop';
-    /** List of alerts which have an effect on this stop */
-    alerts?: Maybe<Array<Maybe<Alert>>>;
-    /** The cluster which this stop is part of */
-    cluster?: Maybe<Cluster>;
-    /** Stop code which is visible at the stop */
-    code?: Maybe<Scalars['String']>;
-    /** Description of the stop, usually a street name */
-    desc?: Maybe<Scalars['String']>;
-    direction?: Maybe<Scalars['String']>;
-    /** ÌD of the stop in format `FeedId:StopId` */
-    gtfsId: Scalars['String'];
-    /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-    id: Scalars['ID'];
-    /** Latitude of the stop (WGS 84) */
-    lat?: Maybe<Scalars['Float']>;
-    /** Identifies whether this stop represents a stop or station. */
-    locationType?: Maybe<LocationType>;
-    /** Longitude of the stop (WGS 84) */
-    lon?: Maybe<Scalars['Float']>;
-    /** Name of the stop, e.g. Pasilan asema */
-    name: Scalars['String'];
-    /** The station which this stop is part of (or null if this stop is not part of a station) */
-    parentStation?: Maybe<Stop>;
-    /** Patterns which pass through this stop */
-    patterns?: Maybe<Array<Maybe<Pattern>>>;
-    /** Identifier of the platform, usually a number. This value is only present for stops that are part of a station */
-    platformCode?: Maybe<Scalars['String']>;
-    /** Routes which pass through this stop */
-    routes?: Maybe<Array<Route>>;
-    /** Returns timetable of the specified pattern at this stop */
-    stopTimesForPattern?: Maybe<Array<Maybe<Stoptime>>>;
-    /** Returns all stops that are children of this station (Only applicable for stations) */
-    stops?: Maybe<Array<Maybe<Stop>>>;
-    /** Returns list of stoptimes (arrivals and departures) at this stop, grouped by patterns */
-    stoptimesForPatterns?: Maybe<Array<Maybe<StoptimesInPattern>>>;
-    /** Returns list of stoptimes for the specified date */
-    stoptimesForServiceDate?: Maybe<Array<Maybe<StoptimesInPattern>>>;
-    /** Returns list of stoptimes (arrivals and departures) at this stop */
-    stoptimesWithoutPatterns?: Maybe<Array<Maybe<Stoptime>>>;
-    timezone?: Maybe<Scalars['String']>;
-    /** List of nearby stops which can be used for transfers */
-    transfers?: Maybe<Array<Maybe<StopAtDistance>>>;
-    url?: Maybe<Scalars['String']>;
-    /**
-     * Transport mode (e.g. `BUS`) used by routes which pass through this stop or `null` if mode cannot be determined, e.g. in case no routes pass through the stop.
-     *  Note that also other types of vehicles may use the stop, e.g. tram replacement buses might use stops which have `TRAM` as their mode.
-     */
-    vehicleMode?: Maybe<Mode>;
-    /** The raw GTFS route type used by routes which pass through this stop. For the list of possible values, see: https://developers.google.com/transit/gtfs/reference/#routestxt and https://developers.google.com/transit/gtfs/reference/extended-route-types */
-    vehicleType?: Maybe<Scalars['Int']>;
-    /** Whether wheelchair boarding is possible for at least some of vehicles on this stop */
-    wheelchairBoarding?: Maybe<WheelchairBoarding>;
-    /** ID of the zone where this stop is located */
-    zoneId?: Maybe<Scalars['String']>;
-  };
+export type Stop = Node & PlaceInterface & {
+  __typename?: 'Stop';
+  /** List of alerts which have an effect on this stop */
+  alerts?: Maybe<Array<Maybe<Alert>>>;
+  /** The cluster which this stop is part of */
+  cluster?: Maybe<Cluster>;
+  /** Stop code which is visible at the stop */
+  code?: Maybe<Scalars['String']>;
+  /** Description of the stop, usually a street name */
+  desc?: Maybe<Scalars['String']>;
+  direction?: Maybe<Scalars['String']>;
+  /** ÌD of the stop in format `FeedId:StopId` */
+  gtfsId: Scalars['String'];
+  /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
+  id: Scalars['ID'];
+  /** Latitude of the stop (WGS 84) */
+  lat?: Maybe<Scalars['Float']>;
+  /** Identifies whether this stop represents a stop or station. */
+  locationType?: Maybe<LocationType>;
+  /** Longitude of the stop (WGS 84) */
+  lon?: Maybe<Scalars['Float']>;
+  /** Name of the stop, e.g. Pasilan asema */
+  name: Scalars['String'];
+  /** The station which this stop is part of (or null if this stop is not part of a station) */
+  parentStation?: Maybe<Stop>;
+  /** Patterns which pass through this stop */
+  patterns?: Maybe<Array<Maybe<Pattern>>>;
+  /** Identifier of the platform, usually a number. This value is only present for stops that are part of a station */
+  platformCode?: Maybe<Scalars['String']>;
+  /** Routes which pass through this stop */
+  routes?: Maybe<Array<Route>>;
+  /** Returns timetable of the specified pattern at this stop */
+  stopTimesForPattern?: Maybe<Array<Maybe<Stoptime>>>;
+  /** Returns all stops that are children of this station (Only applicable for stations) */
+  stops?: Maybe<Array<Maybe<Stop>>>;
+  /** Returns list of stoptimes (arrivals and departures) at this stop, grouped by patterns */
+  stoptimesForPatterns?: Maybe<Array<Maybe<StoptimesInPattern>>>;
+  /** Returns list of stoptimes for the specified date */
+  stoptimesForServiceDate?: Maybe<Array<Maybe<StoptimesInPattern>>>;
+  /** Returns list of stoptimes (arrivals and departures) at this stop */
+  stoptimesWithoutPatterns?: Maybe<Array<Maybe<Stoptime>>>;
+  timezone?: Maybe<Scalars['String']>;
+  /** List of nearby stops which can be used for transfers */
+  transfers?: Maybe<Array<Maybe<StopAtDistance>>>;
+  url?: Maybe<Scalars['String']>;
+  /**
+   * Transport mode (e.g. `BUS`) used by routes which pass through this stop or `null` if mode cannot be determined, e.g. in case no routes pass through the stop.
+   *  Note that also other types of vehicles may use the stop, e.g. tram replacement buses might use stops which have `TRAM` as their mode.
+   */
+  vehicleMode?: Maybe<Mode>;
+  /** The raw GTFS route type used by routes which pass through this stop. For the list of possible values, see: https://developers.google.com/transit/gtfs/reference/#routestxt and https://developers.google.com/transit/gtfs/reference/extended-route-types */
+  vehicleType?: Maybe<Scalars['Int']>;
+  /** Whether wheelchair boarding is possible for at least some of vehicles on this stop */
+  wheelchairBoarding?: Maybe<WheelchairBoarding>;
+  /** ID of the zone where this stop is located */
+  zoneId?: Maybe<Scalars['String']>;
+};
+
 
 /** Stop can represent either a single public transport stop, where passengers can board and/or disembark vehicles, or a station, which contains multiple stops. See field `locationType`. */
 export type StopStopTimesForPatternArgs = {
@@ -1115,6 +1134,7 @@ export type StopStopTimesForPatternArgs = {
   timeRange?: InputMaybe<Scalars['Int']>;
 };
 
+
 /** Stop can represent either a single public transport stop, where passengers can board and/or disembark vehicles, or a station, which contains multiple stops. See field `locationType`. */
 export type StopStoptimesForPatternsArgs = {
   numberOfDepartures?: InputMaybe<Scalars['Int']>;
@@ -1124,12 +1144,14 @@ export type StopStoptimesForPatternsArgs = {
   timeRange?: InputMaybe<Scalars['Int']>;
 };
 
+
 /** Stop can represent either a single public transport stop, where passengers can board and/or disembark vehicles, or a station, which contains multiple stops. See field `locationType`. */
 export type StopStoptimesForServiceDateArgs = {
   date?: InputMaybe<Scalars['String']>;
   omitCanceled?: InputMaybe<Scalars['Boolean']>;
   omitNonPickups?: InputMaybe<Scalars['Boolean']>;
 };
+
 
 /** Stop can represent either a single public transport stop, where passengers can board and/or disembark vehicles, or a station, which contains multiple stops. See field `locationType`. */
 export type StopStoptimesWithoutPatternsArgs = {
@@ -1139,6 +1161,7 @@ export type StopStoptimesWithoutPatternsArgs = {
   startTime?: InputMaybe<Scalars['Long']>;
   timeRange?: InputMaybe<Scalars['Int']>;
 };
+
 
 /** Stop can represent either a single public transport stop, where passengers can board and/or disembark vehicles, or a station, which contains multiple stops. See field `locationType`. */
 export type StopTransfersArgs = {
@@ -1270,15 +1293,18 @@ export type Trip = Node & {
   wheelchairAccessible?: Maybe<WheelchairBoarding>;
 };
 
+
 /** Trip is a specific occurance of a pattern, usually identified by route, direction on the route and exact departure time. */
 export type TripArrivalStoptimeArgs = {
   serviceDate?: InputMaybe<Scalars['String']>;
 };
 
+
 /** Trip is a specific occurance of a pattern, usually identified by route, direction on the route and exact departure time. */
 export type TripDepartureStoptimeArgs = {
   serviceDate?: InputMaybe<Scalars['String']>;
 };
+
 
 /** Trip is a specific occurance of a pattern, usually identified by route, direction on the route and exact departure time. */
 export type TripStoptimesForDateArgs = {
@@ -1296,7 +1322,7 @@ export enum VertexType {
   /** PARKANDRIDE */
   Parkandride = 'PARKANDRIDE',
   /** TRANSIT */
-  Transit = 'TRANSIT',
+  Transit = 'TRANSIT'
 }
 
 export enum WheelchairBoarding {
@@ -1305,7 +1331,7 @@ export enum WheelchairBoarding {
   /** There is no accessibility information for the stop. */
   NoInformation = 'NO_INFORMATION',
   /** At least some vehicles at this stop can be boarded by a rider in a wheelchair. */
-  Possible = 'POSSIBLE',
+  Possible = 'POSSIBLE'
 }
 
 export type DebugOutput = {
@@ -1422,2825 +1448,75 @@ export type GetAlertsForStationsQueryVariables = Exact<{
   ids: Array<Scalars['String']> | Scalars['String'];
 }>;
 
-export type GetAlertsForStationsQuery = {
-  __typename?: 'QueryType';
-  stations?: Array<{
-    __typename?: 'Stop';
-    lon?: number | null;
-    lat?: number | null;
-    stops?: Array<{
-      __typename?: 'Stop';
-      routes?: Array<{
-        __typename?: 'Route';
-        alerts?: Array<{
-          __typename?: 'Alert';
-          alertSeverityLevel?: AlertSeverityLevelType | null;
-          alertHeaderText?: string | null;
-          effectiveEndDate?: any | null;
-          effectiveStartDate?: any | null;
-          alertHeaderTextTranslations: Array<{
-            __typename?: 'TranslatedString';
-            text?: string | null;
-            language?: string | null;
-          }>;
-          alertDescriptionTextTranslations: Array<{
-            __typename?: 'TranslatedString';
-            text?: string | null;
-            language?: string | null;
-          }>;
-          stop?: {
-            __typename?: 'Stop';
-            gtfsId: string;
-            code?: string | null;
-          } | null;
-        } | null> | null;
-      }> | null;
-      alerts?: Array<{
-        __typename?: 'Alert';
-        alertSeverityLevel?: AlertSeverityLevelType | null;
-        alertHeaderText?: string | null;
-        effectiveEndDate?: any | null;
-        effectiveStartDate?: any | null;
-        alertHeaderTextTranslations: Array<{
-          __typename?: 'TranslatedString';
-          text?: string | null;
-          language?: string | null;
-        }>;
-        alertDescriptionTextTranslations: Array<{
-          __typename?: 'TranslatedString';
-          text?: string | null;
-          language?: string | null;
-        }>;
-        stop?: {
-          __typename?: 'Stop';
-          gtfsId: string;
-          code?: string | null;
-        } | null;
-      } | null> | null;
-    } | null> | null;
-  } | null> | null;
-};
+
+export type GetAlertsForStationsQuery = { __typename?: 'QueryType', stations?: Array<{ __typename?: 'Stop', lon?: number | null, lat?: number | null, stops?: Array<{ __typename?: 'Stop', routes?: Array<{ __typename?: 'Route', alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null } | null> | null } | null> | null };
 
 export type GetAlertsForStopsQueryVariables = Exact<{
   ids: Array<Scalars['String']> | Scalars['String'];
 }>;
 
-export type GetAlertsForStopsQuery = {
-  __typename?: 'QueryType';
-  stops?: Array<{
-    __typename?: 'Stop';
-    lat?: number | null;
-    lon?: number | null;
-    alerts?: Array<{
-      __typename?: 'Alert';
-      alertSeverityLevel?: AlertSeverityLevelType | null;
-      alertHeaderText?: string | null;
-      effectiveEndDate?: any | null;
-      effectiveStartDate?: any | null;
-      alertHeaderTextTranslations: Array<{
-        __typename?: 'TranslatedString';
-        text?: string | null;
-        language?: string | null;
-      }>;
-      alertDescriptionTextTranslations: Array<{
-        __typename?: 'TranslatedString';
-        text?: string | null;
-        language?: string | null;
-      }>;
-      stop?: {
-        __typename?: 'Stop';
-        gtfsId: string;
-        code?: string | null;
-      } | null;
-    } | null> | null;
-    routes?: Array<{
-      __typename?: 'Route';
-      alerts?: Array<{
-        __typename?: 'Alert';
-        alertSeverityLevel?: AlertSeverityLevelType | null;
-        alertHeaderText?: string | null;
-        effectiveEndDate?: any | null;
-        effectiveStartDate?: any | null;
-        alertHeaderTextTranslations: Array<{
-          __typename?: 'TranslatedString';
-          text?: string | null;
-          language?: string | null;
-        }>;
-        alertDescriptionTextTranslations: Array<{
-          __typename?: 'TranslatedString';
-          text?: string | null;
-          language?: string | null;
-        }>;
-        stop?: {
-          __typename?: 'Stop';
-          gtfsId: string;
-          code?: string | null;
-        } | null;
-      } | null> | null;
-    }> | null;
-  } | null> | null;
-};
+
+export type GetAlertsForStopsQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', lat?: number | null, lon?: number | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null, routes?: Array<{ __typename?: 'Route', alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null } | null> | null };
 
 export type GetDeparturesForStationsQueryVariables = Exact<{
   ids: Array<Scalars['String']> | Scalars['String'];
   numberOfDepartures: Scalars['Int'];
 }>;
 
-export type GetDeparturesForStationsQuery = {
-  __typename?: 'QueryType';
-  stations?: Array<{
-    __typename?: 'Stop';
-    name: string;
-    code?: string | null;
-    lat?: number | null;
-    lon?: number | null;
-    gtfsId: string;
-    stops?: Array<{
-      __typename?: 'Stop';
-      gtfsId: string;
-      patterns?: Array<{
-        __typename?: 'Pattern';
-        headsign?: string | null;
-      } | null> | null;
-      routes?: Array<{
-        __typename?: 'Route';
-        longName?: string | null;
-        id: string;
-        alerts?: Array<{
-          __typename?: 'Alert';
-          alertSeverityLevel?: AlertSeverityLevelType | null;
-          alertHeaderText?: string | null;
-          effectiveEndDate?: any | null;
-          effectiveStartDate?: any | null;
-          alertHeaderTextTranslations: Array<{
-            __typename?: 'TranslatedString';
-            text?: string | null;
-            language?: string | null;
-          }>;
-          alertDescriptionTextTranslations: Array<{
-            __typename?: 'TranslatedString';
-            text?: string | null;
-            language?: string | null;
-          }>;
-          stop?: {
-            __typename?: 'Stop';
-            gtfsId: string;
-            code?: string | null;
-          } | null;
-        } | null> | null;
-      }> | null;
-      alerts?: Array<{
-        __typename?: 'Alert';
-        alertSeverityLevel?: AlertSeverityLevelType | null;
-        alertHeaderText?: string | null;
-        effectiveEndDate?: any | null;
-        effectiveStartDate?: any | null;
-        alertHeaderTextTranslations: Array<{
-          __typename?: 'TranslatedString';
-          text?: string | null;
-          language?: string | null;
-        }>;
-        alertDescriptionTextTranslations: Array<{
-          __typename?: 'TranslatedString';
-          text?: string | null;
-          language?: string | null;
-        }>;
-        stop?: {
-          __typename?: 'Stop';
-          gtfsId: string;
-          code?: string | null;
-        } | null;
-      } | null> | null;
-    } | null> | null;
-    stoptimesForPatterns?: Array<{
-      __typename?: 'StoptimesInPattern';
-      pattern?: {
-        __typename?: 'Pattern';
-        code: string;
-        directionId?: number | null;
-        headsign?: string | null;
-        route: {
-          __typename?: 'Route';
-          gtfsId: string;
-          shortName?: string | null;
-        };
-      } | null;
-      stoptimes?: Array<{
-        __typename?: 'Stoptime';
-        realtime?: boolean | null;
-        pickupType?: PickupDropoffType | null;
-        serviceDay?: any | null;
-        scheduledDeparture?: number | null;
-        realtimeDeparture?: number | null;
-        realtimeState?: RealtimeState | null;
-        headsign?: string | null;
-        stop?: {
-          __typename?: 'Stop';
-          gtfsId: string;
-          code?: string | null;
-          platformCode?: string | null;
-          parentStation?: { __typename?: 'Stop'; gtfsId: string } | null;
-        } | null;
-        trip?: {
-          __typename?: 'Trip';
-          tripHeadsign?: string | null;
-          gtfsId: string;
-          route: {
-            __typename?: 'Route';
-            gtfsId: string;
-            shortName?: string | null;
-          };
-        } | null;
-      } | null> | null;
-    } | null> | null;
-  } | null> | null;
-};
+
+export type GetDeparturesForStationsQuery = { __typename?: 'QueryType', stations?: Array<{ __typename?: 'Stop', name: string, code?: string | null, lat?: number | null, lon?: number | null, gtfsId: string, stops?: Array<{ __typename?: 'Stop', gtfsId: string, patterns?: Array<{ __typename?: 'Pattern', headsign?: string | null } | null> | null, routes?: Array<{ __typename?: 'Route', longName?: string | null, id: string, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null } | null> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, directionId?: number | null, headsign?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null, stoptimes?: Array<{ __typename?: 'Stoptime', realtime?: boolean | null, pickupType?: PickupDropoffType | null, serviceDay?: any | null, scheduledDeparture?: number | null, realtimeDeparture?: number | null, realtimeState?: RealtimeState | null, headsign?: string | null, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null, platformCode?: string | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null } | null, trip?: { __typename?: 'Trip', tripHeadsign?: string | null, gtfsId: string, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null } | null> | null } | null> | null } | null> | null };
 
 export type GetDeparturesForStopsQueryVariables = Exact<{
   ids: Array<Scalars['String']> | Scalars['String'];
   numberOfDepartures: Scalars['Int'];
 }>;
 
-export type GetDeparturesForStopsQuery = {
-  __typename?: 'QueryType';
-  stops?: Array<{
-    __typename?: 'Stop';
-    name: string;
-    code?: string | null;
-    gtfsId: string;
-    lat?: number | null;
-    lon?: number | null;
-    patterns?: Array<{
-      __typename?: 'Pattern';
-      headsign?: string | null;
-    } | null> | null;
-    alerts?: Array<{
-      __typename?: 'Alert';
-      alertSeverityLevel?: AlertSeverityLevelType | null;
-      alertHeaderText?: string | null;
-      effectiveEndDate?: any | null;
-      effectiveStartDate?: any | null;
-      alertHeaderTextTranslations: Array<{
-        __typename?: 'TranslatedString';
-        text?: string | null;
-        language?: string | null;
-      }>;
-      alertDescriptionTextTranslations: Array<{
-        __typename?: 'TranslatedString';
-        text?: string | null;
-        language?: string | null;
-      }>;
-      stop?: {
-        __typename?: 'Stop';
-        gtfsId: string;
-        code?: string | null;
-      } | null;
-    } | null> | null;
-    routes?: Array<{
-      __typename?: 'Route';
-      longName?: string | null;
-      id: string;
-      alerts?: Array<{
-        __typename?: 'Alert';
-        alertSeverityLevel?: AlertSeverityLevelType | null;
-        alertHeaderText?: string | null;
-        effectiveEndDate?: any | null;
-        effectiveStartDate?: any | null;
-        alertHeaderTextTranslations: Array<{
-          __typename?: 'TranslatedString';
-          text?: string | null;
-          language?: string | null;
-        }>;
-        alertDescriptionTextTranslations: Array<{
-          __typename?: 'TranslatedString';
-          text?: string | null;
-          language?: string | null;
-        }>;
-        stop?: {
-          __typename?: 'Stop';
-          gtfsId: string;
-          code?: string | null;
-        } | null;
-      } | null> | null;
-    }> | null;
-    stoptimesForPatterns?: Array<{
-      __typename?: 'StoptimesInPattern';
-      pattern?: {
-        __typename?: 'Pattern';
-        code: string;
-        directionId?: number | null;
-        headsign?: string | null;
-        route: {
-          __typename?: 'Route';
-          gtfsId: string;
-          shortName?: string | null;
-        };
-      } | null;
-      stoptimes?: Array<{
-        __typename?: 'Stoptime';
-        realtime?: boolean | null;
-        pickupType?: PickupDropoffType | null;
-        serviceDay?: any | null;
-        scheduledDeparture?: number | null;
-        realtimeDeparture?: number | null;
-        realtimeState?: RealtimeState | null;
-        headsign?: string | null;
-        stop?: {
-          __typename?: 'Stop';
-          gtfsId: string;
-          code?: string | null;
-          platformCode?: string | null;
-          parentStation?: { __typename?: 'Stop'; gtfsId: string } | null;
-        } | null;
-        trip?: {
-          __typename?: 'Trip';
-          tripHeadsign?: string | null;
-          gtfsId: string;
-          route: { __typename?: 'Route'; shortName?: string | null };
-        } | null;
-      } | null> | null;
-    } | null> | null;
-  } | null> | null;
-};
+
+export type GetDeparturesForStopsQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', name: string, code?: string | null, gtfsId: string, lat?: number | null, lon?: number | null, patterns?: Array<{ __typename?: 'Pattern', headsign?: string | null } | null> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null, routes?: Array<{ __typename?: 'Route', longName?: string | null, id: string, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, directionId?: number | null, headsign?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null, stoptimes?: Array<{ __typename?: 'Stoptime', realtime?: boolean | null, pickupType?: PickupDropoffType | null, serviceDay?: any | null, scheduledDeparture?: number | null, realtimeDeparture?: number | null, realtimeState?: RealtimeState | null, headsign?: string | null, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null, platformCode?: string | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null } | null, trip?: { __typename?: 'Trip', tripHeadsign?: string | null, gtfsId: string, route: { __typename?: 'Route', shortName?: string | null } } | null } | null> | null } | null> | null } | null> | null };
 
 export type GetLineIdsQueryVariables = Exact<{
-  stations:
-    | Array<InputMaybe<Scalars['String']>>
-    | InputMaybe<Scalars['String']>;
+  stations: Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>;
   stops: Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>;
 }>;
 
-export type GetLineIdsQuery = {
-  __typename?: 'QueryType';
-  stations?: Array<{
-    __typename?: 'Stop';
-    name: string;
-    gtfsId: string;
-    stops?: Array<{
-      __typename?: 'Stop';
-      gtfsId: string;
-      name: string;
-      stoptimesForPatterns?: Array<{
-        __typename?: 'StoptimesInPattern';
-        pattern?: {
-          __typename?: 'Pattern';
-          code: string;
-          headsign?: string | null;
-          route: {
-            __typename?: 'Route';
-            gtfsId: string;
-            shortName?: string | null;
-          };
-        } | null;
-      } | null> | null;
-    } | null> | null;
-  } | null> | null;
-  stops?: Array<{
-    __typename?: 'Stop';
-    gtfsId: string;
-    name: string;
-    parentStation?: { __typename?: 'Stop'; gtfsId: string } | null;
-    stoptimesForPatterns?: Array<{
-      __typename?: 'StoptimesInPattern';
-      pattern?: {
-        __typename?: 'Pattern';
-        code: string;
-        headsign?: string | null;
-        route: {
-          __typename?: 'Route';
-          gtfsId: string;
-          shortName?: string | null;
-        };
-      } | null;
-    } | null> | null;
-  } | null> | null;
-};
+
+export type GetLineIdsQuery = { __typename?: 'QueryType', stations?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, stops?: Array<{ __typename?: 'Stop', gtfsId: string, name: string, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, headsign?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null } | null> | null } | null> | null } | null> | null, stops?: Array<{ __typename?: 'Stop', gtfsId: string, name: string, parentStation?: { __typename?: 'Stop', gtfsId: string } | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, headsign?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null } | null> | null } | null> | null };
 
 export type GetStopsForOldMonitorsQueryVariables = Exact<{
   ids: Array<Scalars['String']> | Scalars['String'];
 }>;
 
-export type GetStopsForOldMonitorsQuery = {
-  __typename?: 'QueryType';
-  stops?: Array<{
-    __typename?: 'Stop';
-    name: string;
-    gtfsId: string;
-    locationType?: LocationType | null;
-  } | null> | null;
-};
+
+export type GetStopsForOldMonitorsQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, locationType?: LocationType | null } | null> | null };
 
 export type GetStopsForStopMonitorQueryVariables = Exact<{
   ids: Array<Scalars['String']> | Scalars['String'];
 }>;
 
-export type GetStopsForStopMonitorQuery = {
-  __typename?: 'QueryType';
-  stops?: Array<{
-    __typename?: 'Stop';
-    name: string;
-    gtfsId: string;
-    locationType?: LocationType | null;
-    lat?: number | null;
-    lon?: number | null;
-  } | null> | null;
-};
+
+export type GetStopsForStopMonitorQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, locationType?: LocationType | null, lat?: number | null, lon?: number | null } | null> | null };
 
 export type StationQueryQueryVariables = Exact<{
-  ids?: InputMaybe<
-    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
-  >;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
 }>;
 
-export type StationQueryQuery = {
-  __typename?: 'QueryType';
-  station?: Array<{
-    __typename?: 'Stop';
-    id: string;
-    name: string;
-    code?: string | null;
-    desc?: string | null;
-    gtfsId: string;
-    platformCode?: string | null;
-    locationType?: LocationType | null;
-    vehicleMode?: Mode | null;
-    stops?: Array<{
-      __typename?: 'Stop';
-      desc?: string | null;
-      code?: string | null;
-      patterns?: Array<{
-        __typename?: 'Pattern';
-        code: string;
-        headsign?: string | null;
-        route: {
-          __typename?: 'Route';
-          mode?: Mode | null;
-          type?: number | null;
-          shortName?: string | null;
-          gtfsId: string;
-        };
-      } | null> | null;
-      stoptimesForPatterns?: Array<{
-        __typename?: 'StoptimesInPattern';
-        pattern?: {
-          __typename?: 'Pattern';
-          code: string;
-          headsign?: string | null;
-          route: {
-            __typename?: 'Route';
-            mode?: Mode | null;
-            type?: number | null;
-            shortName?: string | null;
-            gtfsId: string;
-          };
-        } | null;
-      } | null> | null;
-      routes?: Array<{
-        __typename?: 'Route';
-        shortName?: string | null;
-        gtfsId: string;
-      }> | null;
-    } | null> | null;
-  } | null> | null;
-};
+
+export type StationQueryQuery = { __typename?: 'QueryType', station?: Array<{ __typename?: 'Stop', id: string, name: string, code?: string | null, desc?: string | null, gtfsId: string, platformCode?: string | null, locationType?: LocationType | null, vehicleMode?: Mode | null, stops?: Array<{ __typename?: 'Stop', desc?: string | null, code?: string | null, patterns?: Array<{ __typename?: 'Pattern', code: string, headsign?: string | null, route: { __typename?: 'Route', mode?: Mode | null, type?: number | null, shortName?: string | null, gtfsId: string } } | null> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, headsign?: string | null, route: { __typename?: 'Route', mode?: Mode | null, type?: number | null, shortName?: string | null, gtfsId: string } } | null } | null> | null, routes?: Array<{ __typename?: 'Route', shortName?: string | null, gtfsId: string }> | null } | null> | null } | null> | null };
 
 export type StopQueryQueryVariables = Exact<{
-  ids?: InputMaybe<
-    Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>
-  >;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
 }>;
 
-export type StopQueryQuery = {
-  __typename?: 'QueryType';
-  stop?: Array<{
-    __typename?: 'Stop';
-    id: string;
-    name: string;
-    code?: string | null;
-    desc?: string | null;
-    gtfsId: string;
-    platformCode?: string | null;
-    locationType?: LocationType | null;
-    vehicleMode?: Mode | null;
-    parentStation?: { __typename?: 'Stop'; gtfsId: string } | null;
-    patterns?: Array<{
-      __typename?: 'Pattern';
-      code: string;
-      headsign?: string | null;
-      route: {
-        __typename?: 'Route';
-        mode?: Mode | null;
-        type?: number | null;
-        shortName?: string | null;
-        gtfsId: string;
-      };
-    } | null> | null;
-    stoptimesForPatterns?: Array<{
-      __typename?: 'StoptimesInPattern';
-      pattern?: {
-        __typename?: 'Pattern';
-        code: string;
-        headsign?: string | null;
-        route: {
-          __typename?: 'Route';
-          mode?: Mode | null;
-          type?: number | null;
-          shortName?: string | null;
-          gtfsId: string;
-        };
-      } | null;
-    } | null> | null;
-    routes?: Array<{
-      __typename?: 'Route';
-      shortName?: string | null;
-      gtfsId: string;
-    }> | null;
-  } | null> | null;
-};
 
-export const GetAlertsForStationsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetAlertsForStations' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NonNullType',
-                type: {
-                  kind: 'NamedType',
-                  name: { kind: 'Name', value: 'String' },
-                },
-              },
-            },
-          },
-        },
-      ],
-      directives: [
-        {
-          kind: 'Directive',
-          name: { kind: 'Name', value: 'api' },
-          arguments: [
-            {
-              kind: 'Argument',
-              name: { kind: 'Name', value: 'contextKey' },
-              value: { kind: 'StringValue', value: 'clientName', block: false },
-            },
-          ],
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            alias: { kind: 'Name', value: 'stations' },
-            name: { kind: 'Name', value: 'stations' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'ids' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'lon' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'lat' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'stops' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'routes' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'alerts' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'alertSeverityLevel',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'alertHeaderText',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'alertHeaderTextTranslations',
-                                    },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'text' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'language',
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'alertDescriptionTextTranslations',
-                                    },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'text' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'language',
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'effectiveEndDate',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'effectiveStartDate',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'stop' },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'gtfsId',
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'code' },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'alerts' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertSeverityLevel',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'alertHeaderText' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertHeaderTextTranslations',
-                              },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'text' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'language' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertDescriptionTextTranslations',
-                              },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'text' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'language' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'effectiveEndDate' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'effectiveStartDate',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'stop' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'code' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetAlertsForStationsQuery,
-  GetAlertsForStationsQueryVariables
->;
-export const GetAlertsForStopsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetAlertsForStops' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NonNullType',
-                type: {
-                  kind: 'NamedType',
-                  name: { kind: 'Name', value: 'String' },
-                },
-              },
-            },
-          },
-        },
-      ],
-      directives: [
-        {
-          kind: 'Directive',
-          name: { kind: 'Name', value: 'api' },
-          arguments: [
-            {
-              kind: 'Argument',
-              name: { kind: 'Name', value: 'contextKey' },
-              value: { kind: 'StringValue', value: 'clientName', block: false },
-            },
-          ],
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            alias: { kind: 'Name', value: 'stops' },
-            name: { kind: 'Name', value: 'stops' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'ids' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'alerts' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'alertSeverityLevel' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'alertHeaderText' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: {
-                          kind: 'Name',
-                          value: 'alertHeaderTextTranslations',
-                        },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'text' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'language' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: {
-                          kind: 'Name',
-                          value: 'alertDescriptionTextTranslations',
-                        },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'text' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'language' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'effectiveEndDate' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'effectiveStartDate' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'stop' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'gtfsId' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'code' },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'lat' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'lon' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'routes' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'alerts' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertSeverityLevel',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'alertHeaderText' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertHeaderTextTranslations',
-                              },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'text' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'language' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertDescriptionTextTranslations',
-                              },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'text' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'language' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'effectiveEndDate' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'effectiveStartDate',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'stop' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'code' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetAlertsForStopsQuery,
-  GetAlertsForStopsQueryVariables
->;
-export const GetDeparturesForStationsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetDeparturesForStations' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NonNullType',
-                type: {
-                  kind: 'NamedType',
-                  name: { kind: 'Name', value: 'String' },
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'numberOfDepartures' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          },
-        },
-      ],
-      directives: [
-        {
-          kind: 'Directive',
-          name: { kind: 'Name', value: 'api' },
-          arguments: [
-            {
-              kind: 'Argument',
-              name: { kind: 'Name', value: 'contextKey' },
-              value: { kind: 'StringValue', value: 'clientName', block: false },
-            },
-          ],
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            alias: { kind: 'Name', value: 'stations' },
-            name: { kind: 'Name', value: 'stations' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'ids' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'lat' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'lon' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'gtfsId' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'stops' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'patterns' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'headsign' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'routes' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'alerts' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'alertSeverityLevel',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'alertHeaderText',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'alertHeaderTextTranslations',
-                                    },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'text' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'language',
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'alertDescriptionTextTranslations',
-                                    },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'text' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'language',
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'effectiveEndDate',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'effectiveStartDate',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'stop' },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'gtfsId',
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'code' },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'longName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'id' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'gtfsId' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'alerts' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertSeverityLevel',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'alertHeaderText' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertHeaderTextTranslations',
-                              },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'text' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'language' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertDescriptionTextTranslations',
-                              },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'text' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'language' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'effectiveEndDate' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'effectiveStartDate',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'stop' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'code' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'stoptimesForPatterns' },
-                  arguments: [
-                    {
-                      kind: 'Argument',
-                      name: { kind: 'Name', value: 'numberOfDepartures' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'numberOfDepartures' },
-                      },
-                    },
-                    {
-                      kind: 'Argument',
-                      name: { kind: 'Name', value: 'omitCanceled' },
-                      value: { kind: 'BooleanValue', value: false },
-                    },
-                  ],
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'pattern' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'code' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'directionId' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'headsign' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'route' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'shortName' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'stoptimes' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'stop' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'code' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'platformCode',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'parentStation',
-                                    },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'gtfsId',
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'realtime' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'pickupType' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'serviceDay' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'scheduledDeparture',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'realtimeDeparture',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'realtimeState' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'headsign' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'trip' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'tripHeadsign',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'route' },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'gtfsId',
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'shortName',
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetDeparturesForStationsQuery,
-  GetDeparturesForStationsQueryVariables
->;
-export const GetDeparturesForStopsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetDeparturesForStops' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NonNullType',
-                type: {
-                  kind: 'NamedType',
-                  name: { kind: 'Name', value: 'String' },
-                },
-              },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'numberOfDepartures' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: { kind: 'NamedType', name: { kind: 'Name', value: 'Int' } },
-          },
-        },
-      ],
-      directives: [
-        {
-          kind: 'Directive',
-          name: { kind: 'Name', value: 'api' },
-          arguments: [
-            {
-              kind: 'Argument',
-              name: { kind: 'Name', value: 'contextKey' },
-              value: { kind: 'StringValue', value: 'clientName', block: false },
-            },
-          ],
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            alias: { kind: 'Name', value: 'stops' },
-            name: { kind: 'Name', value: 'stops' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'ids' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'gtfsId' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'lat' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'lon' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'patterns' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'headsign' },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'alerts' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'alertSeverityLevel' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'alertHeaderText' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: {
-                          kind: 'Name',
-                          value: 'alertHeaderTextTranslations',
-                        },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'text' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'language' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: {
-                          kind: 'Name',
-                          value: 'alertDescriptionTextTranslations',
-                        },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'text' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'language' },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'effectiveEndDate' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'effectiveStartDate' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'stop' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'gtfsId' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'code' },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'routes' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'alerts' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertSeverityLevel',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'alertHeaderText' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertHeaderTextTranslations',
-                              },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'text' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'language' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'alertDescriptionTextTranslations',
-                              },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'text' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'language' },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'effectiveEndDate' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'effectiveStartDate',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'stop' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'code' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'longName' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'stoptimesForPatterns' },
-                  arguments: [
-                    {
-                      kind: 'Argument',
-                      name: { kind: 'Name', value: 'numberOfDepartures' },
-                      value: {
-                        kind: 'Variable',
-                        name: { kind: 'Name', value: 'numberOfDepartures' },
-                      },
-                    },
-                    {
-                      kind: 'Argument',
-                      name: { kind: 'Name', value: 'omitCanceled' },
-                      value: { kind: 'BooleanValue', value: false },
-                    },
-                  ],
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'pattern' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'code' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'directionId' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'headsign' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'route' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'shortName' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'stoptimes' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'stop' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'code' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'platformCode',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'parentStation',
-                                    },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'gtfsId',
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'realtime' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'pickupType' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'serviceDay' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'scheduledDeparture',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: {
-                                kind: 'Name',
-                                value: 'realtimeDeparture',
-                              },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'realtimeState' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'headsign' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'trip' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: {
-                                      kind: 'Name',
-                                      value: 'tripHeadsign',
-                                    },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'route' },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'shortName',
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetDeparturesForStopsQuery,
-  GetDeparturesForStopsQueryVariables
->;
-export const GetLineIdsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'getLineIds' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'stations' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NamedType',
-                name: { kind: 'Name', value: 'String' },
-              },
-            },
-          },
-        },
-        {
-          kind: 'VariableDefinition',
-          variable: {
-            kind: 'Variable',
-            name: { kind: 'Name', value: 'stops' },
-          },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NamedType',
-                name: { kind: 'Name', value: 'String' },
-              },
-            },
-          },
-        },
-      ],
-      directives: [
-        {
-          kind: 'Directive',
-          name: { kind: 'Name', value: 'api' },
-          arguments: [
-            {
-              kind: 'Argument',
-              name: { kind: 'Name', value: 'contextKey' },
-              value: { kind: 'StringValue', value: 'clientName', block: false },
-            },
-          ],
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'stations' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'stations' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'gtfsId' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'stops' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'gtfsId' },
-                      },
-                      { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'stoptimesForPatterns' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'pattern' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'code' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'headsign' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'route' },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'gtfsId',
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'shortName',
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'stops' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'stops' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'gtfsId' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'parentStation' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'gtfsId' },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'stoptimesForPatterns' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'pattern' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'code' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'headsign' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'route' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'shortName' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<GetLineIdsQuery, GetLineIdsQueryVariables>;
-export const GetStopsForOldMonitorsDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetStopsForOldMonitors' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NonNullType',
-                type: {
-                  kind: 'NamedType',
-                  name: { kind: 'Name', value: 'String' },
-                },
-              },
-            },
-          },
-        },
-      ],
-      directives: [
-        {
-          kind: 'Directive',
-          name: { kind: 'Name', value: 'api' },
-          arguments: [
-            {
-              kind: 'Argument',
-              name: { kind: 'Name', value: 'contextKey' },
-              value: { kind: 'StringValue', value: 'clientName', block: false },
-            },
-          ],
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            alias: { kind: 'Name', value: 'stops' },
-            name: { kind: 'Name', value: 'stops' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'ids' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'gtfsId' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'locationType' },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetStopsForOldMonitorsQuery,
-  GetStopsForOldMonitorsQueryVariables
->;
-export const GetStopsForStopMonitorDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetStopsForStopMonitor' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
-          type: {
-            kind: 'NonNullType',
-            type: {
-              kind: 'ListType',
-              type: {
-                kind: 'NonNullType',
-                type: {
-                  kind: 'NamedType',
-                  name: { kind: 'Name', value: 'String' },
-                },
-              },
-            },
-          },
-        },
-      ],
-      directives: [
-        {
-          kind: 'Directive',
-          name: { kind: 'Name', value: 'api' },
-          arguments: [
-            {
-              kind: 'Argument',
-              name: { kind: 'Name', value: 'contextKey' },
-              value: { kind: 'StringValue', value: 'clientName', block: false },
-            },
-          ],
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            alias: { kind: 'Name', value: 'stops' },
-            name: { kind: 'Name', value: 'stops' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'ids' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'gtfsId' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'locationType' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'lat' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'lon' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetStopsForStopMonitorQuery,
-  GetStopsForStopMonitorQueryVariables
->;
-export const StationQueryDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'stationQuery' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
-          type: {
-            kind: 'ListType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-      ],
-      directives: [
-        {
-          kind: 'Directive',
-          name: { kind: 'Name', value: 'api' },
-          arguments: [
-            {
-              kind: 'Argument',
-              name: { kind: 'Name', value: 'contextKey' },
-              value: { kind: 'StringValue', value: 'clientName', block: false },
-            },
-          ],
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            alias: { kind: 'Name', value: 'station' },
-            name: { kind: 'Name', value: 'stations' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'ids' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'desc' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'gtfsId' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'platformCode' },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'locationType' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'vehicleMode' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'stops' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'desc' } },
-                      { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'patterns' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'code' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'headsign' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'route' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'mode' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'type' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'shortName' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'stoptimesForPatterns' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'pattern' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'code' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'headsign' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'route' },
-                                    selectionSet: {
-                                      kind: 'SelectionSet',
-                                      selections: [
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'mode' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: { kind: 'Name', value: 'type' },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'shortName',
-                                          },
-                                        },
-                                        {
-                                          kind: 'Field',
-                                          name: {
-                                            kind: 'Name',
-                                            value: 'gtfsId',
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'routes' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'shortName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'gtfsId' },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<StationQueryQuery, StationQueryQueryVariables>;
-export const StopQueryDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'stopQuery' },
-      variableDefinitions: [
-        {
-          kind: 'VariableDefinition',
-          variable: { kind: 'Variable', name: { kind: 'Name', value: 'ids' } },
-          type: {
-            kind: 'ListType',
-            type: {
-              kind: 'NamedType',
-              name: { kind: 'Name', value: 'String' },
-            },
-          },
-        },
-      ],
-      directives: [
-        {
-          kind: 'Directive',
-          name: { kind: 'Name', value: 'api' },
-          arguments: [
-            {
-              kind: 'Argument',
-              name: { kind: 'Name', value: 'contextKey' },
-              value: { kind: 'StringValue', value: 'clientName', block: false },
-            },
-          ],
-        },
-      ],
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            alias: { kind: 'Name', value: 'stop' },
-            name: { kind: 'Name', value: 'stops' },
-            arguments: [
-              {
-                kind: 'Argument',
-                name: { kind: 'Name', value: 'ids' },
-                value: {
-                  kind: 'Variable',
-                  name: { kind: 'Name', value: 'ids' },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'desc' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'gtfsId' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'platformCode' },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'locationType' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'vehicleMode' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'parentStation' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'gtfsId' },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'patterns' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      { kind: 'Field', name: { kind: 'Name', value: 'code' } },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'headsign' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'route' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'mode' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'type' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'shortName' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'gtfsId' },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'stoptimesForPatterns' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'pattern' },
-                        selectionSet: {
-                          kind: 'SelectionSet',
-                          selections: [
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'code' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'headsign' },
-                            },
-                            {
-                              kind: 'Field',
-                              name: { kind: 'Name', value: 'route' },
-                              selectionSet: {
-                                kind: 'SelectionSet',
-                                selections: [
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'mode' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'type' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'shortName' },
-                                  },
-                                  {
-                                    kind: 'Field',
-                                    name: { kind: 'Name', value: 'gtfsId' },
-                                  },
-                                ],
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'routes' },
-                  selectionSet: {
-                    kind: 'SelectionSet',
-                    selections: [
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'shortName' },
-                      },
-                      {
-                        kind: 'Field',
-                        name: { kind: 'Name', value: 'gtfsId' },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<StopQueryQuery, StopQueryQueryVariables>;
+export type StopQueryQuery = { __typename?: 'QueryType', stop?: Array<{ __typename?: 'Stop', id: string, name: string, code?: string | null, desc?: string | null, gtfsId: string, platformCode?: string | null, locationType?: LocationType | null, vehicleMode?: Mode | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null, patterns?: Array<{ __typename?: 'Pattern', code: string, headsign?: string | null, route: { __typename?: 'Route', mode?: Mode | null, type?: number | null, shortName?: string | null, gtfsId: string } } | null> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, headsign?: string | null, route: { __typename?: 'Route', mode?: Mode | null, type?: number | null, shortName?: string | null, gtfsId: string } } | null } | null> | null, routes?: Array<{ __typename?: 'Route', shortName?: string | null, gtfsId: string }> | null } | null> | null };
+
+
+export const GetAlertsForStationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAlertsForStations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stations"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetAlertsForStationsQuery, GetAlertsForStationsQueryVariables>;
+export const GetAlertsForStopsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAlertsForStops"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetAlertsForStopsQuery, GetAlertsForStopsQueryVariables>;
+export const GetDeparturesForStationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDeparturesForStations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stations"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headsign"}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"numberOfDepartures"},"value":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}}},{"kind":"Argument","name":{"kind":"Name","value":"omitCanceled"},"value":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"realtime"}},{"kind":"Field","name":{"kind":"Name","value":"pickupType"}},{"kind":"Field","name":{"kind":"Name","value":"serviceDay"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeState"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"trip"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tripHeadsign"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetDeparturesForStationsQuery, GetDeparturesForStationsQueryVariables>;
+export const GetDeparturesForStopsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDeparturesForStops"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headsign"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"numberOfDepartures"},"value":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}}},{"kind":"Argument","name":{"kind":"Name","value":"omitCanceled"},"value":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"realtime"}},{"kind":"Field","name":{"kind":"Name","value":"pickupType"}},{"kind":"Field","name":{"kind":"Name","value":"serviceDay"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeState"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"trip"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tripHeadsign"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetDeparturesForStopsQuery, GetDeparturesForStopsQueryVariables>;
+export const GetLineIdsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getLineIds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"stations"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"stops"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"stations"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"stops"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetLineIdsQuery, GetLineIdsQueryVariables>;
+export const GetStopsForOldMonitorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetStopsForOldMonitors"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"locationType"}}]}}]}}]} as unknown as DocumentNode<GetStopsForOldMonitorsQuery, GetStopsForOldMonitorsQueryVariables>;
+export const GetStopsForStopMonitorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetStopsForStopMonitor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"locationType"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}}]}}]}}]} as unknown as DocumentNode<GetStopsForStopMonitorQuery, GetStopsForStopMonitorQueryVariables>;
+export const StationQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"stationQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"station"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"desc"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"locationType"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleMode"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"desc"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mode"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mode"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}}]}}]}}]} as unknown as DocumentNode<StationQueryQuery, StationQueryQueryVariables>;
+export const StopQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"stopQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stop"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"desc"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"locationType"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleMode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mode"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mode"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}}]}}]} as unknown as DocumentNode<StopQueryQuery, StopQueryQueryVariables>;

@@ -36,6 +36,8 @@ To run the front end of the app: `npm start` To run backend server `cd server/ &
 
 To access the stop monitor: http://localhost:3000/
 
+GraphQL query types are generated with GraphQL code generator. If you want to make changes to the queries, run `npm run generate` in a terminal window to watch for updates.
+
 
 ## Customization
 

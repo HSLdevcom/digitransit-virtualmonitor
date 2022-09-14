@@ -1,0 +1,19 @@
+.monitor-modal-container {
+  width: 100%;
+  margin: 0 60px;
+
+  #close {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+  }
+
+  .monitor-modal-header {
+    margin-top: 64px;
+    font-style: normal;
+    font-weight: var(--font-weight);
+    line-height: 22px;
+    font-size: 22px;
+    color: #333;
+  }
+}

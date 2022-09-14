@@ -7,6 +7,7 @@ import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
 import IndexPage from './IndexPage';
 import Loading from './Loading';
+import MonitorControls from './MonitorControls';
 
 interface Iv {
   columns: ISides;
@@ -78,6 +79,7 @@ const UserMonitors: React.FC<IProps> = props => {
   return (
     <ContentContainer>
       <div className="user-monitors-container">
+        <MonitorControls />
         <div className="cards-container">{monitors}</div>
         {!!views.length && (
           <div className="create-button-container">{button}</div>

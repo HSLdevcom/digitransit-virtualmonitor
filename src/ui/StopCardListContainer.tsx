@@ -27,7 +27,7 @@ interface IProps {
   staticMonitor?: any;
 }
 
-const createUUID = (startTime, hash) => {
+export const createUUID = (startTime, hash) => {
   return uuidv5(
     startTime + getCurrentSecondsWithMilliSeconds() + hash,
     NIL_UUID,

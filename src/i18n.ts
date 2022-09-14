@@ -21,6 +21,7 @@ i18n.use(initReactI18next).init({
     en: {
       translation: {
         'add-at-least-one-stop': 'Add at least one stop',
+        'add-to-own-displays': 'Lisää omiin näyttöihin',
         all: 'All',
         arriveTerminal: 'Arrives / Terminus',
         autosuggestPlaceHolder: 'Name or number of the stop',
@@ -70,6 +71,8 @@ i18n.use(initReactI18next).init({
         hideLine: 'Hide route {{line}}',
         hideLines: 'Hide routes {{hidden}} / {{all}}',
         horizontal: 'Horizontal',
+        import: 'Import',
+        'import-monitor': 'Import a monitor',
         'info-display-only-one':
           'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
         'info-text-short': 'Departures in a chronological order',
@@ -164,6 +167,7 @@ i18n.use(initReactI18next).init({
     fi: {
       translation: {
         'add-at-least-one-stop': 'Lisää vähintään yksi pysäkki',
+        'add-to-own-displays': 'Lisää omiin näyttöihin',
         all: 'Kaikki',
         arriveTerminal: 'Saapuu / Päätepysäkki',
         autosuggestPlaceHolder: 'Pysäkin nimi tai numero',
@@ -214,6 +218,8 @@ i18n.use(initReactI18next).init({
         hideLine: 'Piilota linja {{line}}',
         hideLines: 'Piilota linjoja {{hidden}} / {{all}}',
         horizontal: 'Vaaka',
+        import: 'Tuo',
+        'import-monitor': 'Tuo monitori',
         'info-display-only-one':
           'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
         'info-text-short': 'Lähdöt aikajärjestyksessä',
@@ -306,6 +312,7 @@ i18n.use(initReactI18next).init({
     sv: {
       translation: {
         'add-at-least-one-stop': 'Lägg till åtminstone en hållplats',
+        'add-to-own-displays': 'Lisää omiin näyttöihin',
         all: 'Alla',
         arriveTerminal: 'Anländer / Ändhållplats',
         autosuggestPlaceHolder: 'Hållplatsens namn eller nummer',
@@ -356,6 +363,8 @@ i18n.use(initReactI18next).init({
         hideLine: 'Dölj linje {{line}}',
         hideLines: 'Dölj linjer {{hidden}} / {{all}}',
         horizontal: 'Horisontell',
+        import: 'Import',
+        'import-monitor': 'Import a monitor',
         'info-display-only-one':
           'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
         'info-text-short': 'Avgångarna i kronologisk ordning',

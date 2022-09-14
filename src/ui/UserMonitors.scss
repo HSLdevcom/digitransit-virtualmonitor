@@ -1,6 +1,8 @@
 .user-monitors-container {
+  width: 780px;
+  margin: 40px 60px 30px;
+
   .create-button-container {
-    width: 780px;
     display: flex;
     margin: 0 60px 20px;
     justify-content: flex-end;
@@ -9,9 +11,5 @@
       height: 40px;
       font-size: 16px;
     }
-  }
-
-  .cards-container {
-    margin: 40px 60px 30px;
   }
 }

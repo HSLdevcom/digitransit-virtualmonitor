@@ -23,9 +23,14 @@ interface IView {
 interface IProps {
   view: IView;
   onDelete: any;
+  preview?: boolean;
 }
 
-const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
+const UserMonitorCard: React.FC<IProps> = ({
+  view,
+  onDelete,
+  preview = false,
+}) => {
   let to;
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
@@ -168,53 +173,57 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
           />
         </div>
         <div className="monitor-name">{name}</div>
-        <button
-          className="delete-icon"
-          onClick={() => setDeleteModalOpen(true)}
-        >
-          <Icon img="delete" color={config.colors.primary} />
-        </button>
+        {!preview && (
+          <button
+            className="delete-icon"
+            onClick={() => setDeleteModalOpen(true)}
+          >
+            <Icon img="delete" color={config.colors.primary} />
+          </button>
+        )}
       </div>
       <div className="cards">{crds}</div>
-      <div className="buttons-container">
-        <div className="main-buttons-container">
+      {!preview && (
+        <div className="buttons-container">
+          <div className="main-buttons-container">
+            <button
+              className="monitor-button white"
+              onClick={() => setOpen(true)}
+            >
+              {t('preview')}
+            </button>
+            <Link
+              tabIndex={0}
+              role="button"
+              className="monitor-button white"
+              to={`/monitors/createview?&url=${url}`}
+            >
+              {t('modify')}
+            </Link>
+            <Link
+              tabIndex={0}
+              role="button"
+              className="monitor-button white"
+              to={`/static?&url=${url}`}
+            >
+              {t('open')}
+            </Link>
+          </div>
           <button
             className="monitor-button white"
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `${window.location.host}/static?url=${url}`,
+              );
+              setShowModal(true);
+              clearTimeout(to);
+              to = setTimeout(() => setShowModal(false), 3000);
+            }}
           >
-            {t('preview')}
+            {t('copy')}
           </button>
-          <Link
-            tabIndex={0}
-            role="button"
-            className="monitor-button white"
-            to={`/monitors/createview?&url=${url}`}
-          >
-            {t('modify')}
-          </Link>
-          <Link
-            tabIndex={0}
-            role="button"
-            className="monitor-button white"
-            to={`/static?&url=${url}`}
-          >
-            {t('open')}
-          </Link>
         </div>
-        <button
-          className="monitor-button white"
-          onClick={() => {
-            navigator.clipboard.writeText(
-              `${window.location.host}/static?url=${url}`,
-            );
-            setShowModal(true);
-            clearTimeout(to);
-            to = setTimeout(() => setShowModal(false), 3000);
-          }}
-        >
-          {t('copy')}
-        </button>
-      </div>
+      )}
     </>
   );
 };

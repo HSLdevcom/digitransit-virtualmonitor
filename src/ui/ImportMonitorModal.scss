@@ -1,0 +1,42 @@
+.import-modal-content {
+  .input-row {
+    display: flex;
+    align-items: center;
+
+    .monitor-button {
+      height: 40px;
+      font-size: 16px;
+      margin: 0 15px;
+    }
+
+    #input-import-monitor {
+      flex: 1;
+      height: 42px;
+      border-radius: 5px;
+      border: solid 1px #888;
+      padding: 0 0 0 10px;
+      margin: 0;
+      font-size: 15px;
+    }
+  }
+
+  .import-preview {
+    margin: 30px 0;
+    border-radius: 5px;
+    border: solid 1px #ddd;
+    padding: 0 15px;
+  }
+
+  .import-button-container {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    margin: 30px 0;
+
+    .monitor-button {
+      height: 40px;
+      font-size: 16px;
+      margin: 0 15px;
+    }
+  }
+}

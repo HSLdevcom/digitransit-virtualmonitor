@@ -26,6 +26,17 @@
     color: $primary-color;
     border: 1px solid #888;
   }
+
+  &:disabled {
+    cursor: unset;
+    background: #ccc;
+    border: 1px solid #ccc;
+    color: #fff;
+
+    span {
+      color: #fff;
+    }
+  }
 }
 
 .index {

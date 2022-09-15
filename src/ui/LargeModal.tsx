@@ -5,17 +5,17 @@ import Icon from './Icon';
 import { ConfigContext } from '../contexts';
 
 interface IProps {
-  handleOpenState: any;
+  onRequestClose: () => void;
   header: string;
 }
-const LargeModal: FC<IProps> = ({ handleOpenState, header, ...rest }) => {
+const LargeModal: FC<IProps> = ({ onRequestClose, header, ...rest }) => {
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
 
   return (
     <Modal
       isOpen={true}
-      onRequestClose={() => handleOpenState(false)}
+      onRequestClose={() => onRequestClose()}
       portalClassName="modal"
     >
       <div className="monitor-modal-container">
@@ -24,7 +24,7 @@ const LargeModal: FC<IProps> = ({ handleOpenState, header, ...rest }) => {
             className="close-button"
             role="button"
             aria-label={t('close')}
-            onClick={() => handleOpenState(false)}
+            onClick={() => onRequestClose()}
           >
             <Icon
               img="close"

@@ -150,6 +150,11 @@
     .monitor-button {
       width: 100%;
       justify-content: center;
+
+      &:disabled {
+        border: none;
+        background: $primary-color;
+      }
     }
   }
 }

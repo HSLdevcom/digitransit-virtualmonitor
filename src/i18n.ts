@@ -72,6 +72,8 @@ i18n.use(initReactI18next).init({
         hideLines: 'Hide routes {{hidden}} / {{all}}',
         horizontal: 'Horizontal',
         import: 'Import',
+        'import-instructions':
+          'Anna olemassaolevan pysäkkinäytön URL-osoite, niin voit lisätä sen omiin näyttöihisi',
         'import-monitor': 'Import a monitor',
         'info-display-only-one':
           'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
@@ -108,6 +110,8 @@ i18n.use(initReactI18next).init({
         'new-display-disabled':
           'Et voi lisätä useampia näkymiä tiedotenäyttöön',
         'no-departures': 'No known departures',
+        'no-monitor-found':
+          'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
@@ -150,6 +154,7 @@ i18n.use(initReactI18next).init({
         'skip-to-main-content': 'Go to the main content of this page',
         staticMonitorTitle: 'Name of the display',
         stop: 'Stop',
+        'stop-display': 'Pysäkkinäyttö',
         stopSettings: 'Settings for stop {{stop}} ({{code}})',
         stoptitle: 'Name of the stop view',
         tighten: 'Convergent',
@@ -219,6 +224,8 @@ i18n.use(initReactI18next).init({
         hideLines: 'Piilota linjoja {{hidden}} / {{all}}',
         horizontal: 'Vaaka',
         import: 'Tuo',
+        'import-instructions':
+          'Anna olemassaolevan pysäkkinäytön URL-osoite, niin voit lisätä sen omiin näyttöihisi',
         'import-monitor': 'Tuo monitori',
         'info-display-only-one':
           'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
@@ -254,6 +261,8 @@ i18n.use(initReactI18next).init({
         'new-display-disabled':
           'Et voi lisätä useampia näkymiä tiedotenäyttöön',
         'no-departures': 'Ei tiedossa olevia lähtöjä',
+        'no-monitor-found':
+          'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
         'no-stops-selected': 'Ei valittuja pysäkkejä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
@@ -295,6 +304,7 @@ i18n.use(initReactI18next).init({
         'skip-to-main-content': 'Siirry sivun pääsisältöön',
         staticMonitorTitle: 'Näytön nimi',
         stop: 'Pysäkki',
+        'stop-display': 'Pysäkkinäyttö',
         stopSettings: 'Pysäkin {{stop}} {{code}} asetukset',
         stoptitle: 'Pysäkkinäkymän nimi',
         tighten: 'Tiivistyvä',
@@ -364,6 +374,8 @@ i18n.use(initReactI18next).init({
         hideLines: 'Dölj linjer {{hidden}} / {{all}}',
         horizontal: 'Horisontell',
         import: 'Import',
+        'import-instructions':
+          'Anna olemassaolevan pysäkkinäytön URL-osoite, niin voit lisätä sen omiin näyttöihisi',
         'import-monitor': 'Import a monitor',
         'info-display-only-one':
           'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
@@ -399,6 +411,8 @@ i18n.use(initReactI18next).init({
         'new-display-disabled':
           'Et voi lisätä useampia näkymiä tiedotenäyttöön',
         'no-departures': 'Inga kända avgångar',
+        'no-monitor-found':
+          'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
         'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',
@@ -440,6 +454,7 @@ i18n.use(initReactI18next).init({
         'skip-to-main-content': 'Gå till sidans huvudinnehåll',
         staticMonitorTitle: 'Skärmens namn',
         stop: 'Hållplats',
+        'stop-display': 'Pysäkkinäyttö',
         stopSettings: 'Inställningar för hållplats {{stop}} ({{code}})',
         stoptitle: 'Hållplatsskärmens namn',
         tighten: 'Förtätad',

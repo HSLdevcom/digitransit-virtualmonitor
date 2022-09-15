@@ -2,6 +2,7 @@
   .input-row {
     display: flex;
     align-items: center;
+    padding-top: 20px;
 
     .monitor-button {
       height: 40px;
@@ -18,6 +19,17 @@
       margin: 0;
       font-size: 15px;
     }
+  }
+
+  .no-monitor-found {
+    position: absolute;
+    color: $alert-color;
+    font-size: 12px;
+    margin: 5px;
+  }
+
+  .input-instructions {
+    font-size: 15px;
   }
 
   .import-preview {
@@ -37,6 +49,17 @@
       height: 40px;
       font-size: 16px;
       margin: 0 15px;
+      position: relative;
+
+      .loading-button {
+        position: absolute;
+        width: calc(100% - 56px); // 100% - total horizontal padding on monitor-button
+      }
+
+      &.loading:disabled {
+        border: none;
+        background: $primary-color;
+      }
     }
   }
 }

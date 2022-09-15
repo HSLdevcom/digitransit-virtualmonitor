@@ -12,9 +12,9 @@ import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
 import { defaultSettings } from './StopRoutesModal';
 import UserViewTitleEditor from './UserViewTitleEditor';
-import { getCurrentSecondsWithMilliSeconds } from '../time';
-import { v5 as uuidv5, NIL as NIL_UUID } from 'uuid';
-import { uuidValidateV5 } from '../util/monitorUtils';
+import { DateTime } from 'luxon';
+import { v5 as uuidv5 } from 'uuid';
+import { namespace, uuidValidateV5 } from '../util/monitorUtils';
 import PrepareMonitor from './PrepareMonitor';
 import { UserContext } from '../contexts';
 import { getParams } from '../util/queryUtils';
@@ -27,13 +27,6 @@ interface IProps {
   staticMonitor?: any;
 }
 
-export const createUUID = (startTime, hash) => {
-  return uuidv5(
-    startTime + getCurrentSecondsWithMilliSeconds() + hash,
-    NIL_UUID,
-  );
-};
-
 const StopCardListContainer: FC<IProps> = ({
   stopCards,
   loading = false,
@@ -41,7 +34,6 @@ const StopCardListContainer: FC<IProps> = ({
 }) => {
   const user = useContext(UserContext);
   const [t] = useTranslation();
-  const startTime = getCurrentSecondsWithMilliSeconds();
   const [stopCardList, setStopCardList] = useState(stopCards);
   const [languages, setLanguages] = useState(props.languages);
 
@@ -201,6 +193,7 @@ const StopCardListContainer: FC<IProps> = ({
         const newCard = {
           ...defaultStopCard(),
           id: cnt,
+          layout: isHorizontal ? 2 : 12,
         };
         setStopCardList(stopCardList.concat(newCard));
         cnt = 0;
@@ -280,7 +273,10 @@ const StopCardListContainer: FC<IProps> = ({
     }).replaceAll('/', '-');
     if (isNew) {
       if (user?.sub) {
-        const newUuid = createUUID(newCard.contenthash, startTime);
+        const newUuid = uuidv5(
+          DateTime.now().toSeconds() + newCard.contenthash,
+          namespace,
+        );
         const newStaticMonitor = {
           ...newCard,
           name: viewTitle,

@@ -38,17 +38,24 @@ const UserMonitors: React.FC<IProps> = props => {
   const [loading, setLoading] = useState(true);
   const [views, setViews] = useState([]);
   const [changed, setChanged] = useState(false);
-  useEffect(() => {
-    const controller = new AbortController();
+
+  const refetchMonitors = controller => {
+    if (!controller) {
+      controller = new AbortController();
+    }
     monitorAPI.getAllMonitorsForUser(controller.signal).then((r: Array<Iv>) => {
-      setViews(r);
+      setViews(r.reverse());
       setChanged(false);
       setLoading(false);
     });
+  };
+  useEffect(() => {
+    const controller = new AbortController();
+    refetchMonitors(controller);
     return () => {
       controller.abort();
     };
-  }, [changed]);
+  }, []);
 
   if (loading) {
     return <Loading white />;
@@ -63,10 +70,14 @@ const UserMonitors: React.FC<IProps> = props => {
     views.map((view, i) => {
       const style = { '--delayLength': `0.${1 + i}s` } as React.CSSProperties;
       return (
-        <div key={`card${i}`} className={'card animate-in'} style={style}>
+        <div
+          key={`card${view.url}`}
+          className={'card animate-in'}
+          style={style}
+        >
           <UserMonitorCard
             key={`monitor#${i}`}
-            onDelete={() => setChanged(true)}
+            onDelete={() => refetchMonitors(undefined)}
             view={view}
           />
         </div>
@@ -79,7 +90,12 @@ const UserMonitors: React.FC<IProps> = props => {
   return (
     <ContentContainer>
       <div className="user-monitors-container">
-        <MonitorControls />
+        <MonitorControls
+          monitorCount={views.length}
+          refetchMonitors={() => {
+            refetchMonitors(undefined);
+          }}
+        />
         <div className="cards-container">{monitors}</div>
         {!!views.length && (
           <div className="create-button-container">{button}</div>

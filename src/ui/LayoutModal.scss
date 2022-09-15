@@ -9,13 +9,6 @@
     }
   }
 
-  .layout-modal-header {
-    margin: 0 0 34px 0;
-    font-size: 1.5rem;
-    font-weight: $font-weight-bigger;
-    padding-left: 60px;
-  }
-
   .layout-modal-content-container {
     $primary-color: var(--primary-color);
 
@@ -37,17 +30,6 @@
 
     .row-info {
       margin-bottom: 10px;
-    }
-
-    #close {
-      display: flex;
-      justify-content: flex-end;
-
-      .close-button {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-      }
     }
   }
 

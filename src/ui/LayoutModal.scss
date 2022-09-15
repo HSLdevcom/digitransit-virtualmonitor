@@ -1,10 +1,18 @@
 @import '../index';
 
-.modal {
+.layout-modal {
+  .monitor-modal-container {
+    margin: 0 80px;
+
+    .monitor-modal-header {
+      margin-bottom: 0;
+    }
+  }
+
   .ReactModal__Content {
     border: none !important;
     border-radius: 5px !important;
-    width: 680px !important;
+    width: 720px !important;
     max-height: 90% !important;
     height: fit-content;
     overflow-x: hidden !important;
@@ -61,9 +69,6 @@
   }
 
   .layouts {
-    margin-top: -31px;
-    margin-left: 60px;
-
     .row {
       .header {
         padding-bottom: 20px;

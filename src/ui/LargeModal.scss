@@ -17,3 +17,22 @@
     color: #333;
   }
 }
+
+.modal {
+  .ReactModal__Content {
+    border: none !important;
+    border-radius: 5px !important;
+    width: 720px !important;
+    max-height: 90% !important;
+    height: fit-content;
+    overflow-x: hidden !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-right: -50%;
+    margin-bottom: -50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    animation: none;
+  }
+}

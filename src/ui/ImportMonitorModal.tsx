@@ -1,8 +1,7 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useState } from 'react';
 import LargeModal from './LargeModal';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
-import { ConfigContext } from '../contexts';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import cx from 'classnames';
 import monitorAPI from '../api';
@@ -22,7 +21,6 @@ const ImportMonitorModal: FC<IProps> = ({
   monitorCount,
 }) => {
   const [t] = useTranslation();
-  const config = useContext(ConfigContext);
   const [url, setUrl] = useState('');
   const [monitor, setMonitor] = useState(null);
   const [addingMonitor, setAddingMonitor] = useState(false);
@@ -102,7 +100,11 @@ const ImportMonitorModal: FC<IProps> = ({
   };
 
   return (
-    <LargeModal header={'import-monitor'} onRequestClose={onRequestClose}>
+    <LargeModal
+      header={'import-monitor'}
+      portalClassName={'import-modal modal'}
+      onRequestClose={onRequestClose}
+    >
       <div className="instructions">{t('import-instructions')}</div>
       <div className="import-modal-content">
         <div className="input-row">

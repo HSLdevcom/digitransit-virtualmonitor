@@ -7,16 +7,27 @@ import { ConfigContext } from '../contexts';
 interface IProps {
   onRequestClose: () => void;
   header: string;
+  isOpen?: boolean;
+  portalClassName?: string;
+  ariaHideApp?: boolean;
 }
-const LargeModal: FC<IProps> = ({ onRequestClose, header, ...rest }) => {
+const LargeModal: FC<IProps> = ({
+  onRequestClose,
+  header,
+  isOpen,
+  portalClassName,
+  ariaHideApp,
+  ...rest
+}) => {
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
 
   return (
     <Modal
-      isOpen={true}
+      isOpen={isOpen ?? true}
       onRequestClose={() => onRequestClose()}
-      portalClassName="modal"
+      portalClassName={portalClassName}
+      ariaHideApp={ariaHideApp}
     >
       <div className="monitor-modal-container">
         <section id="close">

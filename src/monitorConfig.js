@@ -20,8 +20,6 @@ export default {
       hover: '#0062a1',
       monitorBackground: '#0057a2',
     },
-    postfix: '',
-    setName: '',
     feedIds: ['HSL'],
     modeIcons: {
       colors: {
@@ -55,6 +53,9 @@ export default {
     colors: {
       primary: '#7DC02D',
       monitorBackground: '#0057a2',
+    },
+    fonts: {
+      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
     },
     feedIds: ['LINKKI'],
     modeIcons: {

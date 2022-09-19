@@ -26,12 +26,13 @@ import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
 
 export interface IExtendedMonitorConfig extends IMonitorConfig {
-  fonts: {
-    normal: string;
-    narrow: string;
-    weights: {
-      normal: string;
-      bigger: string;
+  fonts?: {
+    externalFonts?: Array<string>;
+    normal?: string;
+    narrow?: string;
+    weights?: {
+      normal?: string;
+      bigger?: string;
     };
     monitor: {
       name: string;
@@ -142,6 +143,11 @@ const App: FC<IConfigurationProps> = props => {
       setLoading(false);
     }
   }, []);
+
+  if (loading) {
+    return <Loading white />;
+  }
+
   const client = new ApolloClient({
     link: ApolloLink.from([
       new MultiAPILink({
@@ -161,12 +167,12 @@ const App: FC<IConfigurationProps> = props => {
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
 
   const fonts = config.fonts.externalFonts.map(font => (
-    <link key={`header-${font}`} rel="stylesheet" type="text/css" href={font} />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href={font}
+    />
   ));
-
-  if (loading) {
-    return <Loading white />;
-  }
 
   return (
     <div className="App">

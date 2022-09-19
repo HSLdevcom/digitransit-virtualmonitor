@@ -35,6 +35,8 @@ export default {
       },
       postfix: '',
       setName: 'default',
+      postfix: '',
+      setName: '',
     },
     name: 'hsl',
     uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
@@ -55,6 +57,9 @@ export default {
     colors: {
       primary: '#7DC02D',
       monitorBackground: '#0057a2',
+    },
+    fonts: {
+      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
     },
     feedIds: ['LINKKI'],
     modeIcons: {

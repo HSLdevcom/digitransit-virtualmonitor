@@ -20,8 +20,6 @@ export default {
       hover: '#0062a1',
       monitorBackground: '#0057a2',
     },
-    postfix: '',
-    setName: '',
     feedIds: ['HSL'],
     modeIcons: {
       colors: {
@@ -35,8 +33,6 @@ export default {
       },
       postfix: '',
       setName: 'default',
-      postfix: '',
-      setName: '',
     },
     name: 'hsl',
     uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',

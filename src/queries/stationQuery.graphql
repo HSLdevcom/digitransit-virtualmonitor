@@ -1,0 +1,42 @@
+query stationQuery($ids: [String]) @api(contextKey: "clientName") {
+  station: stations(ids: $ids) {
+    id
+    name
+    code
+    desc
+    gtfsId
+    platformCode
+    locationType
+    vehicleMode
+    stops {
+      desc
+      code
+      patterns {
+        code
+        headsign
+        route {
+          mode
+          type
+          shortName
+          gtfsId
+        }
+      }
+      stoptimesForPatterns {
+        pattern {
+          code
+          headsign
+          route {
+            mode
+            type
+            shortName
+            gtfsId
+          }
+        }
+      }
+      routes {
+        shortName
+        gtfsId
+      }
+    }
+  }
+}

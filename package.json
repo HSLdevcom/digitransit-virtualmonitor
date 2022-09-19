@@ -52,6 +52,7 @@
   },
   "scripts": {
     "start-prod": "cd server && npm start",
+    "generate": "graphql-codegen --watch",
     "prepare": "patch-package && husky install",
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -62,11 +63,13 @@
     "lint-ts": "eslint src --ext .js,.tsx,.ts --fix --quiet",
     "lint-scss": "stylelint **/*.{css,scss,sass} --fix --quiet",
     "lint-ts-test": "eslint ./src/**/*{ts,tsx,js} --quiet",
-    "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet",
-    "apollo-codegen": "apollo client:codegen --target=typescript ./src/generated/ --outputFlat --watch"
+    "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet"
   },
   "devDependencies": {
-    "@types/graphql": "^14.5.0",
+    "@graphql-codegen/cli": "^2.12.0",
+    "@graphql-codegen/typed-document-node": "^2.3.3",
+    "@graphql-codegen/typescript": "^2.7.3",
+    "@graphql-codegen/typescript-operations": "^2.5.3",
     "@types/history": "^4.7.8",
     "@types/jest": "^23.3.14",
     "@types/node": "^16.10.3",

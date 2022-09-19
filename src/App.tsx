@@ -133,11 +133,9 @@ const App: FC<IConfigurationProps> = props => {
           setUser({ notLogged: true });
           setLoading(false);
         });
-      monitorAPI
-        .getFavourites()
-        .then((favs: Array<Favourite>) => {
-          setFavourites(favs);
-        })
+      monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
+        setFavourites(favs);
+      });
     } else {
       setUser({ notLogged: true });
       setLoading(false);

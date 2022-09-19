@@ -101,21 +101,18 @@ const StopCardListContainer: FC<IProps> = ({
     cardId: number,
     side: string,
     stops: Array<IStop>,
-    reorder: boolean,
     gtfsIdForHidden: string,
   ) => {
     const cardIndex = stopCardList.findIndex(card => card.id === cardId);
-
     if (!gtfsIdForHidden) {
-      stopCardList[cardIndex].columns[side].stops = reorder
-        ? stops
-        : stopCardList[cardIndex].columns[side].stops.concat(stops);
+      stopCardList[cardIndex].columns[side].stops =
+        stopCardList[cardIndex].columns[side].stops.concat(stops);
       setStopCardList(stopCardList.slice());
     } else {
       const stopIndex = stopCardList[cardIndex].columns[side].stops.findIndex(
         stop => stop.gtfsId === gtfsIdForHidden,
       );
-      stopCardList[cardIndex].columns[side].stops[stopIndex] = stops;
+      stopCardList[cardIndex].columns[side].stops[stopIndex] = stops[0];
       setStopCardList(stopCardList.slice());
     }
   };

@@ -12,7 +12,6 @@ interface Props {
     cardId: number,
     side: string,
     stops: Array<IStop>,
-    reorder: boolean,
     gtfsIdForHidden: string,
   ) => void;
   card: ICardInfo;
@@ -26,40 +25,21 @@ interface Props {
 }
 
 const TitleItem = props => {
-  const [titleLeft, setTitleLeft] = useState('');
-  const [changedLeft, setChangedLeft] = useState(false);
-  const [titleRight, setTitleRight] = useState('');
-  const [changedRight, setChangedRight] = useState(false);
-  const { cardInfo, side, updateCardInfo, leftItemsHeader, rightItemsHeader } =
-    props;
+  const { cardInfo, side, updateCardInfo, languages } = props;
+  const [title, setTitle] = useState(props.title);
 
-  const setTitle = (
-    side: string,
-    changed: boolean,
-    title: string = undefined,
-  ) => {
-    if (title) {
-      side === 'left' ? setTitleLeft(title) : setTitleRight(title);
-    }
-    side === 'left' ? setChangedLeft(changed) : setChangedRight(changed);
-  };
-
-  const valueLeft = changedLeft ? titleLeft : props.titleLeft;
-  const valueRight = changedRight ? titleRight : props.titleRight;
   return (
     <div className="double-inputs">
-      {props.languages?.map(lan => (
+      {languages?.map(lan => (
         <StopListTitleInput
           key={`lan${lan}`}
           lang={lan}
           side={side}
-          titleLeft={titleLeft}
-          titleRight={titleRight}
+          title={title}
           updateCardInfo={updateCardInfo}
           cardInfoId={cardInfo.id}
           setTitle={setTitle}
-          itemsHeader={side == 'left' ? leftItemsHeader : rightItemsHeader}
-          value={side === 'left' ? valueLeft : valueRight}
+          value={title}
         />
       ))}
     </div>
@@ -79,52 +59,50 @@ const StopListPlaceHolder = props => {
   );
 };
 
-const StopList = props => {
-  const {
-    leftItems,
-    leftTitle,
-    rightTitle,
-    rightItems,
-    leftItemsPlaceHolder,
-    rightItemsPlaceHolder,
-    leftItemsHeader,
-    rightItemsHeader,
-    cardInfo,
-    updateCardInfo,
-    languages,
-  } = props;
-
-  const showStopTitles = getLayout(cardInfo.layout).isMultiDisplay;
-
+const StopListContainer: FC<Props> = ({
+  card,
+  onStopDelete,
+  onStopMove,
+  updateCardInfo,
+  languages,
+  setStops,
+}) => {
+  const [t] = useTranslation();
+  const showStopTitles = getLayout(card.layout).isMultiDisplay;
+  const leftItems = card.columns.left.stops;
+  const rightItems = card.columns.right.stops;
   return (
-    <>
+    <div className="stop-list">
       <section id={'left'}>
         <div>
           {showStopTitles && (
             <TitleItem
               side="left"
-              titleLeft={leftTitle}
-              leftItemsHeader={leftItemsHeader}
-              cardInfo={cardInfo}
+              title={card.columns.left.title}
+              cardInfo={card}
               updateCardInfo={updateCardInfo}
               languages={languages}
             />
           )}
           {showStopTitles && leftItems.length === 0 && (
-            <StopListPlaceHolder text={leftItemsPlaceHolder} />
+            <StopListPlaceHolder text={t('no-stops-selected')} />
           )}
           <ul className="stops">
             {leftItems &&
               leftItems.map((item, index) => {
+                const s = {
+                  ...item,
+                  cardId: card.id,
+                  layout: card.layout,
+                };
                 return (
                   <li key={`s-${index}`} className="stop">
                     <StopRow
-                      stop={item}
+                      stop={s}
                       side={'left'}
-                      onStopDelete={props.onStopDelete}
-                      onStopMove={props.onStopMove}
-                      setStops={props.setStops}
-                      rightStops={rightItems}
+                      onStopDelete={onStopDelete}
+                      onStopMove={onStopMove}
+                      setStops={setStops}
                       languages={languages}
                     />
                   </li>
@@ -137,28 +115,31 @@ const StopList = props => {
         <section id={'right'}>
           <TitleItem
             side="right"
-            titleRight={rightTitle}
-            rightItemsHeader={rightItemsHeader}
-            cardInfo={cardInfo}
+            title={card.columns.right.title}
+            cardInfo={card}
             updateCardInfo={updateCardInfo}
             languages={languages}
           />
           {showStopTitles && rightItems.length === 0 && (
-            <StopListPlaceHolder text={rightItemsPlaceHolder} />
+            <StopListPlaceHolder text={t('no-stops-selected')} />
           )}
           <div>
             <ul className="stops">
               {rightItems &&
                 rightItems.map((item, index) => {
+                  const s = {
+                    ...item,
+                    cardId: card.id,
+                    layout: card.layout,
+                  };
                   return (
                     <li className="stop" key={`s-${index}`}>
                       <StopRow
-                        stop={item}
+                        stop={s}
                         side={'right'}
-                        onStopDelete={props.onStopDelete}
-                        onStopMove={props.onStopMove}
-                        setStops={props.setStops}
-                        leftStops={leftItems}
+                        onStopDelete={onStopDelete}
+                        onStopMove={onStopMove}
+                        setStops={setStops}
                         languages={languages}
                       />
                     </li>
@@ -168,57 +149,6 @@ const StopList = props => {
           </div>
         </section>
       )}
-    </>
-  );
-};
-
-const addInfoToItems = (card, items, side) => {
-  const modifiedItems =
-    items.length > 0
-      ? items.map(item => ({
-          ...item,
-          side: side,
-          cardId: card.id,
-          layout: card.layout,
-        }))
-      : [];
-  return modifiedItems;
-};
-
-const StopListContainer: FC<Props> = ({
-  card,
-  onStopDelete,
-  onStopMove,
-  updateCardInfo,
-  languages,
-  setStops,
-}) => {
-  const [t] = useTranslation();
-  const leftItems = card.columns.left.stops;
-  const rightItems = card.columns.right.stops;
-
-  return (
-    <div className="stop-list">
-      <StopList
-        leftItems={addInfoToItems(card, leftItems, 'left')}
-        leftItemsHeader={t('headerSideLeft')}
-        leftItemsPlaceHolder={t('placeholderSideLeft')}
-        leftTitle={card.columns.left.title}
-        leftStops={leftItems}
-        rightItems={addInfoToItems(card, rightItems, 'right')}
-        rightItemsHeader={t('headerSideRight')}
-        rightItemsPlaceHolder={t('placeholderSideRight', {
-          title: card.columns.left.title,
-        })}
-        rightTitle={card.columns.right.title}
-        rightStops={rightItems}
-        onStopDelete={onStopDelete}
-        onStopMove={onStopMove}
-        setStops={setStops}
-        cardInfo={card}
-        updateCardInfo={updateCardInfo}
-        languages={languages}
-      />
     </div>
   );
 };

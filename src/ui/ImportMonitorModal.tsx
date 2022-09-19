@@ -45,9 +45,10 @@ const ImportMonitorModal: FC<IProps> = ({
       .catch(() => setImportFailed(true));
   };
 
-  const importHashMonitor = hash => {
+  const importHashMonitor = (hash: string) => {
+    const contenthash = hash.replace(' ', '+');
     monitorAPI
-      .get(hash)
+      .get(contenthash)
       .then((r: any) => {
         if (r?.contenthash) {
           setMonitor({
@@ -65,6 +66,7 @@ const ImportMonitorModal: FC<IProps> = ({
     setImportFailed(false);
     const search = url.indexOf('?') !== -1 ? url.split('?')[1] : url;
     const searchParams = new URLSearchParams(search);
+    console.log(searchParams.get('cont'), search)
     if (searchParams.has('url')) {
       importStaticMonitor(searchParams.get('url'));
     } else if (searchParams.has('cont')) {

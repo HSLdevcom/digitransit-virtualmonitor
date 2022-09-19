@@ -76,7 +76,7 @@ i18n.use(initReactI18next).init({
           'Anna olemassaolevan pysäkkinäytön URL-osoite, niin voit lisätä sen omiin näyttöihisi',
         'import-monitor': 'Import a monitor',
         'info-display-only-one':
-          'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
+          'You can select a service update view only for a display with one stop view.',
         'info-text-short': 'Departures in a chronological order',
         'info-text-one-column':
           'Departures in a chronological order in one column',
@@ -95,7 +95,7 @@ i18n.use(initReactI18next).init({
         'layout-double': 'Double view',
         layoutModalHeader: 'Select layout',
         lineId: 'Route',
-        'link-copied': 'Linkki kopioitu leikepöydälle',
+        'link-copied': 'Link copied to clipboard',
         links: 'Links',
         loading: 'Loading...',
         login: 'Log in',
@@ -108,7 +108,7 @@ i18n.use(initReactI18next).init({
         moveViewDown: 'Move stop display {{id}} down',
         moveViewUp: 'Move stop display {{id}} up',
         'new-display-disabled':
-          'Et voi lisätä useampia näkymiä tiedotenäyttöön',
+          'You cannot add more than one view to the service update view',
         'no-departures': 'No known departures',
         'no-monitor-found':
           'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
@@ -116,14 +116,14 @@ i18n.use(initReactI18next).init({
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
         'non-logged-in-monitor-info':
-          'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
+          'You are editing a display that has been created without logging in to the service. You can save the display in your displays by clicking on the button Create view.',
         notPossibleToCreate:
           'Unable to create a new view without {{requirements}}',
         notPossibleToPreview:
           'Unable to display the preview without {{requirements}}',
         notPossibleToSave: 'Unable to save the view without {{requirements}}',
         'one-column': 'One column',
-        open: 'Open display',
+        open: 'Open the display',
         ok: 'OK',
         or: 'or',
         'platform-or-stop': 'Platform/Stop',
@@ -162,7 +162,7 @@ i18n.use(initReactI18next).init({
         timeShiftDescription:
           'You can exclude departures that are too soon to catch from the location of the stop display.',
         timeShiftShow: 'Only show departures departing in more than',
-        'to-own-displays': 'Siirry omiin näyttöihin',
+        'to-own-displays': 'Go to my displays',
         'two-columns': 'Two columns',
         userinfo: 'My information',
         vertical: 'Vertical',
@@ -378,7 +378,7 @@ i18n.use(initReactI18next).init({
           'Anna olemassaolevan pysäkkinäytön URL-osoite, niin voit lisätä sen omiin näyttöihisi',
         'import-monitor': 'Import a monitor',
         'info-display-only-one':
-          'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
+          'Du kan välja meddelandeskärmen endast för en skärm som har bara en hållplatsvy.',
         'info-text-short': 'Avgångarna i kronologisk ordning',
         'info-text-one-column': 'Avgångarna i kronologisk ordning i en kolumn',
         'info-text-two-columns':
@@ -396,7 +396,7 @@ i18n.use(initReactI18next).init({
         'layout-double': 'Dubbelvy',
         layoutModalHeader: 'Välj justering',
         lineId: 'Linje',
-        'link-copied': 'Linkki kopioitu leikepöydälle',
+        'link-copied': 'Länken har kopierats till urklipp',
         links: 'Länkar',
         loading: 'Laddar...',
         login: 'Logga in',
@@ -409,7 +409,7 @@ i18n.use(initReactI18next).init({
         moveViewDown: 'Flytta hållplatsvy {{id}} nedåt',
         moveViewUp: 'Flytta hållplatsvy {{id}} uppåt',
         'new-display-disabled':
-          'Et voi lisätä useampia näkymiä tiedotenäyttöön',
+          'Du kan inte lägga till flera vyer i meddelandeskärmen',
         'no-departures': 'Inga kända avgångar',
         'no-monitor-found':
           'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
@@ -417,7 +417,7 @@ i18n.use(initReactI18next).init({
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',
         'non-logged-in-monitor-info':
-          'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
+          'Du redigerar en skärm som har skapats utan inloggning. Du kan spara skärmen i dina skärmar genom att klicka på knappen Skapa vy.',
         notPossibleToCreate: 'Vyn kan inte skapas utan {{requirements}}',
         notPossibleToPreview:
           'Förhandsgranskning kan inte visas utan {{requirements}}',
@@ -462,7 +462,7 @@ i18n.use(initReactI18next).init({
         timeShiftDescription:
           'Du kan välja bort de avgångstider som inte är anpassade till dig.',
         timeShiftShow: 'Visa endast avgångar som avgår om minst',
-        'to-own-displays': 'Siirry omiin näyttöihin',
+        'to-own-displays': 'Gå till mina skärmar',
         'two-columns': 'Två kolumner',
         userinfo: 'Mina uppgifter',
         vertical: 'Vertikal',

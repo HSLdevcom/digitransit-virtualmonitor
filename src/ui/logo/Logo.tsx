@@ -5,6 +5,7 @@ import HslLogo from './HslLogo';
 import LinkkiLogo from './LinkkiLogo';
 import MatkaLogo from './MatkaLogo';
 import NysseLogo from './NysseLogo';
+import VaasaLogo from './VaasaLogo';
 
 interface ICommonProps {
   readonly monitorConfig?: any;
@@ -34,6 +35,9 @@ class Logo extends React.Component<ICommonProps> {
       const feedId = feedIds[0].toLowerCase();
 
       switch (feedId) {
+        case 'vaasa':
+          logo = <VaasaLogo />;
+        break;
         case 'tampere':
           logo = <NysseLogo />;
           break;

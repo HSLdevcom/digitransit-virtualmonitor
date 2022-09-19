@@ -66,7 +66,6 @@ const ImportMonitorModal: FC<IProps> = ({
     setImportFailed(false);
     const search = url.indexOf('?') !== -1 ? url.split('?')[1] : url;
     const searchParams = new URLSearchParams(search);
-    console.log(searchParams.get('cont'), search)
     if (searchParams.has('url')) {
       importStaticMonitor(searchParams.get('url'));
     } else if (searchParams.has('cont')) {

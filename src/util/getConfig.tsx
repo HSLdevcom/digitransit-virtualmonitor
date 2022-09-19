@@ -44,7 +44,7 @@ const defaultFonts: IExtendedMonitorConfig = {
 export const getConfig = () => {
   // When developing locally, you can define REACT_APP_CONFIG env variable. Use themes assinged below.
   const env = process.env.REACT_APP_CONFIG;
-  const allowedThemes = ['hsl', 'matka', 'tampere', 'jyvaskyla'];
+  const allowedThemes = ['hsl', 'matka', 'tampere', 'jyvaskyla', 'vaasa'];
   if (env && allowedThemes.indexOf(env) > -1) {
     return config[env];
   }
@@ -59,6 +59,8 @@ export const getConfig = () => {
     theme = 'jyvaskyla';
   } else if (domain.indexOf('hsl') >= 0) {
     theme = 'hsl';
+  } else if (domain.indexOf('vaasa') >= 0) {
+    theme = 'vaasa';
   } else {
     theme = 'matka';
   }

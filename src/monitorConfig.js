@@ -1,6 +1,7 @@
 export default {
   hsl: {
     fonts: {
+      externalFonts: ["https://cloud.typography.com/6364294/7432412/css/fonts.css"],
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       weights: {
         normal: '400',
@@ -28,6 +29,8 @@ export default {
         'mode-subway': '#CA4000',
       },
       setName: 'default',
+      postfix: '',
+      setName: '',
     },
     name: 'hsl',
     uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
@@ -41,6 +44,9 @@ export default {
     colors: {
       primary: '#7DC02D',
       monitorBackground: '#0057a2',
+    },
+    fonts: {
+      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
     },
     feedIds: ['LINKKI'],
     modeIcons: {
@@ -64,6 +70,9 @@ export default {
       monitorBackground: '#0057a2',
     },
     feedIds: ['MATKA', 'HSL', 'tampere', 'LINKKI', 'lautta', 'OULU'],
+    fonts: {
+      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
+    },
     modeIcons: {
       colors: {
         'mode-airplane': '#0046AD',
@@ -93,6 +102,7 @@ export default {
     },
     feedIds: ['tampere', 'TampereVR', 'tampereDRT'],
     fonts: {
+      externalFonts: ['https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css', 'https://fonts.googleapis.com/css?family=Lato'],
       monitor: {
         name: 'Lato',
         weight: '700',
@@ -118,4 +128,36 @@ export default {
     allowLogin: false,
     useTilde: false,
   },
+  vaasa: {
+    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    name: 'vaasa',
+    allowLogin: false,
+    feedIds: ['vaasa'],
+    colors: {
+      primary: '#000a8c',
+      monitorBackground: '#000a8c',
+    },
+    fonts: {
+      externalFonts: ['https://fonts.googleapis.com/css?family=Source+Sans+Pro'],
+      normal: '"Source Sans Pro", Arial, Georgia, Serif',
+      narrow: '"Source Sans Pro", Arial, Georgia, Serif',
+      monitor: {
+        name: '"Source Sans Pro", Arial, Georgia, Serif',
+        weight: '700',
+      },
+    },
+    modeIcons: {
+      colors: {
+        'mode-bus': '#000a8c',
+      },
+      postfix: '-waltti',
+      setName: 'digitransit',
+    },
+    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    showMinutes: '20',
+    alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
+    allowLogin: false,
+    useTilde: true,
+    breadCrumbsStartPage: 'front',
+  }
 };

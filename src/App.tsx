@@ -37,6 +37,7 @@ import PrepareMonitor from './ui/PrepareMonitor';
 
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
+    externalFonts?: Array<string>;
     normal?: string;
     narrow?: string;
     weights?: {
@@ -168,42 +169,21 @@ const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
 
   const favicon = monitorConfig.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
-  const fontHSL = (
+
+  const fonts = monitorConfig.fonts.externalFonts.map(font => (
     <link
       rel="stylesheet"
       type="text/css"
-      href="https://cloud.typography.com/6364294/7432412/css/fonts.css"
+      href={font}
     />
-  );
-  const fontDefault = (
-    <link
-      rel="stylesheet"
-      href="https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"
-    />
-  );
+  ));
 
-  const fontTampere = (
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css?family=Lato"
-    />
-  );
-
-  const getAdditionalFont = name => {
-    switch (name) {
-      case 'tampere':
-        return fontTampere;
-      default:
-        return null;
-    }
-  };
   return (
     <div className="App">
       <Helmet>
         <title>{monitorConfig.name} - pysäkkinäyttö</title>
         {faviconLink}
-        {monitorConfig.name === 'hsl' ? fontHSL : fontDefault}
-        {getAdditionalFont(monitorConfig.name)}
+        {fonts}
       </Helmet>
       <ApolloProvider client={client}>
         <Switch>

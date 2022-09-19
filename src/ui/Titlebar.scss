@@ -56,6 +56,10 @@ $preview-container-height: 365px;
         width: min(100%, 18vh);
       }
 
+      .vaasa {
+        width: min(100%, 12vh);
+      }
+
       .linkki {
         width: min(100%, 7vh);
       }
@@ -138,6 +142,11 @@ $preview-container-height: 365px;
 
     .linkki {
       width: min(100%, 10vh);
+    }
+
+    .vaasa {
+      width: min(100%, 20vh);
+      padding-left: 0.4vw;
     }
 
     &.preview {

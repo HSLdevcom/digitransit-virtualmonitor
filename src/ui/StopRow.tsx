@@ -1,11 +1,10 @@
 import cx from 'classnames';
 import React, { FC, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IPattern, ISettings } from '../util/Interfaces';
 import StopRoutesModal from './StopRoutesModal';
 import StopCode from './StopCode';
 import Icon from './Icon';
-import { IStop } from '../util/Interfaces';
+import { IStopInfoPlus } from '../util/Interfaces';
 import { getLayout } from '../util/getLayout';
 import { sortBy, uniqWith, isEqual } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
@@ -13,16 +12,6 @@ import { defaultSettings } from './StopRoutesModal';
 import { getStopIcon } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext } from '../contexts';
-
-interface IStopInfoPlus extends IStop {
-  cardId?: number;
-  settings: ISettings;
-  layout: number;
-  locality?: string;
-  patterns: Array<IPattern>;
-  id?: string;
-  modes: Array<string>;
-}
 
 interface IProps {
   readonly side: string;
@@ -33,21 +22,11 @@ interface IProps {
   readonly setStops?: (
     cardId: number,
     side: string,
-    stops: IStopInfoPlus,
-    reorder: boolean,
+    stops: Array<IStopInfoPlus>,
     gtfsIdForHidden: string,
   ) => void;
-  readonly leftStops?: Array<IStopInfoPlus>;
-  readonly rightStops?: Array<IStopInfoPlus>;
   readonly languages: Array<string>;
 }
-
-const moveIsPossible = (stop, stopList) => {
-  if (stopList.some((s: IStopInfoPlus) => s.id === stop.id)) {
-    return false;
-  }
-  return true;
-};
 
 const StopRow: FC<IProps> = ({
   side,
@@ -55,8 +34,6 @@ const StopRow: FC<IProps> = ({
   onStopDelete,
   onStopMove,
   setStops,
-  leftStops,
-  rightStops,
   languages,
 }) => {
   const [t] = useTranslation();
@@ -68,7 +45,7 @@ const StopRow: FC<IProps> = ({
         ...stop,
         settings: settings,
       };
-      setStops(stop.cardId, side, newStop, false, stop.gtfsId);
+      setStops(stop.cardId, side, [newStop], stop.gtfsId);
     }
     changeOpen(false);
   };
@@ -91,12 +68,20 @@ const StopRow: FC<IProps> = ({
   const isDefaultSettings =
     isEqual(defaultSettings, stop.settings) || !stop.settings;
 
-  const moveBetweenColumns = getLayout(stop.layout).isMultiDisplay
-    ? moveIsPossible(stop, side === 'left' ? rightStops : leftStops)
-    : false;
+  const moveBetweenColumns = getLayout(stop.layout).isMultiDisplay;
   const alternateIcon = config.modeIcons.postfix;
   return (
     <div className="stop-row-container">
+      {showModal && (
+        <StopRoutesModal
+          stopSettings={stop.settings}
+          closeModal={saveStopSettings}
+          showModal={showModal}
+          stop={stop}
+          combinedPatterns={combinedPatterns}
+          languages={languages}
+        />
+      )}
       <div className="stop-row-stop icon">
         <Icon
           img={
@@ -110,39 +95,29 @@ const StopRow: FC<IProps> = ({
         />
       </div>
       <div className="stop-row-main">
-        <div className="stop-upper-row">
-          {stop.name}
-          <div
-            className={cx('settings', isDouble && 'double')}
-            tabIndex={0}
-            role="button"
-            aria-label={t('stopSettings', {
-              stop: `${stop.name} ${stop.code}`,
-            })}
-            onClick={() => handleClick()}
-            onKeyPress={e =>
-              isKeyboardSelectionEvent(e, true) && handleClick(e, true)
-            }
-          >
-            <Icon img="settings" color={config.colors.primary} />
-          </div>
-          <div className={cx('changed-settings', isDouble && 'double')}>
-            {!isDefaultSettings && <span> {t('settingsChanged')}</span>}
-          </div>
-        </div>
-        {showModal && (
-          <StopRoutesModal
-            stopSettings={stop.settings}
-            closeModal={saveStopSettings}
-            showModal={showModal}
-            stop={stop}
-            combinedPatterns={combinedPatterns}
-            languages={languages}
-          />
-        )}
+        <div className="stop-upper-row">{stop.name}</div>
         <div className="stop-bottom-row">
           {stop.locality && <div className="address">{stop.locality}</div>}
           <StopCode code={stop.code} />
+        </div>
+      </div>
+      <div className="stop-row-settings">
+        <div className={cx('changed-settings', isDouble && 'double')}>
+          {!isDefaultSettings && <span> {t('settingsChanged')}</span>}
+        </div>
+        <div
+          className={cx('settings', isDouble && 'double')}
+          tabIndex={0}
+          role="button"
+          aria-label={t('stopSettings', {
+            stop: `${stop.name} ${stop.code}`,
+          })}
+          onClick={() => handleClick()}
+          onKeyPress={e =>
+            isKeyboardSelectionEvent(e, true) && handleClick(e, true)
+          }
+        >
+          <Icon img="settings" color={config.colors.primary} />
         </div>
       </div>
       <div

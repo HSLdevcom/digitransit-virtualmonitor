@@ -66,42 +66,25 @@
       letter-spacing: -0.03em;
       margin-bottom: 2px;
       display: flex;
+    }
+  }
 
-      .settings {
-        svg {
-          position: absolute;
-          left: 633px;
-          padding-top: 5px;
-          cursor: pointer;
-        }
+  .stop-row-settings {
+    font-weight: var(--font-weight-bigger);
+    display: flex;
 
-        &.double {
-          svg {
-            left: 588px;
-          }
-        }
-      }
+    .changed-settings {
+      display: flex;
+      align-items: center;
+      color: #666;
+      font-size: 13px;
+    }
 
-      .changed-settings {
-        &.double {
-          right: 148px;
-        }
-
-        svg {
-          padding-right: 3px;
-        }
-
-        display: flex;
-        align-items: center;
-        //position: relative;
-        flex: 1 1;
-        text-align: right;
-        color: #666;
-        right: 100px;
-        position: absolute;
-        font-size: 13px;
-        padding-top: 10px;
-      }
+    .settings {
+      margin: 0 15px;
+      display: flex;
+      align-self: center;
+      cursor: pointer;
     }
   }
 

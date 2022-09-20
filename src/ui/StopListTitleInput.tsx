@@ -8,9 +8,8 @@ import { ConfigContext } from '../contexts';
 
 function StopListTitleInput(props: {
   lang: string;
-  titleLeft: string;
-  titleRight: string;
-  setTitle: (side: string, changed: boolean, title?: string) => void;
+  title: string;
+  setTitle: (side: string, title?: string) => void;
   updateCardInfo?: (
     cardId: number,
     type: string,
@@ -19,7 +18,6 @@ function StopListTitleInput(props: {
   ) => void;
   cardInfoId: number;
   side: string;
-  itemsHeader: string;
   value: string;
 }) {
   const [t] = useTranslation();
@@ -31,11 +29,7 @@ function StopListTitleInput(props: {
   };
 
   const onChange = (e, side) => {
-    if (side === 'left') {
-      props.setTitle('left', true, e.target.value);
-    } else {
-      props.setTitle('right', true, e.target.value);
-    }
+    props.setTitle(e.target.value);
     if (props.updateCardInfo) {
       props.updateCardInfo(
         props.cardInfoId,
@@ -49,11 +43,13 @@ function StopListTitleInput(props: {
   return (
     <div className="stop-list-title-input">
       <div className="header">
-        {props.itemsHeader.concat(' - ').concat(props.lang.toUpperCase())}
+        {t(`header-side-${props.side}`)
+          .concat(' - ')
+          .concat(props.lang.toUpperCase())}
       </div>
-      <div className={cx('stop-list-title', props.side)}>
+      <div className={cx('stop-list-title')}>
         <input
-          className={`input-${props.side}`}
+          className={'input-multi-display'}
           id={`stop-list-title-input-${props.side}-${props.lang}`}
           onClick={onClick}
           onFocus={() => setFocus(true)}

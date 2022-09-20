@@ -150,12 +150,17 @@ const App: FC<IConfigurationProps> = props => {
     link: ApolloLink.from([
       new MultiAPILink({
         endpoints: {
-          default: config.uri,
-          hsl: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+          default: '/api/graphql',
           rail: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
         },
         httpSuffix: '',
         createHttpLink: () => createHttpLink(),
+        getContext: endpoint => {
+          if (endpoint === 'default') {
+            return { headers: { 'graphql-endpoint': config.uri } };
+          }
+          return {};
+        },
       }),
     ]),
     cache: new InMemoryCache(),
@@ -165,11 +170,7 @@ const App: FC<IConfigurationProps> = props => {
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
 
   const fonts = config.fonts.externalFonts.map(font => (
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href={font}
-    />
+    <link rel="stylesheet" type="text/css" href={font} />
   ));
 
   return (

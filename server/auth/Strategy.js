@@ -63,8 +63,8 @@ OICStrategy.prototype.authenticate = function (req, opts) {
   const { ssoValidTo, ssoToken } = req.session;
   const authurl =
     ssoValidTo && ssoValidTo > dayjs().unix()
-      ? this.createAuthUrl(redirectUri, cookieLang, ssoToken)
-      : this.createAuthUrl(redirectUri, cookieLang);
+    ? this.createAuthUrl(redirectUri, cookieLang, ssoToken)
+    : this.createAuthUrl(redirectUri, cookieLang);
   if (debugLogging) {
     console.log(`ssoToken: ${ssoToken} authUrl: ${authurl}`);
   }

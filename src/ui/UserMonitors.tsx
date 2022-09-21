@@ -61,9 +61,19 @@ const UserMonitors: React.FC<IProps> = props => {
     return <Loading white />;
   }
   const button = (
-    <Link to={'/monitors/createview'} className="monitor-button blue">
-      {t('quickDisplayCreate')}
-    </Link>
+    <>
+      {!views.length && (
+        <MonitorControls
+          monitorCount={views.length}
+          refetchMonitors={() => {
+            refetchMonitors(undefined);
+          }}
+        />
+      )}
+      <Link to={'/monitors/createview'} className="monitor-button blue">
+        {t('quickDisplayCreate')}
+      </Link>
+    </>
   );
 
   const monitors =

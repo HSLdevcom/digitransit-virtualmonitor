@@ -1,7 +1,5 @@
 import React, { FC, useContext, useState } from 'react';
 import Icon from './Icon';
-import { focusToInput, onClick } from '../util/InputUtils';
-import { isKeyboardSelectionEvent } from '../util/browser';
 import { Redirect } from 'react-router-dom';
 import monitorAPI from '../api';
 import { useTranslation } from 'react-i18next';

@@ -80,6 +80,16 @@
         padding-bottom: 20px;
         margin-top: 30px;
         display: flex;
+
+        .monitor-controls {
+          background-color: #f2f5f7;
+          height: unset;
+
+          .monitor-button {
+            font-size: 1.125em;
+            height: 50px;
+          }
+        }
       }
     }
   }

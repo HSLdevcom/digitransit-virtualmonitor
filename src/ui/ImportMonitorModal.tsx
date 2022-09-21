@@ -53,7 +53,7 @@ const ImportMonitorModal: FC<IProps> = ({
   };
 
   const importHashMonitor = (hash: string) => {
-    const contenthash = hash.replace(' ', '+');
+    const contenthash = hash.replaceAll(' ', '+');
     monitorAPI
       .get(contenthash)
       .then((r: any) => {

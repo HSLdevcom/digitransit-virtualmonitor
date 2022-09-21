@@ -35,7 +35,6 @@ const TitleItem = props => {
           key={`lan${lan}`}
           lang={lan}
           side={side}
-          title={title}
           updateCardInfo={updateCardInfo}
           cardInfoId={cardInfo.id}
           setTitle={setTitle}

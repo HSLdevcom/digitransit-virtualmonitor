@@ -17,7 +17,7 @@
       border: solid 1px #888;
       padding: 0 0 0 10px;
       margin: 0;
-      font-size: 15px;
+      font-size: 13px;
     }
   }
 
@@ -37,6 +37,10 @@
     border-radius: 5px;
     border: solid 1px #ddd;
     padding: 0 15px;
+
+    .monitor-input-container {
+      margin-right: 5px;
+    }
   }
 
   .import-button-container {

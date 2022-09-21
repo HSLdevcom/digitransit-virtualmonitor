@@ -66,7 +66,8 @@ const UserMonitors: React.FC<IProps> = props => {
     </Link>
   );
 
-  const monitors = views.length ? (
+  const monitors =
+    !!views.length &&
     views.map((view, i) => {
       const style = { '--delayLength': `0.${1 + i}s` } as React.CSSProperties;
       return (
@@ -82,25 +83,24 @@ const UserMonitors: React.FC<IProps> = props => {
           />
         </div>
       );
-    })
-  ) : (
-    <IndexPage buttons={button} />
-  );
+    });
 
   return (
     <ContentContainer>
-      <div className="user-monitors-container">
-        <MonitorControls
-          monitorCount={views.length}
-          refetchMonitors={() => {
-            refetchMonitors(undefined);
-          }}
-        />
-        <div className="cards-container">{monitors}</div>
-        {!!views.length && (
+      {views.length ? (
+        <div className="user-monitors-container">
+          <MonitorControls
+            monitorCount={views.length}
+            refetchMonitors={() => {
+              refetchMonitors(undefined);
+            }}
+          />
+          <div className="cards-container">{monitors}</div>
           <div className="create-button-container">{button}</div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <IndexPage buttons={button} />
+      )}
     </ContentContainer>
   );
 };

@@ -26,6 +26,13 @@ const ImportMonitorModal: FC<IProps> = ({
   const [addingMonitor, setAddingMonitor] = useState(false);
   const [importFailed, setImportFailed] = useState(false);
 
+  const setTitle = (title: string) => {
+    setMonitor({
+      ...monitor,
+      name: title,
+    });
+  };
+
   const importStaticMonitor = url => {
     monitorAPI
       .getStatic(url)
@@ -34,7 +41,7 @@ const ImportMonitorModal: FC<IProps> = ({
           setMonitor({
             ...r,
             name:
-              r.name !== ''
+              r.name === ''
                 ? `${t('stop-display')} ${monitorCount + 1}`
                 : r.name,
           });
@@ -130,7 +137,12 @@ const ImportMonitorModal: FC<IProps> = ({
 
         {monitor?.id && (
           <div className="import-preview">
-            <UserMonitorCard view={monitor} onDelete={undefined} preview />
+            <UserMonitorCard
+              view={monitor}
+              onDelete={undefined}
+              preview
+              setTitle={setTitle}
+            />
           </div>
         )}
         <div className="import-button-container">

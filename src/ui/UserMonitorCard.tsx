@@ -10,6 +10,7 @@ import {
 } from '../util/monitorUtils';
 import DeleteModal from './DeleteModal';
 import { ConfigContext } from '../contexts';
+import InputWithEditIcon from './InputWithEditIcon';
 
 interface IView {
   name?: string;
@@ -24,12 +25,14 @@ interface IProps {
   view: IView;
   onDelete: any;
   preview?: boolean;
+  setTitle?: (string) => void;
 }
 
 const UserMonitorCard: React.FC<IProps> = ({
   view,
   onDelete,
   preview = false,
+  setTitle,
 }) => {
   let to;
   const [t] = useTranslation();
@@ -172,7 +175,19 @@ const UserMonitorCard: React.FC<IProps> = ({
             color={config.colors.primary}
           />
         </div>
-        <div className="monitor-name">{name}</div>
+        <div className="monitor-name">
+          {setTitle ? (
+            <InputWithEditIcon
+              value={name}
+              id={url}
+              onChange={title => setTitle(title)}
+            >
+              {' '}
+            </InputWithEditIcon>
+          ) : (
+            name
+          )}
+        </div>
         {!preview && (
           <button
             className="delete-icon"

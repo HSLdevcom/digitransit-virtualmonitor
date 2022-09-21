@@ -217,18 +217,20 @@ const StopCardRow: FC<IProps> = ({
     <li className="stopcard animate-in" id={`stopcard_${id}`} style={style}>
       <div className="stopcard-row-container">
         <div className="title-with-icons">
-          {languages.map((lan, i) => {
-            return (
-              ((isDouble && i === 0) || !isDouble) && (
-                <StopViewTitleEditor
-                  key={`lan-${lan}`}
-                  card={item}
-                  updateCardInfo={updateCardInfo}
-                  lang={lan}
-                />
-              )
-            );
-          })}
+          <div className="title-list">
+            {languages.map((lan, i) => {
+              return (
+                ((isDouble && i === 0) || !isDouble) && (
+                  <StopViewTitleEditor
+                    key={`lan-${lan}`}
+                    card={item}
+                    updateCardInfo={updateCardInfo}
+                    lang={lan}
+                  />
+                )
+              );
+            })}
+          </div>
           <div className="icons">
             {cards.length > 1 && (
               <div

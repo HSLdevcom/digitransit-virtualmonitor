@@ -12,16 +12,16 @@
     display: flex;
     flex: 1;
 
-    .user-view-title-input {
+    .monitor-input-container {
+      max-width: 300px;
+
+      button {
+        background-color: #f2f5f7;
+      }
+    }
+
+    .monitor-input {
       font-size: 26px;
-      font-style: normal;
-      font-weight: $font-weight;
-      line-height: 31px;
-      letter-spacing: -0.3px;
-      text-align: left;
-      width: 250px;
-      height: 31px;
-      border: none;
       background: #f2f5f7;
 
       &:focus {

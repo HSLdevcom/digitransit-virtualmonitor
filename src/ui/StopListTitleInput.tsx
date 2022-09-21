@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ITitle } from '../util/Interfaces';
 import InputWithEditIcon from './InputWithEditIcon';
 interface IProps {
   lang: string;
-  setTitle: (side: string, title?: string) => void;
   updateCardInfo?: (
     cardId: number,
     type: string,
@@ -12,11 +12,10 @@ interface IProps {
   ) => void;
   cardInfoId: number;
   side: string;
-  value: string;
+  value: ITitle;
 }
 const StopListTitleInput: FC<IProps> = ({
   lang,
-  setTitle,
   updateCardInfo,
   cardInfoId,
   side,
@@ -25,7 +24,6 @@ const StopListTitleInput: FC<IProps> = ({
   const [t] = useTranslation();
 
   const onChange = (title, side) => {
-    setTitle(title);
     if (updateCardInfo) {
       updateCardInfo(cardInfoId, `title-${side}`, title, lang);
     }

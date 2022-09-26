@@ -90,13 +90,7 @@ const DisplaySettings: FC<IProps> = ({
                 isSelected={isChecked(option)}
                 onChange={() => handleChange(option)}
                 aria-label={
-                  t('displayLanguage') +
-                  ' ' +
-                  t(
-                    `languageName${
-                      option.charAt(0).toUpperCase() + option.slice(1)
-                    }`,
-                  )
+                  t('displayLanguage') + ' ' + t(`language-name-${option}`)
                 }
                 color={config.colors.primary}
               >

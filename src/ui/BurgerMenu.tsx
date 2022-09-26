@@ -34,11 +34,7 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
           onClick={() => changeLanguage(i18n, language)}
           to={window.location.pathname}
           aria-label={t('changeLanguage', {
-            language: t(
-              `languageName${
-                language.charAt(0).toUpperCase() + language.slice(1)
-              }`,
-            ),
+            language: t(`language-name-${language}`),
           })}
         >
           {language}

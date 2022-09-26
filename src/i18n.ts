@@ -21,6 +21,7 @@ i18n.use(initReactI18next).init({
     en: {
       translation: {
         'add-at-least-one-stop': 'Add at least one stop',
+        'add-to-own-displays': 'Add to my displays',
         all: 'All',
         arriveTerminal: 'Arrives / Terminus',
         autosuggestPlaceHolder: 'Name or number of the stop',
@@ -70,8 +71,12 @@ i18n.use(initReactI18next).init({
         hideLine: 'Hide route {{line}}',
         hideLines: 'Hide routes {{hidden}} / {{all}}',
         horizontal: 'Horizontal',
+        import: 'Import',
+        'import-instructions':
+          'Give the URL address of an existing stop display to add it to your displays.',
+        'import-monitor': 'Import display',
         'info-display-only-one':
-          'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
+          'You can select a service update view only for a display with one stop view.',
         'info-text-short': 'Departures in a chronological order',
         'info-text-one-column':
           'Departures in a chronological order in one column',
@@ -82,15 +87,15 @@ i18n.use(initReactI18next).init({
         'information-display-info':
           'Displays service updates for selected stops and routes',
         languageCode: 'en',
-        languageNameEn: 'English',
-        languageNameFi: 'Finnish',
-        languageNameSv: 'Swedish',
+        'language-name-en': 'English',
+        'language-name-fi': 'Finnish',
+        'language-name-sv': 'Swedish',
         languageSelection: 'Language selection',
         layout: 'Layout',
         'layout-double': 'Double view',
         layoutModalHeader: 'Select layout',
         lineId: 'Route',
-        'link-copied': 'Linkki kopioitu leikepöydälle',
+        'link-copied': 'Link copied to clipboard',
         links: 'Links',
         loading: 'Loading...',
         login: 'Log in',
@@ -103,20 +108,21 @@ i18n.use(initReactI18next).init({
         moveViewDown: 'Move stop display {{id}} down',
         moveViewUp: 'Move stop display {{id}} up',
         'new-display-disabled':
-          'Et voi lisätä useampia näkymiä tiedotenäyttöön',
+          'You cannot add more than one view to the service update view',
         'no-departures': 'No known departures',
+        'no-monitor-found': 'No display was found matching the URL given.',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
         'non-logged-in-monitor-info':
-          'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
+          'You are editing a display that has been created without logging in to the service. You can save the display in your displays by clicking on the button Create view.',
         notPossibleToCreate:
           'Unable to create a new view without {{requirements}}',
         notPossibleToPreview:
           'Unable to display the preview without {{requirements}}',
         notPossibleToSave: 'Unable to save the view without {{requirements}}',
         'one-column': 'One column',
-        open: 'Open display',
+        open: 'Open the display',
         ok: 'OK',
         or: 'or',
         'platform-or-stop': 'Platform/Stop',
@@ -147,6 +153,7 @@ i18n.use(initReactI18next).init({
         'skip-to-main-content': 'Go to the main content of this page',
         staticMonitorTitle: 'Name of the display',
         stop: 'Stop',
+        'stop-display': 'Stop display',
         stopSettings: 'Settings for stop {{stop}} ({{code}})',
         stoptitle: 'Name of the stop view',
         tighten: 'Convergent',
@@ -154,7 +161,7 @@ i18n.use(initReactI18next).init({
         timeShiftDescription:
           'You can exclude departures that are too soon to catch from the location of the stop display.',
         timeShiftShow: 'Only show departures departing in more than',
-        'to-own-displays': 'Siirry omiin näyttöihin',
+        'to-own-displays': 'Go to my displays',
         'two-columns': 'Two columns',
         userinfo: 'My information',
         vertical: 'Vertical',
@@ -164,6 +171,7 @@ i18n.use(initReactI18next).init({
     fi: {
       translation: {
         'add-at-least-one-stop': 'Lisää vähintään yksi pysäkki',
+        'add-to-own-displays': 'Lisää omiin näyttöihin',
         all: 'Kaikki',
         arriveTerminal: 'Saapuu / Päätepysäkki',
         autosuggestPlaceHolder: 'Pysäkin nimi tai numero',
@@ -214,6 +222,10 @@ i18n.use(initReactI18next).init({
         hideLine: 'Piilota linja {{line}}',
         hideLines: 'Piilota linjoja {{hidden}} / {{all}}',
         horizontal: 'Vaaka',
+        import: 'Tuo',
+        'import-instructions':
+          'Anna olemassaolevan pysäkkinäytön URL-osoite, niin voit lisätä sen omiin näyttöihisi',
+        'import-monitor': 'Tuo näyttö',
         'info-display-only-one':
           'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
         'info-text-short': 'Lähdöt aikajärjestyksessä',
@@ -225,9 +237,9 @@ i18n.use(initReactI18next).init({
         'information-display-info':
           'Esittää tiedotteita valituista pysäkeistä ja linjoista',
         languageCode: 'fi',
-        languageNameEn: 'Englanti',
-        languageNameFi: 'Suomi',
-        languageNameSv: 'Ruotsi',
+        'language-name-en': 'Englanti',
+        'language-name-fi': 'Suomi',
+        'language-name-sv': 'Ruotsi',
         languageSelection: 'Kielen valinta',
         layout: 'Asettelu',
         'layout-double': 'Kaksoisnäkymä',
@@ -248,6 +260,8 @@ i18n.use(initReactI18next).init({
         'new-display-disabled':
           'Et voi lisätä useampia näkymiä tiedotenäyttöön',
         'no-departures': 'Ei tiedossa olevia lähtöjä',
+        'no-monitor-found':
+          'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
         'no-stops-selected': 'Ei valittuja pysäkkejä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
@@ -289,6 +303,7 @@ i18n.use(initReactI18next).init({
         'skip-to-main-content': 'Siirry sivun pääsisältöön',
         staticMonitorTitle: 'Näytön nimi',
         stop: 'Pysäkki',
+        'stop-display': 'Pysäkkinäyttö',
         stopSettings: 'Pysäkin {{stop}} {{code}} asetukset',
         stoptitle: 'Pysäkkinäkymän nimi',
         tighten: 'Tiivistyvä',
@@ -306,6 +321,7 @@ i18n.use(initReactI18next).init({
     sv: {
       translation: {
         'add-at-least-one-stop': 'Lägg till åtminstone en hållplats',
+        'add-to-own-displays': 'Lägg till i mina skärmar',
         all: 'Alla',
         arriveTerminal: 'Anländer / Ändhållplats',
         autosuggestPlaceHolder: 'Hållplatsens namn eller nummer',
@@ -356,8 +372,12 @@ i18n.use(initReactI18next).init({
         hideLine: 'Dölj linje {{line}}',
         hideLines: 'Dölj linjer {{hidden}} / {{all}}',
         horizontal: 'Horisontell',
+        import: 'Importera',
+        'import-instructions':
+          'Ange URL-adressen för en existerande hållplatsskärm för att lägga till den i dina skärmar',
+        'import-monitor': 'Importera skärmen',
         'info-display-only-one':
-          'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
+          'Du kan välja meddelandeskärmen endast för en skärm som har bara en hållplatsvy.',
         'info-text-short': 'Avgångarna i kronologisk ordning',
         'info-text-one-column': 'Avgångarna i kronologisk ordning i en kolumn',
         'info-text-two-columns':
@@ -367,15 +387,15 @@ i18n.use(initReactI18next).init({
         'information-display-info':
           'Visar meddelanden om de valda hållplatserna och linjerna',
         languageCode: 'sv',
-        languageNameEn: 'engelska',
-        languageNameFi: 'finska',
-        languageNameSv: 'svenska',
+        'language-name-en': 'engelska',
+        'language-name-fi': 'finska',
+        'language-name-sv': 'svenska',
         languageSelection: 'Språkval',
         layout: 'Justering',
         'layout-double': 'Dubbelvy',
         layoutModalHeader: 'Välj justering',
         lineId: 'Linje',
-        'link-copied': 'Linkki kopioitu leikepöydälle',
+        'link-copied': 'Länken har kopierats till urklipp',
         links: 'Länkar',
         loading: 'Laddar...',
         login: 'Logga in',
@@ -388,13 +408,15 @@ i18n.use(initReactI18next).init({
         moveViewDown: 'Flytta hållplatsvy {{id}} nedåt',
         moveViewUp: 'Flytta hållplatsvy {{id}} uppåt',
         'new-display-disabled':
-          'Et voi lisätä useampia näkymiä tiedotenäyttöön',
+          'Du kan inte lägga till flera vyer i meddelandeskärmen',
         'no-departures': 'Inga kända avgångar',
+        'no-monitor-found':
+          'Inga hållplatsskärmar hittades med den URL-adress du angav.',
         'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',
         'non-logged-in-monitor-info':
-          'Olet muokkaamassa näyttöä, joka on luotu ilman kirjautumista. Voit tallentaa näytön omiin näyttöihisi.',
+          'Du redigerar en skärm som har skapats utan inloggning. Du kan spara skärmen i dina skärmar genom att klicka på knappen Skapa vy.',
         notPossibleToCreate: 'Vyn kan inte skapas utan {{requirements}}',
         notPossibleToPreview:
           'Förhandsgranskning kan inte visas utan {{requirements}}',
@@ -431,6 +453,7 @@ i18n.use(initReactI18next).init({
         'skip-to-main-content': 'Gå till sidans huvudinnehåll',
         staticMonitorTitle: 'Skärmens namn',
         stop: 'Hållplats',
+        'stop-display': 'Hållplatsskärm',
         stopSettings: 'Inställningar för hållplats {{stop}} ({{code}})',
         stoptitle: 'Hållplatsskärmens namn',
         tighten: 'Förtätad',
@@ -438,7 +461,7 @@ i18n.use(initReactI18next).init({
         timeShiftDescription:
           'Du kan välja bort de avgångstider som inte är anpassade till dig.',
         timeShiftShow: 'Visa endast avgångar som avgår om minst',
-        'to-own-displays': 'Siirry omiin näyttöihin',
+        'to-own-displays': 'Gå till mina skärmar',
         'two-columns': 'Två kolumner',
         userinfo: 'Mina uppgifter',
         vertical: 'Vertikal',

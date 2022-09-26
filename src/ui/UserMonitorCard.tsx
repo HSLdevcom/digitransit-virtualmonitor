@@ -10,6 +10,7 @@ import {
 } from '../util/monitorUtils';
 import DeleteModal from './DeleteModal';
 import { ConfigContext } from '../contexts';
+import InputWithEditIcon from './InputWithEditIcon';
 
 interface IView {
   name?: string;
@@ -23,13 +24,20 @@ interface IView {
 interface IProps {
   view: IView;
   onDelete: any;
+  preview?: boolean;
+  setTitle?: (string) => void;
 }
 
-const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
+const UserMonitorCard: React.FC<IProps> = ({
+  view,
+  onDelete,
+  preview = false,
+  setTitle,
+}) => {
   let to;
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
-  const { cards, name, languages, url } = view;
+  const { cards, name, languages, url, id } = view;
   const [isOpen, setOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const layout = cards[0].layout;
@@ -167,54 +175,70 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
             color={config.colors.primary}
           />
         </div>
-        <div className="monitor-name">{name}</div>
-        <button
-          className="delete-icon"
-          onClick={() => setDeleteModalOpen(true)}
-        >
-          <Icon img="delete" color={config.colors.primary} />
-        </button>
+        <div className="monitor-name">
+          {setTitle ? (
+            <InputWithEditIcon
+              value={name}
+              id={id}
+              onChange={title => setTitle(title)}
+            />
+          ) : (
+            name
+          )}
+        </div>
+        {!preview && (
+          <div className="delete-button-container">
+            <button
+              className="delete-icon"
+              onClick={() => setDeleteModalOpen(true)}
+            >
+              <Icon img="delete" color={config.colors.primary} />
+            </button>
+          </div>
+        )}
       </div>
       <div className="cards">{crds}</div>
-      <div className="buttons-container">
-        <div className="main-buttons-container">
+      {!preview && (
+        <div className="buttons-container">
+          <div className="main-buttons-container">
+            <button
+              className="monitor-button white"
+              onClick={() => setOpen(true)}
+            >
+              {t('preview')}
+            </button>
+            <Link
+              tabIndex={0}
+              role="button"
+              className="monitor-button white"
+              to={`/monitors/createview?&url=${url}`}
+            >
+              {t('modify')}
+            </Link>
+            <Link
+              tabIndex={0}
+              role="button"
+              className="monitor-button white"
+              to={`/static?&url=${url}`}
+            >
+              {t('open')}
+            </Link>
+          </div>
           <button
             className="monitor-button white"
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `${window.location.host}/static?url=${url}`,
+              );
+              setShowModal(true);
+              clearTimeout(to);
+              to = setTimeout(() => setShowModal(false), 3000);
+            }}
           >
-            {t('preview')}
+            {t('copy')}
           </button>
-          <Link
-            tabIndex={0}
-            role="button"
-            className="monitor-button white"
-            to={`/monitors/createview?&url=${url}`}
-          >
-            {t('modify')}
-          </Link>
-          <Link
-            tabIndex={0}
-            role="button"
-            className="monitor-button white"
-            to={`/static?&url=${url}`}
-          >
-            {t('open')}
-          </Link>
         </div>
-        <button
-          className="monitor-button white"
-          onClick={() => {
-            navigator.clipboard.writeText(
-              `${window.location.host}/static?url=${url}`,
-            );
-            setShowModal(true);
-            clearTimeout(to);
-            to = setTimeout(() => setShowModal(false), 3000);
-          }}
-        >
-          {t('copy')}
-        </button>
-      </div>
+      )}
     </>
   );
 };

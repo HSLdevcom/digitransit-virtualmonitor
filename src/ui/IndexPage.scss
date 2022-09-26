@@ -26,6 +26,17 @@
     color: $primary-color;
     border: 1px solid #888;
   }
+
+  &:disabled {
+    cursor: unset;
+    background: #ccc;
+    border: 1px solid #ccc;
+    color: #fff;
+
+    span {
+      color: #fff;
+    }
+  }
 }
 
 .index {
@@ -69,6 +80,17 @@
         padding-bottom: 20px;
         margin-top: 30px;
         display: flex;
+
+        .monitor-controls {
+          background-color: #f2f5f7;
+          height: unset;
+          padding: 0;
+
+          .monitor-button {
+            font-size: 1.125em;
+            height: 50px;
+          }
+        }
       }
     }
   }

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IStop, ICardInfo } from '../util/Interfaces';
 import StopListTitleInput from './StopListTitleInput';
@@ -23,28 +23,6 @@ interface Props {
   ) => void;
   languages: Array<string>;
 }
-
-const TitleItem = props => {
-  const { cardInfo, side, updateCardInfo, languages } = props;
-  const [title, setTitle] = useState(props.title);
-
-  return (
-    <div className="double-inputs">
-      {languages?.map(lan => (
-        <StopListTitleInput
-          key={`lan${lan}`}
-          lang={lan}
-          side={side}
-          title={title}
-          updateCardInfo={updateCardInfo}
-          cardInfoId={cardInfo.id}
-          setTitle={setTitle}
-          value={title}
-        />
-      ))}
-    </div>
-  );
-};
 
 const StopListPlaceHolder = props => {
   const { text } = props;
@@ -76,13 +54,18 @@ const StopListContainer: FC<Props> = ({
       <section id={'left'}>
         <div>
           {showStopTitles && (
-            <TitleItem
-              side="left"
-              title={card.columns.left.title}
-              cardInfo={card}
-              updateCardInfo={updateCardInfo}
-              languages={languages}
-            />
+            <div className="double-inputs">
+              {languages?.map(lan => (
+                <StopListTitleInput
+                  key={`lan${lan}`}
+                  lang={lan}
+                  side={'left'}
+                  updateCardInfo={updateCardInfo}
+                  cardInfoId={card.id}
+                  value={card.columns.left.title}
+                />
+              ))}
+            </div>
           )}
           {showStopTitles && leftItems.length === 0 && (
             <StopListPlaceHolder text={t('no-stops-selected')} />
@@ -113,13 +96,18 @@ const StopListContainer: FC<Props> = ({
       </section>
       {showStopTitles && (
         <section id={'right'}>
-          <TitleItem
-            side="right"
-            title={card.columns.right.title}
-            cardInfo={card}
-            updateCardInfo={updateCardInfo}
-            languages={languages}
-          />
+          <div className="double-inputs">
+            {languages?.map(lan => (
+              <StopListTitleInput
+                key={`lan${lan}`}
+                lang={lan}
+                side={'right'}
+                updateCardInfo={updateCardInfo}
+                cardInfoId={card.id}
+                value={card.columns.right.title}
+              />
+            ))}
+          </div>
           {showStopTitles && rightItems.length === 0 && (
             <StopListPlaceHolder text={t('no-stops-selected')} />
           )}

@@ -1,28 +1,12 @@
 @import '../index';
 
-.modal {
-  .ReactModal__Content {
-    border: none !important;
-    border-radius: 5px !important;
-    width: 680px !important;
-    max-height: 90% !important;
-    height: fit-content;
-    overflow-x: hidden !important;
-    top: 50% !important;
-    left: 50% !important;
-    margin-right: -50%;
-    margin-bottom: -50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    justify-content: center;
-    animation: none;
-  }
+.layout-modal {
+  .monitor-modal-container {
+    margin: 0 80px;
 
-  .layout-modal-header {
-    margin: 0 0 34px 0;
-    font-size: 1.5rem;
-    font-weight: $font-weight-bigger;
-    padding-left: 60px;
+    .monitor-modal-header {
+      margin-bottom: 0;
+    }
   }
 
   .layout-modal-content-container {
@@ -47,23 +31,9 @@
     .row-info {
       margin-bottom: 10px;
     }
-
-    #close {
-      display: flex;
-      justify-content: flex-end;
-
-      .close-button {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-      }
-    }
   }
 
   .layouts {
-    margin-top: -31px;
-    margin-left: 60px;
-
     .row {
       .header {
         padding-bottom: 20px;

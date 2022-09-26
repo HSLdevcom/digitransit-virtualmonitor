@@ -1,35 +1,38 @@
 .stop-title {
-  display: flex;
-  flex-direction: column;
   background: #ffff;
   color: #666;
   height: 80px;
-  width: 250px;
+  width: 100%;
+  max-width: 300px;
 }
 
 .stop-title-input-container {
-  display: flex;
+  margin-right: 10px;
 
-  .stop-title-input {
-    &.double {
-      &:focus {
-        outline: none;
-      }
-    }
-
+  .monitor-input.double {
     font-size: 21px;
-    font-style: normal;
-    font-weight: $font-weight;
-    line-height: 24px;
-    letter-spacing: -0.3px;
-    text-align: left;
-    width: 180px;
-    height: 24px;
-    border: none;
+  }
 
-    &:focus {
-      outline: auto $primary-color;
+  .monitor-input-container {
+    width: unset;
+    display: flex;
+
+    .monitor-input {
+      font-size: 21px;
+      font-style: normal;
+      font-weight: $font-weight;
+      line-height: 24px;
+      letter-spacing: -0.3px;
+      text-align: left;
+      height: 24px;
+      flex: 1;
+      border: none;
+      width: 100%;
     }
+  }
+
+  &:focus {
+    outline: auto $primary-color;
   }
 }
 
@@ -41,6 +44,5 @@
   letter-spacing: -0.3px;
   text-align: left;
   white-space: nowrap;
-  margin-top: 17px;
-  margin-bottom: 0;
+  margin: 17px 0 0 3px;
 }

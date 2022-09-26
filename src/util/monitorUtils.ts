@@ -7,6 +7,8 @@ import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import dummyAlerts, { getDummyAlerts } from '../testAlert';
 import SunCalc from 'suncalc';
 
+export const namespace = 'd5a9e986-d6c3-4174-a160-9ac088145cc3';
+
 const WEATHER_URL =
   'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
 

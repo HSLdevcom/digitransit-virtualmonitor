@@ -7,6 +7,7 @@ import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
 import IndexPage from './IndexPage';
 import Loading from './Loading';
+import MonitorControls from './MonitorControls';
 
 interface Iv {
   columns: ISides;
@@ -37,52 +38,79 @@ const UserMonitors: React.FC<IProps> = props => {
   const [loading, setLoading] = useState(true);
   const [views, setViews] = useState([]);
   const [changed, setChanged] = useState(false);
-  useEffect(() => {
-    const controller = new AbortController();
+
+  const refetchMonitors = controller => {
+    if (!controller) {
+      controller = new AbortController();
+    }
     monitorAPI.getAllMonitorsForUser(controller.signal).then((r: Array<Iv>) => {
-      setViews(r);
+      setViews(r.reverse());
       setChanged(false);
       setLoading(false);
     });
+  };
+  useEffect(() => {
+    const controller = new AbortController();
+    refetchMonitors(controller);
     return () => {
       controller.abort();
     };
-  }, [changed]);
+  }, []);
 
   if (loading) {
     return <Loading white />;
   }
   const button = (
-    <Link to={'/monitors/createview'} className="monitor-button blue">
-      {t('quickDisplayCreate')}
-    </Link>
+    <>
+      <Link to={'/monitors/createview'} className="monitor-button blue">
+        {t('quickDisplayCreate')}
+      </Link>
+      {!views.length && (
+        <MonitorControls
+          monitorCount={views.length}
+          refetchMonitors={() => {
+            refetchMonitors(undefined);
+          }}
+        />
+      )}
+    </>
   );
 
-  const monitors = views.length ? (
+  const monitors =
+    !!views.length &&
     views.map((view, i) => {
       const style = { '--delayLength': `0.${1 + i}s` } as React.CSSProperties;
       return (
-        <div key={`card${i}`} className={'card animate-in'} style={style}>
+        <div
+          key={`card${view.url}`}
+          className={'card animate-in'}
+          style={style}
+        >
           <UserMonitorCard
             key={`monitor#${i}`}
-            onDelete={() => setChanged(true)}
+            onDelete={() => refetchMonitors(undefined)}
             view={view}
           />
         </div>
       );
-    })
-  ) : (
-    <IndexPage buttons={button} />
-  );
+    });
 
   return (
     <ContentContainer>
-      <div className="user-monitors-container">
-        <div className="cards-container">{monitors}</div>
-        {!!views.length && (
+      {views.length ? (
+        <div className="user-monitors-container">
+          <MonitorControls
+            monitorCount={views.length}
+            refetchMonitors={() => {
+              refetchMonitors(undefined);
+            }}
+          />
+          <div className="cards-container">{monitors}</div>
           <div className="create-button-container">{button}</div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <IndexPage buttons={button} />
+      )}
     </ContentContainer>
   );
 };

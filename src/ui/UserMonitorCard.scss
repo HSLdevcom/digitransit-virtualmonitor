@@ -58,14 +58,17 @@
     margin: 0 15px 0 0;
   }
 
-  .delete-icon {
-    cursor: pointer;
-    width: 40px;
-    padding-left: 8px;
-    text-align: center;
-    border-left: 1px solid #ddd;
+  .delete-button-container {
     margin-left: 9px;
-    justify-content: center;
+    border-left: 1px solid #ddd;
+    padding-left: 8px;
+
+    .delete-icon {
+      cursor: pointer;
+      width: 40px;
+      text-align: center;
+      justify-content: center;
+    }
   }
 
   .monitor-button {

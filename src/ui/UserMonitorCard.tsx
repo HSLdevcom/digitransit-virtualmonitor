@@ -189,12 +189,14 @@ const UserMonitorCard: React.FC<IProps> = ({
           )}
         </div>
         {!preview && (
-          <button
-            className="delete-icon"
-            onClick={() => setDeleteModalOpen(true)}
-          >
-            <Icon img="delete" color={config.colors.primary} />
-          </button>
+          <div className="delete-button-container">
+            <button
+              className="delete-icon"
+              onClick={() => setDeleteModalOpen(true)}
+            >
+              <Icon img="delete" color={config.colors.primary} />
+            </button>
+          </div>
         )}
       </div>
       <div className="cards">{crds}</div>

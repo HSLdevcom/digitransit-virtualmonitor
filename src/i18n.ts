@@ -110,8 +110,7 @@ i18n.use(initReactI18next).init({
         'new-display-disabled':
           'You cannot add more than one view to the service update view',
         'no-departures': 'No known departures',
-        'no-monitor-found':
-          'No display was found matching the URL given.',
+        'no-monitor-found': 'No display was found matching the URL given.',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',

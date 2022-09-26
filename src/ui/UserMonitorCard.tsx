@@ -181,9 +181,7 @@ const UserMonitorCard: React.FC<IProps> = ({
               value={name}
               id={id}
               onChange={title => setTitle(title)}
-            >
-              {' '}
-            </InputWithEditIcon>
+            />
           ) : (
             name
           )}

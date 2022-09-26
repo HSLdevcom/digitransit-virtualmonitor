@@ -20,8 +20,6 @@ export default {
       hover: '#0062a1',
       monitorBackground: '#0057a2',
     },
-    postfix: '',
-    setName: '',
     feedIds: ['HSL'],
     modeIcons: {
       colors: {
@@ -37,7 +35,7 @@ export default {
       setName: 'default',
     },
     name: 'hsl',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+    uri: 'routing/v1/routers/hsl/index/graphql',
     bannersUri: 'https://content.hsl.fi/api/v1/banners?',
     HSLUri: 'https://test.hslfi.hsldev.com/',
     suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',
@@ -56,6 +54,9 @@ export default {
       primary: '#7DC02D',
       monitorBackground: '#0057a2',
     },
+    fonts: {
+      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
+    },
     feedIds: ['LINKKI'],
     modeIcons: {
       colors: {
@@ -65,7 +66,7 @@ export default {
       setName: 'digitransit',
     },
     name: 'jyvaskyla',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     allowLogin: false,
@@ -101,14 +102,14 @@ export default {
       setName: 'digitransit',
     },
     name: 'tampere',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     allowLogin: false,
     useTilde: false,
   },
   vaasa: {
-    uri: 'routing/v1/routers/waltti/index/graphql',
+    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
     allowLogin: false,
     feedIds: ['vaasa'],

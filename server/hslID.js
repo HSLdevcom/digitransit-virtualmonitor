@@ -1,67 +1,66 @@
-import monitorService from './monitorService.js';
 import axios from 'axios';
+import monitorService from './monitorService.js';
 
 const CLIENT_ID = process.env.MANAGEMENT_API_ID;
 const CLIENT_SECRET = process.env.MANAGEMENT_API_SECRET;
 
 export const isUserOwnedMonitor = async (req, res, next) => {
   try {
-    const userMonitors = await getDataStorageMonitors(req, res, next)
+    const userMonitors = await getDataStorageMonitors(req, res, next);
     if (userMonitors.includes(req.params.id)) {
-      res.status(200).send({msg: 'OK'});
+      res.status(200).send({ msg: 'OK' });
     } else {
-      res.status(401).send({msg: 'Unauthorized'});
+      res.status(401).send({ msg: 'Unauthorized' });
     }
   } catch (err) {
     next(err);
   }
-}
+};
 
 export const updateStaticMonitor = async (req, res, next) => {
   try {
-    const userMonitors = await getDataStorageMonitors(req, res)
+    const userMonitors = await getDataStorageMonitors(req, res);
     if (userMonitors.includes(req.body.url)) {
       monitorService.updateStatic(req, res);
     } else {
-      res.status(401).send("Unauthorized");
+      res.status(401).send('Unauthorized');
     }
   } catch (err) {
     next(err);
   }
-}
+};
 
 export const getMonitors = async (req, res, next) => {
   try {
     const monitors = await getDataStorageMonitors(req, res);
     monitorService.getMonitorsForUser(req, res, next, monitors);
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};
 
 const getDataStorageMonitors = async (req, res) => {
   try {
-    let dataStorage
+    let dataStorage;
     dataStorage = await getDataStorage(req?.user?.data.sub);
     if (dataStorage) {
       const options = {
         endpoint: `/api/rest/v1/datastorage/${dataStorage.id}/data`,
       };
       const response = await makeHslIdRequest(options);
-      return Object.keys(response.data).map(key => key);
-    } else {
-      console.log("no data storage found, user doesn't have any monitors")
-      return [];
+      return Object.keys(response.data).map((key) => key);
     }
+    console.log("no data storage found, user doesn't have any monitors");
+    return [];
   } catch (err) {
     throw err;
   }
-}
+};
 
 export const deleteMonitor = async (req, res, next) => {
   try {
     const userId = req?.user?.data.sub;
-    let dataS = await getDataStorage(userId);
+    const dataS = await getDataStorage(userId);
     if (dataS) {
       const options = {
         endpoint: `/api/rest/v1/datastorage/${dataS.id}/data`,
@@ -69,16 +68,16 @@ export const deleteMonitor = async (req, res, next) => {
       const response = await makeHslIdRequest(options);
       const monitors = Object.keys(response.data).map(key => key);
       if (monitors.includes(req.body.url)) {
-        const response = await deleteMonitorHSL(dataS.id, req.body.url)
-        await monitorService.deleteStatic(req,res);
+        const response = await deleteMonitorHSL(dataS.id, req.body.url);
+        await monitorService.deleteStatic(req, res);
       } else {
-        res.status(401).send("Unauthorized");
+        res.status(401).send('Unauthorized');
       }
     }
   } catch (err) {
-    next(err)
+    next(err);
   }
-}
+};
 
 export const createMonitor = async (req, res, next) => {
   try {
@@ -89,24 +88,24 @@ export const createMonitor = async (req, res, next) => {
     let dataS = await getDataStorage(userId);
     if (dataS) {
       dataStorage.id = dataS.id;
-      console.log("existing data storage found");
+      console.log('existing data storage found');
     } else {
-      console.log("no data storage, creating one")
+      console.log('no data storage, creating one');
       dataS = await createDataStorage(userId);
       dataStorage.id = dataS;
     }
     const res = await updateMonitors(dataStorage.id, req.body, next);
   } catch (e) {
-    next(e)
+    next(e);
   }
-}
+};
 
-const makeHslIdRequest = async (
-  options,
-) => {
+const makeHslIdRequest = async (options) => {
   try {
     const hslIdUrl = 'https://hslid-uat.cinfra.fi';
-    const credentials = `Basic ${Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64')}`;
+    const credentials = `Basic ${Buffer.from(
+      `${CLIENT_ID}:${CLIENT_SECRET}`,
+    ).toString('base64')}`;
     options.url = `${hslIdUrl}${options.endpoint}`;
     options.headers = {
       Authorization: credentials,
@@ -118,10 +117,7 @@ const makeHslIdRequest = async (
     throw err;
   }
 };
-const deleteMonitorHSL = async (
-  dataStorageId,
-  monitor,
-) => {
+const deleteMonitorHSL = async (dataStorageId, monitor) => {
   try {
     const options = {
       method: 'DELETE',
@@ -134,15 +130,12 @@ const deleteMonitorHSL = async (
   }
 };
 
-const updateMonitors = async (
-  dataStorageId,
-  monitor,
-) => {
+const updateMonitors = async (dataStorageId, monitor) => {
   try {
     const options = {
       method: 'PUT',
       endpoint: `/api/rest/v1/datastorage/${dataStorageId}/data/${monitor.url}`,
-      data: {'value': monitor.monitorContenthash},
+      data: { value: monitor.monitorContenthash },
     };
     const response = await makeHslIdRequest(options);
     return response;
@@ -154,7 +147,7 @@ const updateMonitors = async (
 const createDataStorage = async (id) => {
   const options = {
     method: 'POST',
-    endpoint: `/api/rest/v1/datastorage`,
+    endpoint: '/api/rest/v1/datastorage',
     data: {
       name: `monitors-${CLIENT_ID || ''}`,
       description: 'Pysäkkinäytöt',
@@ -170,16 +163,14 @@ const createDataStorage = async (id) => {
   } catch (e) {
     throw e;
   }
-}
+};
 
-const getDataStorage = async (id) => {
+const getDataStorage = async id => {
   const options = {
     method: 'GET',
     endpoint: '/api/rest/v1/datastorage',
     params: {
-      dsfilter: `ownerId eq "${id}" and name eq "monitors-${
-        CLIENT_ID || ''
-      }"`,
+      dsfilter: `ownerId eq "${id}" and name eq "monitors-${CLIENT_ID || ''}"`,
     },
   };
   try {
@@ -187,9 +178,8 @@ const getDataStorage = async (id) => {
     const dataStorage = response.data.resources[0];
     if (dataStorage) {
       return dataStorage;
-    } else {
-      return undefined;
     }
+    return undefined;
   } catch (error) {
     throw error;
   }

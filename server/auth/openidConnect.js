@@ -21,16 +21,15 @@ export const errorHandler = function (res, err) {
   }
 };
 
-
 export const userAuthenticated = function (req, res, next) {
   axios
     .get(`${OIDCHost}/openid/userinfo`, {
       headers: { Authorization: `Bearer ${req.user.token.access_token}` },
     })
-    .then(function () {
+    .then(() => {
       next();
     })
-    .catch(function (err) {
+    .catch(err => {
       errorHandler(res, err);
     });
 };
@@ -179,7 +178,9 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       const restParams = Object.keys(rest)
         .map(k => `${k}=${rest[k]}`)
         .join('&');
-      req.session.returnTo = localPort ? `http://localhost:${localPort}${url}?${restParams}` : `${url}?${restParams}`;
+      req.session.returnTo = localPort
+        ? `http://localhost:${localPort}${url}?${restParams}`
+        : `${url}?${restParams}`;
     }
     passport.authenticate('passport-openid-connect', {
       scope: 'profile',
@@ -188,15 +189,18 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   });
 
   // Callback handler that will redirect back to application after successfull authentication
-  app.get(callbackPath,
+  app.get(
+    callbackPath,
     passport.authenticate('passport-openid-connect', {
       callback: true,
-      successReturnToOrRedirect: localPort ? `http://localhost:${localPort}/${indexPath}` : `/${indexPath}`,
+      successReturnToOrRedirect: localPort
+        ? `http://localhost:${localPort}/${indexPath}`
+        : `/${indexPath}`,
       failureRedirect: '/login',
-    })
+    }),
   );
 
-  app.get('/logout', function (req, res) {
+  app.get('/logout', (req, res) => {
     const cookieLang = req.cookies.lang || 'fi';
     const host = req.headers['x-forwarded-host'] || req.headers.host;
     const postLogoutRedirectUri = req.secure
@@ -216,14 +220,14 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     res.redirect(logoutUrl);
   });
 
-  app.get('/logout/callback', function (req, res) {
+  app.get('/logout/callback', (req, res) => {
     if (debugLogging) {
       console.log(`logout callback for userId ${req.session.userId}`);
     }
     const sessions = `sessions-${req.session.userId}`;
     req.logout();
-    RedisClient.smembers(sessions, function (err, sessionIds) {
-      req.session.destroy(function () {
+    RedisClient.smembers(sessions, (err, sessionIds) => {
+      req.session.destroy(() => {
         res.clearCookie('connect.sid');
         if (sessionIds && sessionIds.length > 0) {
           if (debugLogging) {
@@ -232,12 +236,16 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
           RedisClient.del(...sessionIds);
           RedisClient.del(sessions);
         }
-        res.redirect(localPort ? `http://localhost:${localPort}/${indexPath}` : `/${indexPath}`);
+        res.redirect(
+          localPort
+            ? `http://localhost:${localPort}/${indexPath}`
+            : `/${indexPath}`,
+        );
       });
     });
   });
 
-  app.get('/sso/auth', function (req, res, next) {
+  app.get('/sso/auth', (req, res, next) => {
     if (debugLogging) {
       console.log(`GET sso/auth, token=${req.query['sso-token']}`);
     }
@@ -257,7 +265,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     }
   });
 
-  app.use('/api', function (req, res, next) {
+  app.use('/api', (req, res, next) => {
     res.set('Cache-Control', 'no-store');
     if (req.isAuthenticated()) {
       next();
@@ -266,20 +274,20 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     }
   });
   /* GET the profile of the current authenticated user */
-  app.get('/api/user', function (req, res) {
-    console.log("getuser, ", req.user)
+  app.get('/api/user', (req, res) => {
+    console.log('getuser, ', req.user);
     axios
       .get(`${OIDCHost}/openid/userinfo`, {
         headers: { Authorization: `Bearer ${req.user.token.access_token}` },
       })
-      .then(function (response) {
+      .then(response => {
         if (response && response.status && response.data) {
           res.status(response.status).send(response.data);
         } else {
           errorHandler(res);
         }
       })
-      .catch(function (err) {
+      .catch(err => {
         errorHandler(res, err);
       });
   });

@@ -54,9 +54,6 @@ export default {
       primary: '#7DC02D',
       monitorBackground: '#0057a2',
     },
-    fonts: {
-      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
-    },
     feedIds: ['LINKKI'],
     modeIcons: {
       colors: {

@@ -21,7 +21,7 @@ i18n.use(initReactI18next).init({
     en: {
       translation: {
         'add-at-least-one-stop': 'Add at least one stop',
-        'add-to-own-displays': 'Lisää omiin näyttöihin',
+        'add-to-own-displays': 'Add to my displays',
         all: 'All',
         arriveTerminal: 'Arrives / Terminus',
         autosuggestPlaceHolder: 'Name or number of the stop',
@@ -73,8 +73,8 @@ i18n.use(initReactI18next).init({
         horizontal: 'Horizontal',
         import: 'Import',
         'import-instructions':
-          'Anna olemassaolevan pysäkkinäytön URL-osoite, niin voit lisätä sen omiin näyttöihisi',
-        'import-monitor': 'Import a monitor',
+          'Give the URL address of an existing stop display to add it to your displays.',
+        'import-monitor': 'Import display',
         'info-display-only-one':
           'You can select a service update view only for a display with one stop view.',
         'info-text-short': 'Departures in a chronological order',
@@ -111,7 +111,7 @@ i18n.use(initReactI18next).init({
           'You cannot add more than one view to the service update view',
         'no-departures': 'No known departures',
         'no-monitor-found':
-          'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
+          'No display was found matching the URL given.',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
@@ -154,7 +154,7 @@ i18n.use(initReactI18next).init({
         'skip-to-main-content': 'Go to the main content of this page',
         staticMonitorTitle: 'Name of the display',
         stop: 'Stop',
-        'stop-display': 'Pysäkkinäyttö',
+        'stop-display': 'Stop display',
         stopSettings: 'Settings for stop {{stop}} ({{code}})',
         stoptitle: 'Name of the stop view',
         tighten: 'Convergent',
@@ -226,7 +226,7 @@ i18n.use(initReactI18next).init({
         import: 'Tuo',
         'import-instructions':
           'Anna olemassaolevan pysäkkinäytön URL-osoite, niin voit lisätä sen omiin näyttöihisi',
-        'import-monitor': 'Tuo monitori',
+        'import-monitor': 'Tuo näyttö',
         'info-display-only-one':
           'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
         'info-text-short': 'Lähdöt aikajärjestyksessä',
@@ -322,7 +322,7 @@ i18n.use(initReactI18next).init({
     sv: {
       translation: {
         'add-at-least-one-stop': 'Lägg till åtminstone en hållplats',
-        'add-to-own-displays': 'Lisää omiin näyttöihin',
+        'add-to-own-displays': 'Lägg till i mina skärmar',
         all: 'Alla',
         arriveTerminal: 'Anländer / Ändhållplats',
         autosuggestPlaceHolder: 'Hållplatsens namn eller nummer',
@@ -373,10 +373,10 @@ i18n.use(initReactI18next).init({
         hideLine: 'Dölj linje {{line}}',
         hideLines: 'Dölj linjer {{hidden}} / {{all}}',
         horizontal: 'Horisontell',
-        import: 'Import',
+        import: 'Importera',
         'import-instructions':
-          'Anna olemassaolevan pysäkkinäytön URL-osoite, niin voit lisätä sen omiin näyttöihisi',
-        'import-monitor': 'Import a monitor',
+          'Ange URL-adressen för en existerande hållplatsskärm för att lägga till den i dina skärmar',
+        'import-monitor': 'Importera skärmen',
         'info-display-only-one':
           'Du kan välja meddelandeskärmen endast för en skärm som har bara en hållplatsvy.',
         'info-text-short': 'Avgångarna i kronologisk ordning',
@@ -412,7 +412,7 @@ i18n.use(initReactI18next).init({
           'Du kan inte lägga till flera vyer i meddelandeskärmen',
         'no-departures': 'Inga kända avgångar',
         'no-monitor-found':
-          'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
+          'Inga hållplatsskärmar hittades med den URL-adress du angav.',
         'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',
@@ -454,7 +454,7 @@ i18n.use(initReactI18next).init({
         'skip-to-main-content': 'Gå till sidans huvudinnehåll',
         staticMonitorTitle: 'Skärmens namn',
         stop: 'Hållplats',
-        'stop-display': 'Pysäkkinäyttö',
+        'stop-display': 'Hållplatsskärm',
         stopSettings: 'Inställningar för hållplats {{stop}} ({{code}})',
         stoptitle: 'Hållplatsskärmens namn',
         tighten: 'Förtätad',

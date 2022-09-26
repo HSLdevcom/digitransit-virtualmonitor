@@ -37,7 +37,7 @@ const UserMonitorCard: React.FC<IProps> = ({
   let to;
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
-  const { cards, name, languages, url } = view;
+  const { cards, name, languages, url, id } = view;
   const [isOpen, setOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const layout = cards[0].layout;
@@ -179,7 +179,7 @@ const UserMonitorCard: React.FC<IProps> = ({
           {setTitle ? (
             <InputWithEditIcon
               value={name}
-              id={url}
+              id={id}
               onChange={title => setTitle(title)}
             >
               {' '}

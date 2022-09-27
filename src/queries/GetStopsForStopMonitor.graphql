@@ -3,6 +3,7 @@ query GetStopsForStopMonitor($ids: [String!]!) @api(contextKey: "clientName") {
     name
     gtfsId
     locationType
+    vehicleMode
     lat
     lon
   }

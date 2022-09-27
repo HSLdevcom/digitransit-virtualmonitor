@@ -74,7 +74,7 @@ const MonitorOverlay: FC<IProps> = ({
   }
 
   return (
-    <div className={cx('monitor-overlay', show ? 'show' : 'show')}>
+    <div className={cx('monitor-overlay', show ? 'show' : 'hide')}>
       {loading ? (
         <Loading />
       ) : (

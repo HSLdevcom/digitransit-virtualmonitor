@@ -253,7 +253,7 @@ const App: FC<IConfigurationProps> = props => {
                 }: RouteComponentProps<IStopMonitorProps>) => (
                   <StopMonitorContainer
                     stopIds={stopId.split(',')}
-                    layout={layout ? Number(layout) : 2}
+                    layout={layout ? Number(layout) : 8}
                     urlTitle={props.search?.title}
                   />
                 )}
@@ -267,7 +267,7 @@ const App: FC<IConfigurationProps> = props => {
                 }: RouteComponentProps<IStopMonitorProps>) => (
                   <StopMonitorContainer
                     stopIds={stopId.split(',')}
-                    layout={layout ? Number(layout) : 2}
+                    layout={layout ? Number(layout) : 8}
                     urlTitle={props.search?.title}
                     station
                   />

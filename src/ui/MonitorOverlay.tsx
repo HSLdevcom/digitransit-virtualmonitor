@@ -37,12 +37,12 @@ const MonitorOverlay: FC<IProps> = ({
       setLoading(false);
     }
   }, []);
-
+  const { pathname, href } = window.location;
   if (createNew) {
     to = '/createview';
   } else {
     if (!user?.sub) {
-      if (window.location.href.indexOf('cont=') !== -1) {
+      if (href.indexOf('cont=') !== -1) {
         to = '/createview';
         search = window.location.search;
       } else {
@@ -50,11 +50,23 @@ const MonitorOverlay: FC<IProps> = ({
         text = t('login');
       }
     } else {
-      if (window.location.href.indexOf('url=') !== -1) {
+      // user is logged in
+      if (href.indexOf('url=') !== -1) {
+        // we are in a static monitor while logged in. if user owns
+        // the current monitor, it can be edited, otherwise the link goes to /monitors
         to = userOwned ? `/monitors/createview` : '/monitors';
         search = userOwned ? window.location.search : '';
         text = userOwned ? t('edit-display') : t('to-own-displays');
+      } else if (
+        pathname.indexOf('stop') !== -1 ||
+        pathname.indexOf('station') !== -1
+      ) {
+        // we are in a monitor defined with a url address, e.g. /stop/<gtfsId>
+        to = '/monitors';
+        text = t('to-own-displays');
       } else {
+        // we are in a monitor created without logging in. go to create view and give the monitor
+        // in state so it can be added to own displays
         to = '/monitors/createview';
         state = { view: view };
       }
@@ -62,7 +74,7 @@ const MonitorOverlay: FC<IProps> = ({
   }
 
   return (
-    <div className={cx('monitor-overlay', show ? 'show' : 'hide')}>
+    <div className={cx('monitor-overlay', show ? 'show' : 'show')}>
       {loading ? (
         <Loading />
       ) : (

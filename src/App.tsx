@@ -258,6 +258,21 @@ const App: FC<IConfigurationProps> = props => {
                   />
                 )}
               />
+              <Route
+                path={'/station/:stopId/:layout?'}
+                component={({
+                  match: {
+                    params: { stopId, layout },
+                  },
+                }: RouteComponentProps<IStopMonitorProps>) => (
+                  <StopMonitorContainer
+                    stopIds={stopId.split(',')}
+                    layout={layout ? Number(layout) : 2}
+                    urlTitle={props.search?.title}
+                    station
+                  />
+                )}
+              />
               <Route path={'/version'} component={Version} />
               <Route
                 path={'/'}

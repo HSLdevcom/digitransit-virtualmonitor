@@ -59,6 +59,7 @@ const StopViewTitleEditor: FC<IProps> = ({ card, updateCardInfo, lang }) => {
             className={cx('monitor-input', 'double')}
             id={inputID}
             value={layoutTitle}
+            tabIndex={-1}
             readOnly
           />
         )}

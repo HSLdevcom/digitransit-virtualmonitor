@@ -13,7 +13,6 @@ interface IOption {
 interface IProps {
   readonly name: string;
   readonly indicatorColor?: string;
-  readonly isSearchable?: boolean;
   readonly options?: Array<Option>;
   readonly placeholder?: string | JSX.Element;
   readonly handleChange?: (option: IOption) => void;
@@ -34,7 +33,6 @@ interface NestedOption {
 const Dropdown: FC<IProps> = ({
   name,
   indicatorColor,
-  isSearchable,
   options,
   placeholder,
   handleChange,
@@ -68,7 +66,6 @@ const Dropdown: FC<IProps> = ({
       }}
       isDisabled={isDisabled}
       inputId={uuid()}
-      isSearchable={isSearchable ? isSearchable : false}
       name={name}
       options={options}
       placeholder={placeholder ? placeholder : t('dropdownPlaceHolder')}

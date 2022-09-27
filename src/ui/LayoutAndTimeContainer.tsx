@@ -77,7 +77,6 @@ const LayoutAndTimeContainer: FC<IProps> = ({
       <div className="duration">
         <Dropdown
           name="duration"
-          isSearchable={false}
           options={durations}
           placeholder={!durationEditable ? '-' : placeHolder}
           handleChange={handleChange}

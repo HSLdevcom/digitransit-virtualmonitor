@@ -61,6 +61,8 @@ const CreateViewPage = () => {
             if (r.languages) {
               setLanguages(r.languages);
             }
+          } else {
+            setNoMonitorFound(true);
           }
           setLoading(false);
         })
@@ -117,15 +119,16 @@ const CreateViewPage = () => {
   }
 
   if (
-    user.sub &&
+    user?.sub &&
     location.pathname.toLowerCase() === '/createview' &&
     !url &&
     !hash &&
     !location.state?.view
   ) {
+    // user is trying to access the non logged in create page while logged in,
+    // redirect to correct page
     return <Redirect to={{ pathname: '/monitors/createview' }} />;
   }
-
   if (((!hash && !url) || noMonitorFound) && !location?.state?.view) {
     return (
       <ContentContainer>

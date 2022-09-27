@@ -170,14 +170,14 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   // users will be redirected to hsl.id and once authenticated
   // they will be returned to the callback handler below
   app.get('/login', (req, res) => {
-    const { url, favouriteModalAction, ...rest } = req.query;
-    // if (favouriteModalAction) {
-    //   req.session.returnTo = `/${indexPath}?favouriteModalAction=${favouriteModalAction}`;
-    // }
+    const { url, ...rest } = req.query;
+
     if (url) {
       const restParams = Object.keys(rest)
         .map(k => `${k}=${rest[k]}`)
-        .join('&');
+        .join('&')
+        .replaceAll(' ', '+');
+      
       req.session.returnTo = localPort
         ? `http://localhost:${localPort}${url}?${restParams}`
         : `${url}?${restParams}`;

@@ -101,16 +101,14 @@ app.post('/api/decompress/', (req, res, next) => {
 });
 
 function setUpOpenId() {
+  const urls = process.env.OIDC_URLS?.split(',') || [];
   const localPort = process.env.NODE_ENV === 'production' ? null : 3000;
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = 1;
   setUpOIDC(
     app,
     port,
     '',
-    [
-      'https://virtualmonitor-app-login-dev.azurewebsites.net/',
-      'https://dev-hslmonitori.digitransit.fi/',
-    ],
+    urls,
     ['/static/', '/view/', '/createview/'],
     localPort,
   );

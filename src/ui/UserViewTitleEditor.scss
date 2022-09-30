@@ -1,46 +1,43 @@
 .user-view-title {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   background: #f2f5f7;
   color: #666;
-  height: 52px;
-  width: 780px;
-  position: relative;
-  left: 60px;
-  top: 28px;
+  height: 80px;
+  align-items: center;
   border-bottom: 1px solid #ddd;
   margin-bottom: 18px;
-}
 
-.user-view-title-input-container {
-  display: flex;
+  .user-view-title-input-container {
+    display: flex;
+    flex: 1;
 
-  .user-view-title-input {
-    font-size: 26px;
-    font-style: normal;
-    font-weight: $font-weight;
-    line-height: 31px;
-    letter-spacing: -0.3px;
-    text-align: left;
-    width: 150px;
-    height: 31px;
-    border: none;
-    background: #f2f5f7;
+    .monitor-input-container {
+      max-width: 300px;
 
-    &:focus {
-      outline: auto $primary-color;
+      button {
+        background-color: #f2f5f7;
+      }
+    }
+
+    .monitor-input {
+      font-size: 26px;
+      background: #f2f5f7;
+
+      &:focus {
+        outline: auto $primary-color;
+      }
+    }
+
+    .user-view-title-input-button {
+      display: flex;
+      align-items: center;
     }
   }
 
-  .user-view-title-input-button {
-    position: relative;
-    top: 5px;
-  }
-
   .delete-icon {
-    position: absolute;
-    top: 5px;
-    left: 750px;
     cursor: pointer;
+    padding: 0 10px;
+    background-color: #f2f5f7;
   }
 }

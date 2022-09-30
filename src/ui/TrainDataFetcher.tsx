@@ -1,7 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { gql, useQuery } from '@apollo/client';
 import CarouselDataContainer from './CarouselDataContainer';
-import { IMonitor } from '../util/Interfaces';
 import Loading from './Loading';
 import {
   getTodayWithFormat,
@@ -73,14 +72,12 @@ const removeDuplicatesWithDifferentTracks = (
   return Array.from(new Set(result));
 };
 interface IProps {
-  monitor: IMonitor;
   preview?: boolean;
   defaultLines?: any;
   stopAndRoutes?: any;
 }
 
 const TrainDataFetcher: FC<IProps> = ({
-  monitor,
   preview = false,
   stopAndRoutes,
   defaultLines,
@@ -185,8 +182,6 @@ const TrainDataFetcher: FC<IProps> = ({
 
   return (
     <CarouselDataContainer
-      views={monitor.cards}
-      languages={monitor.languages}
       trainsWithTrack={removeDuplicatesWithDifferentTracks(
         sortBy(trainsWithTrack, 'timeInSecs'),
       )}

@@ -19,6 +19,11 @@
     width: 720px;
     border-bottom: 1px solid #ddd;
 
+    .title-list {
+      flex: 1;
+      display: flex;
+    }
+
     .icons {
       display: flex;
       height: 40px;
@@ -80,7 +85,6 @@
     line-height: 24px;
     letter-spacing: -0.3px;
     color: #666;
-    min-width: 106px;
   }
 
   .headers {
@@ -133,44 +137,30 @@
     }
   }
 
-  .east-west-inputs {
+  .double-inputs {
     display: flex;
-    flex-flow: row;
-    align-items: flex-end;
 
     .stop-list-title-input {
-      width: 500px;
+      width: 100%;
+      max-width: 300px;
 
       .header {
         padding-bottom: 16px;
+        margin-left: 2px;
       }
 
-      .stop-list-title {
-        &.left,
-        &.right {
-          display: flex;
-          flex-direction: row;
-          position: relative;
+      .monitor-input-container {
+        width: unset;
+        display: flex;
+        margin-right: 10px;
 
-          .input-left,
-          .input-right {
-            font-size: 21px;
-            line-height: 24px;
-            letter-spacing: -0.3px;
-            width: 130px;
+        .monitor-input {
+          font-size: 18px;
+          width: 100%;
+
+          &:read-only {
+            outline: none;
             border: none;
-
-            &:focus {
-              outline: auto $primary-color;
-            }
-          }
-
-          svg {
-            position: relative;
-            top: 2px;
-            display: flex;
-            justify-content: center;
-            align-content: center;
           }
         }
       }

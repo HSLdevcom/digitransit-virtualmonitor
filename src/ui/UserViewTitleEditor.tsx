@@ -1,52 +1,41 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import Icon from './Icon';
-import { WithTranslation, withTranslation } from 'react-i18next';
-import { focusToInput, onClick } from '../util/InputUtils';
-import { isKeyboardSelectionEvent } from '../util/browser';
 import { Redirect } from 'react-router-dom';
 import monitorAPI from '../api';
-import { getPrimaryColor } from '../util/getConfig';
+import { useTranslation } from 'react-i18next';
+import DeleteModal from './DeleteModal';
+import { getParams } from '../util/queryUtils';
+import { ConfigContext } from '../contexts';
+import InputWithEditIcon from './InputWithEditIcon';
 
 interface IProps {
   title: string;
   updateViewTitle: (newTitle: string) => void;
-  backToList: () => void;
-  contentHash?: string;
-  url?: string;
-  isNew: boolean;
+  monitorId?: string;
 }
 
-const UserViewTitleEditor: FC<IProps & WithTranslation> = ({
+const UserViewTitleEditor: FC<IProps> = ({
   title,
   updateViewTitle,
-  backToList,
-  isNew,
-  contentHash,
-  url,
-  t,
+  monitorId,
 }) => {
-  const [newTitle, setNewTitle] = useState(title);
-  const [isFocus, setFocus] = useState(false);
+  const config = useContext(ConfigContext);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [isDeleted, setDeleted] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [t] = useTranslation();
 
-  const onBlur = event => {
-    setFocus(false);
-    updateViewTitle(newTitle);
-  };
-
-  function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
-    setFocus(true);
-  }
-
-  const onChange = e => {
-    setNewTitle(e.target.value);
-  };
+  const { url } = getParams(window.location.search);
 
   const onDelete = () => {
-    if (contentHash && url) {
-      monitorAPI.deleteStatic(contentHash, url).then(res => {
+    setDeleting(true);
+    if (monitorId && url) {
+      monitorAPI.deleteStatic(monitorId, url).then(res => {
         setDeleted(true);
+        setDeleting(false);
       });
+    } else {
+      setDeleted(true);
     }
   };
 
@@ -54,8 +43,7 @@ const UserViewTitleEditor: FC<IProps & WithTranslation> = ({
     return (
       <Redirect
         to={{
-          pathname: '/',
-          search: `?pocLogin`,
+          pathname: '/monitors',
         }}
       />
     );
@@ -63,36 +51,30 @@ const UserViewTitleEditor: FC<IProps & WithTranslation> = ({
 
   return (
     <div className="user-view-title">
-      <div className="user-view-title-input-container">
-        <input
-          className="user-view-title-input"
-          id="user-view-title-input"
-          onClick={e => onClick(e)}
-          onChange={e => onChange(e)}
-          maxLength={25}
-          onKeyDown={e => isKeyboardSelectionEvent(e)}
-          onBlur={e => onBlur(e)}
-          onFocus={e => {
-            handleFocus(e);
-          }}
-          value={newTitle}
+      {deleteModalOpen && (
+        <DeleteModal
+          loading={deleting}
+          name={title}
+          setDeleteModalOpen={setDeleteModalOpen}
+          onDeleteCallBack={onDelete}
         />
-
-        {!isFocus && (
-          <div
-            className="user-view-title-input-button"
-            role="button"
-            onClick={() => focusToInput('user-view-title-input')}
-          >
-            <Icon img="edit" color={getPrimaryColor()} />
-          </div>
-        )}
-        <div className="delete-icon" onClick={isNew ? backToList : onDelete}>
-          <Icon img="delete" color={getPrimaryColor()} />
-        </div>
+      )}
+      <div className="user-view-title-input-container">
+        <InputWithEditIcon
+          id="user-view-title-input"
+          onChange={t => updateViewTitle(t)}
+          value={title}
+          inputProps={{
+            placeholder: t('staticMonitorTitle'),
+            maxLength: 25,
+          }}
+        />
       </div>
+      <button className="delete-icon" onClick={() => setDeleteModalOpen(true)}>
+        <Icon img="delete" color={config.colors.primary} />
+      </button>
     </div>
   );
 };
 
-export default withTranslation('translations')(UserViewTitleEditor);
+export default UserViewTitleEditor;

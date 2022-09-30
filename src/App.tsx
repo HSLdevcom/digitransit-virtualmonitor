@@ -1,23 +1,12 @@
 /* eslint-disable no-empty-pattern */
-import React, { useEffect } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import React, { FC, useEffect, useState, useContext } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
-import Breadcrumbs from './ui/Breadcrumbs';
-import Banner from './ui/Banner';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import CreateViewPage from './ui/CreateViewPage';
 import Version from './ui/Version';
-import {
-  defaultColorAlert,
-  defaultColorFont,
-  defaultFontNarrow,
-  defaultFontNormal,
-  defaultFontWeightNormal,
-  defaultFontWeightBigger,
-} from './ui/DefaultStyles';
+import BannerContainer from './ui/BannerContainer';
 import { Helmet } from 'react-helmet';
-
 import {
   ApolloClient,
   InMemoryCache,
@@ -25,15 +14,16 @@ import {
   ApolloLink,
   createHttpLink,
 } from '@apollo/client';
-
+import monitorAPI from './api';
 import { MultiAPILink } from '@habx/apollo-multi-endpoint-link';
 import StopMonitorContainer from './ui/StopMonitorContainer';
-
 import './sass/main.scss';
-
 import SkipToMainContent from './ui/SkipToMainContent';
-
 import PrepareMonitor from './ui/PrepareMonitor';
+import { ConfigContext, UserContext, FavouritesContext } from './contexts';
+import Loading from './ui/Loading';
+import UserMonitors from './ui/UserMonitors';
+import ProtectedRoute from './ProtectedRoute';
 
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
@@ -44,25 +34,20 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
       normal?: string;
       bigger?: string;
     };
-    monitor?: {
-      name?: string;
-      weights?: {
-        normal?: string;
-        bigger?: string;
-      };
+    monitor: {
+      name: string;
+      weight: string;
     };
   };
-  colors?: {
-    alert?: string;
-    font?: string;
+  colors: {
+    alert: string;
     hover?: string;
-    monitorBackground?: string;
-    primary?: string;
+    monitorBackground: string;
+    primary: string;
   };
-  alertOrientation?: string;
-  modeIcons?: {
-    borderRadius?: string;
-    colors?: {
+  alertOrientation: string;
+  modeIcons: {
+    colors: {
       'mode-airplane'?: string;
       'mode-bus'?: string;
       'mode-tram'?: string;
@@ -72,10 +57,10 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
       'mode-citybike'?: string;
       'mode-citybike-secondary'?: string;
     };
-    postfix?: string;
-    setName?: string;
+    postfix: string;
+    setName: string;
   };
-  allowLogin?: boolean;
+  allowLogin: boolean;
 }
 export interface IMonitorConfig {
   name?: string;
@@ -87,17 +72,14 @@ export interface IMonitorConfig {
   urlParamFindText?: string;
   urlParamFindAltText?: string;
   showMinutes?: string;
-  breadCrumbsStartPage?: string;
 }
 
 export interface IQueryString {
   title?: string;
   cont?: string;
-  pocLogin?: boolean;
 }
 
 export interface IConfigurationProps {
-  monitorConfig?: IMonitorConfig;
   search?: IQueryString;
 }
 
@@ -106,183 +88,211 @@ interface ICompressedDisplayRouteParams {
   packedDisplay: string;
 }
 
-interface IConfigurationDisplayRouteParams {
-  configuration: string;
-  displayName: string;
-}
-
 interface IStopMonitorProps {
   stopId: string;
   layout?: string;
 }
 
-export type combinedConfigurationAndInjected = IConfigurationProps &
-  WithTranslation;
+interface User {
+  sub?: string;
+  notLogged?: boolean;
+}
 
-const App: React.FC<combinedConfigurationAndInjected & WithTranslation> = (
-  props: combinedConfigurationAndInjected & WithTranslation,
-) => {
-  // ---------- TODO: POC / DEBUG PURPOSES ONLY ----------
-  const user = {
-    loggedIn: true,
-    urls: ['abcdef', 'ghijk'],
-  };
-  // ----------                                 ----------
-  const monitorConfig: IExtendedMonitorConfig = props.monitorConfig;
+interface Favourite {
+  type: string;
+}
+
+const App: FC<IConfigurationProps> = props => {
+  const [user, setUser] = useState<User>({});
+  const [favourites, setFavourites] = useState<Array<Favourite>>([]);
+  const [loading, setLoading] = useState(true);
+  const config = useContext(ConfigContext);
   const style = {
-    '--alert-color': monitorConfig.colors.alert || defaultColorAlert,
-    '--font-color': monitorConfig.colors.font || defaultColorFont,
-    '--font-family': monitorConfig.fonts?.normal || defaultFontNormal,
-    '--font-family-narrow': monitorConfig.fonts?.narrow || defaultFontNarrow,
-    '--font-weight':
-      monitorConfig.fonts?.weights?.normal || defaultFontWeightNormal,
-    '--font-weight-bigger':
-      monitorConfig.fonts?.weights?.bigger || defaultFontWeightBigger,
-    '--monitor-background-color':
-      monitorConfig.colors.monitorBackground || monitorConfig.colors.primary,
-    '--monitor-font': monitorConfig.fonts?.monitor?.name || defaultFontNarrow,
-    '--monitor-font-weight':
-      monitorConfig.fonts?.monitor?.weights?.normal || defaultFontWeightNormal,
-    '--monitor-font-weight-bigger':
-      monitorConfig.fonts?.monitor?.weights?.bigger || defaultFontWeightBigger,
-    '--primary-color': monitorConfig.colors.primary,
+    '--alert-color': config.colors.alert,
+    '--font-family': config.fonts.normal,
+    '--font-family-narrow': config.fonts?.narrow,
+    '--font-weight': config.fonts.weights.normal,
+    '--font-weight-bigger': config.fonts.weights.bigger,
+    '--monitor-background-color': config.colors.monitorBackground,
+    '--monitor-font': config.fonts.monitor.name,
+    '--monitor-font-weight': config.fonts.monitor.weight,
+    '--primary-color': config.colors.primary,
   };
   useEffect(() => {
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }
+    if (config.allowLogin) {
+      monitorAPI
+        .getUser()
+        .then(user => {
+          setUser(user);
+          setLoading(false);
+        })
+        .catch(() => {
+          setUser({ notLogged: true });
+          setLoading(false);
+        });
+      monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
+        setFavourites(favs);
+      });
+    } else {
+      setUser({ notLogged: true });
+      setLoading(false);
+    }
   }, []);
+
+  if (loading) {
+    return <Loading white />;
+  }
+
   const client = new ApolloClient({
     link: ApolloLink.from([
       new MultiAPILink({
         endpoints: {
-          default: monitorConfig.uri,
-          hsl: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+          default: '/api/graphql',
           rail: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
         },
         httpSuffix: '',
         createHttpLink: () => createHttpLink(),
+        getContext: endpoint => {
+          if (endpoint === 'default') {
+            return { headers: { 'graphql-endpoint': config.uri } };
+          }
+          return {};
+        },
       }),
     ]),
     cache: new InMemoryCache(),
   });
 
-  const favicon = monitorConfig.name.concat('.png');
+  const favicon = config.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
 
-  const fonts = monitorConfig.fonts.externalFonts.map(font => (
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href={font}
-    />
+  const fonts = config.fonts.externalFonts.map(font => (
+    <link rel="stylesheet" type="text/css" href={font} />
   ));
 
   return (
     <div className="App">
       <Helmet>
-        <title>{monitorConfig.name} - pysäkkinäyttö</title>
+        <title>{config.name} - pysäkkinäyttö</title>
         {faviconLink}
         {fonts}
       </Helmet>
       <ApolloProvider client={client}>
-        <Switch>
-          <Route
-            path={'/createView'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <>
-                <SkipToMainContent />
-                <section aria-label="navigation">
-                  <Banner config={monitorConfig} />
-                  <Breadcrumbs start={monitorConfig.breadCrumbsStartPage} />
-                </section>
-                <section role="main" id="mainContent">
-                  <CreateViewPage config={monitorConfig} />
-                </section>
-              </>
-            )}
-          />
-          <Route
-            path={'/createStaticView'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <>
-                <SkipToMainContent />
-                <section aria-label="navigation">
-                  <Banner config={monitorConfig} />
-                  <Breadcrumbs
-                    isLogged={user.loggedIn && monitorConfig.allowLogin}
-                    start={monitorConfig.breadCrumbsStartPage}
-                  />
-                </section>
-                <section role="main" id="mainContent">
-                  <CreateViewPage config={monitorConfig} user={user} />
-                </section>
-              </>
-            )}
-          />
-          <Route path={'/view'} component={PrepareMonitor} />
-          <Route path={'/static'} component={PrepareMonitor} />
-          <Route path={'/version'} component={Version} />
-          <Route
-            path={'/urld/:version/:packedDisplay'}
-            component={({
-              match: {
-                params: { version, packedDisplay },
-              },
-            }: RouteComponentProps<ICompressedDisplayRouteParams>) => {
-              return (
-                <>
-                  <DisplayUrlCompression
-                    version={decodeURIComponent(version)}
-                    packedString={decodeURIComponent(packedDisplay)}
-                  />
-                </>
-              );
-            }}
-          />
-          <Route
-            path={'/stop/:stopId/:layout?'}
-            component={({
-              match: {
-                params: { stopId, layout },
-              },
-            }: RouteComponentProps<IStopMonitorProps>) => (
-              <StopMonitorContainer
-                stopIds={stopId.split(',')}
-                layout={layout ? Number(layout) : 2}
-                config={monitorConfig}
-                urlTitle={props.search?.title}
+        <UserContext.Provider value={user}>
+          <FavouritesContext.Provider value={favourites}>
+            <Switch>
+              <Route
+                path={'/createview'}
+                component={({
+                  match: {
+                    params: {},
+                  },
+                }: RouteComponentProps) => (
+                  <>
+                    <SkipToMainContent />
+                    <BannerContainer />
+                    <section role="main" id="mainContent">
+                      <CreateViewPage />
+                    </section>
+                  </>
+                )}
               />
-            )}
-          />
-          <Route
-            path={'/'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps<IMonitorConfig>) => (
-              <>
-                <SkipToMainContent />
-                <LandingPage
-                  login={props.search?.pocLogin}
-                  config={monitorConfig}
-                />
-              </>
-            )}
-          />
-        </Switch>
+              <Route path={'/view'} component={PrepareMonitor} />
+              <Route path={'/static'} component={PrepareMonitor} />
+              <ProtectedRoute
+                path={'/monitors/createview'}
+                component={({
+                  match: {
+                    params: {},
+                  },
+                }: RouteComponentProps) => (
+                  <>
+                    <SkipToMainContent />
+                    <BannerContainer />
+                    <section role="main" id="mainContent">
+                      <CreateViewPage />
+                    </section>
+                  </>
+                )}
+              />
+              <ProtectedRoute
+                path={'/monitors'}
+                component={() => (
+                  <>
+                    <BannerContainer />
+                    <UserMonitors />
+                  </>
+                )}
+              />
+              <Route
+                path={'/urld/:version/:packedDisplay'}
+                component={({
+                  match: {
+                    params: { version, packedDisplay },
+                  },
+                }: RouteComponentProps<ICompressedDisplayRouteParams>) => {
+                  return (
+                    <>
+                      <DisplayUrlCompression
+                        version={decodeURIComponent(version)}
+                        packedString={decodeURIComponent(packedDisplay)}
+                      />
+                    </>
+                  );
+                }}
+              />
+              <Route
+                path={'/stop/:stopId/:layout?'}
+                component={({
+                  match: {
+                    params: { stopId, layout },
+                  },
+                }: RouteComponentProps<IStopMonitorProps>) => (
+                  <StopMonitorContainer
+                    stopIds={stopId.split(',')}
+                    layout={layout ? Number(layout) : 8}
+                    urlTitle={props.search?.title}
+                  />
+                )}
+              />
+              <Route
+                path={'/station/:stopId/:layout?'}
+                component={({
+                  match: {
+                    params: { stopId, layout },
+                  },
+                }: RouteComponentProps<IStopMonitorProps>) => (
+                  <StopMonitorContainer
+                    stopIds={stopId.split(',')}
+                    layout={layout ? Number(layout) : 8}
+                    urlTitle={props.search?.title}
+                    station
+                  />
+                )}
+              />
+              <Route path={'/version'} component={Version} />
+              <Route
+                path={'/'}
+                component={({
+                  match: {
+                    params: {},
+                  },
+                }: RouteComponentProps) => (
+                  <>
+                    <SkipToMainContent />
+                    <LandingPage />
+                  </>
+                )}
+              />
+            </Switch>
+          </FavouritesContext.Provider>
+        </UserContext.Provider>
       </ApolloProvider>
     </div>
   );
 };
 
-export default withTranslation('translations')(App);
+export default App;

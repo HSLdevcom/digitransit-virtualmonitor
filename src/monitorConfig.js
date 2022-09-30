@@ -1,7 +1,10 @@
 export default {
   hsl: {
+    frontPageContent: 'front-page-paragraph-hsl',
     fonts: {
-      externalFonts: ["https://cloud.typography.com/6364294/7432412/css/fonts.css"],
+      externalFonts: [
+        'https://cloud.typography.com/6364294/7432412/css/fonts.css',
+      ],
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       weights: {
         normal: '400',
@@ -28,19 +31,27 @@ export default {
         'mode-ferry': '#007A97',
         'mode-subway': '#CA4000',
       },
+      postfix: '',
       setName: 'default',
       postfix: '',
       setName: '',
     },
     name: 'hsl',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+    uri: 'routing/v1/routers/hsl/index/graphql',
+    bannersUri: 'https://content.hsl.fi/api/v1/banners?',
+    HSLUri: 'https://test.hslfi.hsldev.com/',
+    suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
-    allowLogin: false,
+    allowLogin: true,
     useTilde: true,
   },
   jyvaskyla: {
+    fonts: {
+      externalFonts: [
+        'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+      ],
+    },
     colors: {
       primary: '#7DC02D',
       monitorBackground: '#0057a2',
@@ -57,43 +68,14 @@ export default {
       setName: 'digitransit',
     },
     name: 'jyvaskyla',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
     useTilde: true,
   },
   matka: {
-    colors: {
-      primary: '#026273',
-      monitorBackground: '#0057a2',
-    },
-    feedIds: ['MATKA', 'HSL', 'tampere', 'LINKKI', 'lautta', 'OULU'],
-    fonts: {
-      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
-    },
-    modeIcons: {
-      colors: {
-        'mode-airplane': '#0046AD',
-        'mode-bus': '#007ac9',
-        'mode-bus-express': '#007ac9',
-        'mode-bus-local': '#007ac9',
-        'mode-tram': '#5E7921',
-        'mode-subway': '#CA4000',
-        'mode-rail': '#8E5EA0',
-        'mode-ferry': '#247C7B',
-      },
-      postfix: '-waltti',
-      setName: 'digitransit',
-    },
     name: 'matka',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql',
-    showMinutes: '15',
-    alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
-    allowLogin: false,
-    useTilde: true,
   },
   tampere: {
     colors: {
@@ -102,7 +84,10 @@ export default {
     },
     feedIds: ['tampere', 'TampereVR', 'tampereDRT'],
     fonts: {
-      externalFonts: ['https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css', 'https://fonts.googleapis.com/css?family=Lato'],
+      externalFonts: [
+        'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+        'https://fonts.googleapis.com/css?family=Lato',
+      ],
       monitor: {
         name: 'Lato',
         weight: '700',
@@ -118,13 +103,10 @@ export default {
       postfix: '-waltti',
       setName: 'digitransit',
     },
-    monitorFont: 'Lato',
-    monitorFontWeight: '700',
     name: 'tampere',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    breadCrumbsStartPage: 'front', // Possible values are 'front' and 'site'
     allowLogin: false,
     useTilde: false,
   },
@@ -138,7 +120,9 @@ export default {
       monitorBackground: '#000a8c',
     },
     fonts: {
-      externalFonts: ['https://fonts.googleapis.com/css?family=Source+Sans+Pro'],
+      externalFonts: [
+        'https://fonts.googleapis.com/css?family=Source+Sans+Pro',
+      ],
       normal: '"Source Sans Pro", Arial, Georgia, Serif',
       narrow: '"Source Sans Pro", Arial, Georgia, Serif',
       monitor: {
@@ -153,11 +137,8 @@ export default {
       postfix: '-waltti',
       setName: 'digitransit',
     },
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
     useTilde: true,
-    breadCrumbsStartPage: 'front',
-  }
+  },
 };

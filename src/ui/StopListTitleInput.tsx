@@ -1,15 +1,9 @@
-import cx from 'classnames';
-import React, { useState } from 'react';
-import Icon from './Icon';
-import { focusToInput, onClick } from '../util/InputUtils';
-import { getPrimaryColor } from '../util/getConfig';
-import { isKeyboardSelectionEvent } from '../util/browser';
-
-function StopListTitleInput(props: {
+import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ITitle } from '../util/Interfaces';
+import InputWithEditIcon from './InputWithEditIcon';
+interface IProps {
   lang: string;
-  titleLeft: string;
-  titleRight: string;
-  setTitle: (side: string, changed: boolean, title?: string) => void;
   updateCardInfo?: (
     cardId: number,
     type: string,
@@ -18,65 +12,36 @@ function StopListTitleInput(props: {
   ) => void;
   cardInfoId: number;
   side: string;
-  itemsHeader: string;
-  value: string;
-}) {
-  const [titleLeft, setTitleLeft] = useState(props.titleLeft);
-  const [titleRight, setTitleRight] = useState(props.titleRight);
-  const [focus, setFocus] = useState(false);
+  value: ITitle;
+}
+const StopListTitleInput: FC<IProps> = ({
+  lang,
+  updateCardInfo,
+  cardInfoId,
+  side,
+  value,
+}) => {
+  const [t] = useTranslation();
 
-  const onBlur = () => {
-    setFocus(false);
-  };
-
-  const onChange = (e, side) => {
-    if (side === 'left') {
-      setTitleLeft(e.target.value);
-      props.setTitle('left', true, e.target.value);
-    } else {
-      setTitleRight(e.target.value);
-      props.setTitle('right', true, e.target.value);
-    }
-    if (props.updateCardInfo) {
-      props.updateCardInfo(
-        props.cardInfoId,
-        `title-${side}`,
-        e.target.value,
-        props.lang,
-      );
+  const onChange = (title, side) => {
+    if (updateCardInfo) {
+      updateCardInfo(cardInfoId, `title-${side}`, title, lang);
     }
   };
 
   return (
     <div className="stop-list-title-input">
       <div className="header">
-        {props.itemsHeader.concat(' - ').concat(props.lang.toUpperCase())}
+        {t(`header-side-${side}`).concat(' - ').concat(lang.toUpperCase())}
       </div>
-      <div className={cx('stop-list-title', props.side)}>
-        <input
-          className={`input-${props.side}`}
-          id={`stop-list-title-input-${props.side}-${props.lang}`}
-          onClick={onClick}
-          onFocus={() => setFocus(true)}
-          onKeyDown={e => isKeyboardSelectionEvent(e)}
-          maxLength={13}
-          onBlur={onBlur}
-          onChange={e => onChange(e, props.side)}
-          value={props.value[props.lang]}
-        />
-        {!focus && (
-          <div
-            role="button"
-            onClick={() =>
-              focusToInput(`stop-list-title-input-${props.side}-${props.lang}`)
-            }
-          >
-            <Icon img="edit" color={getPrimaryColor()} width={20} height={20} />
-          </div>
-        )}
-      </div>
+      <InputWithEditIcon
+        onChange={title => onChange(title, side)}
+        id={`stop-list-title-input-${side}-${lang}`}
+        value={value[lang]}
+        inputProps={{ placeholder: t(`side${side}`), maxLength: 13 }}
+      />
     </div>
   );
-}
+};
 
 export default StopListTitleInput;

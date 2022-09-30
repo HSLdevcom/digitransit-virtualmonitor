@@ -1,5 +1,4 @@
 import cosmosClient from '@azure/cosmos';
-import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import config from './config.js';
 
 const { CosmosClient } = cosmosClient;
@@ -9,10 +8,6 @@ const client = new CosmosClient({ endpoint, key });
 
 const database = client.database(databaseId);
 const container = database.container(containerId);
-
-function uuidValidateV5(uuid) {
-  return uuidValidate(uuid) && uuidVersion(uuid) === 5;
-}
 
 async function getMonitor(hash) {
   try {
@@ -31,33 +26,14 @@ async function getMonitor(hash) {
       .fetchAll();
     return items;
   } catch (e) {
-    console.log('ERROR', e);
-    return null;
+    throw e;
   }
 }
 
 const monitorService = {
-  get: async function get(req, res) {
+  get: async function get(req, res, next) {
     try {
-      let contentHash = req.params.id;
-      const isValidUuid = uuidValidateV5(req.params.id);
-      if (isValidUuid) {
-        const container = database.container('staticMonitors');
-        const url = req.params.id;
-        const querySpec = {
-          query: 'SELECT c.monitorContenthash from c WHERE c.url = @url',
-          parameters: [
-            {
-              name: '@url',
-              value: url,
-            },
-          ],
-        };
-        const { resources: items } = await container.items
-          .query(querySpec)
-          .fetchAll();
-        contentHash = items[0].monitorContenthash;
-      }
+      const contentHash = req.params.id;
       const items = await getMonitor(contentHash);
       if (items == null || !items.length) {
         res.json({});
@@ -65,165 +41,91 @@ const monitorService = {
         res.json(items[0]);
       }
     } catch (e) {
-      console.log(e);
-      res.status(500).send(e);
+      next(e);
     }
   },
-  getAllMonitorsForUser: async function getAll(req, res) {
+  getMonitorsForUser: async function get(req, res, next, ids) {
     try {
       const cont = database.container('staticMonitors');
+      const urls = ids;
       // query to return all items
-      const querySpec = {
-        query: 'SELECT * from c',
-      };
-      // read all items in the Items container
-      const { resources: items } = await cont.items.query(querySpec).fetchAll();
-      const monitors = [];
-      const contenthashes = [];
-      items.forEach(item => {
-        monitors.push(item);
-        contenthashes.push(item.monitorContenthash);
-      });
-      if (items == null || !items.length) {
-        res.json({});
-      } else {
-        const queryS = {
-          query:
-            'SELECT * from c WHERE ARRAY_CONTAINS (@hashes, c.contenthash)',
+      if (urls.length) {
+        const querySpec = {
+          query: 'SELECT * from c WHERE ARRAY_CONTAINS(@urls, c.url)',
           parameters: [
             {
-              name: '@hashes',
-              value: contenthashes,
+              name: '@urls',
+              value: urls,
             },
           ],
         };
-
-        const { resources: userMonitors } = await container.items
-          .query(queryS)
+        // read all items in the Items container
+        const { resources: items } = await cont.items
+          .query(querySpec)
           .fetchAll();
-        if (userMonitors == null || !userMonitors.length) {
-          res.json({});
-        } else {
-          userMonitors.forEach(mon => {
-            const monitor = monitors.find(
-              m => m.monitorContenthash === mon.contenthash,
-            );
-            mon.name = monitor.name;
-            mon.url = monitor.url;
-          });
-          res.json(userMonitors);
-        }
-      }
-    } catch (e) {
-      console.log(e);
-      res.status(500).send(e);
-    }
-  },
-  getMonitorsForUser: async function get(req, res) {
-    try {
-      const cont = database.container('staticMonitors');
-      const urls = req.params.id.split(',');
-      // query to return all items
-      const querySpec = {
-        query:
-          'SELECT c.name, c.monitorContenthash, c.url from c WHERE ARRAY_CONTAINS(@urls, c.url)',
-        parameters: [
-          {
-            name: '@urls',
-            value: urls,
-          },
-        ],
-      };
-      // read all items in the Items container
-      const { resources: items } = await cont.items.query(querySpec).fetchAll();
-      const monitors = [];
-      const contenthashes = [];
-      items.forEach(item => {
-        monitors.push(item);
-        contenthashes.push(item.monitorContenthash);
-      });
-      if (!items.length) {
-        res.json({});
+        res.json(items);
       } else {
-        const queryS = {
-          query:
-            'SELECT * from c WHERE ARRAY_CONTAINS (@hashes, c.contenthash)',
-          parameters: [
-            {
-              name: '@hashes',
-              value: contenthashes,
-            },
-          ],
-        };
-
-        const { resources: items } = await container.items
-          .query(queryS)
-          .fetchAll();
-        if (items == null || !items.length) {
-          res.json({});
-        } else {
-          const userMonitors = items;
-          userMonitors.forEach(mon => {
-            const monitor = monitors.find(
-              m => m.monitorContenthash === mon.contenthash,
-            );
-            mon.name = monitor.name;
-            mon.url = monitor.url;
-          });
-          res.json(userMonitors);
-        }
+        res.json([]);
       }
     } catch (e) {
-      console.log(e);
-      res.status(500).send(e);
+      next(e);
     }
   },
-  create: async function create(req, res) {
+  create: async function create(req, res, next) {
     try {
       await Promise.resolve(container.items.create(req.body));
       res.send('OK');
     } catch (e) {
-      if (e.code !== 409) {
-        console.log(e);
+      if (e.code === 409) {
+        res.status(409).send('OK');
+      } else {
+        next(e);
       }
-      res.send(e);
     }
   },
-  createStatic: async function createStaticMonitor(req, res) {
+  getStatic: async function getStaticMonitor(req, res, next) {
+    try {
+      const container = database.container('staticMonitors');
+      const url = req.params.id;
+      const querySpec = {
+        query: 'SELECT * from c WHERE c.url = @url',
+        parameters: [
+          {
+            name: '@url',
+            value: url,
+          },
+        ],
+      };
+      const { resources: items } = await container.items
+        .query(querySpec)
+        .fetchAll();
+      if (items.length) {
+        res.json(items[0]);
+      } else {
+        res.json({});
+      }
+    } catch (err) {
+      next(err);
+    }
+  },
+  createStatic: async function createStaticMonitor(req, res, next) {
     try {
       const container = database.container('staticMonitors');
       await Promise.resolve(container.items.create(req.body));
       res.send('OK');
     } catch (e) {
-      if (e.code !== 409) {
-        console.log(e);
-      }
-      res.send(e);
+      next(e);
     }
   },
   updateStatic: async function updateStaticMonitor(req, res) {
     try {
       const container = database.container('staticMonitors');
-      const itemToUpdate = await container
+      const { resource: updatedItem } = await container
         .item(req.body.id, req.body.url)
-        .read();
-      if (!itemToUpdate) {
-        res.json({});
-      } else {
-        const newData = {
-          ...itemToUpdate.resource,
-          id: req.body.hash,
-          name: req.body.name,
-          monitorContenthash: req.body.hash,
-        };
-        const { resource: updatedItem } = await container
-          .item(req.body.id, req.body.url)
-          .replace(newData);
-        res.json(updatedItem);
-      }
+        .replace(req.body);
+      res.json(updatedItem);
     } catch (e) {
-      console.log(e);
-      res.send(e);
+      throw e;
     }
   },
   deleteStatic: async function deleteStaticMonitor(req, res) {
@@ -232,8 +134,7 @@ const monitorService = {
       const { body } = await container.item(req.body.id, req.body.url).delete();
       res.status(200).json(body);
     } catch (e) {
-      console.log(e);
-      res.send(e);
+      throw e;
     }
   },
 };

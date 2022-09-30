@@ -1,17 +1,14 @@
-import React, { useState } from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
-import { IMonitorConfig } from '../App';
+import React, { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { UserContext } from '../contexts';
 import Logo from './logo/Logo';
 import BurgerMenu from './BurgerMenu';
 import Icon from './Icon';
 
-interface Props {
-  config?: IMonitorConfig;
-  user?: any; // todo: refactor when we have proper user
-}
-const Banner: React.FC<Props & WithTranslation> = ({ config, user, t }) => {
+const Banner = () => {
+  const user = useContext(UserContext);
+  const [t] = useTranslation();
   const [isOpen, changeOpen] = useState(false);
-
   const setOpen = () => {
     changeOpen(true);
   };
@@ -22,7 +19,7 @@ const Banner: React.FC<Props & WithTranslation> = ({ config, user, t }) => {
 
   return (
     <div className="main-banner">
-      <Logo isLandscape monitorConfig={config} />
+      <Logo isLandscape />
       <div className="menu-container">
         <button
           className="menu-button"
@@ -41,4 +38,4 @@ const Banner: React.FC<Props & WithTranslation> = ({ config, user, t }) => {
     </div>
   );
 };
-export default withTranslation('translations')(Banner);
+export default Banner;

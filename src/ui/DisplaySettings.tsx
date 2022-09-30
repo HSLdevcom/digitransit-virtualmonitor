@@ -1,10 +1,9 @@
-import React, { FC } from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import React, { FC, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';
-import { v4 as uuid } from 'uuid';
-import { getPrimaryColor } from '../util/getConfig';
+import { ConfigContext } from '../contexts';
 
 interface IProps {
   languages: Array<string>;
@@ -13,13 +12,14 @@ interface IProps {
   handleOrientation: (orientation: string) => void;
 }
 
-const DisplaySettings: FC<IProps & WithTranslation> = ({
+const DisplaySettings: FC<IProps> = ({
   languages,
   orientation,
   handleOrientation,
   handleChange,
-  t,
 }) => {
+  const config = useContext(ConfigContext);
+  const [t] = useTranslation();
   const options = ['fi', 'sv', 'en'];
   const isChecked = (option: string) => {
     return languages.includes(option);
@@ -82,28 +82,20 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
           </div>
         )}
         <div className="language-controls">
-          {options.map((option, idx) => {
+          {options.map(option => {
             return (
-              <React.Fragment key={uuid()}>
-                <Checkbox
-                  name={option}
-                  isSelected={isChecked(option)}
-                  onChange={() => handleChange(option)}
-                  aria-label={
-                    t('displayLanguage') +
-                    ' ' +
-                    t(
-                      `languageName${
-                        option.charAt(0).toUpperCase() + option.slice(1)
-                      }`,
-                    )
-                  }
-                  color={getPrimaryColor()}
-                  margin={idx !== 0 ? '0 5px 0 5px' : '0 5px 0 0'}
-                >
-                  {option.toUpperCase()}
-                </Checkbox>
-              </React.Fragment>
+              <Checkbox
+                key={`check_${option}`}
+                name={option}
+                isSelected={isChecked(option)}
+                onChange={() => handleChange(option)}
+                aria-label={
+                  t('displayLanguage') + ' ' + t(`language-name-${option}`)
+                }
+                color={config.colors.primary}
+              >
+                {option.toUpperCase()}
+              </Checkbox>
             );
           })}
         </div>
@@ -112,4 +104,4 @@ const DisplaySettings: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(DisplaySettings);
+export default DisplaySettings;

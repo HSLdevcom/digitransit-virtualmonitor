@@ -1,27 +1,66 @@
 
+.monitor-button {
+  text-align: center;
+  white-space: nowrap;
+  font-size: 1.125em;
+  font-style: normal;
+  font-weight: $font-weight;
+  letter-spacing: -0.02em;
+  background: $primary-color;
+  border-radius: 50px;
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  border: none;
+  height: 50px;
+  color: #fff;
+  cursor: pointer;
+  margin: 0 10px 10px 0;
+
+  &.blue {
+    background: $primary-color;
+  }
+
+  &.white {
+    background: white;
+    color: $primary-color;
+    border: 1px solid #888;
+  }
+
+  &:disabled {
+    cursor: unset;
+    background: #ccc;
+    border: 1px solid #ccc;
+    color: #fff;
+
+    span {
+      color: #fff;
+    }
+  }
+}
+
 .index {
   font-family: $font-family;
   display: flex;
 
   .left {
-    flex: 1;
+    width: 50vw;
     color: #333;
 
     .welcome {
+      margin-top: 69px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
 
       .text {
-        position: relative;
-        top: 69px;
         font-size: 18px;
         line-height: 22px;
         font-weight: $font-weight;
         font-style: normal;
         letter-spacing: -0.03em;
         text-align: left;
-        padding-right: 120px;
+        padding-right: 60px;
         padding-left: 120px;
         margin-top: 22px;
 
@@ -30,49 +69,47 @@
           font-size: 24px;
           line-height: 29px;
         }
+
+        &.bold {
+          font-weight: bolder;
+        }
       }
 
       .button-container {
-        position: relative;
-        top: 69px;
         padding-left: 120px;
-        padding-bottom: 60px;
+        padding-bottom: 20px;
         margin-top: 30px;
+        display: flex;
 
-        .create-new {
-          font-size: 1.125em;
-          font-style: normal;
-          font-weight: $font-weight;
-          line-height: 22px;
-          letter-spacing: -0.02em;
-          text-align: center;
-          background: $primary-color;
-          border-radius: 50px;
-          width: 216px;
-          border: none;
-          height: 50px;
-          color: #fff;
-          cursor: pointer;
+        .monitor-controls {
+          background-color: #f2f5f7;
+          height: unset;
+          padding: 0;
+
+          .monitor-button {
+            font-size: 1.125em;
+            height: 50px;
+          }
         }
       }
     }
   }
 
   .right {
-    .desktop-img {
-      padding-top: 72px;
-      padding-right: 167px;
-    }
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .right {
+    display: none !important;
+    width: 0;
   }
 
-  @media screen and (max-width: 1220px) {
-    .right {
-      display: none;
-      width: 0;
-    }
-
-    .left {
-      width: 100%;
-    }
+  .left {
+    width: 100% !important;
   }
 }

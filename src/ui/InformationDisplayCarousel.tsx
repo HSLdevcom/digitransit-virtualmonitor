@@ -1,9 +1,9 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import { IAlert, IView } from '../util/Interfaces';
 import cx from 'classnames';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import MonitorTitlebar from './MonitorTitleBar';
-import { getConfig } from '../util/getConfig';
+import { ConfigContext } from '../contexts';
 import MonitorOverlay from './MonitorOverlay';
 
 interface IProps {
@@ -13,13 +13,13 @@ interface IProps {
   view: IView;
 }
 let to;
-const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
+const InformationDisplayCarousel: FC<IProps> = ({
   view,
   alerts,
   languages,
   preview = false,
-  t,
 }) => {
+  const [t] = useTranslation();
   const [current, setCurrent] = useState(0);
   const [currentLang, setCurrentLang] = useState(0);
   const [showOverlay, setShowOverlay] = useState(false);
@@ -40,7 +40,6 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
     return () => clearTimeout(to);
   }, [currentLang]);
 
-  const config = getConfig();
   return (
     <div
       className={cx('main-content-container', {
@@ -53,13 +52,12 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
         to = setTimeout(() => setShowOverlay(false), 3000);
       }}
     >
-      <MonitorOverlay show={showOverlay} isPreview={preview} />
+      {!preview && <MonitorOverlay show={showOverlay} />}
       <MonitorTitlebar
         isLandscape
         view={view}
         currentLang={languages[currentLang]}
         preview={preview}
-        config={config}
       />
       <div
         className={cx('information-monitor-container', {
@@ -78,14 +76,14 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
               a => a.language === language,
             ).text;
             return (
-              <>
+              <React.Fragment key={`alert-${language}`}>
                 <h2 className="alert-header">
                   {description.includes(header) ? description : header}
                 </h2>
                 {!description.includes(header) && (
                   <div className="alert-description">{description}</div>
                 )}
-              </>
+              </React.Fragment>
             );
           })
         ) : (
@@ -98,4 +96,4 @@ const InformationDisplayCarousel: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(InformationDisplayCarousel);
+export default InformationDisplayCarousel;

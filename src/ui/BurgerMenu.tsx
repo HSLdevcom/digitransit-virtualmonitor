@@ -1,24 +1,20 @@
-import React from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
+import React, { FC, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
-import { getColorByName } from '../util/getConfig';
 import Modal from 'react-modal';
+import { ConfigContext } from '../contexts';
 
-Modal.setAppElement('#root');
+if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
   createStatic: boolean;
   onClose: (option) => void;
   isOpen: boolean;
 }
 
-const BurgerMenu: React.FC<Props & WithTranslation> = ({
-  createStatic,
-  t,
-  i18n,
-  isOpen,
-  onClose,
-}) => {
+const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
+  const [t, i18n] = useTranslation();
+  const config = useContext(ConfigContext);
   const changeLanguage = (i18n, lang) => {
     i18n.changeLanguage(lang);
     if (lang !== localStorage.getItem('lang')) {
@@ -33,15 +29,12 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
     languageCodes.forEach(language => {
       retValue.push(
         <Link
+          key={language}
           className="lang-select"
           onClick={() => changeLanguage(i18n, language)}
           to={window.location.pathname}
           aria-label={t('changeLanguage', {
-            language: t(
-              `languageName${
-                language.charAt(0).toUpperCase() + language.slice(1)
-              }`,
-            ),
+            language: t(`language-name-${language}`),
           })}
         >
           {language}
@@ -55,7 +48,7 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
     { text: t('breadCrumbsFrontPage'), to: '/' },
     {
       text: t('createViewTitle'),
-      to: createStatic ? '/createStaticView' : '/createView',
+      to: '/createview',
     },
   ];
 
@@ -63,7 +56,7 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
     const retValue = [];
     links.forEach(link => {
       retValue.push(
-        <Link className="link" to={link.to}>
+        <Link key={link.to} className="link" to={link.to}>
           {link.text}
         </Link>,
       );
@@ -107,7 +100,7 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
           >
             <Icon
               img="close"
-              color={getColorByName('primary')}
+              color={config.colors.primary}
               height={24}
               width={24}
             />
@@ -128,4 +121,4 @@ const BurgerMenu: React.FC<Props & WithTranslation> = ({
     </Modal>
   );
 };
-export default withTranslation('translations')(BurgerMenu);
+export default BurgerMenu;

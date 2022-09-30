@@ -1,0 +1,41 @@
+query stopQuery($ids: [String]) @api(contextKey: "clientName") {
+  stop: stops(ids: $ids) {
+    id
+    name
+    code
+    desc
+    gtfsId
+    platformCode
+    locationType
+    vehicleMode
+    parentStation {
+      gtfsId
+    }
+    patterns {
+      code
+      headsign
+      route {
+        mode
+        type
+        shortName
+        gtfsId
+      }
+    }
+    stoptimesForPatterns {
+      pattern {
+        code
+        headsign
+        route {
+          mode
+          type
+          shortName
+          gtfsId
+        }
+      }
+    }
+    routes {
+      shortName
+      gtfsId
+    }
+  }
+}

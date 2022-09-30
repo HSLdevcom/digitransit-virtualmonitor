@@ -1,9 +1,8 @@
 .display-settings-container {
   display: flex;
-  margin: 26px 0 0 60px;
-  width: 780px;
   justify-content: space-between;
   font-family: $font-family;
+  margin-top: 26px;
 }
 
 .display-language-container {
@@ -15,7 +14,7 @@
     position: absolute;
     color: #dc0451;
     right: 0;
-    top: -1.5em;
+    top: -1.4em;
     font-size: 0.813rem;
   }
 
@@ -27,6 +26,12 @@
     border-radius: 5px;
     background-color: white;
     align-items: center;
+
+    label {
+      svg {
+        margin-right: 5px !important;
+      }
+    }
 
     div {
       margin-right: 10px;

@@ -3,10 +3,8 @@ import cx from 'classnames';
 import { horizontalLayouts, verticalLayouts } from './Layouts';
 import isEqual from 'lodash/isEqual';
 import Modal from 'react-modal';
-import { withTranslation, WithTranslation } from 'react-i18next';
-import { v4 as uuid } from 'uuid';
-import { getColorByName } from '../util/getConfig';
-import Icon from './Icon';
+import { useTranslation } from 'react-i18next';
+import LargeModal from './LargeModal';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
@@ -16,21 +14,27 @@ interface Option {
 }
 interface Props {
   option: Option;
-  onClose: (option) => void;
-  isOpen: boolean;
+  open: boolean;
+  onSave: (option: number) => void;
+  onClose: () => void;
   orientation: string;
   ariaHideApp?: boolean; // For unit testing
+  allowInformationDisplay: boolean;
 }
 
-const LayoutModal: FC<Props & WithTranslation> = ({
+const LayoutModal: FC<Props> = ({
   orientation,
-  isOpen,
   option,
   onClose,
-  t,
+  onSave,
+  open,
   ariaHideApp = true,
+  allowInformationDisplay,
 }) => {
+  const [t] = useTranslation();
+
   const [selected, setSelected] = useState(option);
+
   useEffect(() => {
     if (!isEqual(selected, option)) {
       setSelected(option);
@@ -41,53 +45,31 @@ const LayoutModal: FC<Props & WithTranslation> = ({
     if (layoutBtn) {
       layoutBtn.focus();
     }
-  }, [option, isOpen]);
+  }, [option, open]);
 
-  const handleSave = () => {
-    onClose(selected);
-  };
-
-  const handleSelect = option => {
-    setSelected(option);
-  };
-
-  const verticalHeight = {
-    content: {
-      width: '640px',
-    },
-  };
   const layouts =
     orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={() => onClose(null)}
-      portalClassName="modal"
-      style={orientation === 'vertical' ? verticalHeight : undefined}
+    <LargeModal
+      isOpen={open}
+      onRequestClose={() => onClose()}
+      portalClassName="layout-modal modal"
       ariaHideApp={ariaHideApp}
+      header={'layoutModalHeader'}
     >
       <div className="layout-modal-content-container">
-        <section id="close">
-          <button
-            className="close-button"
-            role="button"
-            aria-label={t('close')}
-            onClick={() => onClose(null)}
-          >
-            <Icon
-              img="close"
-              color={getColorByName('primary')}
-              height={24}
-              width={24}
-            />
-          </button>
-        </section>
-        <h2 className="layout-modal-header">{t('layoutModalHeader')}</h2>
         <div className="layouts">
           {layouts.map(l => {
             return (
-              <div className="row" key={uuid()}>
+              <div className="row" key={`layoutrow_${l.label}`}>
                 <h3 className="row-header">{t(l.label)}</h3>
+                <div className="row-info">{t(l.infoText)}</div>
+                {l.label === 'information-display' &&
+                  !allowInformationDisplay && (
+                    <div className="info-display-warning">
+                      {t('info-display-only-one')}
+                    </div>
+                  )}
                 <div className="options">
                   {l.options.map(option => {
                     return (
@@ -99,9 +81,12 @@ const LayoutModal: FC<Props & WithTranslation> = ({
                             ? 'label-selected'
                             : '',
                         )}
-                        onClick={() => handleSelect(option)}
+                        disabled={
+                          +option.value > 17 && !allowInformationDisplay
+                        }
+                        onClick={() => setSelected(option)}
                         id={`layoutBtn-${option.value}`}
-                        key={uuid()}
+                        key={`button_${option.value}`}
                         role="button"
                         aria-label={`${t(orientation)} ${t(l.label)} ${
                           option.rows
@@ -117,13 +102,16 @@ const LayoutModal: FC<Props & WithTranslation> = ({
           })}
         </div>
         <div className="button-container">
-          <button className="close-button" onClick={handleSave}>
+          <button
+            className="close-button"
+            onClick={() => onSave(+selected.value)}
+          >
             {t('save')}
           </button>
         </div>
       </div>
-    </Modal>
+    </LargeModal>
   );
 };
 
-export default withTranslation('translations')(LayoutModal);
+export default LayoutModal;

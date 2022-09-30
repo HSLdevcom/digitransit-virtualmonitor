@@ -1,159 +1,114 @@
 const baseAPI = '/api';
 
+const fetchData = (path, options, signal = undefined) => {
+  return new Promise((resolve, reject) => {
+    const jsonResponse = !options.method || options.method === 'POST';
+    fetch(`${baseAPI}/${path}`, {
+      headers: {
+        accepts: 'application/json',
+      },
+      ...options,
+      signal: signal ?? undefined,
+    })
+      .then(result => (jsonResponse ? result.json() : result))
+      .then(json => resolve(json))
+      .catch(e => {
+        reject(e);
+      });
+  });
+};
+
 const monitorAPI = {
-  get(monitor) {
-    return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/monitor/${monitor}`, {
-        headers: {
-          accepts: 'application/json',
-        },
-      })
-        .then(result => result.json())
-        .then(json => resolve(json))
-        .catch(err => {
-          reject(err);
-        });
-    });
+  getUser() {
+    const options = {
+      credentials: 'include',
+    };
+    return fetchData('user', options);
   },
-  getAllMonitorsForUser() {
-    return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/usermonitors`, {
-        headers: {
-          accepts: 'application/json',
-        },
-      })
-        .then(result => result.json())
-        .then(json => resolve(json))
-        .catch(err => {
-          reject(err);
-        });
-    });
+  getFavourites() {
+    return fetchData('user/favourites', {});
+  },
+  get(monitor, signal = undefined) {
+    return fetchData(`monitor/${monitor}`, {}, signal);
+  },
+  isUserOwned(monitor, signal = undefined) {
+    const options = {
+      method: 'GET',
+    };
+    return fetchData(`userowned/${monitor}`, options, signal);
+  },
+  getStatic(monitor, signal = undefined) {
+    return fetchData(`staticmonitor/${monitor}`, {}, signal);
+  },
+  getAllMonitorsForUser(signal) {
+    return fetchData(`usermonitors`, {}, signal);
   },
   getMonitorsForUser(urls) {
-    return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/usermonitors/${urls}`, {
-        headers: {
-          // Accept: 'application/json',
-          // 'Content-Type': 'application/json'
-          accepts: 'application/json',
-        },
-      })
-        .then(result => result.json())
-        .then(json => resolve(json))
-        .catch(err => {
-          reject(err);
-        });
-    });
+    return fetchData(`usermonitors/${urls}`, {});
   },
   create(monitor) {
-    return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/monitor`, {
-        method: 'PUT',
-        body: JSON.stringify(monitor),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(result => resolve(result))
-        .catch(err => {
-          reject(err);
-        });
-    });
+    const options = {
+      method: 'PUT',
+      body: JSON.stringify(monitor),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    };
+    return fetchData(`monitor`, options);
   },
   getTranslations(ids) {
-    return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/translations/${ids.join()}`, {
-        headers: {
-          accepts: 'application/json',
-        },
-      })
-        .then(result => result.json())
-        .then(result => resolve(result))
-        .catch(err => {
-          reject(err);
-        });
-    });
+    return fetchData(`translations/${ids.join()}`, {});
   },
   decompress(base64string) {
-    return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/decompress`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          payload: base64string,
-        }),
-      })
-        .then(result => result.json())
-        .then(result => resolve(result))
-        .catch(err => {
-          reject(err);
-        });
-    });
+    const options = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        payload: base64string,
+      }),
+    };
+    return fetchData(`decompress`, options);
   },
-  createStatic(hash, url, title) {
-    return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/staticmonitor`, {
-        method: 'PUT',
-        body: JSON.stringify({
-          id: hash,
-          monitorContenthash: hash,
-          name: title,
-          url: url,
-        }),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(result => resolve(result))
-        .catch(err => {
-          reject(err);
-        });
-    });
+  createStatic(monitor) {
+    const options = {
+      method: 'PUT',
+      credentials: 'include',
+      body: JSON.stringify(monitor),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    };
+    return fetchData(`staticmonitor`, options);
   },
-  updateStatic(oldHash, url, newHash, title) {
-    return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/staticmonitor`, {
-        method: 'POST',
-        body: JSON.stringify({
-          id: oldHash,
-          url: url,
-          hash: newHash,
-          name: title,
-        }),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(result => resolve(result))
-        .catch(err => {
-          reject(err);
-        });
-    });
+  updateStatic(monitor) {
+    const options = {
+      method: 'POST',
+      body: JSON.stringify(monitor),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    };
+    return fetchData(`staticmonitor`, options);
   },
   deleteStatic(hash, url) {
-    return new Promise((resolve, reject) => {
-      fetch(`${baseAPI}/staticmonitor`, {
-        method: 'DELETE',
-        body: JSON.stringify({
-          id: hash,
-          url: url,
-        }),
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(result => resolve(result))
-        .catch(err => {
-          reject(err);
-        });
-    });
+    const options = {
+      method: 'DELETE',
+      body: JSON.stringify({
+        id: hash,
+        url: url,
+      }),
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    };
+    return fetchData(`staticmonitor`, options);
   },
 };
 

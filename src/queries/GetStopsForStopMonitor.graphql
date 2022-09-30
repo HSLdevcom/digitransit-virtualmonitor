@@ -1,0 +1,10 @@
+query GetStopsForStopMonitor($ids: [String!]!) @api(contextKey: "clientName") {
+  stops: stops(ids: $ids) {
+    name
+    gtfsId
+    locationType
+    vehicleMode
+    lat
+    lon
+  }
+}

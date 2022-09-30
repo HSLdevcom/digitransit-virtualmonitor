@@ -1,6 +1,6 @@
-import React, { FC, useState, useEffect } from 'react';
-import { getConfig } from '../util/getConfig';
-import { IView, IClosedStop, ITrainData } from '../util/Interfaces';
+import React, { FC, useState, useEffect, useContext } from 'react';
+import { ConfigContext, MonitorContext } from '../contexts';
+import { IClosedStop, ITrainData } from '../util/Interfaces';
 import Monitor from './Monitor';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
@@ -12,8 +12,6 @@ import { stopTimeAbsoluteDepartureTime } from '../util/monitorUtils';
 import MonitorAlertRowStatic from './MonitorAlertRowStatic';
 
 interface IProps {
-  views: Array<IView>;
-  languages: Array<string>;
   stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card
   stopDepartures: Array<Array<Array<IDeparture>>>; // and the final one for the actual departures
   translations?: Array<ITranslation>;
@@ -21,9 +19,6 @@ interface IProps {
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
   trainsWithTrack?: Array<ITrainData>;
-  staticContentHash?: string;
-  staticUrl?: string;
-  staticViewTitle?: string;
 }
 
 const sortAndFilter = (departures, trainsWithTrack) => {
@@ -61,26 +56,22 @@ const sortAndFilter = (departures, trainsWithTrack) => {
 };
 
 const CarouselContainer: FC<IProps> = ({
-  views,
   stopDepartures,
   stationDepartures,
-  languages,
   translations,
   alerts,
   preview = false,
   closedStopViews,
   trainsWithTrack,
-  staticContentHash,
-  staticUrl,
-  staticViewTitle,
 }) => {
+  const { cards: views, languages } = useContext(MonitorContext);
   const len = views.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
 
   const orientations = ['static', 'vertical', 'horizontal'];
-  const config = getConfig();
+  const config = useContext(ConfigContext);
   const [demoOrientation, setDemoOrientation] = useState(
     orientations.indexOf(config.alertOrientation),
   );
@@ -185,15 +176,11 @@ const CarouselContainer: FC<IProps> = ({
       translatedStrings={
         translations ? translations.filter(t => t.lang === lan) : []
       }
-      config={config}
       isPreview={preview}
       alertState={alertState}
       alertComponent={alertComponent}
       alertRowSpan={alertSpan}
       closedStopViews={closedStopViews}
-      staticContentHash={staticContentHash}
-      staticUrl={staticUrl}
-      staticViewTitle={staticViewTitle}
     />
   );
 };

@@ -1,20 +1,22 @@
 import React, { FC, useState } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { verticalLayouts, horizontalLayouts } from './Layouts';
 import Dropdown from './Dropdown';
 import LayoutModal from './LayoutModal';
-import { ICardInfo } from './CardInfo';
+import { ICardInfo } from '../util/Interfaces';
 
 interface IProps {
   cardInfo: ICardInfo;
+  updateLayout: (cardId: number, layout: number) => void;
   updateCardInfo: (
     cardId: number,
     type: string,
-    value: string,
+    value: string | number,
     lang?: string,
   ) => void;
   orientation: string;
   durationEditable: boolean;
+  allowInformationDisplay: boolean;
 }
 
 const durations = [
@@ -24,13 +26,16 @@ const durations = [
   { value: 15, label: '15s' },
 ];
 
-const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
+const LayoutAndTimeContainer: FC<IProps> = ({
   cardInfo,
   updateCardInfo,
+  updateLayout,
   orientation,
   durationEditable,
-  t,
+  allowInformationDisplay,
 }) => {
+  const [t] = useTranslation();
+  const [open, setOpen] = useState(false);
   const placeHolder = durations.find(
     duration => duration.value === cardInfo.duration,
   ).label;
@@ -45,19 +50,11 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
   }
   const layoutButton = layout.label;
 
-  const [isOpen, changeOpen] = useState(false);
-
-  const setOpen = () => {
-    changeOpen(true);
-  };
-
-  const getLayout = option => {
+  const onSave = option => {
     if (option) {
-      if (updateCardInfo) {
-        updateCardInfo(cardInfo.id, 'layout', option.value.toString());
-      }
+      updateLayout(cardInfo.id, option);
+      setOpen(false);
     }
-    changeOpen(false);
   };
 
   const handleChange = option => {
@@ -67,7 +64,7 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
   };
   return (
     <div className="layout-and-time-container">
-      <div role="button" onClick={setOpen}>
+      <div role="button" onClick={() => setOpen(true)}>
         <button
           className="layout-button"
           name="layout"
@@ -88,13 +85,15 @@ const LayoutAndTimeContainer: FC<IProps & WithTranslation> = ({
         />
       </div>
       <LayoutModal
+        allowInformationDisplay={allowInformationDisplay}
         orientation={orientation}
-        isOpen={isOpen}
         option={layout}
-        onClose={getLayout}
+        open={open}
+        onClose={() => setOpen(false)}
+        onSave={onSave}
       />
     </div>
   );
 };
 
-export default withTranslation('translations')(LayoutAndTimeContainer);
+export default LayoutAndTimeContainer;

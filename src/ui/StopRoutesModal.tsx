@@ -1,17 +1,17 @@
 import cx from 'classnames';
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import Button from './Button';
 import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
-import { withTranslation, WithTranslation } from 'react-i18next';
-import { IStop, IPattern } from '../util/Interfaces';
+import { useTranslation } from 'react-i18next';
+import { IStopInfoPlus, IPattern } from '../util/Interfaces';
 import Modal from 'react-modal';
-import { getColorByName, getIconStyleWithColor } from '../util/getConfig';
 import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
+import { ConfigContext } from '../contexts';
 
-Modal.setAppElement('#root');
+if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
 interface IRoute {
   gtfsId?: string;
@@ -19,13 +19,9 @@ interface IRoute {
   code?: string;
 }
 
-interface IStopPlus extends IStop {
-  patterns: Array<IPattern>;
-}
-
 interface Props {
   showModal: boolean;
-  stop: IStopPlus;
+  stop: IStopInfoPlus;
   closeModal: (route: IRoute[]) => void;
   stopSettings?: any;
   combinedPatterns: string[];
@@ -42,9 +38,9 @@ export const defaultSettings = {
   showRouteColumn: true,
 };
 
-const StopRoutesModal: FC<Props & WithTranslation> = (
-  props: Props & WithTranslation,
-) => {
+const StopRoutesModal: FC<Props> = props => {
+  const config = useContext(ConfigContext);
+  const [t] = useTranslation();
   const [showInputs, setShowInputs] = useState(false);
   const [settings, setSettings] = useState(
     props.stopSettings || defaultSettings,
@@ -54,7 +50,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
     props.stopSettings?.renamedDestinations || [],
   );
   const stopCode = props.stop.code ? `(${props.stop.code})` : '';
-  const text = props.t('stopSettings', {
+  const text = t('stopSettings', {
     stop: props.stop.name,
     code: stopCode,
   });
@@ -220,12 +216,12 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
           <button
             className="close-button"
             role="button"
-            aria-label={props.t('close')}
+            aria-label={t('close')}
             onClick={handleClose}
           >
             <Icon
               img="close"
-              color={getColorByName('primary')}
+              color={config.colors.primary}
               height={24}
               width={24}
             />
@@ -237,7 +233,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
           </div>
         </section>
         <section className="section-margin-large">
-          <h2 id="show-settings-group-label">{props.t('show')}</h2>
+          <h2 id="show-settings-group-label">{t('show')}</h2>
           {showSettings.map(setting => {
             return (
               <React.Fragment key={`setting-${setting}`}>
@@ -249,11 +245,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                     settings && settings[setting] ? settings[setting] : false
                   }
                   onChange={() => checkShowSetting(setting)}
-                  aria-label={`${props.t('show')} ${props.t(setting)}`}
-                  margin={'0 10px 5px 0'}
-                  color={getColorByName('primary')}
+                  aria-label={`${t('show')} ${t(setting)}`}
+                  color={config.colors.primary}
                 >
-                  {props.t(setting)}
+                  {t(setting)}
                 </Checkbox>
               </React.Fragment>
             );
@@ -263,10 +258,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
           <div className="divider" />
         </section>
         <section className="section-margin-large timeshift">
-          <h2> {props.t('timeShift')}</h2>
-          <p>{props.t('timeShiftDescription')}</p>
+          <h2> {t('timeShift')}</h2>
+          <p>{t('timeShiftDescription')}</p>
           <div className="show-departures-over">
-            {props.t('timeShiftShow')}
+            {t('timeShiftShow')}
             <Dropdown
               name="duration"
               isSearchable={false}
@@ -282,7 +277,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
         <section className="section-margin-large title-and-no-renaming">
           <div className="title">
             <h2>
-              {props.t('hideLines', {
+              {t('hideLines', {
                 hidden: settings.hiddenRoutes.length,
                 all: props.combinedPatterns.length,
               })}
@@ -301,9 +296,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                 showInputs ? handleDeleteRenamings(e) : handleShowInputs(e)
               }
             >
-              {showInputs
-                ? props.t('deleteRenamings')
-                : props.t('renameDestinations')}
+              {showInputs ? t('deleteRenamings') : t('renameDestinations')}
             </h2>
           </div>
         </section>
@@ -315,10 +308,10 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
               name={'all'}
               width={30}
               height={30}
-              color={getColorByName('primary')}
-              aria-label={props.t('hideAllLines')}
+              color={config.colors.primary}
+              aria-label={t('hideAllLines')}
             >
-              <span className="all">{props.t('all')}</span>
+              <span className="all">{t('all')}</span>
             </Checkbox>
           </div>
           {props.languages.length > 1 && (
@@ -338,7 +331,7 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
             const { route } = props.stop.patterns.find(
               p => p.route.gtfsId === gtfsID,
             );
-            const iconStyle = getIconStyleWithColor(getRouteMode(route));
+            const alternateIcon = config.modeIcons.postfix;
             return (
               <div key={pattern} className="row">
                 <Checkbox
@@ -347,19 +340,21 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
                   name={pattern}
                   width={30}
                   height={30}
-                  color={getColorByName('primary')}
-                  aria-label={props.t('hideLine', { line: patternArray[2] })}
+                  color={config.colors.primary}
+                  aria-label={t('hideLine', { line: patternArray[2] })}
                 >
                   <div className="vehicle">
                     <Icon
                       img={
-                        !iconStyle.postfix
+                        !alternateIcon
                           ? getRouteMode(route)
-                          : getRouteMode(route) + iconStyle.postfix
+                          : getRouteMode(route) + alternateIcon
                       }
                       width={24}
                       height={24}
-                      color={iconStyle.color}
+                      color={
+                        config.modeIcons.colors[`mode-${getRouteMode(route)}`]
+                      }
                     />
                   </div>
                   <div className="route-number">{patternArray[2]}</div>
@@ -389,11 +384,11 @@ const StopRoutesModal: FC<Props & WithTranslation> = (
         <section className="section-margin-small">
           <div className="divider-routes" />
           <div className="button-container">
-            <Button onClick={handleSave} text={props.t('save')} />
+            <Button onClick={handleSave} text={t('save')} />
           </div>
         </section>
       </div>
     </Modal>
   );
 };
-export default withTranslation('translations')(StopRoutesModal);
+export default StopRoutesModal;

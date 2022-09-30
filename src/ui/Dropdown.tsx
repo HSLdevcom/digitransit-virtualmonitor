@@ -1,10 +1,10 @@
-import React, { FC } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import React, { FC, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 import Select from 'react-select';
 import Icon from './Icon';
 import { v4 as uuid } from 'uuid';
-import { getPrimaryColor } from '../util/getConfig';
+import { ConfigContext } from '../contexts';
 
 interface IOption {
   value: string;
@@ -31,7 +31,7 @@ interface NestedOption {
   value: number;
 }
 
-const Dropdown: FC<IProps & WithTranslation> = ({
+const Dropdown: FC<IProps> = ({
   name,
   indicatorColor,
   isSearchable,
@@ -39,12 +39,13 @@ const Dropdown: FC<IProps & WithTranslation> = ({
   placeholder,
   handleChange,
   isDisabled = false,
-  t,
 }) => {
+  const [t] = useTranslation();
+  const config = useContext(ConfigContext);
   const ddIndicator = (
     <Icon
       img="arrow-down"
-      color={indicatorColor ? indicatorColor : getPrimaryColor()}
+      color={indicatorColor ? indicatorColor : config.colors.primary}
     />
   );
 
@@ -77,4 +78,4 @@ const Dropdown: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(Dropdown);
+export default Dropdown;

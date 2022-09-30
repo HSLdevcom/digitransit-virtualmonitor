@@ -1,15 +1,25 @@
 export interface IStop {
-  code: string;
-  desc: string;
-  gtfsId: string;
-  locationType: string;
-  lat: number;
-  lon: number;
-  name: string;
-  settings: ISettings;
+  id?: string;
+  code?: string;
+  desc?: string;
+  gtfsId?: string;
+  locationType?: string;
+  lat?: number;
+  lon?: number;
+  name?: string;
+  settings?: ISettings;
   mode?: string;
   routes?: Array<any>;
   parentStation?: string;
+}
+export interface IStopInfoPlus extends IStop {
+  cardId?: number;
+  settings?: ISettings;
+  layout?: number;
+  locality?: string;
+  patterns?: Array<IPattern>;
+  id?: string;
+  modes?: Array<string>;
 }
 export interface ISettings {
   hiddenRoutes: Array<IHiddenRoute>;
@@ -62,7 +72,6 @@ export interface IMonitor {
   cards: Array<IView>;
   languages: Array<string>;
   contenthash?: string;
-  isInformationDisplay: boolean;
 }
 
 export interface IAlertDescriptionTextTranslation {
@@ -124,4 +133,13 @@ export interface ICard {
   source: string;
   parentStation: string;
   hiddenRoutes: any;
+}
+export interface ICardInfo {
+  index: number;
+  id: number;
+  layout?: number;
+  duration?: number;
+  title?: ITitle;
+  possibleToMove: boolean;
+  columns?: IColumn;
 }

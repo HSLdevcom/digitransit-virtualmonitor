@@ -1,22 +1,15 @@
-.create-container {
-  width: 734px;
-  display: flex;
-  flex-flow: row-reverse;
+.user-monitors-container {
+  width: 780px;
+  margin: 40px 60px 30px;
 
-  .btn {
-    font-size: 16px;
-    padding: 0 28px;
-    height: 40px;
-    background: $primary-color;
-    border: 1px solid #888;
-    box-sizing: border-box;
-    border-radius: 40px;
-    cursor: pointer;
-    margin-right: 4px;
-    margin-left: 0;
-    color: #fff;
-    position: relative;
-    bottom: 10px;
-    margin-bottom: 60px;
+  .create-button-container {
+    display: flex;
+    margin: 20px 10px 20px;
+    justify-content: flex-end;
+
+    .monitor-button {
+      height: 40px;
+      font-size: 16px;
+    }
   }
 }

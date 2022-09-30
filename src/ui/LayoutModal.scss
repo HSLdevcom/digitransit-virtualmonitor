@@ -1,32 +1,12 @@
 @import '../index';
 
-.modal {
-  .ReactModal__Overlay {
-    z-index: 10;
-  }
+.layout-modal {
+  .monitor-modal-container {
+    margin: 0 80px;
 
-  .ReactModal__Content {
-    border: none !important;
-    border-radius: 5px !important;
-    width: 680px !important;
-    max-height: 90% !important;
-    height: fit-content;
-    overflow-x: hidden !important;
-    top: 50% !important;
-    left: 50% !important;
-    margin-right: -50%;
-    margin-bottom: -50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    justify-content: center;
-    animation: none;
-  }
-
-  .layout-modal-header {
-    margin: 0 0 34px 0;
-    font-size: 1.5rem;
-    font-weight: $font-weight-bigger;
-    padding-left: 60px;
+    .monitor-modal-header {
+      margin-bottom: 0;
+    }
   }
 
   .layout-modal-content-container {
@@ -44,22 +24,16 @@
       font-size: 1.125rem;
     }
 
-    #close {
-      display: flex;
-      justify-content: flex-end;
+    .info-display-warning {
+      font-size: 14px;
+    }
 
-      .close-button {
-        background: transparent;
-        border: none;
-        cursor: pointer;
-      }
+    .row-info {
+      margin-bottom: 10px;
     }
   }
 
   .layouts {
-    margin-top: -31px;
-    margin-left: 60px;
-
     .row {
       .header {
         padding-bottom: 20px;
@@ -71,11 +45,22 @@
       .options {
         display: flex;
 
+        .option:disabled::after {
+          position: absolute;
+          content: '';
+          height: 100%;
+          width: 100%;
+          background-color: rgba(221, 221, 221, 0.7);
+        }
+
         .option {
+          position: relative;
           display: flex;
           flex-direction: column;
+          align-items: center;
           border: 1px solid #ddd;
           border-radius: 4px;
+          padding: 0;
 
           svg {
             position: relative;
@@ -86,11 +71,6 @@
             height: 210px;
             width: 121px;
             margin-right: 20px;
-
-            svg {
-              top: 10px;
-              left: 10px;
-            }
           }
 
           &.label-selected {

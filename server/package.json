@@ -9,14 +9,20 @@
   },
   "dependencies": {
     "@azure/cosmos": "3.5.2",
+    "axios": "^0.27.2",
     "body-parser": "^1.17.2",
+    "connect-redis": "^6.1.3",
     "cookie-parser": "^1.4.3",
     "cron": "^1.8.2",
+    "dayjs": "^1.11.3",
     "express": "^4.15.3",
+    "express-session": "^1.17.3",
     "gtfs": "https://github.com/HSLdevcom/node-gtfs.git#master",
     "morgan": "^1.8.2",
+    "openid-client": "^4.9.1",
+    "passport": "^0.4.1",
     "pug": "^3.0.2",
-    "uuid": "^8.3.2"
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "@types/uuid": "^8.3.1",

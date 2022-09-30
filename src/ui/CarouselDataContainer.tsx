@@ -1,19 +1,11 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import { useQuery } from '@apollo/client';
 import {
-  GET_STOP_DEPARTURES,
-  GET_STATION_DEPARTURES,
-} from '../queries/departureQueries';
-import {
-  GetDeparturesForStations,
-  GetDeparturesForStationsVariables,
-} from '../generated/GetDeparturesForStations';
-import {
-  GetDeparturesForStops,
-  GetDeparturesForStopsVariables,
-} from '../generated/GetDeparturesForStops';
+  GetDeparturesForStopsDocument,
+  GetDeparturesForStationsDocument,
+} from '../generated';
 import { getLayout } from '../util/getLayout';
-import { IView, ITrainData } from '../util/Interfaces';
+import { ITrainData } from '../util/Interfaces';
 import {
   getStopsAndStationsFromViews,
   createDepartureArray,
@@ -21,17 +13,13 @@ import {
 import TranslationContainer from './TranslationContainer';
 import Loading from './Loading';
 import { uniq, uniqBy } from 'lodash';
-import { WithTranslation, withTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import CarouselContainer from './CarouselContainer';
+import { MonitorContext } from '../contexts';
 
 interface IProps {
-  views: Array<IView>;
-  languages: Array<string>;
   preview?: boolean;
   trainsWithTrack?: Array<ITrainData>;
-  staticContentHash?: string;
-  staticUrl?: string;
-  staticViewTitle?: string;
   fromStop?: boolean;
   initTime: number;
 }
@@ -44,18 +32,14 @@ const filterEffectiveAlerts = alerts => {
   return effectiveAlerts;
 };
 
-const CarouselDataContainer: FC<IProps & WithTranslation> = ({
-  views,
-  languages,
+const CarouselDataContainer: FC<IProps> = ({
   preview,
-  t,
   trainsWithTrack,
-  staticContentHash,
-  staticUrl,
-  staticViewTitle,
   fromStop,
   initTime,
 }) => {
+  const { cards: views, languages } = useContext(MonitorContext);
+  const [t] = useTranslation();
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
 
@@ -78,19 +62,13 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   const [alerts, setAlerts] = useState([]);
   const [closedStopViews, setClosedStopViews] = useState([]);
 
-  const stationsState = useQuery<
-    GetDeparturesForStations,
-    GetDeparturesForStationsVariables
-  >(GET_STATION_DEPARTURES, {
+  const stationsState = useQuery(GetDeparturesForStationsDocument, {
     variables: { ids: stationIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stationIds.length < 1,
     context: { clientName: 'default' },
   });
-  const stopsState = useQuery<
-    GetDeparturesForStops,
-    GetDeparturesForStopsVariables
-  >(GET_STOP_DEPARTURES, {
+  const stopsState = useQuery(GetDeparturesForStopsDocument, {
     variables: { ids: stopIds, numberOfDepartures: largest },
     pollInterval: pollInterval,
     skip: stopIds.length < 1,
@@ -154,37 +132,27 @@ const CarouselDataContainer: FC<IProps & WithTranslation> = ({
   if (languages.indexOf('sv') !== -1) {
     return (
       <TranslationContainer
-        languages={languages}
         translationIds={uniq(translationIds)}
         stopDepartures={stopDepartures}
         stationDepartures={stationDepartures}
         alerts={alerts}
-        views={views}
         preview={preview}
         closedStopViews={closedStopViews}
         trainsWithTrack={trainsWithTrack}
-        staticContentHash={staticContentHash}
-        staticUrl={staticUrl}
-        staticViewTitle={staticViewTitle}
       />
     );
   }
 
   return (
     <CarouselContainer
-      languages={languages}
       stopDepartures={stopDepartures}
       stationDepartures={stationDepartures}
       alerts={alerts}
-      views={views}
       preview={preview}
       closedStopViews={closedStopViews}
       trainsWithTrack={trainsWithTrack}
-      staticContentHash={staticContentHash}
-      staticUrl={staticUrl}
-      staticViewTitle={staticViewTitle}
     />
   );
 };
 
-export default withTranslation('translations')(CarouselDataContainer);
+export default CarouselDataContainer;

@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC } from 'react';
-import { WithTranslation, withTranslation } from 'react-i18next';
 import MonitorRow, { IDeparture } from './MonitorRow';
 import cx from 'classnames';
 import { formatDate, setDate, formattedDateTimeFromSeconds } from '../time';
 import { getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
-import { v4 as uuid } from 'uuid';
 import { IClosedStop } from '../util/Interfaces';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
   viewId: number;
@@ -28,7 +27,7 @@ interface IProps {
 }
 const hasColumn = value => value === false;
 
-const MonitorRowContainer: FC<IProps & WithTranslation> = ({
+const MonitorRowContainer: FC<IProps> = ({
   viewId,
   departuresLeft,
   departuresRight,
@@ -44,8 +43,8 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   showMinutes,
   closedStopViews,
   preview,
-  t,
 }) => {
+  const [t] = useTranslation();
   const DATE_FORMAT = 'dd.MM.yyyy HH:mm';
   const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
     getLayout(layout);
@@ -111,7 +110,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
       i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
     leftColumn.push(
       <MonitorRow
-        key={departure ? departure.trip.gtfsId : uuid()}
+        key={departure ? departure.trip.gtfsId : `row_l${i}`}
         departure={departure}
         translations={translatedStrings}
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
@@ -150,7 +149,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
         rightColumn.push(
           <MonitorRow
-            key={departure ? departure.trip.gtfsId : uuid()}
+            key={departure ? departure.trip.gtfsId : `row_c${i}`}
             departure={departure}
             translations={translatedStrings}
             isFirst={
@@ -179,7 +178,7 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
           i !== nextDayDepartureIndexRight ? departuresRight[i] : null;
         rightColumn.push(
           <MonitorRow
-            key={departure ? departure.trip.gtfsId : uuid()}
+            key={departure ? departure.trip.gtfsId : `row_r${i}`}
             departure={departure}
             isTwoRow={rightColumnCount === 4 || layout === 12}
             stops={rightStops}
@@ -398,4 +397,4 @@ const MonitorRowContainer: FC<IProps & WithTranslation> = ({
   );
 };
 
-export default withTranslation('translations')(MonitorRowContainer);
+export default MonitorRowContainer;

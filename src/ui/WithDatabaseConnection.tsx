@@ -6,7 +6,8 @@ import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
 import NoMonitorsFound from './NoMonitorsFound';
 import TrainDataPreparer from './TrainDataPreparer';
-import { uuidValidateV5, getContentHash } from '../util/monitorUtils';
+import { getParams } from '../util/queryUtils';
+import { MonitorContext } from '../contexts';
 
 interface Iv {
   columns: ISides;
@@ -30,7 +31,6 @@ interface ILocation {
 }
 interface IProps {
   readonly location?: ILocation;
-  readonly instance?: string;
   readonly stations: Array<ICard>;
   readonly stops: Array<ICard>;
   readonly showPlatformsOrTracks: boolean;
@@ -38,65 +38,57 @@ interface IProps {
 
 const WithDatabaseConnection: FC<IProps> = ({
   location,
-  instance,
   stations,
   stops,
   showPlatformsOrTracks,
 }) => {
   const [view, setView] = useState({});
-  const [fetched, setFetched] = useState(false);
-  const [hash, setHash] = useState(undefined);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
-      const hash = getContentHash(location.search);
-      monitorAPI.get(hash).then(r => {
-        setHash(hash);
-        setFetched(true);
-        setView(r);
-      });
+      const { url, cont: hash } = getParams(location.search);
+      if (hash) {
+        monitorAPI
+          .get(hash)
+          .then(r => {
+            setLoading(false);
+            setView(r);
+          })
+          .catch(() => setLoading(false));
+      } else if (url) {
+        monitorAPI
+          .getStatic(url)
+          .then(r => {
+            setLoading(false);
+            setView(r);
+          })
+          .catch(() => setLoading(false));
+      }
     }
   }, []);
 
-  const monitor = fetched ? view : location?.state?.view.cards;
-  if ((!fetched && !location?.state?.view?.cards) || !monitor?.contenthash) {
-    if (fetched) {
+  const monitor = !loading ? view : location?.state?.view.cards;
+  if ((loading && !location?.state?.view?.cards) || !monitor?.contenthash) {
+    if (!loading) {
       return <NoMonitorsFound />;
     }
     return <Loading />;
   }
 
   return (
-    <>
-      {monitor.isInformationDisplay ? (
-        <InformationDisplayContainer monitor={monitor} />
+    <MonitorContext.Provider value={monitor}>
+      {monitor.cards[0].layout > 17 ? (
+        <InformationDisplayContainer />
       ) : (
         <>
           {(stations.length || stops.length) && showPlatformsOrTracks ? (
-            <TrainDataPreparer
-              monitor={monitor}
-              stations={stations}
-              stops={stops}
-              staticContentHash={
-                monitor.contenthash ? monitor.contenthash : undefined
-              }
-              staticUrl={uuidValidateV5(hash) ? hash : undefined}
-              staticViewTitle={location?.state?.viewTitle}
-            />
+            <TrainDataPreparer stations={stations} stops={stops} />
           ) : (
-            <CarouselDataContainer
-              views={monitor.cards}
-              languages={monitor.languages}
-              staticContentHash={
-                monitor.contenthash ? monitor.contenthash : undefined
-              }
-              staticUrl={uuidValidateV5(hash) ? hash : undefined}
-              staticViewTitle={location?.state?.viewTitle}
-              initTime={new Date().getTime()}
-            />
+            <CarouselDataContainer initTime={new Date().getTime()} />
           )}
         </>
       )}
-    </>
+    </MonitorContext.Provider>
   );
 };
 

@@ -1,31 +1,35 @@
-import React from 'react';
-import { withTranslation, WithTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import React, { FC, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import ContentContainer from './ContentContainer';
 import monitorsImage from './icons/create-monitor.svg';
 import cx from 'classnames';
+import { ConfigContext } from '../contexts';
 
-export function IndexPage(props: WithTranslation) {
+interface IProps {
+  buttons: any;
+  renderLogInMessage?: boolean;
+}
+
+const IndexPage: FC<IProps> = ({ buttons, renderLogInMessage = false }) => {
+  const { t, i18n } = useTranslation();
+  const config = useContext(ConfigContext);
   return (
     <ContentContainer longContainer>
       <div className="index">
         <div className="left">
           <div className="welcome">
-            <h1 className={cx('text', 'bigger')}>
-              {props.t('frontPageParagraph1')}
-            </h1>
-            <div className="text">{props.t('frontPageParagraph2')}</div>
-            <div className="text">{props.t('frontPageParagraph3')}</div>
+            <h1 className={cx('text', 'bigger')}>{t('frontPageParagraph1')}</h1>
+            <div className="text">{t('frontPageParagraph2')}</div>
+            <div className="text">{t('frontPageParagraph3')}</div>
+            <>
+              {config.frontPageContent && renderLogInMessage && (
+                <span className="text bold">
+                  {t('front-page-paragraph-hsl')}
+                </span>
+              )}
+            </>
             <div className="button-container" tabIndex={-1}>
-              <Link
-                to={'/createView'}
-                id="create-new-link"
-                aria-label={props.t('quickDisplayCreate')}
-              >
-                <button className="create-new">
-                  {props.t('quickDisplayCreate')}
-                </button>
-              </Link>
+              {buttons}
             </div>
           </div>
         </div>
@@ -39,6 +43,6 @@ export function IndexPage(props: WithTranslation) {
       </div>
     </ContentContainer>
   );
-}
+};
 
-export default withTranslation('translations')(IndexPage);
+export default IndexPage;

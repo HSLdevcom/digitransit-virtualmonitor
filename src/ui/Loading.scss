@@ -7,6 +7,17 @@
   align-items: center;
   flex: 1;
 
+  &.primary {
+    background-color: $primary-color;
+  }
+
+  &.small {
+    svg {
+      width: 20px !important;
+      height: 20px !important;
+    }
+  }
+
   &.white {
     background-color: #fff;
 

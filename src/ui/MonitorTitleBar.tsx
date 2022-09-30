@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { IMonitorConfig, IView } from '../util/Interfaces';
+import { IView } from '../util/Interfaces';
 import { DateTime } from 'luxon';
 import Icon, { iconExists } from './Icon';
 import { getWeatherData, checkDayNight } from '../util/monitorUtils';
@@ -9,7 +9,6 @@ import TitlebarTime from './TitlebarTime';
 import cx from 'classnames';
 
 interface IProps {
-  config: IMonitorConfig;
   preview: boolean;
   isMultiDisplay?: boolean;
   isLandscape?: boolean;
@@ -19,7 +18,6 @@ interface IProps {
 
 const MonitorTitlebar: FC<IProps> = ({
   view,
-  config,
   preview,
   isMultiDisplay = false,
   isLandscape = false,
@@ -81,12 +79,7 @@ const MonitorTitlebar: FC<IProps> = ({
       isLandscape={isLandscape}
       isMultiDisplay={isMultiDisplay}
     >
-      <Logo
-        monitorConfig={config}
-        isPreview={preview}
-        isLandscape={isLandscape}
-        forMonitor={true}
-      />
+      <Logo isPreview={preview} isLandscape={isLandscape} forMonitor={true} />
       {!isMultiDisplay && (
         <div
           className={cx('title-text', {

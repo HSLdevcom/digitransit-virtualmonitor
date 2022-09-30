@@ -1,62 +1,63 @@
 import React, { FC, useState, useEffect } from 'react';
-import { IMonitorConfig } from '../App';
 import CarouselDataContainer from './CarouselDataContainer';
 import { defaultStopCard } from '../util/stopCardUtil';
-import { withTranslation, WithTranslation } from 'react-i18next';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import Loading from './Loading';
-import { GetStops, GetStopsVariables } from '../generated/GetStops';
+import {
+  GetStationsForStationMonitorDocument,
+  GetStopsForStopMonitorDocument,
+} from '../generated';
+import { MonitorContext } from '../contexts';
 
 interface IProps {
   stopIds: Array<string>;
   layout?: number;
-  config: IMonitorConfig;
   urlTitle?: string;
+  station?: boolean;
 }
 
-export const GET_STOP = gql`
-  query GetStops($ids: [String!]!) @api(contextKey: "clientName") {
-    stops: stops(ids: $ids) {
-      name
-      gtfsId
-      locationType
-      lat
-      lon
-    }
-  }
-`;
-
-const setLayoutByNumber = number => {
+const getLayoutByNumber = number => {
   if (number <= 4) {
     return 1;
-  } else if (number > 4 && number < 8) {
+  } else if (number > 4 && number <= 8) {
     return 2;
   }
   return 3;
 };
 
-const StopMonitorContainer: FC<IProps & WithTranslation> = ({
+/**
+ * Used for creating monitors based on URL addresses e.g
+ * /stop/<gtfsId> or /station/<gtfsId> for example for
+ * the purpose of linking from journey planner
+ */
+const StopMonitorContainer: FC<IProps> = ({
   stopIds,
   layout = 2,
   urlTitle,
-  t,
+  station = false,
 }) => {
-  const [stopCard, setStopCard] = useState([defaultStopCard(t)]);
+  const [stopCard, setStopCard] = useState([defaultStopCard()]);
   const [fetched, setFetched] = useState(false);
 
-  const { data, loading } = useQuery<GetStops, GetStopsVariables>(GET_STOP, {
+  const document = station
+    ? GetStationsForStationMonitorDocument
+    : GetStopsForStopMonitorDocument;
+
+  const { data, loading } = useQuery(document, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
     context: { clientName: 'default' },
   });
 
-  const newLayout = setLayoutByNumber(layout);
-
   useEffect(() => {
     if (data) {
       const card = stopCard.slice();
-      card[0].columns.left.stops = data.stops.filter(s => s);
-      card[0].layout = newLayout;
+      card[0].columns.left.stops = data.stops
+        .filter(s => s)
+        .map(stop => {
+          return { ...stop, mode: stop.vehicleMode };
+        });
+      card[0].layout = getLayoutByNumber(layout);
       if (stopIds.length === 1) {
         card[0].title.fi = urlTitle || data.stops[0]?.name;
       } else {
@@ -69,14 +70,15 @@ const StopMonitorContainer: FC<IProps & WithTranslation> = ({
   if (loading || !fetched) {
     return <Loading />;
   }
+  const monitor = {
+    cards: stopCard,
+    languages: ['fi'],
+  };
   return (
-    <CarouselDataContainer
-      languages={['fi']}
-      views={stopCard}
-      fromStop
-      initTime={new Date().getTime()}
-    />
+    <MonitorContext.Provider value={monitor}>
+      <CarouselDataContainer fromStop initTime={new Date().getTime()} />
+    </MonitorContext.Provider>
   );
 };
 
-export default withTranslation('translations')(StopMonitorContainer);
+export default StopMonitorContainer;

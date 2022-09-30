@@ -11,18 +11,7 @@ $primary-color: var(--primary-color);
 $monitor-background-color: var(--monitor-background-color);
 $monitor-font: var(--monitor-font);
 $monitor-font-weight: var(--monitor-font-weight);
-$monitor-font-weight-bigger: var(--monitor-font-weight-bigger);
-
-.check-box {
-  input[type=checkbox] {
-    height: 20px;
-    left: 0;
-    position: absolute;
-    top: 0;
-    visibility: hidden;
-    width: 20px;
-  }
-}
+$monitor-font-weight-bigger: var(--font-weight-bigger);
 
 ul,
 li {
@@ -31,8 +20,22 @@ li {
 
 .ReactModal__Content {
   font-family: var(--font-family);
+  padding: 0 !important;
 }
 
 .ReactModal__Overlay {
+  z-index: 1000;
   background-color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.animate-in {
+  animation-duration: 0.5s;
+  animation-name: animate-in;
+  animation-delay: var(--delayLength);
+  animation-fill-mode: backwards;
+}
+
+@keyframes animate-in {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
 }

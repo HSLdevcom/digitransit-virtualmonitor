@@ -33,6 +33,8 @@ export default {
       },
       postfix: '',
       setName: 'default',
+      postfix: '',
+      setName: '',
     },
     name: 'hsl',
     uri: 'routing/v1/routers/hsl/index/graphql',

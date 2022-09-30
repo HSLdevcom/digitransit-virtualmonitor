@@ -102,7 +102,7 @@ export const createMonitor = async (req, res, next) => {
 
 const makeHslIdRequest = async (options) => {
   try {
-    const hslIdUrl = 'https://hslid-uat.cinfra.fi';
+    const hslIdUrl = process.env.OIDCHOST;
     const credentials = `Basic ${Buffer.from(
       `${CLIENT_ID}:${CLIENT_SECRET}`,
     ).toString('base64')}`;

@@ -29,7 +29,7 @@ Monitor also shows alerts for stops when available. There is also hidden functio
 
 `npm install && cd server/ && npm install`
 
-Use node version 16.8.0
+Use node version 16.8.0 or later
 
 ## Compiling and running for development.
 

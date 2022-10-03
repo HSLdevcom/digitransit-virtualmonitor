@@ -32,7 +32,7 @@ export default {
         'mode-subway': '#CA4000',
       },
       postfix: '',
-      setName: '',
+      setName: 'default',
     },
     name: 'hsl',
     uri: 'routing/v1/routers/hsl/index/graphql',

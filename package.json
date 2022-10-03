@@ -32,7 +32,7 @@
     "lodash-es": "4.17.21",
     "luxon": "^1.27.0",
     "object-hash": "^2.2.0",
-    "patch-package": "^5.1.2",
+    "patch-package": "^6.4.7",
     "prettier": "^2.3.0",
     "react": "^16.14.0",
     "react-autosuggest": "^10.0.0",

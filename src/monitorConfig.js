@@ -39,7 +39,9 @@ export default {
     bannersUri: 'https://content.hsl.fi/api/v1/banners?',
     HSLUri:
       // eslint-disable-next-line no-undef
-      window.location.href.indexOf('omatnaytot') > -1
+      window.location.href.indexOf('omatnaytot') > -1 ||
+      // eslint-disable-next-line no-undef
+      window.location.href.indexOf('pre-prod') > -1
         ? 'https://hsl.fi'
         : 'https://test.hslfi.hsldev.com/',
     suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',

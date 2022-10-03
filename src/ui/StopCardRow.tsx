@@ -211,7 +211,10 @@ const StopCardRow: FC<IProps> = ({
   const searchContext = {
     ...getSearchContext(config),
     getFavouriteStops: () =>
-      favourites?.filter(f => f.type === 'stop' || f.type === 'station') || [],
+      // Result may also be something else than array, like an 500 http response
+      Array.isArray(favourites)
+        ? favourites.filter(f => f.type === 'stop' || f.type === 'station')
+        : [],
   };
   return (
     <li className="stopcard animate-in" id={`stopcard_${id}`} style={style}>

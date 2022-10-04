@@ -20,12 +20,10 @@ import {
   createMonitor,
 } from './hslID.js';
 
-const FavouriteHost =
-  process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
+const FavouriteHost =  process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
 
-const NotificationHost = process.env.NOTIFICATION_HOST
+const NotificationHost =  process.env.NOTIFICATION_HOST
   || 'https://test.hslfi.hsldev.com/user/api/v1/notifications';
-
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
 const app = express();
@@ -49,8 +47,7 @@ app.get('/api/monitor/:id', (req, res, next) => {
 
 app.use('/api/graphql', (req, res, next) => {
   const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
-  const endpoint =
-    req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
+  const endpoint =    req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
   const queryparams = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
     ? `?${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
     : '';
@@ -61,10 +58,10 @@ app.use('/api/graphql', (req, res, next) => {
     data: JSON.stringify(req.body),
     url,
   })
-    .then((r) => {
+    .then(r => {
       res.json(r.data);
     })
-    .catch(e => next(e));
+    .catch((e) => next(e));
 });
 
 app.put('/api/monitor', (req, res, next) => {
@@ -74,10 +71,10 @@ app.put('/api/monitor', (req, res, next) => {
 app.get('/api/translations/:recordIds', (req, res, next) => {
   const ids = req.params.recordIds.split(',');
   getTranslations({ trans_id: ids })
-    .then((t) => {
+    .then(t => {
       res.json(t);
     })
-    .catch((e) => next(e));
+    .catch(e => next(e));
 });
 
 app.get('/api/staticmonitor/:id', (req, res, next) => {
@@ -91,10 +88,10 @@ app.post('/api/decompress/', (req, res, next) => {
     );
     decompresser
       .unpack(req.body.payload)
-      .then((t) => {
+      .then(t => {
         res.json(t);
       })
-      .catch(e => console.log(e));
+      .catch((e) => console.log(e));
   } catch (e) {
     next(e);
   }
@@ -144,43 +141,43 @@ app.use('/api/user/favourites', userAuthenticated, (req, res) => {
     url: `${FavouriteHost}/${req.user.data.sub}`,
     data: JSON.stringify(req.body),
   })
-    .then((response) => {
+    .then(response => {
       if (response && response.status && response.data) {
         res.status(response.status).send(response.data);
       } else {
         errorHandler(res);
       }
     })
-    .catch((err) => {
+    .catch(err => {
       errorHandler(res, err);
     });
 });
 
 app.use('/api/user/notifications', userAuthenticated, (req, res) => {
   const params = Object.keys(req.query)
-    .map((k) => `${k}=${req.query[k]}`)
+    .map(k => `${k}=${req.query[k]}`)
     .join('&');
-
-  const url =    req.method === 'POST'
-      ? `${NotificationHost}/read?${params}`
-      : `${NotificationHost}?${params}`;
+  const url =
+    req.method === 'POST'
+    ? `${NotificationHost}/read?${params}`
+    : `${NotificationHost}?${params}`;
   axios({
     headers: {
       'content-type': 'application/json',
-      'x-hslid-token': req.user.token.access_token,
+      'x-hslid-token': req.user.token.id_token,
     },
     method: req.method,
     url,
     data: JSON.stringify(req.body),
   })
-    .then((response) => {
+    .then(response => {
       if (response && response.status && response.data) {
         res.status(response.status).send(response.data);
       } else {
         errorHandler(res);
       }
     })
-    .catch((err) => {
+    .catch(err => {
       errorHandler(res, err);
     });
 });

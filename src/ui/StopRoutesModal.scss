@@ -92,11 +92,6 @@
           }
         }
 
-        .empty-space,
-        .reserved-space {
-          width: 160px;
-        }
-
         .option-checkbox-container {
           width: 32px;
         }
@@ -104,6 +99,11 @@
         .all {
           margin-bottom: 5px;
           margin-left: 8px;
+        }
+
+        .empty-space,
+        .routeInfo {
+          min-width: 35%;
         }
 
         .vehicle {
@@ -118,7 +118,7 @@
           font-size: 18px;
           line-height: 22px;
           color: #333;
-          min-width: 85px;
+          display: inline-block;
         }
 
         .destination {
@@ -134,6 +134,7 @@
           .fi,
           .sv {
             width: 100%;
+            margin-right: 13px;
 
             &.readonly {
               font-size: 16px;
@@ -147,17 +148,6 @@
 
             &::placeholder {
               color: gray;
-            }
-          }
-
-          .fi,
-          .sv {
-            margin-right: 13px;
-          }
-
-          .fi {
-            &.readonly {
-              margin-left: -2px;
             }
           }
         }
@@ -177,8 +167,9 @@
             display: flex;
 
             &.fi,
-            &.sv {
-              margin-right: 114px;
+            &.sv,
+            &.en {
+              width: 100%;
             }
           }
         }

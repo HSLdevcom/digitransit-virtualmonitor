@@ -136,7 +136,7 @@ app.get('/api/userowned/:id', userAuthenticated, (req, res, next) => {
 
 app.use('/api/user/favourites', userAuthenticated, (req, res) => {
   axios({
-    headers: { Authorization: `Bearer ${req.user.token.access_token}` },
+    headers: { Authorization: `Bearer ${req.user.token.id_token}` },
     method: req.method,
     url: `${FavouriteHost}/${req.user.data.sub}`,
     data: JSON.stringify(req.body),

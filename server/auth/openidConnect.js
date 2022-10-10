@@ -275,7 +275,6 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   });
   /* GET the profile of the current authenticated user */
   app.get('/api/user', (req, res) => {
-    console.log('getuser, ', req.user);
     axios
       .get(`${OIDCHost}/openid/userinfo`, {
         headers: { Authorization: `Bearer ${req.user.token.access_token}` },

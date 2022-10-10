@@ -33,13 +33,17 @@ export default {
       },
       postfix: '',
       setName: 'default',
-      postfix: '',
-      setName: '',
     },
     name: 'hsl',
     uri: 'routing/v1/routers/hsl/index/graphql',
     bannersUri: 'https://content.hsl.fi/api/v1/banners?',
-    HSLUri: 'https://test.hslfi.hsldev.com/',
+    HSLUri:
+      // eslint-disable-next-line no-undef
+      window.location.href.indexOf('omatnaytot') > -1 ||
+      // eslint-disable-next-line no-undef
+      window.location.href.indexOf('pre-prod') > -1
+        ? 'https://hsl.fi'
+        : 'https://test.hslfi.hsldev.com/',
     suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
@@ -55,9 +59,6 @@ export default {
     colors: {
       primary: '#7DC02D',
       monitorBackground: '#0057a2',
-    },
-    fonts: {
-      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
     },
     feedIds: ['LINKKI'],
     modeIcons: {
@@ -76,6 +77,7 @@ export default {
   },
   matka: {
     name: 'matka',
+    uri: 'routing/v1/routers/finland/index/graphql',
   },
   tampere: {
     colors: {
@@ -111,7 +113,7 @@ export default {
     useTilde: false,
   },
   vaasa: {
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
     allowLogin: false,
     feedIds: ['vaasa'],

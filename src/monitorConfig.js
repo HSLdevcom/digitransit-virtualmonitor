@@ -77,6 +77,7 @@ export default {
   },
   matka: {
     name: 'matka',
+    uri: 'routing/v1/routers/finland/index/graphql',
   },
   tampere: {
     colors: {
@@ -112,7 +113,7 @@ export default {
     useTilde: false,
   },
   vaasa: {
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
     allowLogin: false,
     feedIds: ['vaasa'],

@@ -334,31 +334,33 @@ const StopRoutesModal: FC<Props> = props => {
             const alternateIcon = config.modeIcons.postfix;
             return (
               <div key={pattern} className="row">
-                <Checkbox
-                  isSelected={hiddenRouteChecked(pattern)}
-                  onChange={() => checkHiddenRoute(pattern)}
-                  name={pattern}
-                  width={30}
-                  height={30}
-                  color={config.colors.primary}
-                  aria-label={t('hideLine', { line: patternArray[2] })}
-                >
-                  <div className="vehicle">
-                    <Icon
-                      img={
-                        !alternateIcon
-                          ? getRouteMode(route)
-                          : getRouteMode(route) + alternateIcon
-                      }
-                      width={24}
-                      height={24}
-                      color={
-                        config.modeIcons.colors[`mode-${getRouteMode(route)}`]
-                      }
-                    />
-                  </div>
-                  <div className="route-number">{patternArray[2]}</div>
-                </Checkbox>
+                <div className="routeInfo">
+                  <Checkbox
+                    isSelected={hiddenRouteChecked(pattern)}
+                    onChange={() => checkHiddenRoute(pattern)}
+                    name={pattern}
+                    width={30}
+                    height={30}
+                    color={config.colors.primary}
+                    aria-label={t('hideLine', { line: patternArray[2] })}
+                  >
+                    <div className="vehicle">
+                      <Icon
+                        img={
+                          !alternateIcon
+                            ? getRouteMode(route)
+                            : getRouteMode(route) + alternateIcon
+                        }
+                        width={24}
+                        height={24}
+                        color={
+                          config.modeIcons.colors[`mode-${getRouteMode(route)}`]
+                        }
+                      />
+                    </div>
+                    <div className="route-number">{patternArray[2]}</div>
+                  </Checkbox>
+                </div>
                 <div className="renamedDestinations">
                   {props.languages.map(lang => (
                     <input

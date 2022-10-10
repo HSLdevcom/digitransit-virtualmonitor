@@ -35,7 +35,7 @@ export default {
     setName: 'digitransit',
   },
   name: 'default',
-  uri: 'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql',
+  uri: 'routing/v1/routers/finland/index/graphql',
   showMinutes: '15',
   alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
   allowLogin: false,

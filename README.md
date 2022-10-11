@@ -24,6 +24,7 @@ It's possible to give names to the stops and displays. Some stops have a pier or
 ### Alerts
 
 Monitor also shows alerts for stops when available. There is also hidden functionality for viewing only alerts from selected stops. It can be accessed by hiding all the departures from all selected stops in the stop settings.
+
 ## Setup
 
 `npm install && cd server/ && npm install`

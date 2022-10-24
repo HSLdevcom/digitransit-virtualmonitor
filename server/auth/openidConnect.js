@@ -5,7 +5,9 @@ import redis from 'redis';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import connectRedis from 'connect-redis';
+import {OIDCStrategy} from 'passport-azure-ad';
 import Strategy from './Strategy.js';
+import config from './config.js'
 
 const OIDCHost = process.env.OIDCHOST || 'https://hslid-dev.t5.fi';
 
@@ -22,6 +24,7 @@ export const errorHandler = function (res, err) {
 };
 
 export const userAuthenticated = function (req, res, next) {
+  console.log('what?')
   axios
     .get(`${OIDCHost}/openid/userinfo`, {
       headers: { Authorization: `Bearer ${req.user.token.access_token}` },
@@ -38,7 +41,7 @@ const RedisStore = connectRedis(session);
 
 const clearAllUserSessions = false; // set true if logout should erase all user's sessions
 
-const debugLogging = process.env.DEBUGLOGGING;
+const debugLogging = true // process.env.DEBUGLOGGING;
 
 axios.defaults.timeout = 12000;
 
@@ -160,9 +163,40 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   app.use(passport.initialize());
   app.use(passport.session());
   passport.use('passport-openid-connect', oic);
+  passport.use('azuread-openidconnect', new OIDCStrategy({
+    identityMetadata: config.creds.identityMetadata,
+    clientID: config.creds.clientID,
+    responseType: config.creds.responseType,
+    responseMode: config.creds.responseMode,
+    redirectUrl: config.creds.redirectUrl,
+    allowHttpForRedirectUrl: config.creds.allowHttpForRedirectUrl,
+    clientSecret: config.creds.clientSecret,
+    validateIssuer: config.creds.validateIssuer,
+    isB2C: false,
+    issuer: config.creds.issuer,
+    passReqToCallback: config.creds.passReqToCallback,
+    scope: config.creds.scope,
+    loggingLevel: config.creds.loggingLevel,
+    nonceLifetime: config.creds.nonceLifetime,
+    nonceMaxAmount: config.creds.nonceMaxAmount,
+    useCookieInsteadOfSession: config.creds.useCookieInsteadOfSession,
+    cookieEncryptionKeys: config.creds.cookieEncryptionKeys,
+    clockSkew: config.creds.clockSkew,
+  },
+  function(iss, sub, profile, accessToken, refreshToken, done) {
+    console.log('HERE', profile)
+    if (!profile.oid) {
+      return done(new Error("No oid found"), null);
+    }
+  },
+));
+
   passport.serializeUser(Strategy.serializeUser);
   passport.deserializeUser(Strategy.deserializeUser);
 
+  
+
+  
   app.use(redirectToLogin);
   app.use(refreshTokens);
 
@@ -177,7 +211,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
         .map(k => `${k}=${rest[k]}`)
         .join('&')
         .replaceAll(' ', '+');
-      
+
       req.session.returnTo = localPort
         ? `http://localhost:${localPort}${url}?${restParams}`
         : `${url}?${restParams}`;
@@ -187,6 +221,57 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       successReturnToOrRedirect: '/',
     })(req, res);
   });
+
+  app.get('/matka-login', (req, res, next) => {
+    console.log('MOI')
+    passport.authenticate('azuread-openidconnect', 
+    { 
+      response: res,
+      failureRedirect: '/'
+    }
+  )(req, res, next);
+  },
+  function(req, res) {
+    console.log('Login called')
+    res.redirect('/');
+    });
+
+// 'GET returnURL'
+// `passport.authenticate` will try to authenticate the content returned in
+// query (such as authorization code). If authentication fails, user will be
+// redirected to '/' (home page); otherwise, it passes to the next middleware.
+app.get('/auth/openid/return',
+  function(req, res, next) {
+    console.log('HELLO')
+    passport.authenticate('azuread-openidconnect', 
+      { 
+        response: res,    // required
+        failureRedirect: '/'  
+      }
+    )(req, res, next);
+  },
+  function(req, res) {
+    console.log('Return from azureAd')
+    res.redirect('/');
+  });
+
+// 'POST returnURL'
+// `passport.authenticate` will try to authenticate the content returned in
+// body (such as authorization code). If authentication fails, user will be
+// redirected to '/' (home page); otherwise, it passes to the next middleware.
+app.post('/auth/openid/return',
+  function(req, res, next) {
+    passport.authenticate('azuread-openidconnect', 
+      { 
+        response: res,    // required
+        failureRedirect: '/'  
+      }
+    )(req, res, next);
+  },
+  function(req, res) {
+    console.log('Return from AzureAD')
+    res.redirect('/');
+  });  
 
   // Callback handler that will redirect back to application after successfull authentication
   app.get(
@@ -275,11 +360,13 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   });
   /* GET the profile of the current authenticated user */
   app.get('/api/user', (req, res) => {
+    console.log('FOOO')
     axios
       .get(`${OIDCHost}/openid/userinfo`, {
         headers: { Authorization: `Bearer ${req.user.token.access_token}` },
       })
       .then(response => {
+        console.log('resp')
         if (response && response.status && response.data) {
           res.status(response.status).send(response.data);
         } else {
@@ -287,6 +374,26 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
         }
       })
       .catch(err => {
+        console.log('error')
+        errorHandler(res, err);
+      });
+  });
+  app.get('/api/matka-user', (req, res) => {
+    console.log('FOOO')
+    axios
+      .get(`${OIDCHost}/openid/userinfo`, {
+        headers: { Authorization: `Bearer ${req.user.token.access_token}` },
+      })
+      .then(response => {
+        console.log('resp')
+        if (response && response.status && response.data) {
+          res.status(response.status).send(response.data);
+        } else {
+          errorHandler(res);
+        }
+      })
+      .catch(err => {
+        console.log('error')
         errorHandler(res, err);
       });
   });

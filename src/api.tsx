@@ -1,6 +1,8 @@
 const baseAPI = '/api';
+const foo = window.location.hostname;
 
 const fetchData = (path, options, signal = undefined) => {
+  console.log('HÄÄR PRKL', foo)
   return new Promise((resolve, reject) => {
     const jsonResponse = !options.method || options.method === 'POST';
     fetch(`${baseAPI}/${path}`, {
@@ -19,11 +21,14 @@ const fetchData = (path, options, signal = undefined) => {
 };
 
 const monitorAPI = {
-  getUser() {
+  getUser(configName: undefined) {
+    console.log(configName)
+    const path = configName === 'matka' ? 'matka-user' : 'user';
+    console.log('PAHT ', path)
     const options = {
       credentials: 'include',
     };
-    return fetchData('user', options);
+    return fetchData(path, options);
   },
   getFavourites() {
     return fetchData('user/favourites', {});

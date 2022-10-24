@@ -135,6 +135,7 @@ app.get('/api/userowned/:id', userAuthenticated, (req, res, next) => {
 });
 
 app.use('/api/user/favourites', userAuthenticated, (req, res) => {
+  console.log('FOOB')
   axios({
     headers: { Authorization: `Bearer ${req.user.token.id_token}` },
     method: req.method,
@@ -142,6 +143,7 @@ app.use('/api/user/favourites', userAuthenticated, (req, res) => {
     data: JSON.stringify(req.body),
   })
     .then(response => {
+      console.log('RESP')
       if (response && response.status && response.data) {
         res.status(response.status).send(response.data);
       } else {
@@ -149,6 +151,7 @@ app.use('/api/user/favourites', userAuthenticated, (req, res) => {
       }
     })
     .catch(err => {
+      console.log('err')
       errorHandler(res, err);
     });
 });

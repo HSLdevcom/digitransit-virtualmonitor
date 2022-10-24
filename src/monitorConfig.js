@@ -78,6 +78,7 @@ export default {
   matka: {
     name: 'matka',
     uri: 'routing/v1/routers/finland/index/graphql',
+    allowLogin: true
   },
   tampere: {
     colors: {

@@ -24,6 +24,20 @@ module.exports = function (app) {
     }),
   );
   app.use(
+    '/matka-login',
+    createProxyMiddleware({
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+    })
+  )
+  app.use(
+    '/auth/openid/return',
+    createProxyMiddleware({
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+    })
+  )
+  app.use(
     '/logout',
     createProxyMiddleware({
       target: 'http://localhost:3001',

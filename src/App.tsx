@@ -124,7 +124,7 @@ const App: FC<IConfigurationProps> = props => {
     }
     if (config.allowLogin) {
       monitorAPI
-        .getUser()
+        .getUser(config.name)
         .then(user => {
           setUser(user);
           setLoading(false);

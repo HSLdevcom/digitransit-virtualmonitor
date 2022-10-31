@@ -22,7 +22,7 @@
     "openid-client": "^4.9.1",
     "passport": "^0.4.1",
     "pug": "^3.0.2",
-    "redis": "^2.8.0"
+    "redis": "^3.1.1"
   },
   "devDependencies": {
     "@types/uuid": "^8.3.1",

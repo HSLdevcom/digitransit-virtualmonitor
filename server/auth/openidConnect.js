@@ -225,7 +225,9 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       console.log(`logout callback for userId ${req.session.userId}`);
     }
     const sessions = `sessions-${req.session.userId}`;
-    req.logout();
+    req.logout(function (err) {
+      if (err) { return next(err); }
+    });
     RedisClient.smembers(sessions, (err, sessionIds) => {
       req.session.destroy(() => {
         res.clearCookie('connect.sid');

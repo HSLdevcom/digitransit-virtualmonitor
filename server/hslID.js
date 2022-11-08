@@ -7,6 +7,8 @@ const CLIENT_SECRET = process.env.MANAGEMENT_API_SECRET;
 export const isUserOwnedMonitor = async (req, res, next) => {
   try {
     const userMonitors = await getDataStorageMonitors(req, res, next);
+    // Needs to work for all kinds of users
+    console.log("Request param ID ", req.params.id)
     if (userMonitors.includes(req.params.id)) {
       res.status(200).send({ msg: 'OK' });
     } else {
@@ -48,6 +50,7 @@ const getDataStorageMonitors = async (req, res) => {
         endpoint: `/api/rest/v1/datastorage/${dataStorage.id}/data`,
       };
       const response = await makeHslIdRequest(options);
+      console.log("List of user's monitors ", response.data)
       return Object.keys(response.data).map((key) => key);
     }
     console.log("no data storage found, user doesn't have any monitors");
@@ -95,6 +98,7 @@ export const createMonitor = async (req, res, next) => {
       dataStorage.id = dataS;
     }
     const res = await updateMonitors(dataStorage.id, req.body, next);
+    console.log("Monitor url that will be saved: ", req.body.url)
   } catch (e) {
     next(e);
   }

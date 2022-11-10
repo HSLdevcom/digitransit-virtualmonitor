@@ -6,7 +6,6 @@ import { trainStationMap } from '../util/trainStations';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import dummyAlerts, { getDummyAlerts } from '../testAlert';
 import SunCalc from 'suncalc';
-import { IDeparture } from '../ui/MonitorRow';
 
 export const namespace = 'd5a9e986-d6c3-4174-a160-9ac088145cc3';
 
@@ -20,7 +19,7 @@ const delay = ms =>
     }, ms);
   });
 
-export const stopTimeAbsoluteDepartureTime = (stopTime: IDeparture) =>
+export const stopTimeAbsoluteDepartureTime = (stopTime: any) =>
   stopTime.serviceDay + stopTime.realtimeDeparture;
 
 export const stringifyPattern = pattern => {
@@ -414,5 +413,5 @@ export const uuidValidateV5 = uuid => {
   return uuidValidate(uuid) && uuidVersion(uuid) === 5;
 };
 
-export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
+export const stoptimeSpecificDepartureId = (departure: any) =>
   `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;

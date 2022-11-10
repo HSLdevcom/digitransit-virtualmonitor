@@ -31,7 +31,6 @@ export interface IDeparture {
   route: any;
   headsign: string;
   realtimeDeparture: number;
-  scheduledDeparture: number;
   realtime: boolean;
   pickupType: string;
   stop: IStop;

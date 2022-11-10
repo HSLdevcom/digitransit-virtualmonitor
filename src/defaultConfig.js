@@ -4,7 +4,15 @@ export default {
     monitorBackground: '#0057a2',
     alert: '#dc0451',
   },
-  feedIds: ['MATKA', 'HSL', 'tampere', 'LINKKI', 'lautta', 'OULU'],
+  feedIds: [
+    'MATKA',
+    'HSL',
+    'tampere',
+    'LINKKI',
+    'lautta',
+    'OULU',
+    'digitraffic',
+  ],
   fonts: {
     weights: {
       normal: '400',

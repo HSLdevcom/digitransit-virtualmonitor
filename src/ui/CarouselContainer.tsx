@@ -8,10 +8,7 @@ import MonitorAlertRow from './MonitorAlertRow';
 import { getLayout } from '../util/getLayout';
 import cx from 'classnames';
 import uniqBy from 'lodash/uniqBy';
-import {
-  stopTimeAbsoluteDepartureTime,
-  stoptimeSpecificDepartureId,
-} from '../util/monitorUtils';
+import { stopTimeAbsoluteDepartureTime } from '../util/monitorUtils';
 import MonitorAlertRowStatic from './MonitorAlertRowStatic';
 
 interface IProps {
@@ -31,7 +28,7 @@ const sortAndFilter = (departures, trainsWithTrack) => {
         stopTimeAbsoluteDepartureTime(stopTimeA) -
         stopTimeAbsoluteDepartureTime(stopTimeB),
     ),
-    departure => stoptimeSpecificDepartureId(departure),
+    departure => departure.trip.gtfsId,
   );
   const sortedAndFilteredWithTrack = trainsWithTrack ? [] : sortedAndFiltered;
   if (sortedAndFiltered.length > 0 && trainsWithTrack) {

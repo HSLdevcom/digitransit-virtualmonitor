@@ -7,7 +7,6 @@ import { getLayout } from '../util/getLayout';
 import { ITranslation } from './TranslationContainer';
 import { IClosedStop } from '../util/Interfaces';
 import { useTranslation } from 'react-i18next';
-import { stoptimeSpecificDepartureId } from '../util/monitorUtils';
 
 interface IProps {
   viewId: number;
@@ -111,7 +110,7 @@ const MonitorRowContainer: FC<IProps> = ({
       i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
     leftColumn.push(
       <MonitorRow
-        key={departure ? stoptimeSpecificDepartureId(departure) : `row_l${i}`}
+        key={departure ? departure.trip.gtfsId : `row_l${i}`}
         departure={departure}
         translations={translatedStrings}
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
@@ -150,9 +149,7 @@ const MonitorRowContainer: FC<IProps> = ({
           i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
         rightColumn.push(
           <MonitorRow
-            key={
-              departure ? stoptimeSpecificDepartureId(departure) : `row_c${i}`
-            }
+            key={departure ? departure.trip.gtfsId : `row_c${i}`}
             departure={departure}
             translations={translatedStrings}
             isFirst={
@@ -181,9 +178,7 @@ const MonitorRowContainer: FC<IProps> = ({
           i !== nextDayDepartureIndexRight ? departuresRight[i] : null;
         rightColumn.push(
           <MonitorRow
-            key={
-              departure ? stoptimeSpecificDepartureId(departure) : `row_r${i}`
-            }
+            key={departure ? departure.trip.gtfsId : `row_r${i}`}
             departure={departure}
             isTwoRow={rightColumnCount === 4 || layout === 12}
             stops={rightStops}

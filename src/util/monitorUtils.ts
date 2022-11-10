@@ -240,7 +240,7 @@ export const createDepartureArray = (
               stopTimeAbsoluteDepartureTime(stopTimeA) -
               stopTimeAbsoluteDepartureTime(stopTimeB),
           ),
-        departure => stoptimeSpecificDepartureId(departure),
+        departure => departure.trip.gtfsId,
       );
     });
   });
@@ -412,6 +412,3 @@ export const isPlatformOrTrackVisible = monitor => {
 export const uuidValidateV5 = uuid => {
   return uuidValidate(uuid) && uuidVersion(uuid) === 5;
 };
-
-export const stoptimeSpecificDepartureId = (departure: any) =>
-  `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;

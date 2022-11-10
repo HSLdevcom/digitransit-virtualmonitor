@@ -11,7 +11,7 @@ import { IDeparture } from '../ui/MonitorRow';
 export const namespace = 'd5a9e986-d6c3-4174-a160-9ac088145cc3';
 
 const WEATHER_URL =
-  'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
+  'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::harmonie::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
 
 const delay = ms =>
   new Promise<void>(resolve => {

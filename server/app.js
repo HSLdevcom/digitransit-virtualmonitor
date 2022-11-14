@@ -64,6 +64,21 @@ app.use('/api/graphql', (req, res, next) => {
     .catch((e) => next(e));
 });
 
+app.get('/api/geocoding/:endpoint', (req, res, next) => {
+  const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
+  const endpoint = `/geocoding/v1/${req.params.endpoint}`;
+  const apiSubscriptionParameter = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
+    ? `&${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
+    : '';
+  const url = `${baseurl}/${endpoint}?${req._parsedUrl.query}${apiSubscriptionParameter}`;
+
+  axios.get(url)
+    .then(function (response) {
+      res.json(response.data);
+    })
+    .catch((e) => next(e));
+});
+
 app.put('/api/monitor', (req, res, next) => {
   monitorService.create(req, res, next);
 });

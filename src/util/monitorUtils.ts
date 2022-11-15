@@ -32,6 +32,15 @@ export const stringifyPattern = pattern => {
   ].join(':');
 };
 
+export const stringifyStop = stoptime => {
+  return [
+    stoptime.stop.gtfsId,
+    stoptime.stop.shortName,
+    capitalize(stoptime.headsign),
+    stoptime.realtimeDeparture,
+  ].join(':');
+};
+
 export const getStopsAndStationsFromViews = views => {
   const stopIds = [];
   const stationIds = [];
@@ -65,7 +74,7 @@ export const filterDepartures = (
     stop.stoptimesForPatterns.forEach(stp =>
       stp.stoptimes.forEach(s => {
         if (s.pickupType === 'NONE') {
-          arrivalDepartures.push(stringifyPattern(stp.pattern));
+          arrivalDepartures.push(stringifyStop(s));
         }
         return s.pickupType !== 'NONE';
       }),
@@ -73,21 +82,19 @@ export const filterDepartures = (
   }
   stop.stoptimesForPatterns.forEach(stoptimeList => {
     const combinedPattern = stringifyPattern(stoptimeList.pattern);
-
-    if (
-      !hiddenRoutes.includes(combinedPattern) &&
-      !arrivalDepartures.includes(combinedPattern)
-    ) {
+    if (!hiddenRoutes.includes(combinedPattern)) {
       let stoptimes = [];
-      stoptimeList.stoptimes.forEach(item =>
-        stoptimes.push({
-          ...item,
-          combinedPattern: combinedPattern,
-          showStopNumber: showStopNumber,
-          showVia: showVia,
-          vehicleMode: stop.vehicleMode?.toLowerCase(),
-        }),
-      );
+      stoptimeList.stoptimes.forEach(item => {
+        if (!arrivalDepartures.includes(stringifyStop(item))) {
+          stoptimes.push({
+            ...item,
+            combinedPattern: combinedPattern,
+            showStopNumber: showStopNumber,
+            showVia: showVia,
+            vehicleMode: stop.vehicleMode?.toLowerCase(),
+          });
+        }
+      });
 
       if (timeshift > 0) {
         stoptimes = stoptimes.filter(s => {

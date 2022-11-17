@@ -32,15 +32,6 @@ export const stringifyPattern = pattern => {
   ].join(':');
 };
 
-export const stringifyStop = stoptime => {
-  return [
-    stoptime.stop.gtfsId,
-    stoptime.stop.shortName,
-    capitalize(stoptime.headsign),
-    stoptime.realtimeDeparture,
-  ].join(':');
-};
-
 export const getStopsAndStationsFromViews = views => {
   const stopIds = [];
   const stationIds = [];

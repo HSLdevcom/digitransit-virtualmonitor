@@ -58,36 +58,23 @@ export const filterDepartures = (
   showVia,
 ) => {
   const departures = [];
-  const arrivalDepartures = [];
   const currentSeconds = getCurrentSeconds();
 
-  if (!showEndOfLine && stop.stoptimesForPatterns) {
-    stop.stoptimesForPatterns.forEach(stp =>
-      stp.stoptimes.forEach(s => {
-        if (s.pickupType === 'NONE') {
-          arrivalDepartures.push(stringifyPattern(stp.pattern));
-        }
-        return s.pickupType !== 'NONE';
-      }),
-    );
-  }
   stop.stoptimesForPatterns.forEach(stoptimeList => {
     const combinedPattern = stringifyPattern(stoptimeList.pattern);
-
-    if (
-      !hiddenRoutes.includes(combinedPattern) &&
-      !arrivalDepartures.includes(combinedPattern)
-    ) {
+    if (!hiddenRoutes.includes(combinedPattern)) {
       let stoptimes = [];
-      stoptimeList.stoptimes.forEach(item =>
-        stoptimes.push({
-          ...item,
-          combinedPattern: combinedPattern,
-          showStopNumber: showStopNumber,
-          showVia: showVia,
-          vehicleMode: stop.vehicleMode?.toLowerCase(),
-        }),
-      );
+      stoptimeList.stoptimes.forEach(item => {
+        if (showEndOfLine || item.pickupType !== 'NONE') {
+          stoptimes.push({
+            ...item,
+            combinedPattern: combinedPattern,
+            showStopNumber: showStopNumber,
+            showVia: showVia,
+            vehicleMode: stop.vehicleMode?.toLowerCase(),
+          });
+        }
+      });
 
       if (timeshift > 0) {
         stoptimes = stoptimes.filter(s => {

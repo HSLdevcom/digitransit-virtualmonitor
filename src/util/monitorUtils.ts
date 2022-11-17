@@ -67,25 +67,14 @@ export const filterDepartures = (
   showVia,
 ) => {
   const departures = [];
-  const arrivalDepartures = [];
   const currentSeconds = getCurrentSeconds();
 
-  if (!showEndOfLine && stop.stoptimesForPatterns) {
-    stop.stoptimesForPatterns.forEach(stp =>
-      stp.stoptimes.forEach(s => {
-        if (s.pickupType === 'NONE') {
-          arrivalDepartures.push(stringifyStop(s));
-        }
-        return s.pickupType !== 'NONE';
-      }),
-    );
-  }
   stop.stoptimesForPatterns.forEach(stoptimeList => {
     const combinedPattern = stringifyPattern(stoptimeList.pattern);
     if (!hiddenRoutes.includes(combinedPattern)) {
       let stoptimes = [];
       stoptimeList.stoptimes.forEach(item => {
-        if (!arrivalDepartures.includes(stringifyStop(item))) {
+        if (showEndOfLine || item.pickupType !== 'NONE') {
           stoptimes.push({
             ...item,
             combinedPattern: combinedPattern,

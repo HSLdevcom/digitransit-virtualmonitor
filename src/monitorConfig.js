@@ -72,7 +72,7 @@ export default {
     uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
+    allowLogin: true,
     useTilde: true,
   },
   matka: {
@@ -109,13 +109,13 @@ export default {
     uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
+    allowLogin: true,
     useTilde: false,
   },
   vaasa: {
     uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
-    allowLogin: false,
+    allowLogin: true,
     feedIds: ['vaasa'],
     colors: {
       primary: '#000a8c',

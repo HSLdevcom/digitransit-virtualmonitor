@@ -11,12 +11,20 @@ const LandingPage = () => {
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
   const logIn = user.sub && config.allowLogin;
+  let loginURI;
+  switch (config.name) {
+    case 'tampere' || 'jyvaskyla' || 'vaasa':
+      loginURI = 'waltti-login';
+      break;
+    default:
+      loginURI = 'login?url=/&';
+  }
 
   const buttons = (
     <>
       {config.allowLogin ? (
         <>
-          <a href={'login?url=/&'} aria-label={t('front-page-sign-in-button')}>
+          <a href={loginURI} aria-label={t('front-page-sign-in-button')}>
             <div className="monitor-button blue">
               {t('front-page-sign-in-button')}
             </div>

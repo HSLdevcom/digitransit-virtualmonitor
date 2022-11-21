@@ -9,10 +9,8 @@ import process from 'process';
 import User from './User.js';
 
 const debugLogging = process.env.DEBUGLOGGING;
-const callbackPath = '/oid_callback';
-
-const OICStrategy = function (config) {
-  this.name = 'passport-openid-connect';
+const OICStrategy = function (name, callbackPath, config) {
+  this.name = name;
   this.config = config || {};
   this.client = null;
   this.tokenSet = null;
@@ -21,6 +19,7 @@ const OICStrategy = function (config) {
       'Initialization of OpenID Connect discovery process completed.',
     );
   });
+  this.callbackPath = callbackPath;
 };
 
 util.inherits(OICStrategy, Strategy);
@@ -177,9 +176,9 @@ OICStrategy.prototype.createAuthUrl = function (redirectUri, lang, ssoToken) {
 OICStrategy.prototype.createRedirectUrl = function (req) {
   const host = req.headers['x-forwarded-host'] || req.headers.host;
   if (req.secure) {
-    return `https://${host}${callbackPath}`;
+    return `https://${host}${this.callbackPath}`;
   }
-  return `http://${host}${callbackPath}`;
+  return `http://${host}${this.callbackPath}`;
 };
 
 OICStrategy.serializeUser = function (user, cb) {

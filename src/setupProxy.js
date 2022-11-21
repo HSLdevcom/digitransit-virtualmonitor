@@ -10,6 +10,13 @@ module.exports = function (app) {
     }),
   );
   app.use(
+    '/oid_waltti_callback',
+    createProxyMiddleware({
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+    }),
+  );
+  app.use(
     '/api',
     createProxyMiddleware({
       target: 'http://localhost:3001',
@@ -23,6 +30,13 @@ module.exports = function (app) {
       changeOrigin: true,
     }),
   );
+  app.use(
+    '/waltti-login',
+    createProxyMiddleware({
+      target: 'http://localhost:3001',
+      changeOrigin: true,
+    })
+  )
   app.use(
     '/logout',
     createProxyMiddleware({

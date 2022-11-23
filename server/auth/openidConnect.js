@@ -90,17 +90,17 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     },
   });
 
-  const walttiIsConfigured = JSON.parse(process.env.OIDC_CLIENT_ID).waltti && JSON.parse(process.env.OIDC_CLIENT_SECRET).waltti;
-  console.log("walttiIsConfigured? ", walttiIsConfigured)
+  const walttiClientID = JSON.parse(process.env.OIDC_CLIENT_ID).waltti;
+  const walttiClientSecret = JSON.parse(process.env.OIDC_CLIENT_SECRET).waltti;
 
   const walttiConfiguration = function (req, res, next) {
-    if (walttiIsConfigured) {
+    if (walttiClientID && walttiClientSecret) {
       console.log("waltti happening1")
       return new Strategy('passport-openid-connect-waltti', walttiCallbackPath, {
         issuerHost:
           process.env.OIDC_ISSUER || `${OIDCHost}/.well-known/openid-configuration`,
-        client_id: JSON.parse(process.env.OIDC_CLIENT_ID).waltti,
-        client_secret: JSON.parse(process.env.OIDC_CLIENT_SECRET).waltti,
+        client_id: walttiClientID,
+        client_secret: walttiClientSecret,
         redirect_uris: redirectUris,
         post_logout_redirect_uris: postLogoutRedirectUris,
         scope: 'openid profile',
@@ -188,7 +188,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   app.use(passport.initialize());
   app.use(passport.session());
   passport.use('passport-openid-connect', oic);
-  if (walttiIsConfigured) {
+  if (walttiClientID && walttiClientSecret) {
     console.log("waltti happening")
     passport.use('passport-openid-connect-waltti', walttiConfiguration());
   }

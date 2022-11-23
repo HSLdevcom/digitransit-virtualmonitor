@@ -42,12 +42,12 @@ export const getMonitors = async (req, res, next) => {
 const getDataStorageMonitors = async (req, res) => {
   try {
     let dataStorage;
-    dataStorage = await getDataStorage(req?.user?.data.sub);
+    dataStorage = await getDataStorage(req?.user);
     if (dataStorage) {
       const options = {
         endpoint: `/api/rest/v1/datastorage/${dataStorage.id}/data`,
       };
-      const response = await makeHslIdRequest(options);
+      const response = await makeOpenIdRequest(options, req?.user);
       return Object.keys(response.data).map((key) => key);
     }
     console.log("no data storage found, user doesn't have any monitors");
@@ -59,16 +59,15 @@ const getDataStorageMonitors = async (req, res) => {
 
 export const deleteMonitor = async (req, res, next) => {
   try {
-    const userId = req?.user?.data.sub;
-    const dataS = await getDataStorage(userId);
+    const dataS = await getDataStorage(req.user);
     if (dataS) {
       const options = {
         endpoint: `/api/rest/v1/datastorage/${dataS.id}/data`,
       };
-      const response = await makeHslIdRequest(options);
+      const response = await makeOpenIdRequest(options, req.user);
       const monitors = Object.keys(response.data).map(key => key);
       if (monitors.includes(req.body.url)) {
-        const response = await deleteMonitorHSL(dataS.id, req.body.url);
+        const response = await deleteMonitorHSL(dataS.id, req.body.url, req.user);
         await monitorService.deleteStatic(req, res);
       } else {
         res.status(401).send('Unauthorized');
@@ -85,7 +84,7 @@ export const createMonitor = async (req, res, next) => {
     const dataStorage = {
       id: '',
     };
-    let dataS = await getDataStorage(userId);
+    let dataS = await getDataStorage(req?.user);
     if (dataS) {
       dataStorage.id = dataS.id;
       console.log('existing data storage found');
@@ -94,19 +93,27 @@ export const createMonitor = async (req, res, next) => {
       dataS = await createDataStorage(userId);
       dataStorage.id = dataS;
     }
-    const res = await updateMonitors(dataStorage.id, req.body, next);
+    const res = await updateMonitors(dataStorage.id, req.body, next, req.user);
   } catch (e) {
     next(e);
   }
 };
 
-const makeHslIdRequest = async (options) => {
+const makeOpenIdRequest = async (options, user) => {
   try {
-    const hslIdUrl = process.env.OIDCHOST;
+    const openIdUrls = JSON.parse(process.env.OIDCHOST);
+    let openIdUrl;
+    if (JSON.stringify(user.data).indexOf('hsl-asiakas') !== -1) {
+      console.log("HSL")
+      openIdUrl = openIdUrls.hsl;
+    } else {
+      console.log("WALTTI")
+      openIdUrl = openIdUrls.waltti;
+    }
     const credentials = `Basic ${Buffer.from(
       `${CLIENT_ID}:${CLIENT_SECRET}`,
     ).toString('base64')}`;
-    options.url = `${hslIdUrl}${options.endpoint}`;
+    options.url = `${openIdUrl}${options.endpoint}`;
     options.headers = {
       Authorization: credentials,
       'Content-Type': 'application/json',
@@ -117,34 +124,35 @@ const makeHslIdRequest = async (options) => {
     throw err;
   }
 };
-const deleteMonitorHSL = async (dataStorageId, monitor) => {
+const deleteMonitorHSL = async (dataStorageId, monitor, user) => {
   try {
     const options = {
       method: 'DELETE',
       endpoint: `/api/rest/v1/datastorage/${dataStorageId}/data/${monitor}`,
     };
-    const response = await makeHslIdRequest(options);
+    const response = await makeOpenIdRequest(options, user);
     return response;
   } catch (err) {
     throw err;
   }
 };
 
-const updateMonitors = async (dataStorageId, monitor) => {
+const updateMonitors = async (dataStorageId, monitor, user) => {
   try {
     const options = {
       method: 'PUT',
       endpoint: `/api/rest/v1/datastorage/${dataStorageId}/data/${monitor.url}`,
       data: { value: monitor.monitorContenthash },
     };
-    const response = await makeHslIdRequest(options);
+    const response = await makeOpenIdRequest(options, user);
     return response;
   } catch (err) {
     throw err;
   }
 };
 
-const createDataStorage = async (id) => {
+const createDataStorage = async user => {
+  const id = user?.data.sub;
   const options = {
     method: 'POST',
     endpoint: '/api/rest/v1/datastorage',
@@ -158,14 +166,15 @@ const createDataStorage = async (id) => {
     },
   };
   try {
-    const response = await makeHslIdRequest(options);
+    const response = await makeOpenIdRequest(options, user);
     return response.data.id;
   } catch (e) {
     throw e;
   }
 };
 
-const getDataStorage = async id => {
+const getDataStorage = async user => {
+  const id = user?.data.sub;
   const options = {
     method: 'GET',
     endpoint: '/api/rest/v1/datastorage',
@@ -174,7 +183,7 @@ const getDataStorage = async id => {
     },
   };
   try {
-    const response = await makeHslIdRequest(options);
+    const response = await makeOpenIdRequest(options, user);
     const dataStorage = response.data.resources[0];
     if (dataStorage) {
       return dataStorage;

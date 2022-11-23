@@ -93,7 +93,7 @@ export const createMonitor = async (req, res, next) => {
       dataS = await createDataStorage(userId);
       dataStorage.id = dataS;
     }
-    const res = await updateMonitors(dataStorage.id, req.body, next, req.user);
+    const res = await updateMonitors(dataStorage.id, req.body, req.user, next);
   } catch (e) {
     next(e);
   }

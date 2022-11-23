@@ -117,15 +117,13 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
           {linkElements()}
         </section>
         <section id="links" style={{ display: 'flex' }}>
-        <a href={"/logout"} aria-label={t('logout')}>
-          <div className="link">
-            {t('logout')}
-          </div>
-        </a>
-      </section>
-      <></>
-    </div>
-    </Modal >
+          <a href={'/logout'} aria-label={t('logout')}>
+            <div className="link">{t('logout')}</div>
+          </a>
+        </section>
+        <></>
+      </div>
+    </Modal>
   );
 };
 export default BurgerMenu;

@@ -178,7 +178,9 @@ const App: FC<IConfigurationProps> = props => {
   return (
     <div className="App">
       <Helmet>
-        <title>{config.name} - {t('stop-display')}</title>
+        <title>
+          {config.name} - {t('stop-display')}
+        </title>
         {faviconLink}
         {fonts}
       </Helmet>

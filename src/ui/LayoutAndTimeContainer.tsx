@@ -68,7 +68,6 @@ const LayoutAndTimeContainer: FC<IProps> = ({
         <button
           className="layout-button"
           name="layout"
-          role="button"
           aria-label={t('layout')}
         >
           {layoutButton}

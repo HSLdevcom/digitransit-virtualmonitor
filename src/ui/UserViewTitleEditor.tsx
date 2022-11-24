@@ -71,6 +71,7 @@ const UserViewTitleEditor: FC<IProps> = ({
         />
       </div>
       <button className="delete-icon" onClick={() => setDeleteModalOpen(true)}>
+        <span className="sr-only">{t('delete-display', { id: title })}</span>
         <Icon img="delete" color={config.colors.primary} />
       </button>
     </div>

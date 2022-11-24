@@ -62,7 +62,11 @@ const UserMonitors: React.FC<IProps> = props => {
   }
   const button = (
     <>
-      <Link to={'/monitors/createview'} className="monitor-button blue">
+      <Link
+        role="button"
+        to={'/monitors/createview'}
+        className="monitor-button blue"
+      >
         {t('quickDisplayCreate')}
       </Link>
       {!views.length && (

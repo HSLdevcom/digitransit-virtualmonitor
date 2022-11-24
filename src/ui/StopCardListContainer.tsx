@@ -480,7 +480,7 @@ const StopCardListContainer: FC<IProps> = ({
         )}
         {isModifyView && (
           <>
-            <Link className="button" role="link" to={'/monitors'}>
+            <Link className="button" role="button" to={'/monitors'}>
               <span>{t('cancel')}</span>
             </Link>
             <button

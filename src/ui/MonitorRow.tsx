@@ -207,7 +207,6 @@ const MonitorRow: FC<IProps> = ({
 
   const showStopCode = departure.showStopNumber;
   const viaSetting = departure.showVia;
-
   if (!lineLen) {
     if (!departure) {
       lineLen = 0;
@@ -227,13 +226,13 @@ const MonitorRow: FC<IProps> = ({
           'without-route-column': withoutRouteColumn,
         })}
       >
-        {!withoutRouteColumn && lineLen !== -1 && lineLen <= 5 && (
+        {!withoutRouteColumn && lineLen !== -1 && lineLen <= 7 && (
           <div className={cx('grid-col line', `len${lineLen}`)}>
             {line[0]}
             {line.length > 1 && <span className="line-letter">{line[1]}</span>}
           </div>
         )}
-        {!withoutRouteColumn && (lineLen === -1 || lineLen > 5) && (
+        {!withoutRouteColumn && (lineLen === -1 || lineLen > 7) && (
           <div className={cx('grid-col line icon', `len${2}`)}>
             <Icon
               height={24}

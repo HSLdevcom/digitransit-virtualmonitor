@@ -208,7 +208,6 @@ const UserMonitorCard: React.FC<IProps> = ({
               {t('preview')}
             </button>
             <Link
-              role="button"
               tabIndex={0}
               className="monitor-button white"
               to={`/monitors/createview?&url=${url}`}
@@ -216,7 +215,6 @@ const UserMonitorCard: React.FC<IProps> = ({
               {t('modify')}
             </Link>
             <Link
-              role="button"
               tabIndex={0}
               className="monitor-button white"
               to={`/static?&url=${url}`}

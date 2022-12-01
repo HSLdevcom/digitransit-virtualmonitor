@@ -32,7 +32,6 @@ const LandingPage = () => {
         </>
       ) : (
         <Link
-          role="button"
           to={'/createview'}
           id="create-new-link"
           aria-label={t('quickDisplayCreate')}

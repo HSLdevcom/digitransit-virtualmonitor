@@ -9,6 +9,7 @@ import process from 'process';
 import User from './User.js';
 
 const debugLogging = process.env.DEBUGLOGGING;
+let callbackPath;
 const OICStrategy = function (name, callbackPath, config) {
   this.name = name;
   this.config = config || {};

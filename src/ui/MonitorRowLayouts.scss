@@ -409,7 +409,7 @@
   }
 
   .rows12.portrait .grid-row {
-    grid-template-columns: 95px 1fr 95px; // Tämä vaikuttaa tuplanäkymän alaosaan  95px 1fr 95px; JA yksittäiseen
+    grid-template-columns: 95px 1fr 95px;
 
     &.without-route-column {
       grid-template-columns: auto 95px;

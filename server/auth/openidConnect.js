@@ -8,8 +8,8 @@ import connectRedis from 'connect-redis';
 import Strategy from './Strategy.js';
 
 const OIDCHost = JSON.parse(process.env.OIDCHOST).hsl || 'https://hslid-dev.t5.fi';
-/* const OIDCHost_waltti = JSON.parse(process.env.OIDCHOST).waltti;
- */
+const OIDCHost_waltti = JSON.parse(process.env.OIDCHOST).waltti;
+
 export const errorHandler = function (res, err) {
   const status = err?.message && err.message.includes('timeout') ? 408 : 500;
 
@@ -22,9 +22,18 @@ export const errorHandler = function (res, err) {
   }
 };
 
+function selectOidcHost(req) {
+  if (JSON.stringify(req?.user?.data).indexOf('hsl') !== -1) {
+    return OIDCHost;
+  } else {
+    return OIDCHost_waltti;
+  }
+}
+
 export const userAuthenticated = function (req, res, next) {
+  const oidc_host = selectOidcHost(req);
   axios
-    .get(`${OIDCHost}/openid/userinfo`, {
+    .get(`${oidc_host}/openid/userinfo`, {
       headers: { Authorization: `Bearer ${req.user.token.access_token}` },
     })
     .then(() => {
@@ -55,9 +64,9 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   const RedisKey = process.env.REDIS_KEY;
   const RedisClient = RedisKey
     ? redis.createClient(RedisPort, RedisHost, {
-        auth_pass: RedisKey,
-        tls: { servername: RedisHost },
-      })
+      auth_pass: RedisKey,
+      tls: { servername: RedisHost },
+    })
     : redis.createClient(RedisPort, RedisHost);
 
   const redirectUris = hostnames.map(host => `${host}${callbackPath}`);
@@ -98,7 +107,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       console.log("waltti happening1")
       return new Strategy('passport-openid-connect-waltti', walttiCallbackPath, {
         issuerHost:
-          process.env.OIDC_ISSUER || `${OIDCHost}/.well-known/openid-configuration`,
+          process.env.OIDC_ISSUER || `${OIDCHost_waltti}/.well-known/openid-configuration`,
         client_id: walttiClientID,
         client_secret: walttiClientSecret,
         redirect_uris: redirectUris,
@@ -337,8 +346,9 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   });
   /* GET the profile of the current authenticated user */
   app.get('/api/user', (req, res) => {
+    const oidc_host = selectOidcHost(req);
     axios
-      .get(`${OIDCHost}/openid/userinfo`, {
+      .get(`${oidc_host}/openid/userinfo`, {
         headers: { Authorization: `Bearer ${req.user.token.access_token}` },
       })
       .then(response => {

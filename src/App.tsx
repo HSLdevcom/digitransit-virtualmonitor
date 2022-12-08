@@ -133,11 +133,13 @@ const App: FC<IConfigurationProps> = props => {
           setUser({ notLogged: true });
           setLoading(false);
         });
-      monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
-        if (Array.isArray(favourites)) {
-          setFavourites(favs);
-        }
-      });
+      if (config.name === 'hsl' && user.sub) {
+        monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
+          if (Array.isArray(favourites)) {
+            setFavourites(favs);
+          }
+        });
+      }
     } else {
       setUser({ notLogged: true });
       setLoading(false);

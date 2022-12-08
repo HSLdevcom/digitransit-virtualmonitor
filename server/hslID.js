@@ -103,7 +103,7 @@ const makeOpenIdRequest = async (options, user) => {
   try {
     const openIdUrls = JSON.parse(process.env.OIDCHOST);
     let openIdUrl;
-    if (JSON.stringify(user.data).indexOf('hsl-asiakas') !== -1) {
+    if (JSON.stringify(user.data).indexOf('hsl') !== -1) {
       console.log("HSL")
       openIdUrl = openIdUrls.hsl;
     } else {

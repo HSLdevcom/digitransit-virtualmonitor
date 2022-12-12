@@ -105,26 +105,25 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   const walttiClientID = JSON.parse(process.env.OIDC_CLIENT_ID).waltti;
   const walttiClientSecret = JSON.parse(process.env.OIDC_CLIENT_SECRET).waltti;
 
-  const walttiConfiguration = function (req, res, next) {
-    return new Strategy('passport-openid-connect-waltti', walttiCallbackPath, {
-      issuerHost:
-        process.env.OIDC_ISSUER || `${OIDCHost_waltti}/.well-known/openid-configuration`,
-      client_id: walttiClientID,
-      client_secret: walttiClientSecret,
-      redirect_uris: redirectUris,
-      post_logout_redirect_uris: postLogoutRedirectUris,
-      scope: 'openid profile',
-      sessionCallback(userId, sessionId) {
-        // keep track of per-user sessions
-        if (debugLogging) {
-          console.log(`adding session for used ${userId} id ${sessionId}`);
-        }
-        if (clearAllUserSessions) {
-          RedisClient.sadd(`sessions-${userId}`, sessionId);
-        }
-      },
-    });
-  }
+  const walttiConfiguration = new Strategy('passport-openid-connect-waltti', walttiCallbackPath, {
+    issuerHost:
+      process.env.OIDC_ISSUER || `${OIDCHost_waltti}/.well-known/openid-configuration`,
+    client_id: walttiClientID,
+    client_secret: walttiClientSecret,
+    redirect_uris: redirectUris,
+    post_logout_redirect_uris: postLogoutRedirectUris,
+    scope: 'openid profile',
+    sessionCallback(userId, sessionId) {
+      // keep track of per-user sessions
+      if (debugLogging) {
+        console.log(`adding session for used ${userId} id ${sessionId}`);
+      }
+      if (clearAllUserSessions) {
+        RedisClient.sadd(`sessions-${userId}`, sessionId);
+      }
+    },
+  });
+
   const redirectToLogin = function (req, res, next) {
     const { ssoValidTo, ssoToken } = req.session;
     // Only allow sso login when user navigates to certain paths
@@ -197,7 +196,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   app.use(passport.initialize());
   app.use(passport.session());
   passport.use('passport-openid-connect', oic);
-  passport.use('passport-openid-connect-waltti', walttiConfiguration());
+  passport.use('passport-openid-connect-waltti', walttiConfiguration);
 
   passport.serializeUser(Strategy.serializeUser);
   passport.deserializeUser(Strategy.deserializeUser);
@@ -273,7 +272,14 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       id_token_hint: req.user.token.id_token,
       ui_locales: cookieLang,
     };
-    const logoutUrl = oic.client.endSessionUrl(params);
+
+    let logoutUrl = '';
+    const userData = JSON.stringify(req?.user?.data);
+    if (userData.indexOf('hsl') !== -1) {
+      logoutUrl = oic.client.endSessionUrl(params);
+    } else if (userData.indexOf('waltti') !== -1) {
+      logoutUrl = walttiConfiguration.client.endSessionUrl(params);
+    }
 
     req.session.userId = req.user.data.sub;
     if (debugLogging) {

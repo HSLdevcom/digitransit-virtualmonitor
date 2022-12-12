@@ -1,8 +1,9 @@
 import axios from 'axios';
 import monitorService from './monitorService.js';
 
-const CLIENT_ID = process.env.MANAGEMENT_API_ID;
-const CLIENT_SECRET = process.env.MANAGEMENT_API_SECRET;
+const CLIENT_ID_LIST = JSON.parse(process.env.MANAGEMENT_API_ID);
+const CLIENT_SECRET_LIST = JSON.parse(process.env.MANAGEMENT_API_SECRET);
+const OPEN_ID_URL_LIST = JSON.parse(process.env.OIDCHOST);
 
 export const isUserOwnedMonitor = async (req, res, next) => {
   try {
@@ -80,7 +81,6 @@ export const deleteMonitor = async (req, res, next) => {
 
 export const createMonitor = async (req, res, next) => {
   try {
-    const userId = req?.user?.data.sub;
     const dataStorage = {
       id: '',
     };
@@ -90,7 +90,7 @@ export const createMonitor = async (req, res, next) => {
       console.log('existing data storage found');
     } else {
       console.log('no data storage, creating one');
-      dataS = await createDataStorage(userId);
+      dataS = await createDataStorage(req.user);
       dataStorage.id = dataS;
     }
     const res = await updateMonitors(dataStorage.id, req.body, req.user, next);
@@ -101,17 +101,16 @@ export const createMonitor = async (req, res, next) => {
 
 const makeOpenIdRequest = async (options, user) => {
   try {
-    const openIdUrls = JSON.parse(process.env.OIDCHOST);
-    let openIdUrl;
-    if (JSON.stringify(user.data).indexOf('hsl') !== -1) {
-      console.log("HSL")
-      openIdUrl = openIdUrls.hsl;
-    } else {
-      console.log("WALTTI")
-      openIdUrl = openIdUrls.waltti;
-    }
+    let openIdUrl = '';
+    const userData = JSON.stringify(user.data);
+    if (userData.indexOf('hsl') !== -1) {
+      openIdUrl = OPEN_ID_URL_LIST.hsl;
+    } else if (userData.indexOf('waltti') !== -1) {
+      openIdUrl = OPEN_ID_URL_LIST.waltti;
+    } 
+    const apiClient = selectManagementApiClient(user);
     const credentials = `Basic ${Buffer.from(
-      `${CLIENT_ID}:${CLIENT_SECRET}`,
+      `${apiClient.id}:${apiClient.secret}`,
     ).toString('base64')}`;
     options.url = `${openIdUrl}${options.endpoint}`;
     options.headers = {
@@ -152,17 +151,18 @@ const updateMonitors = async (dataStorageId, monitor, user) => {
 };
 
 const createDataStorage = async user => {
-  const id = user?.data.sub;
+  const userId = user?.data?.sub;
+  const apiClient = selectManagementApiClient(user);
   const options = {
     method: 'POST',
     endpoint: '/api/rest/v1/datastorage',
     data: {
-      name: `monitors-${CLIENT_ID || ''}`,
+      name: `monitors-${apiClient.id || ''}`,
       description: 'Pysäkkinäytöt',
-      ownerId: id,
-      adminAccess: [CLIENT_ID],
-      readAccess: [CLIENT_ID, id],
-      writeAccess: [CLIENT_ID, id],
+      ownerId: userId,
+      adminAccess: [apiClient.id],
+      readAccess: [apiClient.id, userId],
+      writeAccess: [apiClient.id, userId],
     },
   };
   try {
@@ -174,12 +174,13 @@ const createDataStorage = async user => {
 };
 
 const getDataStorage = async user => {
-  const id = user?.data.sub;
+  const id = user?.data?.sub;
+  const apiClient = selectManagementApiClient(user);
   const options = {
     method: 'GET',
     endpoint: '/api/rest/v1/datastorage',
     params: {
-      dsfilter: `ownerId eq "${id}" and name eq "monitors-${CLIENT_ID || ''}"`,
+      dsfilter: `ownerId eq "${id}" and name eq "monitors-${apiClient.id || ''}"`,
     },
   };
   try {
@@ -193,3 +194,23 @@ const getDataStorage = async user => {
     throw error;
   }
 };
+
+function selectManagementApiClient(user) {
+  const userData = JSON.stringify(user?.data);
+  if (userData.indexOf('hsl') !== -1) {
+    return {
+      id: CLIENT_ID_LIST.hsl,
+      secret: CLIENT_SECRET_LIST.hsl
+    };
+  } else if (userData.indexOf('waltti') !== -1) {
+    return {
+      id: CLIENT_ID_LIST.waltti,
+      secret: CLIENT_SECRET_LIST.waltti
+    };
+  } else {
+    return {
+      id: '',
+      secret: ''
+    };
+  }
+}

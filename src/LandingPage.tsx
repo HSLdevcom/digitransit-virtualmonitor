@@ -16,8 +16,11 @@ const LandingPage = () => {
     case 'tampere' || 'jyvaskyla' || 'vaasa':
       loginURI = 'waltti-login';
       break;
-    default:
+    case 'hsl':
       loginURI = 'login?url=/&';
+      break;
+    default:
+      loginURI = '';
   }
 
   const buttons = (

@@ -23,10 +23,13 @@ export const errorHandler = function (res, err) {
 };
 
 function selectOidcHost(req) {
-  if (JSON.stringify(req?.user?.data).indexOf('hsl') !== -1) {
+  const userData = JSON.stringify(req?.user?.data);
+  if (userData.indexOf('hsl') !== -1) {
     return OIDCHost;
-  } else {
+  } else if (userData.indexOf('waltti') !== -1) {
     return OIDCHost_waltti;
+  } else {
+    return '';
   }
 }
 
@@ -103,27 +106,24 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   const walttiClientSecret = JSON.parse(process.env.OIDC_CLIENT_SECRET).waltti;
 
   const walttiConfiguration = function (req, res, next) {
-    if (walttiClientID && walttiClientSecret) {
-      console.log("waltti happening1")
-      return new Strategy('passport-openid-connect-waltti', walttiCallbackPath, {
-        issuerHost:
-          process.env.OIDC_ISSUER || `${OIDCHost_waltti}/.well-known/openid-configuration`,
-        client_id: walttiClientID,
-        client_secret: walttiClientSecret,
-        redirect_uris: redirectUris,
-        post_logout_redirect_uris: postLogoutRedirectUris,
-        scope: 'openid profile',
-        sessionCallback(userId, sessionId) {
-          // keep track of per-user sessions
-          if (debugLogging) {
-            console.log(`adding session for used ${userId} id ${sessionId}`);
-          }
-          if (clearAllUserSessions) {
-            RedisClient.sadd(`sessions-${userId}`, sessionId);
-          }
-        },
-      });
-    }
+    return new Strategy('passport-openid-connect-waltti', walttiCallbackPath, {
+      issuerHost:
+        process.env.OIDC_ISSUER || `${OIDCHost_waltti}/.well-known/openid-configuration`,
+      client_id: walttiClientID,
+      client_secret: walttiClientSecret,
+      redirect_uris: redirectUris,
+      post_logout_redirect_uris: postLogoutRedirectUris,
+      scope: 'openid profile',
+      sessionCallback(userId, sessionId) {
+        // keep track of per-user sessions
+        if (debugLogging) {
+          console.log(`adding session for used ${userId} id ${sessionId}`);
+        }
+        if (clearAllUserSessions) {
+          RedisClient.sadd(`sessions-${userId}`, sessionId);
+        }
+      },
+    });
   }
   const redirectToLogin = function (req, res, next) {
     const { ssoValidTo, ssoToken } = req.session;
@@ -197,10 +197,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   app.use(passport.initialize());
   app.use(passport.session());
   passport.use('passport-openid-connect', oic);
-  if (walttiClientID && walttiClientSecret) {
-    console.log("waltti happening")
-    passport.use('passport-openid-connect-waltti', walttiConfiguration());
-  }
+  passport.use('passport-openid-connect-waltti', walttiConfiguration());
 
   passport.serializeUser(Strategy.serializeUser);
   passport.deserializeUser(Strategy.deserializeUser);
@@ -227,7 +224,6 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   // users will be redirected to hsl.id and once authenticated
   // they will be returned to the callback handler below
   app.get('/login', (req, res) => {
-    console.log("/LOGIN")
     req.session.returnTo = getReturnUrl(req);
     passport.authenticate('passport-openid-connect', {
       scope: 'profile',
@@ -236,7 +232,6 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   });
 
   app.get('/waltti-login', (req, res) => {
-    console.log("/WALTTI-LOGIN")
     req.session.returnTo = getReturnUrl(req);
     passport.authenticate('passport-openid-connect-waltti', {
       scope: 'profile',
@@ -268,7 +263,6 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   );
 
   app.get('/logout', (req, res) => {
-    console.log("logout")
     const cookieLang = req.cookies.lang || 'fi';
     const host = req.headers['x-forwarded-host'] || req.headers.host;
     const postLogoutRedirectUri = req.secure
@@ -289,7 +283,6 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   });
 
   app.get('/logout/callback', (req, res) => {
-    console.log("logout callback")
     if (debugLogging) {
       console.log(`logout callback for userId ${req.session.userId}`);
     }

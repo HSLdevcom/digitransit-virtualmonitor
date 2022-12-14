@@ -15,7 +15,7 @@
     "cookie-parser": "^1.4.3",
     "cron": "^1.8.2",
     "dayjs": "^1.11.3",
-    "express": "^4.15.3",
+    "express": "^4.17.3",
     "express-session": "^1.17.3",
     "gtfs": "https://github.com/HSLdevcom/node-gtfs.git#master",
     "morgan": "^1.8.2",

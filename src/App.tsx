@@ -61,6 +61,7 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     setName: string;
   };
   allowLogin: boolean;
+  allowFavourites: boolean;
 }
 export interface IMonitorConfig {
   name?: string;
@@ -133,7 +134,7 @@ const App: FC<IConfigurationProps> = props => {
           setUser({ notLogged: true });
           setLoading(false);
         });
-      if (config.name === 'hsl' && user.sub) {
+      if (config.allowFavourites && user.sub) {
         monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
           if (Array.isArray(favourites)) {
             setFavourites(favs);

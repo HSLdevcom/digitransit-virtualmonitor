@@ -7,8 +7,10 @@ import dayjs from 'dayjs';
 import connectRedis from 'connect-redis';
 import Strategy from './Strategy.js';
 
-const OIDCHost = JSON.parse(process.env.OIDCHOST).hsl || 'https://hslid-dev.t5.fi';
+const OIDCHost_hsl = JSON.parse(process.env.OIDCHOST).hsl || 'https://hslid-dev.t5.fi';
 const OIDCHost_waltti = JSON.parse(process.env.OIDCHOST).waltti;
+const oidcClientIdList = JSON.parse(process.env.OIDC_CLIENT_ID);
+const oidcClientSecretList = JSON.parse(process.env.OIDC_CLIENT_SECRET);
 
 export const errorHandler = function (res, err) {
   const status = err?.message && err.message.includes('timeout') ? 408 : 500;
@@ -25,7 +27,7 @@ export const errorHandler = function (res, err) {
 function selectOidcHost(req) {
   const userData = JSON.stringify(req?.user?.data);
   if (userData.indexOf('hsl') !== -1) {
-    return OIDCHost;
+    return OIDCHost_hsl;
   } else if (userData.indexOf('waltti') !== -1) {
     return OIDCHost_waltti;
   } else {
@@ -60,7 +62,6 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   const hslCallbackPath = '/oid_callback'; // connect HSL callback path
   const walttiCallbackPath = '/oid_waltti_callback'; // connect Waltti callback path
   const logoutCallbackPath = '/logout/callback';
-  // Use Passport with OpenId Connect strategy to authenticate users
 
   const RedisHost = process.env.REDIS_HOST || '127.0.0.1';
   const RedisPort = process.env.REDIS_PORT || 6379;
@@ -83,46 +84,32 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     );
   }
 
-  const hslConfiguration = new Strategy('passport-openid-connect-hsl', hslCallbackPath, {
-    issuerHost:
-      process.env.OIDC_ISSUER || `${OIDCHost}/.well-known/openid-configuration`,
-    client_id: JSON.parse(process.env.OIDC_CLIENT_ID).hsl,
-    client_secret: JSON.parse(process.env.OIDC_CLIENT_SECRET).hsl,
-    redirect_uris: redirectUris,
-    post_logout_redirect_uris: postLogoutRedirectUris,
-    scope: 'openid profile',
-    sessionCallback(userId, sessionId) {
-      // keep track of per-user sessions
-      if (debugLogging) {
-        console.log(`adding session for used ${userId} id ${sessionId}`);
-      }
-      if (clearAllUserSessions) {
-        RedisClient.sadd(`sessions-${userId}`, sessionId);
-      }
-    },
-  });
+  // Use Passport with OpenId Connect strategy to authenticate users
+  const hslStrategyName = 'passport-openid-connect-hsl';
+  const walttiStrategyName = 'passport-openid-connect-waltti';
+  const hslConfiguration = configurationStrategy(hslStrategyName, hslCallbackPath, OIDCHost_hsl, oidcClientIdList.hsl, oidcClientSecretList.hsl);
+  const walttiConfiguration = configurationStrategy(walttiStrategyName, walttiCallbackPath, OIDCHost_waltti, oidcClientIdList.waltti, oidcClientSecretList.waltti);
 
-  const walttiClientID = JSON.parse(process.env.OIDC_CLIENT_ID).waltti;
-  const walttiClientSecret = JSON.parse(process.env.OIDC_CLIENT_SECRET).waltti;
-
-  const walttiConfiguration = new Strategy('passport-openid-connect-waltti', walttiCallbackPath, {
-    issuerHost:
-      process.env.OIDC_ISSUER || `${OIDCHost_waltti}/.well-known/openid-configuration`,
-    client_id: walttiClientID,
-    client_secret: walttiClientSecret,
-    redirect_uris: redirectUris,
-    post_logout_redirect_uris: postLogoutRedirectUris,
-    scope: 'openid profile',
-    sessionCallback(userId, sessionId) {
-      // keep track of per-user sessions
-      if (debugLogging) {
-        console.log(`adding session for used ${userId} id ${sessionId}`);
-      }
-      if (clearAllUserSessions) {
-        RedisClient.sadd(`sessions-${userId}`, sessionId);
-      }
-    },
-  });
+  function configurationStrategy(strategyName, callbackPath, OIDCHost, client_id, client_secret) {
+    return new Strategy(strategyName, callbackPath, {
+      issuerHost:
+        process.env.OIDC_ISSUER || `${OIDCHost}/.well-known/openid-configuration`,
+      client_id: client_id,
+      client_secret: client_secret,
+      redirect_uris: redirectUris,
+      post_logout_redirect_uris: postLogoutRedirectUris,
+      scope: 'openid profile',
+      sessionCallback(userId, sessionId) {
+        // keep track of per-user sessions
+        if (debugLogging) {
+          console.log(`adding session for used ${userId} id ${sessionId}`);
+        }
+        if (clearAllUserSessions) {
+          RedisClient.sadd(`sessions-${userId}`, sessionId);
+        }
+      },
+    });
+  }
 
   const redirectToLogin = function (req, res, next) {
     const { ssoValidTo, ssoToken } = req.session;
@@ -159,7 +146,15 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       token.refresh_token &&
       dayjs().unix() >= token.expires_at
     ) {
-      return passport.authenticate('passport-openid-connect-hsl', {
+      const userData = JSON.stringify(req?.user?.data);
+      const oidcStrategyName = '';
+      if (userData.indexOf('hsl') !== -1) {
+        oidcStrategyName = hslStrategyName;
+      } else if (userData.indexOf('waltti') !== -1) {
+        oidcStrategyName = walttiStrategyName;
+      }
+
+      return passport.authenticate(oidcStrategyName, {
         refresh: true,
         successReturnToOrRedirect: `/${indexPath}`,
         failureRedirect: `/${indexPath}`,
@@ -196,8 +191,8 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   // Initialize Passport
   app.use(passport.initialize());
   app.use(passport.session());
-  passport.use('passport-openid-connect-hsl', hslConfiguration);
-  passport.use('passport-openid-connect-waltti', walttiConfiguration);
+  passport.use(hslStrategyName, hslConfiguration);
+  passport.use(walttiStrategyName, walttiConfiguration);
 
   passport.serializeUser(Strategy.serializeUser);
   passport.deserializeUser(Strategy.deserializeUser);
@@ -225,7 +220,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   // they will be returned to the callback handler below
   app.get('/hsl-login', (req, res) => {
     req.session.returnTo = getReturnUrl(req);
-    passport.authenticate('passport-openid-connect-hsl', {
+    passport.authenticate(hslStrategyName, {
       scope: 'profile',
       successReturnToOrRedirect: '/',
     })(req, res);
@@ -233,7 +228,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
 
   app.get('/waltti-login', (req, res) => {
     req.session.returnTo = getReturnUrl(req);
-    passport.authenticate('passport-openid-connect-waltti', {
+    passport.authenticate(walttiStrategyName, {
       scope: 'profile',
       successReturnToOrRedirect: '/',
     })(req, res);
@@ -242,7 +237,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   // Callback handler that will redirect back to application after successfull authentication
   app.get(
     hslCallbackPath,
-    passport.authenticate('passport-openid-connect-hsl', {
+    passport.authenticate(hslStrategyName, {
       callback: true,
       successReturnToOrRedirect: localPort
         ? `http://localhost:${localPort}/${indexPath}`
@@ -253,7 +248,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
 
   app.get(
     walttiCallbackPath,
-    passport.authenticate('passport-openid-connect-waltti', {
+    passport.authenticate(walttiStrategyName, {
       callback: true,
       successReturnToOrRedirect: localPort
         ? `http://localhost:${localPort}/${indexPath}`

@@ -48,6 +48,7 @@ export default {
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     allowLogin: true,
+    allowFavourites: true,
     useTilde: true,
   },
   jyvaskyla: {
@@ -73,6 +74,7 @@ export default {
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     allowLogin: true,
+    allowFavourites: false,
     useTilde: true,
   },
   matka: {
@@ -110,12 +112,14 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     allowLogin: true,
+    allowFavourites: false,
     useTilde: false,
   },
   vaasa: {
     uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
     allowLogin: true,
+    allowFavourites: false,
     feedIds: ['vaasa'],
     colors: {
       primary: '#000a8c',

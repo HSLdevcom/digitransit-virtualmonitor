@@ -47,5 +47,6 @@ export default {
   showMinutes: '15',
   alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
   allowLogin: false,
+  allowFavourites: false,
   useTilde: true,
 };

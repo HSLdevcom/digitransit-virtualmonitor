@@ -18,7 +18,7 @@ import {
   updateStaticMonitor,
   deleteMonitor,
   createMonitor,
-} from './hslID.js';
+} from './openID.js';
 
 const FavouriteHost =  process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
 

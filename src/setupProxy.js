@@ -24,7 +24,7 @@ module.exports = function (app) {
     }),
   );
   app.use(
-    '/login',
+    '/hsl-login',
     createProxyMiddleware({
       target: 'http://localhost:3001',
       changeOrigin: true,

@@ -17,7 +17,7 @@ const LandingPage = () => {
       loginURI = 'waltti-login';
       break;
     case 'hsl':
-      loginURI = 'login?url=/&';
+      loginURI = 'hsl-login?url=/&';
       break;
     default:
       loginURI = '';

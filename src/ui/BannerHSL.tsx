@@ -72,7 +72,7 @@ const BannerHSL = () => {
             isLoading: false, // When fetching for login-information, `isLoading`-property can be set to true. Spinner will be shown.
             isAuthenticated: !!user.sub, // If user is authenticated, set `isAuthenticated`-property to true.
             isSelected: false,
-            loginUrl: `login?url=${url}&${params}`, // Url that user will be redirect to when Person-icon is pressed and user is not logged in.
+            loginUrl: `hsl-login?url=${url}&${params}`, // Url that user will be redirect to when Person-icon is pressed and user is not logged in.
             initials: initials,
             menuItems: [
               {

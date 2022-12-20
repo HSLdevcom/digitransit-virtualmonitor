@@ -60,15 +60,15 @@ const getDataStorageMonitors = async (req, res) => {
 
 export const deleteMonitor = async (req, res, next) => {
   try {
-    const dataS = await getDataStorage(req.user);
+    const dataS = await getDataStorage(req?.user);
     if (dataS) {
       const options = {
         endpoint: `/api/rest/v1/datastorage/${dataS.id}/data`,
       };
-      const response = await makeOpenIdRequest(options, req.user);
+      const response = await makeOpenIdRequest(options, req?.user);
       const monitors = Object.keys(response.data).map(key => key);
       if (monitors.includes(req.body.url)) {
-        const response = await deleteMonitorHSL(dataS.id, req.body.url, req.user);
+        const response = await deleteMonitorHSL(dataS.id, req?.body?.url, req?.user);
         await monitorService.deleteStatic(req, res);
       } else {
         res.status(401).send('Unauthorized');
@@ -84,16 +84,17 @@ export const createMonitor = async (req, res, next) => {
     const dataStorage = {
       id: '',
     };
-    let dataS = await getDataStorage(req?.user);
+    const user = req?.user;
+    let dataS = await getDataStorage(user);
     if (dataS) {
       dataStorage.id = dataS.id;
       console.log('existing data storage found');
     } else {
       console.log('no data storage, creating one');
-      dataS = await createDataStorage(req.user);
+      dataS = await createDataStorage(user);
       dataStorage.id = dataS;
     }
-    const res = await updateMonitors(dataStorage.id, req.body, req.user, next);
+    const res = await updateMonitors(dataStorage.id, req?.body, user, next);
   } catch (e) {
     next(e);
   }
@@ -102,7 +103,7 @@ export const createMonitor = async (req, res, next) => {
 const makeOpenIdRequest = async (options, user) => {
   try {
     let openIdUrl = '';
-    const userData = JSON.stringify(user.data);
+    const userData = JSON.stringify(user?.data);
     if (userData.indexOf('hsl') !== -1) {
       openIdUrl = OPEN_ID_URL_LIST.hsl;
     } else if (userData.indexOf('waltti') !== -1) {

@@ -8,7 +8,6 @@ import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
 import { ConfigContext } from '../contexts';
-import { handleFontCounterClick } from '../util/monitorUtils';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -50,7 +49,6 @@ const Monitor: FC<IProps> = ({
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
-    handleFontCounterClick(config.fonts.fontCounter);
     const setDimensions = () => {
       setWindowDimensions(getWindowDimensions());
     };

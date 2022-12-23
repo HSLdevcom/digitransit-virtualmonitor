@@ -121,6 +121,12 @@ const App: FC<IConfigurationProps> = props => {
     '--primary-color': config.colors.primary,
   };
   useEffect(() => {
+    if (config.fonts.fontCounter) {
+      fetch(config.fonts.fontCounter, {
+        mode: 'no-cors',
+      });
+    }
+
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }

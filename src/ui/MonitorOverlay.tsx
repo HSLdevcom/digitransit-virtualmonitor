@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { ConfigContext, MonitorContext, UserContext } from '../contexts';
+import { MonitorContext, UserContext } from '../contexts';
 import monitorAPI from '../api';
 import Loading from './Loading';
 

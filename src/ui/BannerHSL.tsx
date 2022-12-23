@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import SiteHeader from '@hsl-fi/site-header';
 import { UserContext, ConfigContext, FavouritesContext } from '../contexts';
+import { handleFontCounterClick } from '../util/monitorUtils';
 
 const notificationAPI = '/api/user/notifications';
 
@@ -22,6 +23,10 @@ const BannerHSL = () => {
       localStorage.setItem('lang', lang);
     }
   };
+
+  useEffect(() => {
+    handleFontCounterClick(config.fonts.fontCounter);
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();

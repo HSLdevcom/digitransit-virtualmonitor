@@ -403,3 +403,11 @@ export const uuidValidateV5 = uuid => {
 
 export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
   `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;
+
+export const handleFontCounterClick = uri => {
+  if (uri) {
+    fetch(uri, {
+      mode: 'no-cors',
+    });
+  }
+};

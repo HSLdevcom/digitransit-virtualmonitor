@@ -272,7 +272,7 @@
   }
 
   .rows12 .grid-row {
-    grid-template-columns: 7vh 1fr 60px;
+    grid-template-columns: 8vh 1fr 60px;
 
     &.without-route-column {
       grid-template-columns: auto 60px;
@@ -282,7 +282,7 @@
   }
 
   .rows12 .grid-row.with-stop-code {
-    grid-template-columns: 7vh 1fr 60px 60px;
+    grid-template-columns: 11vh 1fr 60px 60px;
 
     &.without-route-column {
       grid-template-columns: auto 60px 60px;
@@ -310,7 +310,7 @@
   }
 
   .rows8.two-cols .grid-row {
-    grid-template-columns: 8vh 1fr 60px;
+    grid-template-columns: 11vh 1fr 60px;
 
     &.without-route-column {
       grid-template-columns: auto 80px;
@@ -318,7 +318,7 @@
   }
 
   .rows8.two-cols .grid-row.with-stop-code {
-    grid-template-columns: 8vh 1fr 60px 60px;
+    grid-template-columns: 11vh 1fr 60px 60px;
 
     &.without-route-column {
       grid-template-columns: auto 60px 80px;

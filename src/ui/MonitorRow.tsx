@@ -165,12 +165,14 @@ const MonitorRow: FC<IProps> = ({
       : '';
     if (splitDestination && translation && translation[currentLang]) {
       const t =
-        translation[currentLang].substring(4, translation.length) ===
-        viaDestination.substring(4, viaDestination.length)
-          ? translation[currentLang]
+        translation['fi']?.substring(
+          departureDestination.indexOf(' via') + 1,
+        ) === viaDestination
+          ? translation[currentLang]?.split('via')
           : null;
+
       if (t) {
-        viaDestination = ` via ${t}`;
+        viaDestination = ` via ${t[1]}`;
       }
     }
   } else if (renamedDestination && renamedDestination[currentLang] !== '') {

@@ -34,7 +34,7 @@ export default {
       setName: 'default',
     },
     name: 'hsl',
-    uri: 'routing/v1/routers/hsl/index/graphql',
+    uri: 'routing/v2/routers/hsl/index/graphql',
     bannersUri: 'https://content.hsl.fi/api/v1/banners?',
     HSLUri:
       // eslint-disable-next-line no-undef
@@ -68,7 +68,7 @@ export default {
       setName: 'digitransit',
     },
     name: 'jyvaskyla',
-    uri: 'routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/2/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     allowLogin: false,
@@ -76,7 +76,7 @@ export default {
   },
   matka: {
     name: 'matka',
-    uri: 'routing/v1/routers/finland/index/graphql',
+    uri: 'routing/v2/routers/finland/index/graphql',
   },
   tampere: {
     colors: {
@@ -105,14 +105,14 @@ export default {
       setName: 'digitransit',
     },
     name: 'tampere',
-    uri: 'routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v2/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     allowLogin: false,
     useTilde: false,
   },
   vaasa: {
-    uri: 'routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v2/routers/waltti/index/graphql',
     name: 'vaasa',
     allowLogin: false,
     feedIds: ['vaasa'],

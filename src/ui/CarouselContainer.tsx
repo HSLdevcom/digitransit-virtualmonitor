@@ -176,9 +176,7 @@ const CarouselContainer: FC<IProps> = ({
       view={newView}
       currentLang={languages[language]}
       departures={departures}
-      translatedStrings={
-        translations ? translations.filter(t => t.lang === lan) : []
-      }
+      translations={translations}
       isPreview={preview}
       alertState={alertState}
       alertComponent={alertComponent}

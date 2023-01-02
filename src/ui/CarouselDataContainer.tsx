@@ -132,13 +132,17 @@ const CarouselDataContainer: FC<IProps> = ({
   if (languages.indexOf('sv') !== -1) {
     return (
       <TranslationContainer
-        translationIds={uniq(translationIds)}
+        stopIds={stopIds}
+        stationIds={stationIds}
         stopDepartures={stopDepartures}
         stationDepartures={stationDepartures}
         alerts={alerts}
         preview={preview}
         closedStopViews={closedStopViews}
         trainsWithTrack={trainsWithTrack}
+        languages={languages}
+        pollInterval={pollInterval}
+        largest={largest}
       />
     );
   }

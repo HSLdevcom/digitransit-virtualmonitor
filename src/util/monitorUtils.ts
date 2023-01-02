@@ -403,3 +403,8 @@ export const uuidValidateV5 = uuid => {
 
 export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
   `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;
+
+export const getDepartureDestination = departure =>
+  departure.headsign && departure.headsign.endsWith(' via')
+    ? departure.headsign.substring(0, departure.headsign.indexOf(' via'))
+    : departure.headsign || departure.trip?.tripHeadsign;

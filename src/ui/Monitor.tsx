@@ -22,7 +22,7 @@ interface IProps {
   readonly view: IView;
   readonly departures: Array<Array<IDeparture>>;
   currentLang: string;
-  readonly translatedStrings: Array<ITranslation>;
+  readonly translations: any;
   readonly isPreview: boolean;
   alertComponent: any;
   alertRowSpan: number;
@@ -33,7 +33,7 @@ let to;
 const Monitor: FC<IProps> = ({
   view,
   departures,
-  translatedStrings,
+  translations,
   currentLang,
   isPreview,
   alertState,
@@ -101,7 +101,7 @@ const Monitor: FC<IProps> = ({
         rightStops={view.columns.right.stops}
         leftStops={view.columns.left.stops}
         currentLang={currentLang}
-        translatedStrings={translatedStrings}
+        translations={translations}
         layout={view.layout}
         isLandscape={isLandscapeByLayout}
         alertState={alertState}

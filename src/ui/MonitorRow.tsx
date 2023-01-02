@@ -1,9 +1,9 @@
 import React, { FC, useContext } from 'react';
 import { getDepartureTime } from '../time';
 import cx from 'classnames';
-import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
-import { capitalize } from '../util/monitorUtils';
+import { ITranslation } from './TranslationContainer';
+import { capitalize, getDepartureDestination } from '../util/monitorUtils';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from '../contexts';
 
@@ -81,6 +81,17 @@ const processLine = inputText => {
   return [''];
 };
 
+const getDepartureTranslations = (translations, departure) => {
+  let translation;
+  translations?.forEach(translat => {
+    if (translat.id === departure.trip.gtfsId) {
+      translation = translat;
+    }
+  });
+
+  return translation;
+};
+
 const MonitorRow: FC<IProps> = ({
   departure,
   isFirst = false,
@@ -121,14 +132,9 @@ const MonitorRow: FC<IProps> = ({
 
   const isCancelled = departure.realtimeState === 'CANCELED';
 
-  const departureDestination =
-    departure.headsign && departure.headsign.endsWith(' via')
-      ? departure.headsign.substring(0, departure.headsign.indexOf(' via'))
-      : departure.headsign || departure.trip?.tripHeadsign;
+  const departureDestination = getDepartureDestination(departure);
 
-  const d = translations?.find(
-    t => t.trans_id === departureDestination?.split(' via')[0],
-  );
+  const translation = getDepartureTranslations(translations, departure);
 
   const renamedDestination = renamedDestinations.find(
     dest => dest.pattern === departure.combinedPattern,
@@ -138,7 +144,10 @@ const MonitorRow: FC<IProps> = ({
   if (renamedDestination && renamedDestination[currentLang] !== '') {
     destination = renamedDestination[currentLang];
   } else {
-    destination = d ? d.translation : capitalize(departureDestination);
+    destination =
+      translation && translation[currentLang]
+        ? translation[currentLang]
+        : capitalize(departureDestination);
   }
 
   const splitDestination =
@@ -154,10 +163,12 @@ const MonitorRow: FC<IProps> = ({
     viaDestination = splitDestination
       ? departureDestination.substring(departureDestination.indexOf(' via') + 1)
       : '';
-    if (splitDestination) {
-      const t = translations?.find(
-        t => t.trans_id === viaDestination.substring(4, viaDestination.length),
-      )?.translation;
+    if (splitDestination && translation && translation[currentLang]) {
+      const t =
+        translation[currentLang].substring(4, translation.length) ===
+        viaDestination.substring(4, viaDestination.length)
+          ? translation[currentLang]
+          : null;
       if (t) {
         viaDestination = ` via ${t}`;
       }

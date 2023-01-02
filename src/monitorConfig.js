@@ -68,7 +68,7 @@ export default {
       setName: 'digitransit',
     },
     name: 'jyvaskyla',
-    uri: 'routing/2/routers/waltti/index/graphql',
+    uri: 'routing/v2/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     allowLogin: false,

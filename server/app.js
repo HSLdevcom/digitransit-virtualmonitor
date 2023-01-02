@@ -5,7 +5,6 @@ import axios from 'axios';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
-import { getTranslations } from 'gtfs';
 import setUpOIDC, {
   userAuthenticated,
   errorHandler,
@@ -81,15 +80,6 @@ app.get('/api/geocoding/:endpoint', (req, res, next) => {
 
 app.put('/api/monitor', (req, res, next) => {
   monitorService.create(req, res, next);
-});
-
-app.get('/api/translations/:recordIds', (req, res, next) => {
-  const ids = req.params.recordIds.split(',');
-  getTranslations({ trans_id: ids })
-    .then(t => {
-      res.json(t);
-    })
-    .catch(e => next(e));
 });
 
 app.get('/api/staticmonitor/:id', (req, res, next) => {

@@ -57,9 +57,6 @@ const monitorAPI = {
     };
     return fetchData(`monitor`, options);
   },
-  getTranslations(ids) {
-    return fetchData(`translations/${ids.join()}`, {});
-  },
   decompress(base64string) {
     const options = {
       method: 'POST',

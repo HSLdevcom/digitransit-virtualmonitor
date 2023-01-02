@@ -6,15 +6,11 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import Debug from 'debug';
 import http from 'http';
-import cron from 'cron';
 
-// const gtfs = require('gtfs');
-import { importGtfs } from 'gtfs';
 // eslint-disable-next-line import/extensions
 import app from './app.js';
 
 const debug = Debug('express-react:server');
-const { CronJob } = cron;
 
 /**
  * Normalize a port into a number, string, or false.
@@ -42,53 +38,6 @@ function normalizePort(val) {
  */
 
 const port = normalizePort(process.env.PORT || '3001');
-const config = {
-  agencies: [
-    {
-      url: 'https://infopalvelut.storage.hsldev.com/gtfs/hsl.zip',
-      exclude: [
-        'attributions',
-        'calendar_dates',
-        'calendar',
-        'fare_attributes',
-        'fare_rules',
-        'feed_info',
-        'transfers',
-        'shapes',
-        'agency',
-        'stop_times',
-        'routes',
-        'trips',
-        'stops',
-      ],
-    },
-  ],
-};
-
-importGtfs(config)
-  .then(() => {
-    console.log('Import Successful');
-  })
-  .catch((err) => {
-    console.error(err);
-  });
-
-const job = new CronJob(
-  '00 00 00 * * *',
-  () => {
-    const d = new Date();
-    console.log('IMPORT STARTING AT ', d);
-    importGtfs(config)
-      .then(() => {
-        console.log('Import Successful');
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  },
-  null,
-);
-job.start();
 
 app.set('port', port);
 

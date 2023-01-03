@@ -15,7 +15,7 @@ interface IProps {
   departuresRight: Array<IDeparture>;
   rightStops: Array<any>;
   leftStops: Array<any>;
-  translations: any;
+  translations: Array<ITranslation>;
   currentLang: string;
   layout: any;
   isLandscape: boolean;

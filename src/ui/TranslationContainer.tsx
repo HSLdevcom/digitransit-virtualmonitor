@@ -41,11 +41,10 @@ const getTranslations = (stops, lang, departureTranslations) => {
           item => item.id === departure.trip.gtfsId,
         );
         if (translation) {
-          translation[lang] = departureDestination; //time.trip.tripHeadsign;
-        } else {
+          translation[lang] = departureDestination;
           departureTranslations.push({
             id: departure.trip.gtfsId,
-            [lang]: departureDestination, //time.trip.tripHeadsign,
+            [lang]: departureDestination,
           });
         }
       }),

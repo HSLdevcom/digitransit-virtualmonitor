@@ -69,6 +69,7 @@ const StopCardRow: FC<IProps> = ({
   const config = useContext(ConfigContext);
   const favourites = useContext(FavouritesContext);
   const [t] = useTranslation();
+  const lang = t('languageCode');
   const [getStop, stopState] = useLazyQuery(StopQueryDocument, {
     fetchPolicy: 'network-only',
     context: { clientName: 'default' },
@@ -87,22 +88,22 @@ const StopCardRow: FC<IProps> = ({
     switch (properties.layer) {
       case 'stop':
         getStop({
-          variables: { ids: getGTFSId(properties.id) },
+          variables: { ids: getGTFSId(properties.id), language: lang },
         });
         break;
       case 'favouriteStop':
         getStop({
-          variables: { ids: properties.gtfsId },
+          variables: { ids: properties.gtfsId, language: lang },
         });
         break;
       case 'station':
         getStation({
-          variables: { ids: getGTFSId(properties.id) },
+          variables: { ids: getGTFSId(properties.id), language: lang },
         });
         break;
       case 'favouriteStation':
         getStation({
-          variables: { ids: properties.gtfsId },
+          variables: { ids: properties.gtfsId, language: lang },
         });
         break;
       default:
@@ -192,7 +193,6 @@ const StopCardRow: FC<IProps> = ({
     }
   }, [stationState.data]);
 
-  const lang = t('languageCode');
   const isFirst = index === 0;
   const isLast = index === cards.length - 1;
   const isDouble = layout >= 9 && layout <= 11;

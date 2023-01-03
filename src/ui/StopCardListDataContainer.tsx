@@ -22,14 +22,15 @@ const StopCardListDataContainer: FC<IProps> = ({
   loading,
   staticMonitor,
 }) => {
+  const lang = localStorage.getItem('lang');
   const [cardList, setCardList] = useState(stopCardList);
   const stops = useQuery(StopQueryDocument, {
-    variables: { ids: stopIds },
+    variables: { ids: stopIds, language: lang },
     skip: stopIds.length < 1,
     context: { clientName: 'default' },
   });
   const stations = useQuery(StationQueryDocument, {
-    variables: { ids: stationIds },
+    variables: { ids: stationIds, language: lang },
     skip: stationIds.length < 1,
     context: { clientName: 'default' },
   });

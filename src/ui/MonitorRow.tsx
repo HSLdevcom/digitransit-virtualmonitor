@@ -82,14 +82,9 @@ const processLine = inputText => {
 };
 
 const getDepartureTranslations = (translations, departure) => {
-  let translation;
-  translations?.forEach(translat => {
-    if (translat.id === departure.trip.gtfsId) {
-      translation = translat;
-    }
-  });
-
-  return translation;
+  return translations && translations.length > 0
+    ? translations.find(t => t.id === departure.trip.gtfsId)
+    : null;
 };
 
 const MonitorRow: FC<IProps> = ({

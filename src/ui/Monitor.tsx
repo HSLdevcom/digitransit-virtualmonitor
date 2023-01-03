@@ -22,7 +22,7 @@ interface IProps {
   readonly view: IView;
   readonly departures: Array<Array<IDeparture>>;
   currentLang: string;
-  readonly translations: any;
+  readonly translations: Array<ITranslation>;
   readonly isPreview: boolean;
   alertComponent: any;
   alertRowSpan: number;

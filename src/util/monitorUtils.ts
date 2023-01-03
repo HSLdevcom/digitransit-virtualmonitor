@@ -89,26 +89,6 @@ export const filterDepartures = (
   });
   return departures;
 };
-const getTranslationStringsForStop = (stop, hiddenRoutes) => {
-  const stringsToTranslate = [];
-  stop.stoptimesForPatterns.forEach(stopTimeForPattern => {
-    if (!hiddenRoutes.includes(stringifyPattern(stopTimeForPattern.pattern))) {
-      let headsign = stopTimeForPattern.stoptimes[0].headsign;
-      if (headsign?.includes(' via ')) {
-        const destinations = headsign.split(' via ');
-        stringsToTranslate.push(...destinations);
-      } else if (headsign?.endsWith(' via')) {
-        headsign = headsign.substring(0, headsign.indexOf(' via'));
-        stringsToTranslate.push(headsign);
-      } else {
-        if (headsign) {
-          stringsToTranslate.push(headsign);
-        }
-      }
-    }
-  });
-  return stringsToTranslate;
-};
 
 export const createDepartureArray = (
   views,
@@ -124,7 +104,6 @@ export const createDepartureArray = (
     renamedDestinations: [],
   };
   const departures = [];
-  const stringsToTranslate = [];
   const alerts = [];
   const closedStopViews: Array<IClosedStop> = [];
 
@@ -192,16 +171,10 @@ export const createDepartureArray = (
 
             if (isStation) {
               stop.stops.forEach(s => {
-                stringsToTranslate.push(
-                  ...getTranslationStringsForStop(stop, hiddenRoutes),
-                );
                 alerts.push(...s.alerts);
                 s.routes.forEach(r => alerts.push(...r.alerts));
               });
             } else {
-              stringsToTranslate.push(
-                ...getTranslationStringsForStop(stop, hiddenRoutes),
-              );
               alerts.push(...stop.alerts);
               stop.routes.forEach(r => alerts.push(...r.alerts));
             }
@@ -236,7 +209,7 @@ export const createDepartureArray = (
   if (process.env.NODE_ENV === 'development' && dummyAlerts.inUse) {
     arr = arr.concat(getDummyAlerts(initTime));
   }
-  return [stringsToTranslate, departures, arr, closedStopViews];
+  return [departures, arr, closedStopViews];
 };
 
 export function getWeatherData(time, lat, lon) {
@@ -404,7 +377,10 @@ export const uuidValidateV5 = uuid => {
 export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
   `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;
 
-export const getDepartureDestination = departure =>
-  departure.headsign && departure.headsign.endsWith(' via')
-    ? departure.headsign.substring(0, departure.headsign.indexOf(' via'))
-    : departure.headsign || departure.trip?.tripHeadsign;
+export const getDepartureDestination = (departure, lang) => {
+  return departure['headsign' + lang]
+    ? departure['headsign' + lang]
+    : departure.trip
+    ? departure.trip['tripHeadsign' + lang]
+    : null;
+};

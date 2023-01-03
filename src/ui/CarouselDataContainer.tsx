@@ -10,9 +10,8 @@ import {
   getStopsAndStationsFromViews,
   createDepartureArray,
 } from '../util/monitorUtils';
-import TranslationContainer from './TranslationContainer';
 import Loading from './Loading';
-import { uniq, uniqBy } from 'lodash';
+import { uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import CarouselContainer from './CarouselContainer';
 import { MonitorContext } from '../contexts';
@@ -38,7 +37,7 @@ const CarouselDataContainer: FC<IProps> = ({
   fromStop,
   initTime,
 }) => {
-  const { cards: views, languages } = useContext(MonitorContext);
+  const { cards: views } = useContext(MonitorContext);
   const [t] = useTranslation();
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
@@ -58,7 +57,6 @@ const CarouselDataContainer: FC<IProps> = ({
     useState(emptyDepartureArrays);
   const [stopsFetched, setStopsFetched] = useState(stopIds.length < 1);
   const [stationsFetched, setStationsFetched] = useState(stationIds.length < 1);
-  const [translationIds, setTranslationIds] = useState([]);
   const [alerts, setAlerts] = useState([]);
   const [closedStopViews, setClosedStopViews] = useState([]);
 
@@ -78,9 +76,14 @@ const CarouselDataContainer: FC<IProps> = ({
   useEffect(() => {
     const stops = stopsState?.data?.stops;
     if (stops?.length > 0) {
-      const [stringsToTranslate, newDepartureArray, a, closedStopViews] =
-        createDepartureArray(views, stops, false, t, fromStop, initTime);
-      setTranslationIds(translationIds.concat(stringsToTranslate));
+      const [newDepartureArray, a, closedStopViews] = createDepartureArray(
+        views,
+        stops,
+        false,
+        t,
+        fromStop,
+        initTime,
+      );
       setStopDepartures(newDepartureArray);
       const arr = alerts.concat(a);
       setAlerts(
@@ -102,7 +105,7 @@ const CarouselDataContainer: FC<IProps> = ({
   useEffect(() => {
     const stations = stationsState?.data?.stations;
     if (stations?.length > 0) {
-      const [stringsToTranslate, newDepartureArray, a] = createDepartureArray(
+      const [newDepartureArray, a] = createDepartureArray(
         views,
         stations,
         true,
@@ -110,7 +113,6 @@ const CarouselDataContainer: FC<IProps> = ({
         fromStop,
         initTime,
       );
-      setTranslationIds(translationIds.concat(stringsToTranslate));
       setStationDepartures(newDepartureArray);
       const arr = alerts.concat(a);
       setAlerts(
@@ -128,25 +130,6 @@ const CarouselDataContainer: FC<IProps> = ({
   if (!stopsFetched || !stationsFetched) {
     return <Loading />;
   }
-
-  if (languages.indexOf('sv') !== -1) {
-    return (
-      <TranslationContainer
-        stopIds={stopIds}
-        stationIds={stationIds}
-        stopDepartures={stopDepartures}
-        stationDepartures={stationDepartures}
-        alerts={alerts}
-        preview={preview}
-        closedStopViews={closedStopViews}
-        trainsWithTrack={trainsWithTrack}
-        languages={languages}
-        pollInterval={pollInterval}
-        largest={largest}
-      />
-    );
-  }
-
   return (
     <CarouselContainer
       stopDepartures={stopDepartures}

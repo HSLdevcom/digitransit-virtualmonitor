@@ -2,7 +2,6 @@ import React, { FC, useContext } from 'react';
 import { getDepartureTime } from '../time';
 import cx from 'classnames';
 import Icon from './Icon';
-import { ITranslation } from './TranslationContainer';
 import { capitalize, getDepartureDestination } from '../util/monitorUtils';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from '../contexts';
@@ -44,7 +43,6 @@ export interface IDeparture {
 interface IProps {
   isTwoRow: boolean;
   departure: IDeparture;
-  translations?: Array<ITranslation>;
   stops: Array<any>;
   isFirst?: boolean;
   showVia?: boolean;
@@ -81,12 +79,6 @@ const processLine = inputText => {
   return [''];
 };
 
-const getDepartureTranslations = (translations, departure) => {
-  return translations && translations.length > 0
-    ? translations.find(t => t.id === departure.trip.gtfsId)
-    : null;
-};
-
 const MonitorRow: FC<IProps> = ({
   departure,
   isFirst = false,
@@ -96,7 +88,6 @@ const MonitorRow: FC<IProps> = ({
   isTwoRow,
   currentLang,
   stops,
-  translations,
   dayForDivider,
   showMinutes,
   withoutRouteColumn,
@@ -126,11 +117,7 @@ const MonitorRow: FC<IProps> = ({
   );
 
   const isCancelled = departure.realtimeState === 'CANCELED';
-
-  const departureDestination = getDepartureDestination(departure);
-
-  const translation = getDepartureTranslations(translations, departure);
-
+  const departureDestination = getDepartureDestination(departure, currentLang);
   const renamedDestination = renamedDestinations.find(
     dest => dest.pattern === departure.combinedPattern,
   );
@@ -139,10 +126,7 @@ const MonitorRow: FC<IProps> = ({
   if (renamedDestination && renamedDestination[currentLang] !== '') {
     destination = renamedDestination[currentLang];
   } else {
-    destination =
-      translation && translation[currentLang]
-        ? translation[currentLang]
-        : capitalize(departureDestination);
+    destination = capitalize(departureDestination);
   }
 
   const splitDestination =
@@ -158,12 +142,12 @@ const MonitorRow: FC<IProps> = ({
     viaDestination = splitDestination
       ? departureDestination.substring(departureDestination.indexOf(' via') + 1)
       : '';
-    if (splitDestination && translation && translation[currentLang]) {
+    if (splitDestination) {
       const t =
-        translation['fi']?.substring(
+        departureDestination?.substring(
           departureDestination.indexOf(' via') + 1,
         ) === viaDestination
-          ? translation[currentLang]?.split('via')
+          ? departureDestination.split('via')
           : null;
 
       if (t) {

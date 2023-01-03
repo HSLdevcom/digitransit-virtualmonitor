@@ -4,7 +4,6 @@ import { IView, IClosedStop } from '../util/Interfaces';
 import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getLayout';
 import { IDeparture } from './MonitorRow';
-import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
 import { ConfigContext } from '../contexts';
@@ -22,7 +21,6 @@ interface IProps {
   readonly view: IView;
   readonly departures: Array<Array<IDeparture>>;
   currentLang: string;
-  readonly translations: Array<ITranslation>;
   readonly isPreview: boolean;
   alertComponent: any;
   alertRowSpan: number;
@@ -33,7 +31,6 @@ let to;
 const Monitor: FC<IProps> = ({
   view,
   departures,
-  translations,
   currentLang,
   isPreview,
   alertState,
@@ -101,7 +98,6 @@ const Monitor: FC<IProps> = ({
         rightStops={view.columns.right.stops}
         leftStops={view.columns.left.stops}
         currentLang={currentLang}
-        translations={translations}
         layout={view.layout}
         isLandscape={isLandscapeByLayout}
         alertState={alertState}

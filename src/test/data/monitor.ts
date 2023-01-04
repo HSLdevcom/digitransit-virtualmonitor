@@ -13,6 +13,8 @@ export const departure: IDeparture = {
   vehicleMode: '',
   combinedPattern: 'MATKA:60061713:87:Jyväskylä:',
   headsign: 'JYVÄSKYLÄ',
+  headsignfi: 'Jyväskylä',
+  headsignsv: 'Jyskylä',
   pickupType: 'SCHEDULED',
   realtime: true,
   route: { alerts: [], shortName: '123' },
@@ -23,6 +25,8 @@ export const departure: IDeparture = {
   stop: stop,
   trip: {
     tripHeadsign: 'Helsinki',
+    tripHeadsignfi: 'Helsinki',
+    tripHeadsignsv: 'Helsingfors',
     gtfsId: 'HSL:1234trip',
     stops: [stop],
     route: { alerts: [], shortName: '123' },

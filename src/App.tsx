@@ -60,8 +60,10 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     postfix: string;
     setName: string;
   };
-  allowLogin: boolean;
-  allowFavourites: boolean;
+  login: {
+    inUse: boolean;
+    favourites: boolean;
+  };
 }
 export interface IMonitorConfig {
   name?: string;
@@ -123,7 +125,7 @@ const App: FC<IConfigurationProps> = props => {
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }
-    if (config.allowLogin) {
+    if (config.login.inUse) {
       monitorAPI
         .getUser()
         .then(user => {
@@ -134,7 +136,7 @@ const App: FC<IConfigurationProps> = props => {
           setUser({ notLogged: true });
           setLoading(false);
         });
-      if (config.allowFavourites && user.sub) {
+      if (config.login.favourites && user.sub) {
         monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
           if (Array.isArray(favourites)) {
             setFavourites(favs);

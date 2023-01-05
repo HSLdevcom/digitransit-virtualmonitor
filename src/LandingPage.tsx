@@ -10,7 +10,7 @@ const LandingPage = () => {
   const [t] = useTranslation();
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
-  const logIn = user.sub && config.allowLogin;
+  const logIn = user.sub && config.login.inUse;
   let loginURI;
   switch (config.name) {
     case 'tampere' || 'jyvaskyla' || 'vaasa':
@@ -25,7 +25,7 @@ const LandingPage = () => {
 
   const buttons = (
     <>
-      {config.allowLogin ? (
+      {config.login.inUse ? (
         <>
           <a href={loginURI} aria-label={t('front-page-sign-in-button')}>
             <div className="monitor-button blue">

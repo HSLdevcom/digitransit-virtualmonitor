@@ -92,8 +92,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
 
   function configurationStrategy(strategyName, callbackPath, OIDCHost, client_id, client_secret) {
     return new Strategy(strategyName, callbackPath, {
-      issuerHost:
-        process.env.OIDC_ISSUER || `${OIDCHost}/.well-known/openid-configuration`,
+      issuerHost: `${OIDCHost}/.well-known/openid-configuration`,
       client_id: client_id,
       client_secret: client_secret,
       redirect_uris: redirectUris,

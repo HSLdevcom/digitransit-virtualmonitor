@@ -47,7 +47,7 @@ const UserMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
           <button
             className="close-button"
             role="button"
-            aria-label={t('menuClose')}
+            aria-label={t('userMenuClose')}
             onClick={onClose}
           >
             <Icon

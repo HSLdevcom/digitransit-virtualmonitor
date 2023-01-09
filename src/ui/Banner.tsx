@@ -27,6 +27,12 @@ const Banner = () => {
     changeUserMenuOpen(false);
   };
 
+  const { given_name, family_name } = user;
+  const initials =
+    given_name && family_name
+      ? given_name.charAt(0) + family_name.charAt(0)
+      : '';
+
   return (
     <div className="main-banner">
       <Logo isLandscape />
@@ -35,10 +41,15 @@ const Banner = () => {
           <button
             className="menu-button"
             role="button"
-            aria-label={t('menuOpen')}
+            aria-label={t('userMenuOpen')}
             onClick={setUserOpen}
           >
-            <Icon img="user-icon" width={40} height={40} color={'white'} />
+            <div className="usermenu-container">
+              <div>
+                <Icon img="user-icon" width={30} height={30} color={'white'} />
+              </div>
+              <div className="usermenu-text">{initials}</div>
+            </div>
           </button>
         </div>
       )}

@@ -5,23 +5,14 @@ import IndexPage from './ui/IndexPage';
 import { Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { getLoginUri } from './util/getLoginUri';
 
 const LandingPage = () => {
   const [t] = useTranslation();
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
   const logIn = user.sub && config.login.inUse;
-  let loginURI;
-  switch (config.name) {
-    case 'tampere' || 'jyvaskyla' || 'vaasa':
-      loginURI = 'waltti-login';
-      break;
-    case 'hsl':
-      loginURI = 'hsl-login?url=/&';
-      break;
-    default:
-      loginURI = '';
-  }
+  const loginURI = getLoginUri(config.name);
 
   const buttons = (
     <>

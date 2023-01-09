@@ -1,12 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { UserContext } from '../contexts';
+import { ConfigContext, UserContext } from '../contexts';
 import Logo from './logo/Logo';
 import BurgerMenu from './BurgerMenu';
 import UserMenu from './UserMenu';
 import Icon from './Icon';
+import { getLoginUri } from '../util/getLoginUri';
 
 const Banner = () => {
+  const config = useContext(ConfigContext);
   const user = useContext(UserContext);
   const [t] = useTranslation();
   const [burgerMenuIsOpen, changeBurgerMenuOpen] = useState(false);
@@ -36,28 +38,50 @@ const Banner = () => {
   return (
     <div className="main-banner">
       <Logo isLandscape />
-      {user.sub && (
-        <div className="menu-container">
-          <button
-            className="menu-button"
-            role="button"
-            aria-label={t('userMenuOpen')}
-            onClick={setUserOpen}
-          >
-            <div className="usermenu-container">
-              <div>
-                <Icon img="user-icon" width={30} height={30} color={'white'} />
+      {config.login.inUse && (
+        <>
+          <div className="menu-container">
+            {user.sub ? (
+              <button
+                className="menu-button"
+                role="button"
+                aria-label={t('userMenuOpen')}
+                onClick={setUserOpen}
+              >
+                <div className="usermenu-container">
+                  <div>
+                    <Icon
+                      img="user-icon"
+                      width={30}
+                      height={30}
+                      color={'white'}
+                    />
+                  </div>
+                  <div className="usermenu-text">{initials}</div>
+                </div>
+              </button>
+            ) : (
+              <div className="usermenu-container">
+                <a href={getLoginUri(config.name)} aria-label={t('login')}>
+                  <div>
+                    <Icon
+                      img="user-icon"
+                      width={30}
+                      height={30}
+                      color={'white'}
+                    />
+                  </div>
+                </a>
               </div>
-              <div className="usermenu-text">{initials}</div>
-            </div>
-          </button>
-        </div>
+            )}
+          </div>
+          <UserMenu
+            isOpen={userMenuIsOpen}
+            onClose={setUserClose}
+            createStatic={user && user.loggedIn}
+          />
+        </>
       )}
-      <UserMenu
-        isOpen={userMenuIsOpen}
-        onClose={setUserClose}
-        createStatic={user && user.loggedIn}
-      />
       <div className="menu-container">
         <button
           className="menu-button"

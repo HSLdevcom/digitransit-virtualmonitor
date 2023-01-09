@@ -53,12 +53,13 @@
     align-items: center;
 
     .usermenu-text {
-      font-size: 14px;
+      font-size: 16px;
+      font-family: $font-family;
+      font-weight: $font-weight-bigger;
       letter-spacing: -0.3px;
       line-height: 1.5;
       color: white;
-      font-family: $font-family;
-      font-weight: $font-weight-bigger;
+      margin-left: 5px;
     }
   }
 }

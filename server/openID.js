@@ -5,18 +5,6 @@ const CLIENT_ID_LIST = JSON.parse(process.env.MANAGEMENT_API_ID);
 const CLIENT_SECRET_LIST = JSON.parse(process.env.MANAGEMENT_API_SECRET);
 const OPEN_ID_URL_LIST = JSON.parse(process.env.OIDCHOST);
 
-const HSL_CLIENT = {
-  openIdUrl: OPEN_ID_URL_LIST.hsl,
-  id: CLIENT_ID_LIST.hsl,
-  secret: CLIENT_SECRET_LIST.hsl
-}
-
-const WALTTI_CLIENT = {
-  openIdUrl: OPEN_ID_URL_LIST.waltti,
-  id: CLIENT_ID_LIST.waltti,
-  secret: CLIENT_SECRET_LIST.waltti
-}
-
 export const isUserOwnedMonitor = async (req, res, next) => {
   try {
     const userMonitors = await getDataStorageMonitors(req, res, next);
@@ -200,9 +188,20 @@ const getDataStorage = async (apiClient) => {
 };
 
 function getClientAndUserInformation(user) {
+  const HSL_CLIENT = {
+    openIdUrl: OPEN_ID_URL_LIST.hsl,
+    id: CLIENT_ID_LIST.hsl,
+    secret: CLIENT_SECRET_LIST.hsl
+  }
+
+  const WALTTI_CLIENT = {
+    openIdUrl: OPEN_ID_URL_LIST.waltti,
+    id: CLIENT_ID_LIST.waltti,
+    secret: CLIENT_SECRET_LIST.waltti
+  }
+
   const userData = JSON.stringify(user?.data);
   if (userData.indexOf('hsl') !== -1) {
-
     return {
       ...HSL_CLIENT,
       userId: user?.data?.sub
@@ -212,12 +211,12 @@ function getClientAndUserInformation(user) {
       ...WALTTI_CLIENT,
       userId: user?.data?.sub
     }
-  } else {
-    return {
-      openIdUrl: '',
-      id: '',
-      secret: '',
-      userId: user?.data?.sub
-    };
   }
+  
+  return {
+    openIdUrl: '',
+    id: '',
+    secret: '',
+    userId: user?.data?.sub
+  };
 }

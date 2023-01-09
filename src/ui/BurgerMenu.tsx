@@ -117,13 +117,6 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
         <section id="links" style={{ display: 'flex' }} aria-label={t('links')}>
           {linkElements()}
         </section>
-        {user.sub && (
-          <section id="links" style={{ display: 'flex' }}>
-            <a href={'/logout'} aria-label={t('logout')}>
-              <div className="link">{t('logout')}</div>
-            </a>
-          </section>
-        )}
         <></>
       </div>
     </Modal>

@@ -46,7 +46,9 @@ export default {
   uri: 'routing/v1/routers/finland/index/graphql',
   showMinutes: '15',
   alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-  allowLogin: false,
-  allowFavourites: false,
+  login: {
+    inUse: false,
+    favourites: false,
+  },
   useTilde: true,
 };

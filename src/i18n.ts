@@ -113,6 +113,8 @@ i18n.use(initReactI18next).init({
           'You cannot add more than one view to the service update view',
         'no-departures': 'No known departures',
         'no-monitor-found': 'No display was found matching the URL given.',
+        'incorrect-instance':
+          'The display matching the given URL does not belong to this service area.',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
@@ -266,6 +268,8 @@ i18n.use(initReactI18next).init({
         'no-departures': 'Ei tiedossa olevia lähtöjä',
         'no-monitor-found':
           'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
+        'incorrect-instance':
+          'Antamasi URL-osoite ei viittaa tämän palvelualueen pysäkkinäyttöön.',
         'no-stops-selected': 'Ei valittuja pysäkkejä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
@@ -417,6 +421,8 @@ i18n.use(initReactI18next).init({
           'Du kan inte lägga till flera vyer i meddelandeskärmen',
         'no-departures': 'Inga kända avgångar',
         'no-monitor-found':
+          'Inga hållplatsskärmar hittades med den URL-adress du angav.',
+        'incorrect-instance':
           'Inga hållplatsskärmar hittades med den URL-adress du angav.',
         'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',

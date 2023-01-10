@@ -9,6 +9,7 @@ import UserMonitorCard from './UserMonitorCard';
 import { v5 as uuidv5, validate } from 'uuid';
 import { namespace } from '../util/monitorUtils';
 import Loading from './Loading';
+import { getConfig } from '../util/getConfig';
 
 interface IProps {
   onRequestClose: () => void;
@@ -25,6 +26,7 @@ const ImportMonitorModal: FC<IProps> = ({
   const [monitor, setMonitor] = useState(null);
   const [addingMonitor, setAddingMonitor] = useState(false);
   const [importFailed, setImportFailed] = useState(false);
+  const [incorrectInstance, setIncorrectInstance] = useState(false);
 
   const setTitle = (title: string) => {
     setMonitor({
@@ -38,13 +40,17 @@ const ImportMonitorModal: FC<IProps> = ({
       .getStatic(url)
       .then((r: any) => {
         if (r.contenthash) {
-          setMonitor({
-            ...r,
-            name:
-              r.name === ''
-                ? `${t('stop-display')} ${monitorCount + 1}`
-                : r.name,
-          });
+          if (!r.instance || r.instance === getConfig().name) {
+            setMonitor({
+              ...r,
+              name:
+                r.name === ''
+                  ? `${t('stop-display')} ${monitorCount + 1}`
+                  : r.name,
+            });
+          } else {
+            setIncorrectInstance(true);
+          }
         } else {
           setImportFailed(true);
         }
@@ -58,10 +64,14 @@ const ImportMonitorModal: FC<IProps> = ({
       .get(contenthash)
       .then((r: any) => {
         if (r?.contenthash) {
-          setMonitor({
-            ...r,
-            name: `${t('stop-display')} ${monitorCount + 1}`,
-          });
+          if (!r.instance || r.instance === getConfig().name) {
+            setMonitor({
+              ...r,
+              name: `${t('stop-display')} ${monitorCount + 1}`,
+            });
+          } else {
+            setIncorrectInstance(true);
+          }
         } else {
           setImportFailed(true);
         }
@@ -71,6 +81,8 @@ const ImportMonitorModal: FC<IProps> = ({
 
   const importMonitor = () => {
     setImportFailed(false);
+    setIncorrectInstance(false);
+
     const search = url.indexOf('?') !== -1 ? url.split('?')[1] : url;
     const searchParams = new URLSearchParams(search);
     if (searchParams.has('url')) {
@@ -96,6 +108,7 @@ const ImportMonitorModal: FC<IProps> = ({
     const newStaticMonitor = {
       ...monitor,
       url: newUuid,
+      instance: getConfig().name,
     };
     setAddingMonitor(true);
     monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
@@ -133,6 +146,9 @@ const ImportMonitorModal: FC<IProps> = ({
         </div>
         {importFailed && (
           <div className="no-monitor-found">{t('no-monitor-found')}</div>
+        )}
+        {incorrectInstance && (
+          <div className="no-monitor-found">{t('incorrect-instance')}</div>
         )}
 
         {monitor?.id && (

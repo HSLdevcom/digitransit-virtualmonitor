@@ -5,7 +5,7 @@ import IndexPage from './ui/IndexPage';
 import { Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { getLoginUri } from './util/getLoginUri';
+import { getLoginUri } from './util/getResources';
 
 const LandingPage = () => {
   const [t] = useTranslation();

@@ -4,7 +4,7 @@ import {
   GetDeparturesForStopsDocument,
   GetDeparturesForStationsDocument,
 } from '../generated';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import { ITrainData } from '../util/Interfaces';
 import {
   getStopsAndStationsFromViews,

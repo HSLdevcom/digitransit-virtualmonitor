@@ -5,7 +5,7 @@ import Monitor from './Monitor';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorAlertRow from './MonitorAlertRow';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import cx from 'classnames';
 import uniqBy from 'lodash/uniqBy';
 import {

@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import MonitorRow, { IDeparture } from './MonitorRow';
 import cx from 'classnames';
 import { formatDate, setDate, formattedDateTimeFromSeconds } from '../time';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import { ITranslation } from './TranslationContainer';
 import { IClosedStop } from '../util/Interfaces';
 import { useTranslation } from 'react-i18next';

@@ -155,3 +155,16 @@ export const getAlertRowSpanForLayouts = (views, current) => {
   });
   return Math.max(...alertRowSpans);
 };
+
+export function getLoginUri(configName) {
+  switch (configName) {
+    case 'tampere':
+    case 'jyvaskyla':
+    case 'vaasa':
+      return 'waltti-login';
+    case 'hsl':
+      return 'hsl-login?url=/&';
+    default:
+      return '';
+  }
+}

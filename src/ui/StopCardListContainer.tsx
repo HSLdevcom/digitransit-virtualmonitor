@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import monitorAPI from '../api';
 import { Link, Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
 import { defaultSettings } from './StopRoutesModal';

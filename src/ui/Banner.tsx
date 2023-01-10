@@ -5,7 +5,7 @@ import Logo from './logo/Logo';
 import BurgerMenu from './BurgerMenu';
 import UserMenu from './UserMenu';
 import Icon from './Icon';
-import { getLoginUri } from '../util/getLoginUri';
+import { getLoginUri } from '../util/getResources';
 
 const Banner = () => {
   const config = useContext(ConfigContext);

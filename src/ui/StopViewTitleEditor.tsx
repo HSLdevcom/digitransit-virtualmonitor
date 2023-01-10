@@ -4,7 +4,7 @@ import { ICardInfo } from '../util/Interfaces';
 import Icon from './Icon';
 import { useTranslation } from 'react-i18next';
 import { focusToInput, onClick } from '../util/InputUtils';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext } from '../contexts';
 import InputWithEditIcon from './InputWithEditIcon';

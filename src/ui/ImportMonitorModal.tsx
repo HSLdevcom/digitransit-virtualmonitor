@@ -9,10 +9,7 @@ import UserMonitorCard from './UserMonitorCard';
 import { v5 as uuidv5, validate } from 'uuid';
 import { namespace } from '../util/monitorUtils';
 import Loading from './Loading';
-import {
-  getConfig,
-  getDomainIdentifierForTheme,
-} from '../util/getConfig';
+import { getConfig, getDomainIdentifierForTheme } from '../util/getConfig';
 import { IMonitor } from '../util/Interfaces';
 
 interface IProps {
@@ -85,7 +82,9 @@ const ImportMonitorModal: FC<IProps> = ({
 
   const urlBelongsToInstance = () => {
     const currentTheme = getConfig().name;
-    const themeMatchingGivenUrl = Object.keys(getDomainIdentifierForTheme).find(theme => url.indexOf(getDomainIdentifierForTheme[theme]) >= 0);
+    const themeMatchingGivenUrl = Object.keys(getDomainIdentifierForTheme).find(
+      theme => url.indexOf(getDomainIdentifierForTheme[theme]) >= 0,
+    );
     if (themeMatchingGivenUrl && themeMatchingGivenUrl !== currentTheme) {
       setIncorrectInstance(true);
       return false;

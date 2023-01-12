@@ -9,7 +9,11 @@ import UserMonitorCard from './UserMonitorCard';
 import { v5 as uuidv5, validate } from 'uuid';
 import { namespace } from '../util/monitorUtils';
 import Loading from './Loading';
-import { getConfig } from '../util/getConfig';
+import {
+  getConfig,
+  getDomainIdentifierForTheme,
+} from '../util/getConfig';
+import { IMonitor } from '../util/Interfaces';
 
 interface IProps {
   onRequestClose: () => void;
@@ -38,7 +42,7 @@ const ImportMonitorModal: FC<IProps> = ({
   const importStaticMonitor = url => {
     monitorAPI
       .getStatic(url)
-      .then((r: any) => {
+      .then((r: IMonitor) => {
         if (r.contenthash) {
           if (!r.instance || r.instance === getConfig().name) {
             setMonitor({
@@ -62,7 +66,7 @@ const ImportMonitorModal: FC<IProps> = ({
     const contenthash = hash.replaceAll(' ', '+');
     monitorAPI
       .get(contenthash)
-      .then((r: any) => {
+      .then((r: IMonitor) => {
         if (r?.contenthash) {
           if (!r.instance || r.instance === getConfig().name) {
             setMonitor({
@@ -79,23 +83,36 @@ const ImportMonitorModal: FC<IProps> = ({
       .catch(() => setImportFailed(true));
   };
 
+  const urlBelongsToInstance = () => {
+    const currentTheme = getConfig().name;
+    const themeMatchingGivenUrl = Object.keys(getDomainIdentifierForTheme).find(theme => url.indexOf(getDomainIdentifierForTheme[theme]) >= 0);
+    if (themeMatchingGivenUrl && themeMatchingGivenUrl !== currentTheme) {
+      setIncorrectInstance(true);
+      return false;
+    }
+    return true;
+  };
+
   const importMonitor = () => {
     setImportFailed(false);
     setIncorrectInstance(false);
 
     const search = url.indexOf('?') !== -1 ? url.split('?')[1] : url;
     const searchParams = new URLSearchParams(search);
-    if (searchParams.has('url')) {
-      importStaticMonitor(searchParams.get('url'));
-    } else if (searchParams.has('cont')) {
-      importHashMonitor(searchParams.get('cont'));
-    } else {
-      if (validate(url)) {
-        importStaticMonitor(url);
-      } else if (url.length === 24) {
-        importHashMonitor(url);
+
+    if (urlBelongsToInstance()) {
+      if (searchParams.has('url')) {
+        importStaticMonitor(searchParams.get('url'));
+      } else if (searchParams.has('cont')) {
+        importHashMonitor(searchParams.get('cont'));
       } else {
-        setImportFailed(true);
+        if (validate(url)) {
+          importStaticMonitor(url);
+        } else if (url.length === 24) {
+          importHashMonitor(url);
+        } else {
+          setImportFailed(true);
+        }
       }
     }
   };

@@ -46,7 +46,10 @@ export default {
     suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: true,
+    login: {
+      inUse: true,
+      favourites: true,
+    },
     useTilde: true,
   },
   jyvaskyla: {
@@ -71,7 +74,10 @@ export default {
     uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
+    login: {
+      inUse: true,
+      favourites: false,
+    },
     useTilde: true,
   },
   matka: {
@@ -108,13 +114,19 @@ export default {
     uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
+    login: {
+      inUse: true,
+      favourites: false,
+    },
     useTilde: false,
   },
   vaasa: {
     uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
-    allowLogin: false,
+    login: {
+      inUse: true,
+      favourites: false,
+    },
     feedIds: ['vaasa'],
     colors: {
       primary: '#000a8c',

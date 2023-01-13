@@ -2,7 +2,11 @@ import cx from 'classnames';
 import React, { FC } from 'react';
 import { ICardInfo } from '../util/Interfaces';
 import { useTranslation } from 'react-i18next';
-import { getLayout } from '../util/getLayout';
+import { focusToInput, onClick } from '../util/InputUtils';
+import { getLayout } from '../util/getResources';
+import { isKeyboardSelectionEvent } from '../util/browser';
+import { ConfigContext } from '../contexts';
+
 import InputWithEditIcon from './InputWithEditIcon';
 
 interface IProps {

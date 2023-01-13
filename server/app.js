@@ -18,7 +18,7 @@ import {
   updateStaticMonitor,
   deleteMonitor,
   createMonitor,
-} from './hslID.js';
+} from './openID.js';
 
 const FavouriteHost =  process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
 
@@ -141,7 +141,7 @@ app.put('/api/staticmonitor', userAuthenticated, (req, res, next) => {
   monitorService.createStatic(req, res, next);
 });
 
-app.get('/api/usermonitors', userAuthenticated, (req, res, next) => {
+app.get('/api/usermonitors/:instanceName', userAuthenticated, (req, res, next) => {
   getMonitors(req, res, next);
 });
 

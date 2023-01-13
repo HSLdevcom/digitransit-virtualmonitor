@@ -33,3 +33,11 @@ export const getConfig = () => {
   }
   return mergeWith(defaultConfig, config[theme], merger);
 };
+
+export const getDomainIdentifierForTheme = {
+  hsl: 'hsl',
+  matka: 'matka',
+  tampere: 'tre',
+  jyvaskyla: 'jyvaskyla',
+  vaasa: 'vaasa',
+};

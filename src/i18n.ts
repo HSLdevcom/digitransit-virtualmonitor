@@ -103,6 +103,8 @@ i18n.use(initReactI18next).init({
         logout: 'Log out',
         menuClose: 'Close the main menu',
         menuOpen: 'Open the main menu',
+        userMenuClose: 'Close the user menu',
+        userMenuOpen: 'Open the user menu',
         modify: 'Edit',
         moveStopToLeftCol: 'Move stop {{stop}} to the left column',
         moveStopToRightCol: 'Move stop {{stop}} to the right column',
@@ -112,6 +114,8 @@ i18n.use(initReactI18next).init({
           'You cannot add more than one view to the service update view',
         'no-departures': 'No known departures',
         'no-monitor-found': 'No display was found matching the URL given.',
+        'incorrect-instance':
+          'The display matching the given URL does not belong to this service area.',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
@@ -254,6 +258,8 @@ i18n.use(initReactI18next).init({
         logout: 'Kirjaudu ulos',
         menuClose: 'Sulje päävalikko',
         menuOpen: 'Avaa päävalikko',
+        userMenuClose: 'Sulje käyttäjävalikko',
+        userMenuOpen: 'Avaa käyttäjävalikko',
         modify: 'Muokkaa',
         moveStopToLeftCol: 'Siirrä pysäkki {{stop}} vasempaan palstaan',
         moveStopToRightCol: 'Siirrä pysäkki {{stop}} oikeaan palstaan',
@@ -264,6 +270,8 @@ i18n.use(initReactI18next).init({
         'no-departures': 'Ei tiedossa olevia lähtöjä',
         'no-monitor-found':
           'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
+        'incorrect-instance':
+          'Antamasi URL-osoite ei viittaa tämän palvelualueen pysäkkinäyttöön.',
         'no-stops-selected': 'Ei valittuja pysäkkejä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
@@ -405,6 +413,8 @@ i18n.use(initReactI18next).init({
         logout: 'Logga ut',
         menuClose: 'Stäng huvudmenyn',
         menuOpen: 'Öppna huvudmenyn',
+        userMenuClose: 'Stäng användarmenyn',
+        userMenuOpen: 'Öppna användarmenyn',
         modify: 'Redigera',
         moveStopToLeftCol: 'Flytta hållplats {{stop}} till vänstra kolumnen',
         moveStopToRightCol: 'Flytta hållplats {{stop}} till högra kolumnen',
@@ -414,6 +424,8 @@ i18n.use(initReactI18next).init({
           'Du kan inte lägga till flera vyer i meddelandeskärmen',
         'no-departures': 'Inga kända avgångar',
         'no-monitor-found':
+          'Inga hållplatsskärmar hittades med den URL-adress du angav.',
+        'incorrect-instance':
           'Inga hållplatsskärmar hittades med den URL-adress du angav.',
         'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',

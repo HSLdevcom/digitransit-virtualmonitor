@@ -1,3 +1,5 @@
+import { getConfig } from './util/getConfig';
+
 const baseAPI = '/api';
 
 const fetchData = (path, options, signal = undefined) => {
@@ -41,7 +43,8 @@ const monitorAPI = {
     return fetchData(`staticmonitor/${monitor}`, {}, signal);
   },
   getAllMonitorsForUser(signal) {
-    return fetchData(`usermonitors`, {}, signal);
+    const instanceName = getConfig().name;
+    return fetchData(`usermonitors/${instanceName}`, {}, signal);
   },
   getMonitorsForUser(urls) {
     return fetchData(`usermonitors/${urls}`, {});

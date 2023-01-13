@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import monitorAPI from '../api';
 import { Link, Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import { defaultStopCard } from '../util/stopCardUtil';
 import Loading from './Loading';
 import { defaultSettings } from './StopRoutesModal';
@@ -18,6 +18,7 @@ import { namespace, uuidValidateV5 } from '../util/monitorUtils';
 import PrepareMonitor from './PrepareMonitor';
 import { UserContext } from '../contexts';
 import { getParams } from '../util/queryUtils';
+import { getConfig } from '../util/getConfig';
 
 interface IProps {
   stopCards: any;
@@ -281,6 +282,7 @@ const StopCardListContainer: FC<IProps> = ({
           ...newCard,
           name: viewTitle,
           url: newUuid,
+          instance: getConfig().name,
         };
         monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
           if (res.status === 200 || res.status === 409) {
@@ -303,6 +305,7 @@ const StopCardListContainer: FC<IProps> = ({
           name: viewTitle,
           id: props.staticMonitor.id,
           url: getParams(window.location.search).url,
+          instance: getConfig().name,
         };
         monitorAPI.updateStatic(newStaticMonitor).then(res => {
           setView(newCard);

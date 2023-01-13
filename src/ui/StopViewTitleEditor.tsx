@@ -6,7 +6,6 @@ import { focusToInput, onClick } from '../util/InputUtils';
 import { getLayout } from '../util/getResources';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext } from '../contexts';
-import { getLayout } from '../util/getLayout';
 
 import InputWithEditIcon from './InputWithEditIcon';
 

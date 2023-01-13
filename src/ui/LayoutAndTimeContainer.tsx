@@ -68,7 +68,6 @@ const LayoutAndTimeContainer: FC<IProps> = ({
         <button
           className="layout-button"
           name="layout"
-          role="button"
           aria-label={t('layout')}
         >
           {layoutButton}
@@ -77,7 +76,6 @@ const LayoutAndTimeContainer: FC<IProps> = ({
       <div className="duration">
         <Dropdown
           name="duration"
-          isSearchable={false}
           options={durations}
           placeholder={!durationEditable ? '-' : placeHolder}
           handleChange={handleChange}

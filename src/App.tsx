@@ -24,6 +24,7 @@ import { ConfigContext, UserContext, FavouritesContext } from './contexts';
 import Loading from './ui/Loading';
 import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
+import { useTranslation } from 'react-i18next';
 
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
@@ -106,6 +107,7 @@ interface Favourite {
 }
 
 const App: FC<IConfigurationProps> = props => {
+  const [t] = useTranslation();
   const [user, setUser] = useState<User>({});
   const [favourites, setFavourites] = useState<Array<Favourite>>([]);
   const [loading, setLoading] = useState(true);
@@ -122,6 +124,12 @@ const App: FC<IConfigurationProps> = props => {
     '--primary-color': config.colors.primary,
   };
   useEffect(() => {
+    if (config.fonts.fontCounter) {
+      fetch(config.fonts.fontCounter, {
+        mode: 'no-cors',
+      });
+    }
+
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }
@@ -183,7 +191,9 @@ const App: FC<IConfigurationProps> = props => {
   return (
     <div className="App">
       <Helmet>
-        <title>{config.name} - pysäkkinäyttö</title>
+        <title>
+          {config.name} - {t('stop-display')}
+        </title>
         {faviconLink}
         {fonts}
       </Helmet>
@@ -229,8 +239,11 @@ const App: FC<IConfigurationProps> = props => {
                 path={'/monitors'}
                 component={() => (
                   <>
+                    <SkipToMainContent />
                     <BannerContainer />
-                    <UserMonitors />
+                    <section role="main" id="mainContent">
+                      <UserMonitors />
+                    </section>
                   </>
                 )}
               />

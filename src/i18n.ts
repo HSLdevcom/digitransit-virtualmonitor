@@ -45,6 +45,7 @@ i18n.use(initReactI18next).init({
         delete: 'Delete',
         'delete-confirmation': 'Are you sure you want to delete this monitor',
         deleteRenamings: 'Clear text changes',
+        'delete-display': 'Remove stop display {{id}}',
         deleteStop: 'Remove stop {{stop}}',
         deleteView: 'Remove stop display {{id}}',
         departureTime: 'Time/min',
@@ -200,6 +201,7 @@ i18n.use(initReactI18next).init({
         'delete-confirmation':
           'Oletko varma, että haluat poistaa näytön "{{monitor}}"?',
         deleteRenamings: 'Tyhjennä tekstimuutokset',
+        'delete-display': 'Poista pysäkkinäyttö {{id}}',
         deleteStop: 'Poista pysäkki {{stop}}',
         deleteView: 'Poista pysäkkinäkymä {{id}}',
         departureTime: 'Aika/min',
@@ -354,6 +356,7 @@ i18n.use(initReactI18next).init({
         'delete-confirmation':
           'Är du säker på att du vill ta bort skärmen "{{monitor}}"?',
         deleteRenamings: 'Rensa alla textändringar',
+        'delete-display': 'Ta bort hållplatsskärm {{id}}',
         deleteStop: 'Ta bort hållplats {{stop}}',
         deleteView: 'Ta bort hållplatsvy {{id}}',
         departureTime: 'Tid/min',

@@ -160,7 +160,7 @@ const createDataStorage = async (apiClient) => {
     },
   };
   try {
-    const response = await makeOpenIdRequest(options, user);
+    const response = await makeOpenIdRequest(options, apiClient);
     return response.data.id;
   } catch (e) {
     throw e;

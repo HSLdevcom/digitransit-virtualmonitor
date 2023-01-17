@@ -30,7 +30,7 @@
     "i18next": "^19.9.2",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
-    "luxon": "^1.27.0",
+    "luxon": "^1.28.1",
     "object-hash": "^2.2.0",
     "patch-package": "^6.5.0",
     "prettier": "^2.3.0",

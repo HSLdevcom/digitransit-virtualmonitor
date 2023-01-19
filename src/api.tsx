@@ -2,6 +2,13 @@ import { getConfig } from './util/getConfig';
 
 const baseAPI = '/api';
 
+function statusCheckedResult(result) {
+  if (result.status === 401) {
+    return [];
+  }
+  return result.json();
+}
+
 const fetchData = (path, options, signal = undefined) => {
   return new Promise((resolve, reject) => {
     const jsonResponse = !options.method || options.method === 'POST';
@@ -12,7 +19,7 @@ const fetchData = (path, options, signal = undefined) => {
       ...options,
       signal: signal ?? undefined,
     })
-      .then(result => (jsonResponse ? result.json() : result))
+      .then(result => (jsonResponse ? statusCheckedResult(result) : result))
       .then(json => resolve(json))
       .catch(e => {
         reject(e);

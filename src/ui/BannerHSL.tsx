@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import SiteHeader from '@hsl-fi/site-header';
 import { UserContext, ConfigContext, FavouritesContext } from '../contexts';
+import { logout } from '../util/logoutUtil';
 
 const notificationAPI = '/api/user/notifications';
 
@@ -11,6 +12,7 @@ const BannerHSL = () => {
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
   const [banners, setBanners] = useState([]);
+  const [userState, setUser] = useState(user);
   const notificationApiUrls = {
     get: `${notificationAPI}?language=${i18n.language}`,
     post: `${notificationAPI}?language=${i18n.language}`,
@@ -83,7 +85,7 @@ const BannerHSL = () => {
               {
                 name: t('logout'),
                 url: '/logout',
-                //onClick: () => clearStorages(context),
+                onClick: () => logout(setUser),
               },
             ],
           },

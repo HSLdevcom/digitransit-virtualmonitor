@@ -1,8 +1,9 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from './Icon';
 import Modal from 'react-modal';
 import { ConfigContext, UserContext } from '../contexts';
+import { logout } from '../util/logoutUtil';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
@@ -15,6 +16,7 @@ const UserMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
   const [t, i18n] = useTranslation();
   const config = useContext(ConfigContext);
   const user = useContext(UserContext);
+  const [userState, setUser] = useState(user);
 
   const modalStyle = {
     overlay: {
@@ -60,7 +62,13 @@ const UserMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
         </section>
         {user.sub && (
           <section id="links" style={{ display: 'flex' }}>
-            <a href={'/logout'} aria-label={t('logout')}>
+            <a
+              href={'/logout'}
+              onClick={() => {
+                logout(setUser);
+              }}
+              aria-label={t('logout')}
+            >
               <div className="link">{t('logout')}</div>
             </a>
           </section>

@@ -25,7 +25,7 @@ import Loading from './ui/Loading';
 import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
 import { useTranslation } from 'react-i18next';
-
+import { listenForLogoutAllTabs } from './util/logoutUtil';
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
     externalFonts?: Array<string>;
@@ -124,6 +124,8 @@ const App: FC<IConfigurationProps> = props => {
     '--primary-color': config.colors.primary,
   };
   useEffect(() => {
+    listenForLogoutAllTabs(setUser);
+
     if (config.fonts.fontCounter) {
       fetch(config.fonts.fontCounter, {
         mode: 'no-cors',

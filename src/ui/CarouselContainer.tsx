@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useContext } from 'react';
+import React, { FC, useState, useEffect, useContext, useRef } from 'react';
 import { ConfigContext, MonitorContext } from '../contexts';
 import { IClosedStop, ITrainData } from '../util/Interfaces';
 import Monitor from './Monitor';
@@ -78,6 +78,13 @@ const CarouselContainer: FC<IProps> = ({
   const [demoOrientation, setDemoOrientation] = useState(
     orientations.indexOf(config.alertOrientation),
   );
+  const environment = process.env.NODE_ENV;
+  const [alertOrientation, setAlertOrientation] = useState(
+    environment && environment === 'production'
+      ? config.alertOrientation
+      : orientations[demoOrientation],
+  );
+
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
@@ -92,6 +99,12 @@ const CarouselContainer: FC<IProps> = ({
     }, time);
     return () => clearTimeout(id);
   }, [current]);
+
+  useEffect(() => {
+    if (config.alertOrientation === 'static') {
+      setAlertOrientation('static');
+    }
+  }, [alerts]);
 
   const index = Math.floor(current / 2) % views.length;
 
@@ -130,11 +143,12 @@ const CarouselContainer: FC<IProps> = ({
       break;
   }
 
-  const environment = process.env.NODE_ENV;
-  const alertOrientation =
-    environment && environment === 'production'
-      ? config.alertOrientation
-      : orientations[demoOrientation];
+  const alertRowReference = useRef();
+  useIsOverflow(alertRowReference, isOverflowFromCallback => {
+    if (isOverflowFromCallback) {
+      setAlertOrientation('vertical');
+    }
+  });
 
   if (alerts.length > 0) {
     alertComponent = (
@@ -158,6 +172,7 @@ const CarouselContainer: FC<IProps> = ({
             alerts={alerts}
             languages={languages}
             preview={preview}
+            alertRowReference={alertRowReference}
           />
         ) : (
           <MonitorAlertRow
@@ -186,6 +201,15 @@ const CarouselContainer: FC<IProps> = ({
       closedStopViews={closedStopViews}
     />
   );
+};
+
+export const useIsOverflow = (ref, callback) => {
+  useEffect(() => {
+    const { current } = ref;
+    if (current) {
+      callback(current.scrollHeight > current.clientHeight);
+    }
+  }, [callback, ref]);
 };
 
 export default CarouselContainer;

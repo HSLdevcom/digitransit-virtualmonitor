@@ -28,6 +28,7 @@ const ImportMonitorModal: FC<IProps> = ({
   const [addingMonitor, setAddingMonitor] = useState(false);
   const [importFailed, setImportFailed] = useState(false);
   const [incorrectInstance, setIncorrectInstance] = useState(false);
+  const [saveFailed, setSaveFailed] = useState(false);
 
   const setTitle = (title: string) => {
     setMonitor({
@@ -117,6 +118,7 @@ const ImportMonitorModal: FC<IProps> = ({
   };
 
   const addMonitor = () => {
+    setSaveFailed(false);
     const newUuid = uuidv5(
       DateTime.now().toSeconds() + monitor.contenthash,
       namespace,
@@ -131,6 +133,9 @@ const ImportMonitorModal: FC<IProps> = ({
       if (res.status === 200 || res.status === 409) {
         refetchMonitors();
         onRequestClose();
+        setAddingMonitor(false);
+      } else {
+        setSaveFailed(true);
         setAddingMonitor(false);
       }
     });
@@ -176,6 +181,9 @@ const ImportMonitorModal: FC<IProps> = ({
               setTitle={setTitle}
             />
           </div>
+        )}
+        {saveFailed && (
+          <div className="no-monitor-found">{t('save-failed')}</div>
         )}
         <div className="import-button-container">
           <button

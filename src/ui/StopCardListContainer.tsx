@@ -50,6 +50,7 @@ const StopCardListContainer: FC<IProps> = ({
   const [viewTitle, setViewTitle] = useState(
     props.staticMonitor ? props.staticMonitor.name : null,
   );
+  const [saveFailed, setSaveFailed] = useState(false);
 
   const openPreview = () => {
     setOpen(true);
@@ -231,6 +232,7 @@ const StopCardListContainer: FC<IProps> = ({
   };
 
   const createOrSaveMonitor = isNew => {
+    setSaveFailed(false);
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
     cardArray.forEach(card => {
@@ -288,6 +290,8 @@ const StopCardListContainer: FC<IProps> = ({
           if (res.status === 200 || res.status === 409) {
             setView(newStaticMonitor);
             setRedirect(true);
+          } else {
+            setSaveFailed(true);
           }
         });
       } else {
@@ -307,10 +311,13 @@ const StopCardListContainer: FC<IProps> = ({
           url: getParams(window.location.search).url,
           instance: getConfig().name,
         };
-        monitorAPI.updateStatic(newStaticMonitor).then(res => {
-          setView(newCard);
-          setRedirect(true);
-        });
+        monitorAPI
+          .updateStatic(newStaticMonitor)
+          .then(res => {
+            setView(newCard);
+            setRedirect(true);
+          })
+          .catch(() => setSaveFailed(true));
       } else {
         monitorAPI.create(newCard).then(res => {
           setView(newCard);
@@ -449,6 +456,7 @@ const StopCardListContainer: FC<IProps> = ({
           );
         })}
       </ul>
+      {saveFailed && <div className="alert-text">{t('save-failed')}</div>}
       <div className="buttons">
         <div className="wide">
           <button

@@ -116,6 +116,7 @@ i18n.use(initReactI18next).init({
         'no-monitor-found': 'No display was found matching the URL given.',
         'incorrect-instance':
           'The URL address you entered does not refer to a stop display in this service area.',
+        'save-failed': 'Save failed',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
@@ -272,6 +273,7 @@ i18n.use(initReactI18next).init({
           'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
         'incorrect-instance':
           'Antamasi URL-osoite ei viittaa tämän palvelualueen pysäkkinäyttöön.',
+        'save-failed': 'Tallennus epäonnistui',
         'no-stops-selected': 'Ei valittuja pysäkkejä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
@@ -427,6 +429,7 @@ i18n.use(initReactI18next).init({
           'Inga hållplatsskärmar hittades med den URL-adress du angav.',
         'incorrect-instance':
           'URL-adressen du angav pekar inte på en hållplatsskärm i detta serviceområde.',
+        'save-failed': 'Spara misslyckades',
         'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',

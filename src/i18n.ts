@@ -115,7 +115,7 @@ i18n.use(initReactI18next).init({
         'no-departures': 'No known departures',
         'no-monitor-found': 'No display was found matching the URL given.',
         'incorrect-instance':
-          'The display matching the given URL does not belong to this service area.',
+          'The URL address you entered does not refer to a stop display in this service area.',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
@@ -426,7 +426,7 @@ i18n.use(initReactI18next).init({
         'no-monitor-found':
           'Inga hållplatsskärmar hittades med den URL-adress du angav.',
         'incorrect-instance':
-          'Inga hållplatsskärmar hittades med den URL-adress du angav.',
+          'URL-adressen du angav pekar inte på en hållplatsskärm i detta serviceområde.',
         'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',

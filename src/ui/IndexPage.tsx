@@ -22,11 +22,13 @@ const IndexPage: FC<IProps> = ({ buttons, renderLogInMessage = false }) => {
             <div className="text">{t('frontPageParagraph2')}</div>
             <div className="text">{t('frontPageParagraph3')}</div>
             <>
-              {config.frontPageContent && renderLogInMessage && (
-                <span className="text bold">
-                  {t('front-page-paragraph-hsl')}
-                </span>
-              )}
+              {config.login.inUse &&
+                config.frontPageContent &&
+                renderLogInMessage && (
+                  <span className="text bold">
+                    {t(config.frontPageContent)}
+                  </span>
+                )}
             </>
             <div className="button-container" tabIndex={-1}>
               {buttons}

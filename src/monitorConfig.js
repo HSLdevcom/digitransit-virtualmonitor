@@ -53,6 +53,7 @@ export default {
     useTilde: true,
   },
   jyvaskyla: {
+    frontPageContent: 'front-page-paragraph-waltti',
     fonts: {
       externalFonts: [
         'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
@@ -85,6 +86,7 @@ export default {
     uri: 'routing/v1/routers/finland/index/graphql',
   },
   tampere: {
+    frontPageContent: 'front-page-paragraph-waltti',
     colors: {
       primary: '#1c57cf',
       monitorBackground: '#1c57cf',
@@ -121,6 +123,7 @@ export default {
     useTilde: false,
   },
   vaasa: {
+    frontPageContent: 'front-page-paragraph-waltti',
     uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
     login: {

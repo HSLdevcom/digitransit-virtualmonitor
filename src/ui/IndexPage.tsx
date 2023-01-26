@@ -23,10 +23,10 @@ const IndexPage: FC<IProps> = ({ buttons, renderLogInMessage = false }) => {
             <div className="text">{t('frontPageParagraph3')}</div>
             <>
               {config.login.inUse &&
-                config.frontPageContent &&
+                config.login.frontPageContent &&
                 renderLogInMessage && (
                   <span className="text bold">
-                    {t(config.frontPageContent)}
+                    {t(config.login.frontPageContent)}
                   </span>
                 )}
             </>

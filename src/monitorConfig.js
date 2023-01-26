@@ -1,6 +1,5 @@
 export default {
   hsl: {
-    frontPageContent: 'front-page-paragraph-hsl',
     fonts: {
       fontCounter: 'https://cloud.typography.com/6364294/7432412/css/fonts.css',
       externalFonts: ['https://www.hsl.fi/fonts/784131/6C5FB8083F348CFBB.css'],
@@ -48,12 +47,12 @@ export default {
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
       inUse: true,
+      frontPageContent: 'front-page-paragraph-hsl',
       favourites: true,
     },
     useTilde: true,
   },
   jyvaskyla: {
-    frontPageContent: 'front-page-paragraph-waltti',
     fonts: {
       externalFonts: [
         'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
@@ -77,6 +76,7 @@ export default {
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
       inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
     useTilde: true,
@@ -86,7 +86,6 @@ export default {
     uri: 'routing/v1/routers/finland/index/graphql',
   },
   tampere: {
-    frontPageContent: 'front-page-paragraph-waltti',
     colors: {
       primary: '#1c57cf',
       monitorBackground: '#1c57cf',
@@ -118,16 +117,17 @@ export default {
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
       inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
     useTilde: false,
   },
   vaasa: {
-    frontPageContent: 'front-page-paragraph-waltti',
     uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
     login: {
       inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
     feedIds: ['vaasa'],

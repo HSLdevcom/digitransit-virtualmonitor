@@ -66,6 +66,8 @@ i18n.use(initReactI18next).init({
           'Displaying public transport timetables in prominent places encourages the use of public transport and makes it easier. In addition to timetables, the service provides you with service updates and disruption alerts.',
         'front-page-paragraph-hsl':
           'When you log in using your HSL account before creating a display, you can later edit the display.',
+        'front-page-paragraph-waltti':
+          'When you log in using your Waltti account before creating a display, you can later edit the display.',
         'header-side-left': 'Left column',
         'header-side-right': 'Right column',
         hideAllLines: 'Hide all routes',
@@ -222,6 +224,8 @@ i18n.use(initReactI18next).init({
           'Joukkoliikenteen aikataulut näkyvällä paikalla helpottavat joukkoliikenteen käyttöä ja kannustavat käyttämään joukkoliikennettä. Aikataulujen lisäksi palvelun kautta saat myös ajankohtaiset liikenne- ja häiriötiedotteet.',
         'front-page-paragraph-hsl':
           'Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.',
+        'front-page-paragraph-waltti':
+          'Luo näyttö Waltti-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.',
         'header-side-left': 'Vasen palsta',
         'header-side-right': 'Oikea palsta',
         hideAllLines: 'Piilota kaikki linjat',
@@ -377,6 +381,8 @@ i18n.use(initReactI18next).init({
           'Kollektivtrafikens tidtabeller på synliga platser gör det lättare att resa kollektivt och uppmuntrar att använda kollektivtrafiktjänster. Genom tjänsten får du även aktuella trafikmeddelanden och information om trafikstörningar.',
         'front-page-paragraph-hsl':
           'Skapa en skärmvy genom att logga in med HRT-konto så du kan senare redigera hålplatsskärmvy du skapat.',
+        'front-page-paragraph-waltti':
+          'Skapa en skärmvy genom att logga in med Waltti-konto så du kan senare redigera hålplatsskärmvy du skapat.',
         'header-side-left': 'Vänstra kolumnen',
         'header-side-right': 'Högra kolumnen',
         hideAllLines: 'Dölj alla linjer',

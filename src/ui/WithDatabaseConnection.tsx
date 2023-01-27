@@ -45,7 +45,7 @@ const WithDatabaseConnection: FC<IProps> = ({
 }) => {
   const [view, setView] = useState({});
   const [loading, setLoading] = useState(true);
-  const [queryError, setqueryError] = useState(false);
+  const [queryError, setQueryError] = useState(false);
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
       const { url, cont: hash } = getParams(location.search);
@@ -79,7 +79,7 @@ const WithDatabaseConnection: FC<IProps> = ({
   if (queryError) {
     return (
       <MonitorContext.Provider value={monitor}>
-        <QueryError setQueryError={setqueryError} />
+        <QueryError setQueryError={setQueryError} />
       </MonitorContext.Provider>
     );
   }
@@ -94,7 +94,7 @@ const WithDatabaseConnection: FC<IProps> = ({
           ) : (
             <CarouselDataContainer
               initTime={new Date().getTime()}
-              setQueryError={setqueryError}
+              setQueryError={setQueryError}
               queryError={queryError}
             />
           )}

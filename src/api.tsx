@@ -22,7 +22,6 @@ const fetchData = (path, options, signal = undefined) => {
 
 const monitorAPI = {
   getPing(signal = undefined) {
-    console.log('PING')
     const options = {
       method: 'GET',
     };

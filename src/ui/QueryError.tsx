@@ -43,11 +43,12 @@ const QueryError: FC<IProps> = ({ setQueryError, preview }) => {
     return () => clearTimeout(to);
   }, [currentLang]);
   let to;
+  const isPortrait = view.layout > 11;
   return (
     <div
       className={cx('main-content-container', {
         preview: preview,
-        portrait: view.layout > 11,
+        portrait: isPortrait,
       })}
       onMouseMove={() => {
         setShowOverlay(true);
@@ -57,7 +58,7 @@ const QueryError: FC<IProps> = ({ setQueryError, preview }) => {
     >
       {view && (
         <MonitorTitlebar
-          isLandscape
+          isLandscape={!isPortrait}
           preview={preview}
           view={view}
           currentLang={languages[currentLang]}

@@ -13,6 +13,7 @@ import {
   stoptimeSpecificDepartureId,
 } from '../util/monitorUtils';
 import MonitorAlertRowStatic from './MonitorAlertRowStatic';
+import { getCurrentSeconds } from '../time';
 
 interface IProps {
   stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card
@@ -32,6 +33,9 @@ const sortAndFilter = (departures, trainsWithTrack) => {
         stopTimeAbsoluteDepartureTime(stopTimeB),
     ),
     departure => stoptimeSpecificDepartureId(departure),
+  ).filter(
+    departure =>
+      departure.serviceDay + departure.realtimeDeparture >= getCurrentSeconds(),
   );
   const sortedAndFilteredWithTrack = trainsWithTrack ? [] : sortedAndFiltered;
   if (sortedAndFiltered.length > 0 && trainsWithTrack) {

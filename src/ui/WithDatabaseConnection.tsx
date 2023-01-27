@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import monitorAPI from '../api';
 import { ISides, ITitle, ICard } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
@@ -8,6 +8,7 @@ import NoMonitorsFound from './NoMonitorsFound';
 import TrainDataPreparer from './TrainDataPreparer';
 import { getParams } from '../util/queryUtils';
 import { MonitorContext } from '../contexts';
+import QueryError from './QueryError';
 
 interface Iv {
   columns: ISides;
@@ -44,6 +45,7 @@ const WithDatabaseConnection: FC<IProps> = ({
 }) => {
   const [view, setView] = useState({});
   const [loading, setLoading] = useState(true);
+  const [queryError, setqueryError] = useState(false);
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
       const { url, cont: hash } = getParams(location.search);
@@ -74,7 +76,13 @@ const WithDatabaseConnection: FC<IProps> = ({
     }
     return <Loading />;
   }
-
+  if (queryError) {
+    return (
+      <MonitorContext.Provider value={monitor}>
+        <QueryError setQueryError={setqueryError} />
+      </MonitorContext.Provider>
+    );
+  }
   return (
     <MonitorContext.Provider value={monitor}>
       {monitor.cards[0].layout > 17 ? (
@@ -84,7 +92,11 @@ const WithDatabaseConnection: FC<IProps> = ({
           {(stations.length || stops.length) && showPlatformsOrTracks ? (
             <TrainDataPreparer stations={stations} stops={stops} />
           ) : (
-            <CarouselDataContainer initTime={new Date().getTime()} />
+            <CarouselDataContainer
+              initTime={new Date().getTime()}
+              setQueryError={setqueryError}
+              queryError={queryError}
+            />
           )}
         </>
       )}

@@ -72,6 +72,9 @@ export interface IMonitor {
   cards: Array<IView>;
   languages: Array<string>;
   contenthash?: string;
+  name?: string;
+  url?: string;
+  instance?: string;
 }
 
 export interface IAlertDescriptionTextTranslation {

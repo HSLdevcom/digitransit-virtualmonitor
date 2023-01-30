@@ -45,6 +45,7 @@ i18n.use(initReactI18next).init({
         delete: 'Delete',
         'delete-confirmation': 'Are you sure you want to delete this monitor',
         deleteRenamings: 'Clear text changes',
+        'delete-display': 'Remove stop display {{id}}',
         deleteStop: 'Remove stop {{stop}}',
         deleteView: 'Remove stop display {{id}}',
         departureTime: 'Time/min',
@@ -65,6 +66,8 @@ i18n.use(initReactI18next).init({
           'Displaying public transport timetables in prominent places encourages the use of public transport and makes it easier. In addition to timetables, the service provides you with service updates and disruption alerts.',
         'front-page-paragraph-hsl':
           'When you log in using your HSL account before creating a display, you can later edit the display.',
+        'front-page-paragraph-waltti':
+          'When you log in using your Waltti account before creating a display, you can later edit the display.',
         'header-side-left': 'Left column',
         'header-side-right': 'Right column',
         hideAllLines: 'Hide all routes',
@@ -102,6 +105,8 @@ i18n.use(initReactI18next).init({
         logout: 'Log out',
         menuClose: 'Close the main menu',
         menuOpen: 'Open the main menu',
+        userMenuClose: 'Close the user menu',
+        userMenuOpen: 'Open the user menu',
         modify: 'Edit',
         moveStopToLeftCol: 'Move stop {{stop}} to the left column',
         moveStopToRightCol: 'Move stop {{stop}} to the right column',
@@ -111,6 +116,8 @@ i18n.use(initReactI18next).init({
           'You cannot add more than one view to the service update view',
         'no-departures': 'No known departures',
         'no-monitor-found': 'No display was found matching the URL given.',
+        'incorrect-instance':
+          'The URL address you entered does not refer to a stop display in this service area.',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
@@ -166,6 +173,7 @@ i18n.use(initReactI18next).init({
         userinfo: 'My information',
         vertical: 'Vertical',
         viewEditorName: 'Name of the view',
+        'query-error': 'No connection!\nWe are looking into the issue.',
       },
     },
     fi: {
@@ -196,6 +204,7 @@ i18n.use(initReactI18next).init({
         'delete-confirmation':
           'Oletko varma, että haluat poistaa näytön "{{monitor}}"?',
         deleteRenamings: 'Tyhjennä tekstimuutokset',
+        'delete-display': 'Poista pysäkkinäyttö {{id}}',
         deleteStop: 'Poista pysäkki {{stop}}',
         deleteView: 'Poista pysäkkinäkymä {{id}}',
         departureTime: 'Aika/min',
@@ -216,6 +225,8 @@ i18n.use(initReactI18next).init({
           'Joukkoliikenteen aikataulut näkyvällä paikalla helpottavat joukkoliikenteen käyttöä ja kannustavat käyttämään joukkoliikennettä. Aikataulujen lisäksi palvelun kautta saat myös ajankohtaiset liikenne- ja häiriötiedotteet.',
         'front-page-paragraph-hsl':
           'Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.',
+        'front-page-paragraph-waltti':
+          'Luo näyttö Waltti-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.',
         'header-side-left': 'Vasen palsta',
         'header-side-right': 'Oikea palsta',
         hideAllLines: 'Piilota kaikki linjat',
@@ -252,6 +263,8 @@ i18n.use(initReactI18next).init({
         logout: 'Kirjaudu ulos',
         menuClose: 'Sulje päävalikko',
         menuOpen: 'Avaa päävalikko',
+        userMenuClose: 'Sulje käyttäjävalikko',
+        userMenuOpen: 'Avaa käyttäjävalikko',
         modify: 'Muokkaa',
         moveStopToLeftCol: 'Siirrä pysäkki {{stop}} vasempaan palstaan',
         moveStopToRightCol: 'Siirrä pysäkki {{stop}} oikeaan palstaan',
@@ -262,6 +275,8 @@ i18n.use(initReactI18next).init({
         'no-departures': 'Ei tiedossa olevia lähtöjä',
         'no-monitor-found':
           'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
+        'incorrect-instance':
+          'Antamasi URL-osoite ei viittaa tämän palvelualueen pysäkkinäyttöön.',
         'no-stops-selected': 'Ei valittuja pysäkkejä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
@@ -316,6 +331,7 @@ i18n.use(initReactI18next).init({
         userinfo: 'Omat tiedot',
         vertical: 'Pysty',
         viewEditorName: 'Näkymän nimi',
+        'query-error': 'Yhteys poikki!\nSelvitämme tilannetta.',
       },
     },
     sv: {
@@ -346,6 +362,7 @@ i18n.use(initReactI18next).init({
         'delete-confirmation':
           'Är du säker på att du vill ta bort skärmen "{{monitor}}"?',
         deleteRenamings: 'Rensa alla textändringar',
+        'delete-display': 'Ta bort hållplatsskärm {{id}}',
         deleteStop: 'Ta bort hållplats {{stop}}',
         deleteView: 'Ta bort hållplatsvy {{id}}',
         departureTime: 'Tid/min',
@@ -366,6 +383,8 @@ i18n.use(initReactI18next).init({
           'Kollektivtrafikens tidtabeller på synliga platser gör det lättare att resa kollektivt och uppmuntrar att använda kollektivtrafiktjänster. Genom tjänsten får du även aktuella trafikmeddelanden och information om trafikstörningar.',
         'front-page-paragraph-hsl':
           'Skapa en skärmvy genom att logga in med HRT-konto så du kan senare redigera hålplatsskärmvy du skapat.',
+        'front-page-paragraph-waltti':
+          'Skapa en skärmvy genom att logga in med Waltti-konto så du kan senare redigera hålplatsskärmvy du skapat.',
         'header-side-left': 'Vänstra kolumnen',
         'header-side-right': 'Högra kolumnen',
         hideAllLines: 'Dölj alla linjer',
@@ -402,6 +421,8 @@ i18n.use(initReactI18next).init({
         logout: 'Logga ut',
         menuClose: 'Stäng huvudmenyn',
         menuOpen: 'Öppna huvudmenyn',
+        userMenuClose: 'Stäng användarmenyn',
+        userMenuOpen: 'Öppna användarmenyn',
         modify: 'Redigera',
         moveStopToLeftCol: 'Flytta hållplats {{stop}} till vänstra kolumnen',
         moveStopToRightCol: 'Flytta hållplats {{stop}} till högra kolumnen',
@@ -412,6 +433,8 @@ i18n.use(initReactI18next).init({
         'no-departures': 'Inga kända avgångar',
         'no-monitor-found':
           'Inga hållplatsskärmar hittades med den URL-adress du angav.',
+        'incorrect-instance':
+          'URL-adressen du angav pekar inte på en hållplatsskärm i detta serviceområde.',
         'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',
@@ -466,6 +489,7 @@ i18n.use(initReactI18next).init({
         userinfo: 'Mina uppgifter',
         vertical: 'Vertikal',
         viewEditorName: 'Vyns namn',
+        'query-error': 'Ingen anslutning!\nVi utreder situationen.',
       },
     },
   },

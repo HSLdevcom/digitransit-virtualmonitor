@@ -18,6 +18,7 @@ export const departure: IDeparture = {
   route: { alerts: [], shortName: '123' },
   realtimeDeparture: 51763,
   realtimeState: 'UPDATED',
+  scheduledDeparture: 51763,
   serviceDay: 1645480800,
   stop: stop,
   trip: {

@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, useContext } from 'react';
 import cx from 'classnames';
 import { IView, IClosedStop } from '../util/Interfaces';
 import MonitorRowContainer from './MonitorRowContainer';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';

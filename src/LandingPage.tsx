@@ -5,18 +5,20 @@ import IndexPage from './ui/IndexPage';
 import { Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { getLoginUri } from './util/getResources';
 
 const LandingPage = () => {
   const [t] = useTranslation();
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
-  const logIn = user.sub && config.allowLogin;
+  const logIn = user.sub && config.login.inUse;
+  const loginURI = getLoginUri(config.name);
 
   const buttons = (
     <>
-      {config.allowLogin ? (
+      {config.login.inUse ? (
         <>
-          <a href={'login?url=/&'} aria-label={t('front-page-sign-in-button')}>
+          <a href={loginURI} aria-label={t('front-page-sign-in-button')}>
             <div className="monitor-button blue">
               {t('front-page-sign-in-button')}
             </div>

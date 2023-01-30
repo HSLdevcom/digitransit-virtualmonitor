@@ -5,11 +5,15 @@ import Monitor from './Monitor';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorAlertRow from './MonitorAlertRow';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import cx from 'classnames';
 import uniqBy from 'lodash/uniqBy';
-import { stopTimeAbsoluteDepartureTime } from '../util/monitorUtils';
+import {
+  stopTimeAbsoluteDepartureTime,
+  stoptimeSpecificDepartureId,
+} from '../util/monitorUtils';
 import MonitorAlertRowStatic from './MonitorAlertRowStatic';
+import { getCurrentSeconds } from '../time';
 
 interface IProps {
   stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card
@@ -28,7 +32,10 @@ const sortAndFilter = (departures, trainsWithTrack) => {
         stopTimeAbsoluteDepartureTime(stopTimeA) -
         stopTimeAbsoluteDepartureTime(stopTimeB),
     ),
-    departure => departure.trip.gtfsId,
+    departure => stoptimeSpecificDepartureId(departure),
+  ).filter(
+    departure =>
+      departure.serviceDay + departure.realtimeDeparture >= getCurrentSeconds(),
   );
   const sortedAndFilteredWithTrack = trainsWithTrack ? [] : sortedAndFiltered;
   if (sortedAndFiltered.length > 0 && trainsWithTrack) {

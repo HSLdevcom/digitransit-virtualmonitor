@@ -9,6 +9,8 @@ import UserMonitorCard from './UserMonitorCard';
 import { v5 as uuidv5, validate } from 'uuid';
 import { namespace } from '../util/monitorUtils';
 import Loading from './Loading';
+import { getConfig, getDomainIdentifierForTheme } from '../util/getConfig';
+import { IMonitor } from '../util/Interfaces';
 
 interface IProps {
   onRequestClose: () => void;
@@ -25,6 +27,7 @@ const ImportMonitorModal: FC<IProps> = ({
   const [monitor, setMonitor] = useState(null);
   const [addingMonitor, setAddingMonitor] = useState(false);
   const [importFailed, setImportFailed] = useState(false);
+  const [incorrectInstance, setIncorrectInstance] = useState(false);
 
   const setTitle = (title: string) => {
     setMonitor({
@@ -36,15 +39,19 @@ const ImportMonitorModal: FC<IProps> = ({
   const importStaticMonitor = url => {
     monitorAPI
       .getStatic(url)
-      .then((r: any) => {
+      .then((r: IMonitor) => {
         if (r.contenthash) {
-          setMonitor({
-            ...r,
-            name:
-              r.name === ''
-                ? `${t('stop-display')} ${monitorCount + 1}`
-                : r.name,
-          });
+          if (!r.instance || r.instance === getConfig().name) {
+            setMonitor({
+              ...r,
+              name:
+                r.name === ''
+                  ? `${t('stop-display')} ${monitorCount + 1}`
+                  : r.name,
+            });
+          } else {
+            setIncorrectInstance(true);
+          }
         } else {
           setImportFailed(true);
         }
@@ -56,12 +63,16 @@ const ImportMonitorModal: FC<IProps> = ({
     const contenthash = hash.replaceAll(' ', '+');
     monitorAPI
       .get(contenthash)
-      .then((r: any) => {
+      .then((r: IMonitor) => {
         if (r?.contenthash) {
-          setMonitor({
-            ...r,
-            name: `${t('stop-display')} ${monitorCount + 1}`,
-          });
+          if (!r.instance || r.instance === getConfig().name) {
+            setMonitor({
+              ...r,
+              name: `${t('stop-display')} ${monitorCount + 1}`,
+            });
+          } else {
+            setIncorrectInstance(true);
+          }
         } else {
           setImportFailed(true);
         }
@@ -69,21 +80,38 @@ const ImportMonitorModal: FC<IProps> = ({
       .catch(() => setImportFailed(true));
   };
 
+  const urlBelongsToInstance = () => {
+    const currentTheme = getConfig().name;
+    const themeMatchingGivenUrl = Object.keys(getDomainIdentifierForTheme).find(
+      theme => url.indexOf(getDomainIdentifierForTheme[theme]) >= 0,
+    );
+    if (themeMatchingGivenUrl && themeMatchingGivenUrl !== currentTheme) {
+      setIncorrectInstance(true);
+      return false;
+    }
+    return true;
+  };
+
   const importMonitor = () => {
     setImportFailed(false);
+    setIncorrectInstance(false);
+
     const search = url.indexOf('?') !== -1 ? url.split('?')[1] : url;
     const searchParams = new URLSearchParams(search);
-    if (searchParams.has('url')) {
-      importStaticMonitor(searchParams.get('url'));
-    } else if (searchParams.has('cont')) {
-      importHashMonitor(searchParams.get('cont'));
-    } else {
-      if (validate(url)) {
-        importStaticMonitor(url);
-      } else if (url.length === 24) {
-        importHashMonitor(url);
+
+    if (urlBelongsToInstance()) {
+      if (searchParams.has('url')) {
+        importStaticMonitor(searchParams.get('url'));
+      } else if (searchParams.has('cont')) {
+        importHashMonitor(searchParams.get('cont'));
       } else {
-        setImportFailed(true);
+        if (validate(url)) {
+          importStaticMonitor(url);
+        } else if (url.length === 24) {
+          importHashMonitor(url);
+        } else {
+          setImportFailed(true);
+        }
       }
     }
   };
@@ -96,6 +124,7 @@ const ImportMonitorModal: FC<IProps> = ({
     const newStaticMonitor = {
       ...monitor,
       url: newUuid,
+      instance: getConfig().name,
     };
     setAddingMonitor(true);
     monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
@@ -133,6 +162,9 @@ const ImportMonitorModal: FC<IProps> = ({
         </div>
         {importFailed && (
           <div className="no-monitor-found">{t('no-monitor-found')}</div>
+        )}
+        {incorrectInstance && (
+          <div className="no-monitor-found">{t('incorrect-instance')}</div>
         )}
 
         {monitor?.id && (

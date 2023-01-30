@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import Modal from 'react-modal';
-import { ConfigContext } from '../contexts';
+import { ConfigContext, UserContext } from '../contexts';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
@@ -15,6 +15,7 @@ interface Props {
 const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
   const [t, i18n] = useTranslation();
   const config = useContext(ConfigContext);
+  const user = useContext(UserContext);
   const changeLanguage = (i18n, lang) => {
     i18n.changeLanguage(lang);
     if (lang !== localStorage.getItem('lang')) {

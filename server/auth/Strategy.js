@@ -9,18 +9,18 @@ import process from 'process';
 import User from './User.js';
 
 const debugLogging = process.env.DEBUGLOGGING;
-const callbackPath = '/oid_callback';
-
-const OICStrategy = function (config) {
-  this.name = 'passport-openid-connect';
+let callbackPath;
+const OICStrategy = function (name, callbackPath, config) {
+  this.name = name;
   this.config = config || {};
   this.client = null;
   this.tokenSet = null;
   this.init().then(() => {
     console.log(
-      'Initialization of OpenID Connect discovery process completed.',
+      'Initialization of OpenID Connect discovery process completed for', this.config.issuerHost
     );
   });
+  this.callbackPath = callbackPath;
 };
 
 util.inherits(OICStrategy, Strategy);
@@ -32,17 +32,17 @@ custom.setHttpOptionsDefaults({
 OICStrategy.prototype.init = function () {
   if (!this.config.issuerHost) {
     throw new Error(
-      'Could not find requried config options issuerHost in openid-passport strategy initalization',
+      'Could not find requried config options issuerHost in openid-passport strategy initalization', this.config.issuerHost
     );
   }
-  console.log('OIDC: discover');
+  console.log('OIDC: discover ', this.config.issuerHost);
   return Issuer.discover(this.config.issuerHost)
     .then(issuer => {
       this.client = new issuer.Client(this.config);
       this.client[custom.clock_tolerance] = 30;
     })
     .catch(err => {
-      console.log('OpenID Connect discovery failed');
+      console.log('OpenID Connect discovery failed', this.config.issuerHost);
       console.error('OIDC error: ', err);
       process.abort();
     });
@@ -145,7 +145,9 @@ OICStrategy.prototype.refresh = function (req) {
     })
     .catch(err => {
       console.error('Error refreshing tokens', err);
-      req.logout();
+      req.logout(function (err) {
+        if (err) { return next(err); }
+      });
       req.session.destroy();
       this.fail(err);
     });
@@ -175,9 +177,9 @@ OICStrategy.prototype.createAuthUrl = function (redirectUri, lang, ssoToken) {
 OICStrategy.prototype.createRedirectUrl = function (req) {
   const host = req.headers['x-forwarded-host'] || req.headers.host;
   if (req.secure) {
-    return `https://${host}${callbackPath}`;
+    return `https://${host}${this.callbackPath}`;
   }
-  return `http://${host}${callbackPath}`;
+  return `http://${host}${this.callbackPath}`;
 };
 
 OICStrategy.serializeUser = function (user, cb) {

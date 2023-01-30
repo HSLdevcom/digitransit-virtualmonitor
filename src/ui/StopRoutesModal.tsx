@@ -264,7 +264,6 @@ const StopRoutesModal: FC<Props> = props => {
             {t('timeShiftShow')}
             <Dropdown
               name="duration"
-              isSearchable={false}
               options={durations}
               placeholder={settings.timeShift.toString().concat(' min')}
               handleChange={handleTimeShift}
@@ -364,6 +363,7 @@ const StopRoutesModal: FC<Props> = props => {
                 <div className="renamedDestinations">
                   {props.languages.map(lang => (
                     <input
+                      tabIndex={showInputs ? 1 : -1}
                       key={`${lang}-${pattern}`}
                       id={`${lang}-${pattern}`}
                       name={pattern}

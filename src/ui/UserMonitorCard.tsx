@@ -101,16 +101,12 @@ const UserMonitorCard: React.FC<IProps> = ({
               <div className="stop-list">
                 {colStop.map((stop, j) => {
                   const stopCode = `(${stop.code})`;
-                  const stopTitle = stop.name
-                    .concat(stop.code ? stopCode : '')
-                    .concat(' - ')
-                    .concat(stop.gtfsId);
                   const icon =
                     stop.locationType === 'STATION' || stop.mode === 'SUBWAY'
                       ? `station-${stop.mode.toLowerCase()}`
                       : `stop-${stop.mode.toLowerCase()}`;
                   return (
-                    <li key={`stop#${j}`} title={stopTitle}>
+                    <li key={`stop#${j}`}>
                       <Icon
                         img={icon}
                         color={
@@ -191,7 +187,11 @@ const UserMonitorCard: React.FC<IProps> = ({
             <button
               className="delete-icon"
               onClick={() => setDeleteModalOpen(true)}
+              aria-label={t('delete-display', { id: name })}
             >
+              <span className="sr-only">
+                {t('delete-display', { id: name })}
+              </span>
               <Icon img="delete" color={config.colors.primary} />
             </button>
           </div>
@@ -209,7 +209,6 @@ const UserMonitorCard: React.FC<IProps> = ({
             </button>
             <Link
               tabIndex={0}
-              role="button"
               className="monitor-button white"
               to={`/monitors/createview?&url=${url}`}
             >
@@ -217,7 +216,6 @@ const UserMonitorCard: React.FC<IProps> = ({
             </Link>
             <Link
               tabIndex={0}
-              role="button"
               className="monitor-button white"
               to={`/static?&url=${url}`}
             >

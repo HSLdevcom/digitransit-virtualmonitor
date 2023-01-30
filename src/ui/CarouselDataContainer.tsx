@@ -4,7 +4,7 @@ import {
   GetDeparturesForStopsDocument,
   GetDeparturesForStationsDocument,
 } from '../generated';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import { ITrainData } from '../util/Interfaces';
 import {
   getStopsAndStationsFromViews,
@@ -22,6 +22,8 @@ interface IProps {
   trainsWithTrack?: Array<ITrainData>;
   fromStop?: boolean;
   initTime: number;
+  setQueryError?: any;
+  queryError?: boolean;
 }
 
 const filterEffectiveAlerts = alerts => {
@@ -37,6 +39,8 @@ const CarouselDataContainer: FC<IProps> = ({
   trainsWithTrack,
   fromStop,
   initTime,
+  setQueryError,
+  queryError,
 }) => {
   const { cards: views, languages } = useContext(MonitorContext);
   const [t] = useTranslation();
@@ -77,6 +81,11 @@ const CarouselDataContainer: FC<IProps> = ({
   const [forceUpdate, setforceUpdate] = useState(false);
   useEffect(() => {
     const stops = stopsState?.data?.stops;
+    if (stopsState?.error && !queryError) {
+      setQueryError(true);
+    } else if (!stopsState?.error && queryError) {
+      setQueryError(false);
+    }
     if (stops?.length > 0) {
       const [stringsToTranslate, newDepartureArray, a, closedStopViews] =
         createDepartureArray(views, stops, false, t, fromStop, initTime);
@@ -98,9 +107,13 @@ const CarouselDataContainer: FC<IProps> = ({
     }, 1000 * 20);
     return () => clearInterval(intervalId);
   }, [stopsState.data, forceUpdate]);
-
   useEffect(() => {
     const stations = stationsState?.data?.stations;
+    if (stationsState?.error && !queryError) {
+      setQueryError(true);
+    } else if (!stationsState?.error && queryError) {
+      setQueryError(false);
+    }
     if (stations?.length > 0) {
       const [stringsToTranslate, newDepartureArray, a] = createDepartureArray(
         views,

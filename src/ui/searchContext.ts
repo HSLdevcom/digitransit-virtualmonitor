@@ -1,7 +1,7 @@
 export function getSearchContext(config) {
   const searchContext = {
-    URL_PELIAS: 'https://api.digitransit.fi/geocoding/v1/search',
-    URL_PELIAS_PLACE: 'https://api.digitransit.fi/geocoding/v1/place',
+    URL_PELIAS: '/api/geocoding/search',
+    URL_PELIAS_PLACE: '/api/geocoding/place',
     isPeliasLocationAware: false, // true / false does Let Pelias suggest based on current user location
     minimalRegexp: undefined, // used for testing min. regexp. For example: new RegExp('.{2,}'),
     lineRegexp: new RegExp(

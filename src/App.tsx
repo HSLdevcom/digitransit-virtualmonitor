@@ -24,7 +24,8 @@ import { ConfigContext, UserContext, FavouritesContext } from './contexts';
 import Loading from './ui/Loading';
 import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
-
+import { useTranslation } from 'react-i18next';
+import { listenForLogoutAllTabs } from './util/logoutUtil';
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
     externalFonts?: Array<string>;
@@ -60,7 +61,10 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     postfix: string;
     setName: string;
   };
-  allowLogin: boolean;
+  login: {
+    inUse: boolean;
+    favourites: boolean;
+  };
 }
 export interface IMonitorConfig {
   name?: string;
@@ -103,6 +107,7 @@ interface Favourite {
 }
 
 const App: FC<IConfigurationProps> = props => {
+  const [t] = useTranslation();
   const [user, setUser] = useState<User>({});
   const [favourites, setFavourites] = useState<Array<Favourite>>([]);
   const [loading, setLoading] = useState(true);
@@ -119,10 +124,18 @@ const App: FC<IConfigurationProps> = props => {
     '--primary-color': config.colors.primary,
   };
   useEffect(() => {
+    listenForLogoutAllTabs(setUser);
+
+    if (config.fonts.fontCounter) {
+      fetch(config.fonts.fontCounter, {
+        mode: 'no-cors',
+      });
+    }
+
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }
-    if (config.allowLogin) {
+    if (config.login.inUse) {
       monitorAPI
         .getUser()
         .then(user => {
@@ -133,11 +146,13 @@ const App: FC<IConfigurationProps> = props => {
           setUser({ notLogged: true });
           setLoading(false);
         });
-      monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
-        if (Array.isArray(favourites)) {
-          setFavourites(favs);
-        }
-      });
+      if (config.login.favourites && user.sub) {
+        monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
+          if (Array.isArray(favourites)) {
+            setFavourites(favs);
+          }
+        });
+      }
     } else {
       setUser({ notLogged: true });
       setLoading(false);
@@ -178,7 +193,9 @@ const App: FC<IConfigurationProps> = props => {
   return (
     <div className="App">
       <Helmet>
-        <title>{config.name} - pysäkkinäyttö</title>
+        <title>
+          {config.name} - {t('stop-display')}
+        </title>
         {faviconLink}
         {fonts}
       </Helmet>
@@ -224,8 +241,11 @@ const App: FC<IConfigurationProps> = props => {
                 path={'/monitors'}
                 component={() => (
                   <>
+                    <SkipToMainContent />
                     <BannerContainer />
-                    <UserMonitors />
+                    <section role="main" id="mainContent">
+                      <UserMonitors />
+                    </section>
                   </>
                 )}
               />

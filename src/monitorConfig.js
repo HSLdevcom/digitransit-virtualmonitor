@@ -1,10 +1,8 @@
 export default {
   hsl: {
-    frontPageContent: 'front-page-paragraph-hsl',
     fonts: {
-      externalFonts: [
-        'https://cloud.typography.com/6364294/7432412/css/fonts.css',
-      ],
+      fontCounter: 'https://cloud.typography.com/6364294/7432412/css/fonts.css',
+      externalFonts: ['https://www.hsl.fi/fonts/784131/6C5FB8083F348CFBB.css'],
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       weights: {
         normal: '400',
@@ -47,7 +45,11 @@ export default {
     suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: true,
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-hsl',
+      favourites: true,
+    },
     useTilde: true,
   },
   jyvaskyla: {
@@ -72,7 +74,11 @@ export default {
     uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
     useTilde: true,
   },
   matka: {
@@ -109,13 +115,21 @@ export default {
     uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
     useTilde: false,
   },
   vaasa: {
     uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
-    allowLogin: false,
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
     feedIds: ['vaasa'],
     colors: {
       primary: '#000a8c',

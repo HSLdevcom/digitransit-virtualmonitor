@@ -17,9 +17,8 @@ const QueryError: FC<IProps> = ({ setQueryError, preview }) => {
   const [showOverlay, setShowOverlay] = useState(false);
   const [currentLang, setCurrentLang] = useState(0);
   const monitor = useContext(MonitorContext);
-  const view = monitor?.cards[0];
+  const view = monitor?.cards?.[0];
   const languages = monitor?.languages;
-
   useEffect(() => {
     const controller = new AbortController();
     const id = setInterval(() => {
@@ -36,14 +35,18 @@ const QueryError: FC<IProps> = ({ setQueryError, preview }) => {
     };
   }, []);
   useEffect(() => {
-    const nextLan = (currentLang + 1) % languages.length;
+    const nextLan = (currentLang + 1) % languages?.length;
+    const duration = view?.duration ? view.duration * 1000 : 5000;
     const to = setTimeout(() => {
       setCurrentLang(nextLan);
-    }, view.duration * 1000);
+    }, duration);
     return () => clearTimeout(to);
   }, [currentLang]);
   let to;
-  const isPortrait = view.layout > 11;
+  const isPortrait = view?.layout > 11;
+  const lang = languages
+    ? languages[currentLang]
+    : window.localStorage.getItem('lang') || 'fi';
   return (
     <div
       className={cx('main-content-container', {
@@ -61,7 +64,7 @@ const QueryError: FC<IProps> = ({ setQueryError, preview }) => {
           isLandscape={!isPortrait}
           preview={preview}
           view={view}
-          currentLang={languages[currentLang]}
+          currentLang={lang}
         />
       )}
       <div className="query-error">
@@ -78,7 +81,7 @@ const QueryError: FC<IProps> = ({ setQueryError, preview }) => {
           height={120}
           color={'white'}
         />
-        <span>{t('query-error', { lng: languages[currentLang] })}</span>
+        <span>{t('query-error', { lng: lang })}</span>
       </div>
     </div>
   );

@@ -56,32 +56,43 @@ const WithDatabaseConnection: FC<IProps> = ({
             setLoading(false);
             setView(r);
           })
-          .catch(() => setLoading(false));
+          .catch(() => {
+            setQueryError(true);
+            setLoading(false);
+          });
       } else if (url) {
         monitorAPI
           .getStatic(url)
           .then(r => {
             setLoading(false);
             setView(r);
+            if (queryError) {
+              setQueryError(false);
+            }
           })
-          .catch(() => setLoading(false));
+          .catch(() => {
+            setQueryError(true);
+            setLoading(false);
+          });
+      } else {
+        setQueryError(true);
       }
     }
-  }, []);
+  }, [queryError]);
 
   const monitor = !loading ? view : location?.state?.view.cards;
-  if ((loading && !location?.state?.view?.cards) || !monitor?.contenthash) {
-    if (!loading) {
-      return <NoMonitorsFound />;
-    }
-    return <Loading />;
-  }
   if (queryError) {
     return (
       <MonitorContext.Provider value={monitor}>
         <QueryError setQueryError={setQueryError} />
       </MonitorContext.Provider>
     );
+  }
+  if ((loading && !location?.state?.view?.cards) || !monitor?.contenthash) {
+    if (!loading) {
+      return <NoMonitorsFound />;
+    }
+    return <Loading />;
   }
   return (
     <MonitorContext.Provider value={monitor}>

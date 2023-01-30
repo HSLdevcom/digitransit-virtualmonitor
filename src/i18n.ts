@@ -331,7 +331,7 @@ i18n.use(initReactI18next).init({
         userinfo: 'Omat tiedot',
         vertical: 'Pysty',
         viewEditorName: 'Näkymän nimi',
-       'query-error': 'Yhteys poikki!\nSelvitämme tilannetta.',
+        'query-error': 'Yhteys poikki!\nSelvitämme tilannetta.',
       },
     },
     sv: {

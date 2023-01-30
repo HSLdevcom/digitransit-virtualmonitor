@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useContext } from 'react';
 import monitorAPI from '../api';
 import { ISides, ITitle, ICard } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
@@ -8,6 +8,7 @@ import NoMonitorsFound from './NoMonitorsFound';
 import TrainDataPreparer from './TrainDataPreparer';
 import { getParams } from '../util/queryUtils';
 import { MonitorContext } from '../contexts';
+import QueryError from './QueryError';
 
 interface Iv {
   columns: ISides;
@@ -44,6 +45,7 @@ const WithDatabaseConnection: FC<IProps> = ({
 }) => {
   const [view, setView] = useState({});
   const [loading, setLoading] = useState(true);
+  const [queryError, setQueryError] = useState(false);
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
       const { url, cont: hash } = getParams(location.search);
@@ -54,27 +56,44 @@ const WithDatabaseConnection: FC<IProps> = ({
             setLoading(false);
             setView(r);
           })
-          .catch(() => setLoading(false));
+          .catch(() => {
+            setQueryError(true);
+            setLoading(false);
+          });
       } else if (url) {
         monitorAPI
           .getStatic(url)
           .then(r => {
             setLoading(false);
             setView(r);
+            if (queryError) {
+              setQueryError(false);
+            }
           })
-          .catch(() => setLoading(false));
+          .catch(() => {
+            setQueryError(true);
+            setLoading(false);
+          });
+      } else {
+        setQueryError(true);
       }
     }
-  }, []);
+  }, [queryError]);
 
   const monitor = !loading ? view : location?.state?.view.cards;
+  if (queryError) {
+    return (
+      <MonitorContext.Provider value={monitor}>
+        <QueryError setQueryError={setQueryError} />
+      </MonitorContext.Provider>
+    );
+  }
   if ((loading && !location?.state?.view?.cards) || !monitor?.contenthash) {
     if (!loading) {
       return <NoMonitorsFound />;
     }
     return <Loading />;
   }
-
   return (
     <MonitorContext.Provider value={monitor}>
       {monitor.cards[0].layout > 17 ? (
@@ -84,7 +103,11 @@ const WithDatabaseConnection: FC<IProps> = ({
           {(stations.length || stops.length) && showPlatformsOrTracks ? (
             <TrainDataPreparer stations={stations} stops={stops} />
           ) : (
-            <CarouselDataContainer initTime={new Date().getTime()} />
+            <CarouselDataContainer
+              initTime={new Date().getTime()}
+              setQueryError={setQueryError}
+              queryError={queryError}
+            />
           )}
         </>
       )}

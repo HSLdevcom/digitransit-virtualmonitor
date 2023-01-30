@@ -28,6 +28,12 @@ const fetchData = (path, options, signal = undefined) => {
 };
 
 const monitorAPI = {
+  getPing(signal = undefined) {
+    const options = {
+      method: 'GET',
+    };
+    return fetchData('status', options, signal);
+  },
   getUser() {
     const options = {
       credentials: 'include',

@@ -173,6 +173,7 @@ i18n.use(initReactI18next).init({
         userinfo: 'My information',
         vertical: 'Vertical',
         viewEditorName: 'Name of the view',
+        'query-error': 'No connection!\nWe are looking into the issue.',
       },
     },
     fi: {
@@ -330,6 +331,7 @@ i18n.use(initReactI18next).init({
         userinfo: 'Omat tiedot',
         vertical: 'Pysty',
         viewEditorName: 'Näkymän nimi',
+       'query-error': 'Yhteys poikki!\nSelvitämme tilannetta.',
       },
     },
     sv: {
@@ -487,6 +489,7 @@ i18n.use(initReactI18next).init({
         userinfo: 'Mina uppgifter',
         vertical: 'Vertikal',
         viewEditorName: 'Vyns namn',
+        'query-error': 'Ingen anslutning!\nVi utreder situationen.',
       },
     },
   },

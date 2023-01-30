@@ -91,7 +91,7 @@ const StopRow: FC<IProps> = ({
           }
           width={32}
           height={32}
-          color={config.modeIcons.colors[`mode-${stop.mode.toLowerCase()}`]}
+          color={config.modeIcons.colors[`mode-${stop.mode?.toLowerCase()}`]}
         />
       </div>
       <div className="stop-row-main">

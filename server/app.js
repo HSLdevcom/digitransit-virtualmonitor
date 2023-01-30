@@ -5,7 +5,6 @@ import axios from 'axios';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
-import { getTranslations } from 'gtfs';
 import setUpOIDC, {
   userAuthenticated,
   errorHandler,
@@ -20,10 +19,13 @@ import {
   createMonitor,
 } from './openID.js';
 
-const FavouriteHost = process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
+const FavouriteHost =
+  process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
 
-const NotificationHost = process.env.NOTIFICATION_HOST
-  || 'https://test.hslfi.hsldev.com/user/api/v1/notifications';
+const NotificationHost =
+  process.env.NOTIFICATION_HOST ||
+  'https://test.hslfi.hsldev.com/user/api/v1/notifications';
+  
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
 const app = express();
@@ -61,27 +63,31 @@ app.use('/api/graphql', (req, res, next) => {
     .then(r => {
       res.json(r.data);
     })
-    .catch((e) => next(e));
+    .catch(e => next(e));
 });
 
 app.get('/api/geocoding/:endpoint', (req, res, next) => {
   const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
   const endpoint = `/geocoding/v1/${req.params.endpoint}`;
-  const apiSubscriptionParameter = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
+  const apiSubscriptionParameter = process.env
+    .API_SUBSCRIPTION_QUERY_PARAMETER_NAME
     ? `&${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
     : '';
   const url = `${baseurl}/${endpoint}?${req._parsedUrl.query}${apiSubscriptionParameter}`;
 
-  axios.get(url)
+  axios
+    .get(url)
     .then(function (response) {
       res.json(response.data);
     })
-    .catch((e) => next(e));
+    .catch(e => next(e));
 });
 
 app.put('/api/monitor', (req, res, next) => {
   monitorService.create(req, res, next);
 });
+
+app.get('/api/status', (req, res) => res.status(200).json({ status: 'OK' }));
 
 app.get('/api/translations/:recordIds', (req, res, next) => {
   const ids = req.params.recordIds.split(',');
@@ -106,7 +112,7 @@ app.post('/api/decompress/', (req, res, next) => {
       .then(t => {
         res.json(t);
       })
-      .catch((e) => console.log(e));
+      .catch(e => console.log(e));
   } catch (e) {
     next(e);
   }
@@ -146,9 +152,13 @@ app.put('/api/staticmonitor', userAuthenticated, (req, res, next) => {
     });
 });
 
-app.get('/api/usermonitors/:instanceName', userAuthenticated, (req, res, next) => {
-  getMonitors(req, res, next);
-});
+app.get(
+  '/api/usermonitors/:instanceName',
+  userAuthenticated,
+  (req, res, next) => {
+    getMonitors(req, res, next);
+  },
+);
 
 app.get('/api/userowned/:id', userAuthenticated, (req, res, next) => {
   isUserOwnedMonitor(req, res, next);

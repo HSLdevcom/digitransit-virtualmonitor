@@ -356,10 +356,10 @@ export const getTrainStationData = (monitor, locationType) => {
   array.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
-        if (
-          stop.locationType === locationType &&
-          stop.vehicleMode?.toLowerCase() === 'rail'
-        ) {
+        const hasMode =
+          stop.vehicleMode?.toLowerCase() === 'rail' ||
+          stop.mode?.toLowerCase() === 'rail';
+        if (stop.locationType === locationType && hasMode) {
           const isHsl = stop.gtfsId.startsWith('HSL:');
           const gtfsId =
             isHsl && stop.parentStation?.gtfsId

@@ -403,6 +403,10 @@ const StopCardListContainer: FC<IProps> = ({
     ? t('new-display-disabled')
     : t('prepareDisplay');
 
+  const buttonsOrButtonsWithAlertClass = saveFailed
+    ? 'buttons-with-alert'
+    : 'buttons';
+
   return (
     <div className="stop-card-list-container">
       <div className="animate-in">
@@ -456,8 +460,7 @@ const StopCardListContainer: FC<IProps> = ({
           );
         })}
       </ul>
-      {saveFailed && <div className="alert-text">{t('save-failed')}</div>}
-      <div className="buttons">
+      <div className={cx(buttonsOrButtonsWithAlertClass)}>
         <div className="wide">
           <button
             disabled={newDisplayDisabled}
@@ -506,6 +509,11 @@ const StopCardListContainer: FC<IProps> = ({
           </>
         )}
       </div>
+      {saveFailed && (
+        <div className="alert-text" role="alert">
+          {t('save-failed')}
+        </div>
+      )}
     </div>
   );
 };

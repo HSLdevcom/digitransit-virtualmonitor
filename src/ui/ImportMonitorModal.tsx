@@ -183,7 +183,9 @@ const ImportMonitorModal: FC<IProps> = ({
           </div>
         )}
         {saveFailed && (
-          <div className="no-monitor-found">{t('save-failed')}</div>
+          <div className="no-monitor-found" role="alert">
+            {t('save-failed')}
+          </div>
         )}
         <div className="import-button-container">
           <button

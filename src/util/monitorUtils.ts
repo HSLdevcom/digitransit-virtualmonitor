@@ -361,10 +361,7 @@ export const getTrainStationData = (monitor, locationType) => {
           stop.mode?.toLowerCase() === 'rail';
         if (stop.locationType === locationType && hasMode) {
           const isHsl = stop.gtfsId.startsWith('HSL:');
-          const gtfsId =
-            isHsl && stop.parentStation?.gtfsId
-              ? stop.parentStation?.gtfsId
-              : stop.gtfsId;
+          const gtfsId = stop.gtfsId;
 
           retValue.push({
             gtfsId: gtfsId,

@@ -8,6 +8,7 @@ import InformationDisplayContainer from './InformationDisplayContainer';
 import { useTranslation } from 'react-i18next';
 import TrainDataPreparer from './TrainDataPreparer';
 import { MonitorContext } from '../contexts';
+import { isPlatformOrTrackVisible } from '../util/monitorUtils';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
@@ -18,7 +19,6 @@ interface Props {
   isLandscape: boolean;
   stations: Array<ICard>;
   stops: Array<ICard>;
-  showPlatformsOrTracks: boolean;
 }
 const PreviewModal: FC<Props> = ({
   view,
@@ -28,7 +28,6 @@ const PreviewModal: FC<Props> = ({
   isLandscape,
   stations,
   stops,
-  showPlatformsOrTracks,
 }) => {
   const [t] = useTranslation();
   const monitor = {
@@ -61,7 +60,8 @@ const PreviewModal: FC<Props> = ({
               <InformationDisplayContainer preview />
             ) : (
               <>
-                {(stations.length || stops.length) && showPlatformsOrTracks ? (
+                {(stations.length || stops.length) &&
+                isPlatformOrTrackVisible(view) ? (
                   <TrainDataPreparer
                     stations={stations}
                     stops={stops}

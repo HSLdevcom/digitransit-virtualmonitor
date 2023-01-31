@@ -1,10 +1,7 @@
 import React, { FC } from 'react';
 import PreviewModal from './PreviewModal';
 import WithDatabaseConnection from './WithDatabaseConnection';
-import {
-  getTrainStationData,
-  isPlatformOrTrackVisible,
-} from '../util/monitorUtils';
+import { getTrainStationData } from '../util/monitorUtils';
 import { IMonitor } from '../util/Interfaces';
 
 interface IProps {
@@ -22,8 +19,6 @@ const PrepareMonitor: FC<IProps> = ({ location, preview }) => {
   const monitor = location ? location?.state?.view : preview.view;
   const stations = monitor ? getTrainStationData(monitor, 'STATION') : [];
   const stops = monitor ? getTrainStationData(monitor, 'STOP') : [];
-  const showPlatformsOrTracks =
-    stations.length || stops.length ? isPlatformOrTrackVisible(monitor) : false;
 
   if (preview) {
     return (
@@ -35,7 +30,6 @@ const PrepareMonitor: FC<IProps> = ({ location, preview }) => {
         isLandscape={preview.isLandscape}
         stations={stations}
         stops={stops}
-        showPlatformsOrTracks={showPlatformsOrTracks}
       />
     );
   }
@@ -44,7 +38,6 @@ const PrepareMonitor: FC<IProps> = ({ location, preview }) => {
       location={location}
       stations={stations}
       stops={stops}
-      showPlatformsOrTracks={showPlatformsOrTracks}
     />
   );
 };

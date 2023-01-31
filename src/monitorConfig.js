@@ -1,8 +1,9 @@
 export default {
   hsl: {
     fonts: {
-      fontCounter: 'https://cloud.typography.com/6364294/7432412/css/fonts.css',
-      externalFonts: ['https://www.hsl.fi/fonts/784131/6C5FB8083F348CFBB.css'],
+      externalFonts: [
+        'https://cloud.typography.com/6364294/7432412/css/fonts.css',
+      ],
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       weights: {
         normal: '400',

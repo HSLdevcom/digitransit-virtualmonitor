@@ -8,6 +8,7 @@ import ContentContainer from './ContentContainer';
 import IndexPage from './IndexPage';
 import Loading from './Loading';
 import MonitorControls from './MonitorControls';
+import { useMergeState } from '../util/utilityHooks';
 
 interface Iv {
   columns: ISides;
@@ -35,19 +36,22 @@ interface IProps {
 
 const UserMonitors: React.FC<IProps> = props => {
   const [t] = useTranslation();
-  const [loading, setLoading] = useState(true);
-  const [views, setViews] = useState([]);
-  const [changed, setChanged] = useState(false);
+  const [userMonitorsState, setUserMonitorsState] = useMergeState({
+    views: [],
+    loading: true,
+    error: false,
+  });
 
   const refetchMonitors = controller => {
     if (!controller) {
       controller = new AbortController();
     }
-    monitorAPI.getAllMonitorsForUser(controller.signal).then((r: Array<Iv>) => {
-      setViews(r.reverse());
-      setChanged(false);
-      setLoading(false);
-    });
+    monitorAPI
+      .getAllMonitorsForUser(controller.signal)
+      .then((r: Array<Iv>) => {
+        setUserMonitorsState({ views: r.reverse(), loading: false });
+      })
+      .catch(e => setUserMonitorsState({ error: true }));
   };
   useEffect(() => {
     const controller = new AbortController();
@@ -56,6 +60,8 @@ const UserMonitors: React.FC<IProps> = props => {
       controller.abort();
     };
   }, []);
+
+  const { views, loading } = userMonitorsState;
 
   if (loading) {
     return <Loading white />;

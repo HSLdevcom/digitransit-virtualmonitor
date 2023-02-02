@@ -3,8 +3,8 @@ import { getConfig } from './util/getConfig';
 const baseAPI = '/api';
 
 function statusCheckedResult(result) {
-  if (result.status === 401) {
-    return [];
+  if (result.status !== 200) {
+    throw new Error(`Connection error: status ${result.status}`);
   }
   return result.json();
 }

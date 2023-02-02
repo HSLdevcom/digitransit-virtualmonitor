@@ -25,7 +25,7 @@ const FavouriteHost =
 const NotificationHost =
   process.env.NOTIFICATION_HOST ||
   'https://test.hslfi.hsldev.com/user/api/v1/notifications';
-  
+
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
 const app = express();

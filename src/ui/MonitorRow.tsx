@@ -19,6 +19,8 @@ export interface IStop {
 }
 interface ITrip {
   tripHeadsign: string;
+  tripHeadsignfi: string;
+  tripHeadsignsv: string;
   route: IRoute;
   stops: Array<IStop>;
   gtfsId: string;
@@ -29,6 +31,8 @@ export interface IDeparture {
   trip: ITrip;
   route: any;
   headsign: string;
+  headsignfi: string;
+  headsignsv: string;
   realtimeDeparture: number;
   scheduledDeparture?: number;
   realtime: boolean;
@@ -52,6 +56,8 @@ interface IProps {
   currentLang: string;
   showMinutes: number;
   withoutRouteColumn: boolean;
+  headsignfi?: string;
+  headsignsv?: string;
 }
 
 const isCharacter = char => {

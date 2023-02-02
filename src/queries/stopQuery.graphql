@@ -25,6 +25,10 @@ query stopQuery($ids: [String], $language: String!) @api(contextKey: "clientName
       pattern {
         code
         headsign
+        originalTripPattern {
+			    code
+          name
+			  }
         route {
           mode
           type

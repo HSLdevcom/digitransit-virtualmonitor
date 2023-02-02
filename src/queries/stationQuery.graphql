@@ -24,7 +24,11 @@ query stationQuery($ids: [String]  $language: String) @api(contextKey: "clientNa
       stoptimesForPatterns {
         pattern {
           code
-          headsign
+          headsign          
+          originalTripPattern {
+			      code
+            name
+			   }
           route {
             mode
             type

@@ -19,10 +19,17 @@ import {
   createMonitor,
 } from './hslID.js';
 
+const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
+const geocodingurl = process.env.GEOCODING_API_URL ?? 'https://dev-api.digitransit.fi';
+
 const FavouriteHost =  process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
 
 const NotificationHost =  process.env.NOTIFICATION_HOST
   || 'https://test.hslfi.hsldev.com/user/api/v1/notifications';
+
+const apiSubscriptionParameter = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
+  ? `&${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
+  : '';
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
 const app = express();
@@ -45,12 +52,9 @@ app.get('/api/monitor/:id', (req, res, next) => {
 });
 
 app.use('/api/graphql', (req, res, next) => {
-  const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
-  const endpoint =    req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
-  const queryparams = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
-    ? `?${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
-    : '';
-  const url = `${baseurl}/${endpoint}${queryparams}`;
+  const endpoint = req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
+  const url = `${baseurl}/${endpoint}?${apiSubscriptionParameter}`;
+  console.log('URL! ', url)
   axios({
     headers: { 'content-type': 'application/json' },
     method: req.method,
@@ -64,12 +68,8 @@ app.use('/api/graphql', (req, res, next) => {
 });
 
 app.get('/api/geocoding/:endpoint', (req, res, next) => {
-  const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
   const endpoint = `/geocoding/v1/${req.params.endpoint}`;
-  const apiSubscriptionParameter = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
-    ? `&${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
-    : '';
-  const url = `${baseurl}/${endpoint}?${req._parsedUrl.query}${apiSubscriptionParameter}`;
+  const url = `${geocodingurl}/${endpoint}?${req._parsedUrl.query}${apiSubscriptionParameter}`;
 
   axios.get(url)
     .then(function (response) {

@@ -13,6 +13,10 @@
   white-space: pre-line;
   text-align: center;
 
+  &.preview {
+    padding-bottom: 100px;
+  }
+
   a {
     text-decoration: none;
   }

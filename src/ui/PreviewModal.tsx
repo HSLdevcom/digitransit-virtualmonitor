@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import Modal from 'react-modal';
 import { IMonitor, ICard } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import TrainDataPreparer from './TrainDataPreparer';
 import { MonitorContext } from '../contexts';
 import { isPlatformOrTrackVisible } from '../util/monitorUtils';
+import QueryError from './QueryError';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
@@ -30,10 +31,38 @@ const PreviewModal: FC<Props> = ({
   stops,
 }) => {
   const [t] = useTranslation();
+  const [error, setQueryError] = useState(false);
   const monitor = {
     ...view,
     languages,
   };
+  if (error) {
+    return (
+      <Modal
+        isOpen={isOpen}
+        onRequestClose={() => onClose(false)}
+        portalClassName={cx('preview', !isLandscape ? 'portrait' : '')}
+      >
+        <div className="title-and-close">
+          <div className="title">{t('preview')}</div>
+          <section id="close">
+            <button
+              className="close"
+              role="button"
+              aria-label={t('close')}
+              onClick={() => onClose(false)}
+            >
+              <Icon img="close" color={'#FFFFFF'} height={16} width={16} />
+            </button>
+          </section>
+        </div>
+        <section id={isLandscape ? 'previewMonitor' : 'previewMonitorPortrait'}>
+          <div className="query-error"></div>
+          <QueryError preview={true} setQueryError={setQueryError} />
+        </section>
+      </Modal>
+    );
+  }
   return (
     <MonitorContext.Provider value={monitor}>
       <Modal
@@ -71,6 +100,7 @@ const PreviewModal: FC<Props> = ({
                   <CarouselDataContainer
                     preview
                     initTime={new Date().getTime()}
+                    setQueryError={setQueryError}
                   />
                 )}
               </>

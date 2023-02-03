@@ -67,7 +67,7 @@ const QueryError: FC<IProps> = ({ setQueryError, preview }) => {
           currentLang={lang}
         />
       )}
-      <div className="query-error">
+      <div className={cx('query-error', { preview: preview })}>
         {!preview && (
           <MonitorOverlay
             show={showOverlay}

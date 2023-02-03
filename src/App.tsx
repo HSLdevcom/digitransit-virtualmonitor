@@ -187,7 +187,7 @@ const App: FC<IConfigurationProps> = props => {
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
 
   const fonts = config.fonts.externalFonts.map(font => (
-    <link rel="stylesheet" type="text/css" href={font} />
+    <link key={font.toString()} rel="stylesheet" type="text/css" href={font} />
   ));
 
   return (

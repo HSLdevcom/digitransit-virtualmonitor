@@ -19,6 +19,7 @@ import PrepareMonitor from './PrepareMonitor';
 import { UserContext } from '../contexts';
 import { getParams } from '../util/queryUtils';
 import { getConfig } from '../util/getConfig';
+import { useMergeState } from '../util/utilityHooks';
 
 interface IProps {
   stopCards: any;
@@ -43,14 +44,16 @@ const StopCardListContainer: FC<IProps> = ({
   const [orientation, setOrientation] = useState(
     !isHorizontal ? 'vertical' : 'horizontal',
   );
-  const [redirect, setRedirect] = useState(false);
-  const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);
-
   const [viewTitle, setViewTitle] = useState(
-    props.staticMonitor ? props.staticMonitor.name : null,
+    props.staticMonitor ? props.staticMonitor.name : '',
   );
   const [saveFailed, setSaveFailed] = useState(false);
+
+  const [viewState, setViewState] = useMergeState({
+    view: undefined,
+    redirect: false,
+  });
 
   const openPreview = () => {
     setOpen(true);
@@ -288,8 +291,7 @@ const StopCardListContainer: FC<IProps> = ({
         };
         monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
           if (res.status === 200 || res.status === 409) {
-            setView(newStaticMonitor);
-            setRedirect(true);
+            setViewState({ view: newStaticMonitor, redirect: true });
           } else {
             setSaveFailed(true);
           }
@@ -297,8 +299,7 @@ const StopCardListContainer: FC<IProps> = ({
       } else {
         monitorAPI.create(newCard).then((res: any) => {
           if (res.status === 200 || res.status === 409) {
-            setView(newCard);
-            setRedirect(true);
+            setViewState({ view: newCard, redirect: true });
           }
         });
       }
@@ -314,18 +315,18 @@ const StopCardListContainer: FC<IProps> = ({
         monitorAPI
           .updateStatic(newStaticMonitor)
           .then(res => {
-            setView(newCard);
-            setRedirect(true);
+            setViewState({ view: newCard, redirect: true });
           })
           .catch(() => setSaveFailed(true));
       } else {
         monitorAPI.create(newCard).then(res => {
-          setView(newCard);
-          setRedirect(true);
+          setViewState({ view: newCard, redirect: true });
         });
       }
     }
   };
+
+  const { view, redirect } = viewState;
 
   if (redirect && view) {
     let search;

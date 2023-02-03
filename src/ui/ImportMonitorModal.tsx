@@ -85,15 +85,16 @@ const ImportMonitorModal: FC<IProps> = ({
           setImportState({ viewNotFound: true });
         }
       })
-      .catch(() => setImportState({ viewNotFound: true }));
+      .catch(() => setImportState({ importQueryError: true }));
   };
 
   const urlBelongsToInstance = () => {
     const currentTheme = getConfig().name;
-    const themeMatchingGivenUrl = Object.keys(getDomainIdentifierForTheme).find(
-      theme => url.indexOf(getDomainIdentifierForTheme[theme]) >= 0,
-    );
-    if (themeMatchingGivenUrl && themeMatchingGivenUrl !== currentTheme) {
+    const urlMatchesAllowedTheme = Object.keys(
+      getDomainIdentifierForTheme,
+    ).find(theme => url.indexOf(getDomainIdentifierForTheme[theme]) >= 0);
+
+    if (urlMatchesAllowedTheme && urlMatchesAllowedTheme !== currentTheme) {
       setImportState({ incorrectInstance: true });
       return false;
     }
@@ -141,8 +142,8 @@ const ImportMonitorModal: FC<IProps> = ({
     monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
       if (res.status === 200 || res.status === 409) {
         refetchMonitors();
-        onRequestClose();
         setImportState({ addingMonitor: false });
+        onRequestClose();
       } else {
         setImportState({ addingMonitor: false, saveFailed: true });
       }

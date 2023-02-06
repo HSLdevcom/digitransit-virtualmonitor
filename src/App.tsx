@@ -126,12 +126,6 @@ const App: FC<IConfigurationProps> = props => {
   useEffect(() => {
     listenForLogoutAllTabs(setUser);
 
-    if (config.fonts.fontCounter) {
-      fetch(config.fonts.fontCounter, {
-        mode: 'no-cors',
-      });
-    }
-
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }

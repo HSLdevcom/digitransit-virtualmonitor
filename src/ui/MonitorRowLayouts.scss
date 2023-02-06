@@ -11,7 +11,7 @@
 }
 
 /* ********* 4 rows ********* */
-$rows4-1st-col-width: 23vh;
+$rows4-1st-col-width: 31vh;
 
 .rows4 .grid-row {
   grid-template-columns: $rows4-1st-col-width 1fr 36vh;
@@ -36,7 +36,7 @@ $rows4-1st-col-width: 23vh;
 }
 
 /* ********* 8 rows ********* */
-$rows8-1st-col-width: 21vh;
+$rows8-1st-col-width: 28vh;
 
 .rows8 .grid-row {
   grid-template-columns: $rows8-1st-col-width 1fr 25vh;
@@ -56,7 +56,7 @@ $rows8-1st-col-width: 21vh;
 }
 
 /* ********* 12 rows ********* */
-$rows12-1st-col-width: 17vh;
+$rows12-1st-col-width: 22vh;
 
 .rows12 .grid-row {
   font-size: calc((#{var(--height)} - 30vh) / 17);
@@ -78,7 +78,7 @@ $rows12-1st-col-width: 17vh;
 /* ****************** 2 columns ****************** */
 
 /* ********* 4 rows ********* */
-$rows4-2col-1st-col-width: 18vh;
+$rows4-2col-1st-col-width: 31vh;
 
 .rows4.two-cols .grid-row {
   grid-template-columns: $rows4-2col-1st-col-width 1fr 19vh;
@@ -97,7 +97,7 @@ $rows4-2col-1st-col-width: 18vh;
 }
 
 /* ********* 8 rows ********* */
-$rows8-2col-1st-col-width: 21vh;
+$rows8-2col-1st-col-width: 28vh;
 
 .rows8.two-cols .grid-row {
   grid-template-columns: $rows8-2col-1st-col-width 1fr 18vh;
@@ -112,8 +112,14 @@ $rows8-2col-1st-col-width: 21vh;
 }
 
 /* ********* 12 rows ********* */
+$rows12-2col-1st-col-width: 17vh;
+
+.rows12.two-cols .grid-row {
+  grid-template-columns: $rows12-2col-1st-col-width 1fr 18vh;
+}
+
 .rows12.two-cols .grid-row.with-stop-code {
-  grid-template-columns: 17vh 1fr 13vh 18vh;
+  grid-template-columns: $rows12-2col-1st-col-width 1fr 13vh 18vh;
 
   &.without-route-column {
     grid-template-columns: auto 13vh 18vh;
@@ -121,7 +127,7 @@ $rows8-2col-1st-col-width: 21vh;
 }
 
 /* ****************** Portrait ****************** */
-$tightened-1st-column-width: 19vh;
+$tightened-1st-column-width: 25vh;
 
 /* ********* 4 rows ********* */
 
@@ -152,7 +158,7 @@ $tightened-1st-column-width: 19vh;
 }
 
 /* ********* 8 rows ********* */
-$rows8-portrait-1st-col-width: 19vh;
+$rows8-portrait-1st-col-width: 25vh;
 
 .rows8.portrait .grid-row.with-stop-code {
   grid-template-columns: $rows8-portrait-1st-col-width 1fr 12vh 17vh;
@@ -182,7 +188,7 @@ $rows8-portrait-1st-col-width: 19vh;
 }
 
 /* ********* 12 rows ********* */
-$rows12-portrait-1st-col-width: 15vh;
+$rows12-portrait-1st-col-width: 23vh;
 
 .rows12.portrait .grid-row {
   font-size: calc((#{var(--height)} - 30vh) / 18);
@@ -202,7 +208,7 @@ $rows12-portrait-1st-col-width: 15vh;
 }
 
 /* ********* 16 rows ********* */
-$rows16-portrait-1st-col-width: 15vh;
+$rows16-portrait-1st-col-width: 23vh;
 
 .rows16.portrait .grid-row {
   grid-template-columns: $rows16-portrait-1st-col-width 1fr 15vh;
@@ -223,7 +229,7 @@ $rows16-portrait-1st-col-width: 15vh;
 }
 
 /* ********* 24 rows ********* */
-$rows24-portrait-1st-col-width: 10vh;
+$rows24-portrait-1st-col-width: 15vh;
 
 .rows24.portrait .grid-row {
   grid-template-columns: $rows24-portrait-1st-col-width 1fr 14vh;

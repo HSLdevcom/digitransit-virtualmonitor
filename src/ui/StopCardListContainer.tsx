@@ -300,6 +300,8 @@ const StopCardListContainer: FC<IProps> = ({
         monitorAPI.create(newCard).then((res: any) => {
           if (res.status === 200 || res.status === 409) {
             setViewState({ view: newCard, redirect: true });
+          } else {
+            setSaveFailed(true);
           }
         });
       }
@@ -319,9 +321,12 @@ const StopCardListContainer: FC<IProps> = ({
           })
           .catch(() => setSaveFailed(true));
       } else {
-        monitorAPI.create(newCard).then(res => {
-          setViewState({ view: newCard, redirect: true });
-        });
+        monitorAPI
+          .create(newCard)
+          .then(res => {
+            setViewState({ view: newCard, redirect: true });
+          })
+          .catch(() => setSaveFailed(true));
       }
     }
   };

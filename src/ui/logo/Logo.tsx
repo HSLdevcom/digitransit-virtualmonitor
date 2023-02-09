@@ -6,6 +6,7 @@ import LinkkiLogo from './LinkkiLogo';
 import MatkaLogo from './MatkaLogo';
 import NysseLogo from './NysseLogo';
 import Vaasalogo from './VaasaLogo';
+import OuluLogo from './OuluLogo';
 
 interface ICommonProps {
   readonly isPreview?: boolean;
@@ -37,6 +38,9 @@ const Logo: FC<ICommonProps> = props => {
         break;
       case 'jyvaskyla':
         logo = <LinkkiLogo />;
+        break;
+      case 'oulu':
+        logo = <OuluLogo />;
         break;
       default:
         break;

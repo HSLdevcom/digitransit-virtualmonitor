@@ -146,7 +146,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       dayjs().unix() >= token.expires_at
     ) {
       const userData = JSON.stringify(req?.user?.data);
-      const oidcStrategyName = '';
+      let oidcStrategyName = '';
       if (userData.indexOf('hsl') !== -1) {
         oidcStrategyName = hslStrategyName;
       } else if (userData.indexOf('waltti') !== -1) {

@@ -17,7 +17,7 @@
     "dayjs": "^1.11.3",
     "express": "^4.17.3",
     "express-session": "^1.17.3",
-    "gtfs": "https://github.com/HSLdevcom/node-gtfs.git#master",
+    "gtfs": "https://github.com/HSLdevcom/node-gtfs.git#896dbb78",
     "morgan": "^1.8.2",
     "openid-client": "^4.9.1",
     "passport": "^0.6.0",
@@ -26,6 +26,10 @@
   },
   "devDependencies": {
     "@types/uuid": "^8.3.1",
-    "cross-env": "^7.0.2"
+    "cross-env": "^7.0.2",
+    "prettier": "^2.8.0",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1"
   }
 }

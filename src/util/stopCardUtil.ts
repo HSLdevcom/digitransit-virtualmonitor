@@ -29,7 +29,12 @@ export const getStopIcon = stop => {
     const mode = stop.mode;
     return `station-${mode?.toLowerCase()}`;
   }
-  return `stop-${stop.vehicleMode?.toLowerCase()}`;
+  const mode = stop.vehicleMode
+    ? `stop-${stop.vehicleMode.toLowerCase()}`
+    : stop.mode
+    ? `stop-${stop.mode.toLowerCase()}`
+    : 'stop-bus';
+  return mode;
 };
 
 export const getRouteMode = route => {

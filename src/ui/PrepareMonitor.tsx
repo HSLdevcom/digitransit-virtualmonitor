@@ -1,7 +1,10 @@
 import React, { FC } from 'react';
 import PreviewModal from './PreviewModal';
 import WithDatabaseConnection from './WithDatabaseConnection';
-import { getTrainStationData } from '../util/monitorUtils';
+import {
+  getStopsAndStationsActuallyFromViews,
+  getTrainStationData,
+} from '../util/monitorUtils';
 import { IMonitor } from '../util/Interfaces';
 
 interface IProps {
@@ -30,6 +33,7 @@ const PrepareMonitor: FC<IProps> = ({ location, preview }) => {
         isLandscape={preview.isLandscape}
         stations={stations}
         stops={stops}
+        coords={[]}
       />
     );
   }

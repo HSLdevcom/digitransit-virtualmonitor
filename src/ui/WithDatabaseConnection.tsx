@@ -14,6 +14,7 @@ import {
   isPlatformOrTrackVisible,
 } from '../util/monitorUtils';
 import { useMergeState } from '../util/utilityHooks';
+import MonitorMap from './monitorMap';
 
 interface Iv {
   columns: ISides;
@@ -40,9 +41,10 @@ interface IProps {
   readonly stations: Array<ICard>;
   readonly stops: Array<ICard>;
   readonly showPlatformsOrTracks?: boolean;
+  coords?: any;
 }
 
-const WithDatabaseConnection: FC<IProps> = ({ location }) => {
+const WithDatabaseConnection: FC<IProps> = ({ location, coords }) => {
   const [queryError, setQueryError] = useState(false);
   const [monitorState, setMonitorState] = useMergeState({
     loading: true,
@@ -108,9 +110,14 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
     }
     return <Loading />;
   }
+  const layout = view.cards[0].layout;
+
+  const showInfoDisplay = layout > 17 && layout < 19;
+  const showMapDisplay = layout > 19 && layout < 22;
+
   return (
     <MonitorContext.Provider value={monitor}>
-      {monitor.cards[0].layout > 17 ? (
+      {showInfoDisplay ? (
         <InformationDisplayContainer />
       ) : (
         <>

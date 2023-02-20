@@ -8,6 +8,8 @@ query stationQuery($ids: [String]) @api(contextKey: "clientName") {
     platformCode
     locationType
     vehicleMode
+    lat
+    lon
     stops {
       desc
       code

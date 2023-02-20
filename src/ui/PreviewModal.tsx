@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import TrainDataPreparer from './TrainDataPreparer';
 import { MonitorContext } from '../contexts';
 import { isPlatformOrTrackVisible } from '../util/monitorUtils';
+import MonitorMap from './monitorMap';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
@@ -19,6 +20,7 @@ interface Props {
   isLandscape: boolean;
   stations: Array<ICard>;
   stops: Array<ICard>;
+  coords?: any;
 }
 const PreviewModal: FC<Props> = ({
   view,
@@ -28,12 +30,16 @@ const PreviewModal: FC<Props> = ({
   isLandscape,
   stations,
   stops,
+  coords,
 }) => {
   const [t] = useTranslation();
   const monitor = {
     ...view,
     languages,
   };
+  const layout = view.cards[0].layout;
+  const showInfoDisplay = layout > 17 && layout < 19;
+  const showMapDisplay = layout > 19 && layout < 22;
   return (
     <MonitorContext.Provider value={monitor}>
       <Modal
@@ -56,7 +62,7 @@ const PreviewModal: FC<Props> = ({
         </div>
         <section id={isLandscape ? 'previewMonitor' : 'previewMonitorPortrait'}>
           <div className="carouselContainer">
-            {view.cards[0].layout > 17 ? (
+            {showInfoDisplay ? (
               <InformationDisplayContainer preview />
             ) : (
               <>

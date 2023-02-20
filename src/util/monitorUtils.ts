@@ -49,6 +49,22 @@ export const getStopsAndStationsFromViews = views => {
   return [stopIds, stationIds];
 };
 
+export const getStopsAndStationsActuallyFromViews = views => {
+  const stopIds = [];
+  const stationIds = [];
+  const totallyArray = Array.isArray(views) ? views : [views];
+  totallyArray.forEach(view => {
+    Object.keys(view.columns).forEach(col => {
+      view.columns[col].stops?.forEach(stop => {
+        stop.locationType === 'STOP'
+          ? stopIds.push(stop)
+          : stationIds.push(stop);
+      });
+    });
+  });
+  return [stopIds, stationIds];
+};
+
 export const filterDepartures = (
   stop,
   hiddenRoutes,
@@ -362,7 +378,6 @@ export const getTrainStationData = (monitor, locationType) => {
         if (stop.locationType === locationType && hasMode) {
           const isHsl = stop.gtfsId.startsWith('HSL:');
           const gtfsId = stop.gtfsId;
-
           retValue.push({
             gtfsId: gtfsId,
             shortCode: !isHsl
@@ -371,6 +386,8 @@ export const getTrainStationData = (monitor, locationType) => {
                 null,
             source: isHsl ? 'HSL' : 'MATKA',
             hiddenRoutes: stop.settings?.hiddenRoutes || [],
+            lat: stop.lat,
+            lon: stop.lon,
           });
         }
       });

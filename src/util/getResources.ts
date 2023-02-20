@@ -139,6 +139,17 @@ export const getLayout = (layout: number): ILayout => {
         rightColumnCount: 0,
         isPortrait: true,
       };
+    case 20:
+      return {
+        leftColumnCount: 0,
+        rightColumnCount: 0,
+      };
+    case 21:
+      return {
+        leftColumnCount: 0,
+        rightColumnCount: 0,
+        isPortrait: true,
+      };
   }
 };
 

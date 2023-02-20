@@ -152,6 +152,22 @@ export const horizontalLayouts = [
       },
     ],
   },
+  {
+    label: 'map-display',
+    infoText: 'map-display-info',
+    options: [
+      {
+        value: '20',
+        label: (
+          <>
+            <Icon img="layout18" height={90} width={160} />
+            <span className="label"></span>
+          </>
+        ),
+        rows: '',
+      },
+    ],
+  },
 ];
 
 export const verticalLayouts = [
@@ -236,6 +252,22 @@ export const verticalLayouts = [
         label: (
           <>
             <Icon img="layout19" height={160} width={90} />
+            <span className="label"></span>
+          </>
+        ),
+        rows: '',
+      },
+    ],
+  },
+  {
+    label: 'map-display',
+    infoText: 'map-display-info',
+    options: [
+      {
+        value: '21',
+        label: (
+          <>
+            <Icon img="layout18" height={160} width={90} />
             <span className="label"></span>
           </>
         ),

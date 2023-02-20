@@ -244,6 +244,8 @@ const StopCardListContainer: FC<IProps> = ({
           mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           code: stop.code ? stop.code : null,
           locality: stop.locality,
+          lat: stop.lat,
+          lon: stop.lon,
         };
       });
       card.columns.right.stops = card.columns.right.stops.map(stop => {
@@ -256,6 +258,8 @@ const StopCardListContainer: FC<IProps> = ({
           mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           code: stop.code ? stop.code : null,
           locality: stop.locality,
+          lat: stop.lat,
+          lon: stop.lon,
         };
       });
     });
@@ -373,7 +377,9 @@ const StopCardListContainer: FC<IProps> = ({
   const noStops = checkNoStops(stopCardList);
   const makeButtonsDisabled = !(languages.length > 0 && !noStops);
   const isModifyView = window.location.href.indexOf('url=') !== -1;
-  const newDisplayDisabled = stopCardList.find(c => c.layout > 17);
+  const newDisplayDisabled = stopCardList.find(
+    c => c.layout > 17 && c.layout < 20,
+  );
 
   const buttonsRequirements = [];
   if (languages.length === 0) {

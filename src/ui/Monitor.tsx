@@ -7,7 +7,10 @@ import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
-import { ConfigContext } from '../contexts';
+import { ConfigContext, MapContext } from '../contexts';
+import { getStopsAndStationsActuallyFromViews } from '../util/monitorUtils';
+import { getStopIcon } from '../util/stopCardUtil';
+import MonitorMapContainer from '../MonitorMapContainer';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -47,7 +50,6 @@ const Monitor: FC<IProps> = ({
   );
   const { isMultiDisplay } = getLayout(view.layout);
   const [showOverlay, setShowOverlay] = useState(false);
-
   useEffect(() => {
     const setDimensions = () => {
       setWindowDimensions(getWindowDimensions());
@@ -72,7 +74,23 @@ const Monitor: FC<IProps> = ({
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11;
-
+  const showMapDisplay = view.layout > 19 && view.layout < 22;
+  const stopsAndStations = getStopsAndStationsActuallyFromViews(view);
+  const coords = stopsAndStations
+    .map(stops => {
+      return stops.map(stop => {
+        const coord = [stop?.lat, stop?.lon];
+        const obj = {
+          coords: coord,
+          mode: getStopIcon(stop),
+        };
+        return obj;
+      });
+    })
+    .flat();
+  coords.forEach(c => {
+    c.coords.flat();
+  });
   return (
     <div
       style={style}
@@ -94,23 +112,27 @@ const Monitor: FC<IProps> = ({
         view={view}
         currentLang={currentLang}
       />
-      <MonitorRowContainer
-        viewId={view['id']}
-        departuresLeft={departures[0].filter(x => x != null)}
-        departuresRight={departures[1].filter(x => x != null)}
-        rightStops={view.columns.right.stops}
-        leftStops={view.columns.left.stops}
-        currentLang={currentLang}
-        translatedStrings={translatedStrings}
-        layout={view.layout}
-        isLandscape={isLandscapeByLayout}
-        alertState={alertState}
-        alertComponent={alertComponent}
-        alertRowSpan={alertRowSpan}
-        showMinutes={Number(config.showMinutes)}
-        closedStopViews={closedStopViews}
-        preview={isPreview}
-      />
+      {showMapDisplay ? (
+        <MonitorMapContainer coords={coords} />
+      ) : (
+        <MonitorRowContainer
+          viewId={view['id']}
+          departuresLeft={departures[0].filter(x => x != null)}
+          departuresRight={departures[1].filter(x => x != null)}
+          rightStops={view.columns.right.stops}
+          leftStops={view.columns.left.stops}
+          currentLang={currentLang}
+          translatedStrings={translatedStrings}
+          layout={view.layout}
+          isLandscape={isLandscapeByLayout}
+          alertState={alertState}
+          alertComponent={alertComponent}
+          alertRowSpan={alertRowSpan}
+          showMinutes={Number(config.showMinutes)}
+          closedStopViews={closedStopViews}
+          preview={isPreview}
+        />
+      )}
     </div>
   );
 };

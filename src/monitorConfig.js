@@ -165,5 +165,10 @@ export default {
     colors: {
       primary: '#E10669',
     },
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
   },
 };

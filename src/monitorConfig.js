@@ -164,6 +164,7 @@ export default {
     feedIds: ['OULU'],
     colors: {
       primary: '#E10669',
+      monitorBackground: '#E10669',
     },
     login: {
       inUse: true,

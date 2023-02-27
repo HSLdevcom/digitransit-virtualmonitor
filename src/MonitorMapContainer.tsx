@@ -1,12 +1,13 @@
-import React, { FC, useContext, useEffect } from 'react';
-import { useMergeState } from './util/utilityHooks';
+import React, { FC } from 'react';
+import cx from 'classnames';
 import L from 'leaflet';
 import MonitorMap from './ui/monitorMap';
-import { MapContext } from './contexts';
 type Coordinate = [number, number];
 type BoundingBox = [Coordinate, Coordinate];
 interface IProps {
-  coords?: any;
+  stopsForMap?: any;
+  alertComponent?: any;
+  preview?: boolean;
 }
 
 function getBoundingBox(coordinates: Coordinate[]): BoundingBox {
@@ -39,12 +40,27 @@ function getBoundingBox(coordinates: Coordinate[]): BoundingBox {
   ];
 }
 const MonitorMapContainer: FC<IProps> = props => {
-  const coordinates = props.coords.map(s => s.coords);
-  const [state, setState] = useMergeState({
-    bounds: getBoundingBox(coordinates),
-  });
-
-  const { bounds } = state;
-  return <MonitorMap bounds={bounds} coords={props.coords} />;
+  const coordinates = props.stopsForMap.map(s => s.coords);
+  const withAlerts = props.alertComponent != null;
+  const bounds = getBoundingBox(coordinates);
+  const isLandscape = true;
+  return (
+    <div
+      className={cx('monitor-container', {
+        preview: props.preview,
+        portrait: !isLandscape,
+        'two-cols': false,
+        tightened: false,
+      })}
+    >
+      <MonitorMap
+        bounds={bounds}
+        stopsForMap={props.stopsForMap}
+        preview={props.preview}
+        withAlerts={withAlerts}
+      />
+      <div className="alert-component">{props.alertComponent}</div>
+    </div>
+  );
 };
 export default MonitorMapContainer;

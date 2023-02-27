@@ -7,7 +7,7 @@ import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
-import { ConfigContext, MapContext } from '../contexts';
+import { ConfigContext } from '../contexts';
 import { getStopsAndStationsActuallyFromViews } from '../util/monitorUtils';
 import { getStopIcon } from '../util/stopCardUtil';
 import MonitorMapContainer from '../MonitorMapContainer';
@@ -73,10 +73,10 @@ const Monitor: FC<IProps> = ({
       config.colors.monitorBackground || config.colors.primary,
   } as React.CSSProperties;
 
-  const isLandscapeByLayout = view.layout <= 11;
+  const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;
   const showMapDisplay = view.layout > 19 && view.layout < 22;
   const stopsAndStations = getStopsAndStationsActuallyFromViews(view);
-  const coords = stopsAndStations
+  const stopsForMap = stopsAndStations
     .map(stops => {
       return stops.map(stop => {
         const coord = [stop?.lat, stop?.lon];
@@ -88,7 +88,7 @@ const Monitor: FC<IProps> = ({
       });
     })
     .flat();
-  coords.forEach(c => {
+  stopsForMap.forEach(c => {
     c.coords.flat();
   });
   return (
@@ -113,7 +113,11 @@ const Monitor: FC<IProps> = ({
         currentLang={currentLang}
       />
       {showMapDisplay ? (
-        <MonitorMapContainer coords={coords} />
+        <MonitorMapContainer
+          stopsForMap={stopsForMap}
+          alertComponent={alertComponent}
+          preview={isPreview}
+        />
       ) : (
         <MonitorRowContainer
           viewId={view['id']}

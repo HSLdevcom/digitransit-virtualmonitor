@@ -39,7 +39,9 @@ const StopCardListContainer: FC<IProps> = ({
   const [languages, setLanguages] = useState(props.languages);
 
   const isHorizontal =
-    stopCardList[0].layout < 12 || stopCardList[0].layout === 18;
+    stopCardList[0].layout < 12 ||
+    stopCardList[0].layout === 18 ||
+    stopCardList[0].layout === 20;
   const [orientation, setOrientation] = useState(
     !isHorizontal ? 'vertical' : 'horizontal',
   );

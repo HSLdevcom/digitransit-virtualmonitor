@@ -20,7 +20,6 @@ interface Props {
   isLandscape: boolean;
   stations: Array<ICard>;
   stops: Array<ICard>;
-  coords?: any;
 }
 const PreviewModal: FC<Props> = ({
   view,
@@ -30,7 +29,6 @@ const PreviewModal: FC<Props> = ({
   isLandscape,
   stations,
   stops,
-  coords,
 }) => {
   const [t] = useTranslation();
   const monitor = {
@@ -39,7 +37,6 @@ const PreviewModal: FC<Props> = ({
   };
   const layout = view.cards[0].layout;
   const showInfoDisplay = layout > 17 && layout < 19;
-  const showMapDisplay = layout > 19 && layout < 22;
   return (
     <MonitorContext.Provider value={monitor}>
       <Modal

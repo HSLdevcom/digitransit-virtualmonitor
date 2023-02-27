@@ -1,8 +1,22 @@
 .monitormap {
-  height: 350px;
-  width: 344px;
+  height: 70%;
+  width: 100%;
 
-  .preview {
-    height: 378px;
+  &.preview {
+    position: relative;
+    height: 75% !important;
+  }
+}
+
+.alert-component {
+  * {
+    position: relative;
+  }
+}
+
+.preview .alert-component {
+  * {
+    position: relative;
+    font-size: 20px !important;
   }
 }

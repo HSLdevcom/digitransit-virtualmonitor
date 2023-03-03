@@ -1,6 +1,5 @@
 import React, { FC } from 'react';
 import cx from 'classnames';
-import L from 'leaflet';
 import MonitorMap from './ui/monitorMap';
 type Coordinate = [number, number];
 type BoundingBox = [Coordinate, Coordinate];

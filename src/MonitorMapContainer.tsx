@@ -4,8 +4,12 @@ import L from 'leaflet';
 import MonitorMap from './ui/monitorMap';
 type Coordinate = [number, number];
 type BoundingBox = [Coordinate, Coordinate];
+interface stopsForMap {
+  coords: [number | null | undefined, number | null | undefined];
+  mode?: string;
+}
 interface IProps {
-  stopsForMap?: any;
+  stopsForMap?: stopsForMap[];
   alertComponent?: any;
   preview?: boolean;
 }

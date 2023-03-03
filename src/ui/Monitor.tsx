@@ -79,7 +79,7 @@ const Monitor: FC<IProps> = ({
   const stopsForMap = stopsAndStations
     .map(stops => {
       return stops.map(stop => {
-        const coord = [stop?.lat, stop?.lon];
+        const coord: [number, number] = [stop?.lat, stop?.lon];
         const obj = {
           coords: coord,
           mode: getStopIcon(stop),

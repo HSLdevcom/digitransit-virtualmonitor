@@ -172,6 +172,7 @@ export function getLoginUri(configName) {
     case 'tampere':
     case 'jyvaskyla':
     case 'vaasa':
+    case 'oulu':
       return 'waltti-login';
     case 'hsl':
       return 'hsl-login?url=/&';

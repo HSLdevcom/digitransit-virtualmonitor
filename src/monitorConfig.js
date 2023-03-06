@@ -158,4 +158,18 @@ export default {
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     useTilde: true,
   },
+  oulu: {
+    name: 'oulu',
+    uri: 'routing/v1/routers/waltti/index/graphql',
+    feedIds: ['OULU'],
+    colors: {
+      primary: '#E10669',
+      monitorBackground: '#E10669',
+    },
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
+  },
 };

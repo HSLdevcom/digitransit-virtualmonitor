@@ -44,7 +44,6 @@ function getBoundingBox(coordinates: Coordinate[]): BoundingBox {
 }
 const MonitorMapContainer: FC<IProps> = props => {
   const coordinates = props.stopsForMap.map(s => s.coords);
-  const withAlerts = props.alertComponent != null;
   const bounds = getBoundingBox(coordinates);
   const isLandscape = true;
   return (
@@ -60,9 +59,7 @@ const MonitorMapContainer: FC<IProps> = props => {
         bounds={bounds}
         stopsForMap={props.stopsForMap}
         preview={props.preview}
-        withAlerts={withAlerts}
       />
-      <div className="alert-component">{props.alertComponent}</div>
     </div>
   );
 };

@@ -8,7 +8,7 @@ import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
 import { ConfigContext } from '../contexts';
-import { getStopsAndStationsActuallyFromViews } from '../util/monitorUtils';
+import { stopsAndStationsFromViews } from '../util/monitorUtils';
 import { getStopIcon } from '../util/stopCardUtil';
 import MonitorMapContainer from '../MonitorMapContainer';
 
@@ -75,7 +75,7 @@ const Monitor: FC<IProps> = ({
 
   const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;
   const showMapDisplay = view.layout > 19 && view.layout < 22;
-  const stopsAndStations = getStopsAndStationsActuallyFromViews(view);
+  const stopsAndStations = stopsAndStationsFromViews(view);
   const stopsForMap = stopsAndStations
     .map(stops => {
       return stops.map(stop => {

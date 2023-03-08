@@ -10,7 +10,6 @@ interface IProps {
   stopsForMap?: any;
   bounds: any;
   preview?: boolean;
-  withAlerts?: boolean;
 }
 const MonitorMap: FC<IProps> = props => {
   const config = useContext(ConfigContext);
@@ -71,7 +70,6 @@ const MonitorMap: FC<IProps> = props => {
       key="map"
       className={cx('monitormap', {
         preview: props.preview,
-        alerts: props.withAlerts,
       })}
     ></div>
   );

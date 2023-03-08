@@ -49,11 +49,11 @@ export const getStopsAndStationsFromViews = views => {
   return [stopIds, stationIds];
 };
 
-export const getStopsAndStationsActuallyFromViews = views => {
+export const stopsAndStationsFromViews = views => {
   const stopIds = [];
   const stationIds = [];
-  const totallyArray = Array.isArray(views) ? views : [views];
-  totallyArray.forEach(view => {
+  const arr = Array.isArray(views) ? views : [views];
+  arr.forEach(view => {
     Object.keys(view.columns).forEach(col => {
       view.columns[col].stops?.forEach(stop => {
         stop.locationType === 'STOP'

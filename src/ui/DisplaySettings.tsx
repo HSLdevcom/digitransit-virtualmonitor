@@ -10,6 +10,8 @@ interface IProps {
   orientation: string;
   handleChange: (language: string) => void;
   handleOrientation: (orientation: string) => void;
+  showMap: any;
+  setShowMap: any;
 }
 
 const DisplaySettings: FC<IProps> = ({
@@ -17,6 +19,8 @@ const DisplaySettings: FC<IProps> = ({
   orientation,
   handleOrientation,
   handleChange,
+  showMap,
+  setShowMap,
 }) => {
   const config = useContext(ConfigContext);
   const [t] = useTranslation();
@@ -100,6 +104,12 @@ const DisplaySettings: FC<IProps> = ({
           })}
         </div>
       </section>
+      <div className="map-toggle">
+        <button onClick={() => setShowMap(!showMap)}>
+          {' '}
+          {showMap ? 'TRUE' : 'FALSE'}
+        </button>
+      </div>
     </div>
   );
 };

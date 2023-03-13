@@ -12,6 +12,7 @@ interface IProps {
   languages: Array<string>;
   loading: boolean;
   staticMonitor?: any;
+  mapSettings?: any;
 }
 
 const StopCardListDataContainer: FC<IProps> = ({
@@ -21,6 +22,7 @@ const StopCardListDataContainer: FC<IProps> = ({
   languages,
   loading,
   staticMonitor,
+  mapSettings,
 }) => {
   const [cardList, setCardList] = useState(stopCardList);
   const stops = useQuery(StopQueryDocument, {
@@ -133,6 +135,7 @@ const StopCardListDataContainer: FC<IProps> = ({
       vertical={stopCardList[0].layout > 11}
       stopCards={cardList}
       staticMonitor={staticMonitor}
+      mapSettings={mapSettings}
     />
   );
 };

@@ -71,11 +71,12 @@ const CarouselContainer: FC<IProps> = ({
   closedStopViews,
   trainsWithTrack,
 }) => {
-  const { cards: views, languages } = useContext(MonitorContext);
+  const { cards: views, languages, mapSettings } = useContext(MonitorContext);
   const len = views.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
+  const [displayMap, setDisplayMap] = useState(false);
 
   const orientations = ['static', 'vertical', 'horizontal'];
   const config = useContext(ConfigContext);
@@ -91,7 +92,16 @@ const CarouselContainer: FC<IProps> = ({
         const nextLan = (language + 1) % languages.length;
         setLanguage(nextLan);
       }
-      setAlertState(current % 2);
+      if (
+        mapSettings.showMap &&
+        language === languages.length - 1 &&
+        current === len - 1
+      ) {
+        setDisplayMap(!displayMap);
+      } else {
+        setDisplayMap(false);
+        setAlertState(current % 2);
+      }
       setCurrent(next);
     }, time);
     return () => clearTimeout(id);
@@ -115,7 +125,6 @@ const CarouselContainer: FC<IProps> = ({
     ...views[index],
     //layout: 8,
   };
-
   const { alertSpan } = getLayout(newView.layout);
   let alertComponent;
   let alertRowClass = '';
@@ -188,6 +197,8 @@ const CarouselContainer: FC<IProps> = ({
       alertComponent={alertComponent}
       alertRowSpan={alertSpan}
       closedStopViews={closedStopViews}
+      displayMap={displayMap}
+      mapSettings={mapSettings}
     />
   );
 };

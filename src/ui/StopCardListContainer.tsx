@@ -1,6 +1,6 @@
 import cx from 'classnames';
 import { IStop, IMonitor } from '../util/Interfaces';
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import hash from 'object-hash';
 import { useTranslation } from 'react-i18next';
@@ -14,11 +14,18 @@ import { defaultSettings } from './StopRoutesModal';
 import UserViewTitleEditor from './UserViewTitleEditor';
 import { DateTime } from 'luxon';
 import { v5 as uuidv5 } from 'uuid';
-import { namespace, uuidValidateV5 } from '../util/monitorUtils';
+import isEqual from 'lodash/isEqual';
+import {
+  getBoundingBox,
+  namespace,
+  uuidValidateV5,
+} from '../util/monitorUtils';
 import PrepareMonitor from './PrepareMonitor';
 import { UserContext } from '../contexts';
 import { getParams } from '../util/queryUtils';
 import { getConfig } from '../util/getConfig';
+import { useMergeState } from '../util/utilityHooks';
+import MapCardRow from './MapCardRow';
 
 interface IProps {
   stopCards: any;
@@ -26,18 +33,42 @@ interface IProps {
   loading?: boolean;
   vertical?: boolean;
   staticMonitor?: any;
+  mapSettings?: any;
 }
 
 const StopCardListContainer: FC<IProps> = ({
   stopCards,
   loading = false,
+  mapSettings,
   ...props
 }) => {
   const user = useContext(UserContext);
   const [t] = useTranslation();
   const [stopCardList, setStopCardList] = useState(stopCards);
   const [languages, setLanguages] = useState(props.languages);
-
+  const [mapProps, setMapProps] = useMergeState({
+    center: mapSettings?.center,
+    zoom: mapSettings?.zoom,
+    bounds: mapSettings?.bounds,
+    showMap: mapSettings?.showMap,
+  });
+  const stopCoordinates = stopCardList.flatMap(card => {
+    const stops = card.columns.left.stops.concat(card.columns.right.stops);
+    return stops.map(s => [s.lat, s.lon]);
+  });
+  const updateMapSettings = showMap => {
+    setMapProps({ showMap: showMap });
+    mapSettings.showMap = showMap;
+  };
+  const bounds = getBoundingBox(stopCoordinates);
+  useEffect(() => {
+    if (!isEqual(bounds, mapProps.bounds)) {
+      setMapProps({
+        bounds: bounds,
+        center: null,
+      });
+    }
+  });
   const isHorizontal =
     stopCardList[0].layout < 12 ||
     stopCardList[0].layout === 18 ||
@@ -273,6 +304,7 @@ const StopCardListContainer: FC<IProps> = ({
       cards: cards,
       languages: languageArray.filter(lan => languages.includes(lan)),
       contenthash: '',
+      mapSettings: mapProps,
     };
     newCard.contenthash = hash(newCard, {
       algorithm: 'md5',
@@ -419,6 +451,8 @@ const StopCardListContainer: FC<IProps> = ({
           handleOrientation={handleOrientation}
           languages={languages}
           handleChange={handleLanguageChange}
+          showMap={mapProps.showMap}
+          setShowMap={updateMapSettings}
         />
       </div>
 
@@ -430,6 +464,7 @@ const StopCardListContainer: FC<IProps> = ({
             languages: languages,
             onClose: closePreview,
             isLandscape: orientation === 'horizontal' ? true : false,
+            mapSettings: mapProps,
           }}
         />
       )}
@@ -457,6 +492,7 @@ const StopCardListContainer: FC<IProps> = ({
           );
         })}
       </ul>
+      {mapProps.showMap && <MapCardRow />}
       <div className="buttons">
         <div className="wide">
           <button

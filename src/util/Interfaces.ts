@@ -75,6 +75,7 @@ export interface IMonitor {
   name?: string;
   url?: string;
   instance?: string;
+  mapSettings?: any;
 }
 
 export interface IAlertDescriptionTextTranslation {

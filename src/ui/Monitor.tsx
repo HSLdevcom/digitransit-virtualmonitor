@@ -7,7 +7,7 @@ import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
-import { ConfigContext } from '../contexts';
+import { ConfigContext, MonitorContext } from '../contexts';
 import { stopsAndStationsFromViews } from '../util/monitorUtils';
 import { getStopIcon } from '../util/stopCardUtil';
 import MonitorMapContainer from '../MonitorMapContainer';
@@ -30,6 +30,8 @@ interface IProps {
   alertComponent: any;
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
+  displayMap?: boolean;
+  mapSettings?: any;
 }
 let to;
 
@@ -43,8 +45,11 @@ const Monitor: FC<IProps> = ({
   alertComponent,
   alertRowSpan,
   closedStopViews,
+  displayMap,
+  mapSettings,
 }) => {
   const config = useContext(ConfigContext);
+  const { cards } = useContext(MonitorContext);
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
@@ -74,8 +79,8 @@ const Monitor: FC<IProps> = ({
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;
-  const showMapDisplay = view.layout > 19 && view.layout < 22;
-  const stopsAndStations = stopsAndStationsFromViews(view);
+  const showMapDisplay = displayMap;
+  const stopsAndStations = stopsAndStationsFromViews(cards);
   const stopsForMap = stopsAndStations
     .map(stops => {
       return stops.map(stop => {
@@ -115,8 +120,8 @@ const Monitor: FC<IProps> = ({
       {showMapDisplay ? (
         <MonitorMapContainer
           stopsForMap={stopsForMap}
-          alertComponent={alertComponent}
           preview={isPreview}
+          mapSettings={mapSettings}
         />
       ) : (
         <MonitorRowContainer

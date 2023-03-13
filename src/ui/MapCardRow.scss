@@ -1,0 +1,15 @@
+.map-card {
+  font-family: var(--font-family);
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 720px;
+  height: auto;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 20px;
+  margin-bottom: 10px;
+}

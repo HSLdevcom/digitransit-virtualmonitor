@@ -98,7 +98,7 @@ export const createMonitor = async (req, res, next) => {
     }
     const res = await updateMonitors(dataStorage.id, req?.body, apiClient, next);
   } catch (e) {
-    next(e);
+    throw e;
   }
 };
 
@@ -212,7 +212,7 @@ function getClientAndUserInformation(user) {
       userId: user?.data?.sub
     }
   }
-  
+
   return {
     openIdUrl: '',
     id: '',

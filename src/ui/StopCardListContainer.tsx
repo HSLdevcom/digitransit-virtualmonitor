@@ -51,6 +51,7 @@ const StopCardListContainer: FC<IProps> = ({
     zoom: mapSettings?.zoom,
     bounds: mapSettings?.bounds,
     showMap: mapSettings?.showMap,
+    hideTimeTable: false, // not implemeted yet
   });
   const stopCoordinates = stopCardList.flatMap(card => {
     const stops = card.columns.left.stops.concat(card.columns.right.stops);
@@ -58,7 +59,6 @@ const StopCardListContainer: FC<IProps> = ({
   });
   const updateMapSettings = showMap => {
     setMapProps({ showMap: showMap });
-    mapSettings.showMap = showMap;
   };
   const bounds = getBoundingBox(stopCoordinates);
   useEffect(() => {

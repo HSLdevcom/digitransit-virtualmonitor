@@ -4,6 +4,7 @@ import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';
 import { ConfigContext } from '../contexts';
+import Toggle from './Toggle';
 
 interface IProps {
   languages: Array<string>;
@@ -104,12 +105,20 @@ const DisplaySettings: FC<IProps> = ({
           })}
         </div>
       </section>
-      <div className="map-toggle">
-        <button onClick={() => setShowMap(!showMap)}>
+      <section className="display-language-container">
+        <div className="map-toggle">
           {' '}
-          {showMap ? 'TRUE' : 'FALSE'}
-        </button>
-      </div>
+          <label>
+            <Toggle
+              id="toggle"
+              toggled={showMap}
+              title="showmap"
+              onToggle={setShowMap}
+            />
+          </label>
+          <div className="txt">Näytä esityksessä</div>
+        </div>
+      </section>
     </div>
   );
 };

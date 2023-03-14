@@ -117,7 +117,7 @@ const Monitor: FC<IProps> = ({
         view={view}
         currentLang={currentLang}
       />
-      {showMapDisplay ? (
+      {showMapDisplay || mapSettings.hideTimeTable ? (
         <MonitorMapContainer
           stopsForMap={stopsForMap}
           preview={isPreview}

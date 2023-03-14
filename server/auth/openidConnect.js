@@ -155,8 +155,8 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
 
       return passport.authenticate(oidcStrategyName, {
         refresh: true,
-        successReturnToOrRedirect: `/${indexPath}`,
-        failureRedirect: `/${indexPath}`,
+        successReturnToOrRedirect: `/${req.path}`,
+        failureRedirect: `/${req.path}`,
       })(req, res, next);
     }
     return next();

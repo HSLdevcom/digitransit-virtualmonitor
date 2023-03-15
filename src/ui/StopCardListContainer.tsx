@@ -141,7 +141,7 @@ const StopCardListContainer: FC<IProps> = ({
   };
 
   const onCardDelete = (id: number) => {
-    const card = stopCardList.find(c => c.id === id)
+    const card = stopCardList.find(c => c.id === id);
     if (card?.type === 'map') {
       setMapProps({
         showMap: false,

@@ -7,6 +7,7 @@ import StopViewTitleEditor from './StopViewTitleEditor';
 import { ICardInfo } from '../util/Interfaces';
 import Icon from './Icon';
 import Toggle from './Toggle';
+import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {
@@ -188,18 +189,35 @@ const mapCardRow: FunctionComponent<IProps> = ({
               )}
             </div>
           </div>
-          <div>
-            <Icon img="map-icon" height={48} width={48} />
-            {t('map-description')}
-            <span onClick={() => openModal()}> {t('edit-map')}</span>
+          <div className="headers">
+            <div className="stop"></div>
+            <div className="layout">{t('layout')}</div>
+            <div className="duration">{t('duration')}</div>
           </div>
-          <div>
+          <div className="map-description">
+            <Icon img="map-icon" height={48} width={48} />
+            <span className="desc"> {t('map-description')} </span>
+            <span className="modallink" onClick={() => openModal()}>
+              {' '}
+              {t('edit-map')}
+            </span>
+            <LayoutAndTimeContainer
+              orientation={'2'}
+              cardInfo={item}
+              updateCardInfo={updateCardInfo}
+              updateLayout={null}
+              durationEditable
+              allowInformationDisplay={false}
+            />
+          </div>
+          <div className="toggle">
             <label>
               <Toggle
                 toggled={mapSettings.hideTimeTable}
                 onToggle={handleToggle}
               />
             </label>
+            <span className="hide-timetable">{t('hide-timetable')}</span>
           </div>
         </div>
       </li>

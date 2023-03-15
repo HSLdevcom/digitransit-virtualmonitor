@@ -216,7 +216,7 @@ i18n.use(initReactI18next).init({
         displayLanguages: 'Esityskielet',
         duration: 'Kesto / esityskieli',
         'edit-display': 'Muokkaa näyttöä',
-        'edit-map': 'Muokkaa rajausta',
+        'edit-map': 'Muokkaa rajausta > ',
         'front-page-no-sign-in-button': 'Jatka kirjautumatta',
         'front-page-sign-in-button': 'Kirjaudu ja luo näyttö',
         frontPageParagraph1:
@@ -234,6 +234,7 @@ i18n.use(initReactI18next).init({
         hideAllLines: 'Piilota kaikki linjat',
         hideLine: 'Piilota linja {{line}}',
         hideLines: 'Piilota linjoja {{hidden}} / {{all}}',
+        'hide-timetable': 'Näytä esityksessä vain karttanäkymä',
         horizontal: 'Vaaka',
         import: 'Tuo',
         'import-instructions':

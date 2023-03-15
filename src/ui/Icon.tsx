@@ -110,6 +110,7 @@ import { ReactComponent as Weather172 } from './icons/weather/172.svg';
 import { ReactComponent as Weather173 } from './icons/weather/173.svg';
 import { ReactComponent as UserIcon } from './icons/user-icon.svg';
 import { ReactComponent as QueryErrorAlert } from './icons/query-error-alert.svg';
+import { ReactComponent as MapIcon} from './icons/map.svg';
 
 export interface IIconMapProps {
   color?: string;
@@ -249,6 +250,7 @@ const IconMap = (style: IIconMapProps) => {
     weather173: <Weather173 style={style} />,
     'user-icon': <UserIcon style={style} />,
     'query-error-alert': <QueryErrorAlert style={style} />,
+    'map-icon': <MapIcon style={style} />
   };
 };
 

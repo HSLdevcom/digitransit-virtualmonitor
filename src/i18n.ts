@@ -266,6 +266,7 @@ i18n.use(initReactI18next).init({
         logout: 'Kirjaudu ulos',
         'map-description':
           'Karttanäkymä näkyy yhtenä näkymänä esityksessä. Se rajataan automaattisesti koko esitykseen valittujen pysäkkien perusteella',
+        maptitle: 'Karttanäkymän nimi',
         menuClose: 'Sulje päävalikko',
         menuOpen: 'Avaa päävalikko',
         userMenuClose: 'Sulje käyttäjävalikko',

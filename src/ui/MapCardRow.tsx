@@ -68,6 +68,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
                     card={item}
                     updateCardInfo={updateCardInfo}
                     lang={lan}
+                    isMap
                   />
                 );
               })}
@@ -197,7 +198,11 @@ const mapCardRow: FunctionComponent<IProps> = ({
           <div className="map-description">
             <Icon img="map-icon" height={48} width={48} />
             <span className="desc"> {t('map-description')} </span>
-            <span className="modallink" onClick={() => openModal()}>
+            <span
+              className="modallink"
+              role="button"
+              onClick={() => openModal()}
+            >
               {' '}
               {t('edit-map')}
             </span>

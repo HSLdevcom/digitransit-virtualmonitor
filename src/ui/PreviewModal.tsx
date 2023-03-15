@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import TrainDataPreparer from './TrainDataPreparer';
 import { MonitorContext } from '../contexts';
 import { isPlatformOrTrackVisible } from '../util/monitorUtils';
-import MonitorMap from './monitorMap';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {

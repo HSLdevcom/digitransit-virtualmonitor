@@ -3,17 +3,18 @@ import 'leaflet/dist/leaflet.css';
 import React, { useEffect, FC, useContext } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Icon from './Icon';
-import { ConfigContext, MapContext } from '../contexts';
+import { ConfigContext } from '../contexts';
 import cx from 'classnames';
 
 interface IProps {
-  stopsForMap?: any;
   preview?: boolean;
   mapSettings: any;
+  modal?: boolean;
+  updateMap?: any;
 }
-const MonitorMap: FC<IProps> = ({ stopsForMap, preview, mapSettings }) => {
+const MonitorMap: FC<IProps> = ({ preview, mapSettings, modal, updateMap }) => {
   const config = useContext(ConfigContext);
-  const icons = stopsForMap.map(stop => {
+  const icons = mapSettings.stops.map(stop => {
     const color =
       config.modeIcons.colors[
         `${stop.mode
@@ -47,17 +48,16 @@ const MonitorMap: FC<IProps> = ({ stopsForMap, preview, mapSettings }) => {
     icons.forEach(icon =>
       L.marker(icon.coords, { icon: icon.icon }).addTo(map),
     );
-    /* map.on('move', () => {
-      setmapSettings({
-        center: map.getCenter(),
-        zoom: map.getZoom(), // Center gets updated automatially when zooming in / out. But when moving, zoom does not.
-      });
+    map.on('move', () => {
+      if (updateMap) {
+        updateMap({ center: map.getCenter(), zoom: map.getZoom() });
+      }
     });
     map.on('zoomend', () => {
-      setmapSettings({
-        zoom: map.getZoom(),
-      });
-    }); */
+      if (updateMap) {
+        updateMap({ zoom: map.getZoom() });
+      }
+    });
     return () => {
       if (map) {
         map.remove();
@@ -70,6 +70,7 @@ const MonitorMap: FC<IProps> = ({ stopsForMap, preview, mapSettings }) => {
       key="map"
       className={cx('monitormap', {
         preview: preview,
+        modal: modal,
       })}
     ></div>
   );

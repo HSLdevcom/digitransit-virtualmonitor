@@ -6,15 +6,17 @@ interface stopsForMap {
   mode?: string;
 }
 interface IProps {
-  stopsForMap?: stopsForMap[];
   preview?: boolean;
   mapSettings: any;
+  modal?: boolean;
+  updateMap?: any;
 }
 
 const MonitorMapContainer: FC<IProps> = ({
-  stopsForMap,
   preview,
   mapSettings,
+  modal,
+  updateMap,
 }) => {
   const isLandscape = true;
   return (
@@ -27,9 +29,10 @@ const MonitorMapContainer: FC<IProps> = ({
       })}
     >
       <MonitorMap
-        stopsForMap={stopsForMap}
         preview={preview}
         mapSettings={mapSettings}
+        modal={modal}
+        updateMap={updateMap}
       />
     </div>
   );

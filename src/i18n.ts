@@ -197,6 +197,7 @@ i18n.use(initReactI18next).init({
         closedStop: 'Pysäkki suljettu',
         closedStopWithRange:
           'Pysäkki {{name}} {{code}} suljettu aikavälillä {{startTime}} - {{endTime}}',
+        'confirm-choice': 'Vahvista valinta',
         continue: 'Jatka',
         copy: 'Kopioi linkki',
         createViewTitle: 'Uuden näkymän luonti',
@@ -215,6 +216,7 @@ i18n.use(initReactI18next).init({
         displayLanguages: 'Esityskielet',
         duration: 'Kesto / esityskieli',
         'edit-display': 'Muokkaa näyttöä',
+        'edit-map': 'Muokkaa rajausta',
         'front-page-no-sign-in-button': 'Jatka kirjautumatta',
         'front-page-sign-in-button': 'Kirjaudu ja luo näyttö',
         frontPageParagraph1:
@@ -261,6 +263,8 @@ i18n.use(initReactI18next).init({
         loading: 'Ladataan…',
         login: 'Kirjaudu sisään',
         logout: 'Kirjaudu ulos',
+        'map-description':
+          'Karttanäkymä näkyy yhtenä näkymänä esityksessä. Se rajataan automaattisesti koko esitykseen valittujen pysäkkien perusteella',
         menuClose: 'Sulje päävalikko',
         menuOpen: 'Avaa päävalikko',
         userMenuClose: 'Sulje käyttäjävalikko',

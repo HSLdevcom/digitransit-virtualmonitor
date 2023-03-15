@@ -8,7 +8,7 @@ import monitorAPI from '../api';
 import { Link, Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getResources';
-import { defaultStopCard } from '../util/stopCardUtil';
+import { defaultStopCard, getStopIcon } from '../util/stopCardUtil';
 import Loading from './Loading';
 import { defaultSettings } from './StopRoutesModal';
 import UserViewTitleEditor from './UserViewTitleEditor';
@@ -18,6 +18,7 @@ import isEqual from 'lodash/isEqual';
 import {
   getBoundingBox,
   namespace,
+  stopsAndStationsFromViews,
   uuidValidateV5,
 } from '../util/monitorUtils';
 import PrepareMonitor from './PrepareMonitor';
@@ -26,6 +27,7 @@ import { getParams } from '../util/queryUtils';
 import { getConfig } from '../util/getConfig';
 import { useMergeState } from '../util/utilityHooks';
 import MapCardRow from './MapCardRow';
+import MapModal from './MapModal';
 
 interface IProps {
   stopCards: any;
@@ -51,18 +53,58 @@ const StopCardListContainer: FC<IProps> = ({
     zoom: mapSettings?.zoom,
     bounds: mapSettings?.bounds,
     showMap: mapSettings?.showMap,
-    hideTimeTable: false, // not implemeted yet
+    hideTimeTable: mapSettings?.hideTimeTable,
+    stops: mapSettings?.stops,
+    userSet: mapSettings?.userSet,
   });
   const stopCoordinates = stopCardList.flatMap(card => {
     const stops = card.columns.left.stops.concat(card.columns.right.stops);
     return stops.map(s => [s.lat, s.lon]);
   });
-  const updateMapSettings = showMap => {
+  useEffect(() => {
+    const stopsAndStations = stopsAndStationsFromViews(stopCardList);
+    const stops = stopsAndStations
+      .map(stops => {
+        return stops.map(stop => {
+          const coord: [number, number] = [stop?.lat, stop?.lon];
+          const obj = {
+            coords: coord,
+            mode: getStopIcon(stop),
+          };
+          return obj;
+        });
+      })
+      .flat();
+    stops.forEach(c => {
+      c.coords.flat();
+    });
+    setMapProps({
+      stops: stops,
+    });
+  }, [stopCardList]);
+  const handleShowMap = showMap => {
+    if (showMap) {
+      addMap();
+    } else {
+      setStopCardList(stopCardList.filter(s => s.type !== 'map'));
+    }
     setMapProps({ showMap: showMap });
+  };
+  const updateMapSettings = settings => {
+    setMapProps({ ...settings });
   };
   const bounds = getBoundingBox(stopCoordinates);
   useEffect(() => {
-    if (!isEqual(bounds, mapProps.bounds)) {
+    if (mapProps.showMap) {
+      // Check that the map is in the cardlist
+      const map = stopCardList.find(i => i.type === 'map');
+      if (!map) {
+        addMap();
+      }
+    }
+  });
+  useEffect(() => {
+    if (!mapProps.userSet && !isEqual(bounds, mapProps.bounds)) {
       setMapProps({
         bounds: bounds,
         center: null,
@@ -79,11 +121,18 @@ const StopCardListContainer: FC<IProps> = ({
   const [redirect, setRedirect] = useState(false);
   const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);
+  const [isMapmodalOpen, setMapModalOpen] = useState(false);
 
   const [viewTitle, setViewTitle] = useState(
     props.staticMonitor ? props.staticMonitor.name : null,
   );
 
+  const openMapModal = () => {
+    setMapModalOpen(true);
+  };
+  const closeMapModal = () => {
+    setMapModalOpen(false);
+  };
   const openPreview = () => {
     setOpen(true);
   };
@@ -219,7 +268,22 @@ const StopCardListContainer: FC<IProps> = ({
     }
     setStopCardList(stopCardList.slice());
   };
-
+  const addMap = () => {
+    let cnt = stopCardList.length + 1;
+    while (cnt > 0) {
+      if (stopCardList.filter(s => s.id === cnt).length === 0) {
+        const newCard = {
+          ...defaultStopCard(),
+          id: cnt,
+          layout: isHorizontal ? 2 : 12,
+          type: 'map',
+        };
+        setStopCardList(stopCardList.concat(newCard));
+        cnt = 0;
+      }
+      cnt--;
+    }
+  };
   const addNew = () => {
     let cnt = stopCardList.length + 1;
     while (cnt > 0) {
@@ -255,6 +319,11 @@ const StopCardListContainer: FC<IProps> = ({
 
   const checkNoStops = stopCardList => {
     return stopCardList.some((stopCard, i) => {
+      const ismap = stopCard.type === 'map';
+
+      if (ismap) {
+        return false;
+      }
       const isMultiDisplay = getLayout(stopCard.layout).isMultiDisplay;
       return !isMultiDisplay
         ? stopCard.columns.left.stops.length === 0
@@ -452,10 +521,9 @@ const StopCardListContainer: FC<IProps> = ({
           languages={languages}
           handleChange={handleLanguageChange}
           showMap={mapProps.showMap}
-          setShowMap={updateMapSettings}
+          setShowMap={handleShowMap}
         />
       </div>
-
       {isOpen && (
         <PrepareMonitor
           preview={{
@@ -468,12 +536,37 @@ const StopCardListContainer: FC<IProps> = ({
           }}
         />
       )}
+      {isMapmodalOpen && (
+        <MapModal
+          isOpen={isMapmodalOpen}
+          onClose={closeMapModal}
+          mapSettings={mapProps}
+          isLandscape={orientation == 'horizontal' ? true : false}
+          updateMapSettings={updateMapSettings}
+        />
+      )}
       <ul className="stopcards">
         {stopCardList.map((item, index) => {
           const card: any = {
             index: index,
             ...item,
           };
+          if (item.type === 'map') {
+            return (
+              <MapCardRow
+                key={`stopcard-${index}`}
+                item={card}
+                cards={stopCardList}
+                onCardDelete={onCardDelete}
+                onCardMove={onCardMove}
+                updateCardInfo={updateCardInfo}
+                languages={languages}
+                mapSettings={mapProps}
+                updateMapSettings={updateMapSettings}
+                openModal={openMapModal}
+              />
+            );
+          }
           return (
             <StopCardRow
               key={`stopcard-${index}`}
@@ -492,7 +585,6 @@ const StopCardListContainer: FC<IProps> = ({
           );
         })}
       </ul>
-      {mapProps.showMap && <MapCardRow />}
       <div className="buttons">
         <div className="wide">
           <button

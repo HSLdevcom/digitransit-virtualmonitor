@@ -76,8 +76,6 @@ const CarouselContainer: FC<IProps> = ({
   const [current, setCurrent] = useState(0);
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
-  const [displayMap, setDisplayMap] = useState(false);
-
   const orientations = ['static', 'vertical', 'horizontal'];
   const config = useContext(ConfigContext);
   const [demoOrientation, setDemoOrientation] = useState(
@@ -92,16 +90,9 @@ const CarouselContainer: FC<IProps> = ({
         const nextLan = (language + 1) % languages.length;
         setLanguage(nextLan);
       }
-      if (
-        mapSettings.showMap &&
-        language === languages.length - 1 &&
-        current === len - 1
-      ) {
-        setDisplayMap(!displayMap);
-      } else {
-        setDisplayMap(false);
-        setAlertState(current % 2);
-      }
+
+      setAlertState(current % 2);
+
       setCurrent(next);
     }, time);
     return () => clearTimeout(id);
@@ -197,7 +188,6 @@ const CarouselContainer: FC<IProps> = ({
       alertComponent={alertComponent}
       alertRowSpan={alertSpan}
       closedStopViews={closedStopViews}
-      displayMap={displayMap}
       mapSettings={mapSettings}
     />
   );

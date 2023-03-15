@@ -30,7 +30,6 @@ interface IProps {
   alertComponent: any;
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
-  displayMap?: boolean;
   mapSettings?: any;
 }
 let to;
@@ -45,7 +44,6 @@ const Monitor: FC<IProps> = ({
   alertComponent,
   alertRowSpan,
   closedStopViews,
-  displayMap,
   mapSettings,
 }) => {
   const config = useContext(ConfigContext);
@@ -79,7 +77,7 @@ const Monitor: FC<IProps> = ({
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;
-  const showMapDisplay = displayMap;
+  const showMapDisplay = view.type === 'map';
   const stopsAndStations = stopsAndStationsFromViews(cards);
   const stopsForMap = stopsAndStations
     .map(stops => {

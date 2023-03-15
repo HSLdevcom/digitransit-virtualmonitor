@@ -67,6 +67,7 @@ export interface IView {
   title: ITitle;
   layout: number;
   duration: number;
+  type?: string;
 }
 export interface IMonitor {
   cards: Array<IView>;

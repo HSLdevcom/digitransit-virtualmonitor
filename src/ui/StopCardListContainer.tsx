@@ -571,6 +571,7 @@ const StopCardListContainer: FC<IProps> = ({
                 mapSettings={mapProps}
                 updateMapSettings={updateMapSettings}
                 openModal={openMapModal}
+                orientation={orientation}
               />
             );
           }

@@ -25,6 +25,7 @@ interface IProps {
   mapSettings: any;
   updateMapSettings: (settings: any) => void;
   openModal: any;
+  orientation?: string;
 }
 
 const mapCardRow: FunctionComponent<IProps> = ({
@@ -37,11 +38,16 @@ const mapCardRow: FunctionComponent<IProps> = ({
   openModal,
   languages,
   mapSettings,
+  orientation,
 }) => {
   const config = useContext(ConfigContext);
   const [t] = useTranslation();
   const possibleToMove = cards.length > 1;
   const { id, index } = item;
+  const richItem = {
+    ...item,
+    layout: orientation === 'vertical' ? 1 : 18,
+  };
   const isFirst = index === 0;
   const isLast = index === cards.length - 1;
   const style = {
@@ -68,7 +74,6 @@ const mapCardRow: FunctionComponent<IProps> = ({
                     card={item}
                     updateCardInfo={updateCardInfo}
                     lang={lan}
-                    isMap
                   />
                 );
               })}
@@ -207,12 +212,13 @@ const mapCardRow: FunctionComponent<IProps> = ({
               {t('edit-map')}
             </span>
             <LayoutAndTimeContainer
-              orientation={'2'}
-              cardInfo={item}
+              orientation={orientation}
+              cardInfo={richItem}
               updateCardInfo={updateCardInfo}
               updateLayout={null}
               durationEditable
               allowInformationDisplay={false}
+              disableLayoutButton
             />
           </div>
           <div className="toggle">

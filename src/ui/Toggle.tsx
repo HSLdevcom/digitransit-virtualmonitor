@@ -1,13 +1,15 @@
 import uniqueId from 'lodash/uniqueId';
 import React, { FC } from 'react';
+import cx from 'classnames';
 
 interface IProps {
   toggled?: boolean;
   title?: string;
   onToggle?: (boolean) => void;
   id?: any;
+  disabled?: boolean;
 }
-const Toggle: FC<IProps> = ({ toggled, title, onToggle, id }) => {
+const Toggle: FC<IProps> = ({ toggled, title, onToggle, id, disabled }) => {
   const useId = id || uniqueId('input-');
   return (
     <div className="option-toggle-container" title={title}>
@@ -19,8 +21,9 @@ const Toggle: FC<IProps> = ({ toggled, title, onToggle, id }) => {
           onChange={() => {
             onToggle(!toggled);
           }}
+          disabled={disabled}
         />
-        <span className="slider round" />
+        <span className={cx('slider round', { disabled })} />
       </div>
     </div>
   );

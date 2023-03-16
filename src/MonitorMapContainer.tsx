@@ -1,10 +1,7 @@
 import React, { FC } from 'react';
 import cx from 'classnames';
 import MonitorMap from './ui/monitorMap';
-interface stopsForMap {
-  coords: [number | null | undefined, number | null | undefined];
-  mode?: string;
-}
+
 interface IProps {
   preview?: boolean;
   mapSettings: any;

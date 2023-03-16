@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from './Icon';
 import cx from 'classnames';
@@ -13,6 +13,7 @@ interface IProps {
   handleOrientation: (orientation: string) => void;
   showMap: any;
   setShowMap: any;
+  disableToggle?: boolean;
 }
 
 const DisplaySettings: FC<IProps> = ({
@@ -22,6 +23,7 @@ const DisplaySettings: FC<IProps> = ({
   handleChange,
   showMap,
   setShowMap,
+  disableToggle,
 }) => {
   const config = useContext(ConfigContext);
   const [t] = useTranslation();
@@ -117,6 +119,7 @@ const DisplaySettings: FC<IProps> = ({
               toggled={showMap}
               title="showmap"
               onToggle={setShowMap}
+              disabled={disableToggle}
             />
           </label>
           <div className="txt">Näytä esityksessä</div>

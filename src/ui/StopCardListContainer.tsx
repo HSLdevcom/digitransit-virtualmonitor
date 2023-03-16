@@ -528,6 +528,7 @@ const StopCardListContainer: FC<IProps> = ({
           handleChange={handleLanguageChange}
           showMap={mapProps.showMap}
           setShowMap={handleShowMap}
+          disableToggle={mapProps.stops?.length === 0}
         />
       </div>
       {isOpen && (

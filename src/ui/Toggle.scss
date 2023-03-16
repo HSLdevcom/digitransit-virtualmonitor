@@ -92,6 +92,10 @@
     border-radius: 34px;
     background: white;
     border: 1px solid #888;
+
+    &.disabled {
+      background: grey !important;
+    }
   }
 
   .slider.round::before {

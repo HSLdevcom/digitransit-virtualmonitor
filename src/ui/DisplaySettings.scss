@@ -4,6 +4,7 @@
   font-family: $font-family;
   margin-top: 26px;
   height: 100px;
+
   .headers {
     display: flex;
     position: absolute;
@@ -19,9 +20,11 @@
   border-radius: 5px;
   background-color: white;
   align-items: center;
+
   .toggle {
     margin: 0;
   }
+
   .txt {
     display: flex;
   }
@@ -94,6 +97,7 @@
 .map-header {
   margin-left: 225px;
 }
+
 .display-orientation-container {
   display: flex;
   align-items: center;

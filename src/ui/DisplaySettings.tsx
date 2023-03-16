@@ -31,11 +31,15 @@ const DisplaySettings: FC<IProps> = ({
   };
   return (
     <div className="display-settings-container">
+      <div className="headers">
+        <div className="orientation-header">{t('displayDirection')}</div>
+        <div className="language-header">{t('displayLanguages')}</div>
+        <div className="map-header">{t('displayMap')}</div>
+      </div>
       <section
         className="display-orientation-container"
         aria-label={t('displayDirection')}
       >
-        <div className="orientation-header">{t('displayDirection')}</div>
         <div className="orientation-controls">
           <button
             className={cx('orientation-button', {
@@ -80,7 +84,6 @@ const DisplaySettings: FC<IProps> = ({
         className="display-language-container"
         aria-label={t('displayLanguages')}
       >
-        <div className="language-header">{t('displayLanguages')}</div>
         {languages.length === 0 && (
           <div className="language-alert" aria-hidden="true">
             {t('chooseOne')}

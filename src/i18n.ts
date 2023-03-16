@@ -214,6 +214,7 @@ i18n.use(initReactI18next).init({
         displayEditorStaticLink: 'Luo näkymä',
         displayLanguage: 'Esityskieli',
         displayLanguages: 'Esityskielet',
+        displayMap: 'Karttanäkymä',
         duration: 'Kesto / esityskieli',
         'edit-display': 'Muokkaa näyttöä',
         'edit-map': 'Muokkaa rajausta > ',

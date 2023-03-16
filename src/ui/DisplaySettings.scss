@@ -3,6 +3,12 @@
   justify-content: space-between;
   font-family: $font-family;
   margin-top: 26px;
+  height: 100px;
+  .headers {
+    display: flex;
+    position: absolute;
+    margin-left: 20px;
+  }
 }
 
 .map-toggle {
@@ -13,7 +19,9 @@
   border-radius: 5px;
   background-color: white;
   align-items: center;
-
+  .toggle {
+    margin: 0;
+  }
   .txt {
     display: flex;
   }
@@ -75,11 +83,17 @@
   }
 }
 
-.orientation-header,
-.language-header {
-  margin-left: 8px;
+.orientation-header {
+  margin-left: 5px;
 }
 
+.language-header {
+  margin-left: 92px;
+}
+
+.map-header {
+  margin-left: 225px;
+}
 .display-orientation-container {
   display: flex;
   align-items: center;

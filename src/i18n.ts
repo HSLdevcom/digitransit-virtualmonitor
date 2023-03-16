@@ -313,6 +313,7 @@ i18n.use(initReactI18next).init({
         'search-autosuggest-len': 'Löydettiin {{count}} ehdotus',
         'search-autosuggest-len_plural': 'Löydettiin {{count}} ehdotusta',
         'search-current-suggestion': 'Tämänhetkinen valinta: {{selection}}',
+        'select-bounds': 'Valitse sopiva rajaus',
         settingsChanged: 'Muutettuja asetuksia',
         show: 'Näytä',
         showEndOfLine: 'Linjat, joille tämä on päätepysäkki',

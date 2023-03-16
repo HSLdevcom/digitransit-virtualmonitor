@@ -1,9 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import Modal from 'react-modal';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 import MonitorMapContainer from '../MonitorMapContainer';
 import { useMergeState } from '../util/utilityHooks';
+import Icon from './Icon';
+import { ConfigContext } from '../contexts';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
@@ -21,6 +23,7 @@ const MapModal: FC<Props> = ({
   updateMapSettings,
 }) => {
   const [t] = useTranslation();
+  const config = useContext(ConfigContext);
   const [state, setState] = useMergeState({
     zoom: undefined,
     center: undefined,
@@ -42,6 +45,25 @@ const MapModal: FC<Props> = ({
       portalClassName={cx('preview', !isLandscape ? 'portrait' : '')}
     >
       <div className="mapmodal">
+        <div className="map-modal-header">
+          {' '}
+          {t('select-bounds')}{' '}
+          <section id="close">
+            <button
+              className="close-button"
+              role="button"
+              aria-label={t('close')}
+              onClick={() => onClose(false)}
+            >
+              <Icon
+                img="close"
+                color={config.colors.primary}
+                height={24}
+                width={24}
+              />
+            </button>{' '}
+          </section>
+        </div>
         <MonitorMapContainer
           mapSettings={mapSettings}
           updateMap={setState}

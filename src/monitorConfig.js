@@ -76,7 +76,7 @@ export default {
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
-      inUse: true,
+      inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
@@ -117,7 +117,7 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
-      inUse: true,
+      inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
@@ -127,7 +127,7 @@ export default {
     uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
     login: {
-      inUse: true,
+      inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
@@ -167,7 +167,7 @@ export default {
       monitorBackground: '#E10669',
     },
     login: {
-      inUse: true,
+      inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },

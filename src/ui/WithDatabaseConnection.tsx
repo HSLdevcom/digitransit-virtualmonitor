@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useContext } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
 import { ISides, ITitle, ICard } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
@@ -9,6 +9,11 @@ import TrainDataPreparer from './TrainDataPreparer';
 import { getParams } from '../util/queryUtils';
 import { MonitorContext } from '../contexts';
 import QueryError from './QueryError';
+import {
+  getTrainStationData,
+  isPlatformOrTrackVisible,
+} from '../util/monitorUtils';
+import { useMergeState } from '../util/utilityHooks';
 
 interface Iv {
   columns: ISides;
@@ -34,18 +39,17 @@ interface IProps {
   readonly location?: ILocation;
   readonly stations: Array<ICard>;
   readonly stops: Array<ICard>;
-  readonly showPlatformsOrTracks: boolean;
+  readonly showPlatformsOrTracks?: boolean;
 }
 
-const WithDatabaseConnection: FC<IProps> = ({
-  location,
-  stations,
-  stops,
-  showPlatformsOrTracks,
-}) => {
-  const [view, setView] = useState({});
-  const [loading, setLoading] = useState(true);
+const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const [queryError, setQueryError] = useState(false);
+  const [monitorState, setMonitorState] = useMergeState({
+    loading: true,
+    view: undefined,
+    stations: undefined,
+    stops: undefined,
+  });
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
       const { url, cont: hash } = getParams(location.search);
@@ -53,26 +57,35 @@ const WithDatabaseConnection: FC<IProps> = ({
         monitorAPI
           .get(hash)
           .then(r => {
-            setLoading(false);
-            setView(r);
+            setMonitorState({
+              loading: false,
+              view: r,
+              stations: getTrainStationData(r, 'STATION'),
+              stops: getTrainStationData(r, 'STOP'),
+            });
           })
           .catch(() => {
             setQueryError(true);
-            setLoading(false);
+            setMonitorState({ loading: false });
           });
       } else if (url) {
         monitorAPI
           .getStatic(url)
           .then(r => {
-            setLoading(false);
-            setView(r);
+            setMonitorState({
+              loading: false,
+              view: r,
+              stations: getTrainStationData(r, 'STATION'),
+              stops: getTrainStationData(r, 'STOP'),
+            });
+
             if (queryError) {
               setQueryError(false);
             }
           })
           .catch(() => {
             setQueryError(true);
-            setLoading(false);
+            setMonitorState({ loading: false });
           });
       } else {
         setQueryError(true);
@@ -80,6 +93,7 @@ const WithDatabaseConnection: FC<IProps> = ({
     }
   }, [queryError]);
 
+  const { loading, view, stops, stations } = monitorState;
   const monitor = !loading ? view : location?.state?.view.cards;
   if (queryError) {
     return (
@@ -100,7 +114,8 @@ const WithDatabaseConnection: FC<IProps> = ({
         <InformationDisplayContainer />
       ) : (
         <>
-          {(stations.length || stops.length) && showPlatformsOrTracks ? (
+          {(stations.length || stops.length) &&
+          isPlatformOrTrackVisible(view) ? (
             <TrainDataPreparer stations={stations} stops={stops} />
           ) : (
             <CarouselDataContainer

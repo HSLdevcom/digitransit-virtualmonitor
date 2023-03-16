@@ -6,6 +6,7 @@ import { trainStationMap } from '../util/trainStations';
 import { stringifyPattern } from '../util/monitorUtils';
 import TrainDataFetcher from './TrainDataFetcher';
 import { GetLineIdsDocument } from '../generated';
+import { useMergeState } from '../util/utilityHooks';
 
 const createLineIdsArray = (data, hiddenRoutes) => {
   const filteredHiddenRoutes = hiddenRoutes.reduce((flatten, arr) => [
@@ -69,9 +70,10 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
     },
     context: { clientName: 'default' },
   });
-
-  const [defaultLines, setDefaultLines] = useState(null);
-  const [stopAndRoutes, setStopAndRoutes] = useState([]);
+  const [state, setState] = useMergeState({
+    defaultLines: undefined,
+    stopAndRoutes: [],
+  });
 
   const hiddenRoutes = stations.concat(stops).map(st => st.hiddenRoutes);
 
@@ -105,14 +107,15 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
           return { commuterLineid: { equals: m.shortName } };
         })
         .filter(x => x);
-      setDefaultLines(lineIds);
-      setStopAndRoutes(stopAndRoutes);
+      setState({ defaultLines: lineIds, stopAndRoutes: stopAndRoutes });
     }
   }, [defaultState.data]);
 
   if (defaultState.loading) {
     return <Loading />;
   }
+
+  const { defaultLines, stopAndRoutes } = state;
   return (
     <TrainDataFetcher
       defaultLines={defaultLines ? defaultLines : []}

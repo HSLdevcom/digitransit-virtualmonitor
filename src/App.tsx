@@ -126,12 +126,6 @@ const App: FC<IConfigurationProps> = props => {
   useEffect(() => {
     listenForLogoutAllTabs(setUser);
 
-    if (config.fonts.fontCounter) {
-      fetch(config.fonts.fontCounter, {
-        mode: 'no-cors',
-      });
-    }
-
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }
@@ -187,7 +181,7 @@ const App: FC<IConfigurationProps> = props => {
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
 
   const fonts = config.fonts.externalFonts.map(font => (
-    <link rel="stylesheet" type="text/css" href={font} />
+    <link key={font.toString()} rel="stylesheet" type="text/css" href={font} />
   ));
 
   return (

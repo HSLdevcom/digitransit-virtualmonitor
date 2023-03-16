@@ -11,6 +11,7 @@ import { namespace } from '../util/monitorUtils';
 import Loading from './Loading';
 import { getConfig, getDomainIdentifierForTheme } from '../util/getConfig';
 import { IMonitor } from '../util/Interfaces';
+import { useMergeState } from '../util/utilityHooks';
 
 interface IProps {
   onRequestClose: () => void;
@@ -25,9 +26,14 @@ const ImportMonitorModal: FC<IProps> = ({
   const [t] = useTranslation();
   const [url, setUrl] = useState('');
   const [monitor, setMonitor] = useState(null);
-  const [addingMonitor, setAddingMonitor] = useState(false);
-  const [importFailed, setImportFailed] = useState(false);
-  const [incorrectInstance, setIncorrectInstance] = useState(false);
+
+  const [importState, setImportState] = useMergeState({
+    addingMonitor: false,
+    viewNotFound: false,
+    incorrectInstance: false,
+    saveFailed: false,
+    importQueryError: false,
+  });
 
   const setTitle = (title: string) => {
     setMonitor({
@@ -50,13 +56,15 @@ const ImportMonitorModal: FC<IProps> = ({
                   : r.name,
             });
           } else {
-            setIncorrectInstance(true);
+            setImportState({ incorrectInstance: true });
           }
         } else {
-          setImportFailed(true);
+          setImportState({ viewNotFound: true });
         }
       })
-      .catch(() => setImportFailed(true));
+      .catch(e => {
+        setImportState({ importQueryError: true });
+      });
   };
 
   const importHashMonitor = (hash: string) => {
@@ -71,30 +79,34 @@ const ImportMonitorModal: FC<IProps> = ({
               name: `${t('stop-display')} ${monitorCount + 1}`,
             });
           } else {
-            setIncorrectInstance(true);
+            setImportState({ incorrectInstance: true });
           }
         } else {
-          setImportFailed(true);
+          setImportState({ viewNotFound: true });
         }
       })
-      .catch(() => setImportFailed(true));
+      .catch(() => setImportState({ importQueryError: true }));
   };
 
   const urlBelongsToInstance = () => {
     const currentTheme = getConfig().name;
-    const themeMatchingGivenUrl = Object.keys(getDomainIdentifierForTheme).find(
-      theme => url.indexOf(getDomainIdentifierForTheme[theme]) >= 0,
-    );
-    if (themeMatchingGivenUrl && themeMatchingGivenUrl !== currentTheme) {
-      setIncorrectInstance(true);
+    const urlMatchesAllowedTheme = Object.keys(
+      getDomainIdentifierForTheme,
+    ).find(theme => url.indexOf(getDomainIdentifierForTheme[theme]) >= 0);
+
+    if (urlMatchesAllowedTheme && urlMatchesAllowedTheme !== currentTheme) {
+      setImportState({ incorrectInstance: true });
       return false;
     }
     return true;
   };
 
   const importMonitor = () => {
-    setImportFailed(false);
-    setIncorrectInstance(false);
+    setImportState({
+      viewNotFound: false,
+      incorrectInstance: false,
+      importQueryError: false,
+    });
 
     const search = url.indexOf('?') !== -1 ? url.split('?')[1] : url;
     const searchParams = new URLSearchParams(search);
@@ -110,13 +122,14 @@ const ImportMonitorModal: FC<IProps> = ({
         } else if (url.length === 24) {
           importHashMonitor(url);
         } else {
-          setImportFailed(true);
+          setImportState({ viewNotFound: true });
         }
       }
     }
   };
 
   const addMonitor = () => {
+    setImportState({ addingMonitor: true, saveFailed: false });
     const newUuid = uuidv5(
       DateTime.now().toSeconds() + monitor.contenthash,
       namespace,
@@ -126,15 +139,24 @@ const ImportMonitorModal: FC<IProps> = ({
       url: newUuid,
       instance: getConfig().name,
     };
-    setAddingMonitor(true);
     monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
       if (res.status === 200 || res.status === 409) {
         refetchMonitors();
+        setImportState({ addingMonitor: false });
         onRequestClose();
-        setAddingMonitor(false);
+      } else {
+        setImportState({ addingMonitor: false, saveFailed: true });
       }
     });
   };
+
+  const {
+    addingMonitor,
+    viewNotFound,
+    incorrectInstance,
+    saveFailed,
+    importQueryError,
+  } = importState;
 
   return (
     <LargeModal
@@ -160,12 +182,21 @@ const ImportMonitorModal: FC<IProps> = ({
             {t('import')}
           </button>
         </div>
-        {importFailed && (
-          <div className="no-monitor-found">{t('no-monitor-found')}</div>
-        )}
-        {incorrectInstance && (
-          <div className="no-monitor-found">{t('incorrect-instance')}</div>
-        )}
+        {(incorrectInstance && (
+          <div className="no-monitor-found" role="alert">
+            {t('incorrect-instance')}
+          </div>
+        )) ||
+          (importQueryError && (
+            <div className="no-monitor-found" role="alert">
+              {t('query-error')}
+            </div>
+          )) ||
+          (viewNotFound && (
+            <div className="no-monitor-found" role="alert">
+              {t('no-monitor-found')}
+            </div>
+          ))}
 
         {monitor?.id && (
           <div className="import-preview">
@@ -175,6 +206,11 @@ const ImportMonitorModal: FC<IProps> = ({
               preview
               setTitle={setTitle}
             />
+          </div>
+        )}
+        {saveFailed && (
+          <div className="no-monitor-found" role="alert">
+            {t('save-failed')}
           </div>
         )}
         <div className="import-button-container">

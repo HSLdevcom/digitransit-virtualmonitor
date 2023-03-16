@@ -19,6 +19,7 @@ import PrepareMonitor from './PrepareMonitor';
 import { UserContext } from '../contexts';
 import { getParams } from '../util/queryUtils';
 import { getConfig } from '../util/getConfig';
+import { useMergeState } from '../util/utilityHooks';
 
 interface IProps {
   stopCards: any;
@@ -43,13 +44,16 @@ const StopCardListContainer: FC<IProps> = ({
   const [orientation, setOrientation] = useState(
     !isHorizontal ? 'vertical' : 'horizontal',
   );
-  const [redirect, setRedirect] = useState(false);
-  const [view, setView] = useState(undefined);
   const [isOpen, setOpen] = useState(false);
-
   const [viewTitle, setViewTitle] = useState(
-    props.staticMonitor ? props.staticMonitor.name : null,
+    props.staticMonitor ? props.staticMonitor.name : '',
   );
+  const [saveFailed, setSaveFailed] = useState(false);
+
+  const [viewState, setViewState] = useMergeState({
+    view: undefined,
+    redirect: false,
+  });
 
   const openPreview = () => {
     setOpen(true);
@@ -231,6 +235,7 @@ const StopCardListContainer: FC<IProps> = ({
   };
 
   const createOrSaveMonitor = isNew => {
+    setSaveFailed(false);
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
     cardArray.forEach(card => {
@@ -286,15 +291,17 @@ const StopCardListContainer: FC<IProps> = ({
         };
         monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
           if (res.status === 200 || res.status === 409) {
-            setView(newStaticMonitor);
-            setRedirect(true);
+            setViewState({ view: newStaticMonitor, redirect: true });
+          } else {
+            setSaveFailed(true);
           }
         });
       } else {
         monitorAPI.create(newCard).then((res: any) => {
           if (res.status === 200 || res.status === 409) {
-            setView(newCard);
-            setRedirect(true);
+            setViewState({ view: newCard, redirect: true });
+          } else {
+            setSaveFailed(true);
           }
         });
       }
@@ -307,18 +314,24 @@ const StopCardListContainer: FC<IProps> = ({
           url: getParams(window.location.search).url,
           instance: getConfig().name,
         };
-        monitorAPI.updateStatic(newStaticMonitor).then(res => {
-          setView(newCard);
-          setRedirect(true);
-        });
+        monitorAPI
+          .updateStatic(newStaticMonitor)
+          .then(res => {
+            setViewState({ view: newCard, redirect: true });
+          })
+          .catch(() => setSaveFailed(true));
       } else {
-        monitorAPI.create(newCard).then(res => {
-          setView(newCard);
-          setRedirect(true);
-        });
+        monitorAPI
+          .create(newCard)
+          .then(res => {
+            setViewState({ view: newCard, redirect: true });
+          })
+          .catch(() => setSaveFailed(true));
       }
     }
   };
+
+  const { view, redirect } = viewState;
 
   if (redirect && view) {
     let search;
@@ -396,6 +409,10 @@ const StopCardListContainer: FC<IProps> = ({
     ? t('new-display-disabled')
     : t('prepareDisplay');
 
+  const buttonsOrButtonsWithAlertClass = saveFailed
+    ? 'buttons-with-alert'
+    : 'buttons';
+
   return (
     <div className="stop-card-list-container">
       <div className="animate-in">
@@ -449,7 +466,7 @@ const StopCardListContainer: FC<IProps> = ({
           );
         })}
       </ul>
-      <div className="buttons">
+      <div className={cx(buttonsOrButtonsWithAlertClass)}>
         <div className="wide">
           <button
             disabled={newDisplayDisabled}
@@ -498,6 +515,11 @@ const StopCardListContainer: FC<IProps> = ({
           </>
         )}
       </div>
+      {saveFailed && (
+        <div className="alert-text" role="alert">
+          {t('save-failed')}
+        </div>
+      )}
     </div>
   );
 };

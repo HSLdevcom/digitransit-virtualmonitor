@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
-import {
-  getTrainStationData,
-  isPlatformOrTrackVisible,
-} from '../util/monitorUtils';
+import { getTrainStationData } from '../util/monitorUtils';
 import DeleteModal from './DeleteModal';
 import { ConfigContext } from '../contexts';
 import InputWithEditIcon from './InputWithEditIcon';
@@ -64,11 +61,8 @@ const UserMonitorCard: React.FC<IProps> = ({
     cards: cards,
     languages: languages,
   };
-
   const stations = v ? getTrainStationData(v, 'STATION') : [];
   const stops = v ? getTrainStationData(v, 'STOP') : [];
-  const showPlatformsOrTracks =
-    stations.length || stops.length ? isPlatformOrTrackVisible(v) : false;
 
   const getTitles = obj => {
     let titles = '';
@@ -151,7 +145,6 @@ const UserMonitorCard: React.FC<IProps> = ({
             isLandscape={isHorizontal}
             stations={stations}
             stops={stops}
-            showPlatformsOrTracks={showPlatformsOrTracks}
           />
         )}
         {deleteModalOpen && (

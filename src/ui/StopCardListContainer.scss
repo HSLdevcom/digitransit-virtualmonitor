@@ -22,6 +22,16 @@
   }
 }
 
+.buttons-with-alert {
+  display: flex;
+  padding: 20px 15px 10px 10px;
+  justify-content: center;
+
+  .wide {
+    flex: 1;
+  }
+}
+
 .button {
   display: flex;
   margin: 0 5px;
@@ -63,4 +73,12 @@
       color: #fff;
     }
   }
+}
+
+.alert-text {
+  text-align: left;
+  color: $alert-color;
+  font-size: 12px;
+  margin: 8px;
+  font-weight: bold;
 }

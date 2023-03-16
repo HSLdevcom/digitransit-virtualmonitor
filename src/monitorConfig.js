@@ -1,8 +1,9 @@
 export default {
   hsl: {
     fonts: {
-      fontCounter: 'https://cloud.typography.com/6364294/7432412/css/fonts.css',
-      externalFonts: ['https://www.hsl.fi/fonts/784131/6C5FB8083F348CFBB.css'],
+      externalFonts: [
+        'https://cloud.typography.com/6364294/7432412/css/fonts.css',
+      ],
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       weights: {
         normal: '400',
@@ -75,7 +76,7 @@ export default {
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
-      inUse: true,
+      inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
@@ -116,7 +117,7 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
-      inUse: true,
+      inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
@@ -126,7 +127,7 @@ export default {
     uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
     login: {
-      inUse: true,
+      inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
@@ -156,5 +157,19 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     useTilde: true,
+  },
+  oulu: {
+    name: 'oulu',
+    uri: 'routing/v1/routers/waltti/index/graphql',
+    feedIds: ['OULU'],
+    colors: {
+      primary: '#E10669',
+      monitorBackground: '#E10669',
+    },
+    login: {
+      inUse: false,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
   },
 };

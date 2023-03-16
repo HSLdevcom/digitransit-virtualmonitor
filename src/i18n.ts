@@ -118,6 +118,7 @@ i18n.use(initReactI18next).init({
         'no-monitor-found': 'No display was found matching the URL given.',
         'incorrect-instance':
           'The URL address you entered does not refer to a stop display in this service area.',
+        'save-failed': 'Save failed',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
@@ -150,7 +151,7 @@ i18n.use(initReactI18next).init({
         'search-current-suggestion': 'Current selection: {{selection}}',
         settingsChanged: 'Settings changed',
         show: 'Show',
-        showEndOfLine: 'Routes terminating at this stop',
+        showEndOfLine: 'Routes terminating or stopping at this stop',
         showRouteColumn: 'Route column',
         showStopNumber: 'Stop or platform number',
         showVia: 'Via information, if available',
@@ -277,6 +278,7 @@ i18n.use(initReactI18next).init({
           'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
         'incorrect-instance':
           'Antamasi URL-osoite ei viittaa tämän palvelualueen pysäkkinäyttöön.',
+        'save-failed': 'Tallennus epäonnistui',
         'no-stops-selected': 'Ei valittuja pysäkkejä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
@@ -308,7 +310,7 @@ i18n.use(initReactI18next).init({
         'search-current-suggestion': 'Tämänhetkinen valinta: {{selection}}',
         settingsChanged: 'Muutettuja asetuksia',
         show: 'Näytä',
-        showEndOfLine: 'Linjat, joille tämä on päätepysäkki',
+        showEndOfLine: 'Linjat, joille tämä on pääte- tai jättöpysäkki',
         showRouteColumn: 'Linja-sarake',
         showStopNumber: 'Pysäkki- tai laiturinumero',
         showVia: 'Kauttakulkutieto (via), jos saatavilla',
@@ -435,6 +437,7 @@ i18n.use(initReactI18next).init({
           'Inga hållplatsskärmar hittades med den URL-adress du angav.',
         'incorrect-instance':
           'URL-adressen du angav pekar inte på en hållplatsskärm i detta serviceområde.',
+        'save-failed': 'Spara misslyckades',
         'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',
@@ -466,7 +469,8 @@ i18n.use(initReactI18next).init({
         'search-current-suggestion': 'Nuvarande val: {{selection}}',
         settingsChanged: 'Inställningarna ändrats',
         show: 'Visa',
-        showEndOfLine: 'Linjerna som har den här hållplatsen som ändhållplats',
+        showEndOfLine:
+          'Linjerna som stannar vid denna hållplats eller har den som ändhållplats',
         showRouteColumn: 'Linjekolumn',
         showStopNumber: 'Hållplats- eller plattformsnummer',
         showVia: 'Via-information, om tillgänglig',

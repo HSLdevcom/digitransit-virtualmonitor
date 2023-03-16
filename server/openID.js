@@ -1,9 +1,10 @@
 import axios from 'axios';
+import { parseEnvPropJSON } from './config.js';
 import monitorService from './monitorService.js';
 
-const CLIENT_ID_LIST = JSON.parse(process.env.MANAGEMENT_API_ID);
-const CLIENT_SECRET_LIST = JSON.parse(process.env.MANAGEMENT_API_SECRET);
-const OPEN_ID_URL_LIST = JSON.parse(process.env.OIDCHOST);
+const CLIENT_ID_LIST = parseEnvPropJSON(process.env.MANAGEMENT_API_ID, "MANAGEMENT_API_ID");
+const CLIENT_SECRET_LIST = parseEnvPropJSON(process.env.MANAGEMENT_API_SECRET, "MANAGEMENT_API_SECRET");
+const OPEN_ID_URL_LIST = parseEnvPropJSON(process.env.OIDCHOST, "OIDCHOST");
 
 export const isUserOwnedMonitor = async (req, res, next) => {
   try {
@@ -98,7 +99,7 @@ export const createMonitor = async (req, res, next) => {
     }
     const res = await updateMonitors(dataStorage.id, req?.body, apiClient, next);
   } catch (e) {
-    next(e);
+    throw e;
   }
 };
 
@@ -212,7 +213,7 @@ function getClientAndUserInformation(user) {
       userId: user?.data?.sub
     }
   }
-  
+
   return {
     openIdUrl: '',
     id: '',

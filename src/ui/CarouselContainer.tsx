@@ -72,7 +72,11 @@ const CarouselContainer: FC<IProps> = ({
   trainsWithTrack,
 }) => {
   const { cards: views, languages, mapSettings } = useContext(MonitorContext);
-  const len = views.length * languages.length * 2;
+  const hideTimeTable = mapSettings.hideTimeTable;
+  const finalViews = hideTimeTable
+    ? views.filter(view => view.type === 'map')
+    : views;
+  const len = finalViews.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
@@ -84,9 +88,11 @@ const CarouselContainer: FC<IProps> = ({
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
-      (views[Math.floor(current / 2) % views.length].duration * 1000) / 2;
+      (finalViews[Math.floor(current / 2) % finalViews.length].duration *
+        1000) /
+      2;
     const id = setTimeout(() => {
-      if ((next / 2) % views.length === 0) {
+      if ((next / 2) % finalViews.length === 0) {
         const nextLan = (language + 1) % languages.length;
         setLanguage(nextLan);
       }
@@ -98,7 +104,7 @@ const CarouselContainer: FC<IProps> = ({
     return () => clearTimeout(id);
   }, [current]);
 
-  const index = Math.floor(current / 2) % views.length;
+  const index = Math.floor(current / 2) % finalViews.length;
 
   const departures = [
     sortAndFilter(
@@ -113,7 +119,7 @@ const CarouselContainer: FC<IProps> = ({
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts
   const newView = {
-    ...views[index],
+    ...finalViews[index],
     //layout: 8,
   };
   const { alertSpan } = getLayout(newView.layout);

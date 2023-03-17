@@ -72,7 +72,7 @@ const CarouselContainer: FC<IProps> = ({
   trainsWithTrack,
 }) => {
   const { cards: views, languages, mapSettings } = useContext(MonitorContext);
-  const hideTimeTable = mapSettings.hideTimeTable;
+  const hideTimeTable = mapSettings?.hideTimeTable;
   const finalViews = hideTimeTable
     ? views.filter(view => view.type === 'map')
     : views;

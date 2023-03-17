@@ -75,60 +75,62 @@ const UserMonitorCard: React.FC<IProps> = ({
     return titles;
   };
 
-  const crds = cards.map((c, i) => {
-    const cols = c.columns;
-    const multipleCols = c.layout >= 9 && c.layout <= 11;
-    const colStops = multipleCols
-      ? [cols.left.stops, cols.right.stops]
-      : [cols.left.stops];
+  const crds = cards
+    .filter(c => c.type !== 'map')
+    .map((c, i) => {
+      const cols = c.columns;
+      const multipleCols = c.layout >= 9 && c.layout <= 11;
+      const colStops = multipleCols
+        ? [cols.left.stops, cols.right.stops]
+        : [cols.left.stops];
 
-    const colTitles = multipleCols
-      ? [getTitles(cols.left), getTitles(cols.right)]
-      : [getTitles(c)];
+      const colTitles = multipleCols
+        ? [getTitles(cols.left), getTitles(cols.right)]
+        : [getTitles(c)];
 
-    const titlesAndStops = (
-      <ul key={`card#${i}`}>
-        {colStops.map((colStop, c) => {
-          return (
-            <React.Fragment key={`display${c}`}>
-              <div className="card-title">{colTitles[c]}</div>
-              <div className="stop-list">
-                {colStop.map((stop, j) => {
-                  const stopCode = `(${stop.code})`;
-                  const icon =
-                    stop.locationType === 'STATION' || stop.mode === 'SUBWAY'
-                      ? `station-${stop.mode.toLowerCase()}`
-                      : `stop-${stop.mode.toLowerCase()}`;
-                  return (
-                    <li key={`stop#${j}`}>
-                      <Icon
-                        img={icon}
-                        color={
-                          config.modeIcons.colors[
-                            `mode-${stop.mode.toLowerCase()}`
-                          ]
-                        }
-                      />
-                      {`${stop.name} ${stop.code ? stopCode : ''}`}
-                    </li>
-                  );
-                })}
-              </div>
-            </React.Fragment>
-          );
-        })}
-      </ul>
-    );
+      const titlesAndStops = (
+        <ul key={`card#${i}`}>
+          {colStops.map((colStop, c) => {
+            return (
+              <React.Fragment key={`display${c}`}>
+                <div className="card-title">{colTitles[c]}</div>
+                <div className="stop-list">
+                  {colStop.map((stop, j) => {
+                    const stopCode = `(${stop.code})`;
+                    const icon =
+                      stop.locationType === 'STATION' || stop.mode === 'SUBWAY'
+                        ? `station-${stop.mode.toLowerCase()}`
+                        : `stop-${stop.mode.toLowerCase()}`;
+                    return (
+                      <li key={`stop#${j}`}>
+                        <Icon
+                          img={icon}
+                          color={
+                            config.modeIcons.colors[
+                              `mode-${stop.mode.toLowerCase()}`
+                            ]
+                          }
+                        />
+                        {`${stop.name} ${stop.code ? stopCode : ''}`}
+                      </li>
+                    );
+                  })}
+                </div>
+              </React.Fragment>
+            );
+          })}
+        </ul>
+      );
 
-    return (
-      <div key={`c#${i}`} className="card-item">
-        <div className="card-container">
-          <Icon img={'layout'.concat(c.layout)} />
-          <div className="data">{titlesAndStops}</div>
+      return (
+        <div key={`c#${i}`} className="card-item">
+          <div className="card-container">
+            <Icon img={'layout'.concat(c.layout)} />
+            <div className="data">{titlesAndStops}</div>
+          </div>
         </div>
-      </div>
-    );
-  });
+      );
+    });
   const isHorizontal = layout < 12 || layout === 18;
   return (
     <>

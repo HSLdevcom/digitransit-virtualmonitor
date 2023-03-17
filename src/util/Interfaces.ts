@@ -148,3 +148,18 @@ export interface ICardInfo {
   possibleToMove: boolean;
   columns?: IColumn;
 }
+type Coordinate = [number, number];
+type BoundingBox = [Coordinate, Coordinate];
+type MapStop = {
+  coords: Coordinate;
+  gtfsId: string;
+  mode: string;
+  name: string;
+};
+export interface IMapSettings {
+  bounds?: BoundingBox;
+  center?: Coordinate;
+  showMap: boolean;
+  hideTimeTable: boolean;
+  stops: [MapStop];
+}

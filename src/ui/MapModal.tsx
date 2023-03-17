@@ -27,12 +27,14 @@ const MapModal: FC<Props> = ({
   const [state, setState] = useMergeState({
     zoom: undefined,
     center: undefined,
+    bounds: undefined,
   });
   const handleClick = () => {
     updateMapSettings({
       ...mapSettings,
       zoom: state.zoom,
       center: state.center,
+      bounds: state.bounds,
       userSet: true,
     });
     onClose(false);

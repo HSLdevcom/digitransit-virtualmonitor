@@ -1,10 +1,11 @@
 import React, { FC } from 'react';
 import cx from 'classnames';
 import MonitorMap from './ui/monitorMap';
+import { IMapSettings } from './util/Interfaces';
 
 interface IProps {
   preview?: boolean;
-  mapSettings: any;
+  mapSettings: IMapSettings;
   modal?: boolean;
   updateMap?: any;
 }

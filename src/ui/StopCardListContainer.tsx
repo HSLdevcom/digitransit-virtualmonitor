@@ -68,7 +68,10 @@ const StopCardListContainer: FC<IProps> = ({
         return stops.map(stop => {
           const coord: [number, number] = [stop?.lat, stop?.lon];
           const obj = {
+            name: stop.name,
+            gtfsId: stop.gtfsId,
             coords: coord,
+            settings: stop.settings,
             mode: getStopIcon(stop),
           };
           return obj;
@@ -342,6 +345,15 @@ const StopCardListContainer: FC<IProps> = ({
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
     cardArray.forEach(card => {
+      if (card.type == 'map') {
+        card.columns.left.stops = mapProps.stops.map(stop => ({
+          name: stop.name,
+          gtfsId: stop.gtfsId,
+          settings: stop.settings,
+          lat: stop.coords[0],
+          lon: stop.coords[1],
+        }));
+      }
       card.columns.left.stops = card.columns.left.stops.map(stop => {
         return {
           name: stop.name,

@@ -57,10 +57,12 @@ const StopCardListContainer: FC<IProps> = ({
     stops: mapSettings?.stops,
     userSet: mapSettings?.userSet,
   });
-  const stopCoordinates = stopCardList.flatMap(card => {
-    const stops = card.columns.left.stops.concat(card.columns.right.stops);
-    return stops.map(s => [s.lat, s.lon]);
-  });
+  const stopCoordinates = stopCardList
+    .filter(c => c.type !== 'map')
+    .flatMap(card => {
+      const stops = card.columns.left.stops.concat(card.columns.right.stops);
+      return stops.map(s => [s.lat, s.lon]);
+    });
   useEffect(() => {
     const stopsAndStations = stopsAndStationsFromViews(stopCardList);
     const stops = stopsAndStations

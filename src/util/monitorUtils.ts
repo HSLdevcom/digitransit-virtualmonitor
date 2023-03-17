@@ -53,7 +53,8 @@ export const stopsAndStationsFromViews = views => {
   const stopIds = [];
   const stationIds = [];
   const arr = Array.isArray(views) ? views : [views];
-  arr.forEach(view => {
+  const arr1 = arr.filter(v => v.type !== 'map');
+  arr1.forEach(view => {
     Object.keys(view.columns).forEach(col => {
       view.columns[col].stops?.forEach(stop => {
         stop.locationType === 'STOP'

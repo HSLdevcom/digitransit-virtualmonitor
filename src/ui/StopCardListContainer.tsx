@@ -286,6 +286,7 @@ const StopCardListContainer: FC<IProps> = ({
           id: cnt,
           layout: isHorizontal ? 2 : 12,
           type: 'map',
+          stops: mapProps.stops,
         };
         setStopCardList(stopCardList.concat(newCard));
         cnt = 0;

@@ -68,6 +68,7 @@ export interface IView {
   layout: number;
   duration: number;
   type?: string;
+  stops?: any;
 }
 export interface IMonitor {
   cards: Array<IView>;

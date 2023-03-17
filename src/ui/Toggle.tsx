@@ -11,6 +11,9 @@ interface IProps {
 }
 const Toggle: FC<IProps> = ({ toggled, title, onToggle, id, disabled }) => {
   const useId = id || uniqueId('input-');
+  if (disabled && toggled) {
+    onToggle(false);
+  }
   return (
     <div className="option-toggle-container" title={title}>
       <div className="toggle">

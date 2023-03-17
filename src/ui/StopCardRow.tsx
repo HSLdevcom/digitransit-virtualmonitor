@@ -51,6 +51,7 @@ interface IProps {
     lang?: string,
   ) => void;
   languages: Array<string>;
+  hideTitle?: boolean;
 }
 
 const StopCardRow: FC<IProps> = ({
@@ -65,6 +66,7 @@ const StopCardRow: FC<IProps> = ({
   setStops,
   updateCardInfo,
   languages,
+  hideTitle,
 }) => {
   const config = useContext(ConfigContext);
   const favourites = useContext(FavouritesContext);
@@ -221,18 +223,19 @@ const StopCardRow: FC<IProps> = ({
       <div className="stopcard-row-container">
         <div className="title-with-icons">
           <div className="title-list">
-            {languages.map((lan, i) => {
-              return (
-                ((isDouble && i === 0) || !isDouble) && (
-                  <StopViewTitleEditor
-                    key={`lan-${lan}`}
-                    card={item}
-                    updateCardInfo={updateCardInfo}
-                    lang={lan}
-                  />
-                )
-              );
-            })}
+            {!hideTitle &&
+              languages.map((lan, i) => {
+                return (
+                  ((isDouble && i === 0) || !isDouble) && (
+                    <StopViewTitleEditor
+                      key={`lan-${lan}`}
+                      card={item}
+                      updateCardInfo={updateCardInfo}
+                      lang={lan}
+                    />
+                  )
+                );
+              })}
           </div>
           <div className="icons">
             {cards.length > 1 && (

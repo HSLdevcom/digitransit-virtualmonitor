@@ -602,7 +602,7 @@ const StopCardListContainer: FC<IProps> = ({
               updateLayout={updateLayout}
               updateCardInfo={updateCardInfo}
               languages={languages}
-              hideTitle={mapSettings.hideTimeTable}
+              hideTitle={mapProps.hideTimeTable}
             />
           );
         })}

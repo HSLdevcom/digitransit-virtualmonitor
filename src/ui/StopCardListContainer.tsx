@@ -52,7 +52,7 @@ const StopCardListContainer: FC<IProps> = ({
     center: mapSettings?.center,
     zoom: mapSettings?.zoom,
     bounds: mapSettings?.bounds,
-    showMap: mapSettings?.showMap,
+    showMap: mapSettings?.showMap ? mapSettings.showMap : false,
     hideTimeTable: mapSettings?.hideTimeTable,
     stops: mapSettings?.stops,
     userSet: mapSettings?.userSet,

@@ -8,6 +8,7 @@ import { getTrainStationData } from '../util/monitorUtils';
 import DeleteModal from './DeleteModal';
 import { ConfigContext } from '../contexts';
 import InputWithEditIcon from './InputWithEditIcon';
+import { IMapSettings } from '../util/Interfaces';
 
 interface IView {
   name?: string;
@@ -16,6 +17,7 @@ interface IView {
   contenthash?: string;
   url?: string;
   id: string;
+  mapSettings?: IMapSettings;
 }
 
 interface IProps {
@@ -34,7 +36,7 @@ const UserMonitorCard: React.FC<IProps> = ({
   let to;
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
-  const { cards, name, languages, url, id } = view;
+  const { cards, name, languages, url, id, mapSettings } = view;
   const [isOpen, setOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const layout = cards[0].layout;
@@ -97,17 +99,18 @@ const UserMonitorCard: React.FC<IProps> = ({
                 <div className="stop-list">
                   {colStop.map((stop, j) => {
                     const stopCode = `(${stop.code})`;
+                    const mode = stop?.mode;
                     const icon =
-                      stop.locationType === 'STATION' || stop.mode === 'SUBWAY'
-                        ? `station-${stop.mode.toLowerCase()}`
-                        : `stop-${stop.mode.toLowerCase()}`;
+                      stop.locationType === 'STATION' || mode === 'SUBWAY'
+                        ? `station-${mode?.toLowerCase()}`
+                        : `stop-${mode?.toLowerCase()}`;
                     return (
                       <li key={`stop#${j}`}>
                         <Icon
                           img={icon}
                           color={
                             config.modeIcons.colors[
-                              `mode-${stop.mode.toLowerCase()}`
+                              `mode-${mode?.toLowerCase()}`
                             ]
                           }
                         />
@@ -147,6 +150,7 @@ const UserMonitorCard: React.FC<IProps> = ({
             isLandscape={isHorizontal}
             stations={stations}
             stops={stops}
+            mapSettings={mapSettings}
           />
         )}
         {deleteModalOpen && (

@@ -25,6 +25,7 @@ const FavouriteHost =
 const NotificationHost =
   process.env.NOTIFICATION_HOST ||
   'https://test.hslfi.hsldev.com/user/api/v1/notifications';
+
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
 const app = express();
@@ -48,8 +49,7 @@ app.get('/api/monitor/:id', (req, res, next) => {
 
 app.use('/api/graphql', (req, res, next) => {
   const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
-  const endpoint =
-    req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
+  const endpoint = req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
   const queryparams = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
     ? `?${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
     : '';
@@ -143,8 +143,13 @@ app.post('/api/staticmonitor', userAuthenticated, (req, res, next) => {
 });
 
 app.put('/api/staticmonitor', userAuthenticated, (req, res, next) => {
-  createMonitor(req, res, next);
-  monitorService.createStatic(req, res, next);
+  createMonitor(req, res, next)
+    .then(response => {
+      monitorService.createStatic(req, res, next);
+    })
+    .catch(err => {
+      errorHandler(res, err);
+    });
 });
 
 app.get(

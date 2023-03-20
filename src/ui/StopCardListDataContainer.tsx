@@ -79,10 +79,10 @@ const StopCardListDataContainer: FC<IProps> = ({
         cardList.forEach((card, j) => {
           const leftIndex = card.columns.left.stops
             .map(s => s.gtfsId)
-            .indexOf(stop.gtfsId);
+            .indexOf(stop?.gtfsId);
           const rightIndex = card.columns.right.stops
             .map(s => s.gtfsId)
-            .indexOf(stop.gtfsId);
+            .indexOf(stop?.gtfsId);
           if (leftIndex > -1) {
             richCard[j].columns.left.stops[leftIndex] = getStopForMonitor(
               richCard[j].columns.left.stops[leftIndex],

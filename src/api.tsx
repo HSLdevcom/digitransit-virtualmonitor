@@ -3,8 +3,8 @@ import { getConfig } from './util/getConfig';
 const baseAPI = '/api';
 
 function statusCheckedResult(result) {
-  if (result.status === 401) {
-    return [];
+  if (result.status > 399) {
+    throw new Error(`Error: status ${result.status}`);
   }
   return result.json();
 }

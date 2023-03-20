@@ -11,8 +11,8 @@ interface IProps {
   orientation: string;
   handleChange: (language: string) => void;
   handleOrientation: (orientation: string) => void;
-  showMap: any;
-  setShowMap: any;
+  showMap: boolean;
+  setShowMap: (boolean) => void;
   disableToggle?: boolean;
 }
 

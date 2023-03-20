@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
-import { IMonitor, ICard } from '../util/Interfaces';
+import { IMonitor, ICard, IMapSettings } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Icon from './Icon';
 import cx from 'classnames';
@@ -19,7 +19,7 @@ interface Props {
   isLandscape: boolean;
   stations: Array<ICard>;
   stops: Array<ICard>;
-  mapSettings?: any;
+  mapSettings?: IMapSettings;
 }
 const PreviewModal: FC<Props> = ({
   view,

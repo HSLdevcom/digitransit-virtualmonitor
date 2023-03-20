@@ -5,10 +5,11 @@ import ReactDOMServer from 'react-dom/server';
 import Icon from './Icon';
 import { ConfigContext } from '../contexts';
 import cx from 'classnames';
+import { IMapSettings } from '../util/Interfaces';
 
 interface IProps {
   preview?: boolean;
-  mapSettings: any;
+  mapSettings: IMapSettings;
   modal?: boolean;
   updateMap?: any;
 }

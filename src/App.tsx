@@ -112,7 +112,6 @@ const App: FC<IConfigurationProps> = props => {
   const [favourites, setFavourites] = useState<Array<Favourite>>([]);
   const [loading, setLoading] = useState(true);
   const config = useContext(ConfigContext);
-
   const style = {
     '--alert-color': config.colors.alert,
     '--font-family': config.fonts.normal,

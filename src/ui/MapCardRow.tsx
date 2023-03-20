@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ConfigContext } from '../contexts';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import StopViewTitleEditor from './StopViewTitleEditor';
-import { ICardInfo } from '../util/Interfaces';
+import { ICardInfo, IMapSettings } from '../util/Interfaces';
 import Icon from './Icon';
 import Toggle from './Toggle';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
@@ -22,9 +22,9 @@ interface IProps {
     lang?: string,
   ) => void;
   languages: Array<string>;
-  mapSettings: any;
-  updateMapSettings: (settings: any) => void;
-  openModal: any;
+  mapSettings: IMapSettings;
+  updateMapSettings: (settings: IMapSettings) => void;
+  openModal: () => void;
   orientation?: string;
 }
 

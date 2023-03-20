@@ -6,14 +6,15 @@ import MonitorMapContainer from '../MonitorMapContainer';
 import { useMergeState } from '../util/utilityHooks';
 import Icon from './Icon';
 import { ConfigContext } from '../contexts';
+import { IMapSettings } from '../util/Interfaces';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
   isOpen: boolean;
   onClose: (boolean) => void;
   isLandscape: boolean;
-  mapSettings?: any;
-  updateMapSettings: any;
+  mapSettings?: IMapSettings;
+  updateMapSettings: (settings: IMapSettings) => void;
 }
 const MapModal: FC<Props> = ({
   isOpen,

@@ -160,7 +160,9 @@ type MapStop = {
 export interface IMapSettings {
   bounds?: BoundingBox;
   center?: Coordinate;
+  zoom?: number;
   showMap: boolean;
   hideTimeTable: boolean;
   stops: [MapStop];
+  userSet: boolean;
 }

@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
 import cx from 'classnames';
-import { IView, IClosedStop } from '../util/Interfaces';
+import { IView, IClosedStop, IMapSettings } from '../util/Interfaces';
 import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout } from '../util/getResources';
 import { IDeparture } from './MonitorRow';
@@ -30,7 +30,7 @@ interface IProps {
   alertComponent: any;
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
-  mapSettings?: any;
+  mapSettings?: IMapSettings;
 }
 let to;
 

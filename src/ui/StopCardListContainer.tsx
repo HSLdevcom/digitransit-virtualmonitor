@@ -1,5 +1,5 @@
 import cx from 'classnames';
-import { IStop, IMonitor } from '../util/Interfaces';
+import { IStop, IMonitor, IMapSettings } from '../util/Interfaces';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import hash from 'object-hash';
@@ -35,7 +35,7 @@ interface IProps {
   loading?: boolean;
   vertical?: boolean;
   staticMonitor?: any;
-  mapSettings?: any;
+  mapSettings?: IMapSettings;
 }
 
 const StopCardListContainer: FC<IProps> = ({

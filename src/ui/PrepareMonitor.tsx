@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import PreviewModal from './PreviewModal';
 import WithDatabaseConnection from './WithDatabaseConnection';
 import { getTrainStationData } from '../util/monitorUtils';
-import { IMonitor } from '../util/Interfaces';
+import { IMapSettings, IMonitor } from '../util/Interfaces';
 
 interface IProps {
   readonly location?: any;
@@ -12,7 +12,7 @@ interface IProps {
     isOpen: boolean;
     onClose: (boolean) => void;
     isLandscape: boolean;
-    mapSettings?: any;
+    mapSettings?: IMapSettings;
   };
 }
 

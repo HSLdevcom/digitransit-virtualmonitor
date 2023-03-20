@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client';
 import StopCardListContainer from './StopCardListContainer';
 import { sortBy } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
+import { IMapSettings } from '../util/Interfaces';
 
 interface IProps {
   stopCardList: any;
@@ -12,7 +13,7 @@ interface IProps {
   languages: Array<string>;
   loading: boolean;
   staticMonitor?: any;
-  mapSettings?: any;
+  mapSettings?: IMapSettings;
 }
 
 const StopCardListDataContainer: FC<IProps> = ({

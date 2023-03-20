@@ -88,12 +88,16 @@ const StopCardListContainer: FC<IProps> = ({
     });
   }, [stopCardList]);
   const handleShowMap = showMap => {
+    const hideTimetable = showMap ? mapSettings?.hideTimeTable : false;
     if (showMap) {
       addMap();
     } else {
       setStopCardList(stopCardList.filter(s => s.type !== 'map'));
     }
-    setMapProps({ showMap: showMap });
+    setMapProps({
+      showMap: showMap,
+      hideTimeTable: hideTimetable,
+    });
   };
   const updateMapSettings = settings => {
     setMapProps({ ...settings });
@@ -150,6 +154,7 @@ const StopCardListContainer: FC<IProps> = ({
     if (card?.type === 'map') {
       setMapProps({
         showMap: false,
+        hideTimeTable: false,
       });
     }
     setStopCardList(stopCardList.filter(s => s.id !== id));
@@ -605,6 +610,7 @@ const StopCardListContainer: FC<IProps> = ({
               updateCardInfo={updateCardInfo}
               languages={languages}
               hideTitle={mapProps.hideTimeTable}
+              hasMap={mapProps.showMap}
             />
           );
         })}

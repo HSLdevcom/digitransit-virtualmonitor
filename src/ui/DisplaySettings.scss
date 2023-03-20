@@ -91,11 +91,19 @@
 }
 
 .language-header {
-  margin-left: 92px;
+  margin-left: 111px;
+
+  &.hsl {
+    margin-left: 92px;
+  }
 }
 
 .map-header {
-  margin-left: 225px;
+  margin-left: 240px;
+
+  &.hsl {
+    margin-left: 225px;
+  }
 }
 
 .display-orientation-container {

@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react';
+import React, { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from './Icon';
 import cx from 'classnames';
@@ -35,8 +35,20 @@ const DisplaySettings: FC<IProps> = ({
     <div className="display-settings-container">
       <div className="headers">
         <div className="orientation-header">{t('displayDirection')}</div>
-        <div className="language-header">{t('displayLanguages')}</div>
-        <div className="map-header">{t('displayMap')}</div>
+        <div
+          className={cx('language-header', {
+            hsl: config.name === 'hsl',
+          })}
+        >
+          {t('displayLanguages')}
+        </div>
+        <div
+          className={cx('map-header', {
+            hsl: config.name === 'hsl',
+          })}
+        >
+          {t('displayMap')}
+        </div>
       </div>
       <section
         className="display-orientation-container"

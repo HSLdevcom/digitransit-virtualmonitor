@@ -84,6 +84,9 @@ const CreateViewPage = () => {
                 if (r.languages) {
                   setLanguages(r.languages);
                 }
+                if (r.mapSettings) {
+                  setMapsettings(r.mapSettings);
+                }
                 setStaticMonitorProperties({ name: r.name, id: r.id });
               }
               if (!r.cards) {

@@ -51,6 +51,8 @@ interface IProps {
     lang?: string,
   ) => void;
   languages: Array<string>;
+  hideTitle?: boolean;
+  hasMap?: boolean;
 }
 
 const StopCardRow: FC<IProps> = ({
@@ -65,6 +67,8 @@ const StopCardRow: FC<IProps> = ({
   setStops,
   updateCardInfo,
   languages,
+  hideTitle,
+  hasMap,
 }) => {
   const config = useContext(ConfigContext);
   const favourites = useContext(FavouritesContext);
@@ -197,7 +201,7 @@ const StopCardRow: FC<IProps> = ({
   const isLast = index === cards.length - 1;
   const isDouble = layout >= 9 && layout <= 11;
   const possibleToMove = cards.length > 1;
-
+  const possibleToDelete = hasMap ? cards.length > 2 : cards.length > 1;
   const filterSearchResults = (results, x) => {
     return results.filter(result => {
       const gtfsId = getGTFSId(result.properties.id);
@@ -221,21 +225,22 @@ const StopCardRow: FC<IProps> = ({
       <div className="stopcard-row-container">
         <div className="title-with-icons">
           <div className="title-list">
-            {languages.map((lan, i) => {
-              return (
-                ((isDouble && i === 0) || !isDouble) && (
-                  <StopViewTitleEditor
-                    key={`lan-${lan}`}
-                    card={item}
-                    updateCardInfo={updateCardInfo}
-                    lang={lan}
-                  />
-                )
-              );
-            })}
+            {!hideTitle &&
+              languages.map((lan, i) => {
+                return (
+                  ((isDouble && i === 0) || !isDouble) && (
+                    <StopViewTitleEditor
+                      key={`lan-${lan}`}
+                      card={item}
+                      updateCardInfo={updateCardInfo}
+                      lang={lan}
+                    />
+                  )
+                );
+              })}
           </div>
           <div className="icons">
-            {cards.length > 1 && (
+            {possibleToDelete && (
               <div
                 className={cx('delete icon', possibleToMove ? '' : 'move-end')}
                 tabIndex={0}

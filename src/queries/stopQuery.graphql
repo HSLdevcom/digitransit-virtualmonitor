@@ -8,6 +8,8 @@ query stopQuery($ids: [String]) @api(contextKey: "clientName") {
     platformCode
     locationType
     vehicleMode
+    lat
+    lon
     parentStation {
       gtfsId
     }

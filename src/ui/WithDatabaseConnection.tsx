@@ -108,9 +108,14 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
     }
     return <Loading />;
   }
+  const layout = view.cards[0].layout;
+
+  const showInfoDisplay = layout > 17 && layout < 19;
+  const showMapDisplay = layout > 19 && layout < 22;
+
   return (
     <MonitorContext.Provider value={monitor}>
-      {monitor.cards[0].layout > 17 ? (
+      {showInfoDisplay ? (
         <InformationDisplayContainer />
       ) : (
         <>

@@ -198,6 +198,7 @@ i18n.use(initReactI18next).init({
         closedStop: 'Pysäkki suljettu',
         closedStopWithRange:
           'Pysäkki {{name}} {{code}} suljettu aikavälillä {{startTime}} - {{endTime}}',
+        'confirm-choice': 'Vahvista valinta',
         continue: 'Jatka',
         copy: 'Kopioi linkki',
         createViewTitle: 'Uuden näkymän luonti',
@@ -214,8 +215,10 @@ i18n.use(initReactI18next).init({
         displayEditorStaticLink: 'Luo näkymä',
         displayLanguage: 'Esityskieli',
         displayLanguages: 'Esityskielet',
+        displayMap: 'Karttanäkymä',
         duration: 'Kesto / esityskieli',
         'edit-display': 'Muokkaa näyttöä',
+        'edit-map': 'Muokkaa rajausta > ',
         'front-page-no-sign-in-button': 'Jatka kirjautumatta',
         'front-page-sign-in-button': 'Kirjaudu ja luo näyttö',
         frontPageParagraph1:
@@ -233,6 +236,7 @@ i18n.use(initReactI18next).init({
         hideAllLines: 'Piilota kaikki linjat',
         hideLine: 'Piilota linja {{line}}',
         hideLines: 'Piilota linjoja {{hidden}} / {{all}}',
+        'hide-timetable': 'Näytä esityksessä vain karttanäkymä',
         horizontal: 'Vaaka',
         import: 'Tuo',
         'import-instructions':
@@ -262,6 +266,9 @@ i18n.use(initReactI18next).init({
         loading: 'Ladataan…',
         login: 'Kirjaudu sisään',
         logout: 'Kirjaudu ulos',
+        'map-description':
+          'Karttanäkymä näkyy yhtenä näkymänä esityksessä. Se rajataan automaattisesti koko esitykseen valittujen pysäkkien perusteella',
+        maptitle: 'Karttanäkymän nimi',
         menuClose: 'Sulje päävalikko',
         menuOpen: 'Avaa päävalikko',
         userMenuClose: 'Sulje käyttäjävalikko',
@@ -308,6 +315,7 @@ i18n.use(initReactI18next).init({
         'search-autosuggest-len': 'Löydettiin {{count}} ehdotus',
         'search-autosuggest-len_plural': 'Löydettiin {{count}} ehdotusta',
         'search-current-suggestion': 'Tämänhetkinen valinta: {{selection}}',
+        'select-bounds': 'Valitse sopiva rajaus',
         settingsChanged: 'Muutettuja asetuksia',
         show: 'Näytä',
         showEndOfLine: 'Linjat, joille tämä on pääte- tai jättöpysäkki',

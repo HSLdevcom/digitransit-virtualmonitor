@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
-import { IMonitor, ICard } from '../util/Interfaces';
+import { IMonitor, ICard, IMapSettings } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Icon from './Icon';
 import cx from 'classnames';
@@ -19,6 +19,7 @@ interface Props {
   isLandscape: boolean;
   stations: Array<ICard>;
   stops: Array<ICard>;
+  mapSettings?: IMapSettings;
 }
 const PreviewModal: FC<Props> = ({
   view,
@@ -28,12 +29,16 @@ const PreviewModal: FC<Props> = ({
   isLandscape,
   stations,
   stops,
+  mapSettings,
 }) => {
   const [t] = useTranslation();
   const monitor = {
     ...view,
     languages,
+    mapSettings,
   };
+  const layout = view.cards[0].layout;
+  const showInfoDisplay = layout > 17 && layout < 19;
   return (
     <MonitorContext.Provider value={monitor}>
       <Modal
@@ -56,7 +61,7 @@ const PreviewModal: FC<Props> = ({
         </div>
         <section id={isLandscape ? 'previewMonitor' : 'previewMonitorPortrait'}>
           <div className="carouselContainer">
-            {view.cards[0].layout > 17 ? (
+            {showInfoDisplay ? (
               <InformationDisplayContainer preview />
             ) : (
               <>

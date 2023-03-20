@@ -3,6 +3,8 @@ query getLineIds($stations: [String]!, $stops: [String]!)
   stations(ids: $stations) {
     name
     gtfsId
+    lat
+    lon
     stops {
       gtfsId
       name

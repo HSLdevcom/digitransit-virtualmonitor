@@ -166,6 +166,17 @@ export default {
       primary: '#E10669',
       monitorBackground: '#E10669',
     },
+    modeIcons: {
+      colors: {
+        'mode-bus': '#E10669',
+        'mode-bus-express': '#E10669',
+        'mode-bus-local': '#E10669',
+        'mode-rail': '#E10669',
+        'mode-tram': '#E10669',
+        'mode-ferry': '#E10669',
+        'mode-subway': '#E10669',
+      },
+    },
     login: {
       inUse: true,
       frontPageContent: 'front-page-paragraph-waltti',

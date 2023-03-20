@@ -1,0 +1,51 @@
+.map-card {
+  font-family: var(--font-family);
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 720px;
+  height: auto;
+  padding: 0  0 20px 30px;
+  margin-bottom: 10px;
+}
+
+.map-description {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #ddd;
+  height: 95px;
+  margin-top: 5px;
+
+  .desc {
+    font-size: 15px;
+    width: 350px;
+    height: 50px;
+    margin-left: 30px;
+  }
+
+  .modallink {
+    font-size: 15px;
+    margin: 61px 0 0 78px;
+    color: var(--primary-color);
+    cursor: pointer;
+    position: absolute;
+  }
+
+  .layout-and-time-container {
+    justify-content: center !important;
+  }
+}
+
+.toggle {
+  display: flex;
+  flex-direction: row;
+  margin-top: 15px;
+  align-items: center;
+
+  label {
+    margin-right: 25px;
+  }
+}

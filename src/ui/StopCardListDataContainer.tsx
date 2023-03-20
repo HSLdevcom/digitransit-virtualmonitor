@@ -4,6 +4,7 @@ import { useQuery } from '@apollo/client';
 import StopCardListContainer from './StopCardListContainer';
 import { sortBy } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
+import { IMapSettings } from '../util/Interfaces';
 
 interface IProps {
   stopCardList: any;
@@ -12,6 +13,7 @@ interface IProps {
   languages: Array<string>;
   loading: boolean;
   staticMonitor?: any;
+  mapSettings?: IMapSettings;
 }
 
 const StopCardListDataContainer: FC<IProps> = ({
@@ -21,6 +23,7 @@ const StopCardListDataContainer: FC<IProps> = ({
   languages,
   loading,
   staticMonitor,
+  mapSettings,
 }) => {
   const [cardList, setCardList] = useState(stopCardList);
   const stops = useQuery(StopQueryDocument, {
@@ -104,11 +107,11 @@ const StopCardListDataContainer: FC<IProps> = ({
       stations.data.station.forEach(station => {
         cardList.forEach((card, j) => {
           const leftIndex = card.columns.left.stops
-            .map(s => s.gtfsId)
-            .indexOf(station.gtfsId);
+            .map(s => s?.gtfsId)
+            .indexOf(station?.gtfsId);
           const rightIndex = card.columns.right.stops
-            .map(s => s.gtfsId)
-            .indexOf(station.gtfsId);
+            .map(s => s?.gtfsId)
+            .indexOf(station?.gtfsId);
           if (leftIndex > -1) {
             richCard[j].columns.left.stops[leftIndex] = getStationForMonitor(
               richCard[j].columns.left.stops[leftIndex],
@@ -133,6 +136,7 @@ const StopCardListDataContainer: FC<IProps> = ({
       vertical={stopCardList[0].layout > 11}
       stopCards={cardList}
       staticMonitor={staticMonitor}
+      mapSettings={mapSettings}
     />
   );
 };

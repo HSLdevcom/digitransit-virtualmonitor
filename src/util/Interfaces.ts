@@ -67,6 +67,8 @@ export interface IView {
   title: ITitle;
   layout: number;
   duration: number;
+  type?: string;
+  stops?: any;
 }
 export interface IMonitor {
   cards: Array<IView>;
@@ -75,6 +77,7 @@ export interface IMonitor {
   name?: string;
   url?: string;
   instance?: string;
+  mapSettings?: any;
 }
 
 export interface IAlertDescriptionTextTranslation {
@@ -145,4 +148,21 @@ export interface ICardInfo {
   title?: ITitle;
   possibleToMove: boolean;
   columns?: IColumn;
+}
+type Coordinate = [number, number];
+type BoundingBox = [Coordinate, Coordinate];
+type MapStop = {
+  coords: Coordinate;
+  gtfsId: string;
+  mode: string;
+  name: string;
+};
+export interface IMapSettings {
+  bounds?: BoundingBox;
+  center?: Coordinate;
+  zoom?: number;
+  showMap: boolean;
+  hideTimeTable: boolean;
+  stops: [MapStop];
+  userSet: boolean;
 }

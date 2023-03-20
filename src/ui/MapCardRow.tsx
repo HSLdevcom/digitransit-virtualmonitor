@@ -46,7 +46,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
   const { id, index } = item;
   const richItem = {
     ...item,
-    layout: orientation === 'vertical' ? 1 : 18,
+    layout: orientation === 'vertical' ? 19 : 18,
   };
   const isFirst = index === 0;
   const isLast = index === cards.length - 1;

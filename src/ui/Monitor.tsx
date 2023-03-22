@@ -66,7 +66,15 @@ const Monitor: FC<IProps> = ({
       clearTimeout(to);
     };
   }, []);
-
+  const flattened = departures.flatMap(o => o);
+  const routes = flattened.map(dep => {
+    return {
+      feedId: config.name,
+      route: dep.trip.route.shortName,
+      shortName: dep.trip.route.shortName,
+      type: 3,
+    };
+  });
   const windowHeight = windowDimensions.height;
   const windowWidth = windowDimensions.width;
   const style = {
@@ -116,7 +124,11 @@ const Monitor: FC<IProps> = ({
         currentLang={currentLang}
       />
       {showMapDisplay || mapSettings?.hideTimeTable ? (
-        <MonitorMapContainer preview={isPreview} mapSettings={mapSettings} />
+        <MonitorMapContainer
+          preview={isPreview}
+          mapSettings={mapSettings}
+          routes={routes}
+        />
       ) : (
         <MonitorRowContainer
           viewId={view['id']}

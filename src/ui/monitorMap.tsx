@@ -1,4 +1,4 @@
-import L from 'leaflet';
+import L, { LatLng } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React, { useEffect, FC, useContext, useState } from 'react';
 import ReactDOMServer from 'react-dom/server';
@@ -6,6 +6,7 @@ import Icon from './Icon';
 import { ConfigContext } from '../contexts';
 import cx from 'classnames';
 import { IMapSettings } from '../util/Interfaces';
+import VehicleIcon from '../Vehicleicon';
 
 interface IProps {
   preview?: boolean;
@@ -37,40 +38,45 @@ const MonitorMap: FC<IProps> = ({
       html: ReactDOMServer.renderToString(
         <Icon img={stop.mode} color={color} />,
       ),
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
     });
 
     return { icon: icon, coords: stop.coords };
   });
 
   useEffect(() => {
-    const newIcons = messages.map(m => {
+    const markers = vehicleMarkers;
+    messages.forEach(m => {
+      const { id, heading, mode, shortName, color, lat, long } = m;
       const icon = L.divIcon({
         className: 'nameclass',
         html: ReactDOMServer.renderToString(
-          <Icon img={'layout1'} height={30} width={30} color={m.color} />,
+          <VehicleIcon
+            className={undefined}
+            id={id}
+            rotate={heading}
+            color={color}
+            vehicleNumber={shortName}
+          />,
         ),
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
       });
-      return { id: m.id, icon: icon, coords: [m.lat, m.long] };
-    });
-
-    const newMarkers = newIcons.map(icon => {
-      return {
-        marker: L.marker(icon.coords, { icon: icon.icon }),
-        id: icon.id,
-      };
-    });
-    const markers = vehicleMarkers;
-    newMarkers.forEach(element => {
-      const exists = vehicleMarkers.find(v => {
-        return v.id === element.id;
+      const exists = markers.find(marker => {
+        return marker.id === id;
       });
+      let marker;
       if (exists) {
-        exists.marker.setLatLng(element.marker._latlng);
+        exists.marker.setLatLng(new LatLng(m.lat, m.long));
+        exists.marker.setIcon(icon);
       } else {
-        element.marker.addTo(map);
-        markers.push(element);
+        marker = { id: id, marker: L.marker([lat, long], { icon: icon }) };
+        marker.marker.addTo(map);
+        markers.push(marker);
       }
     });
+
     setVehicleMarkers(markers);
   }, [messages]);
   useEffect(() => {
@@ -117,8 +123,8 @@ const MonitorMap: FC<IProps> = ({
         }
       });
       return () => {
-        if (map) {
-          map.remove();
+        if (map && map !== undefined) {
+          map?.remove();
         }
       };
     }

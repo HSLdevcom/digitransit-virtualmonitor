@@ -59,10 +59,10 @@ const MonitorMap: FC<IProps> = ({
     const icon = L.divIcon({
       className: 'nameclass',
       html: ReactDOMServer.renderToString(
-        <Icon img={stop.mode} color={color} />,
+        <Icon img={stop.mode} color={color} width={30} height={30} />,
       ),
-      iconSize: [24, 24],
-      iconAnchor: [12, 12],
+      iconSize: [30, 30],
+      iconAnchor: [15, 30],
     });
 
     return { icon: icon, coords: stop.coords };

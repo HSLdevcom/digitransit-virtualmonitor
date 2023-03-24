@@ -38,7 +38,7 @@ const getSvgContent = (rotate, useLargeIcon, vehicleNumber, color) => {
     : 'translate(10 10) scale(0.7)';
   return (
     <svg
-      transform={`rotate(${(rotate || 0) + 180} 40 40)`}
+      transform={`rotate(${(rotate || 0) + 180} )`}
       width="30"
       height="30"
       viewBox="0 0 26 32"
@@ -74,7 +74,6 @@ const getSvgContent = (rotate, useLargeIcon, vehicleNumber, color) => {
             fill="white"
             mask="url(#path-1-outside-1_0_157)"
           />
-          transform={transform}
         </g>
         <circle
           id="Oval Copy"

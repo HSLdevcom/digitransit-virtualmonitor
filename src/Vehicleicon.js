@@ -4,38 +4,26 @@ const getFontSize = length => {
     case 1:
       return '19px';
     case 2:
-      return '19px';
-    case 3:
       return '16px';
-    case 4:
-      return '12px';
-    case 5:
-      return '9px';
-    default:
-      return '12px';
-  }
-};
-const getTextOffSet = length => {
-  switch (length) {
-    case 1:
-      return 12;
-    case 2:
-      return 12;
     case 3:
-      return 11;
+      return '12px';
     case 4:
-      return 11;
+      return '9px';
     case 5:
-      return 10;
+      return '6px';
     default:
-      return 12;
+      return '12px';
   }
 };
+function hexToRgb(hex) {
+  const r = parseInt(hex.substr(1, 2), 16);
+  const g = parseInt(hex.substr(3, 2), 16);
+  const b = parseInt(hex.substr(5, 2), 16);
+  return `rgb(${r}, ${g}, ${b})`;
+}
 
 const getSvgContent = (rotate, useLargeIcon, vehicleNumber, color) => {
-  const transform = useLargeIcon
-    ? 'translate(24 24) scale(1.3)'
-    : 'translate(10 10) scale(0.7)';
+  const textColor = color ? hexToRgb('#' + color) : 'black';
   return (
     <svg
       transform={`rotate(${(rotate || 0) + 180} )`}
@@ -85,9 +73,9 @@ const getSvgContent = (rotate, useLargeIcon, vehicleNumber, color) => {
         ></circle>
         <text
           x="50%"
-          y="50%"
+          y="45%"
           textAnchor="middle"
-          fill={'black'}
+          fill={textColor}
           dy=".3em"
           fontStyle={'condensed'}
           fontSize={getFontSize(vehicleNumber.length)}

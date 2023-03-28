@@ -116,6 +116,7 @@ const MonitorMap: FC<IProps> = ({
         }
       }
     });
+    // Handle vehicles that does not receive new messages, i.e. vehicles reaching end of lines.
     const activeMarkers = markers.filter(m => {
       if (now - m.lastUpdatedAt >= EXPIRE_TIME_SEC) {
         map.removeLayer(m.marker);

@@ -69,3 +69,4 @@ Steps for customization for different organizations is detailed [separately in C
 ## Deploying to Azure web app
 
 See [Stopmonitor iac repo](https://github.com/HSLdevcom/digitransit-virtualmonitor-iac/)
+

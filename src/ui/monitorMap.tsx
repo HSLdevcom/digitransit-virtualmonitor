@@ -51,7 +51,7 @@ const MonitorMap: FC<IProps> = ({
 }) => {
   const config = useContext(ConfigContext);
 
-  const [map, setMap] = useState();
+  const [map, setMap] = useState<any>();
   const [vehicleMarkers, setVehicleMarkers] = useState([]);
   const icons = mapSettings.stops.map(stop => {
     const color =
@@ -73,59 +73,6 @@ const MonitorMap: FC<IProps> = ({
     return { icon: icon, coords: stop.coords };
   });
 
-  useEffect(() => {
-    const markers = vehicleMarkers;
-    const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
-    const now = DateTime.now().toSeconds();
-    messages.forEach(m => {
-      const { id, heading, mode, shortName, color, lat, long, next_stop } = m;
-      const found = stopIDs.includes(next_stop);
-      if (found) {
-        const exists = markers.find(marker => {
-          return marker.id === id;
-        });
-        let marker;
-        if (exists) {
-          updateVehiclePosition(exists, getVehicleIcon(m), lat, long, now);
-        } else {
-          marker = {
-            id: id,
-            marker: L.marker([lat, long], {
-              icon: getVehicleIcon(m),
-            }),
-          };
-          marker.marker.addTo(map);
-          markers.push(marker);
-        }
-      } else {
-        // Expiry handling. Mark those vehicles that have passed stop for expiry.
-        // After a minute, remove vehicles from map.
-        const marker = markers.find(marker => marker.id === id);
-        if (marker) {
-          if (marker.expire) {
-            if (marker.expire <= now) {
-              markers.splice(marker.id, 1);
-              map.removeLayer(marker.marker);
-            } else {
-              updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
-            }
-          } else {
-            marker.expire = now + EXPIRE_TIME_SEC;
-            updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
-          }
-        }
-      }
-    });
-    // Handle vehicles that does not receive new messages, i.e. vehicles reaching end of lines.
-    const activeMarkers = markers.filter(m => {
-      if (now - m.lastUpdatedAt >= EXPIRE_TIME_SEC) {
-        map.removeLayer(m.marker);
-        return false;
-      }
-      return true;
-    });
-    setVehicleMarkers(activeMarkers);
-  }, [messages]);
   useEffect(() => {
     const center = mapSettings?.center
       ? mapSettings.center
@@ -176,6 +123,61 @@ const MonitorMap: FC<IProps> = ({
       };
     }
   }, [map]);
+
+  useEffect(() => {
+    const markers = vehicleMarkers;
+    const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
+    const now = DateTime.now().toSeconds();
+    messages.forEach(m => {
+      const { id, lat, long, next_stop } = m;
+      const found = stopIDs.includes(next_stop);
+      if (found) {
+        const exists = markers.find(marker => {
+          return marker.id === id;
+        });
+        let marker;
+        if (exists) {
+          updateVehiclePosition(exists, getVehicleIcon(m), lat, long, now);
+        } else {
+          marker = {
+            id: id,
+            marker: L.marker([lat, long], {
+              icon: getVehicleIcon(m),
+            }),
+          };
+          marker.marker.addTo(map);
+          markers.push(marker);
+        }
+      } else {
+        // Expiry handling. Mark those vehicles that have passed stop for expiry.
+        // After a minute, remove vehicles from map.
+        const marker = markers.find(marker => marker.id === id);
+        if (marker) {
+          if (marker.expire) {
+            if (marker.expire <= now) {
+              markers.splice(marker.id, 1);
+              map.removeLayer(marker.marker);
+            } else {
+              updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
+            }
+          } else {
+            marker.expire = now + EXPIRE_TIME_SEC;
+            updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
+          }
+        }
+      }
+    });
+    // Handle vehicles that does not receive new messages, i.e. vehicles reaching end of lines.
+    const activeMarkers = markers.filter(m => {
+      if (now - m.lastUpdatedAt >= EXPIRE_TIME_SEC) {
+        map.removeLayer(m.marker);
+        return false;
+      }
+      return true;
+    });
+    setVehicleMarkers(activeMarkers);
+  }, [messages]);
+
   return (
     <div
       id="map"

@@ -16,6 +16,7 @@ interface IProps {
   updateMap?: any;
   messages?: any;
 }
+const EXPIRE_TIME_SEC = 120;
 const getVehicleIcon = message => {
   const { id, heading, mode, shortName, color } = message;
   return L.divIcon({
@@ -34,10 +35,13 @@ const getVehicleIcon = message => {
   });
 };
 
-function updateVehiclePosition(marker, icon, lat, long) {
+function updateVehiclePosition(vehicle, icon, lat, long, timeStamp) {
+  const marker = vehicle.marker;
   marker.setLatLng(new LatLng(lat, long));
   marker.setIcon(icon);
+  vehicle.lastUpdatedAt = timeStamp;
 }
+
 const MonitorMap: FC<IProps> = ({
   preview,
   mapSettings,
@@ -46,6 +50,7 @@ const MonitorMap: FC<IProps> = ({
   messages,
 }) => {
   const config = useContext(ConfigContext);
+
   const [map, setMap] = useState();
   const [vehicleMarkers, setVehicleMarkers] = useState([]);
   const icons = mapSettings.stops.map(stop => {
@@ -71,6 +76,7 @@ const MonitorMap: FC<IProps> = ({
   useEffect(() => {
     const markers = vehicleMarkers;
     const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
+    const now = DateTime.now().toSeconds();
     messages.forEach(m => {
       const { id, heading, mode, shortName, color, lat, long, next_stop } = m;
       const found = stopIDs.includes(next_stop);
@@ -80,7 +86,7 @@ const MonitorMap: FC<IProps> = ({
         });
         let marker;
         if (exists) {
-          updateVehiclePosition(exists.marker, getVehicleIcon(m), lat, long);
+          updateVehiclePosition(exists, getVehicleIcon(m), lat, long, now);
         } else {
           marker = {
             id: id,
@@ -96,27 +102,28 @@ const MonitorMap: FC<IProps> = ({
         // After a minute, remove vehicles from map.
         const marker = markers.find(marker => marker.id === id);
         if (marker) {
-          const now = DateTime.now().toSeconds();
           if (marker.expire) {
             if (marker.expire <= now) {
               markers.splice(marker.id, 1);
               map.removeLayer(marker.marker);
             } else {
-              updateVehiclePosition(
-                marker.marker,
-                getVehicleIcon(m),
-                lat,
-                long,
-              );
+              updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
             }
           } else {
-            marker.expire = now + 60;
-            updateVehiclePosition(marker.marker, getVehicleIcon(m), lat, long);
+            marker.expire = now + EXPIRE_TIME_SEC;
+            updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
           }
         }
       }
     });
-    setVehicleMarkers(markers);
+    const activeMarkers = markers.filter(m => {
+      if (now - m.lastUpdatedAt >= EXPIRE_TIME_SEC) {
+        map.removeLayer(m.marker);
+        return false;
+      }
+      return true;
+    });
+    setVehicleMarkers(activeMarkers);
   }, [messages]);
   useEffect(() => {
     const center = mapSettings?.center
@@ -141,12 +148,12 @@ const MonitorMap: FC<IProps> = ({
       map.on('move', () => {
         if (updateMap) {
           const NE = [
-            map.getBounds()._northEast.lat,
-            map.getBounds()._northEast.lng,
+            map.getBounds().getNorthEast().lat,
+            map.getBounds().getNorthEast().lng,
           ];
           const SW = [
-            map.getBounds()._southWest.lat,
-            map.getBounds()._southWest.lng,
+            map.getBounds().getSouthWest().lat,
+            map.getBounds().getSouthWest().lng,
           ];
           const bounds = [NE, SW];
           updateMap({

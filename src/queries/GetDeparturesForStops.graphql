@@ -80,9 +80,12 @@ query GetDeparturesForStops($ids: [String!]!, $numberOfDepartures: Int!)
         headsign
         trip {
           tripHeadsign
+          directionId
+          id
           gtfsId
           route {
             shortName
+            gtfsId
           }
         }
       }

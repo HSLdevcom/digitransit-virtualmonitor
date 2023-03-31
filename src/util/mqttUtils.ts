@@ -9,6 +9,7 @@ export const startMqtt = (routes, setState) => {
   const topics = routes.map(r => {
     return getTopic(r);
   });
+  const feed = routes[0]?.feedId;
   setState({
     topics: topics,
   });
@@ -19,39 +20,44 @@ export const startMqtt = (routes, setState) => {
     });
 
     client.on('message', (topic, messages) => {
-      const parsedMessages = parseFeedMQTT(
-        feedReader,
-        messages,
-        topic,
-        'tampere',
-      );
+      const parsedMessages = parseFeedMQTT(feedReader, messages, topic, feed);
       setState({
         messages: parsedMessages,
       });
     });
   });
 };
-
-export const stopMqtt = client => {
+export function unsubscribe(client, topic) {
   if (client) {
+    client.unsubscribe(topic);
+  }
+}
+export const stopMqtt = (client, topics, setState) => {
+  // TODO This does not work yet
+  if (client) {
+    client.unsubscribe(topics);
     client.end();
+    setState({ client: null, topics: [] });
   }
 };
 
 function getTopic(option) {
-  const route = option.shortName;
+  const feed = option.feedId;
+  const set = settings[feed];
+  const route = option.route ? option.route : '+';
   const direction = '+';
   const geoHash = ['+', '+', '+', '+'];
-  const tripId = '+';
+  const tripId = option.tripId ? option.tripId : '+';
+
   // headsigns with / cause problems
   const headsign = '+';
   const tripStartTime = '+';
-  const topic = settings.tampere.mqttTopicResolver(
+  const topic = set.mqttTopicResolver(
     route,
     direction,
     tripStartTime,
-    '+',
     headsign,
+    feed,
     tripId,
     geoHash,
   );
@@ -111,6 +117,7 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
           geoHash: [geoHashDeg1, geoHashDeg2, geoHashDeg3, geoHashDeg4],
           shortName: shortName === '' ? undefined : shortName,
           color: color === '' ? undefined : color,
+          topicString: topic,
         };
         messages.push(message);
       }
@@ -118,3 +125,26 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
   });
   return messages.length > 0 ? messages : null;
 };
+
+export function changeTopics(settings, setState) {
+  const { client, oldTopics, options } = settings;
+
+  if (Array.isArray(oldTopics) && oldTopics.length > 0) {
+    client.unsubscribe(oldTopics);
+  }
+  let topicsByRoute;
+  const topics = [];
+  options.forEach(option => {
+    const topicString = getTopic(option);
+    if (option.route) {
+      if (!topicsByRoute) {
+        topicsByRoute = {};
+      }
+      topicsByRoute[option.route] = topicString;
+    }
+    topics.push(topicString);
+  });
+  // set new topic to store
+  setState({ topcis: topics });
+  client.subscribe(topics);
+}

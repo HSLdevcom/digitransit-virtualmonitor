@@ -8,6 +8,7 @@ import cx from 'classnames';
 import { IMapSettings } from '../util/Interfaces';
 import VehicleIcon from '../Vehicleicon';
 import { DateTime } from 'luxon';
+import { changeTopics, unsubscribe } from '../util/mqttUtils';
 
 interface IProps {
   preview?: boolean;
@@ -15,12 +16,16 @@ interface IProps {
   modal?: boolean;
   updateMap?: any;
   messages?: any;
+  client?: any;
+  currentState?: any;
+  newTopics?: any;
+  setState?: any;
 }
 const EXPIRE_TIME_SEC = 120;
 const getVehicleIcon = message => {
   const { id, heading, mode, shortName, color } = message;
   return L.divIcon({
-    className: 'nameclass',
+    className: 'vehicle',
     html: ReactDOMServer.renderToString(
       <VehicleIcon
         className={undefined}
@@ -48,9 +53,12 @@ const MonitorMap: FC<IProps> = ({
   modal,
   updateMap,
   messages,
+  client,
+  currentState,
+  newTopics,
+  setState,
 }) => {
   const config = useContext(ConfigContext);
-
   const [map, setMap] = useState<any>();
   const [vehicleMarkers, setVehicleMarkers] = useState([]);
   const icons = mapSettings.stops.map(stop => {
@@ -62,7 +70,7 @@ const MonitorMap: FC<IProps> = ({
           .replace('station', 'mode')}`
       ];
     const icon = L.divIcon({
-      className: 'nameclass',
+      className: 'stopIcon',
       html: ReactDOMServer.renderToString(
         <Icon img={stop.mode} color={color} width={30} height={30} />,
       ),
@@ -125,30 +133,36 @@ const MonitorMap: FC<IProps> = ({
   }, [map]);
 
   useEffect(() => {
-    const markers = vehicleMarkers;
+    let markers = vehicleMarkers;
     const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
     const now = DateTime.now().toSeconds();
     messages.forEach(m => {
       const { id, lat, long, next_stop } = m;
-      const found = stopIDs.includes(next_stop);
-      if (found) {
-        const exists = markers.find(marker => {
-          return marker.id === id;
-        });
-        let marker;
-        if (exists) {
-          updateVehiclePosition(exists, getVehicleIcon(m), lat, long, now);
-        } else {
-          marker = {
-            id: id,
-            marker: L.marker([lat, long], {
-              icon: getVehicleIcon(m),
-            }),
-          };
-          marker.marker.addTo(map);
-          markers.push(marker);
+      const nextStop = stopIDs.includes(next_stop);
+
+      const exists = markers.find(marker => {
+        return marker.id === id;
+      });
+      let marker;
+      if (exists) {
+        updateVehiclePosition(exists, getVehicleIcon(m), lat, long, now);
+        if (exists.nextStop) {
+          exists.passed = nextStop ? false : true;
+        } else if (nextStop && !exists.nextStop) {
+          exists.nextStop = true;
         }
+        //  exists.passed = nextStop ? false : undefined;
       } else {
+        marker = {
+          id: id,
+          marker: L.marker([lat, long], {
+            icon: getVehicleIcon(m),
+          }),
+        };
+        marker.marker.addTo(map);
+        markers.push(marker);
+      }
+      if (exists?.passed) {
         // Expiry handling. Mark those vehicles that have passed stop for expiry.
         // After a minute, remove vehicles from map.
         const marker = markers.find(marker => marker.id === id);
@@ -156,7 +170,22 @@ const MonitorMap: FC<IProps> = ({
           if (marker.expire) {
             if (marker.expire <= now) {
               markers.splice(marker.id, 1);
-              map.removeLayer(marker.marker);
+              const settings = {
+                oldTopics: currentState.topics,
+                client: currentState.client,
+                options: newTopics,
+              };
+              changeTopics(settings, setState);
+              markers = [];
+              map.eachLayer(layer => {
+                if (
+                  layer.options.icon &&
+                  layer.options.icon?.options.className === 'vehicle'
+                ) {
+                  layer.remove();
+                }
+              });
+              // map.removeLayer(marker.marker);
             } else {
               updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
             }
@@ -168,9 +197,24 @@ const MonitorMap: FC<IProps> = ({
       }
     });
     // Handle vehicles that does not receive new messages, i.e. vehicles reaching end of lines.
-    const activeMarkers = markers.filter(m => {
+    const activeMarkers = markers.forEach(m => {
       if (now - m.lastUpdatedAt >= EXPIRE_TIME_SEC) {
-        map.removeLayer(m.marker);
+        // TODO Verify
+        const settings = {
+          oldTopics: currentState.topics,
+          client: currentState.client,
+          options: newTopics,
+        };
+        changeTopics(settings, setState);
+        markers = [];
+        map.eachLayer(layer => {
+          if (
+            layer.options.icon &&
+            layer.options.icon?.options.className === 'vehicle'
+          ) {
+            layer.remove();
+          }
+        });
         return false;
       }
       return true;

@@ -15,14 +15,14 @@ interface IProps {
   mapSettings: IMapSettings;
   modal?: boolean;
   updateMap?: any;
-  routes?: Array<Option>;
+  topics?: Array<Option>;
 }
 const MonitorMapContainer: FC<IProps> = ({
   preview,
   mapSettings,
   modal,
   updateMap,
-  routes,
+  topics,
 }) => {
   const [state, setState] = useMergeState({
     client: undefined,
@@ -30,14 +30,15 @@ const MonitorMapContainer: FC<IProps> = ({
     messages: [],
   });
   useEffect(() => {
-    if (routes) {
-      startMqtt(routes, setState);
+    if (topics) {
+      startMqtt(topics, setState);
     }
     return () => {
-      stopMqtt(state.client);
+      stopMqtt(state.client, state.topics, setState);
     };
   }, []);
   const isLandscape = true;
+
   return (
     <div
       className={cx('monitor-container', {
@@ -53,6 +54,10 @@ const MonitorMapContainer: FC<IProps> = ({
         modal={modal}
         updateMap={updateMap}
         messages={state.messages}
+        client={state.client}
+        currentState={state}
+        newTopics={topics}
+        setState={setState}
       />
     </div>
   );

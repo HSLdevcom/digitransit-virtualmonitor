@@ -66,13 +66,15 @@ const Monitor: FC<IProps> = ({
       clearTimeout(to);
     };
   }, []);
-  const flattened = departures.flatMap(o => o);
-  const routes = flattened.map(dep => {
+  const flattened = departures.flatMap(o => o).filter(t => t.realtime);
+  const topics = flattened.map(dep => {
     return {
-      feedId: config.name,
-      route: dep.trip.route.shortName,
+      feedId: dep.trip.gtfsId.split(':')[0],
+      route: dep.trip.route?.gtfsId?.split(':')[1],
+      tripId: dep.trip.gtfsId.split(':')[1],
       shortName: dep.trip.route.shortName,
       type: 3,
+      ...dep,
     };
   });
   const windowHeight = windowDimensions.height;
@@ -127,7 +129,7 @@ const Monitor: FC<IProps> = ({
         <MonitorMapContainer
           preview={isPreview}
           mapSettings={mapSettings}
-          routes={routes}
+          topics={topics}
         />
       ) : (
         <MonitorRowContainer

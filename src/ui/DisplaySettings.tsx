@@ -134,7 +134,7 @@ const DisplaySettings: FC<IProps> = ({
               disabled={disableToggle}
             />
           </label>
-          <div className="txt">Näytä esityksessä</div>
+          <div className="txt">{t('showMap')}</div>
         </div>
       </section>
     </div>

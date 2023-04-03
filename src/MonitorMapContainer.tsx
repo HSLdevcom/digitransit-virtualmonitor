@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useContext, useEffect, useRef } from 'react';
 import cx from 'classnames';
 import MonitorMap from './ui/monitorMap';
 import { IMapSettings } from './util/Interfaces';
@@ -29,12 +29,19 @@ const MonitorMapContainer: FC<IProps> = ({
     topics: [],
     messages: [],
   });
+  const clientRef = useRef(null);
+  const topicRef = useRef(null);
+
+  if (state.client) {
+    clientRef.current = state.client;
+    topicRef.current = state.topics;
+  }
   useEffect(() => {
     if (topics) {
-      startMqtt(topics, setState);
+      startMqtt(topics, setState, clientRef);
     }
     return () => {
-      stopMqtt(state.client, state.topics, setState);
+      stopMqtt(clientRef.current, topicRef.current, setState);
     };
   }, []);
   const isLandscape = true;

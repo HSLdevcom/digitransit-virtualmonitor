@@ -1,11 +1,12 @@
 import mqtt from 'mqtt/dist/mqtt';
 import settings from './realTimeUtils';
 
-export const startMqtt = (routes, setState) => {
+export const startMqtt = (routes, setState, setClient) => {
   const client = mqtt.connect('wss://mqtt.digitransit.fi');
   setState({
     client: client,
   });
+  setClient.current = client;
   const topics = routes.map(r => {
     return getTopic(r);
   });
@@ -33,7 +34,6 @@ export function unsubscribe(client, topic) {
   }
 }
 export const stopMqtt = (client, topics, setState) => {
-  // TODO This does not work yet
   if (client) {
     client.unsubscribe(topics);
     client.end();

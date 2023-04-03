@@ -133,7 +133,7 @@ const MonitorMap: FC<IProps> = ({
   }, [map]);
 
   useEffect(() => {
-    let markers = vehicleMarkers;
+    let markers = vehicleMarkers ? vehicleMarkers : [];
     const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
     const now = DateTime.now().toSeconds();
     messages.forEach(m => {
@@ -197,9 +197,8 @@ const MonitorMap: FC<IProps> = ({
       }
     });
     // Handle vehicles that does not receive new messages, i.e. vehicles reaching end of lines.
-    const activeMarkers = markers.forEach(m => {
+    markers.forEach(m => {
       if (now - m.lastUpdatedAt >= EXPIRE_TIME_SEC) {
-        // TODO Verify
         const settings = {
           oldTopics: currentState.topics,
           client: currentState.client,
@@ -215,11 +214,10 @@ const MonitorMap: FC<IProps> = ({
             layer.remove();
           }
         });
-        return false;
       }
-      return true;
+      return m;
     });
-    setVehicleMarkers(activeMarkers);
+    setVehicleMarkers(markers);
   }, [messages]);
 
   return (

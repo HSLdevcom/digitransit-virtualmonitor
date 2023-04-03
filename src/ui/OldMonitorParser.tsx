@@ -1,29 +1,16 @@
 import React, { FC, useEffect, useState } from 'react';
 import { defaultStopCard } from '../util/stopCardUtil';
-import { gql, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import monitorAPI from '../api';
 import { Redirect } from 'react-router-dom';
 import Loading from './Loading';
 import hash from 'object-hash';
-import {
-  GetStopsForOldMonitors,
-  GetStopsForOldMonitorsVariables,
-} from '../generated/GetStopsForOldMonitors';
+import { GetStopsForOldMonitorsDocument } from '../generated';
 
 interface IProps {
   display: any;
 }
 
-export const GET_STOP = gql`
-  query GetStopsForOldMonitors($ids: [String!]!)
-  @api(contextKey: "clientName") {
-    stops: stops(ids: $ids) {
-      name
-      gtfsId
-      locationType
-    }
-  }
-`;
 const findClosest = (arr, goal) => {
   return arr.reduce((prev, curr) =>
     Math.abs(curr - goal) < Math.abs(prev - goal) ? curr : prev,
@@ -84,10 +71,7 @@ const OldMonitorParser: FC<IProps> = ({ display }) => {
     contenthash: '',
   });
   const [redirect, setRedirect] = useState(false);
-  const { data } = useQuery<
-    GetStopsForOldMonitors,
-    GetStopsForOldMonitorsVariables
-  >(GET_STOP, {
+  const { data } = useQuery(GetStopsForOldMonitorsDocument, {
     variables: { ids: stopIds },
     skip: stopIds.length < 1,
     context: { clientName: 'default' },

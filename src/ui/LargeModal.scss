@@ -1,0 +1,38 @@
+.monitor-modal-container {
+  width: 100%;
+  margin: 0 60px;
+
+  #close {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+  }
+
+  .monitor-modal-header {
+    margin: 64px 0 32px;
+    font-style: normal;
+    font-weight: var(--font-weight);
+    line-height: 22px;
+    font-size: 22px;
+    color: #333;
+  }
+}
+
+.modal {
+  .ReactModal__Content {
+    border: none !important;
+    border-radius: 5px !important;
+    width: 720px !important;
+    max-height: 90% !important;
+    height: fit-content;
+    overflow-x: hidden !important;
+    top: 50% !important;
+    left: 50% !important;
+    margin-right: -50%;
+    margin-bottom: -50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    animation: none;
+  }
+}

@@ -32,6 +32,9 @@ const CreateViewPage = () => {
   const [staticMonitorProperties, setStaticMonitorProperties] = useState(null);
   const [loading, setLoading] = useState(true);
   const [noMonitorFound, setNoMonitorFound] = useState(false);
+  const [mapSettings, setMapsettings] = useState(
+    location?.state?.view ? location.state.view.mapSettings : null,
+  );
   const [showMonitorInfoModal, setShowMonitorInfoModal] = useState(
     !!location?.state?.view,
   );
@@ -51,29 +54,38 @@ const CreateViewPage = () => {
   }, [noMonitorFound]);
 
   useEffect(() => {
+    const controller = new AbortController();
     if (hash) {
       monitorAPI
-        .get(hash)
+        .get(hash, controller.signal)
         .then((r: any) => {
           if (r?.cards?.length) {
             setStopCardList(r.cards);
             if (r.languages) {
               setLanguages(r.languages);
             }
+            if (r.mapSettings) {
+              setMapsettings(r.mapSettings);
+            }
+          } else {
+            setNoMonitorFound(true);
           }
           setLoading(false);
         })
         .catch(() => setNoMonitorFound(true));
     } else if (url && user.sub) {
-      monitorAPI.isUserOwned(url).then((res: Response) => {
+      monitorAPI.isUserOwned(url, controller.signal).then((res: Response) => {
         if (res.status === 200) {
           monitorAPI
-            .getStatic(url)
+            .getStatic(url, controller.signal)
             .then((r: any) => {
               if (r?.cards?.length) {
                 setStopCardList(r.cards);
                 if (r.languages) {
                   setLanguages(r.languages);
+                }
+                if (r.mapSettings) {
+                  setMapsettings(r.mapSettings);
                 }
                 setStaticMonitorProperties({ name: r.name, id: r.id });
               }
@@ -93,6 +105,9 @@ const CreateViewPage = () => {
       }
       setLoading(false);
     }
+    return () => {
+      controller.abort();
+    };
   }, []);
   if (
     stopCardList &&
@@ -113,15 +128,16 @@ const CreateViewPage = () => {
   }
 
   if (
-    user.sub &&
+    user?.sub &&
     location.pathname.toLowerCase() === '/createview' &&
     !url &&
     !hash &&
     !location.state?.view
   ) {
+    // user is trying to access the non logged in create page while logged in,
+    // redirect to correct page
     return <Redirect to={{ pathname: '/monitors/createview' }} />;
   }
-
   if (((!hash && !url) || noMonitorFound) && !location?.state?.view) {
     return (
       <ContentContainer>
@@ -183,6 +199,7 @@ const CreateViewPage = () => {
         stationIds={stationIds}
         stopCardList={stopCardList}
         loading={loading}
+        mapSettings={mapSettings}
       />
     </ContentContainer>
   );

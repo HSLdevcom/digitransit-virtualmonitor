@@ -23,9 +23,16 @@ const MonitorTitlebar: FC<IProps> = ({
   isLandscape = false,
   currentLang,
 }) => {
-  const location = view.columns.left.stops[0];
-  const showWeather =
-    !isMultiDisplay && isLandscape && location?.lat && location?.lon;
+  const lat =
+    view.type === 'map'
+      ? view.stops[0].coords[0]
+      : view.columns.left.stops[0].lat;
+  const lon =
+    view.type === 'map'
+      ? view.stops[0].coords[1]
+      : view.columns.left.stops[0].lon;
+
+  const showWeather = !isMultiDisplay && isLandscape && lat && lon;
 
   let temperature;
   let weatherIconString;
@@ -37,7 +44,7 @@ const MonitorTitlebar: FC<IProps> = ({
 
   const fetchWeather = () => {
     if (showWeather) {
-      getWeatherData(DateTime.now(), location.lat, location.lon).then(res => {
+      getWeatherData(DateTime.now(), lat, lon).then(res => {
         let weatherData;
         if (Array.isArray(res) && res.length === 3) {
           weatherData = {
@@ -48,8 +55,8 @@ const MonitorTitlebar: FC<IProps> = ({
             iconId: checkDayNight(
               res[2].ParameterValue,
               DateTime.now(),
-              location.lat,
-              location.lon,
+              lat,
+              lon,
             ),
           };
         }

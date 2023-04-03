@@ -12,7 +12,8 @@ const createUrlCompression = (dictionary = new Buffer.from('')) => ({
         return reject(err);
       }
       return resolve(JSON.parse(buffer.toString()));
-    }));
+    }),
+    );
   },
   pack(objectToPack) {
     return new Promise((resolve, reject) =>
@@ -21,7 +22,8 @@ const createUrlCompression = (dictionary = new Buffer.from('')) => ({
         reject();
       }
       resolve(buffer.toString('base64'));
-    }));
+    }),
+    );
   },
 });
 

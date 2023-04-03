@@ -76,14 +76,14 @@ const InformationDisplayCarousel: FC<IProps> = ({
               a => a.language === language,
             ).text;
             return (
-              <>
+              <React.Fragment key={`alert-${language}`}>
                 <h2 className="alert-header">
                   {description.includes(header) ? description : header}
                 </h2>
                 {!description.includes(header) && (
                   <div className="alert-description">{description}</div>
                 )}
-              </>
+              </React.Fragment>
             );
           })
         ) : (

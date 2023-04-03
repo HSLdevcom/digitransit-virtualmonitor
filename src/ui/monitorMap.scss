@@ -1,0 +1,13 @@
+
+.monitormap {
+  height: 100%;
+  width: 100%;
+
+  &.preview {
+    position: relative;
+  }
+
+  &.modal {
+    position: absolute;
+  }
+}

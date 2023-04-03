@@ -4,12 +4,16 @@ import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';
 import { ConfigContext } from '../contexts';
+import Toggle from './Toggle';
 
 interface IProps {
   languages: Array<string>;
   orientation: string;
   handleChange: (language: string) => void;
   handleOrientation: (orientation: string) => void;
+  showMap: boolean;
+  setShowMap: (boolean) => void;
+  disableToggle?: boolean;
 }
 
 const DisplaySettings: FC<IProps> = ({
@@ -17,6 +21,9 @@ const DisplaySettings: FC<IProps> = ({
   orientation,
   handleOrientation,
   handleChange,
+  showMap,
+  setShowMap,
+  disableToggle,
 }) => {
   const config = useContext(ConfigContext);
   const [t] = useTranslation();
@@ -26,11 +33,27 @@ const DisplaySettings: FC<IProps> = ({
   };
   return (
     <div className="display-settings-container">
+      <div className="headers">
+        <div className="orientation-header">{t('displayDirection')}</div>
+        <div
+          className={cx('language-header', {
+            hsl: config.name === 'hsl',
+          })}
+        >
+          {t('displayLanguages')}
+        </div>
+        <div
+          className={cx('map-header', {
+            hsl: config.name === 'hsl',
+          })}
+        >
+          {t('displayMap')}
+        </div>
+      </div>
       <section
         className="display-orientation-container"
         aria-label={t('displayDirection')}
       >
-        <div className="orientation-header">{t('displayDirection')}</div>
         <div className="orientation-controls">
           <button
             className={cx('orientation-button', {
@@ -75,7 +98,6 @@ const DisplaySettings: FC<IProps> = ({
         className="display-language-container"
         aria-label={t('displayLanguages')}
       >
-        <div className="language-header">{t('displayLanguages')}</div>
         {languages.length === 0 && (
           <div className="language-alert" aria-hidden="true">
             {t('chooseOne')}
@@ -90,13 +112,7 @@ const DisplaySettings: FC<IProps> = ({
                 isSelected={isChecked(option)}
                 onChange={() => handleChange(option)}
                 aria-label={
-                  t('displayLanguage') +
-                  ' ' +
-                  t(
-                    `languageName${
-                      option.charAt(0).toUpperCase() + option.slice(1)
-                    }`,
-                  )
+                  t('displayLanguage') + ' ' + t(`language-name-${option}`)
                 }
                 color={config.colors.primary}
               >
@@ -104,6 +120,21 @@ const DisplaySettings: FC<IProps> = ({
               </Checkbox>
             );
           })}
+        </div>
+      </section>
+      <section className="display-language-container">
+        <div className="map-toggle">
+          {' '}
+          <label>
+            <Toggle
+              id="toggle"
+              toggled={showMap}
+              title="showmap"
+              onToggle={setShowMap}
+              disabled={disableToggle}
+            />
+          </label>
+          <div className="txt">Näytä esityksessä</div>
         </div>
       </section>
     </div>

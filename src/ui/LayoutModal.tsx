@@ -1,17 +1,10 @@
-import React, {
-  ClassAttributes,
-  FC,
-  useState,
-  useEffect,
-  useContext,
-} from 'react';
+import React, { ClassAttributes, FC, useState, useEffect } from 'react';
 import cx from 'classnames';
 import { horizontalLayouts, verticalLayouts } from './Layouts';
 import isEqual from 'lodash/isEqual';
 import Modal from 'react-modal';
 import { useTranslation } from 'react-i18next';
-import Icon from './Icon';
-import { ConfigContext } from '../contexts';
+import LargeModal from './LargeModal';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
@@ -40,8 +33,6 @@ const LayoutModal: FC<Props> = ({
 }) => {
   const [t] = useTranslation();
 
-  const config = useContext(ConfigContext);
-
   const [selected, setSelected] = useState(option);
 
   useEffect(() => {
@@ -56,38 +47,17 @@ const LayoutModal: FC<Props> = ({
     }
   }, [option, open]);
 
-  const verticalHeight = {
-    content: {
-      width: '640px',
-    },
-  };
   const layouts =
     orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;
   return (
-    <Modal
+    <LargeModal
       isOpen={open}
       onRequestClose={() => onClose()}
-      portalClassName="modal"
-      style={orientation === 'vertical' ? verticalHeight : undefined}
+      portalClassName="layout-modal modal"
       ariaHideApp={ariaHideApp}
+      header={'layoutModalHeader'}
     >
       <div className="layout-modal-content-container">
-        <section id="close">
-          <button
-            className="close-button"
-            role="button"
-            aria-label={t('close')}
-            onClick={() => onClose()}
-          >
-            <Icon
-              img="close"
-              color={config.colors.primary}
-              height={24}
-              width={24}
-            />
-          </button>
-        </section>
-        <h2 className="layout-modal-header">{t('layoutModalHeader')}</h2>
         <div className="layouts">
           {layouts.map(l => {
             return (
@@ -112,7 +82,9 @@ const LayoutModal: FC<Props> = ({
                             : '',
                         )}
                         disabled={
-                          +option.value > 17 && !allowInformationDisplay
+                          +option.value > 17 &&
+                          +option.value < 20 &&
+                          !allowInformationDisplay
                         }
                         onClick={() => setSelected(option)}
                         id={`layoutBtn-${option.value}`}
@@ -140,7 +112,7 @@ const LayoutModal: FC<Props> = ({
           </button>
         </div>
       </div>
-    </Modal>
+    </LargeModal>
   );
 };
 

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import SiteHeader from '@hsl-fi/site-header';
 import { UserContext, ConfigContext, FavouritesContext } from '../contexts';
+import { logout } from '../util/logoutUtil';
 
 const notificationAPI = '/api/user/notifications';
 
@@ -11,6 +12,7 @@ const BannerHSL = () => {
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
   const [banners, setBanners] = useState([]);
+  const [userState, setUser] = useState(user);
   const notificationApiUrls = {
     get: `${notificationAPI}?language=${i18n.language}`,
     post: `${notificationAPI}?language=${i18n.language}`,
@@ -24,11 +26,15 @@ const BannerHSL = () => {
   };
 
   useEffect(() => {
+    const controller = new AbortController();
     if (config.bannersUri) {
       fetch(`${config.bannersUri}language=${i18n.language}`)
         .then(res => res.json())
-        .then(data => setBanners(data));
+        .then(data => {
+          setBanners(data);
+        });
     }
+    return () => controller.abort();
   }, [i18n.language]);
 
   const languages = [
@@ -68,7 +74,7 @@ const BannerHSL = () => {
             isLoading: false, // When fetching for login-information, `isLoading`-property can be set to true. Spinner will be shown.
             isAuthenticated: !!user.sub, // If user is authenticated, set `isAuthenticated`-property to true.
             isSelected: false,
-            loginUrl: `login?url=${url}&${params}`, // Url that user will be redirect to when Person-icon is pressed and user is not logged in.
+            loginUrl: `hsl-login?url=${url}&${params}`, // Url that user will be redirect to when Person-icon is pressed and user is not logged in.
             initials: initials,
             menuItems: [
               {
@@ -79,7 +85,7 @@ const BannerHSL = () => {
               {
                 name: t('logout'),
                 url: '/logout',
-                //onClick: () => clearStorages(context),
+                onClick: () => logout(setUser),
               },
             ],
           },

@@ -6,6 +6,7 @@ import LinkkiLogo from './LinkkiLogo';
 import MatkaLogo from './MatkaLogo';
 import NysseLogo from './NysseLogo';
 import Vaasalogo from './VaasaLogo';
+import OuluLogo from './OuluLogo';
 
 interface ICommonProps {
   readonly isPreview?: boolean;
@@ -13,7 +14,7 @@ interface ICommonProps {
   readonly forMonitor?: boolean;
 }
 
-const Logo: FC<ICommonProps> = (props) => {
+const Logo: FC<ICommonProps> = props => {
   const config = useContext(ConfigContext);
   const { isPreview, isLandscape, forMonitor } = props;
 
@@ -35,8 +36,11 @@ const Logo: FC<ICommonProps> = (props) => {
       case 'matka':
         logo = <MatkaLogo />;
         break;
-      case 'linkki':
+      case 'jyvaskyla':
         logo = <LinkkiLogo />;
+        break;
+      case 'oulu':
+        logo = <OuluLogo />;
         break;
       default:
         break;
@@ -57,6 +61,6 @@ const Logo: FC<ICommonProps> = (props) => {
     );
   }
   return null;
-}
+};
 
 export default Logo;

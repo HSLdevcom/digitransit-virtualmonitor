@@ -1,12 +1,13 @@
 import cx from 'classnames';
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC } from 'react';
 import { ICardInfo } from '../util/Interfaces';
-import Icon from './Icon';
 import { useTranslation } from 'react-i18next';
 import { focusToInput, onClick } from '../util/InputUtils';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext } from '../contexts';
+
+import InputWithEditIcon from './InputWithEditIcon';
 
 interface IProps {
   card: ICardInfo;
@@ -17,42 +18,26 @@ interface IProps {
     lang?: string,
   ) => void;
   lang: string;
+  isMap?: boolean;
 }
 
-const StopViewTitleEditor: FC<IProps> = ({ card, updateCardInfo, lang }) => {
+const StopViewTitleEditor: FC<IProps> = ({
+  card,
+  updateCardInfo,
+  lang,
+  isMap,
+}) => {
   const { index, layout, id, title } = card;
   const [t] = useTranslation();
-  const config = useContext(ConfigContext);
   const { isMultiDisplay } = getLayout(layout);
-  const [newTitle, setNewTitle] = useState(
-    isMultiDisplay ? t('layout') : title[lang],
-  );
 
-  useEffect(() => {
-    setNewTitle(isMultiDisplay ? t('layout') : title[lang]);
-  }, [card]);
-
-  const [isFocus, setisFocus] = useState(false);
-
-  const onBlur = event => {
-    setisFocus(false);
-    if (updateCardInfo) {
-      updateCardInfo(id, 'title', event.target.value, lang);
-    }
-  };
   const layoutTitle = t('layout-double');
-
-  function handleFocus(e: React.FocusEvent<HTMLInputElement>) {
-    setisFocus(true);
-  }
-
-  const onChange = e => {
-    setNewTitle(e.target.value);
+  const onChange = title => {
+    updateCardInfo(id, 'title', title, lang);
   };
-
-  const titleDescription = t('stoptitle')
-    .concat(' - ')
-    .concat(lang.toUpperCase());
+  const name = isMap ? 'maptitle' : 'stoptitle';
+  const titleDescription = t(name).concat(' - ').concat(lang.toUpperCase());
+  const inputID = `stop-title-input${id}-${lang}`;
   return (
     <div className="stop-title">
       <p className="description">
@@ -60,44 +45,27 @@ const StopViewTitleEditor: FC<IProps> = ({ card, updateCardInfo, lang }) => {
       </p>
       <div className="stop-title-input-container">
         {!isMultiDisplay && (
-          <input
-            className="stop-title-input"
-            id={`stop-title-input${id}-${lang}`}
-            onClick={e => onClick(e)}
-            onChange={e => onChange(e)}
-            maxLength={15}
-            placeholder={t('viewEditorName')}
-            onKeyDown={e => isKeyboardSelectionEvent(e)}
-            onBlur={e => !isKeyboardSelectionEvent(e) && onBlur(e)}
-            onFocus={e => {
-              handleFocus(e);
+          <InputWithEditIcon
+            onChange={onChange}
+            id={inputID}
+            value={title[lang]}
+            inputProps={{
+              maxLength: 15,
+              placeholder: t('viewEditorName'),
             }}
-            value={newTitle}
+            ariaLabelEdit={`${t('modify')} ${t('stoptitle', {
+              id: index + 1,
+            })} ${t(`language-name-${lang}`)}`}
           />
         )}
         {isMultiDisplay && (
           <input
-            className={cx('stop-title-input', 'double')}
-            id={`stop-title-input${id}-${lang}`}
+            className={cx('monitor-input', 'double')}
+            id={inputID}
             value={layoutTitle}
+            tabIndex={-1}
             readOnly
           />
-        )}
-        {!isMultiDisplay && !isFocus && (
-          <div
-            tabIndex={-1}
-            role="button"
-            onClick={() => focusToInput(`stop-title-input${id}-${lang}`)}
-            aria-label={
-              t('modify') +
-              ' ' +
-              t('stoptitle', { id: index + 1 }) +
-              ' ' +
-              t(`languageName${lang.charAt(0).toUpperCase() + lang.slice(1)}`)
-            }
-          >
-            <Icon img="edit" color={config.colors.primary} />
-          </div>
         )}
       </div>
     </div>

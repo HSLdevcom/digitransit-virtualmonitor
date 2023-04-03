@@ -6,7 +6,7 @@ import NtpSyncComponent from './ntp/NtpSyncComponent';
 import { getParams } from './util/queryUtils';
 import { getConfig } from './util/getConfig';
 import { ConfigContext } from './contexts';
-import './i18n'
+import './i18n';
 
 ReactDOM.render(
   <NtpSyncComponent>

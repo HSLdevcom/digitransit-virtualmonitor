@@ -1,15 +1,10 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
 import { getStopsAndStationsFromViews } from '../util/monitorUtils';
 import { useQuery } from '@apollo/client';
-import { GET_STOP_ALERTS, GET_STATION_ALERTS } from '../queries/alertQueries';
 import {
-  GetAlertsForStations,
-  GetAlertsForStationsVariables,
-} from '../generated/GetAlertsForStations';
-import {
-  GetAlertsForStops,
-  GetAlertsForStopsVariables,
-} from '../generated/GetAlertsForStops';
+  GetAlertsForStopsDocument,
+  GetAlertsForStationsDocument,
+} from '../generated';
 import { uniqBy, cloneDeep } from 'lodash';
 import Loading from './Loading';
 import InformationDisplayCarousel from './InformationDisplayCarousel';
@@ -47,25 +42,19 @@ const InformationDisplayContainer: FC<IProps> = ({ preview = false }) => {
   const [stationAlerts, setStationAlerts] = useState([]);
   const [view, setView] = useState(cloneDeep(monitor).cards[0]);
 
-  const stationsState = useQuery<
-    GetAlertsForStations,
-    GetAlertsForStationsVariables
-  >(GET_STATION_ALERTS, {
+  const stationsState = useQuery(GetAlertsForStationsDocument, {
     variables: { ids: stationIds },
     pollInterval: 180000,
     skip: stationIds.length < 1,
     context: { clientName: 'default' },
   });
 
-  const stopsState = useQuery<GetAlertsForStops, GetAlertsForStopsVariables>(
-    GET_STOP_ALERTS,
-    {
-      variables: { ids: stopIds },
-      pollInterval: 180000,
-      skip: stopIds.length < 1,
-      context: { clientName: 'default' },
-    },
-  );
+  const stopsState = useQuery(GetAlertsForStopsDocument, {
+    variables: { ids: stopIds },
+    pollInterval: 180000,
+    skip: stopIds.length < 1,
+    context: { clientName: 'default' },
+  });
   const ViewWithLocation = (lat, lon) => {
     const newView = {
       ...view,

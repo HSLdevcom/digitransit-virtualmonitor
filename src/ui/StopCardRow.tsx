@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLazyQuery } from '@apollo/client';
 import { ICardInfo, IStop } from '../util/Interfaces';
 import Icon from './Icon';
-import { GET_STOP, GET_STATION } from '../queries/stopStationQueries';
+import { StopQueryDocument, StationQueryDocument } from '../generated';
 import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
 import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
@@ -42,7 +42,6 @@ interface IProps {
     cardId: number,
     side: string,
     stops: Array<IStop>,
-    reorder: boolean,
     gtfsIdForHidden: string,
   ) => void;
   readonly updateCardInfo?: (
@@ -52,6 +51,8 @@ interface IProps {
     lang?: string,
   ) => void;
   languages: Array<string>;
+  hideTitle?: boolean;
+  hasMap?: boolean;
 }
 
 const StopCardRow: FC<IProps> = ({
@@ -66,15 +67,17 @@ const StopCardRow: FC<IProps> = ({
   setStops,
   updateCardInfo,
   languages,
+  hideTitle,
+  hasMap,
 }) => {
   const config = useContext(ConfigContext);
   const favourites = useContext(FavouritesContext);
   const [t] = useTranslation();
-  const [getStop, stopState] = useLazyQuery(GET_STOP, {
+  const [getStop, stopState] = useLazyQuery(StopQueryDocument, {
     fetchPolicy: 'network-only',
     context: { clientName: 'default' },
   });
-  const [getStation, stationState] = useLazyQuery(GET_STATION, {
+  const [getStation, stationState] = useLazyQuery(StationQueryDocument, {
     fetchPolicy: 'network-only',
     context: { clientName: 'default' },
   });
@@ -154,7 +157,6 @@ const StopCardRow: FC<IProps> = ({
                 : undefined,
             };
           }),
-        false,
         undefined,
       );
     }
@@ -189,7 +191,6 @@ const StopCardRow: FC<IProps> = ({
               hiddenRoutes: [],
             };
           }),
-        false,
         undefined,
       );
     }
@@ -200,7 +201,7 @@ const StopCardRow: FC<IProps> = ({
   const isLast = index === cards.length - 1;
   const isDouble = layout >= 9 && layout <= 11;
   const possibleToMove = cards.length > 1;
-
+  const possibleToDelete = hasMap ? cards.length > 2 : cards.length > 1;
   const filterSearchResults = (results, x) => {
     return results.filter(result => {
       const gtfsId = getGTFSId(result.properties.id);
@@ -214,25 +215,32 @@ const StopCardRow: FC<IProps> = ({
   const searchContext = {
     ...getSearchContext(config),
     getFavouriteStops: () =>
-      favourites.filter(f => f.type === 'stop' || f.type === 'station'),
+      // Result may also be something else than array, like an 500 http response
+      Array.isArray(favourites)
+        ? favourites.filter(f => f.type === 'stop' || f.type === 'station')
+        : [],
   };
   return (
     <li className="stopcard animate-in" id={`stopcard_${id}`} style={style}>
       <div className="stopcard-row-container">
         <div className="title-with-icons">
-          {languages.map((lan, i) => {
-            return (
-              ((isDouble && i === 0) || !isDouble) && (
-                <StopViewTitleEditor
-                  card={item}
-                  updateCardInfo={updateCardInfo}
-                  lang={lan}
-                />
-              )
-            );
-          })}
+          <div className="title-list">
+            {!hideTitle &&
+              languages.map((lan, i) => {
+                return (
+                  ((isDouble && i === 0) || !isDouble) && (
+                    <StopViewTitleEditor
+                      key={`lan-${lan}`}
+                      card={item}
+                      updateCardInfo={updateCardInfo}
+                      lang={lan}
+                    />
+                  )
+                );
+              })}
+          </div>
           <div className="icons">
-            {cards.length > 1 && (
+            {possibleToDelete && (
               <div
                 className={cx('delete icon', possibleToMove ? '' : 'move-end')}
                 tabIndex={0}

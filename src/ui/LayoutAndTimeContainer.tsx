@@ -17,6 +17,7 @@ interface IProps {
   orientation: string;
   durationEditable: boolean;
   allowInformationDisplay: boolean;
+  disableLayoutButton?: boolean;
 }
 
 const durations = [
@@ -33,6 +34,7 @@ const LayoutAndTimeContainer: FC<IProps> = ({
   orientation,
   durationEditable,
   allowInformationDisplay,
+  disableLayoutButton,
 }) => {
   const [t] = useTranslation();
   const [open, setOpen] = useState(false);
@@ -64,12 +66,19 @@ const LayoutAndTimeContainer: FC<IProps> = ({
   };
   return (
     <div className="layout-and-time-container">
-      <div role="button" onClick={() => setOpen(true)}>
+      <div
+        role="button"
+        onClick={() => {
+          if (!disableLayoutButton) {
+            setOpen(true);
+          }
+        }}
+      >
         <button
           className="layout-button"
           name="layout"
-          role="button"
           aria-label={t('layout')}
+          disabled={disableLayoutButton}
         >
           {layoutButton}
         </button>
@@ -77,7 +86,6 @@ const LayoutAndTimeContainer: FC<IProps> = ({
       <div className="duration">
         <Dropdown
           name="duration"
-          isSearchable={false}
           options={durations}
           placeholder={!durationEditable ? '-' : placeHolder}
           handleChange={handleChange}

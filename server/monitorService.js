@@ -48,14 +48,19 @@ const monitorService = {
     try {
       const cont = database.container('staticMonitors');
       const urls = ids;
+      const instanceName = req.params.instanceName;
       // query to return all items
       if (urls.length) {
         const querySpec = {
-          query: 'SELECT * from c WHERE ARRAY_CONTAINS(@urls, c.url)',
+          query: 'SELECT * from c WHERE ARRAY_CONTAINS(@urls, c.url) AND (IS_DEFINED(c.instance) = false OR c.instance = @instance)',
           parameters: [
             {
               name: '@urls',
               value: urls,
+            },
+            {
+              name: '@instance',
+              value: req.params.instanceName,
             },
           ],
         };
@@ -68,7 +73,7 @@ const monitorService = {
         res.json([]);
       }
     } catch (e) {
-      next(e)
+      next(e);
     }
   },
   create: async function create(req, res, next) {
@@ -76,7 +81,11 @@ const monitorService = {
       await Promise.resolve(container.items.create(req.body));
       res.send('OK');
     } catch (e) {
-      next(e);
+      if (e.code === 409) {
+        res.status(409).send('OK');
+      } else {
+        next(e);
+      }
     }
   },
   getStatic: async function getStaticMonitor(req, res, next) {
@@ -101,7 +110,7 @@ const monitorService = {
         res.json({});
       }
     } catch (err) {
-      next(err)
+      next(err);
     }
   },
   createStatic: async function createStaticMonitor(req, res, next) {

@@ -5,7 +5,7 @@ import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 import { useTranslation } from 'react-i18next';
-import { IStop, IPattern } from '../util/Interfaces';
+import { IStopInfoPlus, IPattern } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
@@ -19,13 +19,9 @@ interface IRoute {
   code?: string;
 }
 
-interface IStopPlus extends IStop {
-  patterns: Array<IPattern>;
-}
-
 interface Props {
   showModal: boolean;
-  stop: IStopPlus;
+  stop: IStopInfoPlus;
   closeModal: (route: IRoute[]) => void;
   stopSettings?: any;
   combinedPatterns: string[];
@@ -268,7 +264,6 @@ const StopRoutesModal: FC<Props> = props => {
             {t('timeShiftShow')}
             <Dropdown
               name="duration"
-              isSearchable={false}
               options={durations}
               placeholder={settings.timeShift.toString().concat(' min')}
               handleChange={handleTimeShift}
@@ -338,34 +333,37 @@ const StopRoutesModal: FC<Props> = props => {
             const alternateIcon = config.modeIcons.postfix;
             return (
               <div key={pattern} className="row">
-                <Checkbox
-                  isSelected={hiddenRouteChecked(pattern)}
-                  onChange={() => checkHiddenRoute(pattern)}
-                  name={pattern}
-                  width={30}
-                  height={30}
-                  color={config.colors.primary}
-                  aria-label={t('hideLine', { line: patternArray[2] })}
-                >
-                  <div className="vehicle">
-                    <Icon
-                      img={
-                        !alternateIcon
-                          ? getRouteMode(route)
-                          : getRouteMode(route) + alternateIcon
-                      }
-                      width={24}
-                      height={24}
-                      color={
-                        config.modeIcons.colors[`mode-${getRouteMode(route)}`]
-                      }
-                    />
-                  </div>
-                  <div className="route-number">{patternArray[2]}</div>
-                </Checkbox>
+                <div className="routeInfo">
+                  <Checkbox
+                    isSelected={hiddenRouteChecked(pattern)}
+                    onChange={() => checkHiddenRoute(pattern)}
+                    name={pattern}
+                    width={30}
+                    height={30}
+                    color={config.colors.primary}
+                    aria-label={t('hideLine', { line: patternArray[2] })}
+                  >
+                    <div className="vehicle">
+                      <Icon
+                        img={
+                          !alternateIcon
+                            ? getRouteMode(route)
+                            : getRouteMode(route) + alternateIcon
+                        }
+                        width={24}
+                        height={24}
+                        color={
+                          config.modeIcons.colors[`mode-${getRouteMode(route)}`]
+                        }
+                      />
+                    </div>
+                    <div className="route-number">{patternArray[2]}</div>
+                  </Checkbox>
+                </div>
                 <div className="renamedDestinations">
                   {props.languages.map(lang => (
                     <input
+                      tabIndex={showInputs ? 1 : -1}
                       key={`${lang}-${pattern}`}
                       id={`${lang}-${pattern}`}
                       name={pattern}

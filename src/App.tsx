@@ -24,14 +24,16 @@ import { ConfigContext, UserContext, FavouritesContext } from './contexts';
 import Loading from './ui/Loading';
 import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
-
+import { useTranslation } from 'react-i18next';
+import { listenForLogoutAllTabs } from './util/logoutUtil';
 export interface IExtendedMonitorConfig extends IMonitorConfig {
-  fonts: {
-    normal: string;
-    narrow: string;
-    weights: {
-      normal: string;
-      bigger: string;
+  fonts?: {
+    externalFonts?: Array<string>;
+    normal?: string;
+    narrow?: string;
+    weights?: {
+      normal?: string;
+      bigger?: string;
     };
     monitor: {
       name: string;
@@ -59,7 +61,10 @@ export interface IExtendedMonitorConfig extends IMonitorConfig {
     postfix: string;
     setName: string;
   };
-  allowLogin: boolean;
+  login: {
+    inUse: boolean;
+    favourites: boolean;
+  };
 }
 export interface IMonitorConfig {
   name?: string;
@@ -94,18 +99,18 @@ interface IStopMonitorProps {
 
 interface User {
   sub?: string;
-  notLogged?: boolean
+  notLogged?: boolean;
 }
 
 interface Favourite {
   type: string;
 }
 
-const App: FC<IConfigurationProps> = (props) => {
+const App: FC<IConfigurationProps> = props => {
+  const [t] = useTranslation();
   const [user, setUser] = useState<User>({});
   const [favourites, setFavourites] = useState<Array<Favourite>>([]);
   const [loading, setLoading] = useState(true);
-
   const config = useContext(ConfigContext);
   const style = {
     '--alert-color': config.colors.alert,
@@ -119,38 +124,54 @@ const App: FC<IConfigurationProps> = (props) => {
     '--primary-color': config.colors.primary,
   };
   useEffect(() => {
+    listenForLogoutAllTabs(setUser);
+
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
     }
-    if (config.allowLogin) {
-      monitorAPI.getUser().then(user => {
-        setUser(user); 
-        setLoading(false);
-      }).catch(() => {
-        setUser({notLogged: true}); 
-        setLoading(false);
-      })
-      monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
-        setFavourites(favs)
-      }).catch(e => {
-        console.log(e)
-      })
+    if (config.login.inUse) {
+      monitorAPI
+        .getUser()
+        .then(user => {
+          setUser(user);
+          setLoading(false);
+        })
+        .catch(() => {
+          setUser({ notLogged: true });
+          setLoading(false);
+        });
+      if (config.login.favourites && user.sub) {
+        monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
+          if (Array.isArray(favourites)) {
+            setFavourites(favs);
+          }
+        });
+      }
     } else {
-      setUser({notLogged: true}); 
+      setUser({ notLogged: true });
       setLoading(false);
     }
-    
   }, []);
+
+  if (loading) {
+    return <Loading white />;
+  }
+
   const client = new ApolloClient({
     link: ApolloLink.from([
       new MultiAPILink({
         endpoints: {
-          default: config.uri,
-          hsl: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+          default: '/api/graphql',
           rail: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
         },
         httpSuffix: '',
         createHttpLink: () => createHttpLink(),
+        getContext: endpoint => {
+          if (endpoint === 'default') {
+            return { headers: { 'graphql-endpoint': config.uri } };
+          }
+          return {};
+        },
       }),
     ]),
     cache: new InMemoryCache(),
@@ -158,117 +179,132 @@ const App: FC<IConfigurationProps> = (props) => {
 
   const favicon = config.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;
-  
-  const fonts = config.fonts.externalFonts.map(font => (
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href={font}
-    />
-  ));
 
-  if (loading) {
-    return <Loading white/>
-  }
+  const fonts = config.fonts.externalFonts.map(font => (
+    <link key={font.toString()} rel="stylesheet" type="text/css" href={font} />
+  ));
 
   return (
     <div className="App">
       <Helmet>
-        <title>{config.name} - pysäkkinäyttö</title>
+        <title>
+          {config.name} - {t('stop-display')}
+        </title>
         {faviconLink}
         {fonts}
       </Helmet>
       <ApolloProvider client={client}>
         <UserContext.Provider value={user}>
           <FavouritesContext.Provider value={favourites}>
-        <Switch>
-          <Route
-            path={'/createview'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps) => (
-              <>
-                <SkipToMainContent />
-                <BannerContainer />
-                <section role="main" id="mainContent">
-                  <CreateViewPage />
-                </section>
-              </>
-            )}
-          />
-          <Route path={'/view'} component={PrepareMonitor} />
-          <Route path={'/static'} component={PrepareMonitor} />
-          <ProtectedRoute
-            path={'/monitors/createview'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps) => (
-              <>
-                <SkipToMainContent />
-                <BannerContainer />
-                <section role="main" id="mainContent">
-                  <CreateViewPage  />
-                </section>
-              </>
-            )}
-          />
-          <ProtectedRoute path={'/monitors'} component={() => (
-            <>
-              <BannerContainer />
-              <UserMonitors />
-            </>
-          )} />       
-          <Route
-            path={'/urld/:version/:packedDisplay'}
-            component={({
-              match: {
-                params: { version, packedDisplay },
-              },
-            }: RouteComponentProps<ICompressedDisplayRouteParams>) => {
-              return (
-                <>
-                  <DisplayUrlCompression
-                    version={decodeURIComponent(version)}
-                    packedString={decodeURIComponent(packedDisplay)}
-                  />
-                </>
-              );
-            }}
-          />
-          <Route
-            path={'/stop/:stopId/:layout?'}
-            component={({
-              match: {
-                params: { stopId, layout },
-              },
-            }: RouteComponentProps<IStopMonitorProps>) => (
-              <StopMonitorContainer
-                stopIds={stopId.split(',')}
-                layout={layout ? Number(layout) : 2}
-                urlTitle={props.search?.title}
+            <Switch>
+              <Route
+                path={'/createview'}
+                component={({
+                  match: {
+                    params: {},
+                  },
+                }: RouteComponentProps) => (
+                  <>
+                    <SkipToMainContent />
+                    <BannerContainer />
+                    <section role="main" id="mainContent">
+                      <CreateViewPage />
+                    </section>
+                  </>
+                )}
               />
-            )}
-          />
-          <Route path={'/version'} component={Version} />
-          <Route
-            path={'/'}
-            component={({
-              match: {
-                params: {},
-              },
-            }: RouteComponentProps) => (
-              <>
-                <SkipToMainContent />
-                <LandingPage />
-              </>
-            )}
-          />
-        </Switch>
-        </FavouritesContext.Provider>
+              <Route path={'/view'} component={PrepareMonitor} />
+              <Route path={'/static'} component={PrepareMonitor} />
+              <ProtectedRoute
+                path={'/monitors/createview'}
+                component={({
+                  match: {
+                    params: {},
+                  },
+                }: RouteComponentProps) => (
+                  <>
+                    <SkipToMainContent />
+                    <BannerContainer />
+                    <section role="main" id="mainContent">
+                      <CreateViewPage />
+                    </section>
+                  </>
+                )}
+              />
+              <ProtectedRoute
+                path={'/monitors'}
+                component={() => (
+                  <>
+                    <SkipToMainContent />
+                    <BannerContainer />
+                    <section role="main" id="mainContent">
+                      <UserMonitors />
+                    </section>
+                  </>
+                )}
+              />
+              <Route
+                path={'/urld/:version/:packedDisplay'}
+                component={({
+                  match: {
+                    params: { version, packedDisplay },
+                  },
+                }: RouteComponentProps<ICompressedDisplayRouteParams>) => {
+                  return (
+                    <>
+                      <DisplayUrlCompression
+                        version={decodeURIComponent(version)}
+                        packedString={decodeURIComponent(packedDisplay)}
+                      />
+                    </>
+                  );
+                }}
+              />
+              <Route
+                path={'/stop/:stopId/:layout?'}
+                component={({
+                  match: {
+                    params: { stopId, layout },
+                  },
+                }: RouteComponentProps<IStopMonitorProps>) => (
+                  <StopMonitorContainer
+                    stopIds={stopId.split(',')}
+                    layout={layout ? Number(layout) : 8}
+                    urlTitle={props.search?.title}
+                  />
+                )}
+              />
+              <Route
+                path={'/station/:stopId/:layout?'}
+                component={({
+                  match: {
+                    params: { stopId, layout },
+                  },
+                }: RouteComponentProps<IStopMonitorProps>) => (
+                  <StopMonitorContainer
+                    stopIds={stopId.split(',')}
+                    layout={layout ? Number(layout) : 8}
+                    urlTitle={props.search?.title}
+                    station
+                  />
+                )}
+              />
+              <Route path={'/version'} component={Version} />
+              <Route
+                path={'/'}
+                component={({
+                  match: {
+                    params: {},
+                  },
+                }: RouteComponentProps) => (
+                  <>
+                    <SkipToMainContent />
+                    <LandingPage />
+                  </>
+                )}
+              />
+            </Switch>
+          </FavouritesContext.Provider>
         </UserContext.Provider>
       </ApolloProvider>
     </div>

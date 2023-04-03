@@ -6,9 +6,12 @@ import { trainStationMap } from '../util/trainStations';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import dummyAlerts, { getDummyAlerts } from '../testAlert';
 import SunCalc from 'suncalc';
+import { IDeparture } from '../ui/MonitorRow';
+
+export const namespace = 'd5a9e986-d6c3-4174-a160-9ac088145cc3';
 
 const WEATHER_URL =
-  'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
+  'https://opendata.fmi.fi/wfs?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::harmonie::surface::point::simple&timestep=5&parameters=temperature,WindSpeedMS,WeatherSymbol3';
 
 const delay = ms =>
   new Promise<void>(resolve => {
@@ -17,7 +20,7 @@ const delay = ms =>
     }, ms);
   });
 
-export const stopTimeAbsoluteDepartureTime = (stopTime: any) =>
+export const stopTimeAbsoluteDepartureTime = (stopTime: IDeparture) =>
   stopTime.serviceDay + stopTime.realtimeDeparture;
 
 export const stringifyPattern = pattern => {
@@ -46,6 +49,23 @@ export const getStopsAndStationsFromViews = views => {
   return [stopIds, stationIds];
 };
 
+export const stopsAndStationsFromViews = views => {
+  const stopIds = [];
+  const stationIds = [];
+  const arr = Array.isArray(views) ? views : [views];
+  const arr1 = arr.filter(v => v.type !== 'map');
+  arr1.forEach(view => {
+    Object.keys(view.columns).forEach(col => {
+      view.columns[col].stops?.forEach(stop => {
+        stop.locationType === 'STOP'
+          ? stopIds.push(stop)
+          : stationIds.push(stop);
+      });
+    });
+  });
+  return [stopIds, stationIds];
+};
+
 export const filterDepartures = (
   stop,
   hiddenRoutes,
@@ -55,36 +75,23 @@ export const filterDepartures = (
   showVia,
 ) => {
   const departures = [];
-  const arrivalDepartures = [];
   const currentSeconds = getCurrentSeconds();
 
-  if (!showEndOfLine && stop.stoptimesForPatterns) {
-    stop.stoptimesForPatterns.forEach(stp =>
-      stp.stoptimes.forEach(s => {
-        if (s.pickupType === 'NONE') {
-          arrivalDepartures.push(stringifyPattern(stp.pattern));
-        }
-        return s.pickupType !== 'NONE';
-      }),
-    );
-  }
   stop.stoptimesForPatterns.forEach(stoptimeList => {
     const combinedPattern = stringifyPattern(stoptimeList.pattern);
-
-    if (
-      !hiddenRoutes.includes(combinedPattern) &&
-      !arrivalDepartures.includes(combinedPattern)
-    ) {
+    if (!hiddenRoutes.includes(combinedPattern)) {
       let stoptimes = [];
-      stoptimeList.stoptimes.forEach(item =>
-        stoptimes.push({
-          ...item,
-          combinedPattern: combinedPattern,
-          showStopNumber: showStopNumber,
-          showVia: showVia,
-          vehicleMode: stop.vehicleMode?.toLowerCase(),
-        }),
-      );
+      stoptimeList.stoptimes.forEach(item => {
+        if (showEndOfLine || item.pickupType !== 'NONE') {
+          stoptimes.push({
+            ...item,
+            combinedPattern: combinedPattern,
+            showStopNumber: showStopNumber,
+            showVia: showVia,
+            vehicleMode: stop.vehicleMode?.toLowerCase(),
+          });
+        }
+      });
 
       if (timeshift > 0) {
         stoptimes = stoptimes.filter(s => {
@@ -238,7 +245,7 @@ export const createDepartureArray = (
               stopTimeAbsoluteDepartureTime(stopTimeA) -
               stopTimeAbsoluteDepartureTime(stopTimeB),
           ),
-        departure => departure.trip.gtfsId,
+        departure => stoptimeSpecificDepartureId(departure),
       );
     });
   });
@@ -366,16 +373,12 @@ export const getTrainStationData = (monitor, locationType) => {
   array.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
-        if (
-          stop.locationType === locationType &&
-          stop.vehicleMode?.toLowerCase() === 'rail'
-        ) {
+        const hasMode =
+          stop.vehicleMode?.toLowerCase() === 'rail' ||
+          stop.mode?.toLowerCase() === 'rail';
+        if (stop.locationType === locationType && hasMode) {
           const isHsl = stop.gtfsId.startsWith('HSL:');
-          const gtfsId =
-            isHsl && stop.parentStation?.gtfsId
-              ? stop.parentStation?.gtfsId
-              : stop.gtfsId;
-
+          const gtfsId = stop.gtfsId;
           retValue.push({
             gtfsId: gtfsId,
             shortCode: !isHsl
@@ -384,6 +387,8 @@ export const getTrainStationData = (monitor, locationType) => {
                 null,
             source: isHsl ? 'HSL' : 'MATKA',
             hiddenRoutes: stop.settings?.hiddenRoutes || [],
+            lat: stop.lat,
+            lon: stop.lon,
           });
         }
       });
@@ -410,3 +415,39 @@ export const isPlatformOrTrackVisible = monitor => {
 export const uuidValidateV5 = uuid => {
   return uuidValidate(uuid) && uuidVersion(uuid) === 5;
 };
+
+export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
+  `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;
+
+type Coordinate = [number, number];
+type BoundingBox = [Coordinate, Coordinate];
+
+export function getBoundingBox(coordinates: Coordinate[]): BoundingBox {
+  if (coordinates.length === 0) {
+    return [
+      [0, 0],
+      [0, 0],
+    ];
+  }
+
+  let minLat = coordinates[0][0];
+  let maxLat = coordinates[0][0];
+  let minLng = coordinates[0][1];
+  let maxLng = coordinates[0][1];
+  for (let i = 1; i < coordinates.length; i++) {
+    const lat = coordinates[i][0];
+    const lng = coordinates[i][1];
+
+    if (lat && lng) {
+      minLat = Math.min(minLat, lat);
+      minLng = Math.min(minLng, lng);
+      maxLat = Math.max(maxLat, lat);
+      maxLng = Math.max(maxLng, lng);
+    }
+  }
+
+  return [
+    [minLat, minLng],
+    [maxLat, maxLng],
+  ];
+}

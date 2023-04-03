@@ -1,16 +1,25 @@
 export interface IStop {
   id?: string;
-  code: string;
-  desc: string;
-  gtfsId: string;
-  locationType: string;
-  lat: number;
-  lon: number;
-  name: string;
-  settings: ISettings;
+  code?: string;
+  desc?: string;
+  gtfsId?: string;
+  locationType?: string;
+  lat?: number;
+  lon?: number;
+  name?: string;
+  settings?: ISettings;
   mode?: string;
   routes?: Array<any>;
   parentStation?: string;
+}
+export interface IStopInfoPlus extends IStop {
+  cardId?: number;
+  settings?: ISettings;
+  layout?: number;
+  locality?: string;
+  patterns?: Array<IPattern>;
+  id?: string;
+  modes?: Array<string>;
 }
 export interface ISettings {
   hiddenRoutes: Array<IHiddenRoute>;
@@ -58,11 +67,17 @@ export interface IView {
   title: ITitle;
   layout: number;
   duration: number;
+  type?: string;
+  stops?: any;
 }
 export interface IMonitor {
   cards: Array<IView>;
   languages: Array<string>;
   contenthash?: string;
+  name?: string;
+  url?: string;
+  instance?: string;
+  mapSettings?: any;
 }
 
 export interface IAlertDescriptionTextTranslation {
@@ -133,4 +148,21 @@ export interface ICardInfo {
   title?: ITitle;
   possibleToMove: boolean;
   columns?: IColumn;
+}
+type Coordinate = [number, number];
+type BoundingBox = [Coordinate, Coordinate];
+type MapStop = {
+  coords: Coordinate;
+  gtfsId: string;
+  mode: string;
+  name: string;
+};
+export interface IMapSettings {
+  bounds?: BoundingBox;
+  center?: Coordinate;
+  zoom?: number;
+  showMap: boolean;
+  hideTimeTable: boolean;
+  stops: [MapStop];
+  userSet: boolean;
 }

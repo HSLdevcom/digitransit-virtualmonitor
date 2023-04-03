@@ -1,12 +1,9 @@
 export default {
   hsl: {
-    frontPageContent: [{
-      fi: "Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.",
-      sv: "Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.",
-      en: "Create a stop display while logged in so you can edit it later.",
-    }],
     fonts: {
-      externalFonts: ["https://cloud.typography.com/6364294/7432412/css/fonts.css"],
+      externalFonts: [
+        'https://cloud.typography.com/6364294/7432412/css/fonts.css',
+      ],
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       weights: {
         normal: '400',
@@ -22,8 +19,6 @@ export default {
       hover: '#0062a1',
       monitorBackground: '#0057a2',
     },
-    postfix: '',
-    setName: '',
     feedIds: ['HSL'],
     modeIcons: {
       colors: {
@@ -39,18 +34,30 @@ export default {
       setName: 'default',
     },
     name: 'hsl',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql',
+    uri: 'routing/v1/routers/hsl/index/graphql',
     bannersUri: 'https://content.hsl.fi/api/v1/banners?',
-    HSLUri: 'https://test.hslfi.hsldev.com/',
+    HSLUri:
+      // eslint-disable-next-line no-undef
+      window.location.href.indexOf('omatnaytot') > -1 ||
+      // eslint-disable-next-line no-undef
+      window.location.href.indexOf('pre-prod') > -1
+        ? 'https://hsl.fi'
+        : 'https://test.hslfi.hsldev.com/',
     suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: true,
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-hsl',
+      favourites: true,
+    },
     useTilde: true,
   },
   jyvaskyla: {
     fonts: {
-      externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
+      externalFonts: [
+        'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+      ],
     },
     colors: {
       primary: '#7DC02D',
@@ -65,14 +72,19 @@ export default {
       setName: 'digitransit',
     },
     name: 'jyvaskyla',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
     useTilde: true,
   },
   matka: {
     name: 'matka',
+    uri: 'routing/v1/routers/finland/index/graphql',
   },
   tampere: {
     colors: {
@@ -81,7 +93,10 @@ export default {
     },
     feedIds: ['tampere', 'TampereVR', 'tampereDRT'],
     fonts: {
-      externalFonts: ['https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css', 'https://fonts.googleapis.com/css?family=Lato'],
+      externalFonts: [
+        'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+        'https://fonts.googleapis.com/css?family=Lato',
+      ],
       monitor: {
         name: 'Lato',
         weight: '700',
@@ -98,23 +113,33 @@ export default {
       setName: 'digitransit',
     },
     name: 'tampere',
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
     useTilde: false,
   },
   vaasa: {
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v1/routers/waltti/index/graphql',
     name: 'vaasa',
-    allowLogin: false,
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
     feedIds: ['vaasa'],
     colors: {
       primary: '#000a8c',
       monitorBackground: '#000a8c',
     },
     fonts: {
-      externalFonts: ['https://fonts.googleapis.com/css?family=Source+Sans+Pro'],
+      externalFonts: [
+        'https://fonts.googleapis.com/css?family=Source+Sans+Pro',
+      ],
       normal: '"Source Sans Pro", Arial, Georgia, Serif',
       narrow: '"Source Sans Pro", Arial, Georgia, Serif',
       monitor: {
@@ -129,10 +154,33 @@ export default {
       postfix: '-waltti',
       setName: 'digitransit',
     },
-    uri: 'https://api.digitransit.fi/routing/v1/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
-    allowLogin: false,
     useTilde: true,
-  }
+  },
+  oulu: {
+    name: 'oulu',
+    uri: 'routing/v1/routers/waltti/index/graphql',
+    feedIds: ['OULU'],
+    colors: {
+      primary: '#E10669',
+      monitorBackground: '#E10669',
+    },
+    modeIcons: {
+      colors: {
+        'mode-bus': '#E10669',
+        'mode-bus-express': '#E10669',
+        'mode-bus-local': '#E10669',
+        'mode-rail': '#E10669',
+        'mode-tram': '#E10669',
+        'mode-ferry': '#E10669',
+        'mode-subway': '#E10669',
+      },
+    },
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
+  },
 };

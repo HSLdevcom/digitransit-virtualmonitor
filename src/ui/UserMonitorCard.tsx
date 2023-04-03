@@ -1,15 +1,14 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
-import {
-  getTrainStationData,
-  isPlatformOrTrackVisible,
-} from '../util/monitorUtils';
+import { getTrainStationData } from '../util/monitorUtils';
 import DeleteModal from './DeleteModal';
 import { ConfigContext } from '../contexts';
+import InputWithEditIcon from './InputWithEditIcon';
+import { IMapSettings } from '../util/Interfaces';
 
 interface IView {
   name?: string;
@@ -18,18 +17,26 @@ interface IView {
   contenthash?: string;
   url?: string;
   id: string;
+  mapSettings?: IMapSettings;
 }
 
 interface IProps {
   view: IView;
   onDelete: any;
+  preview?: boolean;
+  setTitle?: (string) => void;
 }
 
-const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
+const UserMonitorCard: React.FC<IProps> = ({
+  view,
+  onDelete,
+  preview = false,
+  setTitle,
+}) => {
   let to;
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
-  const { cards, name, languages, url } = view;
+  const { cards, name, languages, url, id, mapSettings } = view;
   const [isOpen, setOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const layout = cards[0].layout;
@@ -39,6 +46,9 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
   const onClose = () => {
     setOpen(false);
   };
+  useEffect(() => {
+    return () => clearTimeout(to);
+  }, []);
 
   const onDeleteCallBack = () => {
     setDeleting(true);
@@ -53,11 +63,8 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
     cards: cards,
     languages: languages,
   };
-
   const stations = v ? getTrainStationData(v, 'STATION') : [];
   const stops = v ? getTrainStationData(v, 'STOP') : [];
-  const showPlatformsOrTracks =
-    stations.length || stops.length ? isPlatformOrTrackVisible(v) : false;
 
   const getTitles = obj => {
     let titles = '';
@@ -70,66 +77,63 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
     return titles;
   };
 
-  const crds = cards.map((c, i) => {
-    const cols = c.columns;
-    const multipleCols = c.layout >= 9 && c.layout <= 11;
-    const colStops = multipleCols
-      ? [cols.left.stops, cols.right.stops]
-      : [cols.left.stops];
+  const crds = cards
+    .filter(c => c.type !== 'map')
+    .map((c, i) => {
+      const cols = c.columns;
+      const multipleCols = c.layout >= 9 && c.layout <= 11;
+      const colStops = multipleCols
+        ? [cols.left.stops, cols.right.stops]
+        : [cols.left.stops];
 
-    const colTitles = multipleCols
-      ? [getTitles(cols.left), getTitles(cols.right)]
-      : [getTitles(c)];
+      const colTitles = multipleCols
+        ? [getTitles(cols.left), getTitles(cols.right)]
+        : [getTitles(c)];
 
-    const titlesAndStops = (
-      <ul key={`card#${i}`}>
-        {colStops.map((colStop, c) => {
-          return (
-            <>
-              <div key={`display${c}`} className="card-title">
-                {colTitles[c]}
-              </div>
-              <div className="stop-list">
-                {colStop.map((stop, j) => {
-                  const stopCode = `(${stop.code})`;
-                  const stopTitle = stop.name
-                    .concat(stop.code ? stopCode : '')
-                    .concat(' - ')
-                    .concat(stop.gtfsId);
-                  const icon =
-                    stop.locationType === 'STATION' || stop.mode === 'SUBWAY'
-                      ? `station-${stop.mode.toLowerCase()}`
-                      : `stop-${stop.mode.toLowerCase()}`;
-                  return (
-                    <li key={`stop#${j}`} title={stopTitle}>
-                      <Icon
-                        img={icon}
-                        color={
-                          config.modeIcons.colors[
-                            `mode-${stop.mode.toLowerCase()}`
-                          ]
-                        }
-                      />
-                      {`${stop.name} ${stop.code ? stopCode : ''}`}
-                    </li>
-                  );
-                })}
-              </div>
-            </>
-          );
-        })}
-      </ul>
-    );
+      const titlesAndStops = (
+        <ul key={`card#${i}`}>
+          {colStops.map((colStop, c) => {
+            return (
+              <React.Fragment key={`display${c}`}>
+                <div className="card-title">{colTitles[c]}</div>
+                <div className="stop-list">
+                  {colStop.map((stop, j) => {
+                    const stopCode = `(${stop.code})`;
+                    const mode = stop?.mode;
+                    const icon =
+                      stop.locationType === 'STATION' || mode === 'SUBWAY'
+                        ? `station-${mode?.toLowerCase()}`
+                        : `stop-${mode?.toLowerCase()}`;
+                    return (
+                      <li key={`stop#${j}`}>
+                        <Icon
+                          img={icon}
+                          color={
+                            config.modeIcons.colors[
+                              `mode-${mode?.toLowerCase()}`
+                            ]
+                          }
+                        />
+                        {`${stop.name} ${stop.code ? stopCode : ''}`}
+                      </li>
+                    );
+                  })}
+                </div>
+              </React.Fragment>
+            );
+          })}
+        </ul>
+      );
 
-    return (
-      <div key={`c#${i}`} className="card-item">
-        <div className="card-container">
-          <Icon img={'layout'.concat(c.layout)} />
-          <div className="data">{titlesAndStops}</div>
+      return (
+        <div key={`c#${i}`} className="card-item">
+          <div className="card-container">
+            <Icon img={'layout'.concat(c.layout)} />
+            <div className="data">{titlesAndStops}</div>
+          </div>
         </div>
-      </div>
-    );
-  });
+      );
+    });
   const isHorizontal = layout < 12 || layout === 18;
   return (
     <>
@@ -146,7 +150,7 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
             isLandscape={isHorizontal}
             stations={stations}
             stops={stops}
-            showPlatformsOrTracks={showPlatformsOrTracks}
+            mapSettings={mapSettings}
           />
         )}
         {deleteModalOpen && (
@@ -166,54 +170,72 @@ const UserMonitorCard: React.FC<IProps> = ({ view, onDelete }) => {
             color={config.colors.primary}
           />
         </div>
-        <div className="monitor-name">{name}</div>
-        <button
-          className="delete-icon"
-          onClick={() => setDeleteModalOpen(true)}
-        >
-          <Icon img="delete" color={config.colors.primary} />
-        </button>
+        <div className="monitor-name">
+          {setTitle ? (
+            <InputWithEditIcon
+              value={name}
+              id={id}
+              onChange={title => setTitle(title)}
+            />
+          ) : (
+            name
+          )}
+        </div>
+        {!preview && (
+          <div className="delete-button-container">
+            <button
+              className="delete-icon"
+              onClick={() => setDeleteModalOpen(true)}
+              aria-label={t('delete-display', { id: name })}
+            >
+              <span className="sr-only">
+                {t('delete-display', { id: name })}
+              </span>
+              <Icon img="delete" color={config.colors.primary} />
+            </button>
+          </div>
+        )}
       </div>
       <div className="cards">{crds}</div>
-      <div className="buttons-container">
-        <div className="main-buttons-container">
+      {!preview && (
+        <div className="buttons-container">
+          <div className="main-buttons-container">
+            <button
+              className="monitor-button white"
+              onClick={() => setOpen(true)}
+            >
+              {t('preview')}
+            </button>
+            <Link
+              tabIndex={0}
+              className="monitor-button white"
+              to={`/monitors/createview?&url=${url}`}
+            >
+              {t('modify')}
+            </Link>
+            <Link
+              tabIndex={0}
+              className="monitor-button white"
+              to={`/static?&url=${url}`}
+            >
+              {t('open')}
+            </Link>
+          </div>
           <button
             className="monitor-button white"
-            onClick={() => setOpen(true)}
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `${window.location.host}/static?url=${url}`,
+              );
+              setShowModal(true);
+              clearTimeout(to);
+              to = setTimeout(() => setShowModal(false), 3000);
+            }}
           >
-            {t('preview')}
+            {t('copy')}
           </button>
-          <Link
-            tabIndex={0}
-            role="button"
-            className="monitor-button white"
-            to={`/monitors/createview?&url=${url}`}
-          >
-            {t('modify')}
-          </Link>
-          <Link
-            tabIndex={0}
-            role="button"
-            className="monitor-button white"
-            to={`/static?&url=${url}`}
-          >
-            {t('open')}
-          </Link>
         </div>
-        <button
-          className="monitor-button white"
-          onClick={() => {
-            navigator.clipboard.writeText(
-              `${window.location.host}/static?url=${url}`,
-            );
-            setShowModal(true);
-            clearTimeout(to);
-            to = setTimeout(() => setShowModal(false), 3000);
-          }}
-        >
-          {t('copy')}
-        </button>
-      </div>
+      )}
     </>
   );
 };

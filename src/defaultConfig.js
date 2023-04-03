@@ -4,7 +4,15 @@ export default {
     monitorBackground: '#0057a2',
     alert: '#dc0451',
   },
-  feedIds: ['MATKA', 'HSL', 'tampere', 'LINKKI', 'lautta', 'OULU'],
+  feedIds: [
+    'MATKA',
+    'HSL',
+    'tampere',
+    'LINKKI',
+    'lautta',
+    'OULU',
+    'digitraffic',
+  ],
   fonts: {
     weights: {
       normal: '400',
@@ -16,7 +24,9 @@ export default {
     },
     normal: '"Roboto", arial, georgia, serif',
     narrow: '"Roboto Condensed", "Arial Condensed", arial, georgia, serif',
-    externalFonts: ["https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css"],
+    externalFonts: [
+      'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+    ],
   },
   modeIcons: {
     colors: {
@@ -33,9 +43,12 @@ export default {
     setName: 'digitransit',
   },
   name: 'default',
-  uri: 'https://api.digitransit.fi/routing/v1/routers/finland/index/graphql',
+  uri: 'routing/v1/routers/finland/index/graphql',
   showMinutes: '15',
   alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
-  allowLogin: false,
+  login: {
+    inUse: false,
+    favourites: false,
+  },
   useTilde: true,
-}
+};

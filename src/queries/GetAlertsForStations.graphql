@@ -1,0 +1,46 @@
+query GetAlertsForStations($ids: [String!]!) @api(contextKey: "clientName") {
+  stations: stations(ids: $ids) {
+    lon
+    lat
+    stops {
+      routes {
+        alerts {
+          alertSeverityLevel
+          alertHeaderText
+          alertHeaderTextTranslations {
+            text
+            language
+          }
+          alertDescriptionTextTranslations {
+            text
+            language
+          }
+          effectiveEndDate
+          effectiveStartDate
+          stop {
+            gtfsId
+            code
+          }
+        }
+      }
+      alerts {
+        alertSeverityLevel
+        alertHeaderText
+        alertHeaderTextTranslations {
+          text
+          language
+        }
+        alertDescriptionTextTranslations {
+          text
+          language
+        }
+        effectiveEndDate
+        effectiveStartDate
+        stop {
+          gtfsId
+          code
+        }
+      }
+    }
+  }
+}

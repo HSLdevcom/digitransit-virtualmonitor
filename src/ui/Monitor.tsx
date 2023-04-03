@@ -1,13 +1,16 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
 import cx from 'classnames';
-import { IView, IClosedStop } from '../util/Interfaces';
+import { IView, IClosedStop, IMapSettings } from '../util/Interfaces';
 import MonitorRowContainer from './MonitorRowContainer';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
-import { ConfigContext } from '../contexts';
+import { ConfigContext, MonitorContext } from '../contexts';
+import { stopsAndStationsFromViews } from '../util/monitorUtils';
+import { getStopIcon } from '../util/stopCardUtil';
+import MonitorMapContainer from '../MonitorMapContainer';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -27,6 +30,7 @@ interface IProps {
   alertComponent: any;
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
+  mapSettings?: IMapSettings;
 }
 let to;
 
@@ -40,8 +44,10 @@ const Monitor: FC<IProps> = ({
   alertComponent,
   alertRowSpan,
   closedStopViews,
+  mapSettings,
 }) => {
   const config = useContext(ConfigContext);
+  const { cards } = useContext(MonitorContext);
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
@@ -55,6 +61,12 @@ const Monitor: FC<IProps> = ({
     return () => window.removeEventListener('resize', setDimensions);
   }, []);
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(to);
+    };
+  }, []);
+
   const windowHeight = windowDimensions.height;
   const windowWidth = windowDimensions.width;
   const style = {
@@ -64,8 +76,24 @@ const Monitor: FC<IProps> = ({
       config.colors.monitorBackground || config.colors.primary,
   } as React.CSSProperties;
 
-  const isLandscapeByLayout = view.layout <= 11;
-
+  const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;
+  const showMapDisplay = view.type === 'map';
+  const stopsAndStations = stopsAndStationsFromViews(cards);
+  const stopsForMap = stopsAndStations
+    .map(stops => {
+      return stops.map(stop => {
+        const coord: [number, number] = [stop?.lat, stop?.lon];
+        const obj = {
+          coords: coord,
+          mode: getStopIcon(stop),
+        };
+        return obj;
+      });
+    })
+    .flat();
+  stopsForMap.forEach(c => {
+    c.coords.flat();
+  });
   return (
     <div
       style={style}
@@ -87,23 +115,27 @@ const Monitor: FC<IProps> = ({
         view={view}
         currentLang={currentLang}
       />
-      <MonitorRowContainer
-        viewId={view['id']}
-        departuresLeft={departures[0].filter(x => x != null)}
-        departuresRight={departures[1].filter(x => x != null)}
-        rightStops={view.columns.right.stops}
-        leftStops={view.columns.left.stops}
-        currentLang={currentLang}
-        translatedStrings={translatedStrings}
-        layout={view.layout}
-        isLandscape={isLandscapeByLayout}
-        alertState={alertState}
-        alertComponent={alertComponent}
-        alertRowSpan={alertRowSpan}
-        showMinutes={Number(config.showMinutes)}
-        closedStopViews={closedStopViews}
-        preview={isPreview}
-      />
+      {showMapDisplay || mapSettings?.hideTimeTable ? (
+        <MonitorMapContainer preview={isPreview} mapSettings={mapSettings} />
+      ) : (
+        <MonitorRowContainer
+          viewId={view['id']}
+          departuresLeft={departures[0].filter(x => x != null)}
+          departuresRight={departures[1].filter(x => x != null)}
+          rightStops={view.columns.right.stops}
+          leftStops={view.columns.left.stops}
+          currentLang={currentLang}
+          translatedStrings={translatedStrings}
+          layout={view.layout}
+          isLandscape={isLandscapeByLayout}
+          alertState={alertState}
+          alertComponent={alertComponent}
+          alertRowSpan={alertRowSpan}
+          showMinutes={Number(config.showMinutes)}
+          closedStopViews={closedStopViews}
+          preview={isPreview}
+        />
+      )}
     </div>
   );
 };

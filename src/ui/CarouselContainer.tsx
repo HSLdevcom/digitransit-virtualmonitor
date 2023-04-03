@@ -5,11 +5,15 @@ import Monitor from './Monitor';
 import { IDeparture } from './MonitorRow';
 import { ITranslation } from './TranslationContainer';
 import MonitorAlertRow from './MonitorAlertRow';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import cx from 'classnames';
 import uniqBy from 'lodash/uniqBy';
-import { stopTimeAbsoluteDepartureTime } from '../util/monitorUtils';
+import {
+  stopTimeAbsoluteDepartureTime,
+  stoptimeSpecificDepartureId,
+} from '../util/monitorUtils';
 import MonitorAlertRowStatic from './MonitorAlertRowStatic';
+import { getCurrentSeconds } from '../time';
 
 interface IProps {
   stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card
@@ -28,7 +32,10 @@ const sortAndFilter = (departures, trainsWithTrack) => {
         stopTimeAbsoluteDepartureTime(stopTimeA) -
         stopTimeAbsoluteDepartureTime(stopTimeB),
     ),
-    departure => departure.trip.gtfsId,
+    departure => stoptimeSpecificDepartureId(departure),
+  ).filter(
+    departure =>
+      departure.serviceDay + departure.realtimeDeparture >= getCurrentSeconds(),
   );
   const sortedAndFilteredWithTrack = trainsWithTrack ? [] : sortedAndFiltered;
   if (sortedAndFiltered.length > 0 && trainsWithTrack) {
@@ -64,12 +71,15 @@ const CarouselContainer: FC<IProps> = ({
   closedStopViews,
   trainsWithTrack,
 }) => {
-  const { cards: views, languages } = useContext(MonitorContext);
-  const len = views.length * languages.length * 2;
+  const { cards: views, languages, mapSettings } = useContext(MonitorContext);
+  const hideTimeTable = mapSettings?.hideTimeTable;
+  const finalViews = hideTimeTable
+    ? views.filter(view => view.type === 'map')
+    : views;
+  const len = finalViews.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
-
   const orientations = ['static', 'vertical', 'horizontal'];
   const config = useContext(ConfigContext);
   const [demoOrientation, setDemoOrientation] = useState(
@@ -78,19 +88,23 @@ const CarouselContainer: FC<IProps> = ({
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
-      (views[Math.floor(current / 2) % views.length].duration * 1000) / 2;
+      (finalViews[Math.floor(current / 2) % finalViews.length].duration *
+        1000) /
+      2;
     const id = setTimeout(() => {
-      if ((next / 2) % views.length === 0) {
+      if ((next / 2) % finalViews.length === 0) {
         const nextLan = (language + 1) % languages.length;
         setLanguage(nextLan);
       }
+
       setAlertState(current % 2);
+
       setCurrent(next);
     }, time);
     return () => clearTimeout(id);
   }, [current]);
 
-  const index = Math.floor(current / 2) % views.length;
+  const index = Math.floor(current / 2) % finalViews.length;
 
   const departures = [
     sortAndFilter(
@@ -105,10 +119,9 @@ const CarouselContainer: FC<IProps> = ({
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts
   const newView = {
-    ...views[index],
+    ...finalViews[index],
     //layout: 8,
   };
-
   const { alertSpan } = getLayout(newView.layout);
   let alertComponent;
   let alertRowClass = '';
@@ -181,6 +194,7 @@ const CarouselContainer: FC<IProps> = ({
       alertComponent={alertComponent}
       alertRowSpan={alertSpan}
       closedStopViews={closedStopViews}
+      mapSettings={mapSettings}
     />
   );
 };

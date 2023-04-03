@@ -36,13 +36,25 @@ $preview-grid-divider: 2px;
   text-align: center;
   bottom: 50px;
 
+  .loading-container {
+    min-width: 40vh;
+    flex: 0;
+    border-radius: 500px;
+    height: 50%;
+    width: 40%;
+
+    svg {
+      width: 40px !important;
+      height: 40px !important;
+    }
+  }
+
   .link {
     display: flex;
     min-width: 40vh;
     background-color: $monitor-background-color;
     height: 50%;
     font-family: $font-family;
-    width: 40%;
     text-decoration: none;
     color: white;
     border-radius: 500px;

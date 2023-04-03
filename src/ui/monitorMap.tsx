@@ -9,6 +9,7 @@ import { IMapSettings } from '../util/Interfaces';
 import VehicleIcon from '../Vehicleicon';
 import { DateTime } from 'luxon';
 import { changeTopics, unsubscribe } from '../util/mqttUtils';
+import monitorAPI from '../api';
 
 interface IProps {
   preview?: boolean;
@@ -89,46 +90,45 @@ const MonitorMap: FC<IProps> = ({
     if (!map) {
       setMap(L.map('map', { zoomControl: false }).setView(center, zoom));
     } else {
-      L.tileLayer(
-        'https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}.png ',
-        {
+      monitorAPI.getMapSettings().then((r: string) => {
+        L.tileLayer(r, {
           attribution:
             'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
           maxZoom: 18,
-        },
-      ).addTo(map);
-      map.fitBounds(mapSettings.bounds);
-      icons.forEach(icon =>
-        L.marker(icon.coords, { icon: icon.icon }).addTo(map),
-      );
-      map.on('move', () => {
-        if (updateMap) {
-          const NE = [
-            map.getBounds().getNorthEast().lat,
-            map.getBounds().getNorthEast().lng,
-          ];
-          const SW = [
-            map.getBounds().getSouthWest().lat,
-            map.getBounds().getSouthWest().lng,
-          ];
-          const bounds = [NE, SW];
-          updateMap({
-            center: map.getCenter(),
-            zoom: map.getZoom(),
-            bounds: bounds,
-          });
-        }
+        }).addTo(map);
+        map.fitBounds(mapSettings.bounds);
+        icons.forEach(icon =>
+          L.marker(icon.coords, { icon: icon.icon }).addTo(map),
+        );
+        map.on('move', () => {
+          if (updateMap) {
+            const NE = [
+              map.getBounds().getNorthEast().lat,
+              map.getBounds().getNorthEast().lng,
+            ];
+            const SW = [
+              map.getBounds().getSouthWest().lat,
+              map.getBounds().getSouthWest().lng,
+            ];
+            const bounds = [NE, SW];
+            updateMap({
+              center: map.getCenter(),
+              zoom: map.getZoom(),
+              bounds: bounds,
+            });
+          }
+        });
+        map.on('zoomend', () => {
+          if (updateMap) {
+            updateMap({ zoom: map.getZoom() });
+          }
+        });
+        return () => {
+          if (map && map !== undefined) {
+            map?.remove();
+          }
+        };
       });
-      map.on('zoomend', () => {
-        if (updateMap) {
-          updateMap({ zoom: map.getZoom() });
-        }
-      });
-      return () => {
-        if (map && map !== undefined) {
-          map?.remove();
-        }
-      };
     }
   }, [map]);
 

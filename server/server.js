@@ -9,7 +9,7 @@ import http from 'http';
 import cron from 'cron';
 
 // const gtfs = require('gtfs');
-import { importGtfs } from 'gtfs';
+// import { importGtfs } from 'gtfs';
 // eslint-disable-next-line import/extensions
 import app from './app.js';
 
@@ -65,30 +65,30 @@ const config = {
   ],
 };
 
-importGtfs(config)
-  .then(() => {
-    console.log('Import Successful');
-  })
-  .catch((err) => {
-    console.error(err);
-  });
+// importGtfs(config)
+//   .then(() => {
+//     console.log('Import Successful');
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
 
-const job = new CronJob(
-  '00 00 00 * * *',
-  () => {
-    const d = new Date();
-    console.log('IMPORT STARTING AT ', d);
-    importGtfs(config)
-      .then(() => {
-        console.log('Import Successful');
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  },
-  null,
-);
-job.start();
+// const job = new CronJob(
+//   '00 00 00 * * *',
+//   () => {
+//     const d = new Date();
+//     console.log('IMPORT STARTING AT ', d);
+//     importGtfs(config)
+//       .then(() => {
+//         console.log('Import Successful');
+//       })
+//       .catch((err) => {
+//         console.error(err);
+//       });
+//   },
+//   null,
+// );
+// job.start();
 
 app.set('port', port);
 

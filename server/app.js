@@ -132,7 +132,7 @@ function setUpOpenId() {
   );
 }
 
-setUpOpenId();
+//setUpOpenId();
 
 app.delete('/api/staticmonitor', userAuthenticated, (req, res, next) => {
   deleteMonitor(req, res, next);

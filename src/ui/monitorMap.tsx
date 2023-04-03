@@ -8,7 +8,7 @@ import cx from 'classnames';
 import { IMapSettings } from '../util/Interfaces';
 import VehicleIcon from '../Vehicleicon';
 import { DateTime } from 'luxon';
-import { changeTopics, unsubscribe } from '../util/mqttUtils';
+import { changeTopics } from '../util/mqttUtils';
 import monitorAPI from '../api';
 
 interface IProps {
@@ -17,7 +17,6 @@ interface IProps {
   modal?: boolean;
   updateMap?: any;
   messages?: any;
-  client?: any;
   currentState?: any;
   newTopics?: any;
   setState?: any;
@@ -54,7 +53,6 @@ const MonitorMap: FC<IProps> = ({
   modal,
   updateMap,
   messages,
-  client,
   currentState,
   newTopics,
   setState,

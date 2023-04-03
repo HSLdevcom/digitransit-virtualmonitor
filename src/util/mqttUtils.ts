@@ -2,6 +2,10 @@ import mqtt from 'mqtt/dist/mqtt';
 import settings from './realTimeUtils';
 
 export const startMqtt = (routes, setState, setClient) => {
+  const feed = routes[0]?.feedId;
+  if (feed.toLowerCase === 'hsl') {
+    return;
+  }
   const client = mqtt.connect('wss://mqtt.digitransit.fi');
   setState({
     client: client,
@@ -10,7 +14,6 @@ export const startMqtt = (routes, setState, setClient) => {
   const topics = routes.map(r => {
     return getTopic(r);
   });
-  const feed = routes[0]?.feedId;
   setState({
     topics: topics,
   });

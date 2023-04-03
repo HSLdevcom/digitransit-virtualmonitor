@@ -61,7 +61,6 @@ const MonitorMapContainer: FC<IProps> = ({
         modal={modal}
         updateMap={updateMap}
         messages={state.messages}
-        client={state.client}
         currentState={state}
         newTopics={topics}
         setState={setState}

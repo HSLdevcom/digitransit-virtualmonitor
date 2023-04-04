@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useRef } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import MonitorMap from './ui/monitorMap';
 import { IMapSettings } from './util/Interfaces';
@@ -29,15 +29,19 @@ const MonitorMapContainer: FC<IProps> = ({
     topics: [],
     messages: [],
   });
+  const [started, setStarted] = useState(false);
   const clientRef = useRef(null);
   const topicRef = useRef(null);
 
   if (state.client) {
     clientRef.current = state.client;
     topicRef.current = state.topics;
+    if (!started) {
+      setStarted(true);
+    }
   }
   useEffect(() => {
-    if (topics && topics.length) {
+    if ((topics && topics.length) || (!state.client && !started && topics)) {
       startMqtt(topics, setState, clientRef);
     }
     return () => {

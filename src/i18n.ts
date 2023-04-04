@@ -106,7 +106,8 @@ i18n.use(initReactI18next).init({
         loading: 'Loading...',
         login: 'Log in',
         logout: 'Log out',
-        'map-description': 'The map view is shown as one view in the presentation. The map view is cropped automatically based on the stops selected for the whole presentation.',
+        'map-description':
+          'The map view is shown as one view in the presentation. The map view is cropped automatically based on the stops selected for the whole presentation.',
         menuClose: 'Close the main menu',
         menuOpen: 'Open the main menu',
         userMenuClose: 'Close the user menu',
@@ -439,7 +440,8 @@ i18n.use(initReactI18next).init({
         loading: 'Laddar...',
         login: 'Logga in',
         logout: 'Logga ut',
-        'map-description': 'Kartvyn visas som en vy i presentationen. Kartvyn beskärs automatiskt på basis av de hållplatser som väljs för hela presentationen.',
+        'map-description':
+          'Kartvyn visas som en vy i presentationen. Kartvyn beskärs automatiskt på basis av de hållplatser som väljs för hela presentationen.',
         menuClose: 'Stäng huvudmenyn',
         menuOpen: 'Öppna huvudmenyn',
         userMenuClose: 'Stäng användarmenyn',

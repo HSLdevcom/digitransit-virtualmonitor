@@ -37,7 +37,7 @@ const MonitorMapContainer: FC<IProps> = ({
     topicRef.current = state.topics;
   }
   useEffect(() => {
-    if (topics) {
+    if (topics && topics.length) {
       startMqtt(topics, setState, clientRef);
     }
     return () => {

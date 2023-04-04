@@ -31,6 +31,7 @@ interface IProps {
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
   mapSettings?: IMapSettings;
+  topics?: Array<any>;
 }
 let to;
 
@@ -45,6 +46,7 @@ const Monitor: FC<IProps> = ({
   alertRowSpan,
   closedStopViews,
   mapSettings,
+  topics,
 }) => {
   const config = useContext(ConfigContext);
   const { cards } = useContext(MonitorContext);
@@ -66,17 +68,7 @@ const Monitor: FC<IProps> = ({
       clearTimeout(to);
     };
   }, []);
-  const flattened = departures.flatMap(o => o).filter(t => t.realtime);
-  const topics = flattened.map(dep => {
-    return {
-      feedId: dep.trip.gtfsId.split(':')[0],
-      route: dep.trip.route?.gtfsId?.split(':')[1],
-      tripId: dep.trip.gtfsId.split(':')[1],
-      shortName: dep.trip.route.shortName,
-      type: 3,
-      ...dep,
-    };
-  });
+
   const windowHeight = windowDimensions.height;
   const windowWidth = windowDimensions.width;
   const style = {

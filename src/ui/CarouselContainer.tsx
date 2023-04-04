@@ -116,6 +116,43 @@ const CarouselContainer: FC<IProps> = ({
       trainsWithTrack,
     ),
   ];
+  let topics = [];
+  if (mapSettings?.showMap) {
+    // Todo. This is a hacky solution to easiest way of figuring out all the departures.
+    // Map keeps record of all it's stops, so it has all their departures. This should be done
+    // more coherent way when there is time.
+    const allDep = [];
+
+    for (let i = 0; i < views.length; i++) {
+      const element = [
+        sortAndFilter(
+          [...stationDepartures[i][0], ...stopDepartures[i][0]],
+          trainsWithTrack,
+        ),
+        sortAndFilter(
+          [...stationDepartures[i][1], ...stopDepartures[i][1]],
+          trainsWithTrack,
+        ),
+      ];
+      allDep.push(element);
+    }
+
+    const mapDepartures = allDep
+      .map(o => o.flatMap(a => a))
+      .reduce((a, b) => (a.length > b.length ? a : b));
+    topics = mapDepartures
+      .filter(t => t.realtime)
+      .map(dep => {
+        return {
+          feedId: dep.trip.gtfsId.split(':')[0],
+          route: dep.trip.route?.gtfsId?.split(':')[1],
+          tripId: dep.trip.gtfsId.split(':')[1],
+          shortName: dep.trip.route.shortName,
+          type: 3,
+          ...dep,
+        };
+      });
+  }
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts
   const newView = {
@@ -195,6 +232,7 @@ const CarouselContainer: FC<IProps> = ({
       alertRowSpan={alertSpan}
       closedStopViews={closedStopViews}
       mapSettings={mapSettings}
+      topics={topics}
     />
   );
 };

@@ -4,18 +4,12 @@ import MonitorMap from './ui/monitorMap';
 import { IMapSettings } from './util/Interfaces';
 import { startMqtt, stopMqtt } from './util/mqttUtils';
 import { useMergeState } from './util/utilityHooks';
-type Option = {
-  feedId: string; // tampere
-  route: string; // 36
-  shortName: string; // 26
-  type: number | 3; // 3
-};
 interface IProps {
   preview?: boolean;
   mapSettings: IMapSettings;
   modal?: boolean;
-  updateMap?: any;
-  topics?: Array<Option>;
+  updateMap?: (settings: IMapSettings) => void;
+  topics?: string[];
 }
 const MonitorMapContainer: FC<IProps> = ({
   preview,

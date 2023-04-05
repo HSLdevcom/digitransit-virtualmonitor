@@ -5,7 +5,13 @@ import ReactDOMServer from 'react-dom/server';
 import Icon from './Icon';
 import { ConfigContext } from '../contexts';
 import cx from 'classnames';
-import { IMapSettings } from '../util/Interfaces';
+import {
+  BoundingBox,
+  Coordinate,
+  IMapSettings,
+  IMessage,
+  IMqttState,
+} from '../util/Interfaces';
 import VehicleIcon from '../Vehicleicon';
 import { DateTime } from 'luxon';
 import { changeTopics } from '../util/mqttUtils';
@@ -15,15 +21,15 @@ interface IProps {
   preview?: boolean;
   mapSettings: IMapSettings;
   modal?: boolean;
-  updateMap?: any;
-  messages?: any;
-  currentState?: any;
-  newTopics?: any;
-  setState?: any;
+  updateMap?: (settings: IMapSettings) => void;
+  messages?: Array<IMessage>;
+  currentState?: IMqttState;
+  newTopics?: string[];
+  setState?: (settings: IMqttState) => void;
 }
 const EXPIRE_TIME_SEC = 120;
 const getVehicleIcon = message => {
-  const { id, heading, mode, shortName, color } = message;
+  const { id, heading, shortName, color } = message;
   return L.divIcon({
     className: 'vehicle',
     html: ReactDOMServer.renderToString(
@@ -100,15 +106,15 @@ const MonitorMap: FC<IProps> = ({
         );
         map.on('move', () => {
           if (updateMap) {
-            const NE = [
+            const NE: Coordinate = [
               map.getBounds().getNorthEast().lat,
               map.getBounds().getNorthEast().lng,
             ];
-            const SW = [
+            const SW: Coordinate = [
               map.getBounds().getSouthWest().lat,
               map.getBounds().getSouthWest().lng,
             ];
-            const bounds = [NE, SW];
+            const bounds: BoundingBox = [NE, SW];
             updateMap({
               center: map.getCenter(),
               zoom: map.getZoom(),

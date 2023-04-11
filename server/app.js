@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import logger from 'morgan';
-import axios from 'axios';
+import axios from './axios-general-instance-config.js';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
@@ -18,6 +18,7 @@ import {
   deleteMonitor,
   createMonitor,
 } from './openID.js';
+import axiosPoolForApi from './axios-api-instance-config.js';
 
 const FavouriteHost =
   process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
@@ -52,14 +53,14 @@ app.get('/api/monitor/:id', (req, res, next) => {
 });
 
 app.use('/api/graphql', (req, res, next) => {
-  const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
-  const endpoint =
+    const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
+    const endpoint =
     req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
   const queryparams = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
     ? `?${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
     : '';
   const url = `${baseurl}/${endpoint}${queryparams}`;
-  axios({
+  axiosPoolForApi({
     headers: { 'content-type': 'application/json' },
     method: req.method,
     data: JSON.stringify(req.body),
@@ -80,7 +81,7 @@ app.get('/api/geocoding/:endpoint', (req, res, next) => {
     : '';
   const url = `${baseurl}/${endpoint}?${req._parsedUrl.query}${apiSubscriptionParameter}`;
 
-  axios
+  axiosPoolForApi
     .get(url)
     .then(response => {
       res.json(response.data);
@@ -179,7 +180,7 @@ app.get('/api/userowned/:id', userAuthenticated, (req, res, next) => {
 });
 
 app.use('/api/user/favourites', userAuthenticated, (req, res) => {
-  axios({
+  axiosPoolForApi({
     headers: { Authorization: `Bearer ${req.user.token.id_token}` },
     method: req.method,
     url: `${FavouriteHost}/${req.user.data.sub}`,

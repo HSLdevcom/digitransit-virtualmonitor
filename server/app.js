@@ -53,8 +53,8 @@ app.get('/api/monitor/:id', (req, res, next) => {
 });
 
 app.use('/api/graphql', (req, res, next) => {
-    const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
-    const endpoint =
+  const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
+  const endpoint =
     req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
   const queryparams = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
     ? `?${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`

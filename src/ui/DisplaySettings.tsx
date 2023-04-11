@@ -31,7 +31,7 @@ const DisplaySettings: FC<IProps> = ({
   const isChecked = (option: string) => {
     return languages.includes(option);
   };
-  const lang = localStorage.getItem('lang');
+  const lang = localStorage.getItem('lang') || 'fi';
   return (
     <div className="display-settings-container">
       <div className="headers">

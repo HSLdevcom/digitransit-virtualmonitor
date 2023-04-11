@@ -6,7 +6,8 @@ export const startMqtt = (routes, setState, setClient) => {
     return;
   }
   const feed = routes[0]?.feedId;
-  if (feed.toLowerCase === 'hsl') {
+  if (feed.toLowerCase() === 'hsl' || feed.toLowerCase() === 'digitraffic') {
+    //Unsupported at the moment
     return;
   }
   const client = mqtt.connect('wss://mqtt.digitransit.fi');

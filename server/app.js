@@ -26,10 +26,9 @@ const NotificationHost =
   process.env.NOTIFICATION_HOST ||
   'https://test.hslfi.hsldev.com/user/api/v1/notifications';
 
-const MAP_URL =
-  process.env.NODE_ENV == 'production'
-    ? 'https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}.png'
-    : 'https://digitransit-DEV-CDN-origin.azureedge.net/map/v2/hsl-map/{z}/{x}/{y}.png';
+const MAP_URL = process.env.MAP_URL
+  ? process.env.MAP_URL
+  : 'https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}.png';
 
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;

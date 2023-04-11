@@ -19,12 +19,12 @@ import {
   createMonitor,
 } from './openID.js';
 
-const FavouriteHost =
+/* const FavouriteHost =
   process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
 
 const NotificationHost =
   process.env.NOTIFICATION_HOST ||
-  'https://test.hslfi.hsldev.com/user/api/v1/notifications';
+  'https://test.hslfi.hsldev.com/user/api/v1/notifications'; */
 
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;

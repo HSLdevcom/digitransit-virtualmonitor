@@ -31,19 +31,20 @@ const DisplaySettings: FC<IProps> = ({
   const isChecked = (option: string) => {
     return languages.includes(option);
   };
+  const lang = localStorage.getItem('lang');
   return (
     <div className="display-settings-container">
       <div className="headers">
         <div className="orientation-header">{t('displayDirection')}</div>
         <div
-          className={cx('language-header', {
+          className={cx('language-header ' + lang, {
             hsl: config.name === 'hsl',
           })}
         >
           {t('displayLanguages')}
         </div>
         <div
-          className={cx('map-header', {
+          className={cx('map-header ' + lang, {
             hsl: config.name === 'hsl',
           })}
         >
@@ -134,7 +135,7 @@ const DisplaySettings: FC<IProps> = ({
               disabled={disableToggle}
             />
           </label>
-          <div className="txt">Näytä esityksessä</div>
+          <div className="txt">{t('showMap')}</div>
         </div>
       </section>
     </div>

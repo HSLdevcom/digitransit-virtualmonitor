@@ -39,6 +39,7 @@ i18n.use(initReactI18next).init({
         closedStop: 'Stop closed',
         closedStopWithRange:
           'Stop {{name}} {{code}} closed between {{startTime}} and {{endTime}}',
+        'confirm-choice': 'Confirm choice',
         continue: 'Continue',
         copy: 'Copy link',
         createViewTitle: 'Creation of a new view',
@@ -54,8 +55,10 @@ i18n.use(initReactI18next).init({
         displayEditorStaticLink: 'Create view',
         displayLanguage: 'Language',
         displayLanguages: 'Languages',
+        displayMap: 'Map view',
         duration: 'Duration / language',
         'edit-display': 'Edit display',
+        'edit-map': 'Adjust the crop >',
         'front-page-no-sign-in-button': 'Continue without logging in',
         'front-page-sign-in-button': 'Log in and create a display',
         frontPageParagraph1:
@@ -73,6 +76,7 @@ i18n.use(initReactI18next).init({
         hideAllLines: 'Hide all routes',
         hideLine: 'Hide route {{line}}',
         hideLines: 'Hide routes {{hidden}} / {{all}}',
+        'hide-timetable': 'Show only the map view in the presentation',
         horizontal: 'Horizontal',
         import: 'Import',
         'import-instructions':
@@ -103,6 +107,8 @@ i18n.use(initReactI18next).init({
         loading: 'Loading...',
         login: 'Log in',
         logout: 'Log out',
+        'map-description':
+          'The map view is shown as one view in the presentation. The map view is cropped automatically based on the stops selected for the whole presentation.',
         menuClose: 'Close the main menu',
         menuOpen: 'Open the main menu',
         userMenuClose: 'Close the user menu',
@@ -149,8 +155,10 @@ i18n.use(initReactI18next).init({
         'search-autosuggest-len': '{{count}} suggestion found',
         'search-autosuggest-len_plural': '{{count}} suggestions found',
         'search-current-suggestion': 'Current selection: {{selection}}',
+        'select-bounds': 'Select the desired crop',
         settingsChanged: 'Settings changed',
         show: 'Show',
+        showMap: 'Show in presentation ',
         showEndOfLine: 'Routes terminating or stopping at this stop',
         showRouteColumn: 'Route column',
         showStopNumber: 'Stop or platform number',
@@ -318,6 +326,7 @@ i18n.use(initReactI18next).init({
         'select-bounds': 'Valitse sopiva rajaus',
         settingsChanged: 'Muutettuja asetuksia',
         show: 'Näytä',
+        showMap: 'Näytä esityksessä',
         showEndOfLine: 'Linjat, joille tämä on pääte- tai jättöpysäkki',
         showRouteColumn: 'Linja-sarake',
         showStopNumber: 'Pysäkki- tai laiturinumero',
@@ -365,6 +374,7 @@ i18n.use(initReactI18next).init({
         closedStop: 'Hållplats indragen',
         closedStopWithRange:
           'Hållplats {{name}} {{code}} indragen mellan {{startTime}} - {{endTime}}',
+        'confirm-choice': 'Bekräfta valet',
         continue: 'Fortsätt',
         copy: 'Kopiera länken',
         createViewTitle: 'Skapa ny vy',
@@ -381,8 +391,10 @@ i18n.use(initReactI18next).init({
         displayEditorStaticLink: 'Skapa vy',
         displayLanguage: 'Språk',
         displayLanguages: 'Språk',
+        displayMap: 'Kartvy',
         duration: 'Tid / språk',
         'edit-display': 'Redigera skärmen',
+        'edit-map': 'Justera beskärningen >',
         'front-page-no-sign-in-button': 'Fortsätt utan att logga in',
         'front-page-sign-in-button': 'Logga in och skapa en skärmvy',
         frontPageParagraph1:
@@ -400,6 +412,7 @@ i18n.use(initReactI18next).init({
         hideAllLines: 'Dölj alla linjer',
         hideLine: 'Dölj linje {{line}}',
         hideLines: 'Dölj linjer {{hidden}} / {{all}}',
+        'hide-timetable': 'Visa endast kartvyn i presentationen',
         horizontal: 'Horisontell',
         import: 'Importera',
         'import-instructions':
@@ -429,6 +442,8 @@ i18n.use(initReactI18next).init({
         loading: 'Laddar...',
         login: 'Logga in',
         logout: 'Logga ut',
+        'map-description':
+          'Kartvyn visas som en vy i presentationen. Kartvyn beskärs automatiskt på basis av de hållplatser som väljs för hela presentationen.',
         menuClose: 'Stäng huvudmenyn',
         menuOpen: 'Öppna huvudmenyn',
         userMenuClose: 'Stäng användarmenyn',
@@ -475,8 +490,10 @@ i18n.use(initReactI18next).init({
         'search-autosuggest-len': '{{count}} förslag hittades',
         'search-autosuggest-len_plural': '{{count}} förslag hittades',
         'search-current-suggestion': 'Nuvarande val: {{selection}}',
+        'select-bounds': 'Välj önskad beskärning',
         settingsChanged: 'Inställningarna ändrats',
         show: 'Visa',
+        showMap: 'Visa som presentation',
         showEndOfLine:
           'Linjerna som stannar vid denna hållplats eller har den som ändhållplats',
         showRouteColumn: 'Linjekolumn',

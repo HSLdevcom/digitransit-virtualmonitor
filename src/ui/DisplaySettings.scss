@@ -91,7 +91,17 @@
 }
 
 .language-header {
-  margin-left: 111px;
+  &.fi {
+    margin-left: 111px;
+  }
+
+  &.sv {
+    margin-left: 75px;
+  }
+
+  &.en {
+    margin-left: 45px;
+  }
 
   &.hsl {
     margin-left: 92px;
@@ -100,6 +110,14 @@
 
 .map-header {
   margin-left: 240px;
+
+  &.en {
+    margin-left: 230px;
+  }
+
+  &.sv {
+    margin-left: 261px;
+  }
 
   &.hsl {
     margin-left: 225px;

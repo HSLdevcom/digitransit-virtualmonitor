@@ -48,6 +48,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
     ...item,
     layout: orientation === 'vertical' ? 19 : 18,
   };
+  const engLan = localStorage.getItem('lang') === 'en';
   const isFirst = index === 0;
   const isLast = index === cards.length - 1;
   const style = {
@@ -204,7 +205,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
             <Icon img="map-icon" height={48} width={48} />
             <span className="desc"> {t('map-description')} </span>
             <span
-              className="modallink"
+              className={cx('modallink', engLan ? 'eng' : '')}
               role="button"
               onClick={() => openModal()}
             >

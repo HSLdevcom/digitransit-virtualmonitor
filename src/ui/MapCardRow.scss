@@ -32,6 +32,10 @@
     color: var(--primary-color);
     cursor: pointer;
     position: absolute;
+
+    &.eng {
+      margin: 76px 0 0 78px;
+    }
   }
 
   .layout-and-time-container {

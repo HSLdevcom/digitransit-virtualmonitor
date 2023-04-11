@@ -31,6 +31,7 @@ interface IProps {
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
   mapSettings?: IMapSettings;
+  topics?: Array<any>;
 }
 let to;
 
@@ -45,6 +46,7 @@ const Monitor: FC<IProps> = ({
   alertRowSpan,
   closedStopViews,
   mapSettings,
+  topics,
 }) => {
   const config = useContext(ConfigContext);
   const { cards } = useContext(MonitorContext);
@@ -116,7 +118,11 @@ const Monitor: FC<IProps> = ({
         currentLang={currentLang}
       />
       {showMapDisplay || mapSettings?.hideTimeTable ? (
-        <MonitorMapContainer preview={isPreview} mapSettings={mapSettings} />
+        <MonitorMapContainer
+          preview={isPreview}
+          mapSettings={mapSettings}
+          topics={topics}
+        />
       ) : (
         <MonitorRowContainer
           viewId={view['id']}

@@ -39,6 +39,7 @@ i18n.use(initReactI18next).init({
         closedStop: 'Stop closed',
         closedStopWithRange:
           'Stop {{name}} {{code}} closed between {{startTime}} and {{endTime}}',
+        'confirm-choice': 'Confirm choice',
         continue: 'Continue',
         copy: 'Copy link',
         createViewTitle: 'Creation of a new view',
@@ -373,6 +374,7 @@ i18n.use(initReactI18next).init({
         closedStop: 'Hållplats indragen',
         closedStopWithRange:
           'Hållplats {{name}} {{code}} indragen mellan {{startTime}} - {{endTime}}',
+        'confirm-choice': 'Bekräfta valet',
         continue: 'Fortsätt',
         copy: 'Kopiera länken',
         createViewTitle: 'Skapa ny vy',

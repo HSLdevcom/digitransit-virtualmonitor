@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import MonitorMap from './ui/monitorMap';
 import { IMapSettings } from './util/Interfaces';
-import { startMqtt, stopMqtt } from './util/mqttUtils';
+import { changeTopics, startMqtt, stopMqtt } from './util/mqttUtils';
 import { useMergeState } from './util/utilityHooks';
 interface IProps {
   preview?: boolean;
@@ -32,6 +32,14 @@ const MonitorMapContainer: FC<IProps> = ({
     topicRef.current = state.topics;
     if (!started) {
       setStarted(true);
+    } else if (topicRef.current.length === 0) {
+      // We have new topics and current topics are empty, so client needs to be updated
+      const settings = {
+        client: clientRef.current,
+        oldTopics: [],
+        options: topics,
+      };
+      changeTopics(settings, setState);
     }
   }
   useEffect(() => {

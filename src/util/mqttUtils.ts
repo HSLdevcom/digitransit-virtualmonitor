@@ -2,6 +2,9 @@ import mqtt from 'mqtt/dist/mqtt';
 import settings from './realTimeUtils';
 
 export const startMqtt = (routes, setState, setClient) => {
+  if (routes?.length === 0) {
+    return;
+  }
   const feed = routes[0]?.feedId;
   if (feed.toLowerCase === 'hsl') {
     return;
@@ -31,6 +34,7 @@ export const startMqtt = (routes, setState, setClient) => {
     });
   });
 };
+
 export function unsubscribe(client, topic) {
   if (client) {
     client.unsubscribe(topic);

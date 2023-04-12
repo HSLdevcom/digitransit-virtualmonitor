@@ -22,7 +22,7 @@ function hexToRgb(hex) {
   return `rgb(${r}, ${g}, ${b})`;
 }
 
-const getSvgContent = (rotate, useLargeIcon, vehicleNumber, color) => {
+const getSvgContent = (rotate, vehicleNumber, color) => {
   const textColor = color ? hexToRgb('#' + color) : 'black';
   return (
     <svg
@@ -75,27 +75,17 @@ const getSvgContent = (rotate, useLargeIcon, vehicleNumber, color) => {
           stroke="#0076B3"
         ></circle>
       </g>
-        <text
-        <text
-          x="50%"
-          y="45%"
       <text
-          x="50%"
-          y="45%"
         textAnchor="middle"
         fill={textColor}
         dy=".3em"
         fontStyle={'condensed'}
         fontSize={getFontSize(vehicleNumber.length)}
       >
-        <tspan x="50%" y={'50%'}>
+        <tspan x="50%" y="50%">
           {vehicleNumber}
         </tspan>
-        </text>
-        </text>
-      </g>
       </text>
-      </g>
     </svg>
   );
 };
@@ -107,11 +97,10 @@ const VehicleIcon = ({
   mode = 'bus',
   scrollIntoView = false,
   vehicleNumber = '',
-  useLargeIcon = false,
   color,
 }) => {
   return (
-    <span>{getSvgContent(rotate, useLargeIcon, vehicleNumber, color)}</span>
+    <span>{getSvgContent(rotate, vehicleNumber, color)}</span>
   );
 };
 

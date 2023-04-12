@@ -82,7 +82,7 @@ const getSvgContent = (rotate, vehicleNumber, color) => {
         fontStyle={'condensed'}
         fontSize={getFontSize(vehicleNumber.length)}
       >
-        <tspan x="50%" y="50%">
+        <tspan x="50%" y="46%">
           {vehicleNumber}
         </tspan>
       </text>

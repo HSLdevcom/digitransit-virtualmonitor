@@ -29,7 +29,6 @@ const MonitorMapContainer: FC<IProps> = ({
 
   if (state.client) {
     clientRef.current = state.client;
-    topicRef.current = state.topics;
     if (!started) {
       setStarted(true);
     } else if (topicRef.current.length === 0) {
@@ -39,12 +38,12 @@ const MonitorMapContainer: FC<IProps> = ({
         oldTopics: [],
         options: topics,
       };
-      changeTopics(settings, setState);
+      changeTopics(settings, setState, topicRef);
     }
   }
   useEffect(() => {
     if ((topics && topics.length) || (!state.client && !started && topics)) {
-      startMqtt(topics, setState, clientRef);
+      startMqtt(topics, setState, clientRef, topicRef);
     }
     return () => {
       stopMqtt(clientRef.current, topicRef.current, setState);
@@ -70,6 +69,7 @@ const MonitorMapContainer: FC<IProps> = ({
         currentState={state}
         newTopics={topics}
         setState={setState}
+        topicRef={topicRef}
       />
     </div>
   );

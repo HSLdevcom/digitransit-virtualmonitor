@@ -1,7 +1,7 @@
 import mqtt from 'mqtt/dist/mqtt';
 import settings from './realTimeUtils';
 
-export const startMqtt = (routes, setState, setClient) => {
+export const startMqtt = (routes, setState, setClient, topicRef) => {
   if (routes?.length === 0) {
     return;
   }
@@ -18,9 +18,8 @@ export const startMqtt = (routes, setState, setClient) => {
   const topics = routes.map(r => {
     return getTopic(r);
   });
-  setState({
-    topics: topics,
-  });
+
+  topicRef.current = topics;
   return import('./gtfsrt').then(bindings => {
     const feedReader = bindings.FeedMessage.read;
     client.on('connect', () => {
@@ -41,11 +40,10 @@ export function unsubscribe(client, topic) {
     client.unsubscribe(topic);
   }
 }
-export const stopMqtt = (client, topics, setState) => {
+export const stopMqtt = (client, topics) => {
   if (client) {
     client.unsubscribe(topics);
     client.end();
-    setState({ client: null, topics: [] });
   }
 };
 
@@ -134,12 +132,9 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
   return messages.length > 0 ? messages : null;
 };
 
-export function changeTopics(settings, setState) {
+export function changeTopics(settings, topicRef) {
   const { client, oldTopics, options } = settings;
 
-  if (Array.isArray(oldTopics) && oldTopics.length > 0) {
-    client.unsubscribe(oldTopics);
-  }
   let topicsByRoute;
   const topics = [];
   options.forEach(option => {
@@ -153,6 +148,37 @@ export function changeTopics(settings, setState) {
     topics.push(topicString);
   });
   // set new topic to store
-  setState({ topcis: topics });
-  client.subscribe(topics);
+
+  const { toSubscribe, toUnsubscribe } = compareTopics(
+    oldTopics,
+    topics,
+    topicRef,
+  );
+  if (toUnsubscribe.length > 0) {
+    client.unsubscribe(toUnsubscribe);
+  }
+  if (toSubscribe.length > 0) {
+    client.subscribe(toSubscribe);
+  }
+}
+
+function compareTopics(oldTopics, newTopics, topicRef) {
+  const toSubscribe = [];
+  const toUnsubscribe = [];
+
+  for (const oldTopic of oldTopics) {
+    if (!newTopics.includes(oldTopic)) {
+      toUnsubscribe.push(oldTopic);
+      topicRef.current = topicRef.current.filter(t => t !== oldTopic);
+    }
+  }
+
+  for (const newTopic of newTopics) {
+    if (!oldTopics.includes(newTopic)) {
+      toSubscribe.push(newTopic);
+      topicRef.current = [...topicRef.current, newTopic];
+    }
+  }
+
+  return { toSubscribe, toUnsubscribe };
 }

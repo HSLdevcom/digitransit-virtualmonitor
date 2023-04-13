@@ -20,7 +20,6 @@ const MonitorMapContainer: FC<IProps> = ({
 }) => {
   const [state, setState] = useMergeState({
     client: undefined,
-    topics: [],
     messages: [],
   });
   const [started, setStarted] = useState(false);
@@ -29,7 +28,6 @@ const MonitorMapContainer: FC<IProps> = ({
 
   if (state.client) {
     clientRef.current = state.client;
-    topicRef.current = state.topics;
     if (!started) {
       setStarted(true);
     } else if (topicRef.current.length === 0) {
@@ -39,15 +37,15 @@ const MonitorMapContainer: FC<IProps> = ({
         oldTopics: [],
         options: topics,
       };
-      changeTopics(settings, setState);
+      changeTopics(settings, topicRef);
     }
   }
   useEffect(() => {
     if ((topics && topics.length) || (!state.client && !started && topics)) {
-      startMqtt(topics, setState, clientRef);
+      startMqtt(topics, setState, clientRef, topicRef);
     }
     return () => {
-      stopMqtt(clientRef.current, topicRef.current, setState);
+      stopMqtt(clientRef.current, topicRef.current);
     };
   }, []);
   const isLandscape = true;
@@ -67,9 +65,9 @@ const MonitorMapContainer: FC<IProps> = ({
         modal={modal}
         updateMap={updateMap}
         messages={state.messages}
-        currentState={state}
+        clientRef={clientRef}
         newTopics={topics}
-        setState={setState}
+        topicRef={topicRef}
       />
     </div>
   );

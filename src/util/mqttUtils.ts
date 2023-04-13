@@ -18,9 +18,7 @@ export const startMqtt = (routes, setState, setClient, topicRef) => {
   const topics = routes.map(r => {
     return getTopic(r);
   });
-  setState({
-    topics: topics,
-  });
+
   topicRef.current = topics;
   return import('./gtfsrt').then(bindings => {
     const feedReader = bindings.FeedMessage.read;
@@ -42,11 +40,10 @@ export function unsubscribe(client, topic) {
     client.unsubscribe(topic);
   }
 }
-export const stopMqtt = (client, topics, setState) => {
+export const stopMqtt = (client, topics) => {
   if (client) {
     client.unsubscribe(topics);
     client.end();
-    setState({ client: null, topics: [] });
   }
 };
 
@@ -135,7 +132,7 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
   return messages.length > 0 ? messages : null;
 };
 
-export function changeTopics(settings, setState, topicRef) {
+export function changeTopics(settings, topicRef) {
   const { client, oldTopics, options } = settings;
 
   let topicsByRoute;
@@ -162,7 +159,6 @@ export function changeTopics(settings, setState, topicRef) {
   }
   if (toSubscribe.length > 0) {
     client.subscribe(toSubscribe);
-    setState({ topcis: toSubscribe });
   }
 }
 

@@ -10,7 +10,6 @@ import {
   Coordinate,
   IMapSettings,
   IMessage,
-  IMqttState,
 } from '../util/Interfaces';
 import VehicleIcon from '../Vehicleicon';
 import { DateTime } from 'luxon';
@@ -23,24 +22,17 @@ interface IProps {
   modal?: boolean;
   updateMap?: (settings: IMapSettings) => void;
   messages?: Array<IMessage>;
-  currentState?: IMqttState;
+  clientRef: any;
   newTopics?: string[];
-  setState?: (settings: IMqttState) => void;
   topicRef: any;
 }
 const EXPIRE_TIME_SEC = 120;
 const getVehicleIcon = message => {
-  const { id, heading, shortName, color } = message;
+  const { heading, shortName, color } = message;
   return L.divIcon({
     className: 'vehicle',
     html: ReactDOMServer.renderToString(
-      <VehicleIcon
-        className={undefined}
-        id={id}
-        rotate={heading}
-        color={color}
-        vehicleNumber={shortName}
-      />,
+      <VehicleIcon rotate={heading} color={color} vehicleNumber={shortName} />,
     ),
     iconSize: [30, 30],
     iconAnchor: [15, 30],
@@ -60,9 +52,8 @@ const MonitorMap: FC<IProps> = ({
   modal,
   updateMap,
   messages,
-  currentState,
+  clientRef,
   newTopics,
-  setState,
   topicRef,
 }) => {
   const config = useContext(ConfigContext);
@@ -201,10 +192,10 @@ const MonitorMap: FC<IProps> = ({
       }
       const settings = {
         oldTopics: topicRef.current,
-        client: currentState.client,
+        client: clientRef.current,
         options: newTopics,
       };
-      changeTopics(settings, setState, topicRef);
+      changeTopics(settings, topicRef);
     }
 
     setVehicleMarkers(filtered);

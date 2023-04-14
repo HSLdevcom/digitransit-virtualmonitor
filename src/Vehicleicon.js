@@ -82,7 +82,7 @@ const getSvgContent = (rotate, vehicleNumber, color) => {
         fontStyle={'condensed'}
         fontSize={getFontSize(vehicleNumber.length)}
       >
-        <tspan x="50%" y="46%">
+        <tspan x="50%" y="47%">
           {vehicleNumber}
         </tspan>
       </text>
@@ -90,8 +90,18 @@ const getSvgContent = (rotate, vehicleNumber, color) => {
   );
 };
 
-const VehicleIcon = ({ rotate, vehicleNumber = '', color }) => {
-  return <span>{getSvgContent(rotate, vehicleNumber, color)}</span>;
+const VehicleIcon = ({
+  className,
+  id,
+  rotate,
+  mode = 'bus',
+  scrollIntoView = false,
+  vehicleNumber = '',
+  color,
+}) => {
+  return (
+    <span>{getSvgContent(rotate, vehicleNumber, color)}</span>
+  );
 };
 
 VehicleIcon.displayName = 'VehicleIcon';

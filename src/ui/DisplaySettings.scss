@@ -7,14 +7,13 @@
 
   .headers {
     display: flex;
-    position: absolute;
-    margin-left: 20px;
+    margin-bottom: 10px;
+    margin-left: 5px;
   }
 }
 
 .map-toggle {
   padding: 0 10px;
-  margin-left: 20px;
   height: 44px;
   display: flex;
   border-radius: 5px;
@@ -48,7 +47,7 @@
 
 .display-language-container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   position: relative;
 
   .language-alert {
@@ -61,7 +60,6 @@
 
   .language-controls {
     padding: 0 10px;
-    margin-left: 20px;
     height: 44px;
     display: flex;
     border-radius: 5px;
@@ -86,53 +84,17 @@
   }
 }
 
-.orientation-header {
-  margin-left: 5px;
-}
-
-.language-header {
-  &.fi {
-    margin-left: 111px;
-  }
-
-  &.sv {
-    margin-left: 75px;
-  }
-
-  &.en {
-    margin-left: 45px;
-  }
-
-  &.hsl {
-    margin-left: 92px;
-  }
-}
-
-.map-header {
-  margin-left: 240px;
-
-  &.en {
-    margin-left: 230px;
-  }
-
-  &.sv {
-    margin-left: 261px;
-  }
-
-  &.hsl {
-    margin-left: 225px;
-  }
-}
-
 .display-orientation-container {
   display: flex;
-  align-items: center;
+  align-items: left;
+  flex-direction: column;
+  margin-left: 20px;
 
   .orientation-controls {
     height: 44px;
     display: flex;
-    margin-left: 20px;
     width: 140px;
+    align-items: left;
 
     .orientation-button {
       display: flex;

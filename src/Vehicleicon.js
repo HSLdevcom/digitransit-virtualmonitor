@@ -90,18 +90,8 @@ const getSvgContent = (rotate, vehicleNumber, color) => {
   );
 };
 
-const VehicleIcon = ({
-  className,
-  id,
-  rotate,
-  mode = 'bus',
-  scrollIntoView = false,
-  vehicleNumber = '',
-  color,
-}) => {
-  return (
-    <span>{getSvgContent(rotate, vehicleNumber, color)}</span>
-  );
+const VehicleIcon = ({ rotate, vehicleNumber = '', color }) => {
+  return <span>{getSvgContent(rotate, vehicleNumber, color)}</span>;
 };
 
 VehicleIcon.displayName = 'VehicleIcon';

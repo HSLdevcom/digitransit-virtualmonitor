@@ -37,7 +37,7 @@ it('should render a row correctly', () => {
   // destination
   expect(
     container.getElementsByClassName('destination-row')[0].innerHTML,
-  ).toEqual('Jyväskylä');
+  ).toEqual('Helsinki');
   // shortName
   expect(
     container.getElementsByClassName('grid-col line')[0].innerHTML,
@@ -81,7 +81,7 @@ it('should render a cancelled departure with alert icon and destination', () => 
 
   expect(
     container.getElementsByClassName('destination-row')[0].innerHTML,
-  ).toEqual('Jyväskylä');
+  ).toEqual('Helsinki');
   expect(
     container.getElementsByClassName('grid-col destination')[0].children[0]
       .nodeName,

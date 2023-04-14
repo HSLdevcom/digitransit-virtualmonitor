@@ -1,4 +1,4 @@
-schema: https://dev-api.digitransit.fi/routing/v2/routers/hsl/index/graphql
+schema: https://api.digitransit.fi/routing/v2/routers/hsl/index/graphql
 documents: './src/queries/*.graphql'
 generates:
   ./src/generated.ts:

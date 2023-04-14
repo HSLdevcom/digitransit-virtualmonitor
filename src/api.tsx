@@ -1,4 +1,13 @@
+import { getConfig } from './util/getConfig';
+
 const baseAPI = '/api';
+
+function statusCheckedResult(result) {
+  if (result.status > 399) {
+    throw new Error(`Error: status ${result.status}`);
+  }
+  return result.json();
+}
 
 const fetchData = (path, options, signal = undefined) => {
   return new Promise((resolve, reject) => {
@@ -10,7 +19,7 @@ const fetchData = (path, options, signal = undefined) => {
       ...options,
       signal: signal ?? undefined,
     })
-      .then(result => (jsonResponse ? result.json() : result))
+      .then(result => (jsonResponse ? statusCheckedResult(result) : result))
       .then(json => resolve(json))
       .catch(e => {
         reject(e);
@@ -19,6 +28,15 @@ const fetchData = (path, options, signal = undefined) => {
 };
 
 const monitorAPI = {
+  getMapSettings(signal = undefined) {
+    return fetchData('map', {}, signal);
+  },
+  getPing(signal = undefined) {
+    const options = {
+      method: 'GET',
+    };
+    return fetchData('status', options, signal);
+  },
   getUser() {
     const options = {
       credentials: 'include',
@@ -41,7 +59,8 @@ const monitorAPI = {
     return fetchData(`staticmonitor/${monitor}`, {}, signal);
   },
   getAllMonitorsForUser(signal) {
-    return fetchData(`usermonitors`, {}, signal);
+    const instanceName = getConfig().name;
+    return fetchData(`usermonitors/${instanceName}`, {}, signal);
   },
   getMonitorsForUser(urls) {
     return fetchData(`usermonitors/${urls}`, {});

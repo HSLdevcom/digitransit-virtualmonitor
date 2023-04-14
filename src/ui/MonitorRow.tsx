@@ -9,6 +9,7 @@ import { ConfigContext } from '../contexts';
 interface IRoute {
   alerts: any;
   shortName: string;
+  gtfsId?: string;
 }
 
 export interface IStop {

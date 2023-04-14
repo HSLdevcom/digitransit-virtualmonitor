@@ -5,7 +5,7 @@ import StopRoutesModal from './StopRoutesModal';
 import StopCode from './StopCode';
 import Icon from './Icon';
 import { IStopInfoPlus } from '../util/Interfaces';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 import { sortBy, uniqWith, isEqual } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
 import { defaultSettings } from './StopRoutesModal';
@@ -97,7 +97,7 @@ const StopRow: FC<IProps> = ({
           }
           width={32}
           height={32}
-          color={config.modeIcons.colors[`mode-${stop.mode.toLowerCase()}`]}
+          color={config.modeIcons.colors[`mode-${stop.mode?.toLowerCase()}`]}
         />
       </div>
       <div className="stop-row-main">

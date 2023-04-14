@@ -27,6 +27,10 @@
       width: 60px;
     }
 
+    .oulu {
+      width: 100px;
+    }
+
     #logo {
       position: absolute;
       max-height: 50px !important;
@@ -45,6 +49,21 @@
       background: transparent;
       border: none;
       cursor: pointer;
+    }
+  }
+
+  .usermenu-container {
+    display: flex;
+    align-items: center;
+
+    .usermenu-text {
+      font-size: 16px;
+      font-family: $font-family;
+      font-weight: $font-weight-bigger;
+      letter-spacing: -0.3px;
+      line-height: 1.5;
+      color: white;
+      margin-left: 5px;
     }
   }
 }

@@ -1,3 +1,5 @@
+import { MqttClient } from 'mqtt';
+
 export interface IStop {
   id?: string;
   code?: string;
@@ -68,11 +70,17 @@ export interface IView {
   title: ITitle;
   layout: number;
   duration: number;
+  type?: string;
+  stops?: any;
 }
 export interface IMonitor {
   cards: Array<IView>;
   languages: Array<string>;
   contenthash?: string;
+  name?: string;
+  url?: string;
+  instance?: string;
+  mapSettings?: IMapSettings;
 }
 
 export interface IAlertDescriptionTextTranslation {
@@ -143,4 +151,47 @@ export interface ICardInfo {
   title?: ITitle;
   possibleToMove: boolean;
   columns?: IColumn;
+}
+export type Coordinate = [number, number];
+export type BoundingBox = [Coordinate, Coordinate];
+type MapStop = {
+  coords: Coordinate;
+  gtfsId: string;
+  mode: string;
+  name: string;
+};
+export interface IMapSettings {
+  bounds?: BoundingBox;
+  center?: Coordinate;
+  zoom?: number;
+  showMap?: boolean;
+  hideTimeTable?: boolean;
+  stops?: [MapStop];
+  userSet?: boolean;
+}
+
+export interface IMessage {
+  id: string;
+  route: 'string';
+  direction: number;
+  tripStartTime: 'string';
+  operatingDay: 'string';
+  mode: 'string';
+  next_stop: 'string';
+  timestamp: number;
+  lat: number;
+  long: number;
+  heading: number;
+  headsign: 'string';
+  tripId: 'string';
+  geoHash: [string, string, string, string];
+  shortName: 'string';
+  color: 'string';
+  topicString: 'string';
+}
+
+export interface IMqttState {
+  client: MqttClient;
+  topics: string[];
+  messages: [IMessage];
 }

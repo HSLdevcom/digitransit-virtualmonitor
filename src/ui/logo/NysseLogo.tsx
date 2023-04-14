@@ -8,11 +8,11 @@ export default ({ style }: { style?: React.CSSProperties } = { style: {} }) => (
     version="1.1"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+    <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g
         transform="translate(-137.000000, -2298.000000)"
         fill="#FFFFFF"
-        fill-rule="nonzero"
+        fillRule="nonzero"
       >
         <g transform="translate(0.000000, 2248.000000)">
           <g id="nysse-logo-white" transform="translate(137.000000, 50.000000)">

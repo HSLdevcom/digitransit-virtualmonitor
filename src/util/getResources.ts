@@ -139,6 +139,17 @@ export const getLayout = (layout: number): ILayout => {
         rightColumnCount: 0,
         isPortrait: true,
       };
+    case 20:
+      return {
+        leftColumnCount: 0,
+        rightColumnCount: 0,
+      };
+    case 21:
+      return {
+        leftColumnCount: 0,
+        rightColumnCount: 0,
+        isPortrait: true,
+      };
   }
 };
 
@@ -155,3 +166,17 @@ export const getAlertRowSpanForLayouts = (views, current) => {
   });
   return Math.max(...alertRowSpans);
 };
+
+export function getLoginUri(configName) {
+  switch (configName) {
+    case 'tampere':
+    case 'jyvaskyla':
+    case 'vaasa':
+    case 'oulu':
+      return 'waltti-login';
+    case 'hsl':
+      return 'hsl-login?url=/&';
+    default:
+      return '';
+  }
+}

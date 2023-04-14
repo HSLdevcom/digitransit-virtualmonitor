@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import Modal from 'react-modal';
-import { IMonitor, ICard } from '../util/Interfaces';
+import { IMonitor, ICard, IMapSettings } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Icon from './Icon';
 import cx from 'classnames';
@@ -8,6 +8,7 @@ import InformationDisplayContainer from './InformationDisplayContainer';
 import { useTranslation } from 'react-i18next';
 import TrainDataPreparer from './TrainDataPreparer';
 import { MonitorContext } from '../contexts';
+import { isPlatformOrTrackVisible } from '../util/monitorUtils';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
@@ -18,7 +19,7 @@ interface Props {
   isLandscape: boolean;
   stations: Array<ICard>;
   stops: Array<ICard>;
-  showPlatformsOrTracks: boolean;
+  mapSettings?: IMapSettings;
 }
 const PreviewModal: FC<Props> = ({
   view,
@@ -28,13 +29,16 @@ const PreviewModal: FC<Props> = ({
   isLandscape,
   stations,
   stops,
-  showPlatformsOrTracks,
+  mapSettings,
 }) => {
   const [t] = useTranslation();
   const monitor = {
     ...view,
     languages,
+    mapSettings,
   };
+  const layout = view.cards[0].layout;
+  const showInfoDisplay = layout > 17 && layout < 19;
   return (
     <MonitorContext.Provider value={monitor}>
       <Modal
@@ -57,11 +61,12 @@ const PreviewModal: FC<Props> = ({
         </div>
         <section id={isLandscape ? 'previewMonitor' : 'previewMonitorPortrait'}>
           <div className="carouselContainer">
-            {view.cards[0].layout > 17 ? (
+            {showInfoDisplay ? (
               <InformationDisplayContainer preview />
             ) : (
               <>
-                {(stations.length || stops.length) && showPlatformsOrTracks ? (
+                {(stations.length || stops.length) &&
+                isPlatformOrTrackVisible(view) ? (
                   <TrainDataPreparer
                     stations={stations}
                     stops={stops}

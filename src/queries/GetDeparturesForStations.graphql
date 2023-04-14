@@ -85,11 +85,15 @@ query GetDeparturesForStations($ids: [String!]!, $numberOfDepartures: Int!)
         headsign
         headsignfi: headsign(language: "fi")
         headsignsv: headsign(language: "sv")
+        headsignen: headsign(language: "en")
         trip {
           tripHeadsign
           tripHeadsignfi : tripHeadsign(language: "fi")
           tripHeadsignsv: tripHeadsign(language: "sv")
+          tripHeadsignen: tripHeadsign(language: "en")
+          directionId
           gtfsId
+          id
           route {
             gtfsId
             shortName

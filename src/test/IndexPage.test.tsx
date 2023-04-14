@@ -7,8 +7,10 @@ import userEvent from '@testing-library/user-event';
 import { ConfigContext } from '../contexts';
 
 const mockConfig = {
-  allowLogin: false,
-  frontPageContent: [],
+  login: {
+    inUse: false,
+    frontPageContent: [],
+  },
 };
 
 const withContext = () => {

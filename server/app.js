@@ -17,19 +17,23 @@ import {
   updateStaticMonitor,
   deleteMonitor,
   createMonitor,
-} from './hslID.js';
+} from './openID.js';
 
 const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
-const geocodingurl = process.env.GEOCODING_API_URL ?? 'https://dev-api.digitransit.fi';
+const FavouriteHost = process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
 
-const FavouriteHost =  process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
-
-const NotificationHost =  process.env.NOTIFICATION_HOST
-  || 'https://test.hslfi.hsldev.com/user/api/v1/notifications';
+const NotificationHost =
+  process.env.NOTIFICATION_HOST ||
+  'https://test.hslfi.hsldev.com/user/api/v1/notifications';
 
 const apiSubscriptionParameter = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
-  ? `&${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
+  ? `${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
   : '';
+
+const MAP_URL = process.env.MAP_URL
+  ? process.env.MAP_URL
+  : 'https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}.png';
+
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
 const app = express();
@@ -63,23 +67,31 @@ app.use('/api/graphql', (req, res, next) => {
     .then(r => {
       res.json(r.data);
     })
-    .catch((e) => next(e));
+    .catch(e => next(e));
 });
 
 app.get('/api/geocoding/:endpoint', (req, res, next) => {
   const endpoint = `/geocoding/v1/${req.params.endpoint}`;
-  const url = `${geocodingurl}/${endpoint}?${req._parsedUrl.query}${apiSubscriptionParameter}`;
+  const url = `${baseurl}/${endpoint}?${req._parsedUrl.query}&${apiSubscriptionParameter}`;
 
-  axios.get(url)
-    .then(function (response) {
+  axios
+    .get(url)
+    .then(response => {
       res.json(response.data);
     })
-    .catch((e) => next(e));
+    .catch(e => next(e));
+});
+
+app.get('/api/map', (req, res) => {
+  const url = `${MAP_URL}?${apiSubscriptionParameter}`;
+  return res.status(200).json(url);
 });
 
 app.put('/api/monitor', (req, res, next) => {
   monitorService.create(req, res, next);
 });
+
+app.get('/api/status', (req, res) => res.status(200).json({ status: 'OK' }));
 
 app.get('/api/staticmonitor/:id', (req, res, next) => {
   monitorService.getStatic(req, res, next);
@@ -95,7 +107,7 @@ app.post('/api/decompress/', (req, res, next) => {
       .then(t => {
         res.json(t);
       })
-      .catch((e) => console.log(e));
+      .catch(e => console.log(e));
   } catch (e) {
     next(e);
   }
@@ -126,13 +138,21 @@ app.post('/api/staticmonitor', userAuthenticated, (req, res, next) => {
 });
 
 app.put('/api/staticmonitor', userAuthenticated, (req, res, next) => {
-  createMonitor(req, res, next);
-  monitorService.createStatic(req, res, next);
+  createMonitor(req, res, next)
+    .then(response => {
+      monitorService.createStatic(req, res, next);
+    })
+    .catch(err => {
+      errorHandler(res, err);
+    });
 });
 
-app.get('/api/usermonitors', userAuthenticated, (req, res, next) => {
-  getMonitors(req, res, next);
-});
+app.get(
+  '/api/usermonitors/:instanceName',
+  userAuthenticated,
+  (req, res, next) => {
+    getMonitors(req, res, next);
+  });
 
 app.get('/api/userowned/:id', userAuthenticated, (req, res, next) => {
   isUserOwnedMonitor(req, res, next);
@@ -163,8 +183,8 @@ app.use('/api/user/notifications', userAuthenticated, (req, res) => {
     .join('&');
   const url =
     req.method === 'POST'
-    ? `${NotificationHost}/read?${params}`
-    : `${NotificationHost}?${params}`;
+      ? `${NotificationHost}/read?${params}`
+      : `${NotificationHost}?${params}`;
   axios({
     headers: {
       'content-type': 'application/json',

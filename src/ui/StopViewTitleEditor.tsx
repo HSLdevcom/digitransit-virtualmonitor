@@ -2,7 +2,11 @@ import cx from 'classnames';
 import React, { FC } from 'react';
 import { ICardInfo } from '../util/Interfaces';
 import { useTranslation } from 'react-i18next';
-import { getLayout } from '../util/getLayout';
+import { focusToInput, onClick } from '../util/InputUtils';
+import { getLayout } from '../util/getResources';
+import { isKeyboardSelectionEvent } from '../util/browser';
+import { ConfigContext } from '../contexts';
+
 import InputWithEditIcon from './InputWithEditIcon';
 
 interface IProps {
@@ -14,9 +18,15 @@ interface IProps {
     lang?: string,
   ) => void;
   lang: string;
+  isMap?: boolean;
 }
 
-const StopViewTitleEditor: FC<IProps> = ({ card, updateCardInfo, lang }) => {
+const StopViewTitleEditor: FC<IProps> = ({
+  card,
+  updateCardInfo,
+  lang,
+  isMap,
+}) => {
   const { index, layout, id, title } = card;
   const [t] = useTranslation();
   const { isMultiDisplay } = getLayout(layout);
@@ -25,10 +35,8 @@ const StopViewTitleEditor: FC<IProps> = ({ card, updateCardInfo, lang }) => {
   const onChange = title => {
     updateCardInfo(id, 'title', title, lang);
   };
-
-  const titleDescription = t('stoptitle')
-    .concat(' - ')
-    .concat(lang.toUpperCase());
+  const name = isMap ? 'maptitle' : 'stoptitle';
+  const titleDescription = t(name).concat(' - ').concat(lang.toUpperCase());
   const inputID = `stop-title-input${id}-${lang}`;
   return (
     <div className="stop-title">

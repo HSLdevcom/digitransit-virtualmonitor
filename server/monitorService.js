@@ -48,14 +48,19 @@ const monitorService = {
     try {
       const cont = database.container('staticMonitors');
       const urls = ids;
+      const instanceName = req.params.instanceName;
       // query to return all items
       if (urls.length) {
         const querySpec = {
-          query: 'SELECT * from c WHERE ARRAY_CONTAINS(@urls, c.url)',
+          query: 'SELECT * from c WHERE ARRAY_CONTAINS(@urls, c.url) AND (IS_DEFINED(c.instance) = false OR c.instance = @instance)',
           parameters: [
             {
               name: '@urls',
               value: urls,
+            },
+            {
+              name: '@instance',
+              value: req.params.instanceName,
             },
           ],
         };

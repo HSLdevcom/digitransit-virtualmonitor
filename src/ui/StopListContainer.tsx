@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { IStop, ICardInfo } from '../util/Interfaces';
 import StopListTitleInput from './StopListTitleInput';
 import StopRow from './StopRow';
-import { getLayout } from '../util/getLayout';
+import { getLayout } from '../util/getResources';
 
 interface Props {
   onStopDelete?: (cardId: number, side: string, gtfsId: string) => void;

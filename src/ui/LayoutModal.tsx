@@ -82,7 +82,9 @@ const LayoutModal: FC<Props> = ({
                             : '',
                         )}
                         disabled={
-                          +option.value > 17 && !allowInformationDisplay
+                          +option.value > 17 &&
+                          +option.value < 20 &&
+                          !allowInformationDisplay
                         }
                         onClick={() => setSelected(option)}
                         id={`layoutBtn-${option.value}`}

@@ -682,7 +682,7 @@ const StopCardListContainer: FC<IProps> = ({
         )}
       </div>
       {saveFailed && (
-        <div className="alert-text" role="alert">
+        <div className="cardlist-alert-text" role="alert">
           {t('save-failed')}
         </div>
       )}

@@ -49,6 +49,7 @@ query GetDeparturesForStops($ids: [String!]!, $numberOfDepartures: Int!)
       longName
       longNamefi: longName(language: "fi")
       longNamesv: longName(language: "sv")
+      longNameen: longName(language: "en")
       id
     }
     stoptimesForPatterns(

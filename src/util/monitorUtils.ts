@@ -393,10 +393,10 @@ export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
   `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;
 
 export const getDepartureDestination = (departure, lang) => {
-  return departure.trip && departure.trip['tripHeadsign' + lang]
-    ? departure.trip['tripHeadsign' + lang]
-    : departure['headsign' + lang]
+  return departure['headsign' + lang]
     ? departure['headsign' + lang]
+    : departure.trip && departure.trip['tripHeadsign' + lang]
+    ? departure.trip['tripHeadsign' + lang]
     : departure['headsign']
     ? departure['headsign']
     : null;

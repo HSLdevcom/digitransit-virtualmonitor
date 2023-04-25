@@ -5,6 +5,23 @@ export const startMqtt = (routes, setState, setClient, topicRef) => {
   if (routes?.length === 0) {
     return;
   }
+  const messageQueue = [];
+  const batchDelay = 3000;
+
+  function enqueueMessage(msg) {
+    messageQueue.push(...msg);
+  }
+
+  function processBatch() {
+    const currentBatch = messageQueue.splice(0, messageQueue.length);
+    if (currentBatch.length > 0) {
+      setState({
+        messages: currentBatch,
+      });
+    }
+    messageQueue.length = 0; // Empty the messageQueue
+  }
+
   const feed = routes[0]?.feedId;
   if (feed.toLowerCase() === 'hsl' || feed.toLowerCase() === 'digitraffic') {
     //Unsupported at the moment
@@ -28,10 +45,9 @@ export const startMqtt = (routes, setState, setClient, topicRef) => {
 
     client.on('message', (topic, messages) => {
       const parsedMessages = parseFeedMQTT(feedReader, messages, topic, feed);
-      setState({
-        messages: parsedMessages,
-      });
+      enqueueMessage(parsedMessages);
     });
+    setInterval(processBatch, batchDelay);
   });
 };
 

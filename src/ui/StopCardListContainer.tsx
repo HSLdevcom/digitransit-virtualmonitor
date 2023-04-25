@@ -519,6 +519,12 @@ const StopCardListContainer: FC<IProps> = ({
   const noStops = checkNoStops(stopCardList);
   const makeButtonsDisabled = !(languages.length > 0 && !noStops);
   const isModifyView = window.location.href.indexOf('url=') !== -1;
+  const login = getConfig().login.inUse;
+  const isNew =
+    (login &&
+      window.location.href.indexOf('url=') === -1 &&
+      window.location.href.indexOf('cont=')) === -1 ||
+    (!login && window.location.href.indexOf('cont=') === -1);
   const newDisplayDisabled = stopCardList.find(
     c => c.layout > 17 && c.layout < 20,
   );
@@ -657,7 +663,7 @@ const StopCardListContainer: FC<IProps> = ({
           <button
             disabled={makeButtonsDisabled}
             className="button blue"
-            onClick={() => createOrSaveMonitor(true)}
+            onClick={() => createOrSaveMonitor(isNew)}
             aria-label={ariaLabelForCreate}
             title={makeButtonsDisabled ? ariaLabelForCreate : undefined}
           >
@@ -673,7 +679,7 @@ const StopCardListContainer: FC<IProps> = ({
               disabled={makeButtonsDisabled}
               className="button blue"
               title={makeButtonsDisabled ? ariaLabelForSave : undefined}
-              onClick={() => createOrSaveMonitor(false)}
+              onClick={() => createOrSaveMonitor(isNew)}
               aria-label={ariaLabelForSave}
             >
               <span>{t('save')}</span>

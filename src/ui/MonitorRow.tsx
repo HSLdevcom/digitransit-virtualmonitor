@@ -131,9 +131,22 @@ const MonitorRow: FC<IProps> = ({
     t => t.trans_id === departureDestination?.split(' via')[0],
   );
 
-  const renamedDestination = renamedDestinations.find(
-    dest => dest.pattern === departure.combinedPattern,
-  );
+  const renamedDestination = renamedDestinations.find(dest => {
+    const headsign = departure.headsign
+      ? departure.headsign.split(' via')[0]
+      : '';
+    const renameDestId = (
+      departure.trip.route.gtfsId +
+      ' - ' +
+      headsign
+    ).toLowerCase();
+    const found = dest.pattern.toLowerCase() === renameDestId;
+    // Backwards combatibility
+    if (!found) {
+      return dest.pattern === departure.combinedPattern;
+    }
+    return found;
+  });
 
   let destination = '';
   if (renamedDestination && renamedDestination[currentLang] !== '') {

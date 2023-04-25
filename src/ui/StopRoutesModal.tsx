@@ -343,14 +343,13 @@ const StopRoutesModal: FC<Props> = props => {
               p => p.route.gtfsId === gtfsID,
             );
             const alternateIcon = config.modeIcons.postfix;
-            // const rId = gtfsID + ' - ' + patternArray[3];
             return (
               <div key={pattern} className="row">
                 <div className="routeInfo">
                   <Checkbox
-                    isSelected={hiddenRouteChecked(renameId)}
-                    onChange={() => checkHiddenRoute(renameId)}
-                    name={renameId}
+                    isSelected={hiddenRouteChecked(pattern)}
+                    onChange={() => checkHiddenRoute(pattern)}
+                    name={pattern}
                     width={30}
                     height={30}
                     color={config.colors.primary}

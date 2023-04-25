@@ -143,9 +143,19 @@ const StopRoutesModal: FC<Props> = props => {
   const handleDeleteRenamings = event => {
     if (event === null || isKeyboardSelectionEvent(event, true)) {
       props.combinedPatterns.forEach(p => {
-        const inputFI = document?.getElementById(`fi-${p}`) as HTMLInputElement;
-        const inputSV = document?.getElementById(`sv-${p}`) as HTMLInputElement;
-        const inputEN = document?.getElementById(`en-${p}`) as HTMLInputElement;
+        const patArr = p.split(':');
+        const renameDestId =
+          [patArr[0], patArr[1]].join(':') + ' - ' + patArr[3];
+
+        const inputFI = document?.getElementById(
+          `fi-${renameDestId}`,
+        ) as HTMLInputElement;
+        const inputSV = document?.getElementById(
+          `sv-${renameDestId}`,
+        ) as HTMLInputElement;
+        const inputEN = document?.getElementById(
+          `en-${renameDestId}`,
+        ) as HTMLInputElement;
         if (inputFI) inputFI.value = '';
         if (inputSV) inputSV.value = '';
         if (inputEN) inputEN.value = '';
@@ -322,22 +332,25 @@ const StopRoutesModal: FC<Props> = props => {
             </div>
           )}
           {props.combinedPatterns.map((pattern, index) => {
-            const renamedDestination = renamings?.find(
-              d => d.pattern === pattern,
-            );
             const patternArray = pattern.split(':');
             const gtfsID = [patternArray[0], patternArray[1]].join(':');
+            const renameId = gtfsID + ' - ' + patternArray[3];
+            const renamedDestination = renamings?.find(d => {
+              return d.pattern === renameId;
+            });
+
             const { route } = props.stop.patterns.find(
               p => p.route.gtfsId === gtfsID,
             );
             const alternateIcon = config.modeIcons.postfix;
+            // const rId = gtfsID + ' - ' + patternArray[3];
             return (
               <div key={pattern} className="row">
                 <div className="routeInfo">
                   <Checkbox
-                    isSelected={hiddenRouteChecked(pattern)}
-                    onChange={() => checkHiddenRoute(pattern)}
-                    name={pattern}
+                    isSelected={hiddenRouteChecked(renameId)}
+                    onChange={() => checkHiddenRoute(renameId)}
+                    name={renameId}
                     width={30}
                     height={30}
                     color={config.colors.primary}
@@ -364,9 +377,9 @@ const StopRoutesModal: FC<Props> = props => {
                   {props.languages.map(lang => (
                     <input
                       tabIndex={showInputs ? 1 : -1}
-                      key={`${lang}-${pattern}`}
-                      id={`${lang}-${pattern}`}
-                      name={pattern}
+                      key={`${lang}-${renameId}`}
+                      id={`${lang}-${renameId}`}
+                      name={renameId}
                       className={cx(lang, !showInputs ? 'readonly' : '')}
                       defaultValue={
                         renamedDestination?.[lang]

@@ -523,7 +523,7 @@ const StopCardListContainer: FC<IProps> = ({
   const isNew =
     (login &&
       window.location.href.indexOf('url=') === -1 &&
-      window.location.href.indexOf('cont=')) ||
+      window.location.href.indexOf('cont=')) === -1 ||
     (!login && window.location.href.indexOf('cont=') === -1);
   const newDisplayDisabled = stopCardList.find(
     c => c.layout > 17 && c.layout < 20,

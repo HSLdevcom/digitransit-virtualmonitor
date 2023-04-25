@@ -132,14 +132,15 @@ const MonitorRow: FC<IProps> = ({
   );
 
   const renamedDestination = renamedDestinations.find(dest => {
-    const headsign = departure.headsign ? departure.headsign : '';
+    const headsign = departure.headsign
+      ? departure.headsign.split(' via')[0]
+      : '';
     const renameDestId = (
       departure.trip.route.gtfsId +
       ' - ' +
       headsign
     ).toLowerCase();
     const found = dest.pattern.toLowerCase() === renameDestId;
-
     // Backwards combatibility
     if (!found) {
       return dest.pattern === departure.combinedPattern;

@@ -128,9 +128,22 @@ const MonitorRow: FC<IProps> = ({
 
   const isCancelled = departure.realtimeState === 'CANCELED';
   const departureDestination = getDepartureDestination(departure, currentLang);
-  const renamedDestination = renamedDestinations.find(
-    dest => dest.pattern === departure.combinedPattern,
-  );
+  const renamedDestination = renamedDestinations.find(dest => {
+    const headsign = departureDestination
+      ? departureDestination.split(' via ')[0]
+      : '';
+    const renameDestId = (
+      departure.trip.route.gtfsId.toLowerCase() +
+      ' - ' +
+      headsign
+    ).toLowerCase();
+    const found = dest.pattern.toLowerCase() === renameDestId;
+    // Backwards combatibility
+    if (!found) {
+      return dest.pattern === departure.combinedPattern;
+    }
+    return found;
+  });
 
   let destination = '';
   if (renamedDestination && renamedDestination[currentLang] !== '') {
@@ -157,9 +170,8 @@ const MonitorRow: FC<IProps> = ({
         departureDestination?.substring(
           departureDestination.indexOf(' via') + 1,
         ) === viaDestination
-          ? departureDestination.split('via')
+          ? departureDestination.split(' via ')
           : null;
-
       if (t) {
         viaDestination = ` via ${t[1]}`;
       }

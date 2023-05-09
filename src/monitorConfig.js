@@ -52,6 +52,9 @@ export default {
       favourites: true,
     },
     useTilde: true,
+    map: {
+      inUse: false,
+    },
   },
   jyvaskyla: {
     fonts: {
@@ -76,15 +79,21 @@ export default {
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
-      inUse: false,
+      inUse: true,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
     useTilde: true,
+    map: {
+      inUse: false,
+    },
   },
   matka: {
     name: 'matka',
     uri: 'routing/v2/routers/finland/index/graphql',
+    map: {
+      inUse: false,
+    },
   },
   tampere: {
     colors: {
@@ -117,17 +126,20 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
-      inUse: false,
+      inUse: true,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
     useTilde: false,
+    map: {
+      inUse: false,
+    },
   },
   vaasa: {
     uri: 'routing/v2/routers/waltti/index/graphql',
     name: 'vaasa',
     login: {
-      inUse: false,
+      inUse: true,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
@@ -157,6 +169,9 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     useTilde: true,
+    map: {
+      inUse: false,
+    },
   },
   oulu: {
     name: 'oulu',
@@ -181,6 +196,9 @@ export default {
       inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
+    },
+    map: {
+      inUse: true,
     },
   },
 };

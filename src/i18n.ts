@@ -64,7 +64,7 @@ i18n.use(initReactI18next).init({
         frontPageParagraph1:
           'Create your own display and select the stops and routes you are interested in',
         frontPageParagraph2:
-          'You can use the service to generate timetables for nearby stops to be displayed in public spaces, on your information displays or on company intranet.',
+          'You can use the service to generate timetables for nearby stops to be displayed in public spaces, on your information displays or on company intranet. You can also create your own personal stop display and save it as a bookmark in your browser.',
         frontPageParagraph3:
           'Displaying public transport timetables in prominent places encourages the use of public transport and makes it easier. In addition to timetables, the service provides you with service updates and disruption alerts.',
         'front-page-paragraph-hsl':
@@ -232,7 +232,7 @@ i18n.use(initReactI18next).init({
         frontPageParagraph1:
           'Luo itsellesi oma näyttö ja valitse pysäkit ja linjat joiden aikatauluista olet kiinnostunut',
         frontPageParagraph2:
-          'Palvelulla voi tuoda esimerkiksi julkisten tilojen auloihin, yritysten infonäytöille tai intranet-verkkoon kyseisen paikan läheisyydessä olevien pysäkkien aikataulut.',
+          'Palvelulla voi tuoda esimerkiksi julkisten tilojen auloihin, yritysten infonäytöille tai intranet-verkkoon kyseisen paikan läheisyydessä olevien pysäkkien aikataulut. Voit myös tehdä henkilökohtaisen pysäkkinäytön ja laittaa sen kirjainmerkiksi selaimeesi.',
         frontPageParagraph3:
           'Joukkoliikenteen aikataulut näkyvällä paikalla helpottavat joukkoliikenteen käyttöä ja kannustavat käyttämään joukkoliikennettä. Aikataulujen lisäksi palvelun kautta saat myös ajankohtaiset liikenne- ja häiriötiedotteet.',
         'front-page-paragraph-hsl':
@@ -400,7 +400,7 @@ i18n.use(initReactI18next).init({
         frontPageParagraph1:
           'Skapa dig en egen skärm och välj de hållplatser och linjer som intresserar dig',
         frontPageParagraph2:
-          'Med tjänsten kan du visa tidtabeller för närmaste hållplatser t.ex. i offentliga lokaler, på digitala informationsskärmar eller på företagets intranät.',
+          'Med tjänsten kan du visa tidtabeller för närmaste hållplatser t.ex. i offentliga lokaler, på digitala informationsskärmar eller på företagets intranät. Du kan även skapa din egen personliga hållplatsskärm och spara den som bokmärke i din webbläsare.',
         frontPageParagraph3:
           'Kollektivtrafikens tidtabeller på synliga platser gör det lättare att resa kollektivt och uppmuntrar att använda kollektivtrafiktjänster. Genom tjänsten får du även aktuella trafikmeddelanden och information om trafikstörningar.',
         'front-page-paragraph-hsl':

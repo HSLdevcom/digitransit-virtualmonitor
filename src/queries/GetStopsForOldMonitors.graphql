@@ -4,5 +4,7 @@ query GetStopsForOldMonitors($ids: [String!]!)
     name
     gtfsId
     locationType
+    lat
+    lon
   }
 }

@@ -32,6 +32,9 @@ const CreateViewPage = () => {
   const [staticMonitorProperties, setStaticMonitorProperties] = useState(null);
   const [loading, setLoading] = useState(true);
   const [noMonitorFound, setNoMonitorFound] = useState(false);
+  const [mapSettings, setMapsettings] = useState(
+    location?.state?.view ? location.state.view.mapSettings : null,
+  );
   const [showMonitorInfoModal, setShowMonitorInfoModal] = useState(
     !!location?.state?.view,
   );
@@ -61,6 +64,9 @@ const CreateViewPage = () => {
             if (r.languages) {
               setLanguages(r.languages);
             }
+            if (r.mapSettings) {
+              setMapsettings(r.mapSettings);
+            }
           } else {
             setNoMonitorFound(true);
           }
@@ -77,6 +83,9 @@ const CreateViewPage = () => {
                 setStopCardList(r.cards);
                 if (r.languages) {
                   setLanguages(r.languages);
+                }
+                if (r.mapSettings) {
+                  setMapsettings(r.mapSettings);
                 }
                 setStaticMonitorProperties({ name: r.name, id: r.id });
               }
@@ -190,6 +199,7 @@ const CreateViewPage = () => {
         stationIds={stationIds}
         stopCardList={stopCardList}
         loading={loading}
+        mapSettings={mapSettings}
       />
     </ContentContainer>
   );

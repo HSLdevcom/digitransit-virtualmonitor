@@ -26,6 +26,10 @@ const NotificationHost =
   process.env.NOTIFICATION_HOST ||
   'https://test.hslfi.hsldev.com/user/api/v1/notifications';
 
+const MAP_URL = process.env.MAP_URL
+  ? process.env.MAP_URL
+  : 'https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}.png';
+
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
 const app = express();
@@ -49,7 +53,8 @@ app.get('/api/monitor/:id', (req, res, next) => {
 
 app.use('/api/graphql', (req, res, next) => {
   const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
-  const endpoint = req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
+  const endpoint =
+    req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
   const queryparams = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
     ? `?${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
     : '';
@@ -77,10 +82,19 @@ app.get('/api/geocoding/:endpoint', (req, res, next) => {
 
   axios
     .get(url)
-    .then(function (response) {
+    .then(response => {
       res.json(response.data);
     })
     .catch(e => next(e));
+});
+
+app.get('/api/map', (req, res) => {
+  const apiSubscriptionParameter = process.env
+    .API_SUBSCRIPTION_QUERY_PARAMETER_NAME
+    ? `&${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
+    : '';
+  const url = `${MAP_URL}?${apiSubscriptionParameter}`;
+  return res.status(200).json(url);
 });
 
 app.put('/api/monitor', (req, res, next) => {

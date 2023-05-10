@@ -71,12 +71,15 @@ const CarouselContainer: FC<IProps> = ({
   closedStopViews,
   trainsWithTrack,
 }) => {
-  const { cards: views, languages } = useContext(MonitorContext);
-  const len = views.length * languages.length * 2;
+  const { cards: views, languages, mapSettings } = useContext(MonitorContext);
+  const hideTimeTable = mapSettings?.hideTimeTable;
+  const finalViews = hideTimeTable
+    ? views.filter(view => view.type === 'map')
+    : views;
+  const len = finalViews.length * languages.length * 2;
   const [current, setCurrent] = useState(0);
   const [alertState, setAlertState] = useState(0);
   const [language, setLanguage] = useState(0);
-
   const orientations = ['static', 'vertical', 'horizontal'];
   const config = useContext(ConfigContext);
   const [demoOrientation, setDemoOrientation] = useState(
@@ -85,19 +88,23 @@ const CarouselContainer: FC<IProps> = ({
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
-      (views[Math.floor(current / 2) % views.length].duration * 1000) / 2;
+      (finalViews[Math.floor(current / 2) % finalViews.length].duration *
+        1000) /
+      2;
     const id = setTimeout(() => {
-      if ((next / 2) % views.length === 0) {
+      if ((next / 2) % finalViews.length === 0) {
         const nextLan = (language + 1) % languages.length;
         setLanguage(nextLan);
       }
+
       setAlertState(current % 2);
+
       setCurrent(next);
     }, time);
     return () => clearTimeout(id);
   }, [current]);
 
-  const index = Math.floor(current / 2) % views.length;
+  const index = Math.floor(current / 2) % finalViews.length;
 
   const departures = [
     sortAndFilter(
@@ -109,13 +116,49 @@ const CarouselContainer: FC<IProps> = ({
       trainsWithTrack,
     ),
   ];
+  let topics = [];
+  if (mapSettings?.showMap) {
+    // Todo. This is a hacky solution to easiest way of figuring out all the departures.
+    // Map keeps record of all it's stops, so it has all their departures. This should be done
+    // more coherent way when there is time.
+    const allDep = [];
+
+    for (let i = 0; i < views.length; i++) {
+      const element = [
+        sortAndFilter(
+          [...stationDepartures[i][0], ...stopDepartures[i][0]],
+          trainsWithTrack,
+        ),
+        sortAndFilter(
+          [...stationDepartures[i][1], ...stopDepartures[i][1]],
+          trainsWithTrack,
+        ),
+      ];
+      allDep.push(element);
+    }
+
+    const mapDepartures = allDep
+      .map(o => o.flatMap(a => a))
+      .reduce((a, b) => (a.length > b.length ? a : b));
+    topics = mapDepartures
+      .filter(t => t.realtime)
+      .map(dep => {
+        return {
+          feedId: dep.trip.gtfsId.split(':')[0],
+          route: dep.trip.route?.gtfsId?.split(':')[1],
+          tripId: dep.trip.gtfsId.split(':')[1],
+          shortName: dep.trip.route.shortName,
+          type: 3,
+          ...dep,
+        };
+      });
+  }
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts
   const newView = {
-    ...views[index],
+    ...finalViews[index],
     //layout: 8,
   };
-
   const { alertSpan } = getLayout(newView.layout);
   let alertComponent;
   let alertRowClass = '';
@@ -188,6 +231,8 @@ const CarouselContainer: FC<IProps> = ({
       alertComponent={alertComponent}
       alertRowSpan={alertSpan}
       closedStopViews={closedStopViews}
+      mapSettings={mapSettings}
+      topics={topics}
     />
   );
 };

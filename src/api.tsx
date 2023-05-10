@@ -28,6 +28,9 @@ const fetchData = (path, options, signal = undefined) => {
 };
 
 const monitorAPI = {
+  getMapSettings(signal = undefined) {
+    return fetchData('map', {}, signal);
+  },
   getPing(signal = undefined) {
     const options = {
       method: 'GET',

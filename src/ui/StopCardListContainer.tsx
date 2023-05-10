@@ -1,6 +1,6 @@
 import cx from 'classnames';
-import { IStop, IMonitor } from '../util/Interfaces';
-import React, { FC, useContext, useState } from 'react';
+import { IStop, IMonitor, IMapSettings } from '../util/Interfaces';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import hash from 'object-hash';
 import { useTranslation } from 'react-i18next';
@@ -8,18 +8,26 @@ import monitorAPI from '../api';
 import { Link, Redirect } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getResources';
-import { defaultStopCard } from '../util/stopCardUtil';
+import { defaultStopCard, getStopIcon } from '../util/stopCardUtil';
 import Loading from './Loading';
 import { defaultSettings } from './StopRoutesModal';
 import UserViewTitleEditor from './UserViewTitleEditor';
 import { DateTime } from 'luxon';
 import { v5 as uuidv5 } from 'uuid';
-import { namespace, uuidValidateV5 } from '../util/monitorUtils';
+import isEqual from 'lodash/isEqual';
+import {
+  getBoundingBox,
+  namespace,
+  stopsAndStationsFromViews,
+  uuidValidateV5,
+} from '../util/monitorUtils';
 import PrepareMonitor from './PrepareMonitor';
 import { UserContext } from '../contexts';
 import { getParams } from '../util/queryUtils';
 import { getConfig } from '../util/getConfig';
 import { useMergeState } from '../util/utilityHooks';
+import MapCardRow from './MapCardRow';
+import MapModal from './MapModal';
 
 interface IProps {
   stopCards: any;
@@ -27,24 +35,101 @@ interface IProps {
   loading?: boolean;
   vertical?: boolean;
   staticMonitor?: any;
+  mapSettings?: IMapSettings;
 }
 
 const StopCardListContainer: FC<IProps> = ({
   stopCards,
   loading = false,
+  mapSettings,
   ...props
 }) => {
   const user = useContext(UserContext);
   const [t] = useTranslation();
   const [stopCardList, setStopCardList] = useState(stopCards);
   const [languages, setLanguages] = useState(props.languages);
-
+  const [mapProps, setMapProps] = useMergeState({
+    center: mapSettings?.center,
+    zoom: mapSettings?.zoom,
+    bounds: mapSettings?.bounds,
+    showMap: mapSettings?.showMap ? mapSettings.showMap : false,
+    hideTimeTable: mapSettings?.hideTimeTable,
+    stops: mapSettings?.stops,
+    userSet: mapSettings?.userSet,
+  });
+  const stopCoordinates = stopCardList
+    .filter(c => c.type !== 'map')
+    .flatMap(card => {
+      const stops = card.columns.left.stops.concat(card.columns.right.stops);
+      return stops.map(s => [s.lat, s.lon]);
+    });
+  useEffect(() => {
+    const stopsAndStations = stopsAndStationsFromViews(stopCardList);
+    const stops = stopsAndStations
+      .map(stops => {
+        return stops.map(stop => {
+          const coord: [number, number] = [stop?.lat, stop?.lon];
+          const obj = {
+            name: stop.name,
+            gtfsId: stop.gtfsId,
+            coords: coord,
+            settings: stop.settings,
+            mode: getStopIcon(stop),
+          };
+          return obj;
+        });
+      })
+      .flat();
+    stops.forEach(c => {
+      c.coords.flat();
+    });
+    setMapProps({
+      stops: stops,
+    });
+  }, [stopCardList]);
+  const handleShowMap = showMap => {
+    const hideTimetable = showMap ? mapSettings?.hideTimeTable : false;
+    if (showMap) {
+      addMap();
+    } else {
+      setStopCardList(stopCardList.filter(s => s.type !== 'map'));
+    }
+    setMapProps({
+      showMap: showMap,
+      hideTimeTable: hideTimetable,
+    });
+  };
+  const updateMapSettings = settings => {
+    setMapProps({ ...settings });
+  };
+  const bounds = getBoundingBox(stopCoordinates);
+  useEffect(() => {
+    if (mapProps.showMap) {
+      // Check that the map is in the cardlist
+      const map = stopCardList.find(i => i.type === 'map');
+      if (!map) {
+        addMap();
+      }
+    }
+  });
+  useEffect(() => {
+    if (!mapProps.userSet && !isEqual(bounds, mapProps.bounds)) {
+      setMapProps({
+        bounds: bounds,
+        center: null,
+      });
+    }
+  });
   const isHorizontal =
-    stopCardList[0].layout < 12 || stopCardList[0].layout === 18;
+    stopCardList[0].layout < 12 ||
+    stopCardList[0].layout === 18 ||
+    stopCardList[0].layout === 20;
   const [orientation, setOrientation] = useState(
     !isHorizontal ? 'vertical' : 'horizontal',
   );
   const [isOpen, setOpen] = useState(false);
+  const [isMapmodalOpen, setMapModalOpen] = useState(false);
+
   const [viewTitle, setViewTitle] = useState(
     props.staticMonitor ? props.staticMonitor.name : '',
   );
@@ -55,6 +140,12 @@ const StopCardListContainer: FC<IProps> = ({
     redirect: false,
   });
 
+  const openMapModal = () => {
+    setMapModalOpen(true);
+  };
+  const closeMapModal = () => {
+    setMapModalOpen(false);
+  };
   const openPreview = () => {
     setOpen(true);
   };
@@ -63,6 +154,13 @@ const StopCardListContainer: FC<IProps> = ({
   };
 
   const onCardDelete = (id: number) => {
+    const card = stopCardList.find(c => c.id === id);
+    if (card?.type === 'map') {
+      setMapProps({
+        showMap: false,
+        hideTimeTable: false,
+      });
+    }
     setStopCardList(stopCardList.filter(s => s.id !== id));
   };
 
@@ -190,7 +288,23 @@ const StopCardListContainer: FC<IProps> = ({
     }
     setStopCardList(stopCardList.slice());
   };
-
+  const addMap = () => {
+    let cnt = stopCardList.length + 1;
+    while (cnt > 0) {
+      if (stopCardList.filter(s => s.id === cnt).length === 0) {
+        const newCard = {
+          ...defaultStopCard(),
+          id: cnt,
+          layout: isHorizontal ? 2 : 12,
+          type: 'map',
+          stops: mapProps.stops,
+        };
+        setStopCardList(stopCardList.concat(newCard));
+        cnt = 0;
+      }
+      cnt--;
+    }
+  };
   const addNew = () => {
     let cnt = stopCardList.length + 1;
     while (cnt > 0) {
@@ -226,6 +340,11 @@ const StopCardListContainer: FC<IProps> = ({
 
   const checkNoStops = stopCardList => {
     return stopCardList.some((stopCard, i) => {
+      const ismap = stopCard.type === 'map';
+
+      if (ismap) {
+        return false;
+      }
       const isMultiDisplay = getLayout(stopCard.layout).isMultiDisplay;
       return !isMultiDisplay
         ? stopCard.columns.left.stops.length === 0
@@ -239,6 +358,15 @@ const StopCardListContainer: FC<IProps> = ({
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
     cardArray.forEach(card => {
+      if (card.type == 'map') {
+        card.columns.left.stops = mapProps.stops.map(stop => ({
+          name: stop.name,
+          gtfsId: stop.gtfsId,
+          settings: stop.settings,
+          lat: stop.coords[0],
+          lon: stop.coords[1],
+        }));
+      }
       card.columns.left.stops = card.columns.left.stops.map(stop => {
         return {
           name: stop.name,
@@ -249,6 +377,8 @@ const StopCardListContainer: FC<IProps> = ({
           mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           code: stop.code ? stop.code : null,
           locality: stop.locality,
+          lat: stop.lat,
+          lon: stop.lon,
         };
       });
       card.columns.right.stops = card.columns.right.stops.map(stop => {
@@ -261,6 +391,8 @@ const StopCardListContainer: FC<IProps> = ({
           mode: stop.mode ? stop.mode : stop.vehicleMode?.toLowerCase(),
           code: stop.code ? stop.code : null,
           locality: stop.locality,
+          lat: stop.lat,
+          lon: stop.lon,
         };
       });
     });
@@ -272,6 +404,7 @@ const StopCardListContainer: FC<IProps> = ({
       cards: cards,
       languages: languageArray.filter(lan => languages.includes(lan)),
       contenthash: '',
+      mapSettings: mapProps,
     };
     newCard.contenthash = hash(newCard, {
       algorithm: 'md5',
@@ -386,7 +519,15 @@ const StopCardListContainer: FC<IProps> = ({
   const noStops = checkNoStops(stopCardList);
   const makeButtonsDisabled = !(languages.length > 0 && !noStops);
   const isModifyView = window.location.href.indexOf('url=') !== -1;
-  const newDisplayDisabled = stopCardList.find(c => c.layout > 17);
+  const login = getConfig().login.inUse;
+  const isNew =
+    (login &&
+      window.location.href.indexOf('url=') === -1 &&
+      window.location.href.indexOf('cont=')) === -1 ||
+    (!login && window.location.href.indexOf('cont=') === -1);
+  const newDisplayDisabled = stopCardList.find(
+    c => c.layout > 17 && c.layout < 20,
+  );
 
   const buttonsRequirements = [];
   if (languages.length === 0) {
@@ -428,9 +569,11 @@ const StopCardListContainer: FC<IProps> = ({
           handleOrientation={handleOrientation}
           languages={languages}
           handleChange={handleLanguageChange}
+          showMap={mapProps.showMap}
+          setShowMap={handleShowMap}
+          disableToggle={mapProps.stops?.length === 0}
         />
       </div>
-
       {isOpen && (
         <PrepareMonitor
           preview={{
@@ -439,7 +582,17 @@ const StopCardListContainer: FC<IProps> = ({
             languages: languages,
             onClose: closePreview,
             isLandscape: orientation === 'horizontal' ? true : false,
+            mapSettings: mapProps,
           }}
+        />
+      )}
+      {isMapmodalOpen && (
+        <MapModal
+          isOpen={isMapmodalOpen}
+          onClose={closeMapModal}
+          mapSettings={mapProps}
+          isLandscape={orientation == 'horizontal' ? true : false}
+          updateMapSettings={updateMapSettings}
         />
       )}
       <ul className="stopcards">
@@ -448,6 +601,23 @@ const StopCardListContainer: FC<IProps> = ({
             index: index,
             ...item,
           };
+          if (item.type === 'map') {
+            return (
+              <MapCardRow
+                key={`stopcard-${index}`}
+                item={card}
+                cards={stopCardList}
+                onCardDelete={onCardDelete}
+                onCardMove={onCardMove}
+                updateCardInfo={updateCardInfo}
+                languages={languages}
+                mapSettings={mapProps}
+                updateMapSettings={updateMapSettings}
+                openModal={openMapModal}
+                orientation={orientation}
+              />
+            );
+          }
           return (
             <StopCardRow
               key={`stopcard-${index}`}
@@ -462,6 +632,8 @@ const StopCardListContainer: FC<IProps> = ({
               updateLayout={updateLayout}
               updateCardInfo={updateCardInfo}
               languages={languages}
+              hideTitle={mapProps.hideTimeTable}
+              hasMap={mapProps.showMap}
             />
           );
         })}
@@ -491,7 +663,7 @@ const StopCardListContainer: FC<IProps> = ({
           <button
             disabled={makeButtonsDisabled}
             className="button blue"
-            onClick={() => createOrSaveMonitor(true)}
+            onClick={() => createOrSaveMonitor(isNew)}
             aria-label={ariaLabelForCreate}
             title={makeButtonsDisabled ? ariaLabelForCreate : undefined}
           >
@@ -507,7 +679,7 @@ const StopCardListContainer: FC<IProps> = ({
               disabled={makeButtonsDisabled}
               className="button blue"
               title={makeButtonsDisabled ? ariaLabelForSave : undefined}
-              onClick={() => createOrSaveMonitor(false)}
+              onClick={() => createOrSaveMonitor(isNew)}
               aria-label={ariaLabelForSave}
             >
               <span>{t('save')}</span>
@@ -516,7 +688,7 @@ const StopCardListContainer: FC<IProps> = ({
         )}
       </div>
       {saveFailed && (
-        <div className="alert-text" role="alert">
+        <div className="cardlist-alert-text" role="alert">
           {t('save-failed')}
         </div>
       )}

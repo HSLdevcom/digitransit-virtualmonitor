@@ -52,6 +52,9 @@ export default {
       favourites: true,
     },
     useTilde: true,
+    map: {
+      inUse: false,
+    },
   },
   jyvaskyla: {
     fonts: {
@@ -81,10 +84,16 @@ export default {
       favourites: false,
     },
     useTilde: true,
+    map: {
+      inUse: false,
+    },
   },
   matka: {
     name: 'matka',
     uri: 'routing/v1/routers/finland/index/graphql',
+    map: {
+      inUse: false,
+    },
   },
   tampere: {
     colors: {
@@ -122,6 +131,9 @@ export default {
       favourites: false,
     },
     useTilde: false,
+    map: {
+      inUse: false,
+    },
   },
   vaasa: {
     uri: 'routing/v1/routers/waltti/index/graphql',
@@ -157,6 +169,9 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     useTilde: true,
+    map: {
+      inUse: false,
+    },
   },
   oulu: {
     name: 'oulu',
@@ -166,10 +181,24 @@ export default {
       primary: '#E10669',
       monitorBackground: '#E10669',
     },
+    modeIcons: {
+      colors: {
+        'mode-bus': '#E10669',
+        'mode-bus-express': '#E10669',
+        'mode-bus-local': '#E10669',
+        'mode-rail': '#E10669',
+        'mode-tram': '#E10669',
+        'mode-ferry': '#E10669',
+        'mode-subway': '#E10669',
+      },
+    },
     login: {
       inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
+    },
+    map: {
+      inUse: true,
     },
   },
 };

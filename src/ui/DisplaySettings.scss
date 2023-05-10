@@ -3,24 +3,63 @@
   justify-content: space-between;
   font-family: $font-family;
   margin-top: 26px;
+  height: 100px;
+
+  .headers {
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 5px;
+  }
+}
+
+.map-toggle {
+  padding: 0 10px;
+  height: 44px;
+  display: flex;
+  border-radius: 5px;
+  background-color: white;
+  align-items: center;
+
+  .toggle {
+    margin: 0;
+  }
+
+  .txt {
+    display: flex;
+  }
+
+  label {
+    svg {
+      margin-right: 5px !important;
+    }
+  }
+
+  div {
+    margin-right: 10px;
+  }
+
+  .option-checkbox-container {
+    margin-left: 10px;
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .display-language-container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   position: relative;
 
   .language-alert {
     position: absolute;
     color: #dc0451;
-    right: 0;
-    top: -1.4em;
+    left: 19px;
+    top: 5.6em;
     font-size: 0.813rem;
   }
 
   .language-controls {
     padding: 0 10px;
-    margin-left: 20px;
     height: 44px;
     display: flex;
     border-radius: 5px;
@@ -45,20 +84,17 @@
   }
 }
 
-.orientation-header,
-.language-header {
-  margin-left: 8px;
-}
-
 .display-orientation-container {
   display: flex;
-  align-items: center;
+  align-items: left;
+  flex-direction: column;
+  margin-left: 20px;
 
   .orientation-controls {
     height: 44px;
     display: flex;
-    margin-left: 20px;
     width: 140px;
+    align-items: left;
 
     .orientation-button {
       display: flex;

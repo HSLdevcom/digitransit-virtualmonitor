@@ -49,6 +49,23 @@ export const getStopsAndStationsFromViews = views => {
   return [stopIds, stationIds];
 };
 
+export const stopsAndStationsFromViews = views => {
+  const stopIds = [];
+  const stationIds = [];
+  const arr = Array.isArray(views) ? views : [views];
+  const arr1 = arr.filter(v => v.type !== 'map');
+  arr1.forEach(view => {
+    Object.keys(view.columns).forEach(col => {
+      view.columns[col].stops?.forEach(stop => {
+        stop.locationType === 'STOP'
+          ? stopIds.push(stop)
+          : stationIds.push(stop);
+      });
+    });
+  });
+  return [stopIds, stationIds];
+};
+
 export const filterDepartures = (
   stop,
   hiddenRoutes,
@@ -362,7 +379,6 @@ export const getTrainStationData = (monitor, locationType) => {
         if (stop.locationType === locationType && hasMode) {
           const isHsl = stop.gtfsId.startsWith('HSL:');
           const gtfsId = stop.gtfsId;
-
           retValue.push({
             gtfsId: gtfsId,
             shortCode: !isHsl
@@ -371,6 +387,8 @@ export const getTrainStationData = (monitor, locationType) => {
                 null,
             source: isHsl ? 'HSL' : 'MATKA',
             hiddenRoutes: stop.settings?.hiddenRoutes || [],
+            lat: stop.lat,
+            lon: stop.lon,
           });
         }
       });
@@ -400,3 +418,36 @@ export const uuidValidateV5 = uuid => {
 
 export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
   `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;
+
+type Coordinate = [number, number];
+type BoundingBox = [Coordinate, Coordinate];
+
+export function getBoundingBox(coordinates: Coordinate[]): BoundingBox {
+  if (coordinates.length === 0) {
+    return [
+      [0, 0],
+      [0, 0],
+    ];
+  }
+
+  let minLat = coordinates[0][0];
+  let maxLat = coordinates[0][0];
+  let minLng = coordinates[0][1];
+  let maxLng = coordinates[0][1];
+  for (let i = 1; i < coordinates.length; i++) {
+    const lat = coordinates[i][0];
+    const lng = coordinates[i][1];
+
+    if (lat && lng) {
+      minLat = Math.min(minLat, lat);
+      minLng = Math.min(minLng, lng);
+      maxLat = Math.max(maxLat, lat);
+      maxLng = Math.max(maxLng, lng);
+    }
+  }
+
+  return [
+    [minLat, minLng],
+    [maxLat, maxLng],
+  ];
+}

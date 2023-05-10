@@ -47,6 +47,9 @@ query GetDeparturesForStops($ids: [String!]!, $numberOfDepartures: Int!)
         }
       }
       longName
+      longNamefi: longName(language: "fi")
+      longNamesv: longName(language: "sv")
+      longNameen: longName(language: "en")
       id
     }
     stoptimesForPatterns(
@@ -78,8 +81,14 @@ query GetDeparturesForStops($ids: [String!]!, $numberOfDepartures: Int!)
         realtimeDeparture
         realtimeState
         headsign
+        headsignfi: headsign(language: "fi")
+        headsignsv: headsign(language: "sv")
+        headsignen: headsign(language: "en")
         trip {
           tripHeadsign
+          tripHeadsignfi: tripHeadsign(language: "fi")
+          tripHeadsignsv: tripHeadsign(language: "sv")
+          tripHeadsignen: tripHeadsign(language: "en")
           directionId
           id
           gtfsId

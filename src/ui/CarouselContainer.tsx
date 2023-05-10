@@ -3,7 +3,6 @@ import { ConfigContext, MonitorContext } from '../contexts';
 import { IClosedStop, ITrainData } from '../util/Interfaces';
 import Monitor from './Monitor';
 import { IDeparture } from './MonitorRow';
-import { ITranslation } from './TranslationContainer';
 import MonitorAlertRow from './MonitorAlertRow';
 import { getLayout } from '../util/getResources';
 import cx from 'classnames';
@@ -18,7 +17,6 @@ import { getCurrentSeconds } from '../time';
 interface IProps {
   stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card
   stopDepartures: Array<Array<Array<IDeparture>>>; // and the final one for the actual departures
-  translations?: Array<ITranslation>;
   alerts: any;
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
@@ -65,7 +63,6 @@ const sortAndFilter = (departures, trainsWithTrack) => {
 const CarouselContainer: FC<IProps> = ({
   stopDepartures,
   stationDepartures,
-  translations,
   alerts,
   preview = false,
   closedStopViews,
@@ -223,9 +220,6 @@ const CarouselContainer: FC<IProps> = ({
       view={newView}
       currentLang={languages[language]}
       departures={departures}
-      translatedStrings={
-        translations ? translations.filter(t => t.lang === lan) : []
-      }
       isPreview={preview}
       alertState={alertState}
       alertComponent={alertComponent}

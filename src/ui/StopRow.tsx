@@ -58,10 +58,16 @@ const StopRow: FC<IProps> = ({
     }
   };
   const isDouble = stop.layout > 8 && stop.layout < 12;
-
-  const stopPatterns = sortBy(stop.patterns, 'route.shortName').map(pattern => {
-    return stringifyPattern(pattern);
-  });
+  const stopPatterns = sortBy(stop.patterns, 'route.shortName')
+    // in OTP-2 query returns also temporary changes etc, which exposes originalTripPattern object. We don't want those patterns here.
+    .filter(
+      pattern =>
+        pattern.originalTripPattern === null ||
+        pattern.originalTripPattern === undefined,
+    )
+    .map(pattern => {
+      return stringifyPattern(pattern);
+    });
 
   const combinedPatterns = uniqWith(stopPatterns);
 

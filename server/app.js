@@ -19,12 +19,16 @@ import {
   createMonitor,
 } from './openID.js';
 
-const FavouriteHost =
-  process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
+const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
+const FavouriteHost = process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
 
 const NotificationHost =
   process.env.NOTIFICATION_HOST ||
   'https://test.hslfi.hsldev.com/user/api/v1/notifications';
+
+const apiSubscriptionParameter = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
+  ? `${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
+  : '';
 
 const MAP_URL = process.env.MAP_URL
   ? process.env.MAP_URL
@@ -52,13 +56,8 @@ app.get('/api/monitor/:id', (req, res, next) => {
 });
 
 app.use('/api/graphql', (req, res, next) => {
-  const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
-  const endpoint =
-    req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
-  const queryparams = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
-    ? `?${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
-    : '';
-  const url = `${baseurl}/${endpoint}${queryparams}`;
+  const endpoint = req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
+  const url = `${baseurl}/${endpoint}?${apiSubscriptionParameter}`;
   axios({
     headers: { 'content-type': 'application/json' },
     method: req.method,
@@ -72,13 +71,8 @@ app.use('/api/graphql', (req, res, next) => {
 });
 
 app.get('/api/geocoding/:endpoint', (req, res, next) => {
-  const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
   const endpoint = `/geocoding/v1/${req.params.endpoint}`;
-  const apiSubscriptionParameter = process.env
-    .API_SUBSCRIPTION_QUERY_PARAMETER_NAME
-    ? `&${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
-    : '';
-  const url = `${baseurl}/${endpoint}?${req._parsedUrl.query}${apiSubscriptionParameter}`;
+  const url = `${baseurl}/${endpoint}?${req._parsedUrl.query}&${apiSubscriptionParameter}`;
 
   axios
     .get(url)
@@ -89,10 +83,6 @@ app.get('/api/geocoding/:endpoint', (req, res, next) => {
 });
 
 app.get('/api/map', (req, res) => {
-  const apiSubscriptionParameter = process.env
-    .API_SUBSCRIPTION_QUERY_PARAMETER_NAME
-    ? `&${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
-    : '';
   const url = `${MAP_URL}?${apiSubscriptionParameter}`;
   return res.status(200).json(url);
 });
@@ -102,15 +92,6 @@ app.put('/api/monitor', (req, res, next) => {
 });
 
 app.get('/api/status', (req, res) => res.status(200).json({ status: 'OK' }));
-
-app.get('/api/translations/:recordIds', (req, res, next) => {
-  const ids = req.params.recordIds.split(',');
-  getTranslations({ trans_id: ids })
-    .then(t => {
-      res.json(t);
-    })
-    .catch(e => next(e));
-});
 
 app.get('/api/staticmonitor/:id', (req, res, next) => {
   monitorService.getStatic(req, res, next);
@@ -171,8 +152,7 @@ app.get(
   userAuthenticated,
   (req, res, next) => {
     getMonitors(req, res, next);
-  },
-);
+  });
 
 app.get('/api/userowned/:id', userAuthenticated, (req, res, next) => {
   isUserOwnedMonitor(req, res, next);

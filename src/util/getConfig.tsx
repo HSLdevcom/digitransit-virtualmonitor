@@ -37,6 +37,8 @@ export const getConfig = () => {
     theme = 'vaasa';
   } else if (domain.indexOf('oulu') >= 0) {
     theme = 'oulu';
+  } else if (domain.indexOf('osl') >= 0) {
+    theme = 'oulu';
   } else {
     theme = 'hsl';
   }

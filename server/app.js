@@ -56,7 +56,7 @@ app.get('/api/monitor/:id', (req, res, next) => {
 });
 
 app.use('/api/graphql', (req, res, next) => {
-  const endpoint = req.headers['graphql-endpoint'] ?? 'routing/v1/routers/hsl/index/graphql';
+  const endpoint = req.headers['graphql-endpoint'] ?? 'routing/v2/routers/hsl/index/graphql';
   const url = `${baseurl}/${endpoint}?${apiSubscriptionParameter}`;
   axios({
     headers: { 'content-type': 'application/json' },

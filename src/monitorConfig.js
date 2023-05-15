@@ -175,7 +175,7 @@ export default {
   },
   oulu: {
     name: 'oulu',
-    uri: 'routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v2/routers/waltti/index/graphql',
     feedIds: ['OULU'],
     colors: {
       primary: '#E10669',

@@ -65,6 +65,19 @@ export const stopsAndStationsFromViews = views => {
   });
   return [stopIds, stationIds];
 };
+const getRenameID = (stops, item) => {
+  let renamID = null;
+  stops.forEach(stop => {
+    const id = stop.patterns.find(
+      s => s.headsign === item.trip?.tripHeadsign,
+    )?.headsign;
+    if (id) {
+      renamID = id;
+      return id;
+    }
+  });
+  return renamID;
+};
 
 export const filterDepartures = (
   stop,
@@ -82,6 +95,12 @@ export const filterDepartures = (
     if (!hiddenRoutes.includes(combinedPattern)) {
       let stoptimes = [];
       stoptimeList.stoptimes.forEach(item => {
+        const renameID = getRenameID(
+          Array.isArray(stop.stops) ? stop.stops : [stop],
+          item,
+        ); // stop?.patterns.find(
+        //   s => s.headsign === item.trip?.tripHeadsign,
+        // ).headsign;
         if (showEndOfLine || item.pickupType !== 'NONE') {
           stoptimes.push({
             ...item,
@@ -89,6 +108,7 @@ export const filterDepartures = (
             showStopNumber: showStopNumber,
             showVia: showVia,
             vehicleMode: stop.vehicleMode?.toLowerCase(),
+            renameID: renameID,
           });
         }
       });

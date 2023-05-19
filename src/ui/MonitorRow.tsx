@@ -45,6 +45,7 @@ export interface IDeparture {
   showStopNumber: boolean;
   showVia: boolean;
   vehicleMode: string;
+  renameID?: string;
 }
 
 interface IProps {
@@ -129,15 +130,20 @@ const MonitorRow: FC<IProps> = ({
   const isCancelled = departure.realtimeState === 'CANCELED';
   const departureDestination = getDepartureDestination(departure, currentLang);
   const renamedDestination = renamedDestinations.find(dest => {
-    const headsign = departureDestination
-      ? departureDestination.split(' via ')[0]
-      : '';
     const renameDestId = (
       departure.trip.route.gtfsId.toLowerCase() +
       ' - ' +
-      headsign
-    ).toLowerCase();
-    const found = dest.pattern.toLowerCase() === renameDestId;
+      departure.renameID
+    )
+      .toLowerCase()
+      .replace(/\(m\)/g, '');
+    const metroDest =
+      dest.pattern.indexOf('(M)') > -1
+        ? dest.pattern.replace(/\(M\)/g, '').toLowerCase().trim()
+        : null;
+    const found = metroDest
+      ? metroDest === renameDestId.trim()
+      : dest.pattern.toLowerCase() === renameDestId;
     // Backwards combatibility
     if (!found) {
       return dest.pattern === departure.combinedPattern;

@@ -82,7 +82,6 @@ const StopRoutesModal: FC<Props> = props => {
     setSettings(newSettings);
   };
 
-
   const checkHiddenRoute = option => {
     if (option === 'all') {
       const routes =

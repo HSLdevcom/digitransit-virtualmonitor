@@ -98,9 +98,8 @@ export const filterDepartures = (
         const renameID = getRenameID(
           Array.isArray(stop.stops) ? stop.stops : [stop],
           item,
-        ); // stop?.patterns.find(
-        //   s => s.headsign === item.trip?.tripHeadsign,
-        // ).headsign;
+        );
+
         if (showEndOfLine || item.pickupType !== 'NONE') {
           stoptimes.push({
             ...item,

@@ -17,6 +17,7 @@ export interface IStop {
   code: string;
   platformCode: string;
   parentStation: any;
+  vehicleMode?: string;
 }
 interface ITrip {
   tripHeadsign: string;
@@ -44,7 +45,22 @@ export interface IDeparture {
   combinedPattern?: string;
   showStopNumber: boolean;
   showVia: boolean;
-  vehicleMode: string;
+  vehicleMode:
+    | null
+    | ''
+    | 'AIRPLANE'
+    | 'BICYCLE'
+    | 'BUS'
+    | 'CABLE_CAR'
+    | 'CAR'
+    | 'FERRY'
+    | 'FUNICULAR'
+    | 'GONDOLA'
+    | 'RAIL'
+    | 'SUBWAY'
+    | 'TRAM'
+    | 'TRANSIT'
+    | 'WALK';
 }
 
 interface IProps {
@@ -207,9 +223,12 @@ const MonitorRow: FC<IProps> = ({
     replaceViaMetroStringWithIcon = true;
     viaDestination = viaDestination.substring(0, viaMetroStringIdx).trimEnd();
   }
-
   let lineLen = departure.trip?.route.shortName?.length;
-  const stopCode = departure.stop?.platformCode || departure.stop?.code;
+  const vehicleMode = departure.stop?.vehicleMode;
+  const stopCode =
+    vehicleMode === 'RAIL'
+      ? departure.stop?.platformCode
+      : departure.stop?.platformCode || departure.stop?.code;
   const stopCodeLen = stopCode?.length;
   const departureTime = getDepartureTime(
     departure.realtimeDeparture,

@@ -10,6 +10,7 @@ import Modal from 'react-modal';
 import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext } from '../contexts';
+import { getRenameDestinationId } from '../util/headsignUtils';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
@@ -81,8 +82,6 @@ const StopRoutesModal: FC<Props> = props => {
     setSettings(newSettings);
   };
 
-  const getRenameDestinationId = (patternArray: string[], gtfsId: string) =>
-    gtfsId + ' - ' + patternArray[3];
 
   const checkHiddenRoute = option => {
     if (option === 'all') {
@@ -148,7 +147,7 @@ const StopRoutesModal: FC<Props> = props => {
       props.combinedPatterns.forEach(p => {
         const patArr = p.split(':');
         const gtfsID = [patArr[0], patArr[1]].join(':');
-        const renameDestId = getRenameDestinationId(patArr, gtfsID);
+        const renameDestId = getRenameDestinationId(patArr[3], gtfsID);
         const inputFI = document?.getElementById(
           `fi-${renameDestId}`,
         ) as HTMLInputElement;
@@ -336,7 +335,7 @@ const StopRoutesModal: FC<Props> = props => {
           {props.combinedPatterns.map((pattern, index) => {
             const patternArray = pattern.split(':');
             const gtfsID = [patternArray[0], patternArray[1]].join(':');
-            const renameId = getRenameDestinationId(patternArray, gtfsID);
+            const renameId = getRenameDestinationId(patternArray[3], gtfsID);
             const renamedDestination = renamings?.find(d => {
               return d.pattern === renameId;
             });

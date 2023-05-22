@@ -5,6 +5,7 @@ import Icon from './Icon';
 import { capitalize, getDepartureDestination } from '../util/monitorUtils';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from '../contexts';
+import { getRenameDestinationId, trimMetroIcon } from '../util/headsignUtils';
 
 interface IRoute {
   alerts: any;
@@ -130,20 +131,19 @@ const MonitorRow: FC<IProps> = ({
   const isCancelled = departure.realtimeState === 'CANCELED';
   const departureDestination = getDepartureDestination(departure, currentLang);
   const renamedDestination = renamedDestinations.find(dest => {
-    const renameDestId = (
-      departure.trip.route.gtfsId.toLowerCase() +
-      ' - ' +
-      departure.renameID
-    )
-      .toLowerCase()
-      .replace(/\(m\)/g, '');
+    const renameDestId = trimMetroIcon(
+      getRenameDestinationId(
+        departure.renameID,
+        departure.trip.route.gtfsId.toLowerCase(),
+      ),
+    );
+
     const metroDest =
-      dest.pattern.indexOf('(M)') > -1
-        ? dest.pattern.replace(/\(M\)/g, '').toLowerCase().trim()
-        : null;
+      dest.pattern.indexOf('(M)') > -1 ? trimMetroIcon(dest.pattern) : null;
     const found = metroDest
-      ? metroDest === renameDestId.trim()
+      ? metroDest === renameDestId
       : dest.pattern.toLowerCase() === renameDestId;
+
     // Backwards combatibility
     if (!found) {
       return dest.pattern === departure.combinedPattern;

@@ -86,6 +86,10 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     );
   }
 
+  RedisClient.on('error', err => {
+    console.error(err);
+  });
+
   // Use Passport with OpenId Connect strategy to authenticate users
   const hslStrategyName = 'passport-openid-connect-hsl';
   const walttiStrategyName = 'passport-openid-connect-waltti';

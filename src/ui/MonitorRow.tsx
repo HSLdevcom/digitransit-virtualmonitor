@@ -140,7 +140,7 @@ const MonitorRow: FC<IProps> = ({
 
     const metroDest =
       dest.pattern.toLowerCase().indexOf('(m)') > -1
-        ? trimMetroIcon(dest.pattern).replace(/\s{2,}/g, ' ')
+        ? trimMetroIcon(dest.pattern)
         : null;
     const found = metroDest
       ? metroDest === renameDestId

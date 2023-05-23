@@ -183,7 +183,6 @@ const StopCardRow: FC<IProps> = ({
             };
             return {
               ...stationWithGTFS,
-              code: station.stops[0].code, //t('station'),
               desc: station.stops[0].desc,
               patterns: sortBy(
                 sortBy(patterns, 'pattern.route.shortname'),

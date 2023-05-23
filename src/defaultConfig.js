@@ -51,4 +51,7 @@ export default {
     favourites: false,
   },
   useTilde: true,
+  map: {
+    inUse: false,
+  },
 };

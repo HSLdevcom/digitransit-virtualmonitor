@@ -10,7 +10,6 @@ import {
   Coordinate,
   IMapSettings,
   IMessage,
-  IMqttState,
 } from '../util/Interfaces';
 import VehicleIcon from '../Vehicleicon';
 import { DateTime } from 'luxon';
@@ -23,23 +22,17 @@ interface IProps {
   modal?: boolean;
   updateMap?: (settings: IMapSettings) => void;
   messages?: Array<IMessage>;
-  currentState?: IMqttState;
+  clientRef: any;
   newTopics?: string[];
-  setState?: (settings: IMqttState) => void;
+  topicRef: any;
 }
 const EXPIRE_TIME_SEC = 120;
 const getVehicleIcon = message => {
-  const { id, heading, shortName, color } = message;
+  const { heading, shortName, color } = message;
   return L.divIcon({
     className: 'vehicle',
     html: ReactDOMServer.renderToString(
-      <VehicleIcon
-        className={undefined}
-        id={id}
-        rotate={heading}
-        color={color}
-        vehicleNumber={shortName}
-      />,
+      <VehicleIcon rotate={heading} color={color} vehicleNumber={shortName} />,
     ),
     iconSize: [30, 30],
     iconAnchor: [15, 30],
@@ -59,9 +52,9 @@ const MonitorMap: FC<IProps> = ({
   modal,
   updateMap,
   messages,
-  currentState,
+  clientRef,
   newTopics,
-  setState,
+  topicRef,
 }) => {
   const config = useContext(ConfigContext);
   const [map, setMap] = useState<any>();
@@ -137,7 +130,7 @@ const MonitorMap: FC<IProps> = ({
   }, [map]);
 
   useEffect(() => {
-    let markers = vehicleMarkers ? vehicleMarkers : [];
+    const markers = vehicleMarkers ? vehicleMarkers : [];
     const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
     const now = DateTime.now().toSeconds();
     messages.forEach(m => {
@@ -173,23 +166,7 @@ const MonitorMap: FC<IProps> = ({
         if (marker) {
           if (marker.expire) {
             if (marker.expire <= now) {
-              markers.splice(marker.id, 1);
-              const settings = {
-                oldTopics: currentState.topics,
-                client: currentState.client,
-                options: newTopics,
-              };
-              changeTopics(settings, setState);
-              markers = [];
-              map.eachLayer(layer => {
-                if (
-                  layer.options.icon &&
-                  layer.options.icon?.options.className === 'vehicle'
-                ) {
-                  layer.remove();
-                }
-              });
-              // map.removeLayer(marker.marker);
+              marker.remove = true;
             } else {
               updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
             }
@@ -200,28 +177,28 @@ const MonitorMap: FC<IProps> = ({
         }
       }
     });
-    // Handle vehicles that does not receive new messages, i.e. vehicles reaching end of lines.
-    markers.forEach(m => {
-      if (now - m.lastUpdatedAt >= EXPIRE_TIME_SEC) {
-        const settings = {
-          oldTopics: currentState.topics,
-          client: currentState.client,
-          options: newTopics,
-        };
-        changeTopics(settings, setState);
-        markers = [];
-        map.eachLayer(layer => {
-          if (
-            layer.options.icon &&
-            layer.options.icon?.options.className === 'vehicle'
-          ) {
-            layer.remove();
-          }
-        });
+    // Handle vehicle removoal
+    const markersToRemove = [];
+    const filtered = markers.filter(m => {
+      if (now - m.lastUpdatedAt >= EXPIRE_TIME_SEC || m.remove) {
+        markersToRemove.push(m.marker);
+        return false;
       }
-      return m;
+      return true;
     });
-    setVehicleMarkers(markers);
+    if (markersToRemove.length > 0) {
+      for (let index = 0; index < markersToRemove.length; index++) {
+        map.removeLayer(markersToRemove[index]);
+      }
+      const settings = {
+        oldTopics: topicRef.current,
+        client: clientRef.current,
+        options: newTopics,
+      };
+      changeTopics(settings, topicRef);
+    }
+
+    setVehicleMarkers(filtered);
   }, [messages]);
 
   return (

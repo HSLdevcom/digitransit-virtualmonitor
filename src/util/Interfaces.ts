@@ -53,6 +53,7 @@ export interface IPattern {
   code: string;
   headsign: string;
   route: IRoute;
+  originalTripPattern?: IPattern;
 }
 
 export interface ISides {

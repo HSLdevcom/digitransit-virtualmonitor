@@ -65,6 +65,19 @@ export const stopsAndStationsFromViews = views => {
   });
   return [stopIds, stationIds];
 };
+const getRenameID = (stops, item) => {
+  let renamID = null;
+  stops.forEach(stop => {
+    const id = stop.patterns.find(
+      s => s.headsign === item.trip?.tripHeadsign,
+    )?.headsign;
+    if (id) {
+      renamID = id;
+      return id;
+    }
+  });
+  return renamID;
+};
 
 export const filterDepartures = (
   stop,
@@ -82,6 +95,11 @@ export const filterDepartures = (
     if (!hiddenRoutes.includes(combinedPattern)) {
       let stoptimes = [];
       stoptimeList.stoptimes.forEach(item => {
+        const renameID = getRenameID(
+          Array.isArray(stop.stops) ? stop.stops : [stop],
+          item,
+        );
+
         if (showEndOfLine || item.pickupType !== 'NONE') {
           stoptimes.push({
             ...item,
@@ -89,6 +107,7 @@ export const filterDepartures = (
             showStopNumber: showStopNumber,
             showVia: showVia,
             vehicleMode: stop.vehicleMode?.toLowerCase(),
+            renameID: renameID,
           });
         }
       });
@@ -106,26 +125,6 @@ export const filterDepartures = (
   });
   return departures;
 };
-const getTranslationStringsForStop = (stop, hiddenRoutes) => {
-  const stringsToTranslate = [];
-  stop.stoptimesForPatterns.forEach(stopTimeForPattern => {
-    if (!hiddenRoutes.includes(stringifyPattern(stopTimeForPattern.pattern))) {
-      let headsign = stopTimeForPattern.stoptimes[0].headsign;
-      if (headsign?.includes(' via ')) {
-        const destinations = headsign.split(' via ');
-        stringsToTranslate.push(...destinations);
-      } else if (headsign?.endsWith(' via')) {
-        headsign = headsign.substring(0, headsign.indexOf(' via'));
-        stringsToTranslate.push(headsign);
-      } else {
-        if (headsign) {
-          stringsToTranslate.push(headsign);
-        }
-      }
-    }
-  });
-  return stringsToTranslate;
-};
 
 export const createDepartureArray = (
   views,
@@ -141,7 +140,6 @@ export const createDepartureArray = (
     renamedDestinations: [],
   };
   const departures = [];
-  const stringsToTranslate = [];
   const alerts = [];
   const closedStopViews: Array<IClosedStop> = [];
 
@@ -209,16 +207,10 @@ export const createDepartureArray = (
 
             if (isStation) {
               stop.stops.forEach(s => {
-                stringsToTranslate.push(
-                  ...getTranslationStringsForStop(stop, hiddenRoutes),
-                );
                 alerts.push(...s.alerts);
                 s.routes.forEach(r => alerts.push(...r.alerts));
               });
             } else {
-              stringsToTranslate.push(
-                ...getTranslationStringsForStop(stop, hiddenRoutes),
-              );
               alerts.push(...stop.alerts);
               stop.routes.forEach(r => alerts.push(...r.alerts));
             }
@@ -253,7 +245,7 @@ export const createDepartureArray = (
   if (process.env.NODE_ENV === 'development' && dummyAlerts.inUse) {
     arr = arr.concat(getDummyAlerts(initTime));
   }
-  return [stringsToTranslate, departures, arr, closedStopViews];
+  return [departures, arr, closedStopViews];
 };
 
 export function getWeatherData(time, lat, lon) {
@@ -418,6 +410,16 @@ export const uuidValidateV5 = uuid => {
 
 export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
   `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;
+
+export const getDepartureDestination = (departure, lang) => {
+  return departure['headsign' + lang]
+    ? departure['headsign' + lang]
+    : departure.trip && departure.trip['tripHeadsign' + lang]
+    ? departure.trip['tripHeadsign' + lang]
+    : departure['headsign']
+    ? departure['headsign']
+    : null;
+};
 
 type Coordinate = [number, number];
 type BoundingBox = [Coordinate, Coordinate];

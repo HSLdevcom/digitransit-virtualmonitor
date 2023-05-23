@@ -1,7 +1,7 @@
-query stopQuery($ids: [String]) @api(contextKey: "clientName") {
+query stopQuery($ids: [String], $language: String!) @api(contextKey: "clientName") {
   stop: stops(ids: $ids) {
     id
-    name
+    name(language: $language)
     code
     desc
     gtfsId
@@ -24,9 +24,16 @@ query stopQuery($ids: [String]) @api(contextKey: "clientName") {
       }
     }
     stoptimesForPatterns {
+      stoptimes {
+        headsign
+      }
       pattern {
         code
         headsign
+        originalTripPattern {
+			    code
+          name
+			  }
         route {
           mode
           type

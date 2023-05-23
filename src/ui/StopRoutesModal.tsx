@@ -10,6 +10,7 @@ import Modal from 'react-modal';
 import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext } from '../contexts';
+import { getRenameDestinationId } from '../util/headsignUtils';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
@@ -143,9 +144,18 @@ const StopRoutesModal: FC<Props> = props => {
   const handleDeleteRenamings = event => {
     if (event === null || isKeyboardSelectionEvent(event, true)) {
       props.combinedPatterns.forEach(p => {
-        const inputFI = document?.getElementById(`fi-${p}`) as HTMLInputElement;
-        const inputSV = document?.getElementById(`sv-${p}`) as HTMLInputElement;
-        const inputEN = document?.getElementById(`en-${p}`) as HTMLInputElement;
+        const patArr = p.split(':');
+        const gtfsID = [patArr[0], patArr[1]].join(':');
+        const renameDestId = getRenameDestinationId(patArr[3], gtfsID);
+        const inputFI = document?.getElementById(
+          `fi-${renameDestId}`,
+        ) as HTMLInputElement;
+        const inputSV = document?.getElementById(
+          `sv-${renameDestId}`,
+        ) as HTMLInputElement;
+        const inputEN = document?.getElementById(
+          `en-${renameDestId}`,
+        ) as HTMLInputElement;
         if (inputFI) inputFI.value = '';
         if (inputSV) inputSV.value = '';
         if (inputEN) inputEN.value = '';
@@ -322,11 +332,13 @@ const StopRoutesModal: FC<Props> = props => {
             </div>
           )}
           {props.combinedPatterns.map((pattern, index) => {
-            const renamedDestination = renamings?.find(
-              d => d.pattern === pattern,
-            );
             const patternArray = pattern.split(':');
             const gtfsID = [patternArray[0], patternArray[1]].join(':');
+            const renameId = getRenameDestinationId(patternArray[3], gtfsID);
+            const renamedDestination = renamings?.find(d => {
+              return d.pattern === renameId;
+            });
+
             const { route } = props.stop.patterns.find(
               p => p.route.gtfsId === gtfsID,
             );
@@ -364,9 +376,9 @@ const StopRoutesModal: FC<Props> = props => {
                   {props.languages.map(lang => (
                     <input
                       tabIndex={showInputs ? 1 : -1}
-                      key={`${lang}-${pattern}`}
-                      id={`${lang}-${pattern}`}
-                      name={pattern}
+                      key={`${lang}-${renameId}`}
+                      id={`${lang}-${renameId}`}
+                      name={renameId}
                       className={cx(lang, !showInputs ? 'readonly' : '')}
                       defaultValue={
                         renamedDestination?.[lang]

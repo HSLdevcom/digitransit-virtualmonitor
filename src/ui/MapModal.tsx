@@ -72,7 +72,7 @@ const MapModal: FC<Props> = ({
           updateMap={setState}
           modal
         ></MonitorMapContainer>
-        <button className="btn" onClick={() => handleClick()}>
+        <button className="btn map-btn" onClick={() => handleClick()}>
           {t('confirm-choice')}
         </button>
       </div>

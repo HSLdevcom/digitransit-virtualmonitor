@@ -4,7 +4,6 @@ import MonitorRow, { IDeparture } from './MonitorRow';
 import cx from 'classnames';
 import { formatDate, setDate, formattedDateTimeFromSeconds } from '../time';
 import { getLayout } from '../util/getResources';
-import { ITranslation } from './TranslationContainer';
 import { IClosedStop } from '../util/Interfaces';
 import { useTranslation } from 'react-i18next';
 import { stoptimeSpecificDepartureId } from '../util/monitorUtils';
@@ -15,7 +14,6 @@ interface IProps {
   departuresRight: Array<IDeparture>;
   rightStops: Array<any>;
   leftStops: Array<any>;
-  translatedStrings: Array<ITranslation>;
   currentLang: string;
   layout: any;
   isLandscape: boolean;
@@ -34,7 +32,6 @@ const MonitorRowContainer: FC<IProps> = ({
   departuresRight,
   rightStops,
   leftStops,
-  translatedStrings,
   currentLang,
   layout,
   isLandscape,
@@ -113,7 +110,6 @@ const MonitorRowContainer: FC<IProps> = ({
       <MonitorRow
         key={departure ? stoptimeSpecificDepartureId(departure) : `row_l${i}`}
         departure={departure}
-        translations={translatedStrings}
         isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
         showVia={
           layout < 4 ||
@@ -154,7 +150,6 @@ const MonitorRowContainer: FC<IProps> = ({
               departure ? stoptimeSpecificDepartureId(departure) : `row_c${i}`
             }
             departure={departure}
-            translations={translatedStrings}
             isFirst={
               i === leftColumnCountWithAlerts ||
               i - 1 === nextDayDepartureIndexLeft
@@ -187,7 +182,6 @@ const MonitorRowContainer: FC<IProps> = ({
             departure={departure}
             isTwoRow={rightColumnCount === 4 || layout === 12}
             stops={rightStops}
-            translations={translatedStrings}
             isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
             showVia={rightColumnCount === 4}
             withTwoColumns={withTwoColumns}

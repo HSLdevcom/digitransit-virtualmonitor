@@ -184,6 +184,10 @@ const App: FC<IConfigurationProps> = props => {
     <link key={font.toString()} rel="stylesheet" type="text/css" href={font} />
   ));
 
+  if (localStorage.getItem('lang') == null) {
+    localStorage.setItem('lang', 'fi');
+  }
+
   return (
     <div className="App">
       <Helmet>

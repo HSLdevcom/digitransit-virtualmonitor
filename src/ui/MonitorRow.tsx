@@ -1,11 +1,11 @@
 import React, { FC, useContext } from 'react';
 import { getDepartureTime } from '../time';
 import cx from 'classnames';
-import { ITranslation } from './TranslationContainer';
 import Icon from './Icon';
-import { capitalize } from '../util/monitorUtils';
+import { capitalize, getDepartureDestination } from '../util/monitorUtils';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from '../contexts';
+import { getRenameDestinationId, trimMetroIcon } from '../util/headsignUtils';
 
 interface IRoute {
   alerts: any;
@@ -18,9 +18,13 @@ export interface IStop {
   code: string;
   platformCode: string;
   parentStation: any;
+  vehicleMode?: string;
 }
 interface ITrip {
   tripHeadsign: string;
+  tripHeadsignfi: string;
+  tripHeadsignsv: string;
+  tripHeadsignen: string;
   route: IRoute;
   stops: Array<IStop>;
   gtfsId: string;
@@ -31,6 +35,9 @@ export interface IDeparture {
   trip: ITrip;
   route: any;
   headsign: string;
+  headsignfi: string;
+  headsignsv: string;
+  headsignen: string;
   realtimeDeparture: number;
   scheduledDeparture?: number;
   realtime: boolean;
@@ -39,13 +46,28 @@ export interface IDeparture {
   combinedPattern?: string;
   showStopNumber: boolean;
   showVia: boolean;
-  vehicleMode: string;
+  renameID?: string;
+  vehicleMode:
+    | null
+    | ''
+    | 'AIRPLANE'
+    | 'BICYCLE'
+    | 'BUS'
+    | 'CABLE_CAR'
+    | 'CAR'
+    | 'FERRY'
+    | 'FUNICULAR'
+    | 'GONDOLA'
+    | 'RAIL'
+    | 'SUBWAY'
+    | 'TRAM'
+    | 'TRANSIT'
+    | 'WALK';
 }
 
 interface IProps {
   isTwoRow: boolean;
   departure: IDeparture;
-  translations?: Array<ITranslation>;
   stops: Array<any>;
   isFirst?: boolean;
   showVia?: boolean;
@@ -55,6 +77,9 @@ interface IProps {
   currentLang: string;
   showMinutes: number;
   withoutRouteColumn: boolean;
+  headsignfi?: string;
+  headsignsv?: string;
+  headsignen?: string;
 }
 
 const isCharacter = char => {
@@ -91,7 +116,6 @@ const MonitorRow: FC<IProps> = ({
   isTwoRow,
   currentLang,
   stops,
-  translations,
   dayForDivider,
   showMinutes,
   withoutRouteColumn,
@@ -121,26 +145,23 @@ const MonitorRow: FC<IProps> = ({
   );
 
   const isCancelled = departure.realtimeState === 'CANCELED';
-
-  const departureDestination =
-    departure.headsign && departure.headsign.endsWith(' via')
-      ? departure.headsign.substring(0, departure.headsign.indexOf(' via'))
-      : departure.headsign || departure.trip?.tripHeadsign;
-
-  const d = translations?.find(
-    t => t.trans_id === departureDestination?.split(' via')[0],
-  );
-
+  const departureDestination = getDepartureDestination(departure, currentLang);
   const renamedDestination = renamedDestinations.find(dest => {
-    const headsign = departure.headsign
-      ? departure.headsign.split(' via')[0]
-      : '';
-    const renameDestId = (
-      departure.trip.route.gtfsId +
-      ' - ' +
-      headsign
-    ).toLowerCase();
-    const found = dest.pattern.toLowerCase() === renameDestId;
+    const renameDestId = trimMetroIcon(
+      getRenameDestinationId(
+        departure.renameID,
+        departure.trip.route.gtfsId.toLowerCase(),
+      ),
+    );
+
+    const metroDest =
+      dest.pattern.toLowerCase().indexOf('(m)') > -1
+        ? trimMetroIcon(dest.pattern)
+        : null;
+    const found = metroDest
+      ? metroDest === renameDestId
+      : dest.pattern.toLowerCase() === renameDestId;
+
     // Backwards combatibility
     if (!found) {
       return dest.pattern === departure.combinedPattern;
@@ -152,7 +173,7 @@ const MonitorRow: FC<IProps> = ({
   if (renamedDestination && renamedDestination[currentLang] !== '') {
     destination = renamedDestination[currentLang];
   } else {
-    destination = d ? d.translation : capitalize(departureDestination);
+    destination = capitalize(departureDestination);
   }
 
   const splitDestination =
@@ -169,11 +190,14 @@ const MonitorRow: FC<IProps> = ({
       ? departureDestination.substring(departureDestination.indexOf(' via') + 1)
       : '';
     if (splitDestination) {
-      const t = translations?.find(
-        t => t.trans_id === viaDestination.substring(4, viaDestination.length),
-      )?.translation;
+      const t =
+        departureDestination?.substring(
+          departureDestination.indexOf(' via') + 1,
+        ) === viaDestination
+          ? departureDestination.split(' via ')
+          : null;
       if (t) {
-        viaDestination = ` via ${t}`;
+        viaDestination = ` via ${t[1]}`;
       }
     }
   } else if (renamedDestination && renamedDestination[currentLang] !== '') {
@@ -207,9 +231,12 @@ const MonitorRow: FC<IProps> = ({
     replaceViaMetroStringWithIcon = true;
     viaDestination = viaDestination.substring(0, viaMetroStringIdx).trimEnd();
   }
-
   let lineLen = departure.trip?.route.shortName?.length;
-  const stopCode = departure.stop?.platformCode || departure.stop?.code;
+  const vehicleMode = departure.stop?.vehicleMode;
+  const stopCode =
+    vehicleMode === 'RAIL'
+      ? departure.stop?.platformCode
+      : departure.stop?.platformCode || departure.stop?.code;
   const stopCodeLen = stopCode?.length;
   const departureTime = getDepartureTime(
     departure.realtimeDeparture,

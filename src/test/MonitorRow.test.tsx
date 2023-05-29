@@ -16,7 +16,6 @@ const defaultProps = {
   showMinutes: 15,
   showVia: true,
   stops: [stop],
-  translations: [],
   withTwoColumns: false,
   withoutRouteColumn: false,
 };

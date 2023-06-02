@@ -44,7 +44,6 @@ query GetDeparturesForStops($ids: [String!]!, $numberOfDepartures: Int!)
         stop {
           gtfsId
           code
-          vehicleMode
         }
       }
       longName

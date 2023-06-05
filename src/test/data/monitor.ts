@@ -3,12 +3,12 @@ import { IDeparture, IStop } from '../../ui/MonitorRow';
 export const stop: IStop = {
   gtfsId: 'HSL:123123',
   code: 'H1234',
-  platformCode: '3',
+  platformCode: null,
   parentStation: null,
 };
 
 export const departure: IDeparture = {
-  showStopNumber: false,
+  showStopNumber: true,
   showVia: false,
   vehicleMode: '',
   combinedPattern: 'MATKA:60061713:87:Jyväskylä:',

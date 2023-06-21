@@ -156,6 +156,8 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     const token = req?.user?.token;
     if (
       req.isAuthenticated() &&
+      req.session &&
+      token &&
       token.refresh_token &&
       dayjs().unix() >= token.expires_at
     ) {

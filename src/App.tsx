@@ -26,6 +26,9 @@ import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
 import { useTranslation } from 'react-i18next';
 import { listenForLogoutAllTabs } from './util/logoutUtil';
+import { BroadcastChannel } from 'broadcast-channel';
+
+Object.assign(window, { BroadcastChannel });
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
     externalFonts?: Array<string>;

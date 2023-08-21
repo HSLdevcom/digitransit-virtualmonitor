@@ -31,7 +31,7 @@ const BannerHSL = () => {
       fetch(`${config.bannersUri}language=${i18n.language}`)
         .then(res => res.json())
         .then(data => {
-          setBanners([]); // setting alerts to site header is currently causing issues DT-5973
+          setBanners(data);
         });
     }
     return () => controller.abort();

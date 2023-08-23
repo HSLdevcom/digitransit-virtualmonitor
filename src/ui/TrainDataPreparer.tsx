@@ -59,10 +59,16 @@ const createLineIdsArray = (data, hiddenRoutes) => {
 interface IProps {
   stations?: Array<ICard>;
   stops?: Array<ICard>;
+  setQueryError?: any;
   [x: string]: any;
 }
 
-const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
+const TrainDataPreparer: FC<IProps> = ({
+  stations,
+  stops,
+  setQueryError,
+  ...rest
+}) => {
   const defaultState = useQuery(GetLineIdsDocument, {
     variables: {
       stations: stations.map(st => st.gtfsId),
@@ -120,6 +126,7 @@ const TrainDataPreparer: FC<IProps> = ({ stations, stops, ...rest }) => {
     <TrainDataFetcher
       defaultLines={defaultLines ? defaultLines : []}
       stopAndRoutes={stopAndRoutes}
+      setQueryError={setQueryError}
       {...rest}
     />
   );

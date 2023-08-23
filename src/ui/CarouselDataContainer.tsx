@@ -79,7 +79,7 @@ const CarouselDataContainer: FC<IProps> = ({
   const [forceUpdate, setforceUpdate] = useState(false);
   useEffect(() => {
     const stops = stopsState?.data?.stops;
-    if (stopsState?.error && !queryError) {
+    if (stopsState?.error && !queryError && queryError != undefined) {
       setQueryError(true);
     } else if (!stopsState?.error && queryError) {
       setQueryError(false);
@@ -112,7 +112,7 @@ const CarouselDataContainer: FC<IProps> = ({
   }, [stopsState.data, forceUpdate]);
   useEffect(() => {
     const stations = stationsState?.data?.stations;
-    if (stationsState?.error && !queryError) {
+    if (stationsState?.error && !queryError && queryError != undefined) {
       setQueryError(true);
     } else if (!stationsState?.error && queryError) {
       setQueryError(false);

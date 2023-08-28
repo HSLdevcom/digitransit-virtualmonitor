@@ -8,3 +8,4 @@ docker-compose.yml
 node_modules
 server/node_modules
 **/.env
+**/.env.example

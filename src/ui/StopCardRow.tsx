@@ -202,6 +202,14 @@ const StopCardRow: FC<IProps> = ({
   const possibleToMove = cards.length > 1;
   const possibleToDelete = hasMap ? cards.length > 2 : cards.length > 1;
   const filterSearchResults = (results, x) => {
+    if (config.stopSearchFilter) {
+      return results
+        .filter(result => {
+          const gtfsId = getGTFSId(result.properties.id);
+          return !columns.left.stops.some(s => s.gtfsId === gtfsId);
+        })
+        .filter(config.stopSearchFilter);
+    }
     return results.filter(result => {
       const gtfsId = getGTFSId(result.properties.id);
       return !columns.left.stops.some(s => s.gtfsId === gtfsId);

@@ -136,7 +136,7 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
-      inUse: true,
+      inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },

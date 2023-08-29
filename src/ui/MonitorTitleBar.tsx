@@ -67,13 +67,10 @@ const MonitorTitlebar: FC<IProps> = ({
   };
   useEffect(() => {
     fetchWeather();
-    const intervalId = setInterval(
-      () => {
-        fetchWeather();
-        setWeatherFetched(false);
-      },
-      1000 * 60 * 15,
-    ); // in milliseconds
+    const intervalId = setInterval(() => {
+      fetchWeather();
+      setWeatherFetched(false);
+    }, 1000 * 60 * 15); // in milliseconds
     return () => clearInterval(intervalId);
   }, []);
 

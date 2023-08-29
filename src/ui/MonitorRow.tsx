@@ -124,8 +124,8 @@ const MonitorRow: FC<IProps> = ({
     );
   }
   const renamedDestinations = [];
-  stops.forEach(s =>
-    s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
+  stops.forEach(
+    s => s.settings?.renamedDestinations?.map(x => renamedDestinations.push(x)),
   );
 
   const isCancelled = departure.realtimeState === 'CANCELED';

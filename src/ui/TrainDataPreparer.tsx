@@ -89,9 +89,8 @@ const TrainDataPreparer: FC<IProps> = ({
       const lineIds = createLineIdsArray(defaultState.data, hiddenRoutes)
         .map(m => {
           const r = stopAndRoutes[m.parentStation]?.routes;
-          const hslId = trainStationMap?.find(
-            i => i.gtfsId === m.parentStation,
-          )?.shortCode;
+          const hslId = trainStationMap?.find(i => i.gtfsId === m.parentStation)
+            ?.shortCode;
           const shortCode = hslId ? hslId : undefined;
 
           if (!r || r.indexOf(m.shortName) === -1) {

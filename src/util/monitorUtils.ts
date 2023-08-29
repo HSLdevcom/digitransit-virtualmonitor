@@ -68,9 +68,8 @@ export const stopsAndStationsFromViews = views => {
 const getRenameID = (stops, item) => {
   let renamID = null;
   stops.forEach(stop => {
-    const id = stop.patterns.find(
-      s => s.headsign === item.trip?.tripHeadsign,
-    )?.headsign;
+    const id = stop.patterns.find(s => s.headsign === item.trip?.tripHeadsign)
+      ?.headsign;
     if (id) {
       renamID = id;
       return id;

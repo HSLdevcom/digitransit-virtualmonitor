@@ -15,9 +15,9 @@ jobs:
     runs-on: 'ubuntu-latest'
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
 
-    - uses: azure/docker-login@v2
+    - uses: azure/docker-login@v1
       with:
         login-server: https://index.docker.io/v1/
         username: ${{ secrets.AzureAppService_ContainerUsername_43e4c8bef39f4f7d9da4f67dc0bafa48 }}

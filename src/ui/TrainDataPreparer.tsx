@@ -60,6 +60,7 @@ interface IProps {
   stations?: Array<ICard>;
   stops?: Array<ICard>;
   setQueryError?: any;
+  queryError?: boolean;
   [x: string]: any;
 }
 

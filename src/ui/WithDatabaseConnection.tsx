@@ -124,6 +124,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
               stations={stations}
               stops={stops}
               setQueryError={setQueryError}
+              queryError={queryError}
             />
           ) : (
             <CarouselDataContainer

@@ -227,7 +227,8 @@ app.use((err, req, res, next) => {
   console.error(
     `Request error (${err.response?.status}): ${err.message}
     url: ${req.url},
-    operation: ${req.body?.operationName}`
+    operation: ${req.body?.operationName}
+    response: (${err.response.status}) ${err.response.statusText}`
   );
 
   // render the error page

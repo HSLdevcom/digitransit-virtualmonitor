@@ -145,10 +145,12 @@ OICStrategy.prototype.refresh = function (req) {
     })
     .catch(err => {
       console.error('Error refreshing tokens', err);
-      req.logout(function (err) {
-        if (err) { return next(err); }
-      });
-      req.session.destroy();
+      if (req.session) {
+        req.logout(function (err) {
+          if (err) { return next(err); }
+        });
+        req.session.destroy();
+      }
       this.fail(err);
     });
 };

@@ -14,7 +14,7 @@ COPY package.json ./
 COPY ./src ./src
 COPY ./public ./public
 COPY ./server ./server
-RUN npm install --production
+RUN npm install --omit=dev
 # build the app
 RUN npm run build
 RUN cd server && npm install

@@ -94,6 +94,16 @@ export default {
     map: {
       inUse: false,
     },
+    stopSearchFilter: stop => {
+      const props = stop.properties;
+      if (
+        props?.id?.includes('GTFS:HSL') &&
+        props?.addendum?.GTFS?.modes?.includes('RAIL')
+      ) {
+        return false;
+      }
+      return true;
+    },
   },
   tampere: {
     colors: {
@@ -126,7 +136,7 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
-      inUse: true,
+      inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },

@@ -2,7 +2,7 @@
 import passport from 'passport';
 import session from 'express-session';
 import redis from 'redis';
-import axios from 'axios';
+import axios from '../axios-general-instance-config.js';
 import dayjs from 'dayjs';
 import connectRedis from 'connect-redis';
 import Strategy from './Strategy.js';
@@ -156,6 +156,8 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     const token = req?.user?.token;
     if (
       req.isAuthenticated() &&
+      req.session &&
+      token &&
       token.refresh_token &&
       dayjs().unix() >= token.expires_at
     ) {

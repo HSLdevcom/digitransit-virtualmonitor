@@ -111,7 +111,6 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const layout = view.cards[0].layout;
 
   const showInfoDisplay = layout > 17 && layout < 19;
-  const showMapDisplay = layout > 19 && layout < 22;
 
   return (
     <MonitorContext.Provider value={monitor}>
@@ -121,7 +120,12 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
         <>
           {(stations.length || stops.length) &&
           isPlatformOrTrackVisible(view) ? (
-            <TrainDataPreparer stations={stations} stops={stops} />
+            <TrainDataPreparer
+              stations={stations}
+              stops={stops}
+              setQueryError={setQueryError}
+              queryError={queryError}
+            />
           ) : (
             <CarouselDataContainer
               initTime={new Date().getTime()}

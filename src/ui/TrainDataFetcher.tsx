@@ -75,12 +75,14 @@ interface IProps {
   preview?: boolean;
   defaultLines?: any;
   stopAndRoutes?: any;
+  setQueryError?: any;
 }
 
 const TrainDataFetcher: FC<IProps> = ({
   preview = false,
   stopAndRoutes,
   defaultLines,
+  setQueryError,
   ...rest
 }) => {
   const shortCodes = stopAndRoutes
@@ -187,6 +189,7 @@ const TrainDataFetcher: FC<IProps> = ({
       )}
       preview={preview}
       initTime={new Date().getTime()}
+      setQueryError={setQueryError}
       {...rest}
     />
   );

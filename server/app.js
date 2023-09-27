@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import logger from 'morgan';
-import axios from 'axios';
+import axios from './axios-general-instance-config.js';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
@@ -18,6 +18,7 @@ import {
   deleteMonitor,
   createMonitor,
 } from './openID.js';
+import axiosPoolForApi from './axios-api-instance-config.js';
 
 const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
 const FavouriteHost = process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
@@ -58,7 +59,7 @@ app.get('/api/monitor/:id', (req, res, next) => {
 app.use('/api/graphql', (req, res, next) => {
   const endpoint = req.headers['graphql-endpoint'] ?? 'routing/v2/routers/hsl/index/graphql';
   const url = `${baseurl}/${endpoint}?${apiSubscriptionParameter}`;
-  axios({
+  axiosPoolForApi({
     headers: { 'content-type': 'application/json' },
     method: req.method,
     data: JSON.stringify(req.body),
@@ -74,7 +75,7 @@ app.get('/api/geocoding/:endpoint', (req, res, next) => {
   const endpoint = `/geocoding/v1/${req.params.endpoint}`;
   const url = `${baseurl}/${endpoint}?${req._parsedUrl.query}&${apiSubscriptionParameter}`;
 
-  axios
+  axiosPoolForApi
     .get(url)
     .then(response => {
       res.json(response.data);
@@ -159,7 +160,7 @@ app.get('/api/userowned/:id', userAuthenticated, (req, res, next) => {
 });
 
 app.use('/api/user/favourites', userAuthenticated, (req, res) => {
-  axios({
+  axiosPoolForApi({
     headers: { Authorization: `Bearer ${req.user.token.id_token}` },
     method: req.method,
     url: `${FavouriteHost}/${req.user.data.sub}`,
@@ -222,6 +223,13 @@ app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+  
+  console.error(
+    `Request error (${err.response?.status}): ${err.message}
+    url: ${req.url},
+    operation: ${req.body?.operationName}
+    response: (${err.response.status}) ${err.response.statusText}`
+  );
 
   // render the error page
   res.status(err.status || err.response?.status || 500).send(err.message);

@@ -12,7 +12,7 @@
     "@digitransit-component/digitransit-component-autosuggest": "1.9.10",
     "@habx/apollo-multi-endpoint-link": "^2.5.0",
     "@hsl-fi/modal": "^0.3.1",
-    "@hsl-fi/site-header": "4.2.2",
+    "@hsl-fi/site-header": "4.4.2-alpha.34",
     "@react-aria/checkbox": "^3.4.1",
     "@react-aria/focus": "^3.5.0",
     "@react-stately/toggle": "^3.2.3",
@@ -56,6 +56,7 @@
   "scripts": {
     "start-prod": "cd server && npm start",
     "generate": "graphql-codegen --watch",
+    "prepare": "patch-package && husky install",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

@@ -56,7 +56,6 @@
   "scripts": {
     "start-prod": "cd server && npm start",
     "generate": "graphql-codegen --watch",
-    "prepare": "patch-package && husky install",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

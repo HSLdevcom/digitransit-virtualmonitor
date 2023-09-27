@@ -1,7 +1,7 @@
 import { getCurrentSeconds } from '../time';
 import uniqBy from 'lodash/uniqBy';
 import { IClosedStop } from './Interfaces';
-import xmlParser from 'fast-xml-parser';
+import { XMLParser } from 'fast-xml-parser';
 import { trainStationMap } from '../util/trainStations';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import dummyAlerts, { getDummyAlerts } from '../testAlert';
@@ -276,12 +276,14 @@ export function getWeatherData(time, lat, lon) {
           ignoreAttributes: true,
           ignoreNameSpace: true,
         };
-        return xmlParser.parse(str, options);
+        const parser = new XMLParser(options);
+        return parser.parse(str);
       })
       .then(json => {
-        if (json.FeatureCollection?.member) {
-          const data = json.FeatureCollection.member.map(
-            elem => elem.BsWfsElement,
+        const featureCollection = json['wfs:FeatureCollection']['wfs:member'];
+        if (featureCollection) {
+          const data = featureCollection.map(
+            elem => elem['BsWfs:BsWfsElement'],
           );
           return data;
         }

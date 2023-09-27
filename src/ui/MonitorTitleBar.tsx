@@ -48,12 +48,12 @@ const MonitorTitlebar: FC<IProps> = ({
         let weatherData;
         if (Array.isArray(res) && res.length === 3) {
           weatherData = {
-            temperature: res[0].ParameterValue,
-            windSpeed: res[1].ParameterValue,
+            temperature: res[0]['BsWfs:ParameterValue'],
+            windSpeed: res[1]['BsWfs:ParameterValue'],
             time: DateTime.now(),
             // Icon id's and descriptions: https://www.ilmatieteenlaitos.fi/latauspalvelun-pikaohje ->  Sääsymbolien selitykset ennusteissa.
             iconId: checkDayNight(
-              res[2].ParameterValue,
+              res[2]['BsWfs:ParameterValue'],
               DateTime.now(),
               lat,
               lon,

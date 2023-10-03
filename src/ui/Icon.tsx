@@ -111,6 +111,8 @@ import { ReactComponent as Weather173 } from './icons/weather/173.svg';
 import { ReactComponent as UserIcon } from './icons/user-icon.svg';
 import { ReactComponent as QueryErrorAlert } from './icons/query-error-alert.svg';
 import { ReactComponent as MapIcon } from './icons/map.svg';
+import { ReactComponent as SpeedTramStop } from './icons/stop-speedtram.svg';
+import { ReactComponent as SpeedTram } from './icons/tram-speed.svg';
 
 export interface IIconMapProps {
   color?: string;
@@ -251,6 +253,8 @@ const IconMap = (style: IIconMapProps) => {
     'user-icon': <UserIcon style={style} />,
     'query-error-alert': <QueryErrorAlert style={style} />,
     'map-icon': <MapIcon style={style} />,
+    'stop-speedtram': <SpeedTramStop style={style} />,
+    'tram-speed': <SpeedTram style={style} />,
   };
 };
 

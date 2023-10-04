@@ -9,6 +9,7 @@ import DeleteModal from './DeleteModal';
 import { ConfigContext } from '../contexts';
 import InputWithEditIcon from './InputWithEditIcon';
 import { IMapSettings } from '../util/Interfaces';
+import { getStopIcon } from '../util/stopCardUtil';
 
 interface IView {
   name?: string;
@@ -100,10 +101,7 @@ const UserMonitorCard: React.FC<IProps> = ({
                   {colStop.map((stop, j) => {
                     const stopCode = `(${stop.code})`;
                     const mode = stop?.mode;
-                    const icon =
-                      stop.locationType === 'STATION' || mode === 'SUBWAY'
-                        ? `station-${mode?.toLowerCase()}`
-                        : `stop-${mode?.toLowerCase()}`;
+                    const icon = getStopIcon(stop);
                     return (
                       <li key={`stop#${j}`}>
                         <Icon

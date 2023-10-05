@@ -1,8 +1,8 @@
 /* ************************************ Main view layouts ************************************ */
 
-$routeCode-col-width: var(--routeCode-col-width);
-
 /* ********* (also used in preview if preview properties are not defined) ********* */
+
+$routeCode-col-width: var(--routeCode-col-width);
 
 .grid-row {
   grid-template-columns: 21vh 1fr 25vh;

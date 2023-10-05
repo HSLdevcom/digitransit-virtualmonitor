@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, useContext } from 'react';
 import cx from 'classnames';
 import { IView, IClosedStop, IMapSettings } from '../util/Interfaces';
 import MonitorRowContainer from './MonitorRowContainer';
-import { getLayout } from '../util/getResources';
+import { getLayout, getRouteCodeColumnWidth } from '../util/getResources';
 import { IDeparture } from './MonitorRow';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
@@ -68,11 +68,18 @@ const Monitor: FC<IProps> = ({
 
   const windowHeight = windowDimensions.height;
   const windowWidth = windowDimensions.width;
+  const calculatedColumnWidth = getRouteCodeColumnWidth(
+    departures,
+    view,
+    windowHeight,
+  );
+
   const style = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,
     '--monitor-background-color':
       config.colors.monitorBackground || config.colors.primary,
+    '--routeCode-col-width': `${calculatedColumnWidth}px`,
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;

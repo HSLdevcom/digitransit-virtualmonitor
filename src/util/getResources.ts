@@ -180,3 +180,32 @@ export function getLoginUri(configName) {
       return '';
   }
 }
+
+export const getRouteCodeColumnWidth = (departures, view, windowHeight) => {
+  const { leftColumnCount, rightColumnCount } = getLayout(view.layout);
+
+  const departuresOnScreen = departures[0]
+    .slice(0, 8)
+    .concat(departures[1].slice(0, leftColumnCount + rightColumnCount));
+  const longestRouteCodeLength = departuresOnScreen.reduce((a, b) => {
+    return a.trip?.route.shortName?.length > b.trip?.route.shortName?.length
+      ? a
+      : b;
+  }, departuresOnScreen[0]).trip?.route.shortName?.length;
+
+  const routeCodeLength =
+    longestRouteCodeLength < 2 ? 2 : longestRouteCodeLength; // Allow space for column titles when the code itself is too short.
+  const nonDepartureRowHeight = windowHeight * 0.1; // 10% of the view space is not departure rows but logos and titles.
+  const rowHeight = (windowHeight - nonDepartureRowHeight) / leftColumnCount;
+  const minRowsBeforeNoMargin = 15; // Larger views have little to no space between text and line.
+
+  // Magical 25% base margin multiplied by how many times the rows would fit into the biggest view that still has margins = smaller views get more margin.
+  const marginPercentage = 0.25 * (minRowsBeforeNoMargin / leftColumnCount);
+
+  // No margin in large views, smaller views have margin by percentage.
+  const nonTextSpaceHeightInRow =
+    leftColumnCount > minRowsBeforeNoMargin ? 0 : rowHeight * marginPercentage;
+
+  const pixelsPerCharacter = (rowHeight - nonTextSpaceHeightInRow) / 2; // divided by two because font is taller than wide.
+  return routeCodeLength * pixelsPerCharacter;
+};

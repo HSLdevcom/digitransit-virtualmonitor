@@ -54,7 +54,7 @@ const MonitorRowContainer: FC<IProps> = ({
   const nextDay = setDate(1);
   const nextDayDepartureIndexLeft = departuresLeft
     .slice(0, leftColumnCount)
-    .findIndex(departure => departure.serviceDay === nextDay.getTime() / 1000);
+    .findIndex(departure => departure?.serviceDay === nextDay.getTime() / 1000);
 
   if (nextDayDepartureIndexLeft !== -1) {
     departuresLeft.splice(nextDayDepartureIndexLeft, 0, null);

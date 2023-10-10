@@ -3,6 +3,8 @@
 /* ********* (also used in preview if preview properties are not defined) ********* */
 
 $routeCode-col-width: var(--routeCode-col-width);
+$calculated-font-size: var(--fontSize);
+$tightened-font-size: var(--tightenedFontSize);
 
 .grid-row {
   grid-template-columns: 21vh 1fr 25vh;
@@ -145,13 +147,13 @@ $tightened-1st-column-width: $routeCode-col-width;
     font-size: calc((#{var(--height)} - 30vh) / 12);
   }
 
-  font-size: calc((#{var(--height)} - 30vh) / 15);
+  font-size: $calculated-font-size;
 }
 
 /* ********* 6 rows ********* */
 
 .rows6.portrait .grid-row {
-  font-size: calc((#{var(--height)} - 30vh) / 16);
+  font-size: $calculated-font-size;
   grid-template-columns: $tightened-1st-column-width 1fr 15vh;
 
   &.without-route-column {
@@ -181,7 +183,7 @@ $rows8-portrait-1st-col-width: $routeCode-col-width;
     grid-template-columns: auto 17vh;
   }
 
-  font-size: calc((#{var(--height)} - 30vh) / 15);
+  font-size: $calculated-font-size;
 
   .len1,
   .len2 {
@@ -193,7 +195,7 @@ $rows8-portrait-1st-col-width: $routeCode-col-width;
 $rows12-portrait-1st-col-width: $routeCode-col-width;
 
 .rows12.portrait .grid-row {
-  font-size: calc((#{var(--height)} - 30vh) / 18);
+  font-size: $calculated-font-size;
   grid-template-columns: $rows12-portrait-1st-col-width 1fr 17vh;
 
   &.without-route-column {
@@ -219,7 +221,7 @@ $rows16-portrait-1st-col-width: $routeCode-col-width;
     grid-template-columns: auto 15vh;
   }
 
-  font-size: calc((#{var(--height)} - 30vh) / 18);
+  font-size: $calculated-font-size;
 }
 
 .rows16.portrait .grid-row.with-stop-code {
@@ -231,7 +233,6 @@ $rows16-portrait-1st-col-width: $routeCode-col-width;
 }
 
 /* ********* 24 rows ********* */
-$rows24-portrait-font-size: calc((#{var(--height)} - 30vh) / 26);
 $rows24-portrait-1st-col-width: $routeCode-col-width;
 
 .rows24.portrait .grid-row {
@@ -241,7 +242,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
     grid-template-columns: auto 14vh;
   }
 
-  font-size: $rows24-portrait-font-size;
+  font-size: $calculated-font-size;
 }
 
 .rows24.portrait .grid-row.with-stop-code {
@@ -276,7 +277,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
 /* ********* 12 rows ********* */
 .rows12.portrait.tightened .grid-row {
   grid-template-columns: $tightened-1st-column-width 1fr 15vh;
-  font-size: calc((#{var(--height)} - 30vh) / 26);
+  font-size: $tightened-font-size;
 }
 
 .rows12.portrait.tightened .grid-row.with-stop-code {

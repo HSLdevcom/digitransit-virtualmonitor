@@ -5,6 +5,8 @@ interface ILayout {
   isPortrait?: boolean;
   tighten?: Array<number>;
   alertSpan?: number;
+  fontSizeDivider?: number;
+  tightenedFontSizeDivider?: number;
 }
 
 export const getLayout = (layout: number): ILayout => {
@@ -85,6 +87,7 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 15,
       };
     case 13:
       return {
@@ -93,6 +96,7 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 18,
       };
     case 14:
       return {
@@ -101,6 +105,7 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 18,
       };
     case 15:
       return {
@@ -109,6 +114,7 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 26,
       };
     case 16:
       return {
@@ -118,6 +124,7 @@ export const getLayout = (layout: number): ILayout => {
         isPortrait: true,
         tighten: [4, 6],
         alertSpan: 1,
+        fontSizeDivider: 15,
       };
     case 17:
       return {
@@ -127,6 +134,8 @@ export const getLayout = (layout: number): ILayout => {
         isPortrait: true,
         tighten: [6, 12],
         alertSpan: 1,
+        fontSizeDivider: 16,
+        tightenedFontSizeDivider: 26,
       };
     case 18:
       return {
@@ -181,31 +190,22 @@ export function getLoginUri(configName) {
   }
 }
 
-export const getRouteCodeColumnWidth = (departures, view, windowHeight) => {
+export const getRouteCodeColumnWidth = (departures, view, fontSize) => {
   const { leftColumnCount, rightColumnCount } = getLayout(view.layout);
 
   const departuresOnScreen = departures[0]
     .slice(0, 8)
     .concat(departures[1].slice(0, leftColumnCount + rightColumnCount));
-  const longestRouteCodeLength = departuresOnScreen.reduce((a, b) => {
-    return a.trip?.route.shortName?.length > b.trip?.route.shortName?.length
-      ? a
-      : b;
-  }, departuresOnScreen[0]).trip?.route.shortName?.length;
 
-  const routeCodeLength =
-    longestRouteCodeLength < 2 ? 2 : longestRouteCodeLength; // Allow space for column titles when the code itself is too short.
-  const nonDepartureRowHeight = windowHeight * 0.1; // 10% of the view space is not departure rows but logos and titles.
-  const rowHeight = (windowHeight - nonDepartureRowHeight) / leftColumnCount;
-  const minRowsBeforeNoMargin = 15; // Larger views have little to no space between text and line.
+  const longestRouteCodeLength = departuresOnScreen?.reduce((a, b) => {
+    const aLengthValue = a.trip?.route?.shortName?.length;
+    const aLength =
+      aLengthValue !== undefined && aLengthValue !== null ? aLengthValue : a;
+    const bLength = b.trip?.route?.shortName?.length;
+    return aLength > bLength ? aLength : bLength;
+  }, 3); // Minimum length value 3 to allow space for the column title.
 
-  // Magical 25% base margin multiplied by how many times the rows would fit into the biggest view that still has margins = smaller views get more margin.
-  const marginPercentage = 0.25 * (minRowsBeforeNoMargin / leftColumnCount);
-
-  // No margin in large views, smaller views have margin by percentage.
-  const nonTextSpaceHeightInRow =
-    leftColumnCount > minRowsBeforeNoMargin ? 0 : rowHeight * marginPercentage;
-
-  const pixelsPerCharacter = (rowHeight - nonTextSpaceHeightInRow) / 2; // divided by two because font is taller than wide.
-  return routeCodeLength * pixelsPerCharacter;
+  // How much taller letters are compared to width
+  const fontHeightWidthRatio = 1.6;
+  return (fontSize / fontHeightWidthRatio) * longestRouteCodeLength;
 };

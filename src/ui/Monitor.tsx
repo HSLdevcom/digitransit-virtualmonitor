@@ -76,6 +76,9 @@ const Monitor: FC<IProps> = ({
     view,
     fontSize,
   );
+  // The width and height of a vehicle icon.
+  // For clarity icon is a bit bigger than text, except on tightened views where it is adjusted to fit narrower lines.
+  const iconSize = tightenedFontSizeDivider ? fontSize - 1 : fontSize + 10;
 
   const style = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,
@@ -85,6 +88,7 @@ const Monitor: FC<IProps> = ({
     '--routeCode-col-width': `${calculatedColumnWidth}px`,
     '--fontSize': `${fontSize}px`,
     '--tightenedFontSize': `${tightenedFontSize}px`,
+    '--iconSize': `${iconSize}px`,
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;

@@ -203,8 +203,8 @@ export const getRouteCodeColumnWidth = (departures, view, fontSize) => {
       const aLengthValue = a?.trip?.route?.shortName?.length;
       const aLength =
         aLengthValue !== undefined && aLengthValue !== null ? aLengthValue : a;
-      const bLength = b.trip?.route?.shortName?.length;
-      return aLength > bLength ? aLength : bLength;
+      const bLength = b?.trip?.route?.shortName?.length;
+      return bLength === undefined || aLength > bLength ? aLength : bLength;
     }, shortestRouteCodeLength) || shortestRouteCodeLength; // Minimum length to allow space for the column title.
 
   // How much taller letters are compared to width

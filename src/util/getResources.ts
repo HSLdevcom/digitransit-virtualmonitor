@@ -197,13 +197,15 @@ export const getRouteCodeColumnWidth = (departures, view, fontSize) => {
     .slice(0, 8)
     .concat(departures[1].slice(0, leftColumnCount + rightColumnCount));
 
-  const longestRouteCodeLength = departuresOnScreen?.reduce((a, b) => {
-    const aLengthValue = a.trip?.route?.shortName?.length;
-    const aLength =
-      aLengthValue !== undefined && aLengthValue !== null ? aLengthValue : a;
-    const bLength = b.trip?.route?.shortName?.length;
-    return aLength > bLength ? aLength : bLength;
-  }, 3); // Minimum length value 3 to allow space for the column title.
+  const shortestRouteCodeLength = 3;
+  const longestRouteCodeLength =
+    departuresOnScreen?.reduce((a, b) => {
+      const aLengthValue = a?.trip?.route?.shortName?.length;
+      const aLength =
+        aLengthValue !== undefined && aLengthValue !== null ? aLengthValue : a;
+      const bLength = b.trip?.route?.shortName?.length;
+      return aLength > bLength ? aLength : bLength;
+    }, shortestRouteCodeLength) || shortestRouteCodeLength; // Minimum length to allow space for the column title.
 
   // How much taller letters are compared to width
   const fontHeightWidthRatio = 1.6;

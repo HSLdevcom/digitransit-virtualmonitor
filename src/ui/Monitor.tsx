@@ -81,7 +81,6 @@ const Monitor: FC<IProps> = ({
   const iconWidthHeight = tightenedFontSizeDivider
     ? fontSize - 1
     : fontSize + 10;
-  const iconSize = fontSize ? `${iconWidthHeight}px` : '5vh';
 
   const style = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,
@@ -91,7 +90,7 @@ const Monitor: FC<IProps> = ({
     '--routeCode-col-width': `${calculatedColumnWidth}px`,
     '--fontSize': `${fontSize}px`,
     '--tightenedFontSize': `${tightenedFontSize}px`,
-    '--iconSize': iconSize,
+    '--iconSize': fontSize ? `${iconWidthHeight}px` : '5vh',
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;

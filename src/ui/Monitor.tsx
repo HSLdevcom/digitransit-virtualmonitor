@@ -2,7 +2,7 @@ import React, { FC, useState, useEffect, useContext } from 'react';
 import cx from 'classnames';
 import { IView, IClosedStop, IMapSettings } from '../util/Interfaces';
 import MonitorRowContainer from './MonitorRowContainer';
-import { getLayout } from '../util/getResources';
+import { getLayout, getRouteCodeColumnWidth } from '../util/getResources';
 import { IDeparture } from './MonitorRow';
 import MonitorOverlay from './MonitorOverlay';
 import MonitorTitlebar from './MonitorTitleBar';
@@ -50,7 +50,8 @@ const Monitor: FC<IProps> = ({
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
-  const { isMultiDisplay } = getLayout(view.layout);
+  const { isMultiDisplay, fontSizeDivider, tightenedFontSizeDivider } =
+    getLayout(view.layout);
   const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
     const setDimensions = () => {
@@ -68,11 +69,28 @@ const Monitor: FC<IProps> = ({
 
   const windowHeight = windowDimensions.height;
   const windowWidth = windowDimensions.width;
+  const fontSize = (windowHeight * 0.7) / fontSizeDivider;
+  const tightenedFontSize = (windowHeight * 0.7) / tightenedFontSizeDivider;
+  const calculatedColumnWidth = getRouteCodeColumnWidth(
+    departures,
+    view,
+    fontSize,
+  );
+  // The width and height of a vehicle icon.
+  // For clarity icon is a bit bigger than text, except on tightened views where it is adjusted to fit narrower lines.
+  const iconWidthHeight = tightenedFontSizeDivider
+    ? fontSize - 1
+    : fontSize + 10;
+
   const style = {
     '--height': `${Number(windowHeight).toFixed(0)}px`,
     '--width': `${Number(windowWidth).toFixed(0)}px`,
     '--monitor-background-color':
       config.colors.monitorBackground || config.colors.primary,
+    '--routeCode-col-width': `${calculatedColumnWidth}px`,
+    '--fontSize': `${fontSize}px`,
+    '--tightenedFontSize': `${tightenedFontSize}px`,
+    '--iconSize': fontSize ? `${iconWidthHeight}px` : '5vh',
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;

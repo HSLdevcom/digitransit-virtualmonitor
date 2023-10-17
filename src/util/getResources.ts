@@ -5,6 +5,8 @@ interface ILayout {
   isPortrait?: boolean;
   tighten?: Array<number>;
   alertSpan?: number;
+  fontSizeDivider?: number;
+  tightenedFontSizeDivider?: number;
 }
 
 export const getLayout = (layout: number): ILayout => {
@@ -85,6 +87,7 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 15,
       };
     case 13:
       return {
@@ -93,6 +96,7 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 18,
       };
     case 14:
       return {
@@ -101,6 +105,7 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 18,
       };
     case 15:
       return {
@@ -109,6 +114,7 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 26,
       };
     case 16:
       return {
@@ -118,6 +124,7 @@ export const getLayout = (layout: number): ILayout => {
         isPortrait: true,
         tighten: [4, 6],
         alertSpan: 1,
+        fontSizeDivider: 15,
       };
     case 17:
       return {
@@ -127,6 +134,8 @@ export const getLayout = (layout: number): ILayout => {
         isPortrait: true,
         tighten: [6, 12],
         alertSpan: 1,
+        fontSizeDivider: 16,
+        tightenedFontSizeDivider: 26,
       };
     case 18:
       return {
@@ -180,3 +189,25 @@ export function getLoginUri(configName) {
       return '';
   }
 }
+
+export const getRouteCodeColumnWidth = (departures, view, fontSize) => {
+  const { leftColumnCount, rightColumnCount } = getLayout(view.layout);
+
+  const departuresOnScreen = departures[0]
+    .slice(0, 8)
+    .concat(departures[1].slice(0, leftColumnCount + rightColumnCount));
+
+  const shortestRouteCodeLength = 3;
+  const longestRouteCodeLength =
+    departuresOnScreen?.reduce((a, b) => {
+      const aLengthValue = a?.trip?.route?.shortName?.length;
+      const aLength =
+        aLengthValue !== undefined && aLengthValue !== null ? aLengthValue : a;
+      const bLength = b?.trip?.route?.shortName?.length;
+      return bLength === undefined || aLength > bLength ? aLength : bLength;
+    }, shortestRouteCodeLength) || shortestRouteCodeLength; // Minimum length to allow space for the column title.
+
+  // How much taller letters are compared to width
+  const fontHeightWidthRatio = 1.6;
+  return (fontSize / fontHeightWidthRatio) * longestRouteCodeLength;
+};

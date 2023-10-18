@@ -414,7 +414,8 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
   /* *************************** Preview: Portrait *************************** */
 
   /* ********* Preview: 8 rows ********* */
-  $p-rows8-portrait-1st-column-width: 100px;
+
+  $p-rows8-portrait-1st-column-width: $routeCode-col-width;
 
   .rows8.portrait .grid-row {
     grid-template-columns: $p-rows8-portrait-1st-column-width 1fr 80px;
@@ -423,7 +424,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
       grid-template-columns: auto 80px;
     }
 
-    font-size: 24px;
+    font-size: $calculated-font-size;
 
     .len1,
     .len2 {
@@ -444,7 +445,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
   }
 
   /* ********* Preview: 12 rows ********* */
-  $p-rows12-portrait-1st-column-width: 95px;
+  $p-rows12-portrait-1st-column-width: $routeCode-col-width;
 
   .rows12.portrait .grid-row.with-stop-code {
     grid-template-columns: $p-rows12-portrait-1st-column-width 1fr 70px 95px;
@@ -461,7 +462,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
       grid-template-columns: auto 95px;
     }
 
-    font-size: 24px;
+    font-size: $calculated-font-size;
 
     .len1,
     .len2 {
@@ -470,7 +471,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
   }
 
   /* ********* Preview: 16 rows ********* */
-  $p-rows16-portrait-1st-column-width: 75px;
+  $p-rows16-portrait-1st-column-width: $routeCode-col-width;
 
   .rows16.portrait .grid-row {
     grid-template-columns: $p-rows16-portrait-1st-column-width 1fr 80px;
@@ -479,7 +480,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
       grid-template-columns: auto 80px;
     }
 
-    font-size: 20px;
+    font-size: $calculated-font-size;
   }
 
   .rows16.portrait .grid-row.with-stop-code {
@@ -491,7 +492,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
   }
 
   /* ********* Preview: 24  rows ********* */
-  $p-rows24-portrait-1st-column-width: 75px;
+  $p-rows24-portrait-1st-column-width: $routeCode-col-width;
 
   .rows24.portrait .grid-row.with-stop-code {
     grid-template-columns: $p-rows24-portrait-1st-column-width 1fr 60px 80px;
@@ -508,11 +509,11 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
       grid-template-columns: auto 80px;
     }
 
-    font-size: 15px;
+    font-size: $calculated-font-size;
   }
 
   /* ********* Preview: Tightened views ********* */
-  $p-tightened-1st-column-width: 105px;
+  $p-tightened-1st-column-width: $routeCode-col-width;
 
   /* ********* Preview: 4 rows ********* */
 
@@ -523,7 +524,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
       grid-template-columns: auto 95px;
     }
 
-    font-size: 26px;
+    font-size: $calculated-font-size;
 
     .len1,
     .len2 {
@@ -548,7 +549,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
       grid-template-columns: auto 95px;
     }
 
-    font-size: 20px;
+    font-size: $calculated-font-size;
 
     .len1,
     .len2 {
@@ -567,7 +568,7 @@ $rows24-portrait-1st-col-width: $routeCode-col-width;
   /* ********* Preview: 12 rows ********* */
   .rows12.portrait.tightened .grid-row {
     grid-template-columns: $p-tightened-1st-column-width 1fr 60px;
-    font-size: 16px;
+    font-size: $calculated-font-size;
 
     .len1,
     .len2 {

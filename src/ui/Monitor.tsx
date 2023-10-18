@@ -50,8 +50,14 @@ const Monitor: FC<IProps> = ({
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions(),
   );
-  const { isMultiDisplay, fontSizeDivider, tightenedFontSizeDivider } =
-    getLayout(view.layout);
+  const {
+    isMultiDisplay,
+    fontSizeDivider,
+    tightenedFontSizeDivider,
+    previewFontSize,
+    tightenedPreviewFontSize,
+    isPortrait,
+  } = getLayout(view.layout);
   const [showOverlay, setShowOverlay] = useState(false);
   useEffect(() => {
     const setDimensions = () => {
@@ -69,8 +75,14 @@ const Monitor: FC<IProps> = ({
 
   const windowHeight = windowDimensions.height;
   const windowWidth = windowDimensions.width;
-  const fontSize = (windowHeight * 0.7) / fontSizeDivider;
-  const tightenedFontSize = (windowHeight * 0.7) / tightenedFontSizeDivider;
+  const fontSize =
+    isPreview && isPortrait
+      ? previewFontSize
+      : (windowHeight * 0.7) / fontSizeDivider;
+  const tightenedFontSize =
+    isPreview && isPortrait
+      ? tightenedPreviewFontSize
+      : (windowHeight * 0.7) / tightenedFontSizeDivider;
   const calculatedColumnWidth = getRouteCodeColumnWidth(
     departures,
     view,

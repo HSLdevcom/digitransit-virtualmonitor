@@ -7,6 +7,8 @@ interface ILayout {
   alertSpan?: number;
   fontSizeDivider?: number;
   tightenedFontSizeDivider?: number;
+  previewFontSize?: number;
+  tightenedPreviewFontSize?: number;
 }
 
 export const getLayout = (layout: number): ILayout => {
@@ -88,6 +90,7 @@ export const getLayout = (layout: number): ILayout => {
         isPortrait: true,
         alertSpan: 1,
         fontSizeDivider: 15,
+        previewFontSize: 24, //px
       };
     case 13:
       return {
@@ -97,6 +100,7 @@ export const getLayout = (layout: number): ILayout => {
         isPortrait: true,
         alertSpan: 1,
         fontSizeDivider: 18,
+        previewFontSize: 24, //px
       };
     case 14:
       return {
@@ -106,6 +110,7 @@ export const getLayout = (layout: number): ILayout => {
         isPortrait: true,
         alertSpan: 1,
         fontSizeDivider: 18,
+        previewFontSize: 20, //px
       };
     case 15:
       return {
@@ -115,6 +120,7 @@ export const getLayout = (layout: number): ILayout => {
         isPortrait: true,
         alertSpan: 1,
         fontSizeDivider: 26,
+        previewFontSize: 15, //px
       };
     case 16:
       return {
@@ -125,6 +131,8 @@ export const getLayout = (layout: number): ILayout => {
         tighten: [4, 6],
         alertSpan: 1,
         fontSizeDivider: 15,
+        previewFontSize: 26, //px
+        tightenedPreviewFontSize: 20, //px
       };
     case 17:
       return {
@@ -136,6 +144,8 @@ export const getLayout = (layout: number): ILayout => {
         alertSpan: 1,
         fontSizeDivider: 16,
         tightenedFontSizeDivider: 26,
+        previewFontSize: 20, //px
+        tightenedPreviewFontSize: 16, //px
       };
     case 18:
       return {

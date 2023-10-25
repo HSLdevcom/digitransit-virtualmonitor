@@ -204,8 +204,8 @@ export const getRouteCodeColumnWidth = (departures, view, fontSize) => {
   const { leftColumnCount, rightColumnCount } = getLayout(view.layout);
 
   const departuresOnScreen = departures[0]
-    .slice(0, 8)
-    .concat(departures[1].slice(0, leftColumnCount + rightColumnCount));
+    .slice(0, leftColumnCount)
+    .concat(departures[1].slice(0, rightColumnCount));
 
   const shortestRouteCodeLength = 3;
   const longestRouteCodeLength =

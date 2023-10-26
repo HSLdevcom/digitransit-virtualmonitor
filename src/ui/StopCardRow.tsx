@@ -1,6 +1,6 @@
-import React, {FC, useContext, useEffect, useState} from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import {useLazyQuery} from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { ICardInfo, IStop } from '../util/Interfaces';
 import Icon from './Icon';
 import { StopQueryDocument, StationQueryDocument } from '../generated';
@@ -14,7 +14,7 @@ import StopListContainer from './StopListContainer';
 import cx from 'classnames';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext, FavouritesContext } from '../contexts';
-import {IResult, PropertiesLayer} from '../types';
+import { IResult, PropertiesLayer } from '../types';
 
 const getGTFSId = (id: string): string | undefined => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -71,17 +71,18 @@ const StopCardRow: FC<IProps> = ({
   hideTitle,
   hasMap,
 }) => {
-
   const config = useContext(ConfigContext);
   const favourites = useContext(FavouritesContext);
   const [t] = useTranslation();
   const lang: string = t('languageCode');
   const [selectedStopKey, setSelectedStopKey] = useState<number | null>(null);
-  const [selectedStationKey, setSelectedStationKey] = useState<number | null>(null);
+  const [selectedStationKey, setSelectedStationKey] = useState<number | null>(
+    null,
+  );
 
   const [getStop, stopState] = useLazyQuery(StopQueryDocument, {
     fetchPolicy: 'network-only',
-    context: { clientName: 'default' }
+    context: { clientName: 'default' },
   });
 
   const [getStation, stationState] = useLazyQuery(StationQueryDocument, {
@@ -91,16 +92,16 @@ const StopCardRow: FC<IProps> = ({
 
   const [autosuggestValue, setAutosuggestValue] = useState(null);
   const { id, index, layout, columns } = item;
-  const noStops: boolean = columns.left.stops.length === 0 && columns.right.stops.length === 0;
+  const noStops: boolean =
+    columns.left.stops.length === 0 && columns.right.stops.length === 0;
 
   const onSelect = async (selected: IResult): Promise<void> => {
     const properties = selected.properties;
     setAutosuggestValue(properties);
     switch (properties.layer) {
-
       case PropertiesLayer.STOP:
         await getStop({
-          variables: { ids: getGTFSId(properties.id), language: lang }
+          variables: { ids: getGTFSId(properties.id), language: lang },
         });
         setSelectedStopKey(Date.now());
         break;
@@ -136,7 +137,10 @@ const StopCardRow: FC<IProps> = ({
   };
 
   const getLocality = () => {
-    if (autosuggestValue.layer === 'favouriteStop' || autosuggestValue.layer === 'favouriteStation') {
+    if (
+      autosuggestValue.layer === 'favouriteStop' ||
+      autosuggestValue.layer === 'favouriteStation'
+    ) {
       const arr = autosuggestValue.address.split(',');
       return arr[arr.length - 1];
     }
@@ -149,21 +153,31 @@ const StopCardRow: FC<IProps> = ({
         id,
         'left',
         stopState.data.stop
-          .filter((s: IStop) => s && !columns.left.stops.some((el: IStop) => el.id === s.id))
-          .map((stop) => {
-          const stopWithGTFS = {
-            ...stop,
-            locality: getLocality(),
-            mode: getModeFromAddendum(autosuggestValue.addendum?.GTFS.modes),
-          };
-          const routes = stop.stoptimesForPatterns.map(stoptimes => stoptimes.pattern);
-          return {
-            ...stopWithGTFS,
-            patterns: sortBy(sortBy(routes, 'route.shortName'), 'shortName.length'),
-            hiddenRoutes: [],
-            parentStation: stop.parentStation ? stop.parentStation.gtfsId : undefined,
-          };
-        }),
+          .filter(
+            (s: IStop) =>
+              s && !columns.left.stops.some((el: IStop) => el.id === s.id),
+          )
+          .map(stop => {
+            const stopWithGTFS = {
+              ...stop,
+              locality: getLocality(),
+              mode: getModeFromAddendum(autosuggestValue.addendum?.GTFS.modes),
+            };
+            const routes = stop.stoptimesForPatterns.map(
+              stoptimes => stoptimes.pattern,
+            );
+            return {
+              ...stopWithGTFS,
+              patterns: sortBy(
+                sortBy(routes, 'route.shortName'),
+                'shortName.length',
+              ),
+              hiddenRoutes: [],
+              parentStation: stop.parentStation
+                ? stop.parentStation.gtfsId
+                : undefined,
+            };
+          }),
         undefined,
       );
     }
@@ -175,10 +189,15 @@ const StopCardRow: FC<IProps> = ({
         id,
         'left',
         stationState.data.station
-          .filter((s: IStop) => s && !columns.left.stops.some((el: IStop) => el.id === s.id))
-          .map((station) => {
+          .filter(
+            (s: IStop) =>
+              s && !columns.left.stops.some((el: IStop) => el.id === s.id),
+          )
+          .map(station => {
             let patterns = [];
-            station.stops.forEach((stop) => patterns.push(...stop.stoptimesForPatterns));
+            station.stops.forEach(stop =>
+              patterns.push(...stop.stoptimesForPatterns),
+            );
             patterns = uniqBy(patterns, 'pattern.code');
             const stationWithGTFS = {
               ...station,
@@ -204,11 +223,14 @@ const StopCardRow: FC<IProps> = ({
   const isLast: boolean = index === cards.length - 1;
   const isDouble: boolean = layout >= 9 && layout <= 11;
   const possibleToMove: boolean = cards.length > 1;
-  const possibleToDelete: boolean = hasMap ? cards.length > 2 : cards.length > 1;
+  const possibleToDelete: boolean = hasMap
+    ? cards.length > 2
+    : cards.length > 1;
 
   const filterSearchResults = (results: IResult[]): IResult[] => {
     if (config.stopSearchFilter) {
-      return results.filter((result: IResult) => {
+      return results
+        .filter((result: IResult) => {
           const gtfsId: string = getGTFSId(result.properties.id);
           return !columns.left.stops.some((s: IStop) => s.gtfsId === gtfsId);
         })
@@ -228,7 +250,9 @@ const StopCardRow: FC<IProps> = ({
     ...getSearchContext(config),
     getFavouriteStops: () =>
       // Result may also be something else than array, like an 500 http response
-      Array.isArray(favourites) ? favourites.filter(f => f.type === 'stop' || f.type === 'station') : [],
+      Array.isArray(favourites)
+        ? favourites.filter(f => f.type === 'stop' || f.type === 'station')
+        : [],
   };
 
   return (
@@ -253,7 +277,10 @@ const StopCardRow: FC<IProps> = ({
           <div className="icons">
             {possibleToDelete && (
               <div
-                className={cx('delete icon', possibleToMove ? '' : 'move-end')}
+                className={cx(
+                  'delete icon',
+                  possibleToMove ? 'move-end' : 'move-end',
+                )}
                 tabIndex={0}
                 role="button"
                 aria-label={t('deleteView', { id: `${index + 1}` })}
@@ -269,7 +296,7 @@ const StopCardRow: FC<IProps> = ({
               <div
                 className={cx(
                   'move icon',
-                  !isFirst && !isLast ? 'up-and-down' : '',
+                  !isFirst && !isLast ? "up-and-down'" : '',
                 )}
               >
                 {isFirst && (

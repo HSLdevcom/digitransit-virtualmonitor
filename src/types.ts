@@ -5,6 +5,11 @@ export enum PropertiesLayer {
   FAVORITE_STATION = 'favouriteStation',
 }
 
+export enum ColumnSideEnum {
+  LIFT = 'left',
+  RIGHT = 'right',
+}
+
 export interface IResult {
   geometry: {
     coordinates: number[];
@@ -40,4 +45,96 @@ export interface IResult {
     source_id: string;
   };
   type: string;
+}
+
+export interface IPattern {
+  code: string;
+  headsign: string;
+  __typename: string;
+  route: IPatternRoute;
+}
+
+export interface IPatternRoute {
+  gtfsId: string;
+  mode: string;
+  shortName: string;
+  type: number;
+  __typename: string;
+}
+
+export interface IRoute {
+  gtfsId: string;
+  shortName: string;
+  __typename: string;
+}
+
+export interface IStoptimesForPattersPatternRoute extends IRoute {
+  mode: string;
+  type: number;
+}
+
+export interface IStoptimesForPatternsPattern {
+  code: string;
+  headsign: string;
+  originalTripPattern: string | null;
+  route: IStoptimesForPattersPatternRoute[];
+}
+
+export interface IStoptimesForPatternsStoptimes {
+  headsign: string;
+  __typename: string;
+}
+
+export interface IStoptimesForPatterns {
+  pattern: IStoptimesForPatternsPattern;
+  stoptimes: IStoptimesForPatternsStoptimes[];
+  __typename: string;
+}
+
+export interface IDataStop {
+  code: string | null;
+  desc: string;
+  gtfsId: string;
+  id: string;
+  lat: number;
+  locationType: string;
+  lon: number;
+  name: string;
+  parentStation: {
+    gtfsId: string;
+    __typename: string;
+  };
+  patterns: IPattern[];
+  routes: IRoute[];
+  stoptimesForPatterns: IStoptimesForPatterns[];
+  vehicleMode: string;
+  __typename: string;
+}
+
+export interface IDataStationStop {
+  code: string;
+  desc: string;
+  patterns: IStoptimesForPatternsPattern[];
+  routes: IRoute[];
+  stoptimesForPatterns: IStoptimesForPatternsPattern[];
+}
+
+export interface IDataStation {
+  code: string | null;
+  desc: string | null;
+  gtfsId: string;
+  id: string;
+  lat: number;
+  locationType: string;
+  lon: number;
+  name: string;
+  platformCode: string | number | null;
+  stops: IDataStationStop[];
+  vehicleMode: string;
+  __typename: string;
+}
+
+export interface IResponseData {
+  stop?: IDataStop[];
+  station?: IDataStation[];
 }

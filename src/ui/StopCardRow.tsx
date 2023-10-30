@@ -300,7 +300,7 @@ const StopCardRow: FC<IProps> = ({
               <div
                 className={cx(
                   'delete icon',
-                  possibleToMove ? 'move-end' : 'move-end',
+                  possibleToMove ? '' : 'move-end',
                 )}
                 tabIndex={0}
                 role="button"

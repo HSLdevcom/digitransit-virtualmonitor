@@ -197,7 +197,7 @@ const StopCardRow: FC<IProps> = ({
         undefined,
       );
     }
-  }, [stopState.data, id, timeOfStopSelection]);
+  }, [stopState.data, timeOfStopSelection]);
 
   useEffect((): void => {
     if (stationState.data && stationState.data.station) {
@@ -234,7 +234,7 @@ const StopCardRow: FC<IProps> = ({
         undefined,
       );
     }
-  }, [stationState.data, id, timeOfStationSelection]);
+  }, [stationState.data, timeOfStationSelection]);
 
   const isFirst: boolean = index === 0;
   const isLast: boolean = index === cards.length - 1;

@@ -298,10 +298,7 @@ const StopCardRow: FC<IProps> = ({
           <div className="icons">
             {possibleToDelete && (
               <div
-                className={cx(
-                  'delete icon',
-                  possibleToMove ? '' : 'move-end',
-                )}
+                className={cx('delete icon', possibleToMove ? '' : 'move-end')}
                 tabIndex={0}
                 role="button"
                 aria-label={t('deleteView', { id: `${index + 1}` })}
@@ -317,7 +314,7 @@ const StopCardRow: FC<IProps> = ({
               <div
                 className={cx(
                   'move icon',
-                  !isFirst && !isLast ? "up-and-down'" : '',
+                  !isFirst && !isLast ? 'up-and-down' : '',
                 )}
               >
                 {isFirst && (

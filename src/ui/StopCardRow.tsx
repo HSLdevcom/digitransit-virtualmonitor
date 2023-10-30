@@ -165,7 +165,7 @@ const StopCardRow: FC<IProps> = ({
     if (stopState.data && stopState.data.stop) {
       setStops(
         id,
-        ColumnSideEnum.LIFT,
+        ColumnSideEnum.LEFT,
         stopState.data.stop
           .filter(
             (s: IDataStop) =>
@@ -203,7 +203,7 @@ const StopCardRow: FC<IProps> = ({
     if (stationState.data && stationState.data.station) {
       setStops(
         id,
-        ColumnSideEnum.LIFT,
+        ColumnSideEnum.LEFT,
         stationState.data.station
           .filter(
             (s: IDataStation) =>

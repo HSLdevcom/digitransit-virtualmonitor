@@ -6,7 +6,7 @@ export enum PropertiesLayer {
 }
 
 export enum ColumnSideEnum {
-  LIFT = 'left',
+  LEFT = 'left',
   RIGHT = 'right',
 }
 

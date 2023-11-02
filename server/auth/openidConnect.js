@@ -157,9 +157,8 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     if (
       req.isAuthenticated() &&
       req.session &&
-      token &&
-      token.refresh_token &&
-      dayjs().unix() >= token.expires_at
+      token?.refresh_token &&
+      dayjs().unix() >= token?.expires_at
     ) {
       const userData = JSON.stringify(req?.user?.data);
       let oidcStrategyName = '';
@@ -172,7 +171,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       return passport.authenticate(oidcStrategyName, {
         refresh: true,
         successReturnToOrRedirect: `/${req.path}`,
-        failureRedirect: `/${req.path}`,
+        failureRedirect: '/',
       })(req, res, next);
     }
     return next();

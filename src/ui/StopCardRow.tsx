@@ -435,6 +435,7 @@ const StopCardRow: FC<IProps> = ({
               targets={['Stops']}
               modeIconColors={config.modeIcons.colors}
               modeSet={config.modeIcons.setName}
+              geocodingSize={40}
             />
           </div>
           <LayoutAndTimeContainer

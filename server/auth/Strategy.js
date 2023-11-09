@@ -147,8 +147,8 @@ OICStrategy.prototype.refresh = function (req) {
       console.error('Error refreshing tokens', err);
       req.logout(function (err) {
         if (err) { return next(err); }
+        req.session.destroy();
       });
-      req.session.destroy();
       this.fail(err);
     });
 };

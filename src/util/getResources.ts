@@ -5,6 +5,10 @@ interface ILayout {
   isPortrait?: boolean;
   tighten?: Array<number>;
   alertSpan?: number;
+  fontSizeDivider?: number;
+  tightenedFontSizeDivider?: number;
+  previewFontSize?: number;
+  tightenedPreviewFontSize?: number;
 }
 
 export const getLayout = (layout: number): ILayout => {
@@ -85,6 +89,8 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 15,
+        previewFontSize: 24, //px
       };
     case 13:
       return {
@@ -93,6 +99,8 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 18,
+        previewFontSize: 24, //px
       };
     case 14:
       return {
@@ -101,6 +109,8 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 18,
+        previewFontSize: 20, //px
       };
     case 15:
       return {
@@ -109,6 +119,8 @@ export const getLayout = (layout: number): ILayout => {
         isMultiDisplay: false,
         isPortrait: true,
         alertSpan: 1,
+        fontSizeDivider: 26,
+        previewFontSize: 15, //px
       };
     case 16:
       return {
@@ -118,6 +130,9 @@ export const getLayout = (layout: number): ILayout => {
         isPortrait: true,
         tighten: [4, 6],
         alertSpan: 1,
+        fontSizeDivider: 15,
+        previewFontSize: 26, //px
+        tightenedPreviewFontSize: 20, //px
       };
     case 17:
       return {
@@ -127,6 +142,10 @@ export const getLayout = (layout: number): ILayout => {
         isPortrait: true,
         tighten: [6, 12],
         alertSpan: 1,
+        fontSizeDivider: 16,
+        tightenedFontSizeDivider: 26,
+        previewFontSize: 20, //px
+        tightenedPreviewFontSize: 16, //px
       };
     case 18:
       return {
@@ -134,6 +153,17 @@ export const getLayout = (layout: number): ILayout => {
         rightColumnCount: 0,
       };
     case 19:
+      return {
+        leftColumnCount: 0,
+        rightColumnCount: 0,
+        isPortrait: true,
+      };
+    case 20:
+      return {
+        leftColumnCount: 0,
+        rightColumnCount: 0,
+      };
+    case 21:
       return {
         leftColumnCount: 0,
         rightColumnCount: 0,
@@ -161,6 +191,7 @@ export function getLoginUri(configName) {
     case 'tampere':
     case 'jyvaskyla':
     case 'vaasa':
+    case 'oulu':
       return 'waltti-login';
     case 'hsl':
       return 'hsl-login?url=/&';
@@ -168,3 +199,25 @@ export function getLoginUri(configName) {
       return '';
   }
 }
+
+export const getRouteCodeColumnWidth = (departures, view, fontSize) => {
+  const { leftColumnCount, rightColumnCount } = getLayout(view.layout);
+
+  const departuresOnScreen = departures[0]
+    .slice(0, leftColumnCount)
+    .concat(departures[1].slice(0, rightColumnCount));
+
+  const shortestRouteCodeLength = 3;
+  const longestRouteCodeLength =
+    departuresOnScreen?.reduce((a, b) => {
+      const aLengthValue = a?.trip?.route?.shortName?.length;
+      const aLength =
+        aLengthValue !== undefined && aLengthValue !== null ? aLengthValue : a;
+      const bLength = b?.trip?.route?.shortName?.length;
+      return bLength === undefined || aLength > bLength ? aLength : bLength;
+    }, shortestRouteCodeLength) || shortestRouteCodeLength; // Minimum length to allow space for the column title.
+
+  // How much taller letters are compared to width
+  const fontHeightWidthRatio = 1.6;
+  return (fontSize / fontHeightWidthRatio) * longestRouteCodeLength;
+};

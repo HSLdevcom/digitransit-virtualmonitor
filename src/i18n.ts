@@ -39,6 +39,7 @@ i18n.use(initReactI18next).init({
         closedStop: 'Stop closed',
         closedStopWithRange:
           'Stop {{name}} {{code}} closed between {{startTime}} and {{endTime}}',
+        'confirm-choice': 'Confirm choice',
         continue: 'Continue',
         copy: 'Copy link',
         createViewTitle: 'Creation of a new view',
@@ -54,23 +55,28 @@ i18n.use(initReactI18next).init({
         displayEditorStaticLink: 'Create view',
         displayLanguage: 'Language',
         displayLanguages: 'Languages',
+        displayMap: 'Map view',
         duration: 'Duration / language',
         'edit-display': 'Edit display',
+        'edit-map': 'Adjust the crop >',
         'front-page-no-sign-in-button': 'Continue without logging in',
         'front-page-sign-in-button': 'Log in and create a display',
         frontPageParagraph1:
           'Create your own display and select the stops and routes you are interested in',
         frontPageParagraph2:
-          'You can use the service to generate timetables for nearby stops to be displayed in public spaces, on your information displays or on company intranet.',
+          'You can use the service to generate timetables for nearby stops to be displayed in public spaces, on your information displays or on company intranet. You can also create your own personal stop display and save it as a bookmark in your browser.',
         frontPageParagraph3:
           'Displaying public transport timetables in prominent places encourages the use of public transport and makes it easier. In addition to timetables, the service provides you with service updates and disruption alerts.',
         'front-page-paragraph-hsl':
           'When you log in using your HSL account before creating a display, you can later edit the display.',
+        'front-page-paragraph-waltti':
+          'When you log in using your Waltti account before creating a display, you can later edit the display.',
         'header-side-left': 'Left column',
         'header-side-right': 'Right column',
         hideAllLines: 'Hide all routes',
         hideLine: 'Hide route {{line}}',
         hideLines: 'Hide routes {{hidden}} / {{all}}',
+        'hide-timetable': 'Show only the map view in the presentation',
         horizontal: 'Horizontal',
         import: 'Import',
         'import-instructions':
@@ -101,6 +107,8 @@ i18n.use(initReactI18next).init({
         loading: 'Loading...',
         login: 'Log in',
         logout: 'Log out',
+        'map-description':
+          'The map view is shown as one view in the presentation. The map view is cropped automatically based on the stops selected for the whole presentation.',
         menuClose: 'Close the main menu',
         menuOpen: 'Open the main menu',
         userMenuClose: 'Close the user menu',
@@ -115,7 +123,8 @@ i18n.use(initReactI18next).init({
         'no-departures': 'No known departures',
         'no-monitor-found': 'No display was found matching the URL given.',
         'incorrect-instance':
-          'The display matching the given URL does not belong to this service area.',
+          'The URL address you entered does not refer to a stop display in this service area.',
+        'save-failed': 'Save failed',
         'no-stops-selected': 'No stops selected',
         noMonitors: 'No stop displays found',
         noAlerts: 'No alerts found',
@@ -146,9 +155,11 @@ i18n.use(initReactI18next).init({
         'search-autosuggest-len': '{{count}} suggestion found',
         'search-autosuggest-len_plural': '{{count}} suggestions found',
         'search-current-suggestion': 'Current selection: {{selection}}',
+        'select-bounds': 'Select the desired crop',
         settingsChanged: 'Settings changed',
         show: 'Show',
-        showEndOfLine: 'Routes terminating at this stop',
+        showMap: 'Show in presentation ',
+        showEndOfLine: 'Routes terminating or stopping at this stop',
         showRouteColumn: 'Route column',
         showStopNumber: 'Stop or platform number',
         showVia: 'Via information, if available',
@@ -171,6 +182,7 @@ i18n.use(initReactI18next).init({
         userinfo: 'My information',
         vertical: 'Vertical',
         viewEditorName: 'Name of the view',
+        'query-error': 'No connection!\nWe are looking into the issue.',
       },
     },
     fi: {
@@ -194,6 +206,7 @@ i18n.use(initReactI18next).init({
         closedStop: 'Pysäkki suljettu',
         closedStopWithRange:
           'Pysäkki {{name}} {{code}} suljettu aikavälillä {{startTime}} - {{endTime}}',
+        'confirm-choice': 'Vahvista valinta',
         continue: 'Jatka',
         copy: 'Kopioi linkki',
         createViewTitle: 'Uuden näkymän luonti',
@@ -210,23 +223,28 @@ i18n.use(initReactI18next).init({
         displayEditorStaticLink: 'Luo näkymä',
         displayLanguage: 'Esityskieli',
         displayLanguages: 'Esityskielet',
+        displayMap: 'Karttanäkymä',
         duration: 'Kesto / esityskieli',
         'edit-display': 'Muokkaa näyttöä',
+        'edit-map': 'Muokkaa rajausta > ',
         'front-page-no-sign-in-button': 'Jatka kirjautumatta',
         'front-page-sign-in-button': 'Kirjaudu ja luo näyttö',
         frontPageParagraph1:
           'Luo itsellesi oma näyttö ja valitse pysäkit ja linjat joiden aikatauluista olet kiinnostunut',
         frontPageParagraph2:
-          'Palvelulla voi tuoda esimerkiksi julkisten tilojen auloihin, yritysten infonäytöille tai intranet-verkkoon kyseisen paikan läheisyydessä olevien pysäkkien aikataulut.',
+          'Palvelulla voi tuoda esimerkiksi julkisten tilojen auloihin, yritysten infonäytöille tai intranet-verkkoon kyseisen paikan läheisyydessä olevien pysäkkien aikataulut. Voit myös tehdä henkilökohtaisen pysäkkinäytön ja laittaa sen kirjainmerkiksi selaimeesi.',
         frontPageParagraph3:
           'Joukkoliikenteen aikataulut näkyvällä paikalla helpottavat joukkoliikenteen käyttöä ja kannustavat käyttämään joukkoliikennettä. Aikataulujen lisäksi palvelun kautta saat myös ajankohtaiset liikenne- ja häiriötiedotteet.',
         'front-page-paragraph-hsl':
           'Luo näyttö HSL-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.',
+        'front-page-paragraph-waltti':
+          'Luo näyttö Waltti-tunnuksella kirjautuneena niin pääset myöhemmin muokkaamaan luomaasi pysäkkinäyttöä.',
         'header-side-left': 'Vasen palsta',
         'header-side-right': 'Oikea palsta',
         hideAllLines: 'Piilota kaikki linjat',
         hideLine: 'Piilota linja {{line}}',
         hideLines: 'Piilota linjoja {{hidden}} / {{all}}',
+        'hide-timetable': 'Näytä esityksessä vain karttanäkymä',
         horizontal: 'Vaaka',
         import: 'Tuo',
         'import-instructions':
@@ -256,6 +274,9 @@ i18n.use(initReactI18next).init({
         loading: 'Ladataan…',
         login: 'Kirjaudu sisään',
         logout: 'Kirjaudu ulos',
+        'map-description':
+          'Karttanäkymä näkyy yhtenä näkymänä esityksessä. Se rajataan automaattisesti koko esitykseen valittujen pysäkkien perusteella',
+        maptitle: 'Karttanäkymän nimi',
         menuClose: 'Sulje päävalikko',
         menuOpen: 'Avaa päävalikko',
         userMenuClose: 'Sulje käyttäjävalikko',
@@ -272,6 +293,7 @@ i18n.use(initReactI18next).init({
           'Antamallasi URL-osoitteella ei löytynyt yhtään monitoria.',
         'incorrect-instance':
           'Antamasi URL-osoite ei viittaa tämän palvelualueen pysäkkinäyttöön.',
+        'save-failed': 'Tallennus epäonnistui',
         'no-stops-selected': 'Ei valittuja pysäkkejä',
         noMonitors: 'Pysäkkinäyttöä ei löytynyt',
         noAlerts: 'Tiedotteita ei löytynyt',
@@ -301,9 +323,11 @@ i18n.use(initReactI18next).init({
         'search-autosuggest-len': 'Löydettiin {{count}} ehdotus',
         'search-autosuggest-len_plural': 'Löydettiin {{count}} ehdotusta',
         'search-current-suggestion': 'Tämänhetkinen valinta: {{selection}}',
+        'select-bounds': 'Valitse sopiva rajaus',
         settingsChanged: 'Muutettuja asetuksia',
         show: 'Näytä',
-        showEndOfLine: 'Linjat, joille tämä on päätepysäkki',
+        showMap: 'Näytä esityksessä',
+        showEndOfLine: 'Linjat, joille tämä on pääte- tai jättöpysäkki',
         showRouteColumn: 'Linja-sarake',
         showStopNumber: 'Pysäkki- tai laiturinumero',
         showVia: 'Kauttakulkutieto (via), jos saatavilla',
@@ -326,6 +350,7 @@ i18n.use(initReactI18next).init({
         userinfo: 'Omat tiedot',
         vertical: 'Pysty',
         viewEditorName: 'Näkymän nimi',
+        'query-error': 'Yhteys poikki!\nSelvitämme tilannetta.',
       },
     },
     sv: {
@@ -349,6 +374,7 @@ i18n.use(initReactI18next).init({
         closedStop: 'Hållplats indragen',
         closedStopWithRange:
           'Hållplats {{name}} {{code}} indragen mellan {{startTime}} - {{endTime}}',
+        'confirm-choice': 'Bekräfta valet',
         continue: 'Fortsätt',
         copy: 'Kopiera länken',
         createViewTitle: 'Skapa ny vy',
@@ -365,23 +391,28 @@ i18n.use(initReactI18next).init({
         displayEditorStaticLink: 'Skapa vy',
         displayLanguage: 'Språk',
         displayLanguages: 'Språk',
+        displayMap: 'Kartvy',
         duration: 'Tid / språk',
         'edit-display': 'Redigera skärmen',
+        'edit-map': 'Justera beskärningen >',
         'front-page-no-sign-in-button': 'Fortsätt utan att logga in',
         'front-page-sign-in-button': 'Logga in och skapa en skärmvy',
         frontPageParagraph1:
           'Skapa dig en egen skärm och välj de hållplatser och linjer som intresserar dig',
         frontPageParagraph2:
-          'Med tjänsten kan du visa tidtabeller för närmaste hållplatser t.ex. i offentliga lokaler, på digitala informationsskärmar eller på företagets intranät.',
+          'Med tjänsten kan du visa tidtabeller för närmaste hållplatser t.ex. i offentliga lokaler, på digitala informationsskärmar eller på företagets intranät. Du kan även skapa din egen personliga hållplatsskärm och spara den som bokmärke i din webbläsare.',
         frontPageParagraph3:
           'Kollektivtrafikens tidtabeller på synliga platser gör det lättare att resa kollektivt och uppmuntrar att använda kollektivtrafiktjänster. Genom tjänsten får du även aktuella trafikmeddelanden och information om trafikstörningar.',
         'front-page-paragraph-hsl':
           'Skapa en skärmvy genom att logga in med HRT-konto så du kan senare redigera hålplatsskärmvy du skapat.',
+        'front-page-paragraph-waltti':
+          'Skapa en skärmvy genom att logga in med Waltti-konto så du kan senare redigera hålplatsskärmvy du skapat.',
         'header-side-left': 'Vänstra kolumnen',
         'header-side-right': 'Högra kolumnen',
         hideAllLines: 'Dölj alla linjer',
         hideLine: 'Dölj linje {{line}}',
         hideLines: 'Dölj linjer {{hidden}} / {{all}}',
+        'hide-timetable': 'Visa endast kartvyn i presentationen',
         horizontal: 'Horisontell',
         import: 'Importera',
         'import-instructions':
@@ -411,6 +442,8 @@ i18n.use(initReactI18next).init({
         loading: 'Laddar...',
         login: 'Logga in',
         logout: 'Logga ut',
+        'map-description':
+          'Kartvyn visas som en vy i presentationen. Kartvyn beskärs automatiskt på basis av de hållplatser som väljs för hela presentationen.',
         menuClose: 'Stäng huvudmenyn',
         menuOpen: 'Öppna huvudmenyn',
         userMenuClose: 'Stäng användarmenyn',
@@ -426,7 +459,8 @@ i18n.use(initReactI18next).init({
         'no-monitor-found':
           'Inga hållplatsskärmar hittades med den URL-adress du angav.',
         'incorrect-instance':
-          'Inga hållplatsskärmar hittades med den URL-adress du angav.',
+          'URL-adressen du angav pekar inte på en hållplatsskärm i detta serviceområde.',
+        'save-failed': 'Spara misslyckades',
         'no-stops-selected': 'Inga valda hållplatser',
         noMonitors: 'Ingen hållplatsskärm hittades',
         noAlerts: 'Ingen information om trafikstörningar hittades',
@@ -456,9 +490,12 @@ i18n.use(initReactI18next).init({
         'search-autosuggest-len': '{{count}} förslag hittades',
         'search-autosuggest-len_plural': '{{count}} förslag hittades',
         'search-current-suggestion': 'Nuvarande val: {{selection}}',
+        'select-bounds': 'Välj önskad beskärning',
         settingsChanged: 'Inställningarna ändrats',
         show: 'Visa',
-        showEndOfLine: 'Linjerna som har den här hållplatsen som ändhållplats',
+        showMap: 'Visa som presentation',
+        showEndOfLine:
+          'Linjerna som stannar vid denna hållplats eller har den som ändhållplats',
         showRouteColumn: 'Linjekolumn',
         showStopNumber: 'Hållplats- eller plattformsnummer',
         showVia: 'Via-information, om tillgänglig',
@@ -481,6 +518,7 @@ i18n.use(initReactI18next).init({
         userinfo: 'Mina uppgifter',
         vertical: 'Vertikal',
         viewEditorName: 'Vyns namn',
+        'query-error': 'Ingen anslutning!\nVi utreder situationen.',
       },
     },
   },

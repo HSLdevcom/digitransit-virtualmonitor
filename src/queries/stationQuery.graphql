@@ -1,13 +1,15 @@
-query stationQuery($ids: [String]) @api(contextKey: "clientName") {
+query stationQuery($ids: [String]  $language: String) @api(contextKey: "clientName") {
   station: stations(ids: $ids) {
     id
-    name
+    name(language: $language )
     code
     desc
     gtfsId
     platformCode
     locationType
     vehicleMode
+    lat
+    lon
     stops {
       desc
       code
@@ -24,7 +26,11 @@ query stationQuery($ids: [String]) @api(contextKey: "clientName") {
       stoptimesForPatterns {
         pattern {
           code
-          headsign
+          headsign          
+          originalTripPattern {
+			      code
+            name
+			   }
           route {
             mode
             type

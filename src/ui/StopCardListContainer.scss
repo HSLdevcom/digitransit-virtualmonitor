@@ -1,5 +1,4 @@
 .stopcards {
-  padding-top: 26px;
   margin-block-start: 0;
   margin-block-end: 0;
 }
@@ -15,6 +14,16 @@
 .buttons {
   display: flex;
   padding: 20px 15px 40px 10px;
+  justify-content: center;
+
+  .wide {
+    flex: 1;
+  }
+}
+
+.buttons-with-alert {
+  display: flex;
+  padding: 20px 15px 10px 10px;
   justify-content: center;
 
   .wide {
@@ -63,4 +72,12 @@
       color: #fff;
     }
   }
+}
+
+.cardlist-alert-text {
+  text-align: left;
+  color: $alert-color;
+  font-size: 12px;
+  margin: 8px;
+  font-weight: bold;
 }

@@ -4,13 +4,12 @@ import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import PreviewModal from './PreviewModal';
 import monitorAPI from '../api';
-import {
-  getTrainStationData,
-  isPlatformOrTrackVisible,
-} from '../util/monitorUtils';
+import { getTrainStationData } from '../util/monitorUtils';
 import DeleteModal from './DeleteModal';
 import { ConfigContext } from '../contexts';
 import InputWithEditIcon from './InputWithEditIcon';
+import { IMapSettings } from '../util/Interfaces';
+import { getStopIcon } from '../util/stopCardUtil';
 
 interface IView {
   name?: string;
@@ -19,6 +18,7 @@ interface IView {
   contenthash?: string;
   url?: string;
   id: string;
+  mapSettings?: IMapSettings;
 }
 
 interface IProps {
@@ -37,7 +37,7 @@ const UserMonitorCard: React.FC<IProps> = ({
   let to;
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
-  const { cards, name, languages, url, id } = view;
+  const { cards, name, languages, url, id, mapSettings } = view;
   const [isOpen, setOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const layout = cards[0].layout;
@@ -64,11 +64,8 @@ const UserMonitorCard: React.FC<IProps> = ({
     cards: cards,
     languages: languages,
   };
-
   const stations = v ? getTrainStationData(v, 'STATION') : [];
   const stops = v ? getTrainStationData(v, 'STOP') : [];
-  const showPlatformsOrTracks =
-    stations.length || stops.length ? isPlatformOrTrackVisible(v) : false;
 
   const getTitles = obj => {
     let titles = '';
@@ -81,60 +78,60 @@ const UserMonitorCard: React.FC<IProps> = ({
     return titles;
   };
 
-  const crds = cards.map((c, i) => {
-    const cols = c.columns;
-    const multipleCols = c.layout >= 9 && c.layout <= 11;
-    const colStops = multipleCols
-      ? [cols.left.stops, cols.right.stops]
-      : [cols.left.stops];
+  const crds = cards
+    .filter(c => c.type !== 'map')
+    .map((c, i) => {
+      const cols = c.columns;
+      const multipleCols = c.layout >= 9 && c.layout <= 11;
+      const colStops = multipleCols
+        ? [cols.left.stops, cols.right.stops]
+        : [cols.left.stops];
 
-    const colTitles = multipleCols
-      ? [getTitles(cols.left), getTitles(cols.right)]
-      : [getTitles(c)];
+      const colTitles = multipleCols
+        ? [getTitles(cols.left), getTitles(cols.right)]
+        : [getTitles(c)];
 
-    const titlesAndStops = (
-      <ul key={`card#${i}`}>
-        {colStops.map((colStop, c) => {
-          return (
-            <React.Fragment key={`display${c}`}>
-              <div className="card-title">{colTitles[c]}</div>
-              <div className="stop-list">
-                {colStop.map((stop, j) => {
-                  const stopCode = `(${stop.code})`;
-                  const icon =
-                    stop.locationType === 'STATION' || stop.mode === 'SUBWAY'
-                      ? `station-${stop.mode.toLowerCase()}`
-                      : `stop-${stop.mode.toLowerCase()}`;
-                  return (
-                    <li key={`stop#${j}`}>
-                      <Icon
-                        img={icon}
-                        color={
-                          config.modeIcons.colors[
-                            `mode-${stop.mode.toLowerCase()}`
-                          ]
-                        }
-                      />
-                      {`${stop.name} ${stop.code ? stopCode : ''}`}
-                    </li>
-                  );
-                })}
-              </div>
-            </React.Fragment>
-          );
-        })}
-      </ul>
-    );
+      const titlesAndStops = (
+        <ul key={`card#${i}`}>
+          {colStops.map((colStop, c) => {
+            return (
+              <React.Fragment key={`display${c}`}>
+                <div className="card-title">{colTitles[c]}</div>
+                <div className="stop-list">
+                  {colStop.map((stop, j) => {
+                    const stopCode = `(${stop.code})`;
+                    const mode = stop?.mode;
+                    const icon = getStopIcon(stop);
+                    return (
+                      <li key={`stop#${j}`}>
+                        <Icon
+                          img={icon}
+                          color={
+                            config.modeIcons.colors[
+                              `mode-${mode?.toLowerCase()}`
+                            ]
+                          }
+                        />
+                        {`${stop.name} ${stop.code ? stopCode : ''}`}
+                      </li>
+                    );
+                  })}
+                </div>
+              </React.Fragment>
+            );
+          })}
+        </ul>
+      );
 
-    return (
-      <div key={`c#${i}`} className="card-item">
-        <div className="card-container">
-          <Icon img={'layout'.concat(c.layout)} />
-          <div className="data">{titlesAndStops}</div>
+      return (
+        <div key={`c#${i}`} className="card-item">
+          <div className="card-container">
+            <Icon img={'layout'.concat(c.layout)} />
+            <div className="data">{titlesAndStops}</div>
+          </div>
         </div>
-      </div>
-    );
-  });
+      );
+    });
   const isHorizontal = layout < 12 || layout === 18;
   return (
     <>
@@ -151,7 +148,7 @@ const UserMonitorCard: React.FC<IProps> = ({
             isLandscape={isHorizontal}
             stations={stations}
             stops={stops}
-            showPlatformsOrTracks={showPlatformsOrTracks}
+            mapSettings={mapSettings}
           />
         )}
         {deleteModalOpen && (

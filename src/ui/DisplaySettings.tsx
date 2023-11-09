@@ -4,12 +4,16 @@ import Icon from './Icon';
 import cx from 'classnames';
 import Checkbox from './CheckBox';
 import { ConfigContext } from '../contexts';
+import Toggle from './Toggle';
 
 interface IProps {
   languages: Array<string>;
   orientation: string;
   handleChange: (language: string) => void;
   handleOrientation: (orientation: string) => void;
+  showMap: boolean;
+  setShowMap: (boolean) => void;
+  disableToggle?: boolean;
 }
 
 const DisplaySettings: FC<IProps> = ({
@@ -17,6 +21,9 @@ const DisplaySettings: FC<IProps> = ({
   orientation,
   handleOrientation,
   handleChange,
+  showMap,
+  setShowMap,
+  disableToggle,
 }) => {
   const config = useContext(ConfigContext);
   const [t] = useTranslation();
@@ -24,13 +31,16 @@ const DisplaySettings: FC<IProps> = ({
   const isChecked = (option: string) => {
     return languages.includes(option);
   };
+  const lang = localStorage.getItem('lang') || 'fi';
   return (
     <div className="display-settings-container">
       <section
         className="display-orientation-container"
         aria-label={t('displayDirection')}
       >
-        <div className="orientation-header">{t('displayDirection')}</div>
+        <div className="headers">
+          <div className="orientation-header">{t('displayDirection')}</div>
+        </div>
         <div className="orientation-controls">
           <button
             className={cx('orientation-button', {
@@ -75,7 +85,15 @@ const DisplaySettings: FC<IProps> = ({
         className="display-language-container"
         aria-label={t('displayLanguages')}
       >
-        <div className="language-header">{t('displayLanguages')}</div>
+        <div className="headers">
+          <div
+            className={cx('language-header ' + lang, {
+              hsl: config.name === 'hsl',
+            })}
+          >
+            {t('displayLanguages')}
+          </div>
+        </div>
         {languages.length === 0 && (
           <div className="language-alert" aria-hidden="true">
             {t('chooseOne')}
@@ -100,6 +118,34 @@ const DisplaySettings: FC<IProps> = ({
           })}
         </div>
       </section>
+      {config.map.inUse && (
+        <section className="display-language-container">
+          <div className="headers">
+            <div
+              className={cx('map-header ' + lang, {
+                hsl: config.name === 'hsl',
+              })}
+            >
+              {t('displayMap')}
+            </div>
+          </div>
+          {config.map.inUse && (
+            <div className="map-toggle">
+              {' '}
+              <label>
+                <Toggle
+                  id="toggle"
+                  toggled={showMap}
+                  title="showmap"
+                  onToggle={setShowMap}
+                  disabled={disableToggle}
+                />
+              </label>
+              <div className="txt">{t('showMap')}</div>
+            </div>
+          )}
+        </section>
+      )}
     </div>
   );
 };

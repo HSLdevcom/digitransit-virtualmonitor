@@ -1,7 +1,7 @@
 import { getCurrentSeconds } from '../time';
 import uniqBy from 'lodash/uniqBy';
 import { IClosedStop } from './Interfaces';
-import xmlParser from 'fast-xml-parser';
+import { XMLParser } from 'fast-xml-parser';
 import { trainStationMap } from '../util/trainStations';
 import { validate as uuidValidate, version as uuidVersion } from 'uuid';
 import dummyAlerts, { getDummyAlerts } from '../testAlert';
@@ -49,6 +49,36 @@ export const getStopsAndStationsFromViews = views => {
   return [stopIds, stationIds];
 };
 
+export const stopsAndStationsFromViews = views => {
+  const stopIds = [];
+  const stationIds = [];
+  const arr = Array.isArray(views) ? views : [views];
+  const arr1 = arr.filter(v => v.type !== 'map');
+  arr1.forEach(view => {
+    Object.keys(view.columns).forEach(col => {
+      view.columns[col].stops?.forEach(stop => {
+        stop.locationType === 'STOP'
+          ? stopIds.push(stop)
+          : stationIds.push(stop);
+      });
+    });
+  });
+  return [stopIds, stationIds];
+};
+const getRenameID = (stops, item) => {
+  let renamID = null;
+  stops.forEach(stop => {
+    const id = stop.patterns.find(
+      s => s.headsign === item.trip?.tripHeadsign,
+    )?.headsign;
+    if (id) {
+      renamID = id;
+      return id;
+    }
+  });
+  return renamID;
+};
+
 export const filterDepartures = (
   stop,
   hiddenRoutes,
@@ -65,6 +95,11 @@ export const filterDepartures = (
     if (!hiddenRoutes.includes(combinedPattern)) {
       let stoptimes = [];
       stoptimeList.stoptimes.forEach(item => {
+        const renameID = getRenameID(
+          Array.isArray(stop.stops) ? stop.stops : [stop],
+          item,
+        );
+
         if (showEndOfLine || item.pickupType !== 'NONE') {
           stoptimes.push({
             ...item,
@@ -72,6 +107,7 @@ export const filterDepartures = (
             showStopNumber: showStopNumber,
             showVia: showVia,
             vehicleMode: stop.vehicleMode?.toLowerCase(),
+            renameID: renameID,
           });
         }
       });
@@ -89,26 +125,6 @@ export const filterDepartures = (
   });
   return departures;
 };
-const getTranslationStringsForStop = (stop, hiddenRoutes) => {
-  const stringsToTranslate = [];
-  stop.stoptimesForPatterns.forEach(stopTimeForPattern => {
-    if (!hiddenRoutes.includes(stringifyPattern(stopTimeForPattern.pattern))) {
-      let headsign = stopTimeForPattern.stoptimes[0].headsign;
-      if (headsign?.includes(' via ')) {
-        const destinations = headsign.split(' via ');
-        stringsToTranslate.push(...destinations);
-      } else if (headsign?.endsWith(' via')) {
-        headsign = headsign.substring(0, headsign.indexOf(' via'));
-        stringsToTranslate.push(headsign);
-      } else {
-        if (headsign) {
-          stringsToTranslate.push(headsign);
-        }
-      }
-    }
-  });
-  return stringsToTranslate;
-};
 
 export const createDepartureArray = (
   views,
@@ -124,7 +140,6 @@ export const createDepartureArray = (
     renamedDestinations: [],
   };
   const departures = [];
-  const stringsToTranslate = [];
   const alerts = [];
   const closedStopViews: Array<IClosedStop> = [];
 
@@ -192,16 +207,10 @@ export const createDepartureArray = (
 
             if (isStation) {
               stop.stops.forEach(s => {
-                stringsToTranslate.push(
-                  ...getTranslationStringsForStop(stop, hiddenRoutes),
-                );
                 alerts.push(...s.alerts);
                 s.routes.forEach(r => alerts.push(...r.alerts));
               });
             } else {
-              stringsToTranslate.push(
-                ...getTranslationStringsForStop(stop, hiddenRoutes),
-              );
               alerts.push(...stop.alerts);
               stop.routes.forEach(r => alerts.push(...r.alerts));
             }
@@ -236,7 +245,7 @@ export const createDepartureArray = (
   if (process.env.NODE_ENV === 'development' && dummyAlerts.inUse) {
     arr = arr.concat(getDummyAlerts(initTime));
   }
-  return [stringsToTranslate, departures, arr, closedStopViews];
+  return [departures, arr, closedStopViews];
 };
 
 export function getWeatherData(time, lat, lon) {
@@ -267,12 +276,14 @@ export function getWeatherData(time, lat, lon) {
           ignoreAttributes: true,
           ignoreNameSpace: true,
         };
-        return xmlParser.parse(str, options);
+        const parser = new XMLParser(options);
+        return parser.parse(str);
       })
       .then(json => {
-        if (json.FeatureCollection?.member) {
-          const data = json.FeatureCollection.member.map(
-            elem => elem.BsWfsElement,
+        const featureCollection = json['wfs:FeatureCollection']['wfs:member'];
+        if (featureCollection) {
+          const data = featureCollection.map(
+            elem => elem['BsWfs:BsWfsElement'],
           );
           return data;
         }
@@ -356,16 +367,12 @@ export const getTrainStationData = (monitor, locationType) => {
   array.forEach(card => {
     Object.keys(card.columns).forEach(column => {
       card.columns[column].stops?.forEach(stop => {
-        if (
-          stop.locationType === locationType &&
-          stop.vehicleMode?.toLowerCase() === 'rail'
-        ) {
+        const hasMode =
+          stop.vehicleMode?.toLowerCase() === 'rail' ||
+          stop.mode?.toLowerCase() === 'rail';
+        if (stop.locationType === locationType && hasMode) {
           const isHsl = stop.gtfsId.startsWith('HSL:');
-          const gtfsId =
-            isHsl && stop.parentStation?.gtfsId
-              ? stop.parentStation?.gtfsId
-              : stop.gtfsId;
-
+          const gtfsId = stop.gtfsId;
           retValue.push({
             gtfsId: gtfsId,
             shortCode: !isHsl
@@ -374,6 +381,8 @@ export const getTrainStationData = (monitor, locationType) => {
                 null,
             source: isHsl ? 'HSL' : 'MATKA',
             hiddenRoutes: stop.settings?.hiddenRoutes || [],
+            lat: stop.lat,
+            lon: stop.lon,
           });
         }
       });
@@ -403,3 +412,46 @@ export const uuidValidateV5 = uuid => {
 
 export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
   `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;
+
+export const getDepartureDestination = (departure, lang) => {
+  return departure['headsign' + lang]
+    ? departure['headsign' + lang]
+    : departure.trip && departure.trip['tripHeadsign' + lang]
+    ? departure.trip['tripHeadsign' + lang]
+    : departure['headsign']
+    ? departure['headsign']
+    : null;
+};
+
+type Coordinate = [number, number];
+type BoundingBox = [Coordinate, Coordinate];
+
+export function getBoundingBox(coordinates: Coordinate[]): BoundingBox {
+  if (coordinates.length === 0) {
+    return [
+      [0, 0],
+      [0, 0],
+    ];
+  }
+
+  let minLat = coordinates[0][0];
+  let maxLat = coordinates[0][0];
+  let minLng = coordinates[0][1];
+  let maxLng = coordinates[0][1];
+  for (let i = 1; i < coordinates.length; i++) {
+    const lat = coordinates[i][0];
+    const lng = coordinates[i][1];
+
+    if (lat && lng) {
+      minLat = Math.min(minLat, lat);
+      minLng = Math.min(minLng, lng);
+      maxLat = Math.max(maxLat, lat);
+      maxLng = Math.max(maxLng, lng);
+    }
+  }
+
+  return [
+    [minLat, minLng],
+    [maxLat, maxLng],
+  ];
+}

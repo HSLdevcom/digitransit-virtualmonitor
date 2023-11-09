@@ -1,0 +1,24 @@
+.map-btn {
+  position: absolute;
+  z-index: 1000;
+  left: calc(50% - (216px / 2));
+  bottom: 5%;
+}
+
+.map-modal-header {
+  background-color: #fff;
+  height: 56px;
+  z-index: 1000;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  #close {
+    display: flex;
+    justify-content: flex-end;
+    position: absolute;
+    right: 20px;
+  }
+}

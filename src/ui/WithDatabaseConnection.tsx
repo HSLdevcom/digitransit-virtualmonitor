@@ -8,6 +8,12 @@ import NoMonitorsFound from './NoMonitorsFound';
 import TrainDataPreparer from './TrainDataPreparer';
 import { getParams } from '../util/queryUtils';
 import { MonitorContext } from '../contexts';
+import QueryError from './QueryError';
+import {
+  getTrainStationData,
+  isPlatformOrTrackVisible,
+} from '../util/monitorUtils';
+import { useMergeState } from '../util/utilityHooks';
 
 interface Iv {
   columns: ISides;
@@ -33,17 +39,17 @@ interface IProps {
   readonly location?: ILocation;
   readonly stations: Array<ICard>;
   readonly stops: Array<ICard>;
-  readonly showPlatformsOrTracks: boolean;
+  readonly showPlatformsOrTracks?: boolean;
 }
 
-const WithDatabaseConnection: FC<IProps> = ({
-  location,
-  stations,
-  stops,
-  showPlatformsOrTracks,
-}) => {
-  const [view, setView] = useState({});
-  const [loading, setLoading] = useState(true);
+const WithDatabaseConnection: FC<IProps> = ({ location }) => {
+  const [queryError, setQueryError] = useState(false);
+  const [monitorState, setMonitorState] = useMergeState({
+    loading: true,
+    view: undefined,
+    stations: undefined,
+    stops: undefined,
+  });
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
       const { url, cont: hash } = getParams(location.search);
@@ -51,40 +57,81 @@ const WithDatabaseConnection: FC<IProps> = ({
         monitorAPI
           .get(hash)
           .then(r => {
-            setLoading(false);
-            setView(r);
+            setMonitorState({
+              loading: false,
+              view: r,
+              stations: getTrainStationData(r, 'STATION'),
+              stops: getTrainStationData(r, 'STOP'),
+            });
           })
-          .catch(() => setLoading(false));
+          .catch(() => {
+            setQueryError(true);
+            setMonitorState({ loading: false });
+          });
       } else if (url) {
         monitorAPI
           .getStatic(url)
           .then(r => {
-            setLoading(false);
-            setView(r);
+            setMonitorState({
+              loading: false,
+              view: r,
+              stations: getTrainStationData(r, 'STATION'),
+              stops: getTrainStationData(r, 'STOP'),
+            });
+
+            if (queryError) {
+              setQueryError(false);
+            }
           })
-          .catch(() => setLoading(false));
+          .catch(() => {
+            setQueryError(true);
+            setMonitorState({ loading: false });
+          });
+      } else {
+        setQueryError(true);
       }
     }
-  }, []);
+  }, [queryError]);
 
+  const { loading, view, stops, stations } = monitorState;
   const monitor = !loading ? view : location?.state?.view.cards;
+  if (queryError) {
+    return (
+      <MonitorContext.Provider value={monitor}>
+        <QueryError setQueryError={setQueryError} />
+      </MonitorContext.Provider>
+    );
+  }
   if ((loading && !location?.state?.view?.cards) || !monitor?.contenthash) {
     if (!loading) {
       return <NoMonitorsFound />;
     }
     return <Loading />;
   }
+  const layout = view.cards[0].layout;
+
+  const showInfoDisplay = layout > 17 && layout < 19;
 
   return (
     <MonitorContext.Provider value={monitor}>
-      {monitor.cards[0].layout > 17 ? (
+      {showInfoDisplay ? (
         <InformationDisplayContainer />
       ) : (
         <>
-          {(stations.length || stops.length) && showPlatformsOrTracks ? (
-            <TrainDataPreparer stations={stations} stops={stops} />
+          {(stations.length || stops.length) &&
+          isPlatformOrTrackVisible(view) ? (
+            <TrainDataPreparer
+              stations={stations}
+              stops={stops}
+              setQueryError={setQueryError}
+              queryError={queryError}
+            />
           ) : (
-            <CarouselDataContainer initTime={new Date().getTime()} />
+            <CarouselDataContainer
+              initTime={new Date().getTime()}
+              setQueryError={setQueryError}
+              queryError={queryError}
+            />
           )}
         </>
       )}

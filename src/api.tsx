@@ -3,8 +3,8 @@ import { getConfig } from './util/getConfig';
 const baseAPI = '/api';
 
 function statusCheckedResult(result) {
-  if (result.status === 401) {
-    return [];
+  if (result.status > 399) {
+    throw new Error(`Error: status ${result.status}`);
   }
   return result.json();
 }
@@ -28,6 +28,15 @@ const fetchData = (path, options, signal = undefined) => {
 };
 
 const monitorAPI = {
+  getMapSettings(signal = undefined) {
+    return fetchData('map', {}, signal);
+  },
+  getPing(signal = undefined) {
+    const options = {
+      method: 'GET',
+    };
+    return fetchData('status', options, signal);
+  },
   getUser() {
     const options = {
       credentials: 'include',
@@ -66,9 +75,6 @@ const monitorAPI = {
       },
     };
     return fetchData(`monitor`, options);
-  },
-  getTranslations(ids) {
-    return fetchData(`translations/${ids.join()}`, {});
   },
   decompress(base64string) {
     const options = {

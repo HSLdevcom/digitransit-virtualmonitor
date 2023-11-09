@@ -63,6 +63,10 @@ $preview-container-height: 365px;
       .linkki {
         width: min(100%, 7vh);
       }
+
+      .oulu {
+        width: min(100%, 12vh);
+      }
     }
   }
 
@@ -113,6 +117,10 @@ $preview-container-height: 365px;
     .linkki {
       width: 50px !important;
     }
+
+    .oulu {
+      width: 100px !important;
+    }
   }
 
   .title-logo {
@@ -142,6 +150,10 @@ $preview-container-height: 365px;
 
     .linkki {
       width: min(100%, 10vh);
+    }
+
+    .oulu {
+      width: min(100%, 20vh);
     }
 
     .vaasa {

@@ -1,9 +1,9 @@
 export default {
   hsl: {
-    frontPageContent: 'front-page-paragraph-hsl',
     fonts: {
-      fontCounter: 'https://cloud.typography.com/6364294/7432412/css/fonts.css',
-      externalFonts: ['https://www.hsl.fi/fonts/784131/6C5FB8083F348CFBB.css'],
+      externalFonts: [
+        'https://cloud.typography.com/6364294/7432412/css/fonts.css',
+      ],
       normal: '"Gotham Rounded A","Gotham Rounded B", Arial, Georgia, Serif',
       weights: {
         normal: '400',
@@ -34,7 +34,7 @@ export default {
       setName: 'default',
     },
     name: 'hsl',
-    uri: 'routing/v1/routers/hsl/index/graphql',
+    uri: 'routing/v2/routers/hsl/index/graphql',
     bannersUri: 'https://content.hsl.fi/api/v1/banners?',
     HSLUri:
       // eslint-disable-next-line no-undef
@@ -48,9 +48,13 @@ export default {
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
       inUse: true,
+      frontPageContent: 'front-page-paragraph-hsl',
       favourites: true,
     },
     useTilde: true,
+    map: {
+      inUse: false,
+    },
   },
   jyvaskyla: {
     fonts: {
@@ -71,18 +75,35 @@ export default {
       setName: 'digitransit',
     },
     name: 'jyvaskyla',
-    uri: 'routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v2/routers/waltti/index/graphql',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
       inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
     useTilde: true,
+    map: {
+      inUse: false,
+    },
   },
   matka: {
     name: 'matka',
-    uri: 'routing/v1/routers/finland/index/graphql',
+    uri: 'routing/v2/routers/finland/index/graphql',
+    map: {
+      inUse: false,
+    },
+    stopSearchFilter: stop => {
+      const props = stop.properties;
+      if (
+        props?.id?.includes('GTFS:HSL') &&
+        props?.addendum?.GTFS?.modes?.includes('RAIL')
+      ) {
+        return false;
+      }
+      return true;
+    },
   },
   tampere: {
     colors: {
@@ -111,20 +132,25 @@ export default {
       setName: 'digitransit',
     },
     name: 'tampere',
-    uri: 'routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v2/routers/waltti/index/graphql',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
-      inUse: true,
+      inUse: false,
+      frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
     useTilde: false,
+    map: {
+      inUse: false,
+    },
   },
   vaasa: {
-    uri: 'routing/v1/routers/waltti/index/graphql',
+    uri: 'routing/v2/routers/waltti/index/graphql',
     name: 'vaasa',
     login: {
       inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },
     feedIds: ['vaasa'],
@@ -153,5 +179,36 @@ export default {
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     useTilde: true,
+    map: {
+      inUse: false,
+    },
+  },
+  oulu: {
+    name: 'oulu',
+    uri: 'routing/v2/routers/waltti/index/graphql',
+    feedIds: ['OULU'],
+    colors: {
+      primary: '#E10669',
+      monitorBackground: '#E10669',
+    },
+    modeIcons: {
+      colors: {
+        'mode-bus': '#E10669',
+        'mode-bus-express': '#E10669',
+        'mode-bus-local': '#E10669',
+        'mode-rail': '#E10669',
+        'mode-tram': '#E10669',
+        'mode-ferry': '#E10669',
+        'mode-subway': '#E10669',
+      },
+    },
+    login: {
+      inUse: true,
+      frontPageContent: 'front-page-paragraph-waltti',
+      favourites: false,
+    },
+    map: {
+      inUse: true,
+    },
   },
 };

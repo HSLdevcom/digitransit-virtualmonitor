@@ -11,7 +11,14 @@ export const getConfig = () => {
   };
   // When developing locally, you can define REACT_APP_CONFIG env variable. Use themes assinged below.
   const env = process.env.REACT_APP_CONFIG;
-  const allowedThemes = ['hsl', 'matka', 'tampere', 'jyvaskyla', 'vaasa'];
+  const allowedThemes = [
+    'hsl',
+    'matka',
+    'tampere',
+    'jyvaskyla',
+    'vaasa',
+    'oulu',
+  ];
   if (env && allowedThemes.indexOf(env) > -1) {
     return mergeWith(defaultConfig, config[env], merger);
   }
@@ -28,6 +35,10 @@ export const getConfig = () => {
     theme = 'hsl';
   } else if (domain.indexOf('vaasa') >= 0) {
     theme = 'vaasa';
+  } else if (domain.indexOf('oulu') >= 0) {
+    theme = 'oulu';
+  } else if (domain.indexOf('osl') >= 0) {
+    theme = 'oulu';
   } else {
     theme = 'hsl';
   }
@@ -40,4 +51,5 @@ export const getDomainIdentifierForTheme = {
   tampere: 'tre',
   jyvaskyla: 'jyvaskyla',
   vaasa: 'vaasa',
+  oulu: 'oulu',
 };

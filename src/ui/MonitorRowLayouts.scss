@@ -2,6 +2,10 @@
 
 /* ********* (also used in preview if preview properties are not defined) ********* */
 
+$routeCode-col-width: var(--routeCode-col-width);
+$calculated-font-size: var(--fontSize);
+$tightened-font-size: var(--tightenedFontSize);
+
 .grid-row {
   grid-template-columns: 21vh 1fr 25vh;
 
@@ -11,7 +15,7 @@
 }
 
 /* ********* 4 rows ********* */
-$rows4-1st-col-width: 23vh;
+$rows4-1st-col-width: 31vh;
 
 .rows4 .grid-row {
   grid-template-columns: $rows4-1st-col-width 1fr 36vh;
@@ -19,7 +23,7 @@ $rows4-1st-col-width: 23vh;
 
   .len1,
   .len2 {
-    font-size: calc((#{var(--height)} - 30vh) / 5.4);
+    font-size: calc((#{var(--height)} - 30vh) / 8);
   }
 
   &.alert {
@@ -36,7 +40,7 @@ $rows4-1st-col-width: 23vh;
 }
 
 /* ********* 8 rows ********* */
-$rows8-1st-col-width: 21vh;
+$rows8-1st-col-width: 28vh;
 
 .rows8 .grid-row {
   grid-template-columns: $rows8-1st-col-width 1fr 25vh;
@@ -56,7 +60,7 @@ $rows8-1st-col-width: 21vh;
 }
 
 /* ********* 12 rows ********* */
-$rows12-1st-col-width: 17vh;
+$rows12-1st-col-width: 22vh;
 
 .rows12 .grid-row {
   font-size: calc((#{var(--height)} - 30vh) / 17);
@@ -78,7 +82,7 @@ $rows12-1st-col-width: 17vh;
 /* ****************** 2 columns ****************** */
 
 /* ********* 4 rows ********* */
-$rows4-2col-1st-col-width: 18vh;
+$rows4-2col-1st-col-width: 31vh;
 
 .rows4.two-cols .grid-row {
   grid-template-columns: $rows4-2col-1st-col-width 1fr 19vh;
@@ -97,7 +101,7 @@ $rows4-2col-1st-col-width: 18vh;
 }
 
 /* ********* 8 rows ********* */
-$rows8-2col-1st-col-width: 21vh;
+$rows8-2col-1st-col-width: 28vh;
 
 .rows8.two-cols .grid-row {
   grid-template-columns: $rows8-2col-1st-col-width 1fr 18vh;
@@ -112,8 +116,14 @@ $rows8-2col-1st-col-width: 21vh;
 }
 
 /* ********* 12 rows ********* */
+$rows12-2col-1st-col-width: 17vh;
+
+.rows12.two-cols .grid-row {
+  grid-template-columns: $rows12-2col-1st-col-width 1fr 18vh;
+}
+
 .rows12.two-cols .grid-row.with-stop-code {
-  grid-template-columns: 17vh 1fr 13vh 18vh;
+  grid-template-columns: $rows12-2col-1st-col-width 1fr 13vh 18vh;
 
   &.without-route-column {
     grid-template-columns: auto 13vh 18vh;
@@ -121,7 +131,7 @@ $rows8-2col-1st-col-width: 21vh;
 }
 
 /* ****************** Portrait ****************** */
-$tightened-1st-column-width: 19vh;
+$tightened-1st-column-width: $routeCode-col-width;
 
 /* ********* 4 rows ********* */
 
@@ -134,16 +144,16 @@ $tightened-1st-column-width: 19vh;
 
   .len1,
   .len2 {
-    font-size: calc((#{var(--height)} - 30vh) / 8);
+    font-size: calc((#{var(--height)} - 30vh) / 12);
   }
 
-  font-size: calc((#{var(--height)} - 30vh) / 15);
+  font-size: $calculated-font-size;
 }
 
 /* ********* 6 rows ********* */
 
 .rows6.portrait .grid-row {
-  font-size: calc((#{var(--height)} - 30vh) / 16);
+  font-size: $calculated-font-size;
   grid-template-columns: $tightened-1st-column-width 1fr 15vh;
 
   &.without-route-column {
@@ -152,7 +162,7 @@ $tightened-1st-column-width: 19vh;
 }
 
 /* ********* 8 rows ********* */
-$rows8-portrait-1st-col-width: 19vh;
+$rows8-portrait-1st-col-width: $routeCode-col-width;
 
 .rows8.portrait .grid-row.with-stop-code {
   grid-template-columns: $rows8-portrait-1st-col-width 1fr 12vh 17vh;
@@ -173,19 +183,19 @@ $rows8-portrait-1st-col-width: 19vh;
     grid-template-columns: auto 17vh;
   }
 
-  font-size: calc((#{var(--height)} - 30vh) / 15);
+  font-size: $calculated-font-size;
 
   .len1,
   .len2 {
-    font-size: calc((#{var(--height)} - 30vh) / 8.5);
+    font-size: calc((#{var(--height)} - 30vh) / 12);
   }
 }
 
 /* ********* 12 rows ********* */
-$rows12-portrait-1st-col-width: 15vh;
+$rows12-portrait-1st-col-width: $routeCode-col-width;
 
 .rows12.portrait .grid-row {
-  font-size: calc((#{var(--height)} - 30vh) / 18);
+  font-size: $calculated-font-size;
   grid-template-columns: $rows12-portrait-1st-col-width 1fr 17vh;
 
   &.without-route-column {
@@ -202,7 +212,7 @@ $rows12-portrait-1st-col-width: 15vh;
 }
 
 /* ********* 16 rows ********* */
-$rows16-portrait-1st-col-width: 15vh;
+$rows16-portrait-1st-col-width: $routeCode-col-width;
 
 .rows16.portrait .grid-row {
   grid-template-columns: $rows16-portrait-1st-col-width 1fr 15vh;
@@ -211,7 +221,7 @@ $rows16-portrait-1st-col-width: 15vh;
     grid-template-columns: auto 15vh;
   }
 
-  font-size: calc((#{var(--height)} - 30vh) / 18);
+  font-size: $calculated-font-size;
 }
 
 .rows16.portrait .grid-row.with-stop-code {
@@ -223,7 +233,7 @@ $rows16-portrait-1st-col-width: 15vh;
 }
 
 /* ********* 24 rows ********* */
-$rows24-portrait-1st-col-width: 10vh;
+$rows24-portrait-1st-col-width: $routeCode-col-width;
 
 .rows24.portrait .grid-row {
   grid-template-columns: $rows24-portrait-1st-col-width 1fr 14vh;
@@ -232,7 +242,7 @@ $rows24-portrait-1st-col-width: 10vh;
     grid-template-columns: auto 14vh;
   }
 
-  font-size: calc((#{var(--height)} - 30vh) / 26);
+  font-size: $calculated-font-size;
 }
 
 .rows24.portrait .grid-row.with-stop-code {
@@ -267,7 +277,7 @@ $rows24-portrait-1st-col-width: 10vh;
 /* ********* 12 rows ********* */
 .rows12.portrait.tightened .grid-row {
   grid-template-columns: $tightened-1st-column-width 1fr 15vh;
-  font-size: calc((#{var(--height)} - 30vh) / 26);
+  font-size: $tightened-font-size;
 }
 
 .rows12.portrait.tightened .grid-row.with-stop-code {
@@ -404,7 +414,8 @@ $rows24-portrait-1st-col-width: 10vh;
   /* *************************** Preview: Portrait *************************** */
 
   /* ********* Preview: 8 rows ********* */
-  $p-rows8-portrait-1st-column-width: 100px;
+
+  $p-rows8-portrait-1st-column-width: $routeCode-col-width;
 
   .rows8.portrait .grid-row {
     grid-template-columns: $p-rows8-portrait-1st-column-width 1fr 80px;
@@ -413,7 +424,7 @@ $rows24-portrait-1st-col-width: 10vh;
       grid-template-columns: auto 80px;
     }
 
-    font-size: 24px;
+    font-size: $calculated-font-size;
 
     .len1,
     .len2 {
@@ -434,7 +445,7 @@ $rows24-portrait-1st-col-width: 10vh;
   }
 
   /* ********* Preview: 12 rows ********* */
-  $p-rows12-portrait-1st-column-width: 95px;
+  $p-rows12-portrait-1st-column-width: $routeCode-col-width;
 
   .rows12.portrait .grid-row.with-stop-code {
     grid-template-columns: $p-rows12-portrait-1st-column-width 1fr 70px 95px;
@@ -451,7 +462,7 @@ $rows24-portrait-1st-col-width: 10vh;
       grid-template-columns: auto 95px;
     }
 
-    font-size: 24px;
+    font-size: $calculated-font-size;
 
     .len1,
     .len2 {
@@ -460,7 +471,7 @@ $rows24-portrait-1st-col-width: 10vh;
   }
 
   /* ********* Preview: 16 rows ********* */
-  $p-rows16-portrait-1st-column-width: 75px;
+  $p-rows16-portrait-1st-column-width: $routeCode-col-width;
 
   .rows16.portrait .grid-row {
     grid-template-columns: $p-rows16-portrait-1st-column-width 1fr 80px;
@@ -469,7 +480,7 @@ $rows24-portrait-1st-col-width: 10vh;
       grid-template-columns: auto 80px;
     }
 
-    font-size: 20px;
+    font-size: $calculated-font-size;
   }
 
   .rows16.portrait .grid-row.with-stop-code {
@@ -481,7 +492,7 @@ $rows24-portrait-1st-col-width: 10vh;
   }
 
   /* ********* Preview: 24  rows ********* */
-  $p-rows24-portrait-1st-column-width: 75px;
+  $p-rows24-portrait-1st-column-width: $routeCode-col-width;
 
   .rows24.portrait .grid-row.with-stop-code {
     grid-template-columns: $p-rows24-portrait-1st-column-width 1fr 60px 80px;
@@ -498,11 +509,11 @@ $rows24-portrait-1st-col-width: 10vh;
       grid-template-columns: auto 80px;
     }
 
-    font-size: 15px;
+    font-size: $calculated-font-size;
   }
 
   /* ********* Preview: Tightened views ********* */
-  $p-tightened-1st-column-width: 105px;
+  $p-tightened-1st-column-width: $routeCode-col-width;
 
   /* ********* Preview: 4 rows ********* */
 
@@ -513,7 +524,7 @@ $rows24-portrait-1st-col-width: 10vh;
       grid-template-columns: auto 95px;
     }
 
-    font-size: 26px;
+    font-size: $calculated-font-size;
 
     .len1,
     .len2 {
@@ -538,7 +549,7 @@ $rows24-portrait-1st-col-width: 10vh;
       grid-template-columns: auto 95px;
     }
 
-    font-size: 20px;
+    font-size: $calculated-font-size;
 
     .len1,
     .len2 {
@@ -557,7 +568,7 @@ $rows24-portrait-1st-col-width: 10vh;
   /* ********* Preview: 12 rows ********* */
   .rows12.portrait.tightened .grid-row {
     grid-template-columns: $p-tightened-1st-column-width 1fr 60px;
-    font-size: 16px;
+    font-size: $calculated-font-size;
 
     .len1,
     .len2 {

@@ -2,15 +2,17 @@
 import passport from 'passport';
 import session from 'express-session';
 import redis from 'redis';
-import axios from 'axios';
+import axios from '../axios-general-instance-config.js';
 import dayjs from 'dayjs';
 import connectRedis from 'connect-redis';
 import Strategy from './Strategy.js';
+import { parseEnvPropJSON } from '../config.js';
 
-const OIDCHost_hsl = JSON.parse(process.env.OIDCHOST).hsl || 'https://hslid-dev.t5.fi';
-const OIDCHost_waltti = JSON.parse(process.env.OIDCHOST).waltti;
-const oidcClientIdList = JSON.parse(process.env.OIDC_CLIENT_ID);
-const oidcClientSecretList = JSON.parse(process.env.OIDC_CLIENT_SECRET);
+const OIDCHost_hsl =
+  parseEnvPropJSON(process.env.OIDCHOST, 'OIDCHOST').hsl || 'https://hslid-dev.t5.fi';
+const OIDCHost_waltti = parseEnvPropJSON(process.env.OIDCHOST, 'OIDCHOST').waltti;
+const oidcClientIdList = parseEnvPropJSON(process.env.OIDC_CLIENT_ID, 'OIDC_CLIENT_ID');
+const oidcClientSecretList = parseEnvPropJSON(process.env.OIDC_CLIENT_SECRET, 'OIDC_CLIENT_SECRET');
 
 export const errorHandler = function (res, err) {
   const status = err?.message && err.message.includes('timeout') ? 408 : 500;
@@ -84,12 +86,24 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     );
   }
 
+  RedisClient.on('error', err => {
+    console.error(err);
+  });
+
   // Use Passport with OpenId Connect strategy to authenticate users
   const hslStrategyName = 'passport-openid-connect-hsl';
   const walttiStrategyName = 'passport-openid-connect-waltti';
   const hslConfiguration = configurationStrategy(hslStrategyName, hslCallbackPath, OIDCHost_hsl, oidcClientIdList.hsl, oidcClientSecretList.hsl);
-  const walttiConfiguration = configurationStrategy(walttiStrategyName, walttiCallbackPath, OIDCHost_waltti, oidcClientIdList.waltti, oidcClientSecretList.waltti);
-
+  const walttiConfiguration = OIDCHost_waltti
+  ? configurationStrategy(
+      walttiStrategyName,
+      walttiCallbackPath,
+      OIDCHost_waltti,
+      oidcClientIdList.waltti,
+      oidcClientSecretList.waltti
+    )
+  : null;
+  
   function configurationStrategy(strategyName, callbackPath, OIDCHost, client_id, client_secret) {
     return new Strategy(strategyName, callbackPath, {
       issuerHost: `${OIDCHost}/.well-known/openid-configuration`,
@@ -142,11 +156,12 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     const token = req?.user?.token;
     if (
       req.isAuthenticated() &&
-      token.refresh_token &&
-      dayjs().unix() >= token.expires_at
+      req.session &&
+      token?.refresh_token &&
+      dayjs().unix() >= token?.expires_at
     ) {
       const userData = JSON.stringify(req?.user?.data);
-      const oidcStrategyName = '';
+      let oidcStrategyName = '';
       if (userData.indexOf('hsl') !== -1) {
         oidcStrategyName = hslStrategyName;
       } else if (userData.indexOf('waltti') !== -1) {
@@ -155,8 +170,8 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
 
       return passport.authenticate(oidcStrategyName, {
         refresh: true,
-        successReturnToOrRedirect: `/${indexPath}`,
-        failureRedirect: `/${indexPath}`,
+        successReturnToOrRedirect: `/${req.path}`,
+        failureRedirect: '/',
       })(req, res, next);
     }
     return next();
@@ -191,7 +206,9 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   app.use(passport.initialize());
   app.use(passport.session());
   passport.use(hslStrategyName, hslConfiguration);
-  passport.use(walttiStrategyName, walttiConfiguration);
+  if (walttiConfiguration) {
+    passport.use(walttiStrategyName, walttiConfiguration);
+  }
 
   passport.serializeUser(Strategy.serializeUser);
   passport.deserializeUser(Strategy.deserializeUser);

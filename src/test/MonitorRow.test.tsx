@@ -16,7 +16,6 @@ const defaultProps = {
   showMinutes: 15,
   showVia: true,
   stops: [stop],
-  translations: [],
   withTwoColumns: false,
   withoutRouteColumn: false,
 };
@@ -104,4 +103,22 @@ it('should do show tilde when realtime is off', () => {
   expect(
     container.getElementsByClassName('grid-col time')[0].innerHTML,
   ).toContain('~');
+});
+
+it('should show the stop code when a departure does not have a platform code', () => {
+  const dep = {
+    ...departure,
+    realtime: false,
+  };
+
+  const props = {
+    ...defaultProps,
+    departure: dep,
+  };
+
+  const { container } = render(withContext(props));
+
+  expect(
+    container.getElementsByClassName('grid-col code')[0].innerHTML,
+  ).toContain('H1234');
 });

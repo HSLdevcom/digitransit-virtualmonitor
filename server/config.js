@@ -6,3 +6,20 @@ const config = {
   partitionKey: { kind: 'Hash', paths: ['/contenthash'] },
 };
 export default config;
+
+export function parseEnvPropJSON(envProperty, envPropertyName) {
+  try {
+    const propertyJson = JSON.parse(envProperty);
+    if (typeof propertyJson !== 'object') {
+      throw new Error(
+        `Property ${envPropertyName} is not an object. Expected a JSON object.`
+      );
+    }
+    return propertyJson;
+  } catch (error) {
+    console.error(error, 'Falling back to assuming HSL OIDC configuration.');
+    return {
+      hsl: envProperty,
+    };
+  }
+}

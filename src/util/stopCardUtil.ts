@@ -29,7 +29,15 @@ export const getStopIcon = stop => {
     const mode = stop.mode;
     return `station-${mode?.toLowerCase()}`;
   }
-  return `stop-${stop.vehicleMode?.toLowerCase()}`;
+  if (stop.mode.toLowerCase() === 'hybrid-speedtram-tram') {
+    return 'stop-speedtram';
+  }
+  const mode = stop.vehicleMode
+    ? `stop-${stop.vehicleMode.toLowerCase()}`
+    : stop.mode
+    ? `stop-${stop.mode.toLowerCase()}`
+    : 'stop-bus';
+  return mode;
 };
 
 export const getRouteMode = route => {
@@ -38,6 +46,8 @@ export const getRouteMode = route => {
       return 'bus-express';
     case 704:
       return 'bus-local';
+    case 900:
+      return 'tram-speed';
     default:
       return route.mode?.toLowerCase();
   }

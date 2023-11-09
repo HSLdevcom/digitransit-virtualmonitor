@@ -12,6 +12,21 @@ export default {
     'lautta',
     'OULU',
     'digitraffic',
+    'Rauma',
+    'Hameenlinna',
+    'Kotka',
+    'Kouvola',
+    'Lappeenranta',
+    'Mikkeli',
+    'Vaasa',
+    'Joensuu',
+    'FOLI',
+    'Lahti',
+    'Kuopio',
+    'Rovaniemi',
+    'Kajaani',
+    'Salo',
+    'Pori',
   ],
   fonts: {
     weights: {
@@ -51,4 +66,7 @@ export default {
     favourites: false,
   },
   useTilde: true,
+  map: {
+    inUse: false,
+  },
 };

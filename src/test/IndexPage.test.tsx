@@ -9,8 +9,8 @@ import { ConfigContext } from '../contexts';
 const mockConfig = {
   login: {
     inUse: false,
+    frontPageContent: [],
   },
-  frontPageContent: [],
 };
 
 const withContext = () => {

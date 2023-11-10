@@ -187,11 +187,9 @@ const CarouselContainer: FC<IProps> = ({
   }
 
   const alertRowReference = useRef();
-  useIsOverflow(alertRowReference, isOverflowFromCallback => {
-    if (isOverflowFromCallback) {
-      setAlertOrientation('vertical');
-    }
-  });
+  // Force text to adjust to it's place.
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  useIsOverflow(alertRowReference, () => {});
 
   if (alerts.length > 0) {
     alertComponent = (
@@ -249,7 +247,16 @@ export const useIsOverflow = (ref, callback) => {
   useEffect(() => {
     const { current } = ref;
     if (current) {
-      callback(current.scrollHeight > current.clientHeight);
+      const height: number = current.clientHeight;
+      const contentHeight: number = current.scrollHeight;
+      let fontSize = parseInt(
+        window.getComputedStyle(current, null).getPropertyValue('font-size'),
+        10,
+      );
+      if (contentHeight > height) {
+        fontSize = Math.ceil((fontSize * height) / contentHeight);
+        current.style.fontSize = fontSize + 'px';
+      }
     }
   }, [callback, ref]);
 };

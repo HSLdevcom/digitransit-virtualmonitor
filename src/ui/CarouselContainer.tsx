@@ -186,11 +186,6 @@ const CarouselContainer: FC<IProps> = ({
       break;
   }
 
-  const alertRowReference = useRef();
-  // Force text to adjust to it's place.
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  useIsOverflow(alertRowReference, () => {});
-
   if (alerts.length > 0) {
     alertComponent = (
       <div
@@ -213,7 +208,6 @@ const CarouselContainer: FC<IProps> = ({
             alerts={alerts}
             languages={languages}
             preview={preview}
-            alertRowReference={alertRowReference}
           />
         ) : (
           <MonitorAlertRow
@@ -241,24 +235,6 @@ const CarouselContainer: FC<IProps> = ({
       topics={topics}
     />
   );
-};
-
-export const useIsOverflow = (ref, callback) => {
-  useEffect(() => {
-    const { current } = ref;
-    if (current) {
-      const height: number = current.clientHeight;
-      const contentHeight: number = current.scrollHeight;
-      let fontSize = parseInt(
-        window.getComputedStyle(current, null).getPropertyValue('font-size'),
-        10,
-      );
-      if (contentHeight > height) {
-        fontSize = Math.ceil((fontSize * height) / contentHeight);
-        current.style.fontSize = fontSize + 'px';
-      }
-    }
-  }, [callback, ref]);
 };
 
 export default CarouselContainer;

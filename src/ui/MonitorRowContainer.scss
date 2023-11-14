@@ -534,10 +534,6 @@ $preview-grid-divider: 2px;
 }
 
 .grid.portrait {
-  .grid-row.alert.static {
-    font-size: calc((#{var(--height)} - 30vh) / 24) !important;
-  }
-
   .grid-row.alert.vertical {
     font-size: calc((#{var(--height)} - 30vh) / 20) !important;
   }
@@ -555,8 +551,6 @@ $preview-grid-divider: 2px;
     font-size: calc((#{var(--height)} - 30vh) / 9) !important;
 
     &.static {
-      font-size: calc((#{var(--height)} - 30vh) / 12) !important;
-
       .grid-cols.alert-row {
         width: unset;
         display: flex;
@@ -565,8 +559,6 @@ $preview-grid-divider: 2px;
     }
 
     &.vertical {
-      font-size: calc((#{var(--height)} - 30vh) / 12) !important;
-
       .alert-text {
         align-items: flex-start;
         height: 1px;

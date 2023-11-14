@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 
 export default {
-  inUse: true,
+  inUse: false,
 };
 
 export const getDummyAlerts = initTime => {

@@ -217,7 +217,9 @@ export const getRouteCodeColumnWidth = (departures, view, fontSize) => {
       return bLength === undefined || aLength > bLength ? aLength : bLength;
     }, shortestRouteCodeLength) || shortestRouteCodeLength; // Minimum length to allow space for the column title.
   const longestPossibleRouteCodeLength =
-    longestRouteCodeLength > 7 ? 3 : longestRouteCodeLength;
+    longestRouteCodeLength > 7
+      ? shortestRouteCodeLength
+      : longestRouteCodeLength;
 
   // How much taller letters are compared to width
   const fontHeightWidthRatio = 1.6;

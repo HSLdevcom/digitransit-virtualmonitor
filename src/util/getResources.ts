@@ -216,8 +216,10 @@ export const getRouteCodeColumnWidth = (departures, view, fontSize) => {
       const bLength = b?.trip?.route?.shortName?.length;
       return bLength === undefined || aLength > bLength ? aLength : bLength;
     }, shortestRouteCodeLength) || shortestRouteCodeLength; // Minimum length to allow space for the column title.
+  const longestPossibleRouteCodeLength =
+    longestRouteCodeLength > 7 ? 3 : longestRouteCodeLength;
 
   // How much taller letters are compared to width
   const fontHeightWidthRatio = 1.6;
-  return (fontSize / fontHeightWidthRatio) * longestRouteCodeLength;
+  return (fontSize / fontHeightWidthRatio) * longestPossibleRouteCodeLength;
 };

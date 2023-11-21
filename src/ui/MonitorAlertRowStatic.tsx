@@ -1,9 +1,10 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, MutableRefObject, useEffect, useState } from 'react';
 import cx from 'classnames';
 import {
   getServiceAlertDescription,
   getServiceAlertHeader,
 } from '../util/alertUtils';
+import useFitText from 'use-fit-text';
 
 interface IProps {
   alerts: any;
@@ -14,6 +15,7 @@ interface IProps {
 const MonitorAlertRowStatic: FC<IProps> = ({ alerts, languages }) => {
   const [current, setCurrent] = useState(0);
   const len = alerts.length * languages.length;
+  const { fontSize, ref } = useFitText();
   useEffect(() => {
     const next = (current + 1) % len;
     const id = setTimeout(() => {
@@ -34,7 +36,13 @@ const MonitorAlertRowStatic: FC<IProps> = ({ alerts, languages }) => {
 
   return (
     <div className={cx('grid-row', 'alert static')}>
-      <div className={cx('grid-cols', 'alert-row')}>{alert}</div>
+      <div
+        className={cx('grid-cols', 'alert-row')}
+        style={{ fontSize }}
+        ref={ref}
+      >
+        {alert}
+      </div>
     </div>
   );
 };

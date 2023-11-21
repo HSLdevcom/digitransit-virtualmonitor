@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useContext } from 'react';
+import React, { FC, useState, useEffect, useContext, useRef } from 'react';
 import { ConfigContext, MonitorContext } from '../contexts';
 import { IClosedStop, ITrainData } from '../util/Interfaces';
 import Monitor from './Monitor';
@@ -82,6 +82,13 @@ const CarouselContainer: FC<IProps> = ({
   const [demoOrientation, setDemoOrientation] = useState(
     orientations.indexOf(config.alertOrientation),
   );
+  const environment = process.env.NODE_ENV;
+  const [alertOrientation, setAlertOrientation] = useState(
+    environment && environment === 'production'
+      ? config.alertOrientation
+      : orientations[demoOrientation],
+  );
+
   useEffect(() => {
     const next = (current + 1) % len;
     const time =
@@ -101,7 +108,13 @@ const CarouselContainer: FC<IProps> = ({
     return () => clearTimeout(id);
   }, [current]);
 
-  const index = Math.floor(current / 2) % finalViews.length;
+  useEffect(() => {
+    if (config.alertOrientation === 'static') {
+      setAlertOrientation('static');
+    }
+  }, [alerts]);
+
+  const index = Math.floor(current / 2) % views.length;
 
   const departures = [
     sortAndFilter(
@@ -150,7 +163,6 @@ const CarouselContainer: FC<IProps> = ({
         };
       });
   }
-  const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts
   const newView = {
     ...finalViews[index],
@@ -173,12 +185,6 @@ const CarouselContainer: FC<IProps> = ({
       alertRowClass = '';
       break;
   }
-
-  const environment = process.env.NODE_ENV;
-  const alertOrientation =
-    environment && environment === 'production'
-      ? config.alertOrientation
-      : orientations[demoOrientation];
 
   if (alerts.length > 0) {
     alertComponent = (

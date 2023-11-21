@@ -24,14 +24,14 @@ export const getDummyAlerts = initTime => {
       alertDescriptionTextTranslations: [
         {
           language: 'en',
-          text: `This test alert is effective between ${formattedStartTime} and ${formattedEndTime}.`,
+          text: `This test alert is effective between ${formattedStartTime} and ${formattedEndTime}. This test alert is effective between ${formattedStartTime} and ${formattedEndTime}. This test alert is effective between ${formattedStartTime} and ${formattedEndTime}. This test alert is effective between ${formattedStartTime} and ${formattedEndTime}. This test alert is effective between ${formattedStartTime} and ${formattedEndTime}.  This test alert is effective between ${formattedStartTime} and ${formattedEndTime}. This test alert is effective between ${formattedStartTime} and ${formattedEndTime}. This test alert is effective between ${formattedStartTime} and ${formattedEndTime}. `,
         },
       ],
       alertHeaderText: 'Header text for dummy alert',
       alertHeaderTextTranslations: [
         {
           language: 'en',
-          text: `This test alert is effective between ${formattedStartTime} and ${formattedEndTime}.`,
+          text: `This test alert is effective between ${formattedStartTime} and ${formattedEndTime}. This test alert is effective between ${formattedStartTime} and ${formattedEndTime}. `,
         },
       ],
       alertSeverityLevel: 'SEVERE',

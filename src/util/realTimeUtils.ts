@@ -78,8 +78,6 @@ export default {
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
 
-    credentials: { username: 'user', password: 'userpass' },
-
     gtfsrt: true,
 
     routeSelector: defaultRouteSelector,
@@ -90,8 +88,6 @@ export default {
     mqttTopicResolver: walttiTopicResolver,
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
 
     gtfsrt: true,
 
@@ -104,8 +100,6 @@ export default {
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
 
-    credentials: { username: 'user', password: 'userpass' },
-
     gtfsrt: true,
 
     routeSelector: defaultRouteSelector,
@@ -117,8 +111,6 @@ export default {
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
 
-    credentials: { username: 'user', password: 'userpass' },
-
     gtfsrt: true,
 
     routeSelector: defaultRouteSelector,
@@ -129,8 +121,6 @@ export default {
     mqttTopicResolver: walttiTopicResolver,
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
 
     gtfsrt: true,
 
@@ -173,8 +163,6 @@ export default {
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
 
-    credentials: { username: 'user', password: 'userpass' },
-
     gtfsrt: true,
 
     routeSelector: defaultRouteSelector,
@@ -185,8 +173,6 @@ export default {
     mqttTopicResolver: walttiTopicResolver,
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
 
     gtfsrt: true,
 
@@ -199,8 +185,6 @@ export default {
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
 
-    credentials: { username: 'user', password: 'userpass' },
-
     gtfsrt: true,
 
     routeSelector: defaultRouteSelector,
@@ -211,8 +195,6 @@ export default {
     mqttTopicResolver: walttiTopicResolver,
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
 
     gtfsrt: true,
 
@@ -225,8 +207,6 @@ export default {
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
 
-    credentials: { username: 'user', password: 'userpass' },
-
     gtfsrt: true,
 
     routeSelector: defaultRouteSelector,
@@ -237,8 +217,6 @@ export default {
     mqttTopicResolver: walttiTopicResolver,
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
 
     gtfsrt: true,
 
@@ -251,8 +229,6 @@ export default {
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
 
-    credentials: { username: 'user', password: 'userpass' },
-
     gtfsrt: true,
 
     routeSelector: defaultRouteSelector,
@@ -263,8 +239,6 @@ export default {
     mqttTopicResolver: walttiTopicResolver,
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
 
     gtfsrt: true,
 
@@ -277,8 +251,6 @@ export default {
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
 
-    credentials: { username: 'user', password: 'userpass' },
-
     gtfsrt: true,
 
     routeSelector: defaultRouteSelector,
@@ -289,8 +261,6 @@ export default {
     mqttTopicResolver: walttiTopicResolver,
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
 
     gtfsrt: true,
 
@@ -303,7 +273,16 @@ export default {
 
     mqtt: 'wss://mqtt.waltti.fi/mqtt',
 
-    credentials: { username: 'user', password: 'userpass' },
+    gtfsrt: true,
+
+    routeSelector: defaultRouteSelector,
+
+    active: true,
+  },
+  digitraffic: {
+    mqttTopicResolver: walttiTopicResolver,
+
+    mqtt: 'wss://mqtt.waltti.fi/mqtt',
 
     gtfsrt: true,
 

@@ -23,7 +23,7 @@ export const startMqtt = (routes, setState, setClient, topicRef) => {
   }
 
   const feed = routes[0]?.feedId;
-  if (feed.toLowerCase() === 'hsl' || feed.toLowerCase() === 'digitraffic') {
+  if (feed.toLowerCase() === 'hsl') {
     //Unsupported at the moment
     return;
   }
@@ -114,12 +114,13 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
     shortName,
     color,
   ] = topic.split('/');
+  const entities = feed.entity ? feed.entity : feed;
   const messages = [];
-  feed.entity.forEach(entity => {
+  entities.forEach(entity => {
     const vehiclePos = entity.vehicle;
     if (vehiclePos) {
-      const { trip, position, vehicle } = vehiclePos;
-      if (trip && position && vehicle) {
+      const { trip, position } = vehiclePos;
+      if (trip && position) {
         const message = {
           id: `${agency}:${vehicleId}`,
           route: `${agency}:${routeId}`,

@@ -23,10 +23,10 @@ interface IProps {
   updateMap?: (settings: IMapSettings) => void;
   messages?: Array<IMessage>;
   clientRef: any;
-  newTopics?: string[];
+  newTopics?: any;
   topicRef: any;
+  departures?: any;
 }
-const EXPIRE_TIME_SEC = 120;
 const getVehicleIcon = message => {
   const { heading, shortName, color } = message;
   return L.divIcon({
@@ -46,6 +46,38 @@ function updateVehiclePosition(vehicle, icon, lat, long, timeStamp) {
   vehicle.lastUpdatedAt = timeStamp;
 }
 
+function shouldShowVehicle(message, direction, tripStart, pattern, headsign) {
+  return (
+    !Number.isNaN(parseFloat(message.lat)) &&
+    !Number.isNaN(parseFloat(message.long)) &&
+    (pattern === undefined ||
+      pattern.substr(0, message.route.length) === message.route) &&
+    (headsign === undefined ||
+      message.headsign === undefined ||
+      headsign === message.headsign) &&
+    (direction === undefined ||
+      message.direction === undefined ||
+      message.direction === +direction) &&
+    (tripStart === undefined ||
+      message.tripStartTime === undefined ||
+      message.tripStartTime === tripStart)
+  );
+}
+
+function getVehicle(departures, id) {
+  const flatDeps = departures.flat();
+  const veh = flatDeps.find(d => d.trip.route.gtfsId === id);
+  if (veh) {
+    const vehicleProps = {
+      direction: veh.trip.directionId,
+      tripStart: undefined,
+      pattern: veh.trip.gtfsId,
+      headsign: veh.headsign,
+    };
+    return vehicleProps;
+  }
+  return null;
+}
 const MonitorMap: FC<IProps> = ({
   preview,
   mapSettings,
@@ -55,10 +87,13 @@ const MonitorMap: FC<IProps> = ({
   clientRef,
   newTopics,
   topicRef,
+  departures,
 }) => {
   const config = useContext(ConfigContext);
   const [map, setMap] = useState<any>();
   const [vehicleMarkers, setVehicleMarkers] = useState([]);
+  const feed = newTopics[0]?.feedId.toLowerCase();
+  const EXPIRE_TIME_SEC = feed === 'hsl' ? 10 : 120; // HSL Uses different broker and we need to handle HSL messages differently
   const icons = mapSettings.stops.map(stop => {
     const color =
       config.modeIcons.colors[
@@ -134,14 +169,24 @@ const MonitorMap: FC<IProps> = ({
     const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
     const now = DateTime.now().toSeconds();
     messages.forEach(m => {
-      const { id, lat, long, next_stop } = m;
+      const { id, lat, long, next_stop, route } = m;
       const nextStop = stopIDs.includes(next_stop);
-
+      const vehicle = getVehicle(departures, route);
       const exists = markers.find(marker => {
         return marker.id === id;
       });
       let marker;
-      if (exists) {
+      const showVehicle =
+        route.split(':')[0] === 'HSL'
+          ? shouldShowVehicle(
+              m,
+              vehicle.direction,
+              vehicle.tripStart,
+              vehicle.pattern,
+              vehicle.headsign,
+            )
+          : true;
+      if (exists && showVehicle) {
         updateVehiclePosition(exists, getVehicleIcon(m), lat, long, now);
         if (exists.nextStop) {
           exists.passed = nextStop ? false : true;
@@ -149,7 +194,7 @@ const MonitorMap: FC<IProps> = ({
           exists.nextStop = true;
         }
         //  exists.passed = nextStop ? false : undefined;
-      } else {
+      } else if (showVehicle && !exists) {
         marker = {
           id: id,
           marker: L.marker([lat, long], {

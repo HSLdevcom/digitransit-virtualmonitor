@@ -13,6 +13,7 @@ export type Scalars = {
   Float: number;
   Duration: any;
   GeoJson: any;
+  Grams: any;
   Long: any;
   Polyline: any;
 };
@@ -342,21 +343,36 @@ export enum BikesAllowed {
   NoInformation = 'NO_INFORMATION'
 }
 
+/**
+ * Booking information for a stop time which has special requirements to use, like calling ahead or
+ * using an app.
+ */
 export type BookingInfo = {
   __typename?: 'BookingInfo';
+  /** Contact information for reaching the service provider */
   contactInfo?: Maybe<ContactInfo>;
+  /** A message specific to the drop off */
   dropOffMessage?: Maybe<Scalars['String']>;
+  /** When is the earliest time the service can be booked. */
   earliestBookingTime?: Maybe<BookingTime>;
+  /** When is the latest time the service can be booked */
   latestBookingTime?: Maybe<BookingTime>;
+  /** Maximum number of seconds before travel to make the request */
   maximumBookingNoticeSeconds?: Maybe<Scalars['Long']>;
+  /** A general message for those booking the service */
   message?: Maybe<Scalars['String']>;
+  /** Minimum number of seconds before travel to make the request */
   minimumBookingNoticeSeconds?: Maybe<Scalars['Long']>;
+  /** A message specific to the pick up */
   pickupMessage?: Maybe<Scalars['String']>;
 };
 
+/** Temporal restriction for a booking */
 export type BookingTime = {
   __typename?: 'BookingTime';
+  /** How many days before the booking */
   daysPrior?: Maybe<Scalars['Int']>;
+  /** Time of the booking */
   time?: Maybe<Scalars['String']>;
 };
 
@@ -411,14 +427,22 @@ export type Cluster = Node & {
   stops?: Maybe<Array<Stop>>;
 };
 
+/** Contact information for booking an on-demand or flexible service. */
 export type ContactInfo = {
   __typename?: 'ContactInfo';
+  /** Additional notes about the contacting the service provider */
   additionalDetails?: Maybe<Scalars['String']>;
+  /** URL to the booking systems of the service */
   bookingUrl?: Maybe<Scalars['String']>;
+  /** Name of the person to contact */
   contactPerson?: Maybe<Scalars['String']>;
+  /** Email to contact */
   eMail?: Maybe<Scalars['String']>;
+  /** Fax number to contact */
   faxNumber?: Maybe<Scalars['String']>;
+  /** URL containing general information about the service */
   infoUrl?: Maybe<Scalars['String']>;
+  /** Phone number to contact */
   phoneNumber?: Maybe<Scalars['String']>;
 };
 
@@ -449,9 +473,34 @@ export type Currency = {
 };
 
 /**
- * Departure row is a location, which lists departures of a certain pattern from a
- * stop. Departure rows are identified with the pattern, so querying departure rows
- * will return only departures from one stop per pattern
+ * The standard case of a fare product: it only has a single price to be paid by the passenger
+ * and no discounts are applied.
+ */
+export type DefaultFareProduct = FareProduct & {
+  __typename?: 'DefaultFareProduct';
+  /** Identifier for the fare product. */
+  id: Scalars['String'];
+  /**
+   * The 'medium' that this product applies to, for example "Oyster Card" or "Berlin Ticket App".
+   *
+   * This communicates to riders that a specific way of buying or keeping this product is required.
+   */
+  medium?: Maybe<FareMedium>;
+  /** Human readable name of the product, for example example "Day pass" or "Single ticket". */
+  name: Scalars['String'];
+  /** The price of the product */
+  price: Money;
+  /** The category of riders this product applies to, for example students or pensioners. */
+  riderCategory?: Maybe<RiderCategory>;
+};
+
+/**
+ * Departure row is a combination of a pattern and a stop of that pattern.
+ *
+ * They are de-duplicated so for each pattern there will only be a single departure row.
+ *
+ * This is useful if you want to show a list of stop/pattern combinations but want each pattern to be
+ * listed only once.
  */
 export type DepartureRow = Node & PlaceInterface & {
   __typename?: 'DepartureRow';
@@ -471,9 +520,12 @@ export type DepartureRow = Node & PlaceInterface & {
 
 
 /**
- * Departure row is a location, which lists departures of a certain pattern from a
- * stop. Departure rows are identified with the pattern, so querying departure rows
- * will return only departures from one stop per pattern
+ * Departure row is a combination of a pattern and a stop of that pattern.
+ *
+ * They are de-duplicated so for each pattern there will only be a single departure row.
+ *
+ * This is useful if you want to show a list of stop/pattern combinations but want each pattern to be
+ * listed only once.
  */
 export type DepartureRowStoptimesArgs = {
   numberOfDepartures?: InputMaybe<Scalars['Int']>;
@@ -481,6 +533,99 @@ export type DepartureRowStoptimesArgs = {
   omitNonPickups?: InputMaybe<Scalars['Boolean']>;
   startTime?: InputMaybe<Scalars['Long']>;
   timeRange?: InputMaybe<Scalars['Int']>;
+};
+
+export type Emissions = {
+  __typename?: 'Emissions';
+  /** CO₂ emissions in grams. */
+  co2?: Maybe<Scalars['Grams']>;
+};
+
+/** A 'medium' that a fare product applies to, for example cash, 'Oyster Card' or 'DB Navigator App'. */
+export type FareMedium = {
+  __typename?: 'FareMedium';
+  /** ID of the medium */
+  id: Scalars['String'];
+  /** Human readable name of the medium. */
+  name?: Maybe<Scalars['String']>;
+};
+
+/** A fare product (a ticket) to be bought by a passenger */
+export type FareProduct = {
+  /** Identifier for the fare product. */
+  id: Scalars['String'];
+  /**
+   * The 'medium' that this product applies to, for example "Oyster Card" or "Berlin Ticket App".
+   *
+   * This communicates to riders that a specific way of buying or keeping this product is required.
+   */
+  medium?: Maybe<FareMedium>;
+  /** Human readable name of the product, for example example "Day pass" or "Single ticket". */
+  name: Scalars['String'];
+  /** The category of riders this product applies to, for example students or pensioners. */
+  riderCategory?: Maybe<RiderCategory>;
+};
+
+/** A container for both a fare product (a ticket) and its relationship to the itinerary. */
+export type FareProductUse = {
+  __typename?: 'FareProductUse';
+  /**
+   * Represents the use of a single instance of a fare product throughout the itinerary. It can
+   * be used to cross-reference and de-duplicate fare products that are applicable for more than one
+   * leg.
+   *
+   * If you want to uniquely identify the fare product itself (not its use) use the product's `id`.
+   *
+   * ### Example: Day pass
+   *
+   * The day pass is valid for both legs in the itinerary. It is listed as the applicable `product` for each leg,
+   * and the same FareProductUse id is shown, indicating that only one pass was used/bought.
+   *
+   * **Illustration**
+   * ```yaml
+   * itinerary:
+   *   leg1:
+   *     fareProducts:
+   *       id: "AAA" // id of a FareProductUse instance
+   *       product:
+   *         id: "day-pass" // product id
+   *         name: "Day Pass"
+   *   leg2:
+   *     fareProducts:
+   *       id: "AAA" // identical to leg1. the passenger needs to buy ONE pass, not two.
+   *       product:
+   *         id: "day-pass"  // product id
+   *         name: "Day Pass"
+   * ```
+   *
+   * **It is the responsibility of the API consumers to display the day pass as a product for the
+   * entire itinerary rather than two day passes!**
+   *
+   * ### Example: Several single tickets
+   *
+   * If you have two legs and need to buy two single tickets they will appear in each leg with the
+   * same `FareProduct.id` but different `FareProductUse.id`.
+   *
+   * **Illustration**
+   * ```yaml
+   * itinerary:
+   *   leg1:
+   *     fareProducts:
+   *       id: "AAA" // id of a FareProductUse instance, not product id
+   *       product:
+   *         id: "single-ticket" // product id
+   *         name: "Single Ticket"
+   *   leg2:
+   *     fareProducts:
+   *       id: "BBB" // different to leg1. the passenger needs to buy two single tickets.
+   *       product:
+   *         id: "single-ticket"  // product id
+   *         name: "Single Ticket"
+   * ```
+   */
+  id: Scalars['String'];
+  /** The purchasable fare product */
+  product?: Maybe<FareProduct>;
 };
 
 /** A feed provides routing data (stops, routes, timetables, etc.) from one or more public transport agencies. */
@@ -676,6 +821,15 @@ export type InputUnpreferred = {
 
 export type Itinerary = {
   __typename?: 'Itinerary';
+  /**
+   * Computes a numeric accessibility score between 0 and 1.
+   *
+   * The closer the value is to 1 the better the wheelchair-accessibility of this itinerary is.
+   * A value of `null` means that no score has been computed, not that the leg is inaccessible.
+   *
+   * More information is available in the [feature documentation](https://docs.opentripplanner.org/en/dev-2.x/sandbox/IBIAccessibilityScore/).
+   */
+  accessibilityScore?: Maybe<Scalars['Float']>;
   /** Does the itinerary end without dropping off the rented bicycle: */
   arrivedAtDestinationWithRentedBicycle?: Maybe<Scalars['Boolean']>;
   /** Duration of the trip on this itinerary, in seconds. */
@@ -684,9 +838,15 @@ export type Itinerary = {
   elevationGained?: Maybe<Scalars['Float']>;
   /** How much elevation is lost, in total, over the course of the itinerary, in meters. */
   elevationLost?: Maybe<Scalars['Float']>;
+  /** Emissions of this itinerary per traveler. */
+  emissionsPerPerson?: Maybe<Emissions>;
   /** Time when the user arrives to the destination.. Format: Unix timestamp in milliseconds. */
   endTime?: Maybe<Scalars['Long']>;
-  /** Information about the fares for this itinerary */
+  /**
+   * Information about the fares for this itinerary. This is primarily a GTFS Fares V1 interface
+   * will be removed in the future.
+   * @deprecated Use the leg's `fareProducts`.
+   */
   fares?: Maybe<Array<Maybe<Fare>>>;
   /** Generalized cost of the itinerary. Used for debugging search results. */
   generalizedCost?: Maybe<Scalars['Int']>;
@@ -697,6 +857,14 @@ export type Itinerary = {
    * destination, has four legs.
    */
   legs: Array<Maybe<Leg>>;
+  /**
+   * How many transfers are part of this itinerary.
+   *
+   * Notes:
+   *  - Interlined/stay-seated transfers do not increase this count.
+   *  - Transferring from a flex to a fixed schedule trip and vice versa increases this count.
+   */
+  numberOfTransfers: Scalars['Int'];
   /** Time when the user leaves from the origin. Format: Unix timestamp in milliseconds. */
   startTime?: Maybe<Scalars['Long']>;
   /**
@@ -716,6 +884,15 @@ export type Itinerary = {
 
 export type Leg = {
   __typename?: 'Leg';
+  /**
+   * Computes a numeric accessibility score between 0 and 1.
+   *
+   * The closer the value is to 1 the better the wheelchair-accessibility of this leg is.
+   * A value of `null` means that no score has been computed, not that the itinerary is inaccessible.
+   *
+   * More information is available in the [feature documentation](https://docs.opentripplanner.org/en/dev-2.x/sandbox/IBIAccessibilityScore/).
+   */
+  accessibilityScore?: Maybe<Scalars['Float']>;
   /** For transit legs, the transit agency that operates the service used for this leg. For non-transit legs, `null`. */
   agency?: Maybe<Agency>;
   /** Applicable alerts for this leg. */
@@ -734,6 +911,10 @@ export type Leg = {
   departureDelay?: Maybe<Scalars['Int']>;
   /** The distance traveled while traversing the leg in meters. */
   distance?: Maybe<Scalars['Float']>;
+  /**
+   * Special booking information for the drop off stop of this leg if, for example, it needs
+   * to be booked in advance. This could be due to a flexible or on-demand service.
+   */
   dropOffBookingInfo?: Maybe<BookingInfo>;
   /** This is used to indicate if alighting from this leg is possible only with special arrangements. */
   dropoffType?: Maybe<PickupDropoffType>;
@@ -741,10 +922,23 @@ export type Leg = {
   duration?: Maybe<Scalars['Float']>;
   /** The date and time when this leg ends. Format: Unix timestamp in milliseconds. */
   endTime?: Maybe<Scalars['Long']>;
+  /**
+   * Fare products are purchasable tickets which may have an optional fare container or rider
+   * category that limits who can buy them or how.
+   *
+   * Please read the documentation of `id` very carefully to learn how a single fare product
+   * that applies to multiple legs can appear several times.
+   */
+  fareProducts?: Maybe<Array<Maybe<FareProductUse>>>;
   /** The Place where the leg originates. */
   from: Place;
   /** Generalized cost of the leg. Used for debugging search results. */
   generalizedCost?: Maybe<Scalars['Int']>;
+  /**
+   * For transit legs, the headsign that the vehicle shows at the stop where the passenger boards.
+   * For non-transit legs, null.
+   */
+  headsign?: Maybe<Scalars['String']>;
   /**
    * Interlines with previous leg.
    * This is true when the same vehicle is used for the previous leg as for this leg
@@ -770,6 +964,10 @@ export type Leg = {
   mode?: Maybe<Mode>;
   /** Future legs with same origin and destination stops or stations */
   nextLegs?: Maybe<Array<Leg>>;
+  /**
+   * Special booking information for the pick up stop of this leg if, for example, it needs
+   * to be booked in advance. This could be due to a flexible or on-demand service.
+   */
   pickupBookingInfo?: Maybe<BookingInfo>;
   /** This is used to indicate if boarding this leg is possible only with special arrangements. */
   pickupType?: Maybe<PickupDropoffType>;
@@ -787,6 +985,7 @@ export type Leg = {
   serviceDate?: Maybe<Scalars['String']>;
   /** The date and time when this leg begins. Format: Unix timestamp in milliseconds. */
   startTime?: Maybe<Scalars['Long']>;
+  /** The turn-by-turn navigation instructions. */
   steps?: Maybe<Array<Maybe<Step>>>;
   /** The Place where the leg ends. */
   to: Place;
@@ -860,7 +1059,10 @@ export enum Mode {
   Funicular = 'FUNICULAR',
   /** GONDOLA */
   Gondola = 'GONDOLA',
-  /** Only used internally. No use for API users. */
+  /**
+   * Only used internally. No use for API users.
+   * @deprecated No longer supported
+   */
   LegSwitch = 'LEG_SWITCH',
   /** Railway in which the track consists of a single rail or a beam. */
   Monorail = 'MONORAIL',
@@ -886,10 +1088,12 @@ export enum Mode {
 export type Money = {
   __typename?: 'Money';
   /**
-   * Money amount in cents. **Note:** this value is dependent on the currency used,
-   * as one cent is not necessarily ¹/₁₀₀ of the basic monetary unit.
+   * Money in the major currency unit, so 3.10 USD is represented as `3.1`.
+   *
+   * If you want to get the minor currency unit (310 cents), multiply with
+   * (10 to the power of `currency.digits`).
    */
-  amount: Scalars['Int'];
+  amount: Scalars['Float'];
   /** The currency of this money amount. */
   currency: Currency;
 };
@@ -899,6 +1103,59 @@ export type Node = {
   /** The ID of an object */
   id: Scalars['ID'];
 };
+
+/** Occupancy status of a vehicle. */
+export enum OccupancyStatus {
+  /**
+   * The vehicle or carriage can currently accommodate only standing passengers and has limited
+   * space for them. There isn't a big difference between this and FULL so it's possible to handle
+   * them as the same value, if one wants to limit the number of different values.
+   * SIRI nordic profile: merge into `STANDING_ROOM_ONLY`.
+   */
+  CrushedStandingRoomOnly = 'CRUSHED_STANDING_ROOM_ONLY',
+  /**
+   * The vehicle is considered empty by most measures, and has few or no passengers onboard, but is
+   * still accepting passengers. There isn't a big difference between this and MANY_SEATS_AVAILABLE
+   * so it's possible to handle them as the same value, if one wants to limit the number of different
+   * values.
+   * SIRI nordic profile: merge these into `MANY_SEATS_AVAILABLE`.
+   */
+  Empty = 'EMPTY',
+  /**
+   * The vehicle or carriage has a small number of seats available. The amount of free seats out of
+   * the total seats available to be considered small enough to fall into this category is
+   * determined at the discretion of the producer.
+   * SIRI nordic profile: less than ~50% of seats available.
+   */
+  FewSeatsAvailable = 'FEW_SEATS_AVAILABLE',
+  /**
+   * The vehicle is considered full by most measures, but may still be allowing passengers to
+   * board.
+   */
+  Full = 'FULL',
+  /**
+   * The vehicle or carriage has a large number of seats available. The amount of free seats out of
+   * the total seats available to be considered large enough to fall into this category is
+   * determined at the discretion of the producer. There isn't a big difference between this and
+   * EMPTY so it's possible to handle them as the same value, if one wants to limit the number of
+   * different values.
+   * SIRI nordic profile: more than ~50% of seats available.
+   */
+  ManySeatsAvailable = 'MANY_SEATS_AVAILABLE',
+  /**
+   * The vehicle or carriage is not accepting passengers.
+   * SIRI nordic profile: if vehicle/carriage is not in use / unavailable, or passengers are only allowed
+   * to alight due to e.g. crowding.
+   */
+  NotAcceptingPassengers = 'NOT_ACCEPTING_PASSENGERS',
+  /** Default. There is no occupancy-data on this departure. */
+  NoDataAvailable = 'NO_DATA_AVAILABLE',
+  /**
+   * The vehicle or carriage can currently accommodate only standing passengers.
+   * SIRI nordic profile: less than ~10% of seats available.
+   */
+  StandingRoomOnly = 'STANDING_ROOM_ONLY'
+}
 
 export type OpeningHours = {
   __typename?: 'OpeningHours';
@@ -1116,6 +1373,21 @@ export type Place = {
   rentalVehicle?: Maybe<RentalVehicle>;
   /** The stop related to the place. */
   stop?: Maybe<Stop>;
+  /**
+   * The position of the stop in the pattern. This is not required to start from 0 or be consecutive - any
+   * increasing integer sequence along the stops is valid.
+   *
+   * The purpose of this field is to identify the stop within the pattern so it can be cross-referenced
+   * between it and the itinerary. It is safe to cross-reference when done quickly, i.e. within seconds.
+   * However, it should be noted that realtime updates can change the values, so don't store it for
+   * longer amounts of time.
+   *
+   * Depending on the source data, this might not be the GTFS `stop_sequence` but another value, perhaps
+   * even generated.
+   *
+   * The position can be either at a certain stop or in between two for trips where this is possible.
+   */
+  stopPosition?: Maybe<StopPosition>;
   /** The vehicle parking related to the place */
   vehicleParking?: Maybe<VehicleParking>;
   /** The vehicle rental station related to the place */
@@ -1194,6 +1466,22 @@ export type Plan = {
   searchWindowUsed?: Maybe<Scalars['Long']>;
   /** The destination */
   to: Place;
+};
+
+/** Stop position at a specific stop. */
+export type PositionAtStop = {
+  __typename?: 'PositionAtStop';
+  /** Position of the stop in the pattern. Positions are not required to start from 0 or be consecutive. */
+  position?: Maybe<Scalars['Int']>;
+};
+
+/** The board/alight position in between two stops of the pattern of a trip with continuous pickup/drop off. */
+export type PositionBetweenStops = {
+  __typename?: 'PositionBetweenStops';
+  /** Position of the next stop in the pattern. Positions are not required to start from 0 or be consecutive. */
+  nextPosition?: Maybe<Scalars['Int']>;
+  /** Position of the previous stop in the pattern. Positions are not required to start from 0 or be consecutive. */
+  previousPosition?: Maybe<Scalars['Int']>;
 };
 
 export enum PropulsionType {
@@ -1487,19 +1775,14 @@ export type QueryTypePlanArgs = {
   bikeSwitchTime?: InputMaybe<Scalars['Int']>;
   bikeWalkingReluctance?: InputMaybe<Scalars['Float']>;
   boardSlack?: InputMaybe<Scalars['Int']>;
-  carParkCarLegWeight?: InputMaybe<Scalars['Float']>;
   carReluctance?: InputMaybe<Scalars['Float']>;
   date?: InputMaybe<Scalars['String']>;
   debugItineraryFilter?: InputMaybe<Scalars['Boolean']>;
   from?: InputMaybe<InputCoordinates>;
   fromPlace?: InputMaybe<Scalars['String']>;
-  heuristicStepsPerMainStep?: InputMaybe<Scalars['Int']>;
   ignoreRealtimeUpdates?: InputMaybe<Scalars['Boolean']>;
-  intermediatePlaces?: InputMaybe<Array<InputMaybe<InputCoordinates>>>;
-  itineraryFiltering?: InputMaybe<Scalars['Float']>;
   keepingRentedBicycleAtDestinationCost?: InputMaybe<Scalars['Int']>;
   locale?: InputMaybe<Scalars['String']>;
-  maxPreTransitTime?: InputMaybe<Scalars['Int']>;
   maxTransfers?: InputMaybe<Scalars['Int']>;
   minTransferTime?: InputMaybe<Scalars['Int']>;
   modeWeight?: InputMaybe<InputModeWeight>;
@@ -1512,7 +1795,6 @@ export type QueryTypePlanArgs = {
   preferred?: InputMaybe<InputPreferred>;
   searchWindow?: InputMaybe<Scalars['Long']>;
   startTransitStopId?: InputMaybe<Scalars['String']>;
-  startTransitTripId?: InputMaybe<Scalars['String']>;
   time?: InputMaybe<Scalars['String']>;
   to?: InputMaybe<InputCoordinates>;
   toPlace?: InputMaybe<Scalars['String']>;
@@ -1648,6 +1930,9 @@ export enum RelativeDirection {
   Continue = 'CONTINUE',
   Depart = 'DEPART',
   Elevator = 'ELEVATOR',
+  EnterStation = 'ENTER_STATION',
+  ExitStation = 'EXIT_STATION',
+  FollowSigns = 'FOLLOW_SIGNS',
   HardLeft = 'HARD_LEFT',
   HardRight = 'HARD_RIGHT',
   Left = 'LEFT',
@@ -1683,12 +1968,28 @@ export type RentalVehicle = Node & PlaceInterface & {
   vehicleType?: Maybe<RentalVehicleType>;
 };
 
+export type RentalVehicleEntityCounts = {
+  __typename?: 'RentalVehicleEntityCounts';
+  /** The number of entities by type */
+  byType: Array<RentalVehicleTypeCount>;
+  /** The total number of entities (e.g. vehicles, spaces). */
+  total: Scalars['Int'];
+};
+
 export type RentalVehicleType = {
   __typename?: 'RentalVehicleType';
   /** The vehicle's general form factor */
   formFactor?: Maybe<FormFactor>;
   /** The primary propulsion type of the vehicle */
   propulsionType?: Maybe<PropulsionType>;
+};
+
+export type RentalVehicleTypeCount = {
+  __typename?: 'RentalVehicleTypeCount';
+  /** The number of vehicles of this type */
+  count: Scalars['Int'];
+  /** The type of the rental vehicle (scooter, bicycle, car...) */
+  vehicleType: RentalVehicleType;
 };
 
 /** An estimate for a ride on a hailed vehicle, like an Uber car. */
@@ -1710,6 +2011,15 @@ export type RideHailingProvider = {
   __typename?: 'RideHailingProvider';
   /** The ID of the ride hailing provider. */
   id: Scalars['String'];
+};
+
+/** Category of riders a fare product applies to, for example students or pensioners. */
+export type RiderCategory = {
+  __typename?: 'RiderCategory';
+  /** ID of the category */
+  id: Scalars['String'];
+  /** Human readable name of the category. */
+  name?: Maybe<Scalars['String']>;
 };
 
 /**
@@ -1844,21 +2154,52 @@ export type RoutingError = {
 };
 
 export enum RoutingErrorCode {
-  /** The specified location is not close to any streets or transit stops */
+  /**
+   * The specified location is not close to any streets or transit stops currently loaded into the
+   * system, even though it is generally within its bounds.
+   *
+   * This can happen when there is only transit but no street data coverage at the location in
+   * question.
+   */
   LocationNotFound = 'LOCATION_NOT_FOUND',
-  /** No stops are reachable from the location specified. You can try searching using a different access or egress mode */
+  /**
+   * No stops are reachable from the start or end locations specified.
+   *
+   * You can try searching using a different access or egress mode, for example cycling instead of walking,
+   * increase the walking/cycling/driving speed or have an administrator change the system's configuration
+   * so that stops further away are considered.
+   */
   NoStopsInRange = 'NO_STOPS_IN_RANGE',
-  /** No transit connection was found between the origin and destination withing the operating day or the next day */
+  /**
+   * No transit connection was found between the origin and destination within the operating day or
+   * the next day, not even sub-optimal ones.
+   */
   NoTransitConnection = 'NO_TRANSIT_CONNECTION',
-  /** Transit connection was found, but it was outside the search window, see metadata for the next search window */
+  /**
+   * A transit connection was found, but it was outside the search window. See the metadata for a token
+   * for retrieving the result outside the search window.
+   */
   NoTransitConnectionInSearchWindow = 'NO_TRANSIT_CONNECTION_IN_SEARCH_WINDOW',
-  /** The coordinates are outside the bounds of the data currently loaded into the system */
+  /**
+   * The coordinates are outside the geographic bounds of the transit and street data currently loaded
+   * into the system and therefore cannot return any results.
+   */
   OutsideBounds = 'OUTSIDE_BOUNDS',
-  /** The date specified is outside the range of data currently loaded into the system */
+  /**
+   * The date specified is outside the range of data currently loaded into the system as it is too
+   * far into the future or the past.
+   *
+   * The specific date range of the system is configurable by an administrator and also depends on
+   * the input data provided.
+   */
   OutsideServicePeriod = 'OUTSIDE_SERVICE_PERIOD',
-  /** An unknown error happened during the search. The details have been logged to the server logs */
-  SystemError = 'SYSTEM_ERROR',
-  /** The origin and destination are so close to each other, that walking is always better, but no direct mode was specified for the search */
+  /**
+   * Transit connections were requested and found but because it is easier to just walk all the way
+   * to the destination they were removed.
+   *
+   * If you want to still show the transit results, you need to make walking less desirable by
+   * increasing the walk reluctance.
+   */
   WalkingBetterThanTransit = 'WALKING_BETTER_THAN_TRANSIT'
 }
 
@@ -2104,6 +2445,8 @@ export type StopOnTrip = {
   trip: Trip;
 };
 
+export type StopPosition = PositionAtStop | PositionBetweenStops;
+
 /** Upcoming or current stop and how close the vehicle is to it. */
 export type StopRelationship = {
   __typename?: 'StopRelationship';
@@ -2157,6 +2500,19 @@ export type Stoptime = {
   serviceDay?: Maybe<Scalars['Long']>;
   /** The stop where this arrival/departure happens */
   stop?: Maybe<Stop>;
+  /**
+   * The sequence of the stop in the pattern. This is not required to start from 0 or be consecutive - any
+   * increasing integer sequence along the stops is valid.
+   *
+   * The purpose of this field is to identify the stop within the pattern so it can be cross-referenced
+   * between it and the itinerary. It is safe to cross-reference when done quickly, i.e. within seconds.
+   * However, it should be noted that realtime updates can change the values, so don't store it for
+   * longer amounts of time.
+   *
+   * Depending on the source data, this might not be the GTFS `stop_sequence` but another value, perhaps
+   * even generated.
+   */
+  stopPosition?: Maybe<Scalars['Int']>;
   /** true, if this stop is used as a time equalization stop. false otherwise. */
   timepoint?: Maybe<Scalars['Boolean']>;
   /** Trip which this stoptime is for */
@@ -2288,6 +2644,11 @@ export type Trip = Node & {
   gtfsId: Scalars['String'];
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
   id: Scalars['ID'];
+  /**
+   * The latest realtime occupancy information for the latest occurance of this
+   * trip.
+   */
+  occupancy?: Maybe<TripOccupancy>;
   /** The pattern the trip is running on */
   pattern?: Maybe<Pattern>;
   /** The route the trip is running on */
@@ -2360,6 +2721,16 @@ export enum TripAlertType {
   /** Alerts affecting the trip */
   Trip = 'TRIP'
 }
+
+/**
+ * Occupancy of a vehicle on a trip. This should include the most recent occupancy information
+ * available for a trip. Historic data might not be available.
+ */
+export type TripOccupancy = {
+  __typename?: 'TripOccupancy';
+  /** Occupancy information mapped to a limited set of descriptive states. */
+  occupancyStatus?: Maybe<OccupancyStatus>;
+};
 
 /** This is used for alert entities that we don't explicitly handle or they are missing. */
 export type Unknown = {
@@ -2519,6 +2890,10 @@ export type VehicleRentalStation = Node & PlaceInterface & {
   allowPickup?: Maybe<Scalars['Boolean']>;
   /** If true, vehicles can be currently picked up from this station. */
   allowPickupNow?: Maybe<Scalars['Boolean']>;
+  /** Number of free spaces currently available on the rental station, grouped by vehicle type. */
+  availableSpaces?: Maybe<RentalVehicleEntityCounts>;
+  /** Number of vehicles currently available on the rental station, grouped by vehicle type. */
+  availableVehicles?: Maybe<RentalVehicleEntityCounts>;
   /** Nominal capacity (number of racks) of the rental station. */
   capacity?: Maybe<Scalars['Int']>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
@@ -2547,6 +2922,7 @@ export type VehicleRentalStation = Node & PlaceInterface & {
    * to this station, as for example it might be possible to leave the vehicle in the vicinity of
    * the rental station, even if the vehicle racks don't have any spaces available.
    * See field `allowDropoffNow` to know if is currently possible to return a vehicle.
+   * @deprecated Use `availableSpaces` instead, which also contains the space vehicle types
    */
   spacesAvailable?: Maybe<Scalars['Int']>;
   /** ID of the vehicle in the format of network:id */
@@ -2554,6 +2930,7 @@ export type VehicleRentalStation = Node & PlaceInterface & {
   /**
    * Number of vehicles currently available on the rental station.
    * See field `allowPickupNow` to know if is currently possible to pick up a vehicle.
+   * @deprecated Use `availableVehicles` instead, which also contains vehicle types
    */
   vehiclesAvailable?: Maybe<Scalars['Int']>;
 };
@@ -2632,12 +3009,20 @@ export type Fare = {
   /**
    * Fare price in cents. **Note:** this value is dependent on the currency used,
    * as one cent is not necessarily ¹/₁₀₀ of the basic monerary unit.
+   * @deprecated No longer supported
    */
   cents?: Maybe<Scalars['Int']>;
-  /** Components which this fare is composed of */
+  /**
+   * Components which this fare is composed of
+   * @deprecated No longer supported
+   */
   components?: Maybe<Array<Maybe<FareComponent>>>;
-  /** ISO 4217 currency code */
+  /**
+   * ISO 4217 currency code
+   * @deprecated No longer supported
+   */
   currency?: Maybe<Scalars['String']>;
+  /** @deprecated No longer supported */
   type?: Maybe<Scalars['String']>;
 };
 
@@ -2647,13 +3032,23 @@ export type FareComponent = {
   /**
    * Fare price in cents. **Note:** this value is dependent on the currency used,
    * as one cent is not necessarily ¹/₁₀₀ of the basic monerary unit.
+   * @deprecated No longer supported
    */
   cents?: Maybe<Scalars['Int']>;
-  /** ISO 4217 currency code */
+  /**
+   * ISO 4217 currency code
+   * @deprecated No longer supported
+   */
   currency?: Maybe<Scalars['String']>;
-  /** ID of the ticket type. Corresponds to `fareId` in **TicketType**. */
+  /**
+   * ID of the ticket type. Corresponds to `fareId` in **TicketType**.
+   * @deprecated No longer supported
+   */
   fareId?: Maybe<Scalars['String']>;
-  /** List of routes which use this fare component */
+  /**
+   * List of routes which use this fare component
+   * @deprecated No longer supported
+   */
   routes?: Maybe<Array<Maybe<Route>>>;
 };
 
@@ -2770,7 +3165,7 @@ export type GetDeparturesForStationsQueryVariables = Exact<{
 }>;
 
 
-export type GetDeparturesForStationsQuery = { __typename?: 'QueryType', stations?: Array<{ __typename?: 'Stop', name: string, code?: string | null, lat?: number | null, lon?: number | null, gtfsId: string, stops?: Array<{ __typename?: 'Stop', gtfsId: string, patterns?: Array<{ __typename?: 'Pattern', headsign?: string | null } | null> | null, routes?: Array<{ __typename?: 'Route', longName?: string | null, id: string, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null } | null> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, directionId?: number | null, headsign?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null, stoptimes?: Array<{ __typename?: 'Stoptime', realtime?: boolean | null, pickupType?: PickupDropoffType | null, serviceDay?: any | null, scheduledDeparture?: number | null, realtimeDeparture?: number | null, realtimeState?: RealtimeState | null, headsign?: string | null, headsignfi?: string | null, headsignsv?: string | null, headsignen?: string | null, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null, platformCode?: string | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null } | null, trip?: { __typename?: 'Trip', tripHeadsign?: string | null, directionId?: string | null, gtfsId: string, id: string, tripHeadsignfi?: string | null, tripHeadsignsv?: string | null, tripHeadsignen?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null } | null> | null } | null> | null } | null> | null };
+export type GetDeparturesForStationsQuery = { __typename?: 'QueryType', stations?: Array<{ __typename?: 'Stop', name: string, code?: string | null, lat?: number | null, lon?: number | null, gtfsId: string, stops?: Array<{ __typename?: 'Stop', gtfsId: string, patterns?: Array<{ __typename?: 'Pattern', headsign?: string | null } | null> | null, routes?: Array<{ __typename?: 'Route', longName?: string | null, id: string, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null } | null> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, directionId?: number | null, headsign?: string | null, stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, direction?: string | null }> | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null, stoptimes?: Array<{ __typename?: 'Stoptime', realtime?: boolean | null, pickupType?: PickupDropoffType | null, serviceDay?: any | null, scheduledDeparture?: number | null, realtimeDeparture?: number | null, realtimeState?: RealtimeState | null, headsign?: string | null, headsignfi?: string | null, headsignsv?: string | null, headsignen?: string | null, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null, platformCode?: string | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null } | null, trip?: { __typename?: 'Trip', tripHeadsign?: string | null, directionId?: string | null, gtfsId: string, id: string, tripHeadsignfi?: string | null, tripHeadsignsv?: string | null, tripHeadsignen?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null } | null> | null } | null> | null } | null> | null };
 
 export type GetDeparturesForStopsQueryVariables = Exact<{
   ids: Array<Scalars['String']> | Scalars['String'];
@@ -2778,7 +3173,7 @@ export type GetDeparturesForStopsQueryVariables = Exact<{
 }>;
 
 
-export type GetDeparturesForStopsQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', name: string, code?: string | null, gtfsId: string, lat?: number | null, lon?: number | null, patterns?: Array<{ __typename?: 'Pattern', headsign?: string | null } | null> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null, routes?: Array<{ __typename?: 'Route', longName?: string | null, id: string, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, directionId?: number | null, headsign?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null, stoptimes?: Array<{ __typename?: 'Stoptime', realtime?: boolean | null, pickupType?: PickupDropoffType | null, serviceDay?: any | null, scheduledDeparture?: number | null, realtimeDeparture?: number | null, realtimeState?: RealtimeState | null, headsign?: string | null, headsignfi?: string | null, headsignsv?: string | null, headsignen?: string | null, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null, platformCode?: string | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null } | null, trip?: { __typename?: 'Trip', tripHeadsign?: string | null, directionId?: string | null, id: string, gtfsId: string, tripHeadsignfi?: string | null, tripHeadsignsv?: string | null, tripHeadsignen?: string | null, route: { __typename?: 'Route', shortName?: string | null, gtfsId: string } } | null } | null> | null } | null> | null } | null> | null };
+export type GetDeparturesForStopsQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', name: string, code?: string | null, gtfsId: string, lat?: number | null, lon?: number | null, patterns?: Array<{ __typename?: 'Pattern', headsign?: string | null } | null> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null, routes?: Array<{ __typename?: 'Route', longName?: string | null, id: string, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, directionId?: number | null, headsign?: string | null, stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, direction?: string | null }> | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null, stoptimes?: Array<{ __typename?: 'Stoptime', realtime?: boolean | null, pickupType?: PickupDropoffType | null, serviceDay?: any | null, scheduledDeparture?: number | null, realtimeDeparture?: number | null, realtimeState?: RealtimeState | null, headsign?: string | null, headsignfi?: string | null, headsignsv?: string | null, headsignen?: string | null, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null, platformCode?: string | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null } | null, trip?: { __typename?: 'Trip', tripHeadsign?: string | null, directionId?: string | null, id: string, gtfsId: string, tripHeadsignfi?: string | null, tripHeadsignsv?: string | null, tripHeadsignen?: string | null, route: { __typename?: 'Route', shortName?: string | null, gtfsId: string } } | null } | null> | null } | null> | null } | null> | null };
 
 export type GetLineIdsQueryVariables = Exact<{
   stations: Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>;
@@ -2828,8 +3223,8 @@ export type StopQueryQuery = { __typename?: 'QueryType', stop?: Array<{ __typena
 
 export const GetAlertsForStationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAlertsForStations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stations"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetAlertsForStationsQuery, GetAlertsForStationsQueryVariables>;
 export const GetAlertsForStopsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAlertsForStops"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetAlertsForStopsQuery, GetAlertsForStopsQueryVariables>;
-export const GetDeparturesForStationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDeparturesForStations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stations"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headsign"}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"numberOfDepartures"},"value":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}}},{"kind":"Argument","name":{"kind":"Name","value":"omitCanceled"},"value":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"realtime"}},{"kind":"Field","name":{"kind":"Name","value":"pickupType"}},{"kind":"Field","name":{"kind":"Name","value":"serviceDay"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeState"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","alias":{"kind":"Name","value":"headsignfi"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignsv"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignen"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"trip"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tripHeadsign"}},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignfi"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignsv"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignen"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetDeparturesForStationsQuery, GetDeparturesForStationsQueryVariables>;
-export const GetDeparturesForStopsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDeparturesForStops"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headsign"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"numberOfDepartures"},"value":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}}},{"kind":"Argument","name":{"kind":"Name","value":"omitCanceled"},"value":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"realtime"}},{"kind":"Field","name":{"kind":"Name","value":"pickupType"}},{"kind":"Field","name":{"kind":"Name","value":"serviceDay"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeState"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","alias":{"kind":"Name","value":"headsignfi"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignsv"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignen"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"trip"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tripHeadsign"}},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignfi"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignsv"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignen"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetDeparturesForStopsQuery, GetDeparturesForStopsQueryVariables>;
+export const GetDeparturesForStationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDeparturesForStations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stations"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headsign"}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"numberOfDepartures"},"value":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}}},{"kind":"Argument","name":{"kind":"Name","value":"omitCanceled"},"value":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"direction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"realtime"}},{"kind":"Field","name":{"kind":"Name","value":"pickupType"}},{"kind":"Field","name":{"kind":"Name","value":"serviceDay"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeState"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","alias":{"kind":"Name","value":"headsignfi"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignsv"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignen"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"trip"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tripHeadsign"}},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignfi"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignsv"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignen"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetDeparturesForStationsQuery, GetDeparturesForStationsQueryVariables>;
+export const GetDeparturesForStopsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDeparturesForStops"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headsign"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"numberOfDepartures"},"value":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}}},{"kind":"Argument","name":{"kind":"Name","value":"omitCanceled"},"value":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"direction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"realtime"}},{"kind":"Field","name":{"kind":"Name","value":"pickupType"}},{"kind":"Field","name":{"kind":"Name","value":"serviceDay"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeState"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","alias":{"kind":"Name","value":"headsignfi"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignsv"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignen"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"trip"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tripHeadsign"}},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignfi"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignsv"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignen"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetDeparturesForStopsQuery, GetDeparturesForStopsQueryVariables>;
 export const GetLineIdsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getLineIds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"stations"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"stops"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"stations"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"stops"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetLineIdsQuery, GetLineIdsQueryVariables>;
 export const GetStationsForStationMonitorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetStationsForStationMonitor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"locationType"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleMode"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}}]}}]}}]} as unknown as DocumentNode<GetStationsForStationMonitorQuery, GetStationsForStationMonitorQueryVariables>;
 export const GetStopsForOldMonitorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetStopsForOldMonitors"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"locationType"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}}]}}]}}]} as unknown as DocumentNode<GetStopsForOldMonitorsQuery, GetStopsForOldMonitorsQueryVariables>;

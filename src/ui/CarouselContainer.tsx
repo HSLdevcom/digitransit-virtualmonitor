@@ -113,7 +113,7 @@ const CarouselContainer: FC<IProps> = ({
       trainsWithTrack,
     ),
   ];
-  let topics = [];
+  let initialTopics = [];
   if (mapSettings?.showMap) {
     // Todo. This is a hacky solution to easiest way of figuring out all the departures.
     // Map keeps record of all it's stops, so it has all their departures. This should be done
@@ -137,19 +137,39 @@ const CarouselContainer: FC<IProps> = ({
     const mapDepartures = allDep
       .map(o => o.flatMap(a => a))
       .reduce((a, b) => (a.length > b.length ? a : b));
-    topics = mapDepartures
+    initialTopics = mapDepartures
       .filter(t => t.realtime)
       .map(dep => {
-        return {
-          feedId: dep.trip.gtfsId.split(':')[0],
+        const feedId = dep.trip.gtfsId.split(':')[0];
+        const topic = {
+          feedId: feedId,
           route: dep.trip.route?.gtfsId?.split(':')[1],
           tripId: dep.trip.gtfsId.split(':')[1],
           shortName: dep.trip.route.shortName,
           type: 3,
           ...dep,
         };
+        if (feedId.toLowerCase() === 'hsl') {
+          const i = dep.stops.findIndex(d => dep.stop.gtfsId === d.gtfsId);
+          if (i !== dep.stops.length - 1) {
+            const additionalStop = dep.stops[i + 1];
+            topic.additionalStop = additionalStop;
+          }
+        }
+        return topic;
       });
   }
+  const topics = initialTopics;
+  initialTopics.forEach(t => {
+    if (t.additionalStop) {
+      const additionalTopic = {
+        ...t,
+        stop: t.additionalStop,
+        additionalStop: null,
+      };
+      topics.push(additionalTopic);
+    }
+  });
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts
   const newView = {

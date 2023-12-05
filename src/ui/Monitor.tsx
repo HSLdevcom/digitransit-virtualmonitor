@@ -149,6 +149,7 @@ const Monitor: FC<IProps> = ({
           preview={isPreview}
           mapSettings={mapSettings}
           topics={topics}
+          departures={departures}
         />
       ) : (
         <MonitorRowContainer

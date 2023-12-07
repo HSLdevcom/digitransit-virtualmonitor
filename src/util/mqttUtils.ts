@@ -146,6 +146,13 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
   entities.forEach(entity => {
     const vehiclePos = entity.vehicle;
     if (vehiclePos) {
+      // Digitraffic's train numbers are too long.
+      const vehicleNumber =
+        agency === 'digitraffic'
+          ? shortName.indexOf(' ') !== -1
+            ? shortName.split(' ')[1]
+            : shortName
+          : shortName;
       const { trip, position } = vehiclePos;
       if (trip && position) {
         const message = {
@@ -165,7 +172,7 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
           headsign: headsign === '' ? undefined : headsign,
           tripId: tripId === '' ? undefined : `${agency}:${tripId}`,
           geoHash: [geoHashDeg1, geoHashDeg2, geoHashDeg3, geoHashDeg4],
-          shortName: shortName === '' ? undefined : shortName,
+          shortName: vehicleNumber === '' ? undefined : vehicleNumber,
           color: color === '' ? undefined : color,
           topicString: topic,
         };

@@ -38,6 +38,35 @@ function walttiTopicResolver(
   );
 }
 
+function digitrafficMqttTopicResolver(
+  route,
+  direction, // eslint-disable-line no-unused-vars
+  tripStartTime, // eslint-disable-line no-unused-vars
+  headsign, // eslint-disable-line no-unused-vars
+  feedId,
+  tripId,
+  geoHash,
+  stop, // eslint-disable-line no-unused-vars
+) {
+  return (
+    '/gtfsrt/vp/' +
+    feedId +
+    '/+/+/+/' +
+    route +
+    '/+/+/' +
+    tripId +
+    '/+/+/+/' +
+    geoHash[0] +
+    '/' +
+    geoHash[1] +
+    '/' +
+    geoHash[2] +
+    '/' +
+    geoHash[3] +
+    '/#'
+  );
+}
+
 export default {
   HSL: {
     mqttTopicResolver: function mqttTopicResolver(
@@ -284,7 +313,7 @@ export default {
     active: true,
   },
   digitraffic: {
-    mqttTopicResolver: walttiTopicResolver,
+    mqttTopicResolver: digitrafficMqttTopicResolver,
 
     mqtt: 'wss://mqtt.digitransit.fi',
 

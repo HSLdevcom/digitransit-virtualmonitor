@@ -28,8 +28,8 @@ const fetchData = (path, options, signal = undefined) => {
 };
 
 const monitorAPI = {
-  getMapSettings(signal = undefined) {
-    return fetchData('map', {}, signal);
+  getMapSettings(lang, signal = undefined) {
+    return fetchData(`map/${lang}`, {}, signal);
   },
   getPing(signal = undefined) {
     const options = {

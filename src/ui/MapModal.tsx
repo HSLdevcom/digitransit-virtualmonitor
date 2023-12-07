@@ -15,6 +15,7 @@ interface Props {
   isLandscape: boolean;
   mapSettings?: IMapSettings;
   updateMapSettings: (settings: IMapSettings) => void;
+  lang?: string;
 }
 const MapModal: FC<Props> = ({
   isOpen,
@@ -22,6 +23,7 @@ const MapModal: FC<Props> = ({
   isLandscape,
   mapSettings,
   updateMapSettings,
+  lang,
 }) => {
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
@@ -71,6 +73,7 @@ const MapModal: FC<Props> = ({
           mapSettings={mapSettings}
           updateMap={setState}
           modal
+          lang={lang}
         ></MonitorMapContainer>
         <button className="btn map-btn" onClick={() => handleClick()}>
           {t('confirm-choice')}

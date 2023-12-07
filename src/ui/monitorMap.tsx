@@ -26,6 +26,7 @@ interface IProps {
   newTopics?: any;
   topicRef: any;
   departures?: any;
+  lang: string;
 }
 const getVehicleIcon = message => {
   const { heading, shortName, color } = message;
@@ -88,11 +89,12 @@ const MonitorMap: FC<IProps> = ({
   newTopics,
   topicRef,
   departures,
+  lang,
 }) => {
   const config = useContext(ConfigContext);
   const [map, setMap] = useState<any>();
   const [vehicleMarkers, setVehicleMarkers] = useState([]);
-  const feed = newTopics[0]?.feedId.toLowerCase();
+  const feed = newTopics && newTopics[0]?.feedId.toLowerCase();
   const EXPIRE_TIME_SEC = feed === 'hsl' ? 10 : 120; // HSL Uses different broker and we need to handle HSL messages differently
   const icons = mapSettings.stops.map(stop => {
     const color =
@@ -122,7 +124,7 @@ const MonitorMap: FC<IProps> = ({
     if (!map) {
       setMap(L.map('map', { zoomControl: false }).setView(center, zoom));
     } else {
-      monitorAPI.getMapSettings().then((r: string) => {
+      monitorAPI.getMapSettings(lang).then((r: string) => {
         L.tileLayer(r, {
           attribution:
             'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',

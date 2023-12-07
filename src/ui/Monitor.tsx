@@ -30,6 +30,7 @@ interface IProps {
   closedStopViews: Array<IClosedStop>;
   mapSettings?: IMapSettings;
   topics?: Array<any>;
+  mapLanguage?: string;
 }
 let to;
 
@@ -44,6 +45,7 @@ const Monitor: FC<IProps> = ({
   closedStopViews,
   mapSettings,
   topics,
+  mapLanguage,
 }) => {
   const config = useContext(ConfigContext);
   const { cards } = useContext(MonitorContext);
@@ -150,6 +152,7 @@ const Monitor: FC<IProps> = ({
           mapSettings={mapSettings}
           topics={topics}
           departures={departures}
+          lang={mapLanguage}
         />
       ) : (
         <MonitorRowContainer

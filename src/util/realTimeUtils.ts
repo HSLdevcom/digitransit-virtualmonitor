@@ -11,6 +11,7 @@ function walttiTopicResolver(
   feedId,
   tripId,
   geoHash,
+  stop, // eslint-disable-line no-unused-vars
 ) {
   return (
     '/gtfsrt/vp/' +
@@ -37,6 +38,35 @@ function walttiTopicResolver(
   );
 }
 
+function digitrafficMqttTopicResolver(
+  route,
+  direction, // eslint-disable-line no-unused-vars
+  tripStartTime, // eslint-disable-line no-unused-vars
+  headsign, // eslint-disable-line no-unused-vars
+  feedId,
+  tripId,
+  geoHash,
+  stop, // eslint-disable-line no-unused-vars
+) {
+  return (
+    '/gtfsrt/vp/' +
+    feedId +
+    '/+/+/+/' +
+    route +
+    '/+/+/' +
+    tripId +
+    '/+/+/+/' +
+    geoHash[0] +
+    '/' +
+    geoHash[1] +
+    '/' +
+    geoHash[2] +
+    '/' +
+    geoHash[3] +
+    '/#'
+  );
+}
+
 export default {
   HSL: {
     mqttTopicResolver: function mqttTopicResolver(
@@ -47,6 +77,7 @@ export default {
       feedId, // eslint-disable-line no-unused-vars
       tripId, // eslint-disable-line no-unused-vars
       geoHash, // eslint-disable-line no-unused-vars
+      stop,
     ) {
       let direction = hslDirection;
       if (Number.isInteger(direction)) {
@@ -59,6 +90,8 @@ export default {
         direction +
         '/+/' +
         tripStartTime +
+        '/' +
+        stop +
         '/#'
       );
     },
@@ -76,9 +109,7 @@ export default {
   tampere: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -89,9 +120,7 @@ export default {
   LINKKI: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -102,9 +131,7 @@ export default {
   Lappeenranta: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -115,9 +142,7 @@ export default {
   Joensuu: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -128,9 +153,7 @@ export default {
   Kuopio: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -171,9 +194,7 @@ export default {
       );
     },
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -184,9 +205,7 @@ export default {
   OULU: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -197,9 +216,7 @@ export default {
   Hameenlinna: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -210,9 +227,7 @@ export default {
   Lahti: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -223,9 +238,7 @@ export default {
   Vaasa: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -236,9 +249,7 @@ export default {
   Mikkeli: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -249,9 +260,7 @@ export default {
   Salo: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -262,9 +271,7 @@ export default {
   Kouvola: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -275,9 +282,7 @@ export default {
   Kotka: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -288,9 +293,7 @@ export default {
   Rovaniemi: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
-
-    credentials: { username: 'user', password: 'userpass' },
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 
@@ -301,9 +304,18 @@ export default {
   Kajaani: {
     mqttTopicResolver: walttiTopicResolver,
 
-    mqtt: 'wss://mqtt.waltti.fi/mqtt',
+    mqtt: 'wss://mqtt.digitransit.fi',
 
-    credentials: { username: 'user', password: 'userpass' },
+    gtfsrt: true,
+
+    routeSelector: defaultRouteSelector,
+
+    active: true,
+  },
+  digitraffic: {
+    mqttTopicResolver: digitrafficMqttTopicResolver,
+
+    mqtt: 'wss://mqtt.digitransit.fi',
 
     gtfsrt: true,
 

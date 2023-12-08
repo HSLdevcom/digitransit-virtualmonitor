@@ -33,7 +33,7 @@ const apiSubscriptionParameter = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NA
 
 const MAP_URL = process.env.MAP_URL
   ? process.env.MAP_URL
-  : 'https://cdn.digitransit.fi/map/v2/hsl-map/{z}/{x}/{y}.png';
+  : 'https://cdn.digitransit.fi/map/v2';
 
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
@@ -83,8 +83,16 @@ app.get('/api/geocoding/:endpoint', (req, res, next) => {
     .catch(e => next(e));
 });
 
-app.get('/api/map', (req, res) => {
-  const url = `${MAP_URL}?${apiSubscriptionParameter}`;
+app.get('/api/map/:lang', (req, res) => {
+  const { lang } = req.params
+  let url;
+  const hasLang = lang !== 'null' && lang !== 'undefined'
+  if(hasLang && lang !== 'fi') {
+    url = `${MAP_URL}/hsl-map-${lang}/{z}/\{x}/{y}.png?${apiSubscriptionParameter}`
+  } else  {
+    url = `${MAP_URL}/hsl-map/{z}/\{x}/{y}.png?${apiSubscriptionParameter}`
+
+  }
   return res.status(200).json(url);
 });
 

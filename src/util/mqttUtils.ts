@@ -1,5 +1,6 @@
 import mqtt from 'mqtt/dist/mqtt';
 import settings from './realTimeUtils';
+import { DateTime } from 'luxon';
 
 export const startMqtt = (routes, setState, setClient, topicRef) => {
   if (routes?.length === 0) {
@@ -23,11 +24,7 @@ export const startMqtt = (routes, setState, setClient, topicRef) => {
   }
 
   const feed = routes[0]?.feedId;
-  if (feed.toLowerCase() === 'hsl' || feed.toLowerCase() === 'digitraffic') {
-    //Unsupported at the moment
-    return;
-  }
-  const client = mqtt.connect('wss://mqtt.digitransit.fi');
+  const client = mqtt.connect(settings[feed].mqtt);
   setState({
     client: client,
   });
@@ -44,8 +41,20 @@ export const startMqtt = (routes, setState, setClient, topicRef) => {
     });
 
     client.on('message', (topic, messages) => {
-      const parsedMessages = parseFeedMQTT(feedReader, messages, topic, feed);
-      enqueueMessage(parsedMessages);
+      let parsedMessages;
+      if (settings[feed].gtfsrt) {
+        parsedMessages = parseFeedMQTT(feedReader, messages, topic, feed);
+      } else {
+        const msgs = [];
+        const msg = parseMessage(topic, messages, feed);
+        if (msg) {
+          msgs.push(msg);
+          parsedMessages = msgs;
+        }
+      }
+      if (parsedMessages) {
+        enqueueMessage(parsedMessages);
+      }
     });
     setInterval(processBatch, batchDelay);
   });
@@ -70,7 +79,8 @@ function getTopic(option) {
   const direction = '+';
   const geoHash = ['+', '+', '+', '+'];
   const tripId = option.tripId ? option.tripId : '+';
-
+  const stop =
+    feed.toLowerCase() === 'hsl' ? option.stop.gtfsId.split(':')[1] : '+';
   // headsigns with / cause problems
   const headsign = '+';
   const tripStartTime = '+';
@@ -82,9 +92,26 @@ function getTopic(option) {
     feed,
     tripId,
     geoHash,
+    stop,
   );
   return topic;
 }
+
+const standardModes = ['bus', 'tram', 'ferry'];
+
+const getMode = mode => {
+  if (standardModes.includes(mode)) {
+    return mode;
+  }
+  if (mode === 'train') {
+    return 'rail';
+  }
+  if (mode === 'metro') {
+    return 'subway';
+  }
+  // bus mode should be used as fallback if mode is not one of the standard modes
+  return 'bus';
+};
 
 import ceil from 'lodash/ceil';
 import Pbf from 'pbf';
@@ -114,12 +141,20 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
     shortName,
     color,
   ] = topic.split('/');
+  const entities = feed.entity ? feed.entity : feed;
   const messages = [];
-  feed.entity.forEach(entity => {
+  entities.forEach(entity => {
     const vehiclePos = entity.vehicle;
     if (vehiclePos) {
-      const { trip, position, vehicle } = vehiclePos;
-      if (trip && position && vehicle) {
+      // Digitraffic's train numbers are too long.
+      const vehicleNumber =
+        agency === 'digitraffic'
+          ? shortName.indexOf(' ') !== -1
+            ? shortName.split(' ')[1]
+            : shortName
+          : shortName;
+      const { trip, position } = vehiclePos;
+      if (trip && position) {
         const message = {
           id: `${agency}:${vehicleId}`,
           route: `${agency}:${routeId}`,
@@ -137,7 +172,7 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
           headsign: headsign === '' ? undefined : headsign,
           tripId: tripId === '' ? undefined : `${agency}:${tripId}`,
           geoHash: [geoHashDeg1, geoHashDeg2, geoHashDeg3, geoHashDeg4],
-          shortName: shortName === '' ? undefined : shortName,
+          shortName: vehicleNumber === '' ? undefined : vehicleNumber,
           color: color === '' ? undefined : color,
           topicString: topic,
         };
@@ -148,9 +183,80 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
   return messages.length > 0 ? messages : null;
 };
 
+interface IParseMsg {
+  VP: any;
+  lat: number;
+  long: number;
+  seq: number;
+  oday: string;
+  tsi: any;
+  desi: string;
+  hdg: any;
+}
+export function parseMessage(topic, message: any, agency) {
+  let parsedMessage: IParseMsg;
+  const [
+    ,
+    ,
+    ,
+    ,
+    ,
+    ,
+    mode,
+    ,
+    id,
+    line,
+    dir,
+    headsign, // eslint-disable-line no-unused-vars
+    startTime,
+    nextStop,
+    ...rest // eslint-disable-line no-unused-vars
+  ] = topic.split('/');
+  const vehid = `${agency}_${id}`;
+  if (message instanceof Uint8Array) {
+    parsedMessage = JSON.parse(message.toString()).VP;
+  } else {
+    parsedMessage = message.VP;
+  }
+  if (
+    parsedMessage &&
+    parsedMessage.lat &&
+    parsedMessage.long &&
+    (parsedMessage.seq === undefined || parsedMessage.seq === 1) // seq is used for hsl metro carriage sequence
+  ) {
+    // change times from 24 hour system to 29 hour system, and removes ':'
+    const tripStartTime =
+      startTime &&
+      startTime.length > 4 &&
+      parseInt(startTime.substring(0, 2), 10) < 5
+        ? `${parseInt(startTime.substring(0, 2), 10) + 24}${startTime.substring(
+            3,
+          )}`
+        : startTime.replace(/:/g, '');
+    return {
+      id: vehid,
+      route: `${agency}:${line}`,
+      direction: parseInt(dir, 10) - 1,
+      tripStartTime,
+      operatingDay:
+        parsedMessage.oday && parsedMessage.oday !== 'XXX'
+          ? parsedMessage.oday
+          : DateTime.now().toLocaleString(DateTime.DATE_SHORT),
+      mode: getMode(mode),
+      next_stop: `${agency}:${nextStop}`,
+      timestamp: parsedMessage.tsi,
+      lat: ceil(parsedMessage.lat, 5),
+      long: ceil(parsedMessage.long, 5),
+      shortName: parsedMessage.desi,
+      heading: parsedMessage.hdg,
+      headsign: undefined, // in HSL data headsign from realtime data does not always match gtfs data
+    };
+  }
+  return undefined;
+}
+
 export function changeTopics(settings, topicRef) {
   const { client, oldTopics, options } = settings;
-
   let topicsByRoute;
   const topics = [];
   options.forEach(option => {

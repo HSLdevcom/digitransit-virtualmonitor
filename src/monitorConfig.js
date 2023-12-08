@@ -92,7 +92,7 @@ export default {
     name: 'matka',
     uri: 'routing/v2/routers/finland/index/graphql',
     map: {
-      inUse: false,
+      inUse: true,
     },
     stopSearchFilter: stop => {
       const props = stop.properties;

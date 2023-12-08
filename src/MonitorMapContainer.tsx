@@ -10,6 +10,8 @@ interface IProps {
   modal?: boolean;
   updateMap?: (settings: IMapSettings) => void;
   topics?: string[];
+  departures?: any;
+  lang: string;
 }
 const MonitorMapContainer: FC<IProps> = ({
   preview,
@@ -17,6 +19,8 @@ const MonitorMapContainer: FC<IProps> = ({
   modal,
   updateMap,
   topics,
+  departures,
+  lang,
 }) => {
   const [state, setState] = useMergeState({
     client: undefined,
@@ -68,6 +72,8 @@ const MonitorMapContainer: FC<IProps> = ({
         clientRef={clientRef}
         newTopics={topics}
         topicRef={topicRef}
+        departures={departures}
+        lang={lang}
       />
     </div>
   );

@@ -48,6 +48,7 @@ const StopCardListContainer: FC<IProps> = ({
   const [t] = useTranslation();
   const [stopCardList, setStopCardList] = useState(stopCards);
   const [languages, setLanguages] = useState(props.languages);
+  const mapLanguage = languages.length === 1 ? languages[0] : 'fi';
   const [mapProps, setMapProps] = useMergeState({
     center: mapSettings?.center,
     zoom: mapSettings?.zoom,
@@ -593,6 +594,7 @@ const StopCardListContainer: FC<IProps> = ({
           mapSettings={mapProps}
           isLandscape={orientation == 'horizontal' ? true : false}
           updateMapSettings={updateMapSettings}
+          lang={mapLanguage}
         />
       )}
       <ul className="stopcards">

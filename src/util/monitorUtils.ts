@@ -91,6 +91,7 @@ export const filterDepartures = (
   const currentSeconds = getCurrentSeconds();
 
   stop.stoptimesForPatterns.forEach(stoptimeList => {
+    const stopList = stoptimeList.pattern.stops;
     const combinedPattern = stringifyPattern(stoptimeList.pattern);
     if (!hiddenRoutes.includes(combinedPattern)) {
       let stoptimes = [];
@@ -108,6 +109,7 @@ export const filterDepartures = (
             showVia: showVia,
             vehicleMode: stop.vehicleMode?.toLowerCase(),
             renameID: renameID,
+            stops: stopList,
           });
         }
       });

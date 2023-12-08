@@ -86,11 +86,11 @@ app.get('/api/geocoding/:endpoint', (req, res, next) => {
 app.get('/api/map/:lang', (req, res) => {
   const { lang } = req.params
   let url;
-  const hasLang = lang !== 'null' || lang !== 'undefined'
-  if(hasLang || lang === 'fi') {
+  const hasLang = lang !== 'null' && lang !== 'undefined'
+  if(hasLang && lang !== 'fi') {
+    url = `${MAP_URL}/hsl-map-${lang}/{z}/\{x}/{y}.png?${apiSubscriptionParameter}`
+  } else  {
     url = `${MAP_URL}/hsl-map/{z}/\{x}/{y}.png?${apiSubscriptionParameter}`
-  } else {
-    url = url = `${MAP_URL}/hsl-map-${lang}/{z}/\{x}/{y}.png?${apiSubscriptionParameter}`
 
   }
   return res.status(200).json(url);

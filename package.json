@@ -51,7 +51,8 @@
     "sass": "^1.49.9",
     "suncalc": "1.8.0",
     "url": "^0.11.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "nth-check": "^2.1.1"
   },
   "scripts": {
     "start-prod": "cd server && npm start",
@@ -115,5 +116,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "overrides": {
+    "nth-check": "$nth-check"
+  }
 }

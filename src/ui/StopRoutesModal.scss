@@ -17,7 +17,7 @@
       }
     }
   }
-
+/* stylelint-disable selector-class-pattern */
   .ReactModal__Content {
     border: none !important;
     border-radius: 5px !important;
@@ -53,7 +53,7 @@
   }
 
   .title-container {
-    margin: 64px 0 22px 0;
+    margin: 64px 0 22px;
 
     .title {
       font-size: 22px;
@@ -76,8 +76,7 @@
     .route-rows {
       display: flex;
       flex-direction: column;
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow: hidden auto;
       max-height: 325px;
 
       .row {
@@ -229,7 +228,7 @@
 
       .no-renaming {
         width: 50%;
-        text-align: end;
+        text-align: flex-end;
 
         h2 {
           color: $primary-color;

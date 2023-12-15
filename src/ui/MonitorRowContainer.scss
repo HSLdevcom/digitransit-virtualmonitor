@@ -3,18 +3,18 @@ $preview-container-width: 640px;
 $preview-container-height: 365px;
 $preview-container-height-portrait: 590px;
 $preview-container-height-portrait-tighten: 285px;
-
 $preview-container-width-portrait: 405px;
 $preview-grid-rows-height-portrait-tighten: 266px;
 $preview-grid-rows-margin: 15px;
 $preview-grid-divider: 2px;
 
+/* stylelint-disable color-function-notation */
 .monitor-overlay {
   transition: opacity 1s;
   z-index: 10000;
   width: 60%;
   height: 15%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 70%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -278,7 +278,7 @@ $preview-grid-divider: 2px;
 
     .grid {
       margin: 0 15px;
-      height: calc(100% - 5vh); // 100% - height of table headers
+      height: calc(100% - 5vh); /* 100% - height of table headers */      
       &.portrait {
         display: flex;
         flex-direction: column;
@@ -304,7 +304,7 @@ $preview-grid-divider: 2px;
         font-size: 3.2vh;
 
         &.time {
-          text-align: end;
+          text-align: flex-end;
         }
       }
     }
@@ -446,8 +446,8 @@ $preview-grid-divider: 2px;
         &.icon {
           svg {
             display: flex;
-            width: var(--iconSize) !important;
-            height: var(--iconSize) !important;
+            width: var(--icon-size) !important;
+            height: var(--icon-size) !important;
           }
         }
 
@@ -456,7 +456,7 @@ $preview-grid-divider: 2px;
         }
 
         &.time {
-          text-align: end;
+          text-align: flex-end;
           font-family: $monitor-font;
         }
       }
@@ -506,9 +506,9 @@ $preview-grid-divider: 2px;
           linear-gradient(
             to left,
             transparent,
-            rgba(0, 0, 0, 0.2) 5px,
-            rgba(0, 0, 0, 1) 25px,
-            rgba(0, 0, 0, 1)
+            rgba(0, 0, 0, 20%) 5px,
+            rgba(0, 0, 0, 100%) 25px,
+            rgba(0, 0, 0, 100%)
           );
 
         .via-destination {
@@ -591,9 +591,9 @@ $preview-grid-divider: 2px;
           padding-top: calc(100% / 6);
         }
       }
-
+/* stylelint-disable property-no-vendor-prefix */
       .animated {
-        -moz-animation: alert-animation-vertical #{var(--speed)} linear infinite;
+        -moz-animation: alert-animation-vertical #{var(--speed)} linear infinite; /* stylelint-disable-line */
         -webkit-animation: alert-animation-vertical #{var(--speed)} linear infinite;
         animation: alert-animation-vertical #{var(--speed)} linear infinite;
       }

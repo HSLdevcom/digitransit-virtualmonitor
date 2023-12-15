@@ -264,7 +264,7 @@ const StopCardRow: FC<IProps> = ({
   };
 
   const style = {
-    '--delayLength': `0.0s`,
+    '--delay-length': `0.0s`,
   } as React.CSSProperties;
 
   const searchContext = {

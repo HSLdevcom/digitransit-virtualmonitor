@@ -101,10 +101,10 @@ const Monitor: FC<IProps> = ({
     '--width': `${Number(windowWidth).toFixed(0)}px`,
     '--monitor-background-color':
       config.colors.monitorBackground || config.colors.primary,
-    '--routeCode-col-width': `${calculatedColumnWidth}px`,
-    '--fontSize': `${fontSize}px`,
-    '--tightenedFontSize': `${tightenedFontSize}px`,
-    '--iconSize': fontSize ? `${iconWidthHeight}px` : '5vh',
+    '--routecode-col-width': `${calculatedColumnWidth}px`,
+    '--font-size': `${fontSize}px`,
+    '--tightened-font-size': `${tightenedFontSize}px`,
+    '--icon-size': fontSize ? `${iconWidthHeight}px` : '5vh',
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;

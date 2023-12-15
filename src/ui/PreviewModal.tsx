@@ -59,7 +59,9 @@ const PreviewModal: FC<Props> = ({
             </button>
           </section>
         </div>
-        <section id={isLandscape ? 'previewMonitor' : 'previewMonitorPortrait'}>
+        <section
+          id={isLandscape ? 'preview-monitor' : 'preview-monitor-portrait'}
+        >
           <div className="carouselContainer">
             {showInfoDisplay ? (
               <InformationDisplayContainer preview />

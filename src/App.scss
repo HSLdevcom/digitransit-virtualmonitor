@@ -18,6 +18,7 @@ li {
   list-style-type: none;
 }
 
+/* stylelint-disable selector-class-pattern */
 .ReactModal__Content {
   font-family: var(--font-family);
   padding: 0 !important;
@@ -25,13 +26,13 @@ li {
 
 .ReactModal__Overlay {
   z-index: 1000;
-  background-color: rgba(0, 0, 0, 0.4) !important;
+  background-color: rgb(0 0 0 / 40%) !important;
 }
 
 .animate-in {
   animation-duration: 0.5s;
   animation-name: animate-in;
-  animation-delay: var(--delayLength);
+  animation-delay: var(--delay-length);
   animation-fill-mode: backwards;
 }
 
@@ -40,7 +41,7 @@ li {
   100% { opacity: 1; }
 }
 
-.sr-only:not(:focus):not(:active) {
+.sr-only:not(:focus, :active) {
   clip: rect(0 0 0 0);
   clip-path: inset(50%);
   height: 1px;

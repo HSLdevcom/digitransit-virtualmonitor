@@ -38,7 +38,7 @@
       .header {
         padding-bottom: 20px;
         display: flex;
-        align-items: end;
+        align-items: flex-end;
         flex-flow: column;
       }
 
@@ -50,7 +50,7 @@
           content: '';
           height: 100%;
           width: 100%;
-          background-color: rgba(221, 221, 221, 0.7);
+          background-color: rgb(221 221 221 / 70%);
         }
 
         .option {

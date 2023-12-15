@@ -85,7 +85,7 @@ const UserMonitors: React.FC<IProps> = props => {
   const monitors =
     !!views.length &&
     views.map((view, i) => {
-      const style = { '--delayLength': `0.${1 + i}s` } as React.CSSProperties;
+      const style = { '--delay-length': `0.${1 + i}s` } as React.CSSProperties;
       return (
         <div
           key={`card${view.url}`}

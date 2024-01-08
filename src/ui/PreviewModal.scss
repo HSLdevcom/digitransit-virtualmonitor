@@ -1,3 +1,4 @@
+/* stylelint-disable selector-class-pattern */
 .preview {
   .ReactModal__Content {
     border: none !important;
@@ -11,18 +12,18 @@
     transform: translate(-50%, -50%);
     padding: 0 !important;
     background: #000 !important;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+    box-shadow: 0 4px 20px rgb(0 0 0 / 25%) !important;
     border-radius: 5px !important;
     overflow: hidden !important;
     animation: none;
 
-    #previewMonitor {
+    #preview-monitor {
       position: absolute;
       top: 75px;
       left: 30px;
     }
 
-    #previewMonitorPortrait {
+    #preview-monitor-portrait {
       position: absolute;
       top: 75px;
       left: 0;
@@ -81,7 +82,7 @@
       transform: translate(-50%, -50%);
       padding: 0 !important;
       background: #000 !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+      box-shadow: 0 4px 20px rgb(0 0 0 / 25%) !important;
       border-radius: 5px !important;
       overflow: hidden !important;
       animation: none;

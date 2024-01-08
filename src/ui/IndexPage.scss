@@ -103,7 +103,7 @@
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (width <= 1200px) {
   .right {
     display: none !important;
     width: 0;

@@ -46,7 +46,7 @@
   .import-button-container {
     width: 100%;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     margin: 30px 0;
 
     .monitor-button {
@@ -57,7 +57,7 @@
 
       .loading-button {
         position: absolute;
-        width: calc(100% - 56px); // 100% - total horizontal padding on monitor-button
+        width: calc(100% - 56px); /* 100% - total horizontal padding on monitor-button */
       }
 
       &.loading:disabled {

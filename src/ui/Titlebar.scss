@@ -12,7 +12,7 @@ $preview-container-height: 365px;
   height: 15vh;
   margin: 0 2%;
 
-  &.multiDisplay {
+  &.multiDisplay { /* stylelint-disable-line */
     grid-template-columns: 14vw 1fr 14vw;
   }
 
@@ -75,7 +75,7 @@ $preview-container-height: 365px;
     height: 55px;
     grid-template-columns: calc(0.14 * #{$preview-container-width}) auto calc(0.073 * #{$preview-container-width}) calc(0.14 * #{$preview-container-width});
 
-    &.multiDisplay {
+    &.multiDisplay { /* stylelint-disable-line */
       grid-template-columns: calc(0.14 * #{$preview-container-width}) auto calc(0.14 * #{$preview-container-width});
     }
 
@@ -190,9 +190,9 @@ $preview-container-height: 365px;
     linear-gradient(
       to left,
       transparent,
-      rgba(0, 0, 0, 0.2) 5px,
-      rgba(0, 0, 0, 1) 25px,
-      rgba(0, 0, 0, 1)
+      rgb(0 0 0 / 20%) 5px,
+      rgb(0 0 0 / 100%) 25px,
+      rgb(0 0 0 / 100%)
     );
   justify-content: center;
   align-items: center;
@@ -235,9 +235,9 @@ $preview-container-height: 365px;
     linear-gradient(
       to left,
       transparent,
-      rgba(0, 0, 0, 0.2) 5px,
-      rgba(0, 0, 0, 1) 25px,
-      rgba(0, 0, 0, 1)
+      rgb(0 0 0 / 20%) 5px,
+      rgb(0 0 0 / 100%) 25px,
+      rgb(0 0 0 / 100%)
     );
 }
 
@@ -256,9 +256,9 @@ $preview-container-height: 365px;
     linear-gradient(
       to left,
       transparent,
-      rgba(0, 0, 0, 0.2) 5px,
-      rgba(0, 0, 0, 1) 25px,
-      rgba(0, 0, 0, 1)
+      rgb(0 0 0 / 20%) 5px,
+      rgb(0 0 0 / 100%) 25px,
+      rgb(0 0 0 / 100%)
     );
 }
 
@@ -284,7 +284,7 @@ $preview-container-height: 365px;
   border-radius: 0.2em;
   background-color: white;
   color: $monitor-background-color;
-  padding: 0 1.25vw 0 !important;
+  padding: 0 1.25vw !important;
 
   &.preview {
     font-weight: $monitor-font-weight;

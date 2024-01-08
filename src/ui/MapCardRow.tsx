@@ -52,7 +52,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
   const isFirst = index === 0;
   const isLast = index === cards.length - 1;
   const style = {
-    '--delayLength': `0.0s`,
+    '--delay-length': `0.0s`,
   } as React.CSSProperties;
 
   const handleToggle = hideTimeTable => {

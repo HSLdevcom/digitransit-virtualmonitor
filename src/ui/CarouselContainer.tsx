@@ -109,18 +109,6 @@ const CarouselContainer: FC<IProps> = ({
     return () => clearTimeout(id);
   }, [current]);
 
-  useEffect(() => {
-    if (config.alertOrientation === 'static') {
-      setAlertOrientation('static');
-    }
-  }, [alerts]);
-
-  useEffect(() => {
-    if (config.alertOrientation === 'static') {
-      setAlertOrientation('static');
-    }
-  }, [alerts]);
-
   const index = Math.floor(current / 2) % finalViews.length;
 
   const departures = [
@@ -217,7 +205,7 @@ const CarouselContainer: FC<IProps> = ({
   const alertRowReference = useRef();
   useIsOverflow(alertRowReference, isOverflowFromCallback => {
     if (isOverflowFromCallback) {
-      setAlertOrientation('vertical');
+      setAlertOrientation('horizontal');
     }
   });
 

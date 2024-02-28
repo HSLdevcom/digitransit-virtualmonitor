@@ -62,37 +62,32 @@ const MonitorAlertRow: FC<IProps> = ({
     return () => clearTimeout(to);
   }, []);
 
-  const a = [];
-  for (let i = 0; i < alerts.length; i++) {
-    if (
-      alerts[i].alertDescriptionTextTranslations ||
-      alerts[i].alertHeaderTextTranslations
-    ) {
-      for (let j = 0; j < languages.length; j++) {
-        a.push(
-          <span key={`alert-${i + 1}-lang-${j + 1}`} className="single-alert">
-            {getServiceAlertDescription(alerts[i], languages[j]) ||
-              getServiceAlertHeader(alerts[i], languages[j])}
-          </span>,
-        );
-      }
-    } else {
-      a.push(
-        <span key={`alert-${i + 1}-lang-1`} className="single-alert">
-          {getServiceAlertDescription(alerts[i], 'fi') ||
-            getServiceAlertHeader(alerts[i], 'fi')}
-        </span>,
-      );
-    }
-    if (!(i === alerts.length - 1) && !(alertOrientation === 'horizontal')) {
-      a.push(
-        <div
-          key={`alert-${i + 1}-separator}`}
-          className="alert-separator"
-        ></div>,
-      );
-    }
-  }
+  const DEFAULT_LANGUAGE = 'fi';
+
+  const alertElements = alerts.flatMap((alert, i) => {
+    const hasTranslations =
+      alert.alertDescriptionTextTranslations ||
+      alert.alertHeaderTextTranslations;
+    const languagesToUse = hasTranslations ? languages : [DEFAULT_LANGUAGE];
+
+    const alertSpans = languagesToUse.map((language, j) => (
+      <span key={`alert-${i + 1}-lang-${j + 1}`} className="single-alert">
+        {getServiceAlertDescription(alert, language) ||
+          getServiceAlertHeader(alert, language)}
+      </span>
+    ));
+
+    const isLastAlert = i === alerts.length - 1;
+    const needsSeparator = !isLastAlert && alertOrientation !== 'horizontal';
+    const separator = needsSeparator ? (
+      <div key={`alert-${i + 1}-separator`} className="alert-separator"></div>
+    ) : (
+      []
+    );
+
+    return [...alertSpans, separator];
+  });
+
   const style = {
     '--animationWidth': `${Number(-1 * animationWidth).toFixed(0)}px`,
     '--speed': `${Number(speed).toFixed(0)}s`,
@@ -109,7 +104,7 @@ const MonitorAlertRow: FC<IProps> = ({
             setTimeout(() => setUpdate(false), 100);
           }}
         >
-          {a}
+          {alertElements}
         </div>
       </div>
     </div>

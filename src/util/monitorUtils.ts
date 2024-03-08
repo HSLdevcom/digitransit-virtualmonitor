@@ -426,15 +426,11 @@ export const getDepartureDestination = (departure, lang) => {
     return departure['headsign' + lang]
       ? departure['headsign' + lang]
       : departure['headsign'];
-  } else if (departure.trip && departure.trip.tripHeadsign) {
+  } else if (departure?.trip?.tripHeadsign) {
     return departure.trip['tripHeadsign' + lang]
       ? departure.trip['tripHeadsign' + lang]
       : departure.trip.tripHeadsign;
-  } else if (
-    departure.trip &&
-    departure.trip.route &&
-    departure.trip.route.longName
-  ) {
+  } else if (departure.trip?.route?.longName) {
     return departure.trip.route['longName' + lang]
       ? departure.trip.route['longName' + lang]
       : departure.trip.route.longName;

@@ -422,11 +422,12 @@ export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
  * @returns The departure destination or null if not found.
  */
 export const getDepartureDestination = (departure, lang) => {
+  if (!departure) return null;
   if (departure.headsign) {
     return departure['headsign' + lang]
       ? departure['headsign' + lang]
       : departure['headsign'];
-  } else if (departure?.trip?.tripHeadsign) {
+  } else if (departure.trip?.tripHeadsign) {
     return departure.trip['tripHeadsign' + lang]
       ? departure.trip['tripHeadsign' + lang]
       : departure.trip.tripHeadsign;

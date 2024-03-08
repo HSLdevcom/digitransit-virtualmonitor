@@ -48,6 +48,7 @@ export interface IHiddenRoute {
 export interface IRoute {
   gtfsId: string;
   shortName: string;
+  longName?: string;
 }
 export interface IPattern {
   code: string;

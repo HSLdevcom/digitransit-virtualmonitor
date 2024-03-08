@@ -24,6 +24,14 @@ export const stopTimeAbsoluteDepartureTime = (stopTime: IDeparture) =>
   stopTime.serviceDay + stopTime.realtimeDeparture;
 
 export const stringifyPattern = pattern => {
+  if (!pattern.route.shortName) {
+    return [
+      pattern.route.gtfsId,
+      pattern.route.longName,
+      capitalize(pattern.headsign),
+      pattern.code.split(':')[2],
+    ].join(':');
+  }
   return [
     pattern.route.gtfsId,
     pattern.route.shortName,

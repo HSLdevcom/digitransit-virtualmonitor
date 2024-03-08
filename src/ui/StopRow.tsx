@@ -58,7 +58,22 @@ const StopRow: FC<IProps> = ({
     }
   };
   const isDouble = stop.layout > 8 && stop.layout < 12;
-  const stopPatterns = sortBy(stop.patterns, 'route.shortName')
+  let searchVar = '';
+  stop?.patterns?.forEach(pattern => {
+    if (pattern?.route?.shortName) {
+      searchVar = 'route.shortName';
+      return;
+    }
+    if (pattern?.route?.longName) {
+      searchVar = 'route.longName';
+      return;
+    }
+  });
+  if (!searchVar) {
+    searchVar = 'route.shortName';
+  }
+
+  const stopPatterns = sortBy(stop.patterns, searchVar)
     // in OTP-2 query returns also temporary changes etc, which exposes originalTripPattern object. We don't want those patterns here.
     .filter(
       pattern =>

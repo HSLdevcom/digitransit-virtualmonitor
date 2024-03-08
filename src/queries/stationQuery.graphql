@@ -20,6 +20,7 @@ query stationQuery($ids: [String]  $language: String) @api(contextKey: "clientNa
           mode
           type
           shortName
+          longName
           gtfsId
         }
       }
@@ -35,12 +36,14 @@ query stationQuery($ids: [String]  $language: String) @api(contextKey: "clientNa
             mode
             type
             shortName
+            longName
             gtfsId
           }
         }
       }
       routes {
         shortName
+        longName
         gtfsId
       }
     }

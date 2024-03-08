@@ -67,6 +67,7 @@ query GetDeparturesForStops($ids: [String!]!, $numberOfDepartures: Int!)
           direction
         }
         route {
+          longName
           gtfsId
           shortName
         }
@@ -99,6 +100,10 @@ query GetDeparturesForStops($ids: [String!]!, $numberOfDepartures: Int!)
           id
           gtfsId
           route {
+            longNamefi: longName(language: "fi")
+            longNamesv: longName(language: "sv")
+            longNameen: longName(language: "en")
+            longName
             shortName
             gtfsId
           }

@@ -208,17 +208,18 @@ export const getRouteCodeColumnWidth = (departures, view, fontSize, config) => {
     .concat(departures[1].slice(0, rightColumnCount));
 
   const minimumRouteCodeLength = 3; // Minimum length to allow space for the column title.
-  const longestRouteCodeLength = departuresOnScreen?.reduce((a, b) => {
-    const maxALength =
-      a?.trip?.route?.shortName?.length <= config.lineCodeMaxLength
-        ? a?.trip?.route?.shortName?.length
-        : minimumRouteCodeLength;
-    const maxBLength =
-      b?.trip?.route?.shortName?.length <= config.lineCodeMaxLength
-        ? b?.trip?.route?.shortName?.length
-        : minimumRouteCodeLength;
-    return maxALength > maxBLength ? a : b;
-  }, minimumRouteCodeLength).trip?.route?.shortName?.length;
+  const longestRouteCodeLength =
+    departuresOnScreen?.reduce((a, b) => {
+      const maxALength =
+        a?.trip?.route?.shortName?.length <= config.lineCodeMaxLength
+          ? a?.trip?.route?.shortName?.length
+          : minimumRouteCodeLength;
+      const maxBLength =
+        b?.trip?.route?.shortName?.length <= config.lineCodeMaxLength
+          ? b?.trip?.route?.shortName?.length
+          : minimumRouteCodeLength;
+      return maxALength > maxBLength ? a : b;
+    }).trip?.route?.shortName?.length || minimumRouteCodeLength;
 
   // How much taller letters are compared to width
   const fontHeightWidthRatio = 1.6;

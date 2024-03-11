@@ -69,4 +69,5 @@ export default {
   map: {
     inUse: false,
   },
+  lineCodeMaxLength: 7, // Maximum length of line code to show in the monitor, values larger than 7 are not supported by horizontal layouts
 };

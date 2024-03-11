@@ -22,6 +22,7 @@ const defaultProps = {
 
 const mockConfig = {
   useTilde: true,
+  lineCodeMaxLength: 7,
 };
 
 const withContext = prps => {
@@ -36,15 +37,15 @@ it('should render a row correctly', () => {
   const { container } = render(withContext(defaultProps));
   // destination
   expect(
-    container.getElementsByClassName('destination-row')[0].innerHTML,
+    container.getElementsByClassName('destination-row')[0]?.innerHTML,
   ).toEqual('Jyväskylä');
   // shortName
   expect(
-    container.getElementsByClassName('grid-col line')[0].innerHTML,
+    container.getElementsByClassName('grid-col line')[0]?.innerHTML,
   ).toEqual('123');
   // time,
   expect(
-    container.getElementsByClassName('grid-col time')[0].innerHTML.length,
+    container.getElementsByClassName('grid-col time')[0]?.innerHTML.length,
   ).toBeGreaterThan(0);
 });
 
@@ -62,7 +63,7 @@ it('should render a cancelled departure with the text cancelled', () => {
 
   const { container } = render(withContext(props));
   expect(
-    container.getElementsByClassName('cancelled-row')[0].innerHTML,
+    container.getElementsByClassName('cancelled-row')[0]?.innerHTML,
   ).toEqual('cancelled');
 });
 
@@ -80,10 +81,10 @@ it('should render a cancelled departure with alert icon and destination', () => 
   const { container } = render(withContext(props));
 
   expect(
-    container.getElementsByClassName('destination-row')[0].innerHTML,
+    container.getElementsByClassName('destination-row')[0]?.innerHTML,
   ).toEqual('Jyväskylä');
   expect(
-    container.getElementsByClassName('grid-col destination')[0].children[0]
+    container.getElementsByClassName('grid-col destination')[0]?.children[0]
       .nodeName,
   ).toEqual('svg');
 });
@@ -101,7 +102,7 @@ it('should do show tilde when realtime is off', () => {
 
   const { container } = render(withContext(props));
   expect(
-    container.getElementsByClassName('grid-col time')[0].innerHTML,
+    container.getElementsByClassName('grid-col time')[0]?.innerHTML,
   ).toContain('~');
 });
 
@@ -119,6 +120,6 @@ it('should show the stop code when a departure does not have a platform code', (
   const { container } = render(withContext(props));
 
   expect(
-    container.getElementsByClassName('grid-col code')[0].innerHTML,
+    container.getElementsByClassName('grid-col code')[0]?.innerHTML,
   ).toContain('H1234');
 });

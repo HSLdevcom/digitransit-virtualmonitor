@@ -200,28 +200,25 @@ export function getLoginUri(configName) {
   }
 }
 
-export const getRouteCodeColumnWidth = (departures, view, fontSize) => {
+export const getRouteCodeColumnWidth = (departures, view, fontSize, config) => {
   const { leftColumnCount, rightColumnCount } = getLayout(view.layout);
 
   const departuresOnScreen = departures[0]
     .slice(0, leftColumnCount)
     .concat(departures[1].slice(0, rightColumnCount));
 
-  const shortestRouteCodeLength = 3; // The line code heading still fits
-  const longestRouteCodeLength =
-    departuresOnScreen?.reduce((a, b) => {
-      const aLengthValue = a?.trip?.route?.shortName?.length;
-      const aLength =
-        aLengthValue !== undefined && aLengthValue !== null ? aLengthValue : a;
-      const bLength = b?.trip?.route?.shortName?.length;
-      return bLength === undefined || aLength > bLength ? aLength : bLength;
-    }, shortestRouteCodeLength) || shortestRouteCodeLength; // Minimum length to allow space for the column title.
-  const longestPossibleRouteCodeLength =
-    longestRouteCodeLength > 7 // over 7 characters causes the icon to be shown
-      ? shortestRouteCodeLength
-      : longestRouteCodeLength;
+  const minimumRouteCodeLength = 3; // Minimum length to allow space for the column title.
+
+  const lengthValues = departuresOnScreen.map(
+    departure => departure.trip?.route?.shortName?.length,
+  );
+
+  const longestRouteCodeLength = lengthValues.reduce(
+    (a, b) => (!b || b > config.lineCodeMaxLength || a > b ? a : b),
+    minimumRouteCodeLength,
+  );
 
   // How much taller letters are compared to width
   const fontHeightWidthRatio = 1.6;
-  return (fontSize / fontHeightWidthRatio) * longestPossibleRouteCodeLength;
+  return (fontSize / fontHeightWidthRatio) * longestRouteCodeLength;
 };

@@ -248,22 +248,27 @@ const MonitorRow: FC<IProps> = ({
           'without-route-column': withoutRouteColumn,
         })}
       >
-        {!withoutRouteColumn && lineLen !== -1 && lineLen <= 7 && (
-          <div className={cx('grid-col line', `len${lineLen}`)}>
-            {line[0]}
-            {line.length > 1 && <span className="line-letter">{line[1]}</span>}
-          </div>
-        )}
-        {!withoutRouteColumn && (lineLen === -1 || lineLen > 7) && (
-          <div className={cx('grid-col line icon', `len${2}`)}>
-            <Icon
-              height={24}
-              width={24}
-              img={departure.vehicleMode || 'bus'}
-              color={config.colors.monitorBackground}
-            />
-          </div>
-        )}
+        {!withoutRouteColumn &&
+          lineLen !== -1 &&
+          lineLen <= config.lineCodeMaxLength && (
+            <div className={cx('grid-col line', `len${lineLen}`)}>
+              {line[0]}
+              {line.length > 1 && (
+                <span className="line-letter">{line[1]}</span>
+              )}
+            </div>
+          )}
+        {!withoutRouteColumn &&
+          (lineLen === -1 || lineLen > config.lineCodeMaxLength) && (
+            <div className={cx('grid-col line icon', `len${2}`)}>
+              <Icon
+                height={24}
+                width={24}
+                img={departure.vehicleMode || 'bus'}
+                color={config.colors.monitorBackground}
+              />
+            </div>
+          )}
         <div className="grid-col destination">
           {alertState && isCancelled ? (
             isTwoRow ? (

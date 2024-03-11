@@ -89,6 +89,7 @@ const Monitor: FC<IProps> = ({
     departures,
     view,
     fontSize,
+    config,
   );
   // The width and height of a vehicle icon.
   // For clarity icon is a bit bigger than text, except on tightened views where it is adjusted to fit narrower lines.

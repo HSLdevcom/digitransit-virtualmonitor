@@ -70,13 +70,22 @@ const MonitorAlertRow: FC<IProps> = ({
       alert.alertHeaderTextTranslations;
     const languagesToUse = hasTranslations ? languages : [DEFAULT_LANGUAGE];
 
-    const alertSpans = languagesToUse.map((language, j) => (
-      <span key={`alert-${i + 1}-lang-${j + 1}`} className="single-alert">
-        {getServiceAlertDescription(alert, language) ||
-          getServiceAlertHeader(alert, language)}
-      </span>
-    ));
-
+    // Sort the languages so that they are always in order: fi, sv, en.
+    const sortedLanguages = languagesToUse.sort((a, b) => {
+      if (a === 'fi') return -1;
+      if (b === 'fi') return 1;
+      if (a === 'sv') return -1;
+      if (b === 'sv') return 1;
+      return 0;
+    });
+    const alertSpans = sortedLanguages.map((language, j) => {
+      return (
+        <span key={`alert-${i + 1}-lang-${j + 1}`} className="single-alert">
+          {getServiceAlertDescription(alert, language) ||
+            getServiceAlertHeader(alert, language)}
+        </span>
+      );
+    });
     const isLastAlert = i === alerts.length - 1;
     const needsSeparator = !isLastAlert && alertOrientation !== 'horizontal';
     const separator = needsSeparator ? (

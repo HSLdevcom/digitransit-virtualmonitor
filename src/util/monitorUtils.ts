@@ -24,6 +24,14 @@ export const stopTimeAbsoluteDepartureTime = (stopTime: IDeparture) =>
   stopTime.serviceDay + stopTime.realtimeDeparture;
 
 export const stringifyPattern = pattern => {
+  if (!pattern.route.shortName) {
+    return [
+      pattern.route.gtfsId,
+      pattern.route.longName,
+      capitalize(pattern.headsign),
+      pattern.code.split(':')[2],
+    ].join(':');
+  }
   return [
     pattern.route.gtfsId,
     pattern.route.shortName,
@@ -415,14 +423,28 @@ export const uuidValidateV5 = uuid => {
 export const stoptimeSpecificDepartureId = (departure: IDeparture) =>
   `${departure.trip.gtfsId}:${departure.serviceDay}:${departure.scheduledDeparture}`;
 
+/**
+ * Retrieves the departure destination based on the provided departure object and language.
+ * @param departure - The departure object.
+ * @param lang - The language code.
+ * @returns The departure destination or null if not found.
+ */
 export const getDepartureDestination = (departure, lang) => {
-  return departure['headsign' + lang]
-    ? departure['headsign' + lang]
-    : departure.trip && departure.trip['tripHeadsign' + lang]
-    ? departure.trip['tripHeadsign' + lang]
-    : departure['headsign']
-    ? departure['headsign']
-    : null;
+  if (!departure) return null;
+  if (departure.headsign) {
+    return departure['headsign' + lang]
+      ? departure['headsign' + lang]
+      : departure['headsign'];
+  } else if (departure.trip?.tripHeadsign) {
+    return departure.trip['tripHeadsign' + lang]
+      ? departure.trip['tripHeadsign' + lang]
+      : departure.trip.tripHeadsign;
+  } else if (departure.trip?.route?.longName) {
+    return departure.trip.route['longName' + lang]
+      ? departure.trip.route['longName' + lang]
+      : departure.trip.route.longName;
+  }
+  return null;
 };
 
 type Coordinate = [number, number];

@@ -20,6 +20,7 @@ query stopQuery($ids: [String], $language: String!) @api(contextKey: "clientName
         mode
         type
         shortName
+        longName
         gtfsId
       }
     }
@@ -38,12 +39,14 @@ query stopQuery($ids: [String], $language: String!) @api(contextKey: "clientName
           mode
           type
           shortName
+          longName
           gtfsId
         }
       }
     }
     routes {
       shortName
+      longName
       gtfsId
     }
   }

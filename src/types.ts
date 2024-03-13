@@ -65,6 +65,7 @@ export interface IPatternRoute {
 export interface IRoute {
   gtfsId: string;
   shortName: string;
+  longName?: string;
   __typename: string;
 }
 

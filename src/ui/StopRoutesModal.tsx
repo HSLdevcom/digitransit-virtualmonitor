@@ -5,7 +5,7 @@ import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 import { useTranslation } from 'react-i18next';
-import { IStopInfoPlus, IPattern } from '../util/Interfaces';
+import { IStopInfoPlus, IPattern, IRoute } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
@@ -13,12 +13,6 @@ import { ConfigContext } from '../contexts';
 import { getRenameDestinationId } from '../util/headsignUtils';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
-
-interface IRoute {
-  gtfsId?: string;
-  shortName?: string;
-  code?: string;
-}
 
 interface Props {
   showModal: boolean;

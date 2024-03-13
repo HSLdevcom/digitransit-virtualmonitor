@@ -103,6 +103,10 @@ query GetDeparturesForStations($ids: [String!]!, $numberOfDepartures: Int!)
           route {
             gtfsId
             shortName
+            longName
+            longNamefi: longName(language: "fi")
+            longNamesv: longName(language: "sv")
+            longNameen: longName(language: "en")
           }
         }
       }

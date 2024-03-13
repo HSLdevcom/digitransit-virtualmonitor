@@ -27,6 +27,7 @@ export default {
     'Kajaani',
     'Salo',
     'Pori',
+    'Vikingline',
   ],
   fonts: {
     weights: {

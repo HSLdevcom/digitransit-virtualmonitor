@@ -62,37 +62,41 @@ const MonitorAlertRow: FC<IProps> = ({
     return () => clearTimeout(to);
   }, []);
 
-  const a = [];
-  for (let i = 0; i < alerts.length; i++) {
-    if (
-      alerts[i].alertDescriptionTextTranslations ||
-      alerts[i].alertHeaderTextTranslations
-    ) {
-      for (let j = 0; j < languages.length; j++) {
-        a.push(
-          <span key={`alert-${i + 1}-lang-${j + 1}`} className="single-alert">
-            {getServiceAlertDescription(alerts[i], languages[j]) ||
-              getServiceAlertHeader(alerts[i], languages[j])}
-          </span>,
-        );
-      }
-    } else {
-      a.push(
-        <span key={`alert-${i + 1}-lang-1`} className="single-alert">
-          {getServiceAlertDescription(alerts[i], 'fi') ||
-            getServiceAlertHeader(alerts[i], 'fi')}
-        </span>,
+  const DEFAULT_LANGUAGE = 'fi';
+
+  const alertElements = alerts.flatMap((alert, i) => {
+    const hasTranslations =
+      alert.alertDescriptionTextTranslations ||
+      alert.alertHeaderTextTranslations;
+    const languagesToUse = hasTranslations ? languages : [DEFAULT_LANGUAGE];
+
+    // Sort the languages so that they are always in order: fi, sv, en.
+    const sortedLanguages = languagesToUse.sort((a, b) => {
+      if (a === 'fi') return -1;
+      if (b === 'fi') return 1;
+      if (a === 'sv') return -1;
+      if (b === 'sv') return 1;
+      return 0;
+    });
+    const alertSpans = sortedLanguages.map((language, j) => {
+      return (
+        <span key={`alert-${i + 1}-lang-${j + 1}`} className="single-alert">
+          {getServiceAlertDescription(alert, language) ||
+            getServiceAlertHeader(alert, language)}
+        </span>
       );
-    }
-    if (!(i === alerts.length - 1) && !(alertOrientation === 'horizontal')) {
-      a.push(
-        <div
-          key={`alert-${i + 1}-separator}`}
-          className="alert-separator"
-        ></div>,
-      );
-    }
-  }
+    });
+    const isLastAlert = i === alerts.length - 1;
+    const needsSeparator = !isLastAlert && alertOrientation !== 'horizontal';
+    const separator = needsSeparator ? (
+      <div key={`alert-${i + 1}-separator`} className="alert-separator"></div>
+    ) : (
+      []
+    );
+
+    return [...alertSpans, separator];
+  });
+
   const style = {
     '--animationWidth': `${Number(-1 * animationWidth).toFixed(0)}px`,
     '--speed': `${Number(speed).toFixed(0)}s`,
@@ -109,7 +113,7 @@ const MonitorAlertRow: FC<IProps> = ({
             setTimeout(() => setUpdate(false), 100);
           }}
         >
-          {a}
+          {alertElements}
         </div>
       </div>
     </div>

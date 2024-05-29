@@ -52,7 +52,8 @@
     "suncalc": "1.8.0",
     "url": "^0.11.0",
     "uuid": "^8.3.2",
-    "nth-check": "^2.1.1"
+    "nth-check": "^2.1.1",
+    "react-animate-height": "^3.2.3"
   },
   "scripts": {
     "start-prod": "cd server && npm start",
@@ -118,6 +119,7 @@
     "not op_mini all"
   ],
   "overrides": {
-    "nth-check": "$nth-check"
+    "nth-check": "$nth-check",
+    "react-animate-height": "$react-animate-height"
   }
 }

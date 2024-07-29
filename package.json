@@ -23,7 +23,7 @@
     "classnames": "^2.2.6",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
-    "fast-xml-parser": "4.2.5",
+    "fast-xml-parser": "4.4.1",
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "http-proxy-middleware": "^2.0.6",

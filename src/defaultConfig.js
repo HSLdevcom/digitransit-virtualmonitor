@@ -28,6 +28,7 @@ export default {
     'Salo',
     'Pori',
     'Vikingline',
+    'VARELY',
   ],
   fonts: {
     weights: {

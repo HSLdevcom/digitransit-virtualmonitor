@@ -1,6 +1,6 @@
 {
   "name": "digitransit-stop-monitor",
-  "version": "2.2.42",
+  "version": "2.2.43",
   "description": "Real-time, updating public transport info display that aggregates OpenTripPlanner schedules for multiple stops",
   "license": "MIT",
   "contributors": [
@@ -123,7 +123,7 @@
     "nth-check": "$nth-check",
     "react-animate-height": "$react-animate-height",
     "@digitransit-component/digitransit-component-autosuggest": {
-      "axios":  "0.27.2"
+      "axios": "0.27.2"
     },
     "node-fetch": "$node-fetch"
   }

@@ -35,7 +35,7 @@ export default {
     },
     name: 'hsl',
     uri: 'routing/v2/routers/hsl/index/graphql',
-    bannersUri: 'https://content.hsl.fi/api/v1/banners?',
+    bannersUri: 'https://cms.hsl.fi/api/v1/banners?',
     HSLUri:
       // eslint-disable-next-line no-undef
       window.location.href.indexOf('omatnaytot') > -1 ||
@@ -43,7 +43,7 @@ export default {
       window.location.href.indexOf('pre-prod') > -1
         ? 'https://hsl.fi'
         : 'https://test.hslfi.hsldev.com/',
-    suggestionsUri: 'https://content.hsl.fi/api/v1/search/suggestions/',
+    suggestionsUri: 'https://cms.hsl.fi/api/v1/search/suggestions/',
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {

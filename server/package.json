@@ -17,7 +17,7 @@
     "cookie-parser": "^1.4.3",
     "cron": "^1.8.2",
     "dayjs": "^1.11.3",
-    "express": "^4.17.3",
+    "express": "^4.20.0",
     "express-session": "^1.17.3",
     "morgan": "^1.8.2",
     "openid-client": "^4.9.1",

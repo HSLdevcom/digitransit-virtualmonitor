@@ -122,7 +122,12 @@ const MonitorMap: FC<IProps> = ({
       : mapSettings.bounds[0];
     const zoom = mapSettings.zoom ? mapSettings.zoom : 14;
     if (!map) {
-      setMap(L.map('map', { zoomControl: false }).setView(center, zoom));
+      setMap(
+        L.map('map', { zoomControl: false, zoomAnimation: false }).setView(
+          center,
+          zoom,
+        ),
+      );
     } else {
       monitorAPI.getMapSettings(lang).then((r: string) => {
         L.tileLayer(r, {

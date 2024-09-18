@@ -14,7 +14,7 @@ $preview-grid-divider: 2px;
   z-index: 10000;
   width: 60%;
   height: 15%;
-  background-color: rgba(0, 0, 0, 70%);
+  background-color: $monitor-button-background-color;
   display: flex;
   justify-content: center;
   align-items: center;

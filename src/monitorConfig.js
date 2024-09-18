@@ -104,6 +104,12 @@ export default {
       }
       return true;
     },
+    colors: {
+      primary: '#000000',
+      monitorBackground: '#000000',
+      alert: '#dc0451',
+      monitorButtonBackground: 'rgba(255, 255, 255, 0.7)',
+    },
   },
   tampere: {
     colors: {

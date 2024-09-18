@@ -106,6 +106,7 @@ const Monitor: FC<IProps> = ({
     '--font-size': `${fontSize}px`,
     '--tightened-font-size': `${tightenedFontSize}px`,
     '--icon-size': fontSize ? `${iconWidthHeight}px` : '5vh',
+    '--monitor-button-background-color': config.colors.monitorButtonBackground,
   } as React.CSSProperties;
 
   const isLandscapeByLayout = view.layout <= 11 || view.layout === 20;

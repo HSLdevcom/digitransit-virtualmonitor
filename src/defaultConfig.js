@@ -3,6 +3,7 @@ export default {
     primary: '#026273',
     monitorBackground: '#0057a2',
     alert: '#dc0451',
+    monitorButtonBackground: 'rgba(0, 0, 0, 70%)',
   },
   feedIds: [
     'MATKA',

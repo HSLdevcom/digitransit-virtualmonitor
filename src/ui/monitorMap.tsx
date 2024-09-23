@@ -27,6 +27,8 @@ interface IProps {
   topicRef: any;
   departures?: any;
   lang: string;
+  vehicleMarkerState?: any;
+  setVehicleMarkerState?: any;
 }
 const getVehicleIcon = message => {
   const { heading, shortName, color } = message;
@@ -90,6 +92,8 @@ const MonitorMap: FC<IProps> = ({
   topicRef,
   departures,
   lang,
+  vehicleMarkerState,
+  setVehicleMarkerState,
 }) => {
   const config = useContext(ConfigContext);
   const [map, setMap] = useState<any>();
@@ -172,16 +176,18 @@ const MonitorMap: FC<IProps> = ({
   }, [map]);
 
   useEffect(() => {
-    const markers = vehicleMarkers ? vehicleMarkers : [];
+    const markersOnMap = vehicleMarkers ? vehicleMarkers : [];
     const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
     const now = DateTime.now().toSeconds();
+    const markerState = vehicleMarkerState;
     messages.forEach(m => {
       const { id, lat, long, next_stop, route } = m;
       const nextStop = stopIDs.includes(next_stop);
       const vehicle = getVehicle(departures, route);
-      const exists = markers.find(marker => {
+      let existingMarker = markersOnMap.find(marker => {
         return marker.id === id;
       });
+      const markerToRemove = markerState.get(id) || {};
       let marker;
       const showVehicle =
         route.split(':')[0] === 'HSL'
@@ -193,15 +199,7 @@ const MonitorMap: FC<IProps> = ({
               vehicle.headsign,
             )
           : true;
-      if (exists && showVehicle) {
-        updateVehiclePosition(exists, getVehicleIcon(m), lat, long, now);
-        if (exists.nextStop) {
-          exists.passed = nextStop ? false : true;
-        } else if (nextStop && !exists.nextStop) {
-          exists.nextStop = true;
-        }
-        //  exists.passed = nextStop ? false : undefined;
-      } else if (showVehicle && !exists) {
+      if (map && showVehicle && !existingMarker) {
         marker = {
           id: id,
           marker: L.marker([lat, long], {
@@ -209,30 +207,55 @@ const MonitorMap: FC<IProps> = ({
           }),
         };
         marker.marker.addTo(map);
-        markers.push(marker);
+        markersOnMap.push(marker);
+        existingMarker = marker;
       }
-      if (exists?.passed) {
-        // Expiry handling. Mark those vehicles that have passed stop for expiry.
-        // After a minute, remove vehicles from map.
-        const marker = markers.find(marker => marker.id === id);
-        if (marker) {
-          if (marker.expire) {
-            if (marker.expire <= now) {
-              marker.remove = true;
-            } else {
-              updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
-            }
-          } else {
-            marker.expire = now + EXPIRE_TIME_SEC;
-            updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
-          }
+
+      if (existingMarker && showVehicle) {
+        updateVehiclePosition(
+          existingMarker,
+          getVehicleIcon(m),
+          lat,
+          long,
+          now,
+        );
+        if (markerToRemove.nextStop) {
+          markerToRemove.passed = nextStop ? false : true;
+        } else if (nextStop && !markerToRemove.nextStop) {
+          markerToRemove.id = id;
+          markerToRemove.nextStop = true;
         }
       }
+
+      if (markerToRemove.passed) {
+        // Expiry handling. Mark those vehicles that have passed stop for expiry.
+        // After the set time limit, remove vehicles from map.
+        const marker = markersOnMap.find(marker => marker.id === id);
+        if (markerToRemove.expire) {
+          if (markerToRemove.expire <= now && !markerToRemove.remove) {
+            markerToRemove.remove = true;
+          } else if (marker) {
+            updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
+          }
+        } else if (marker) {
+          markerToRemove.expire = now + EXPIRE_TIME_SEC;
+          updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
+        }
+      }
+
+      if (markerToRemove.id) {
+        markerState.set(markerToRemove.id, markerToRemove);
+      }
     });
-    // Handle vehicle removoal
+
+    // Handle vehicle removal
     const markersToRemove = [];
-    const filtered = markers.filter(m => {
-      if (now - m.lastUpdatedAt >= EXPIRE_TIME_SEC || m.remove) {
+    const filtered = markersOnMap.filter(m => {
+      if (
+        now - m.lastUpdatedAt >= EXPIRE_TIME_SEC || // Remove vehicles that have not been updated for a while (likely reached the end of the line)
+        markerState.get(m.id)?.remove
+      ) {
+        markerState.delete(m.id);
         markersToRemove.push(m.marker);
         return false;
       }
@@ -240,8 +263,19 @@ const MonitorMap: FC<IProps> = ({
     });
     if (markersToRemove.length > 0) {
       for (let index = 0; index < markersToRemove.length; index++) {
-        map.removeLayer(markersToRemove[index]);
+        const marker = markersToRemove[index];
+        map.removeLayer(marker);
       }
+    }
+
+    setVehicleMarkers(filtered);
+    if (markerState) {
+      setVehicleMarkerState(markerState);
+    }
+  }, [messages, map]);
+
+  useEffect(() => {
+    if (topicRef?.current && clientRef?.current && newTopics) {
       const settings = {
         oldTopics: topicRef.current,
         client: clientRef.current,
@@ -249,9 +283,7 @@ const MonitorMap: FC<IProps> = ({
       };
       changeTopics(settings, topicRef);
     }
-
-    setVehicleMarkers(filtered);
-  }, [messages]);
+  }, [newTopics, topicRef]);
 
   return (
     <div

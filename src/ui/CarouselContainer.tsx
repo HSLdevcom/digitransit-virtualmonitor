@@ -6,13 +6,8 @@ import { IDeparture } from './MonitorRow';
 import MonitorAlertRow from './MonitorAlertRow';
 import { getLayout } from '../util/getResources';
 import cx from 'classnames';
-import uniqBy from 'lodash/uniqBy';
-import {
-  stopTimeAbsoluteDepartureTime,
-  stoptimeSpecificDepartureId,
-} from '../util/monitorUtils';
+import { sortAndFilter } from '../util/monitorUtils';
 import MonitorAlertRowStatic from './MonitorAlertRowStatic';
-import { getCurrentSeconds } from '../time';
 
 interface IProps {
   stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card
@@ -21,44 +16,13 @@ interface IProps {
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
   trainsWithTrack?: Array<ITrainData>;
+  topics: any;
+  messages: any;
+  clientRef: any;
+  topicRef: any;
+  vehicleMarkerState?: any;
+  setVehicleMarkerState?: any;
 }
-
-const sortAndFilter = (departures, trainsWithTrack) => {
-  const sortedAndFiltered = uniqBy(
-    departures.sort(
-      (stopTimeA, stopTimeB) =>
-        stopTimeAbsoluteDepartureTime(stopTimeA) -
-        stopTimeAbsoluteDepartureTime(stopTimeB),
-    ),
-    departure => stoptimeSpecificDepartureId(departure),
-  ).filter(
-    departure =>
-      departure.serviceDay + departure.realtimeDeparture >= getCurrentSeconds(),
-  );
-  const sortedAndFilteredWithTrack = trainsWithTrack ? [] : sortedAndFiltered;
-  if (sortedAndFiltered.length > 0 && trainsWithTrack) {
-    sortedAndFiltered.forEach(sf => {
-      const trackDataFound = trainsWithTrack.filter(
-        tt =>
-          (tt.lineId === sf.trip.route.shortName ||
-            tt.trainNumber.toString() === sf.trip.route.shortName) &&
-          tt.timeInSecs === sf.serviceDay + sf.scheduledDeparture,
-      );
-      if (trackDataFound.length === 0) {
-        sortedAndFilteredWithTrack.push({ ...sf });
-      } else {
-        sortedAndFilteredWithTrack.push({
-          ...sf,
-          stop: {
-            ...sf.stop,
-            platformCode: trackDataFound[0].track,
-          },
-        });
-      }
-    });
-  }
-  return sortedAndFilteredWithTrack;
-};
 
 const CarouselContainer: FC<IProps> = ({
   stopDepartures,
@@ -67,6 +31,12 @@ const CarouselContainer: FC<IProps> = ({
   preview = false,
   closedStopViews,
   trainsWithTrack,
+  topics,
+  messages,
+  clientRef,
+  topicRef,
+  vehicleMarkerState,
+  setVehicleMarkerState,
 }) => {
   const { cards: views, languages, mapSettings } = useContext(MonitorContext);
   const mapLanguage = languages.length === 1 ? languages[0] : 'fi';
@@ -121,63 +91,6 @@ const CarouselContainer: FC<IProps> = ({
       trainsWithTrack,
     ),
   ];
-  let initialTopics = [];
-  if (mapSettings?.showMap) {
-    // Todo. This is a hacky solution to easiest way of figuring out all the departures.
-    // Map keeps record of all it's stops, so it has all their departures. This should be done
-    // more coherent way when there is time.
-    const allDep = [];
-
-    for (let i = 0; i < views.length; i++) {
-      const element = [
-        sortAndFilter(
-          [...stationDepartures[i][0], ...stopDepartures[i][0]],
-          trainsWithTrack,
-        ),
-        sortAndFilter(
-          [...stationDepartures[i][1], ...stopDepartures[i][1]],
-          trainsWithTrack,
-        ),
-      ];
-      allDep.push(element);
-    }
-
-    const mapDepartures = allDep
-      .map(o => o.flatMap(a => a))
-      .reduce((a, b) => (a.length > b.length ? a : b));
-    initialTopics = mapDepartures
-      .filter(t => t.realtime)
-      .map(dep => {
-        const feedId = dep.trip.gtfsId.split(':')[0];
-        const topic = {
-          feedId: feedId,
-          route: dep.trip.route?.gtfsId?.split(':')[1],
-          tripId: dep.trip.gtfsId.split(':')[1],
-          shortName: dep.trip.route.shortName,
-          type: 3,
-          ...dep,
-        };
-        if (feedId.toLowerCase() === 'hsl') {
-          const i = dep.stops.findIndex(d => dep.stop.gtfsId === d.gtfsId);
-          if (i !== dep.stops.length - 1) {
-            const additionalStop = dep.stops[i + 1];
-            topic.additionalStop = additionalStop;
-          }
-        }
-        return topic;
-      });
-  }
-  const topics = initialTopics;
-  initialTopics.forEach(t => {
-    if (t.additionalStop) {
-      const additionalTopic = {
-        ...t,
-        stop: t.additionalStop,
-        additionalStop: null,
-      };
-      topics.push(additionalTopic);
-    }
-  });
   const lan = languages[language] === 'en' ? 'fi' : languages[language];
   // for easy testing of different layouts
   const newView = {
@@ -258,6 +171,11 @@ const CarouselContainer: FC<IProps> = ({
       mapSettings={mapSettings}
       topics={topics}
       mapLanguage={mapLanguage}
+      messages={messages}
+      clientRef={clientRef}
+      topicRef={topicRef}
+      vehicleMarkerState={vehicleMarkerState}
+      setVehicleMarkerState={setVehicleMarkerState}
     />
   );
 };

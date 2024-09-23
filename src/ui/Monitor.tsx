@@ -31,6 +31,11 @@ interface IProps {
   mapSettings?: IMapSettings;
   topics?: Array<any>;
   mapLanguage?: string;
+  messages?: any;
+  clientRef?: any;
+  topicRef?: any;
+  vehicleMarkerState?: any;
+  setVehicleMarkerState?: any;
 }
 let to;
 
@@ -46,6 +51,11 @@ const Monitor: FC<IProps> = ({
   mapSettings,
   topics,
   mapLanguage,
+  messages,
+  clientRef,
+  topicRef,
+  vehicleMarkerState,
+  setVehicleMarkerState,
 }) => {
   const config = useContext(ConfigContext);
   const { cards } = useContext(MonitorContext);
@@ -155,6 +165,11 @@ const Monitor: FC<IProps> = ({
           topics={topics}
           departures={departures}
           lang={mapLanguage}
+          messages={messages}
+          clientRef={clientRef}
+          topicRef={topicRef}
+          vehicleMarkerState={vehicleMarkerState}
+          setVehicleMarkerState={setVehicleMarkerState}
         />
       ) : (
         <MonitorRowContainer

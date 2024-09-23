@@ -479,3 +479,40 @@ export function getBoundingBox(coordinates: Coordinate[]): BoundingBox {
     [maxLat, maxLng],
   ];
 }
+
+export const sortAndFilter = (departures, trainsWithTrack) => {
+  const sortedAndFiltered = uniqBy(
+    departures.sort(
+      (stopTimeA, stopTimeB) =>
+        stopTimeAbsoluteDepartureTime(stopTimeA) -
+        stopTimeAbsoluteDepartureTime(stopTimeB),
+    ),
+    departure => stoptimeSpecificDepartureId(departure),
+  ).filter(
+    departure =>
+      departure.serviceDay + departure.realtimeDeparture >= getCurrentSeconds(),
+  );
+  const sortedAndFilteredWithTrack = trainsWithTrack ? [] : sortedAndFiltered;
+  if (sortedAndFiltered.length > 0 && trainsWithTrack) {
+    sortedAndFiltered.forEach(sf => {
+      const trackDataFound = trainsWithTrack.filter(
+        tt =>
+          (tt.lineId === sf.trip.route.shortName ||
+            tt.trainNumber.toString() === sf.trip.route.shortName) &&
+          tt.timeInSecs === sf.serviceDay + sf.scheduledDeparture,
+      );
+      if (trackDataFound.length === 0) {
+        sortedAndFilteredWithTrack.push({ ...sf });
+      } else {
+        sortedAndFilteredWithTrack.push({
+          ...sf,
+          stop: {
+            ...sf.stop,
+            platformCode: trackDataFound[0].track,
+          },
+        });
+      }
+    });
+  }
+  return sortedAndFilteredWithTrack;
+};

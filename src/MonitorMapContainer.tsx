@@ -2,8 +2,6 @@ import React, { FC, useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import MonitorMap from './ui/monitorMap';
 import { IMapSettings } from './util/Interfaces';
-import { changeTopics, startMqtt, stopMqtt } from './util/mqttUtils';
-import { useMergeState } from './util/utilityHooks';
 interface IProps {
   preview?: boolean;
   mapSettings: IMapSettings;
@@ -12,6 +10,11 @@ interface IProps {
   topics?: string[];
   departures?: any;
   lang: string;
+  messages?: any;
+  clientRef?: any;
+  topicRef?: any;
+  vehicleMarkerState?: any;
+  setVehicleMarkerState?: any;
 }
 const MonitorMapContainer: FC<IProps> = ({
   preview,
@@ -21,37 +24,12 @@ const MonitorMapContainer: FC<IProps> = ({
   topics,
   departures,
   lang,
+  messages = [],
+  clientRef,
+  topicRef,
+  vehicleMarkerState,
+  setVehicleMarkerState,
 }) => {
-  const [state, setState] = useMergeState({
-    client: undefined,
-    messages: [],
-  });
-  const [started, setStarted] = useState(false);
-  const clientRef = useRef(null);
-  const topicRef = useRef(null);
-
-  if (state.client) {
-    clientRef.current = state.client;
-    if (!started) {
-      setStarted(true);
-    } else if (topicRef.current.length === 0) {
-      // We have new topics and current topics are empty, so client needs to be updated
-      const settings = {
-        client: clientRef.current,
-        oldTopics: [],
-        options: topics,
-      };
-      changeTopics(settings, topicRef);
-    }
-  }
-  useEffect(() => {
-    if ((topics && topics.length) || (!state.client && !started && topics)) {
-      startMqtt(topics, setState, clientRef, topicRef);
-    }
-    return () => {
-      stopMqtt(clientRef.current, topicRef.current);
-    };
-  }, []);
   const isLandscape = true;
 
   return (
@@ -68,12 +46,14 @@ const MonitorMapContainer: FC<IProps> = ({
         mapSettings={mapSettings}
         modal={modal}
         updateMap={updateMap}
-        messages={state.messages}
+        messages={messages}
         clientRef={clientRef}
         newTopics={topics}
         topicRef={topicRef}
         departures={departures}
         lang={lang}
+        vehicleMarkerState={vehicleMarkerState}
+        setVehicleMarkerState={setVehicleMarkerState}
       />
     </div>
   );

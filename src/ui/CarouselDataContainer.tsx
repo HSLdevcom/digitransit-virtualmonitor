@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useContext } from 'react';
+import React, { FC, useState, useEffect, useContext, useRef } from 'react';
 import { useQuery } from '@apollo/client';
 import {
   GetDeparturesForStopsDocument,
@@ -15,6 +15,9 @@ import { uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import CarouselContainer from './CarouselContainer';
 import { MonitorContext } from '../contexts';
+import { sortAndFilter } from '../util/monitorUtils';
+import { changeTopics, startMqtt, stopMqtt } from '../util/mqttUtils';
+import { useMergeState } from '../util/utilityHooks';
 
 interface IProps {
   preview?: boolean;
@@ -41,7 +44,7 @@ const CarouselDataContainer: FC<IProps> = ({
   setQueryError,
   queryError,
 }) => {
-  const { cards: views } = useContext(MonitorContext);
+  const { cards: views, mapSettings } = useContext(MonitorContext);
   const [t] = useTranslation();
   const pollInterval = 30000;
   const emptyDepartureArrays = [];
@@ -140,6 +143,51 @@ const CarouselDataContainer: FC<IProps> = ({
     return () => clearInterval(intervalId);
   }, [stationsState.data, forceUpdate]);
 
+  const [topicsFound, setTopicsFound] = useState(false);
+  const topics = getMqttTopics(
+    views,
+    mapSettings,
+    stationDepartures,
+    stopDepartures,
+    trainsWithTrack,
+  );
+  if (topics.length > 0 && !topicsFound) {
+    setTopicsFound(true);
+  }
+
+  const [state, setState] = useMergeState({
+    client: undefined,
+    messages: [],
+  });
+
+  const clientRef = useRef(null);
+  const topicRef = useRef(null);
+  const [vehicleMarkerState, setVehicleMarkerState] = useState(new Map());
+
+  useEffect(() => {
+    if (state.client) {
+      clientRef.current = state.client;
+      if (topicRef.current.length === 0) {
+        // We have new topics and current topics are empty, so client needs to be updated
+        const settings = {
+          client: clientRef.current,
+          oldTopics: [],
+          options: topics,
+        };
+        changeTopics(settings, topicRef);
+      }
+    }
+  }, [topics, state.client, topicRef.current?.length, clientRef]);
+
+  useEffect(() => {
+    if ((topics && topics.length) || (!state.client && topics)) {
+      startMqtt(topics, setState, clientRef, topicRef);
+    }
+    return () => {
+      stopMqtt(clientRef.current, topicRef.current);
+    };
+  }, [topicsFound]); // mqtt won't really start without topics
+
   if (!stopsFetched || !stationsFetched) {
     return <Loading />;
   }
@@ -151,8 +199,82 @@ const CarouselDataContainer: FC<IProps> = ({
       preview={preview}
       closedStopViews={closedStopViews}
       trainsWithTrack={trainsWithTrack}
+      topics={topics}
+      messages={state.messages}
+      clientRef={clientRef}
+      topicRef={topicRef}
+      vehicleMarkerState={vehicleMarkerState}
+      setVehicleMarkerState={setVehicleMarkerState}
     />
   );
 };
+
+function getMqttTopics(
+  views,
+  mapSettings,
+  stationDepartures,
+  stopDepartures,
+  trainsWithTrack,
+) {
+  let initialTopics = [];
+
+  if (mapSettings?.showMap) {
+    // Todo. This is a hacky solution to easiest way of figuring out all the departures.
+    // Map keeps record of all it's stops, so it has all their departures. This should be done
+    // more coherent way when there is time.
+    const allDep = [];
+
+    for (let i = 0; i < views.length; i++) {
+      const element = [
+        sortAndFilter(
+          [...stationDepartures[i][0], ...stopDepartures[i][0]],
+          trainsWithTrack,
+        ),
+        sortAndFilter(
+          [...stationDepartures[i][1], ...stopDepartures[i][1]],
+          trainsWithTrack,
+        ),
+      ];
+      allDep.push(element);
+    }
+
+    const mapDepartures = allDep
+      .map(o => o.flatMap(a => a))
+      .reduce((a, b) => (a.length > b.length ? a : b));
+    initialTopics = mapDepartures
+      .filter(t => t.realtime)
+      .map(dep => {
+        const feedId = dep.trip.gtfsId.split(':')[0];
+        const topic = {
+          feedId: feedId,
+          route: dep.trip.route?.gtfsId?.split(':')[1],
+          tripId: dep.trip.gtfsId.split(':')[1],
+          shortName: dep.trip.route.shortName,
+          type: 3,
+          ...dep,
+        };
+        if (feedId.toLowerCase() === 'hsl') {
+          const i = dep.stops.findIndex(d => dep.stop.gtfsId === d.gtfsId);
+          if (i !== dep.stops.length - 1) {
+            const additionalStop = dep.stops[i + 1];
+            topic.additionalStop = additionalStop;
+          }
+        }
+        return topic;
+      });
+  }
+  const topics = initialTopics;
+  initialTopics.forEach(t => {
+    if (t.additionalStop) {
+      const additionalTopic = {
+        ...t,
+        stop: t.additionalStop,
+        additionalStop: null,
+      };
+      topics.push(additionalTopic);
+    }
+  });
+  return topics;
+}
 
 export default CarouselDataContainer;

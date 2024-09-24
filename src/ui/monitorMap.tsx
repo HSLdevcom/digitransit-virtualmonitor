@@ -98,8 +98,7 @@ const MonitorMap: FC<IProps> = ({
   const config = useContext(ConfigContext);
   const [map, setMap] = useState<any>();
   const [vehicleMarkers, setVehicleMarkers] = useState([]);
-  const feed = newTopics && newTopics[0]?.feedId.toLowerCase();
-  const EXPIRE_TIME_SEC = feed === 'hsl' ? 10 : 120; // HSL Uses different broker and we need to handle HSL messages differently
+  const EXPIRE_TIME_SEC = config.rtVehicleOffsetSeconds; // HSL Uses different broker and we need to handle HSL messages differently
   const icons = mapSettings.stops.map(stop => {
     const color =
       config.modeIcons.colors[
@@ -199,7 +198,7 @@ const MonitorMap: FC<IProps> = ({
               vehicle.headsign,
             )
           : true;
-      if (map && showVehicle && !existingMarker) {
+      if (!!map && showVehicle && !existingMarker) {
         marker = {
           id: id,
           marker: L.marker([lat, long], {
@@ -219,32 +218,35 @@ const MonitorMap: FC<IProps> = ({
           long,
           now,
         );
-        if (markerToRemove.nextStop) {
-          markerToRemove.passed = nextStop ? false : true;
-        } else if (nextStop && !markerToRemove.nextStop) {
-          markerToRemove.id = id;
-          markerToRemove.nextStop = true;
-        }
+      }
+      if (markerToRemove.nextStop) {
+        markerToRemove.passed = nextStop ? false : true;
+      } else if (nextStop && !markerToRemove.nextStop) {
+        markerToRemove.id = id;
+        markerToRemove.nextStop = true;
       }
 
       if (markerToRemove.passed) {
         // Expiry handling. Mark those vehicles that have passed stop for expiry.
         // After the set time limit, remove vehicles from map.
-        const marker = markersOnMap.find(marker => marker.id === id);
-        if (markerToRemove.expire) {
-          if (markerToRemove.expire <= now && !markerToRemove.remove) {
-            markerToRemove.remove = true;
-          } else if (marker) {
-            updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
-          }
-        } else if (marker) {
+        if (!markerToRemove.expire) {
           markerToRemove.expire = now + EXPIRE_TIME_SEC;
-          updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
+        } else if (markerToRemove.expire <= now && !markerToRemove.remove) {
+          markerToRemove.remove = true;
         }
       }
 
       if (markerToRemove.id) {
         markerState.set(markerToRemove.id, markerToRemove);
+      }
+      if (existingMarker && showVehicle) {
+        updateVehiclePosition(
+          existingMarker,
+          getVehicleIcon(m),
+          lat,
+          long,
+          now,
+        );
       }
     });
 
@@ -267,6 +269,13 @@ const MonitorMap: FC<IProps> = ({
         map.removeLayer(marker);
       }
     }
+
+    // if markerState key is not found in markersOnMap, remove it from markerState (vehicle missing from messages)
+    markerState?.forEach((value, key) => {
+      if (!markersOnMap.find(m => m.id === key)) {
+        markerState.delete(key);
+      }
+    });
 
     setVehicleMarkers(filtered);
     if (markerState) {

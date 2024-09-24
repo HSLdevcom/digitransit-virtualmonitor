@@ -479,8 +479,11 @@ export function getBoundingBox(coordinates: Coordinate[]): BoundingBox {
     [maxLat, maxLng],
   ];
 }
-
-export const sortAndFilter = (departures, trainsWithTrack) => {
+export const sortAndFilter = (
+  departures,
+  trainsWithTrack,
+  offsetSeconds = 0,
+) => {
   const sortedAndFiltered = uniqBy(
     departures.sort(
       (stopTimeA, stopTimeB) =>
@@ -490,7 +493,8 @@ export const sortAndFilter = (departures, trainsWithTrack) => {
     departure => stoptimeSpecificDepartureId(departure),
   ).filter(
     departure =>
-      departure.serviceDay + departure.realtimeDeparture >= getCurrentSeconds(),
+      departure.serviceDay + departure.realtimeDeparture + offsetSeconds >=
+      getCurrentSeconds(),
   );
   const sortedAndFilteredWithTrack = trainsWithTrack ? [] : sortedAndFiltered;
   if (sortedAndFiltered.length > 0 && trainsWithTrack) {

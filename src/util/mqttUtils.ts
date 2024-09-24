@@ -312,9 +312,9 @@ export function getMqttTopics(
   stationDepartures,
   stopDepartures,
   trainsWithTrack,
+  offsetSeconds,
 ) {
   let initialTopics = [];
-
   if (mapSettings?.showMap) {
     // Todo. This is a hacky solution to easiest way of figuring out all the departures.
     // Map keeps record of all it's stops, so it has all their departures. This should be done
@@ -326,10 +326,12 @@ export function getMqttTopics(
         sortAndFilter(
           [...stationDepartures[i][0], ...stopDepartures[i][0]],
           trainsWithTrack,
+          offsetSeconds,
         ),
         sortAndFilter(
           [...stationDepartures[i][1], ...stopDepartures[i][1]],
           trainsWithTrack,
+          offsetSeconds,
         ),
       ];
       allDep.push(element);

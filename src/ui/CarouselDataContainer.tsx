@@ -22,6 +22,7 @@ import {
   getMqttTopics,
 } from '../util/mqttUtils';
 import { useMergeState } from '../util/utilityHooks';
+import { ConfigContext } from '../contexts';
 
 interface IProps {
   preview?: boolean;
@@ -70,6 +71,7 @@ const CarouselDataContainer: FC<IProps> = ({
   const [stationsFetched, setStationsFetched] = useState(stationIds.length < 1);
   const [alerts, setAlerts] = useState([]);
   const [closedStopViews, setClosedStopViews] = useState([]);
+  const config = useContext(ConfigContext);
 
   const stationsState = useQuery(GetDeparturesForStationsDocument, {
     variables: { ids: stationIds, numberOfDepartures: largest },
@@ -154,6 +156,7 @@ const CarouselDataContainer: FC<IProps> = ({
     stationDepartures,
     stopDepartures,
     trainsWithTrack,
+    config.rtVehicleOffsetSeconds,
   );
   if (topics.length > 0 && !topicsFound) {
     setTopicsFound(true);

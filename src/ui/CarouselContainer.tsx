@@ -71,6 +71,12 @@ const CarouselContainer: FC<IProps> = ({
 
   const index = Math.floor(current / 2) % finalViews.length;
 
+  // show vehicles that have passed the stop
+  const mapDepartures = [
+    ...stationDepartures[index][0],
+    ...stopDepartures[index][0],
+  ];
+
   const departures = [
     sortAndFilter(
       [...stationDepartures[index][0], ...stopDepartures[index][0]],
@@ -161,6 +167,7 @@ const CarouselContainer: FC<IProps> = ({
       mapSettings={mapSettings}
       mqttProps={mqttProps}
       mapLanguage={mapLanguage}
+      mapDepartures={mapDepartures}
     />
   );
 };

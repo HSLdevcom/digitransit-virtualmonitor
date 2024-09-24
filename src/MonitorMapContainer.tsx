@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC } from 'react';
 import cx from 'classnames';
 import MonitorMap from './ui/monitorMap';
 import { IMapSettings } from './util/Interfaces';

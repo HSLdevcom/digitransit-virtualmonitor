@@ -29,13 +29,8 @@ interface IProps {
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
   mapSettings?: IMapSettings;
-  topics?: Array<any>;
   mapLanguage?: string;
-  messages?: any;
-  clientRef?: any;
-  topicRef?: any;
-  vehicleMarkerState?: any;
-  setVehicleMarkerState?: any;
+  mqttProps?: any;
 }
 let to;
 
@@ -49,13 +44,8 @@ const Monitor: FC<IProps> = ({
   alertRowSpan,
   closedStopViews,
   mapSettings,
-  topics,
   mapLanguage,
-  messages,
-  clientRef,
-  topicRef,
-  vehicleMarkerState,
-  setVehicleMarkerState,
+  mqttProps,
 }) => {
   const config = useContext(ConfigContext);
   const { cards } = useContext(MonitorContext);
@@ -162,14 +152,9 @@ const Monitor: FC<IProps> = ({
         <MonitorMapContainer
           preview={isPreview}
           mapSettings={mapSettings}
-          topics={topics}
           departures={departures}
           lang={mapLanguage}
-          messages={messages}
-          clientRef={clientRef}
-          topicRef={topicRef}
-          vehicleMarkerState={vehicleMarkerState}
-          setVehicleMarkerState={setVehicleMarkerState}
+          mqttProps={mqttProps}
         />
       ) : (
         <MonitorRowContainer

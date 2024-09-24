@@ -16,12 +16,7 @@ interface IProps {
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
   trainsWithTrack?: Array<ITrainData>;
-  topics: any;
-  messages: any;
-  clientRef: any;
-  topicRef: any;
-  vehicleMarkerState?: any;
-  setVehicleMarkerState?: any;
+  mqttProps: any;
 }
 
 const CarouselContainer: FC<IProps> = ({
@@ -31,12 +26,7 @@ const CarouselContainer: FC<IProps> = ({
   preview = false,
   closedStopViews,
   trainsWithTrack,
-  topics,
-  messages,
-  clientRef,
-  topicRef,
-  vehicleMarkerState,
-  setVehicleMarkerState,
+  mqttProps,
 }) => {
   const { cards: views, languages, mapSettings } = useContext(MonitorContext);
   const mapLanguage = languages.length === 1 ? languages[0] : 'fi';
@@ -169,13 +159,8 @@ const CarouselContainer: FC<IProps> = ({
       alertRowSpan={alertSpan}
       closedStopViews={closedStopViews}
       mapSettings={mapSettings}
-      topics={topics}
+      mqttProps={mqttProps}
       mapLanguage={mapLanguage}
-      messages={messages}
-      clientRef={clientRef}
-      topicRef={topicRef}
-      vehicleMarkerState={vehicleMarkerState}
-      setVehicleMarkerState={setVehicleMarkerState}
     />
   );
 };

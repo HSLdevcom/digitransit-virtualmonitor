@@ -7,31 +7,28 @@ interface IProps {
   mapSettings: IMapSettings;
   modal?: boolean;
   updateMap?: (settings: IMapSettings) => void;
-  topics?: string[];
   departures?: any;
   lang: string;
-  messages?: any;
-  clientRef?: any;
-  topicRef?: any;
-  vehicleMarkerState?: any;
-  setVehicleMarkerState?: any;
+  mqttProps?: any;
 }
 const MonitorMapContainer: FC<IProps> = ({
   preview,
   mapSettings,
   modal,
   updateMap,
-  topics,
   departures,
   lang,
-  messages = [],
-  clientRef,
-  topicRef,
-  vehicleMarkerState,
-  setVehicleMarkerState,
+  mqttProps,
 }) => {
   const isLandscape = true;
-
+  const {
+    messages,
+    clientRef,
+    newTopics,
+    topicRef,
+    vehicleMarkerState,
+    setVehicleMarkerState,
+  } = mqttProps || { messages: [] };
   return (
     <div
       className={cx('monitor-container', {
@@ -48,7 +45,7 @@ const MonitorMapContainer: FC<IProps> = ({
         updateMap={updateMap}
         messages={messages}
         clientRef={clientRef}
-        newTopics={topics}
+        newTopics={newTopics}
         topicRef={topicRef}
         departures={departures}
         lang={lang}

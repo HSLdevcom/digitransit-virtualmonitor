@@ -15,8 +15,12 @@ import { uniqBy } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import CarouselContainer from './CarouselContainer';
 import { MonitorContext } from '../contexts';
-import { sortAndFilter } from '../util/monitorUtils';
-import { changeTopics, startMqtt, stopMqtt } from '../util/mqttUtils';
+import {
+  changeTopics,
+  startMqtt,
+  stopMqtt,
+  getMqttTopics,
+} from '../util/mqttUtils';
 import { useMergeState } from '../util/utilityHooks';
 
 interface IProps {
@@ -191,6 +195,16 @@ const CarouselDataContainer: FC<IProps> = ({
   if (!stopsFetched || !stationsFetched) {
     return <Loading />;
   }
+
+  const mqttProps = {
+    newTopics: topics,
+    messages: state.messages,
+    clientRef,
+    topicRef,
+    vehicleMarkerState,
+    setVehicleMarkerState,
+  };
+
   return (
     <CarouselContainer
       stopDepartures={stopDepartures}
@@ -199,82 +213,9 @@ const CarouselDataContainer: FC<IProps> = ({
       preview={preview}
       closedStopViews={closedStopViews}
       trainsWithTrack={trainsWithTrack}
-      topics={topics}
-      messages={state.messages}
-      clientRef={clientRef}
-      topicRef={topicRef}
-      vehicleMarkerState={vehicleMarkerState}
-      setVehicleMarkerState={setVehicleMarkerState}
+      mqttProps={mqttProps}
     />
   );
 };
-
-function getMqttTopics(
-  views,
-  mapSettings,
-  stationDepartures,
-  stopDepartures,
-  trainsWithTrack,
-) {
-  let initialTopics = [];
-
-  if (mapSettings?.showMap) {
-    // Todo. This is a hacky solution to easiest way of figuring out all the departures.
-    // Map keeps record of all it's stops, so it has all their departures. This should be done
-    // more coherent way when there is time.
-    const allDep = [];
-
-    for (let i = 0; i < views.length; i++) {
-      const element = [
-        sortAndFilter(
-          [...stationDepartures[i][0], ...stopDepartures[i][0]],
-          trainsWithTrack,
-        ),
-        sortAndFilter(
-          [...stationDepartures[i][1], ...stopDepartures[i][1]],
-          trainsWithTrack,
-        ),
-      ];
-      allDep.push(element);
-    }
-
-    const mapDepartures = allDep
-      .map(o => o.flatMap(a => a))
-      .reduce((a, b) => (a.length > b.length ? a : b));
-    initialTopics = mapDepartures
-      .filter(t => t.realtime)
-      .map(dep => {
-        const feedId = dep.trip.gtfsId.split(':')[0];
-        const topic = {
-          feedId: feedId,
-          route: dep.trip.route?.gtfsId?.split(':')[1],
-          tripId: dep.trip.gtfsId.split(':')[1],
-          shortName: dep.trip.route.shortName,
-          type: 3,
-          ...dep,
-        };
-        if (feedId.toLowerCase() === 'hsl') {
-          const i = dep.stops.findIndex(d => dep.stop.gtfsId === d.gtfsId);
-          if (i !== dep.stops.length - 1) {
-            const additionalStop = dep.stops[i + 1];
-            topic.additionalStop = additionalStop;
-          }
-        }
-        return topic;
-      });
-  }
-  const topics = initialTopics;
-  initialTopics.forEach(t => {
-    if (t.additionalStop) {
-      const additionalTopic = {
-        ...t,
-        stop: t.additionalStop,
-        additionalStop: null,
-      };
-      topics.push(additionalTopic);
-    }
-  });
-  return topics;
-}
 
 export default CarouselDataContainer;

@@ -1,6 +1,7 @@
 import mqtt from 'mqtt/dist/mqtt';
 import settings from './realTimeUtils';
 import { DateTime } from 'luxon';
+import { sortAndFilter } from '../util/monitorUtils';
 
 export const startMqtt = (routes, setState, setClient, topicRef) => {
   if (routes?.length === 0) {
@@ -303,4 +304,72 @@ function compareTopics(oldTopics, newTopics, topicRef) {
   }
 
   return { toSubscribe, toUnsubscribe };
+}
+
+export function getMqttTopics(
+  views,
+  mapSettings,
+  stationDepartures,
+  stopDepartures,
+  trainsWithTrack,
+) {
+  let initialTopics = [];
+
+  if (mapSettings?.showMap) {
+    // Todo. This is a hacky solution to easiest way of figuring out all the departures.
+    // Map keeps record of all it's stops, so it has all their departures. This should be done
+    // more coherent way when there is time.
+    const allDep = [];
+
+    for (let i = 0; i < views.length; i++) {
+      const element = [
+        sortAndFilter(
+          [...stationDepartures[i][0], ...stopDepartures[i][0]],
+          trainsWithTrack,
+        ),
+        sortAndFilter(
+          [...stationDepartures[i][1], ...stopDepartures[i][1]],
+          trainsWithTrack,
+        ),
+      ];
+      allDep.push(element);
+    }
+
+    const mapDepartures = allDep
+      .map(o => o.flatMap(a => a))
+      .reduce((a, b) => (a.length > b.length ? a : b));
+    initialTopics = mapDepartures
+      .filter(t => t.realtime)
+      .map(dep => {
+        const feedId = dep.trip.gtfsId.split(':')[0];
+        const topic = {
+          feedId: feedId,
+          route: dep.trip.route?.gtfsId?.split(':')[1],
+          tripId: dep.trip.gtfsId.split(':')[1],
+          shortName: dep.trip.route.shortName,
+          type: 3,
+          ...dep,
+        };
+        if (feedId.toLowerCase() === 'hsl') {
+          const i = dep.stops.findIndex(d => dep.stop.gtfsId === d.gtfsId);
+          if (i !== dep.stops.length - 1) {
+            const additionalStop = dep.stops[i + 1];
+            topic.additionalStop = additionalStop;
+          }
+        }
+        return topic;
+      });
+  }
+  const topics = initialTopics;
+  initialTopics.forEach(t => {
+    if (t.additionalStop) {
+      const additionalTopic = {
+        ...t,
+        stop: t.additionalStop,
+        additionalStop: null,
+      };
+      topics.push(additionalTopic);
+    }
+  });
+  return topics;
 }

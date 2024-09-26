@@ -23,6 +23,7 @@ import {
 } from '../util/mqttUtils';
 import { useMergeState } from '../util/utilityHooks';
 import { ConfigContext } from '../contexts';
+import { DateTime } from 'luxon';
 
 interface IProps {
   preview?: boolean;
@@ -71,6 +72,8 @@ const CarouselDataContainer: FC<IProps> = ({
   const [stationsFetched, setStationsFetched] = useState(stationIds.length < 1);
   const [alerts, setAlerts] = useState([]);
   const [closedStopViews, setClosedStopViews] = useState([]);
+  const [topicsFound, setTopicsFound] = useState(false);
+  const [topicState, setTopicState] = useState({ topics: [], oldTopics: [] });
   const config = useContext(ConfigContext);
 
   const stationsState = useQuery(GetDeparturesForStationsDocument, {
@@ -113,6 +116,31 @@ const CarouselDataContainer: FC<IProps> = ({
       setStopsFetched(true);
       setClosedStopViews(closedStopViews);
     }
+
+    const newTopics = getMqttTopics(
+      views,
+      mapSettings,
+      stationDepartures,
+      stopDepartures,
+      trainsWithTrack,
+      config.rtVehicleOffsetSeconds,
+    );
+    const oldTopics = topicState.topics;
+    // Keep topics that are still relevant and not in newTopics
+    oldTopics.forEach(topic => {
+      if (
+        !newTopics.find(t => t.tripId === topic.tripId) &&
+        topic.serviceDay +
+          topic.scheduledDeparture +
+          config.rtVehicleOffsetSeconds >
+          DateTime.now().toSeconds()
+      ) {
+        newTopics.push(topic);
+      }
+    });
+
+    setTopicState({ topics: newTopics, oldTopics: oldTopics });
+
     // Force update interval for itineraries that needs to be filtered by timeShift setting.
     const intervalId = setInterval(() => {
       setforceUpdate(!forceUpdate);
@@ -149,15 +177,18 @@ const CarouselDataContainer: FC<IProps> = ({
     return () => clearInterval(intervalId);
   }, [stationsState.data, forceUpdate]);
 
-  const [topicsFound, setTopicsFound] = useState(false);
-  const topics = getMqttTopics(
-    views,
-    mapSettings,
-    stationDepartures,
-    stopDepartures,
-    trainsWithTrack,
-    config.rtVehicleOffsetSeconds,
-  );
+  const topics =
+    topicState.topics.length > 0
+      ? topicState.topics
+      : getMqttTopics(
+          views,
+          mapSettings,
+          stationDepartures,
+          stopDepartures,
+          trainsWithTrack,
+          config.rtVehicleOffsetSeconds,
+        );
+
   if (topics.length > 0 && !topicsFound) {
     setTopicsFound(true);
   }

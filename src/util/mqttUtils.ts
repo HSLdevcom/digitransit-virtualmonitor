@@ -321,17 +321,18 @@ export function getMqttTopics(
     // more coherent way when there is time.
     const allDep = [];
 
+    const offsetWithBuffer = offsetSeconds + 120; // data might be a bit older than real time data so we add a buffer to keep the vehicles moving
     for (let i = 0; i < views.length; i++) {
       const element = [
         sortAndFilter(
           [...stationDepartures[i][0], ...stopDepartures[i][0]],
           trainsWithTrack,
-          offsetSeconds,
+          offsetWithBuffer,
         ),
         sortAndFilter(
           [...stationDepartures[i][1], ...stopDepartures[i][1]],
           trainsWithTrack,
-          offsetSeconds,
+          offsetWithBuffer,
         ),
       ];
       allDep.push(element);

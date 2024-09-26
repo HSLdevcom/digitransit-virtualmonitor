@@ -25,7 +25,7 @@ interface IProps {
   clientRef: any;
   newTopics?: any;
   topicRef: any;
-  departures?: any;
+  mapDepartures?: any;
   lang: string;
   vehicleMarkerState?: any;
   setVehicleMarkerState?: any;
@@ -90,7 +90,7 @@ const MonitorMap: FC<IProps> = ({
   clientRef,
   newTopics,
   topicRef,
-  departures,
+  mapDepartures,
   lang,
   vehicleMarkerState,
   setVehicleMarkerState,
@@ -182,7 +182,7 @@ const MonitorMap: FC<IProps> = ({
     messages.forEach(m => {
       const { id, lat, long, next_stop, route } = m;
       const nextStop = stopIDs.includes(next_stop);
-      const vehicle = getVehicle(departures, route);
+      const vehicle = getVehicle(mapDepartures, route);
       let existingMarker = markersOnMap.find(marker => {
         return marker.id === id;
       });
@@ -218,44 +218,46 @@ const MonitorMap: FC<IProps> = ({
           long,
           now,
         );
-      }
-      if (markerToRemove.nextStop) {
-        markerToRemove.passed = nextStop ? false : true;
-      } else if (nextStop && !markerToRemove.nextStop) {
-        markerToRemove.id = id;
-        markerToRemove.nextStop = true;
-      }
 
-      if (markerToRemove.passed) {
-        // Expiry handling. Mark those vehicles that have passed stop for expiry.
-        // After the set time limit, remove vehicles from map.
-        if (!markerToRemove.expire) {
-          markerToRemove.expire = now + EXPIRE_TIME_SEC;
-        } else if (markerToRemove.expire <= now && !markerToRemove.remove) {
-          markerToRemove.remove = true;
+        if (markerToRemove.nextStop === true) {
+          markerToRemove.passed = nextStop ? false : true;
+        } else if (nextStop && !markerToRemove.nextStop) {
+          markerToRemove.id = id;
+          markerToRemove.nextStop = true;
+        }
+
+        if (markerToRemove.passed === true) {
+          // Expiry handling. Mark those vehicles that have passed stop for expiry.
+          // After the set time limit, remove vehicles from map.
+          if (markerToRemove.id && !markerToRemove.expire) {
+            markerToRemove.expire =
+              DateTime.now().toSeconds() + EXPIRE_TIME_SEC;
+          }
+        }
+
+        if (markerToRemove.id) {
+          markerState.set(markerToRemove.id, markerToRemove);
         }
       }
 
-      if (markerToRemove.id) {
-        markerState.set(markerToRemove.id, markerToRemove);
-      }
       if (existingMarker && showVehicle) {
         updateVehiclePosition(
           existingMarker,
           getVehicleIcon(m),
           lat,
           long,
-          now,
+          DateTime.now().toSeconds(),
         );
       }
     });
 
     // Handle vehicle removal
+    const currentSeconds = DateTime.now().toSeconds();
     const markersToRemove = [];
     const filtered = markersOnMap.filter(m => {
       if (
-        now - m.lastUpdatedAt >= EXPIRE_TIME_SEC || // Remove vehicles that have not been updated for a while (likely reached the end of the line)
-        markerState.get(m.id)?.remove
+        markerState.get(m.id)?.expire <= currentSeconds ||
+        currentSeconds - m.lastUpdatedAt >= EXPIRE_TIME_SEC // Remove vehicles that have not been updated for a while (likely reached the end of the line)
       ) {
         markerState.delete(m.id);
         markersToRemove.push(m.marker);
@@ -269,13 +271,6 @@ const MonitorMap: FC<IProps> = ({
         map.removeLayer(marker);
       }
     }
-
-    // if markerState key is not found in markersOnMap, remove it from markerState (vehicle missing from messages)
-    markerState?.forEach((value, key) => {
-      if (!markersOnMap.find(m => m.id === key)) {
-        markerState.delete(key);
-      }
-    });
 
     setVehicleMarkers(filtered);
     if (markerState) {

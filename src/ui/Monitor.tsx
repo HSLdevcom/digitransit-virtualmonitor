@@ -154,7 +154,7 @@ const Monitor: FC<IProps> = ({
         <MonitorMapContainer
           preview={isPreview}
           mapSettings={mapSettings}
-          departures={mapDepartures}
+          mapDepartures={mapDepartures}
           lang={mapLanguage}
           mqttProps={mqttProps}
         />

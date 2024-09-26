@@ -116,31 +116,6 @@ const CarouselDataContainer: FC<IProps> = ({
       setStopsFetched(true);
       setClosedStopViews(closedStopViews);
     }
-
-    const newTopics = getMqttTopics(
-      views,
-      mapSettings,
-      stationDepartures,
-      stopDepartures,
-      trainsWithTrack,
-      config.rtVehicleOffsetSeconds,
-    );
-    const oldTopics = topicState.topics;
-    // Keep topics that are still relevant and not in newTopics
-    oldTopics.forEach(topic => {
-      if (
-        !newTopics.find(t => t.tripId === topic.tripId) &&
-        topic.serviceDay +
-          topic.scheduledDeparture +
-          config.rtVehicleOffsetSeconds >
-          DateTime.now().toSeconds()
-      ) {
-        newTopics.push(topic);
-      }
-    });
-
-    setTopicState({ topics: newTopics, oldTopics: oldTopics });
-
     // Force update interval for itineraries that needs to be filtered by timeShift setting.
     const intervalId = setInterval(() => {
       setforceUpdate(!forceUpdate);
@@ -176,6 +151,32 @@ const CarouselDataContainer: FC<IProps> = ({
     }, 1000 * 20);
     return () => clearInterval(intervalId);
   }, [stationsState.data, forceUpdate]);
+
+  useEffect(() => {
+    const newTopics = getMqttTopics(
+      views,
+      mapSettings,
+      stationDepartures,
+      stopDepartures,
+      trainsWithTrack,
+      config.rtVehicleOffsetSeconds,
+    );
+    const oldTopics = topicState.topics;
+    // Keep topics that are still relevant and not in newTopics
+    oldTopics.forEach(topic => {
+      if (
+        !newTopics.find(t => t.tripId === topic.tripId) &&
+        topic.serviceDay +
+          topic.scheduledDeparture +
+          config.rtVehicleOffsetSeconds >
+          DateTime.now().toSeconds()
+      ) {
+        newTopics.push(topic);
+      }
+    });
+
+    setTopicState({ topics: newTopics, oldTopics: oldTopics });
+  }, [stationDepartures, stopDepartures, trainsWithTrack]);
 
   const topics =
     topicState.topics.length > 0

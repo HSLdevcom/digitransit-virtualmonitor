@@ -57,7 +57,11 @@ export const startMqtt = (routes, setState, setClient, topicRef) => {
         enqueueMessage(parsedMessages);
       }
     });
-    setInterval(processBatch, batchDelay);
+    const intervalId = setInterval(processBatch, batchDelay);
+
+    client.on('close', () => {
+      clearInterval(intervalId);
+    });
   });
 };
 

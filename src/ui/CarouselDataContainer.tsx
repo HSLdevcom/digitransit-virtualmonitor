@@ -1,4 +1,11 @@
-import React, { FC, useState, useEffect, useContext, useRef } from 'react';
+import React, {
+  FC,
+  useState,
+  useEffect,
+  useContext,
+  useRef,
+  useCallback,
+} from 'react';
 import { useQuery } from '@apollo/client';
 import {
   GetDeparturesForStopsDocument,
@@ -115,6 +122,15 @@ const CarouselDataContainer: FC<IProps> = ({
       );
       setStopsFetched(true);
       setClosedStopViews(closedStopViews);
+
+      setMqttTopics(
+        views,
+        mapSettings,
+        stationDepartures,
+        newDepartureArray,
+        trainsWithTrack,
+        config,
+      );
     }
     // Force update interval for itineraries that needs to be filtered by timeShift setting.
     const intervalId = setInterval(() => {
@@ -144,6 +160,15 @@ const CarouselDataContainer: FC<IProps> = ({
         uniqBy(filterEffectiveAlerts(arr), alert => alert.alertHeaderText),
       );
       setStationsFetched(true);
+
+      setMqttTopics(
+        views,
+        mapSettings,
+        newDepartureArray,
+        stopDepartures,
+        trainsWithTrack,
+        config,
+      );
     }
     // Force update interval for itineraries that needs to be filtered by timeShift setting.
     const intervalId = setInterval(() => {
@@ -152,7 +177,14 @@ const CarouselDataContainer: FC<IProps> = ({
     return () => clearInterval(intervalId);
   }, [stationsState.data, forceUpdate]);
 
-  useEffect(() => {
+  function setMqttTopics(
+    views,
+    mapSettings,
+    stationDepartures,
+    stopDepartures,
+    trainsWithTrack,
+    config,
+  ) {
     const newTopics = getMqttTopics(
       views,
       mapSettings,
@@ -176,7 +208,7 @@ const CarouselDataContainer: FC<IProps> = ({
     });
 
     setTopicState({ topics: newTopics, oldTopics: oldTopics });
-  }, [stationDepartures, stopDepartures, trainsWithTrack]);
+  }
 
   const topics =
     topicState.topics.length > 0
@@ -203,6 +235,14 @@ const CarouselDataContainer: FC<IProps> = ({
   const topicRef = useRef(null);
   const [vehicleMarkerState, setVehicleMarkerState] = useState(new Map());
 
+  const mqttStateHandler = data => {
+    setState(data);
+  };
+
+  const markerHandler = markerData => {
+    setVehicleMarkerState(markerData);
+  };
+
   useEffect(() => {
     if (state.client) {
       clientRef.current = state.client;
@@ -220,7 +260,7 @@ const CarouselDataContainer: FC<IProps> = ({
 
   useEffect(() => {
     if ((topics && topics.length) || (!state.client && topics)) {
-      startMqtt(topics, setState, clientRef, topicRef);
+      startMqtt(topics, mqttStateHandler, clientRef, topicRef);
     }
     return () => {
       stopMqtt(clientRef.current, topicRef.current);
@@ -237,7 +277,7 @@ const CarouselDataContainer: FC<IProps> = ({
     clientRef,
     topicRef,
     vehicleMarkerState,
-    setVehicleMarkerState,
+    setVehicleMarkerState: markerHandler,
   };
 
   return (

@@ -30,7 +30,7 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         push: true
-        tags: index.docker.io/${{ secrets.AzureAppService_ContainerUsername_f26fc3e6de2c474fa634665bbecfd257 }}/digitransit-virtualmonitor:${{ github.sha }}
+        tags: index.docker.io/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}
         file: ./Dockerfile
 
   deploy:
@@ -48,4 +48,4 @@ jobs:
         app-name: 'lwa-virtualmonitor-dev-weu'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_f8dcd93768d244a295f9cd16aece9d9c }}
-        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_f26fc3e6de2c474fa634665bbecfd257 }}/digitransit-virtualmonitor:${{ github.sha }}'
+        images: 'index.docker.io/hsldevcom/digitransit-virtualmonitor:${{ github.sha }}'

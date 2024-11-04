@@ -61,7 +61,7 @@ export default {
     setName: 'digitransit',
   },
   name: 'default',
-  uri: 'routing/v1/routers/finland/index/graphql',
+  uri: 'routing/v2/finland/gtfs/v1',
   showMinutes: '15',
   alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
   login: {

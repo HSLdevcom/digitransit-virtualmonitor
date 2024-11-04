@@ -33,7 +33,7 @@ const apiSubscriptionParameter = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NA
 
 const MAP_URL = process.env.MAP_URL
   ? process.env.MAP_URL
-  : 'https://cdn.digitransit.fi/map/v2';
+  : 'https://cdn.digitransit.fi/map/v3';
 
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;

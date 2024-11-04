@@ -116,7 +116,7 @@ export default {
       primary: '#1c57cf',
       monitorBackground: '#1c57cf',
     },
-    feedIds: ['tampere', 'TampereVR', 'tampereDRT'],
+    feedIds: ['tampere', 'digitraffic', 'tampereDRT'],
     fonts: {
       externalFonts: [
         'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',

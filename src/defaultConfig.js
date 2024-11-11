@@ -28,8 +28,12 @@ export default {
     'Kajaani',
     'Salo',
     'Pori',
+    'Raasepori',
     'Vikingline',
     'VARELY',
+    'Harma',
+    'PohjolanMatka',
+    'Korsisaari',
   ],
   fonts: {
     weights: {

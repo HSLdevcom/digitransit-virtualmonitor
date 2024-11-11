@@ -33,7 +33,7 @@ const apiSubscriptionParameter = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NA
 
 const MAP_URL = process.env.MAP_URL
   ? process.env.MAP_URL
-  : 'https://cdn.digitransit.fi/map/v2';
+  : 'https://cdn.digitransit.fi/map/v3';
 
 const __dirname = fileURLToPath(import.meta.url);
 const port = process.env.PORT || 3001;
@@ -57,7 +57,7 @@ app.get('/api/monitor/:id', (req, res, next) => {
 });
 
 app.use('/api/graphql', (req, res, next) => {
-  const endpoint = req.headers['graphql-endpoint'] ?? 'routing/v2/routers/hsl/index/graphql';
+  const endpoint = req.headers['graphql-endpoint'] ?? 'routing/v2/hsl/gtfs/v1';
   const url = `${baseurl}/${endpoint}?${apiSubscriptionParameter}`;
   axiosPoolForApi({
     headers: { 'content-type': 'application/json' },

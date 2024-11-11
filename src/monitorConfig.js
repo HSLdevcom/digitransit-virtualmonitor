@@ -34,7 +34,7 @@ export default {
       setName: 'default',
     },
     name: 'hsl',
-    uri: 'routing/v2/routers/hsl/index/graphql',
+    uri: 'routing/v2/hsl/gtfs/v1',
     bannersUri: 'https://cms.hsl.fi/api/v1/banners?',
     HSLUri:
       // eslint-disable-next-line no-undef
@@ -75,7 +75,7 @@ export default {
       setName: 'digitransit',
     },
     name: 'jyvaskyla',
-    uri: 'routing/v2/routers/waltti/index/graphql',
+    uri: 'routing/v2/waltti/gtfs/v1',
     showMinutes: '15',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
@@ -90,7 +90,7 @@ export default {
   },
   matka: {
     name: 'matka',
-    uri: 'routing/v2/routers/finland/index/graphql',
+    uri: 'routing/v2/finland/gtfs/v1',
     map: {
       inUse: true,
     },
@@ -116,7 +116,7 @@ export default {
       primary: '#1c57cf',
       monitorBackground: '#1c57cf',
     },
-    feedIds: ['tampere', 'TampereVR', 'tampereDRT'],
+    feedIds: ['tampere', 'digitraffic', 'tampereDRT'],
     fonts: {
       externalFonts: [
         'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
@@ -138,7 +138,7 @@ export default {
       setName: 'digitransit',
     },
     name: 'tampere',
-    uri: 'routing/v2/routers/waltti/index/graphql',
+    uri: 'routing/v2/waltti/gtfs/v1',
     showMinutes: '20',
     alertOrientation: 'horizontal', // Possible values are 'vertical', 'horizontal' and 'static'
     login: {
@@ -152,7 +152,7 @@ export default {
     },
   },
   vaasa: {
-    uri: 'routing/v2/routers/waltti/index/graphql',
+    uri: 'routing/v2/waltti/gtfs/v1',
     name: 'vaasa',
     login: {
       inUse: true,
@@ -191,7 +191,7 @@ export default {
   },
   oulu: {
     name: 'oulu',
-    uri: 'routing/v2/routers/waltti/index/graphql',
+    uri: 'routing/v2/waltti/gtfs/v1',
     feedIds: ['OULU'],
     colors: {
       primary: '#E10669',

@@ -33,6 +33,7 @@ jobs:
 
   build:
     runs-on: 'ubuntu-latest'
+    if: "startsWith(github.event.head_commit.message, '[DEPLOY]')"
 
     steps:
     - uses: actions/checkout@v4
@@ -56,6 +57,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    if: "startsWith(github.event.head_commit.message, '[DEPLOY]')"
     needs: build
     environment:
       name: 'development'

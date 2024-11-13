@@ -27,6 +27,7 @@ import {
   startMqtt,
   stopMqtt,
   getMqttTopics,
+  setMqttTopics,
 } from '../util/mqttUtils';
 import { useMergeState } from '../util/utilityHooks';
 import { ConfigContext } from '../contexts';
@@ -96,6 +97,14 @@ const CarouselDataContainer: FC<IProps> = ({
     context: { clientName: 'default' },
   });
   const [forceUpdate, setforceUpdate] = useState(false);
+
+  const handleTopicStateChange = useCallback(
+    data => {
+      setTopicState(data);
+    },
+    [setTopicState],
+  );
+
   useEffect(() => {
     const stops = stopsState?.data?.stops;
     if (stopsState?.error && !queryError && queryError != undefined) {
@@ -130,6 +139,8 @@ const CarouselDataContainer: FC<IProps> = ({
         newDepartureArray,
         trainsWithTrack,
         config,
+        topicState,
+        handleTopicStateChange,
       );
     }
     // Force update interval for itineraries that needs to be filtered by timeShift setting.
@@ -168,6 +179,8 @@ const CarouselDataContainer: FC<IProps> = ({
         stopDepartures,
         trainsWithTrack,
         config,
+        topicState,
+        handleTopicStateChange,
       );
     }
     // Force update interval for itineraries that needs to be filtered by timeShift setting.
@@ -176,39 +189,6 @@ const CarouselDataContainer: FC<IProps> = ({
     }, 1000 * 20);
     return () => clearInterval(intervalId);
   }, [stationsState.data, forceUpdate]);
-
-  function setMqttTopics(
-    views,
-    mapSettings,
-    stationDepartures,
-    stopDepartures,
-    trainsWithTrack,
-    config,
-  ) {
-    const newTopics = getMqttTopics(
-      views,
-      mapSettings,
-      stationDepartures,
-      stopDepartures,
-      trainsWithTrack,
-      config.rtVehicleOffsetSeconds,
-    );
-    const oldTopics = topicState.topics;
-    // Keep topics that are still relevant and not in newTopics
-    oldTopics.forEach(topic => {
-      if (
-        !newTopics.find(t => t.tripId === topic.tripId) &&
-        topic.serviceDay +
-          topic.scheduledDeparture +
-          config.rtVehicleOffsetSeconds >
-          DateTime.now().toSeconds()
-      ) {
-        newTopics.push(topic);
-      }
-    });
-
-    setTopicState({ topics: newTopics, oldTopics: oldTopics });
-  }
 
   const topics =
     topicState.topics.length > 0

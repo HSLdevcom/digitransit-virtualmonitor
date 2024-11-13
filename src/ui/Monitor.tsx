@@ -31,7 +31,7 @@ interface IProps {
   mapSettings?: IMapSettings;
   mapLanguage?: string;
   mqttProps?: any;
-  mapDepartures?: any;
+  departuresForMap?: any;
 }
 let to;
 
@@ -47,7 +47,7 @@ const Monitor: FC<IProps> = ({
   mapSettings,
   mapLanguage,
   mqttProps,
-  mapDepartures,
+  departuresForMap,
 }) => {
   const config = useContext(ConfigContext);
   const { cards } = useContext(MonitorContext);
@@ -154,7 +154,7 @@ const Monitor: FC<IProps> = ({
         <MonitorMapContainer
           preview={isPreview}
           mapSettings={mapSettings}
-          mapDepartures={mapDepartures}
+          departuresForMap={departuresForMap}
           lang={mapLanguage}
           mqttProps={mqttProps}
         />

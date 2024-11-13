@@ -55,7 +55,7 @@ export default {
     map: {
       inUse: false,
     },
-    rtVehicleOffsetSeconds: 10,
+    rtVehicleOffsetSeconds: 120,
   },
   jyvaskyla: {
     fonts: {

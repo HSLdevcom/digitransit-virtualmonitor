@@ -25,7 +25,7 @@ interface IProps {
   clientRef: any;
   newTopics?: any;
   topicRef: any;
-  mapDepartures?: any;
+  departuresForMap?: any;
   lang: string;
   vehicleMarkerState?: any;
   setVehicleMarkerState?: any;
@@ -89,7 +89,7 @@ const MonitorMap: FC<IProps> = ({
   clientRef,
   newTopics,
   topicRef,
-  mapDepartures,
+  departuresForMap,
   lang,
   vehicleMarkerState,
   setVehicleMarkerState,
@@ -189,7 +189,7 @@ const MonitorMap: FC<IProps> = ({
     const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
     const now = DateTime.now().toSeconds();
     const markerState = vehicleMarkerState;
-    const flatDeps = mapDepartures.flat();
+    const flatDeps = departuresForMap.flat();
     messages.forEach(m => {
       const { id, lat, long, next_stop, route } = m;
       const nextStop = stopIDs.includes(next_stop);

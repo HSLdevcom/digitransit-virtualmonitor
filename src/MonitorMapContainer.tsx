@@ -7,7 +7,7 @@ interface IProps {
   mapSettings: IMapSettings;
   modal?: boolean;
   updateMap?: (settings: IMapSettings) => void;
-  mapDepartures?: any;
+  departuresForMap?: any;
   lang: string;
   mqttProps?: any;
 }
@@ -16,7 +16,7 @@ const MonitorMapContainer: FC<IProps> = ({
   mapSettings,
   modal,
   updateMap,
-  mapDepartures,
+  departuresForMap,
   lang,
   mqttProps,
 }) => {
@@ -47,7 +47,7 @@ const MonitorMapContainer: FC<IProps> = ({
         clientRef={clientRef}
         newTopics={newTopics}
         topicRef={topicRef}
-        mapDepartures={mapDepartures}
+        departuresForMap={departuresForMap}
         lang={lang}
         vehicleMarkerState={vehicleMarkerState}
         setVehicleMarkerState={setVehicleMarkerState}

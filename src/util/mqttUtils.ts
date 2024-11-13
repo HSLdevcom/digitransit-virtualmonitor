@@ -342,10 +342,10 @@ export function getMqttTopics(
       allDep.push(element);
     }
 
-    const mapDepartures = allDep
+    const departuresForMap = allDep
       .map(o => o.flatMap(a => a))
       .reduce((a, b) => (a.length > b.length ? a : b));
-    initialTopics = mapDepartures
+    initialTopics = departuresForMap
       .filter(t => t.realtime)
       .map(dep => {
         const feedId = dep.trip.gtfsId.split(':')[0];
@@ -379,4 +379,39 @@ export function getMqttTopics(
     }
   });
   return topics;
+}
+
+export function setMqttTopics(
+  views,
+  mapSettings,
+  stationDepartures,
+  stopDepartures,
+  trainsWithTrack,
+  config,
+  topicState,
+  handleTopicStateChange,
+) {
+  const newTopics = getMqttTopics(
+    views,
+    mapSettings,
+    stationDepartures,
+    stopDepartures,
+    trainsWithTrack,
+    config.rtVehicleOffsetSeconds,
+  );
+  const oldTopics = topicState.topics;
+  // Keep topics that are still relevant and not in newTopics
+  oldTopics.forEach(topic => {
+    if (
+      !newTopics.find(t => t.tripId === topic.tripId) &&
+      topic.serviceDay +
+        topic.scheduledDeparture +
+        config.rtVehicleOffsetSeconds >
+        DateTime.now().toSeconds()
+    ) {
+      newTopics.push(topic);
+    }
+  });
+
+  handleTopicStateChange({ topics: newTopics, oldTopics: oldTopics });
 }

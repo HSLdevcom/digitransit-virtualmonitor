@@ -10,6 +10,27 @@ on:
   workflow_dispatch:
 
 jobs:
+  version-increment: 
+    runs-on: ubuntu-latest
+    if: "!startsWith(github.event.head_commit.message, '[DEPLOY]')"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GIT_SECRET }}
+      - run: git config --global user.name 'Digitransit'
+      - run: git config --global user.email 'digitransit@hsl.fi'
+      - name: major 
+        run: npm version major -m "[DEPLOY] %s"
+        if: "contains(github.event.head_commit.message, '[MAJOR]')"
+      - name: minor
+        run: npm version minor -m "[DEPLOY] %s"
+        if: "contains(github.event.head_commit.message, '[MINOR]')"
+      - name: patch
+        run: npm version patch -m "[DEPLOY] %s"
+        if: "!contains(github.event.head_commit.message, '[MAJOR]') && !contains(github.event.head_commit.message, '[MINOR]')"
+      - run: git push
+
   build:
     runs-on: 'ubuntu-latest'
 

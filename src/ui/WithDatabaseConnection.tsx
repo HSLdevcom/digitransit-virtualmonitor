@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState, useEffect, useCallback } from 'react';
 import monitorAPI from '../api';
 import { ISides, ITitle, ICard } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
@@ -50,6 +50,11 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
     stations: undefined,
     stops: undefined,
   });
+
+  const errorHandler = error => {
+    setQueryError(error);
+  };
+
   useEffect(() => {
     if (location && !location?.state?.view?.cards) {
       const { url, cont: hash } = getParams(location.search);
@@ -98,7 +103,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   if (queryError) {
     return (
       <MonitorContext.Provider value={monitor}>
-        <QueryError setQueryError={setQueryError} />
+        <QueryError setQueryError={errorHandler} />
       </MonitorContext.Provider>
     );
   }
@@ -123,13 +128,13 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
             <TrainDataPreparer
               stations={stations}
               stops={stops}
-              setQueryError={setQueryError}
+              setQueryError={errorHandler}
               queryError={queryError}
             />
           ) : (
             <CarouselDataContainer
               initTime={new Date().getTime()}
-              setQueryError={setQueryError}
+              setQueryError={errorHandler}
               queryError={queryError}
             />
           )}

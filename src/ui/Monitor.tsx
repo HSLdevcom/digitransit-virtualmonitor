@@ -31,7 +31,7 @@ interface IProps {
   mapSettings?: IMapSettings;
   mapLanguage?: string;
   mqttProps?: any;
-  departuresForMap?: any;
+  departuresForMap?: Array<IDeparture>;
 }
 let to;
 

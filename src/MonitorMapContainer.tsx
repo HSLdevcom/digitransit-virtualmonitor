@@ -2,12 +2,13 @@ import React, { FC } from 'react';
 import cx from 'classnames';
 import MonitorMap from './ui/monitorMap';
 import { IMapSettings } from './util/Interfaces';
+import { IDeparture } from './ui/MonitorRow';
 interface IProps {
   preview?: boolean;
   mapSettings: IMapSettings;
   modal?: boolean;
   updateMap?: (settings: IMapSettings) => void;
-  departuresForMap?: any;
+  departuresForMap?: Array<IDeparture>;
   lang: string;
   mqttProps?: any;
 }

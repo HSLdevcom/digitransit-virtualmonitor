@@ -15,6 +15,7 @@ import VehicleIcon from '../Vehicleicon';
 import { DateTime } from 'luxon';
 import { changeTopics } from '../util/mqttUtils';
 import monitorAPI from '../api';
+import { IDeparture } from './MonitorRow';
 
 interface IProps {
   preview?: boolean;
@@ -25,7 +26,7 @@ interface IProps {
   clientRef: any;
   newTopics?: any;
   topicRef: any;
-  departuresForMap?: any;
+  departuresForMap?: Array<IDeparture>;
   lang: string;
   vehicleMarkerState?: any;
   setVehicleMarkerState?: any;

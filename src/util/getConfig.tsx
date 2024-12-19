@@ -18,6 +18,7 @@ export const getConfig = () => {
     'jyvaskyla',
     'vaasa',
     'oulu',
+    'walttitest',
   ];
   if (env && allowedThemes.indexOf(env) > -1) {
     return mergeWith(defaultConfig, config[env], merger);
@@ -39,6 +40,8 @@ export const getConfig = () => {
     theme = 'oulu';
   } else if (domain.indexOf('osl') >= 0) {
     theme = 'oulu';
+  } else if (domain.indexOf('waltti-test') >= 0) {
+    theme = 'walttitest';
   } else {
     theme = 'hsl';
   }
@@ -52,4 +55,5 @@ export const getDomainIdentifierForTheme = {
   jyvaskyla: 'jyvaskyla',
   vaasa: 'vaasa',
   oulu: 'oulu',
+  walttitest: 'waltti-test',
 };

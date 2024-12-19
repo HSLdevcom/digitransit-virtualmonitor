@@ -72,7 +72,7 @@ app.use('/api/graphql', (req, res, next) => {
 });
 
 app.get('/api/geocoding/:endpoint', (req, res, next) => {
-  const endpoint = `/geocoding/v1/${req.params.endpoint}`;
+  const endpoint = `geocoding/v1/${req.params.endpoint}`;
   const url = `${baseurl}/${endpoint}?${req._parsedUrl.query}&${apiSubscriptionParameter}`;
 
   axiosPoolForApi

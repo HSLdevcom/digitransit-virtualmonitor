@@ -42,6 +42,9 @@ const Logo: FC<ICommonProps> = props => {
       case 'oulu':
         logo = <OuluLogo />;
         break;
+      case 'walttitest':
+        logo = <OuluLogo />;
+        break;
       default:
         break;
     }

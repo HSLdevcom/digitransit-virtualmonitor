@@ -287,13 +287,13 @@ const MonitorRow: FC<IProps> = ({
                   )}
                 </div>
                 <div className="via-destination">
-                  {isCancelled && <Icon img={'alert'} />}
+                  {isCancelled && <Icon img={config.alertIcon} />}
                   {t('cancelled', { lng: currentLang })}
                 </div>
               </>
             ) : (
               <>
-                <Icon img={'alert'} />
+                <Icon img={config.alertIcon} />
                 <div className="cancelled-row">
                   {t('cancelled', { lng: currentLang })}
                 </div>
@@ -315,7 +315,7 @@ const MonitorRow: FC<IProps> = ({
                 )}
               </div>
               <div className="via-destination">
-                {isCancelled && <Icon img={'alert'} />}
+                {isCancelled && <Icon img={config.alertIcon} />}
                 {viaDestination ||
                   (isCancelled && t('cancelled', { lng: currentLang }))}
                 {replaceViaMetroStringWithIcon && (
@@ -332,7 +332,7 @@ const MonitorRow: FC<IProps> = ({
             </>
           ) : (
             <>
-              {isCancelled && <Icon img={'alert'} />}
+              {isCancelled && <Icon img={config.alertIcon} />}
               <div className="destination-row">
                 {destination}
                 {replaceMetroStringWithIcon && (

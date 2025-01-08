@@ -216,5 +216,6 @@ export default {
     map: {
       inUse: true,
     },
+    alertIcon: 'query-error-alert',
   },
 };

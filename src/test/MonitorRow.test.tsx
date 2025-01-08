@@ -23,6 +23,7 @@ const defaultProps = {
 const mockConfig = {
   useTilde: true,
   lineCodeMaxLength: 7,
+  alertIcon: 'alert',
 };
 
 const withContext = prps => {

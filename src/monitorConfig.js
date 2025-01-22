@@ -59,7 +59,7 @@ export default {
   jyvaskyla: {
     fonts: {
       externalFonts: [
-        'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+        'https://cdn.digitransit.fi/matka-fonts/roboto/roboto+montserrat.css',
       ],
     },
     colors: {
@@ -119,7 +119,7 @@ export default {
     feedIds: ['tampere', 'digitraffic', 'tampereDRT'],
     fonts: {
       externalFonts: [
-        'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+        'https://cdn.digitransit.fi/matka-fonts/roboto/roboto+montserrat.css',
         'https://fonts.googleapis.com/css?family=Lato',
       ],
       monitor: {
@@ -209,7 +209,7 @@ export default {
       },
     },
     login: {
-      inUse: true,
+      inUse: false,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },

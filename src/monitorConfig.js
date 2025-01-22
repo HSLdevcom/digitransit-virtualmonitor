@@ -210,7 +210,7 @@ export default {
       },
     },
     login: {
-      inUse: false,
+      inUse: true,
       frontPageContent: 'front-page-paragraph-waltti',
       favourites: false,
     },

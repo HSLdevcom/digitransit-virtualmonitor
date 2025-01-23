@@ -47,7 +47,7 @@ export default {
     normal: '"Roboto", arial, georgia, serif',
     narrow: '"Roboto Condensed", "Arial Condensed", arial, georgia, serif',
     externalFonts: [
-      'https://digitransit-prod-cdn-origin.azureedge.net/matka-fonts/roboto/roboto+montserrat.css',
+      'https://cdn.digitransit.fi/matka-fonts/roboto/roboto+montserrat.css',
     ],
   },
   modeIcons: {

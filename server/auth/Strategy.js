@@ -176,6 +176,13 @@ OICStrategy.prototype.createAuthUrl = function (redirectUri, lang, ssoToken) {
 
 OICStrategy.prototype.createRedirectUrl = function (req) {
   const host = req.headers['x-forwarded-host'] || req.headers.host;
+  if (
+    process.env.NODE_ENV === "local" &&
+    req.headers.host === "localhost:3001"
+  ) {
+    return `http://${host}${this.callbackPath}`.replace("3001", "3000");
+  }
+
   if (req.secure) {
     return `https://${host}${this.callbackPath}`;
   }

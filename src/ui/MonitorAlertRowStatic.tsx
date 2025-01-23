@@ -34,15 +34,13 @@ const MonitorAlertRowStatic: FC<IProps> = ({
     return () => clearTimeout(id);
   }, [current]);
 
+  const alertObject = alerts[alertIndex] || alerts[0];
   const alert =
     getServiceAlertDescription(
-      alerts[alertIndex],
+      alertObject,
       languages[current % languages.length],
     ) ||
-    getServiceAlertHeader(
-      alerts[alertIndex],
-      languages[current % languages.length],
-    );
+    getServiceAlertHeader(alertObject, languages[current % languages.length]);
 
   return (
     <div className={cx('grid-row', 'alert static')}>

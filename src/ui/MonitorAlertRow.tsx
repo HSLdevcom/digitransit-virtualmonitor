@@ -13,13 +13,12 @@ interface IProps {
 }
 const getAnimationWidth = orientation => {
   const alertElements = document.getElementsByClassName('single-alert');
-  const elementArray = alertElements;
   let animationWidth = 0;
-  for (let i = 0; i < elementArray.length; i++) {
+  for (let i = 0; i < alertElements.length; i++) {
     if (orientation === 'vertical') {
-      animationWidth += elementArray[i].clientHeight + 10;
+      animationWidth += alertElements[i].clientHeight + 10;
     } else {
-      animationWidth += elementArray[i].clientWidth;
+      animationWidth += alertElements[i].clientWidth;
     }
   }
   return animationWidth;
@@ -54,12 +53,15 @@ const MonitorAlertRow: FC<IProps> = ({
   // ---------------------------------
   useEffect(() => {
     updateAnimation();
-    const to = setTimeout(() => setUpdate(false), 100);
-    window.addEventListener('resize', () => {
+    const handleResize = () => {
       updateAnimation();
-      setTimeout(() => setUpdate(false), 100);
-    });
-    return () => clearTimeout(to);
+      const resizeTo = setTimeout(() => setUpdate(false), 100);
+      return () => clearTimeout(resizeTo);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const DEFAULT_LANGUAGE = 'fi';

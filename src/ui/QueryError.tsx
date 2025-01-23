@@ -30,7 +30,8 @@ const QueryError: FC<IProps> = ({ setQueryError, preview }) => {
       });
     }, 15000);
     return () => {
-      clearTimeout(id);
+      clearTimeout(to);
+      clearInterval(id);
       controller.abort();
     };
   }, []);

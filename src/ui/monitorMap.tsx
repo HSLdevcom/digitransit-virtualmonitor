@@ -1,6 +1,6 @@
 import L, { LatLng } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import React, { useEffect, FC, useContext, useState } from 'react';
+import React, { useEffect, FC, useContext, useState, useRef } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Icon from './Icon';
 import { ConfigContext } from '../contexts';
@@ -15,6 +15,7 @@ import VehicleIcon from '../Vehicleicon';
 import { DateTime } from 'luxon';
 import { changeTopics } from '../util/mqttUtils';
 import monitorAPI from '../api';
+import { IDeparture } from './MonitorRow';
 
 interface IProps {
   preview?: boolean;
@@ -25,8 +26,10 @@ interface IProps {
   clientRef: any;
   newTopics?: any;
   topicRef: any;
-  departures?: any;
+  departuresForMap?: Array<IDeparture>;
   lang: string;
+  vehicleMarkerState?: any;
+  setVehicleMarkerState?: any;
 }
 const getVehicleIcon = message => {
   const { heading, shortName, color } = message;
@@ -66,8 +69,7 @@ function shouldShowVehicle(message, direction, tripStart, pattern, headsign) {
 }
 
 function getVehicle(departures, id) {
-  const flatDeps = departures.flat();
-  const veh = flatDeps.find(d => d.trip.route.gtfsId === id);
+  const veh = departures.find(d => d.trip.route.gtfsId === id);
   if (veh) {
     const vehicleProps = {
       direction: veh.trip.directionId,
@@ -88,15 +90,16 @@ const MonitorMap: FC<IProps> = ({
   clientRef,
   newTopics,
   topicRef,
-  departures,
+  departuresForMap,
   lang,
+  vehicleMarkerState,
+  setVehicleMarkerState,
 }) => {
   const config = useContext(ConfigContext);
-  const [map, setMap] = useState<any>();
+  const mapRef = useRef(null);
   const [vehicleMarkers, setVehicleMarkers] = useState([]);
-  const feed = newTopics && newTopics[0]?.feedId.toLowerCase();
-  const EXPIRE_TIME_SEC = feed === 'hsl' ? 10 : 120; // HSL Uses different broker and we need to handle HSL messages differently
-  const icons = mapSettings.stops.map(stop => {
+  const EXPIRE_TIME_SEC = config.rtVehicleOffsetSeconds; // HSL Uses different broker and we need to handle HSL messages differently
+  const icons = mapSettings.stops?.map(stop => {
     const color =
       config.modeIcons.colors[
         `${stop.mode
@@ -119,69 +122,83 @@ const MonitorMap: FC<IProps> = ({
   useEffect(() => {
     const center = mapSettings?.center
       ? mapSettings.center
-      : mapSettings.bounds[0];
+      : mapSettings.bounds?.[0];
     const zoom = mapSettings.zoom ? mapSettings.zoom : 14;
-    if (!map) {
-      setMap(
-        L.map('map', { zoomControl: false, zoomAnimation: false }).setView(
-          center,
-          zoom,
-        ),
+    mapRef.current = L.map('map', {
+      zoomControl: false,
+      zoomAnimation: false,
+    }).setView(center, zoom);
+
+    const map = mapRef.current;
+    map.setView(center, zoom);
+    monitorAPI.getMapSettings(lang).then((r: string) => {
+      L.tileLayer(r, {
+        attribution:
+          'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+        maxZoom: 18,
+      }).addTo(map);
+      map.fitBounds(mapSettings.bounds);
+      icons.forEach(icon =>
+        L.marker(icon.coords, { icon: icon.icon }).addTo(map),
       );
-    } else {
-      monitorAPI.getMapSettings(lang).then((r: string) => {
-        L.tileLayer(r, {
-          attribution:
-            'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-          maxZoom: 18,
-        }).addTo(map);
-        map.fitBounds(mapSettings.bounds);
-        icons.forEach(icon =>
-          L.marker(icon.coords, { icon: icon.icon }).addTo(map),
-        );
-        map.on('move', () => {
-          if (updateMap) {
-            const NE: Coordinate = [
-              map.getBounds().getNorthEast().lat,
-              map.getBounds().getNorthEast().lng,
-            ];
-            const SW: Coordinate = [
-              map.getBounds().getSouthWest().lat,
-              map.getBounds().getSouthWest().lng,
-            ];
-            const bounds: BoundingBox = [NE, SW];
-            updateMap({
-              center: map.getCenter(),
-              zoom: map.getZoom(),
-              bounds: bounds,
-            });
-          }
-        });
-        map.on('zoomend', () => {
-          if (updateMap) {
-            updateMap({ zoom: map.getZoom() });
-          }
-        });
-        return () => {
-          if (map && map !== undefined) {
-            map?.remove();
-          }
-        };
+      map.on('move', () => {
+        if (updateMap) {
+          const NE: Coordinate = [
+            map.getBounds().getNorthEast().lat,
+            map.getBounds().getNorthEast().lng,
+          ];
+          const SW: Coordinate = [
+            map.getBounds().getSouthWest().lat,
+            map.getBounds().getSouthWest().lng,
+          ];
+          const bounds: BoundingBox = [NE, SW];
+          updateMap({
+            center: map.getCenter(),
+            zoom: map.getZoom(),
+            bounds: bounds,
+          });
+        }
       });
-    }
-  }, [map]);
+      map.on('zoomend', () => {
+        if (updateMap) {
+          updateMap({ zoom: map.getZoom() });
+        }
+      });
+    });
+    //    }
+    return () => {
+      // Remove all vehicle markers from the map
+      vehicleMarkers.forEach(marker => {
+        marker.marker.remove();
+      });
+
+      if (mapRef.current && mapRef.current !== undefined) {
+        // Remove all layers from the map
+        mapRef.current.eachLayer(layer => {
+          mapRef.current.removeLayer(layer);
+        });
+
+        mapRef.current.off();
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, []);
 
   useEffect(() => {
-    const markers = vehicleMarkers ? vehicleMarkers : [];
+    const markersOnMap = vehicleMarkers ? vehicleMarkers : [];
     const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
     const now = DateTime.now().toSeconds();
+    const markerState = vehicleMarkerState;
+    const flatDeps = departuresForMap?.flat();
     messages.forEach(m => {
       const { id, lat, long, next_stop, route } = m;
       const nextStop = stopIDs.includes(next_stop);
-      const vehicle = getVehicle(departures, route);
-      const exists = markers.find(marker => {
+      const vehicle = getVehicle(flatDeps, route);
+      let existingMarker = markersOnMap.find(marker => {
         return marker.id === id;
       });
+      const markerToRemove = markerState.get(id) || {};
       let marker;
       const showVehicle =
         route.split(':')[0] === 'HSL'
@@ -193,46 +210,68 @@ const MonitorMap: FC<IProps> = ({
               vehicle.headsign,
             )
           : true;
-      if (exists && showVehicle) {
-        updateVehiclePosition(exists, getVehicleIcon(m), lat, long, now);
-        if (exists.nextStop) {
-          exists.passed = nextStop ? false : true;
-        } else if (nextStop && !exists.nextStop) {
-          exists.nextStop = true;
-        }
-        //  exists.passed = nextStop ? false : undefined;
-      } else if (showVehicle && !exists) {
+      if (!!mapRef.current && showVehicle && !existingMarker) {
         marker = {
           id: id,
           marker: L.marker([lat, long], {
             icon: getVehicleIcon(m),
           }),
         };
-        marker.marker.addTo(map);
-        markers.push(marker);
+        marker.marker.addTo(mapRef.current);
+        markersOnMap.push(marker);
+        existingMarker = marker;
       }
-      if (exists?.passed) {
-        // Expiry handling. Mark those vehicles that have passed stop for expiry.
-        // After a minute, remove vehicles from map.
-        const marker = markers.find(marker => marker.id === id);
-        if (marker) {
-          if (marker.expire) {
-            if (marker.expire <= now) {
-              marker.remove = true;
-            } else {
-              updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
-            }
-          } else {
-            marker.expire = now + EXPIRE_TIME_SEC;
-            updateVehiclePosition(marker, getVehicleIcon(m), lat, long, now);
+
+      if (existingMarker && showVehicle) {
+        updateVehiclePosition(
+          existingMarker,
+          getVehicleIcon(m),
+          lat,
+          long,
+          now,
+        );
+
+        if (markerToRemove.nextStop === true) {
+          markerToRemove.passed = nextStop ? false : true;
+        } else if (nextStop && !markerToRemove.nextStop) {
+          markerToRemove.id = id;
+          markerToRemove.nextStop = true;
+        }
+
+        if (markerToRemove.passed === true) {
+          // Expiry handling. Mark those vehicles that have passed stop for expiry.
+          // After the set time limit, remove vehicles from map.
+          if (markerToRemove.id && !markerToRemove.expire) {
+            markerToRemove.expire =
+              DateTime.now().toSeconds() + EXPIRE_TIME_SEC;
           }
         }
+
+        if (markerToRemove.id) {
+          markerState.set(markerToRemove.id, markerToRemove);
+        }
+      }
+
+      if (existingMarker && showVehicle) {
+        updateVehiclePosition(
+          existingMarker,
+          getVehicleIcon(m),
+          lat,
+          long,
+          DateTime.now().toSeconds(),
+        );
       }
     });
-    // Handle vehicle removoal
+
+    // Handle vehicle removal
+    const currentSeconds = DateTime.now().toSeconds();
     const markersToRemove = [];
-    const filtered = markers.filter(m => {
-      if (now - m.lastUpdatedAt >= EXPIRE_TIME_SEC || m.remove) {
+    markersOnMap.filter(m => {
+      if (
+        markerState.get(m.id)?.expire <= currentSeconds ||
+        currentSeconds - m.lastUpdatedAt >= EXPIRE_TIME_SEC // Remove vehicles that have not been updated for a while (likely reached the end of the line)
+      ) {
+        markerState.delete(m.id);
         markersToRemove.push(m.marker);
         return false;
       }
@@ -240,8 +279,19 @@ const MonitorMap: FC<IProps> = ({
     });
     if (markersToRemove.length > 0) {
       for (let index = 0; index < markersToRemove.length; index++) {
-        map.removeLayer(markersToRemove[index]);
+        const marker = markersToRemove[index];
+        marker.remove();
+        mapRef.current.removeLayer(marker);
       }
+    }
+    if (markerState) {
+      setVehicleMarkerState(markerState);
+    }
+    setVehicleMarkers(markersOnMap);
+  }, [messages, mapRef.current]);
+
+  useEffect(() => {
+    if (topicRef?.current && clientRef?.current && newTopics) {
       const settings = {
         oldTopics: topicRef.current,
         client: clientRef.current,
@@ -249,9 +299,7 @@ const MonitorMap: FC<IProps> = ({
       };
       changeTopics(settings, topicRef);
     }
-
-    setVehicleMarkers(filtered);
-  }, [messages]);
+  }, [newTopics, topicRef]);
 
   return (
     <div

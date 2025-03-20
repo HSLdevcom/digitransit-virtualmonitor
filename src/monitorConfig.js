@@ -227,6 +227,7 @@ export default {
     colors: {
       primary: '#E10669',
       monitorBackground: '#E10669',
+      alert: 'black',
     },
     modeIcons: {
       colors: {
@@ -247,5 +248,6 @@ export default {
     map: {
       inUse: true,
     },
+    alertIcon: 'query-error-alert',
   },
 };

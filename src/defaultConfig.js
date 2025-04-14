@@ -7,10 +7,10 @@ export default {
   },
   feedIds: [
     'MATKA',
+    'CAR_FERRIES',
     'HSL',
     'tampere',
     'LINKKI',
-    'lautta',
     'OULU',
     'digitraffic',
     'Rauma',
@@ -34,6 +34,9 @@ export default {
     'Harma',
     'PohjolanMatka',
     'Korsisaari',
+    'KoivistonAuto',
+    'PahkakankaanLiikenne',
+    'IngvesSvanback',
   ],
   fonts: {
     weights: {

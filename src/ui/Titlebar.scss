@@ -161,6 +161,10 @@ $preview-container-height: 365px;
       padding-left: 0.4vw;
     }
 
+    .matka {
+      width: 100%;
+    }
+
     &.preview {
       min-width: calc(0.14 * #{$preview-container-width}) !important;
       padding: calc(0.015 * #{$preview-container-height}) 0 !important;

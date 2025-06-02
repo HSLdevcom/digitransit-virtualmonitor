@@ -113,6 +113,7 @@ import { ReactComponent as QueryErrorAlert } from './icons/query-error-alert.svg
 import { ReactComponent as MapIcon } from './icons/map.svg';
 import { ReactComponent as SpeedTramStop } from './icons/stop-speedtram.svg';
 import { ReactComponent as SpeedTram } from './icons/tram-speed.svg';
+import { ReactComponent as ReplacementBus } from './icons/replacement-bus.svg';
 
 export interface IIconMapProps {
   color?: string;
@@ -255,6 +256,7 @@ const IconMap = (style: IIconMapProps) => {
     'map-icon': <MapIcon style={style} />,
     'stop-speedtram': <SpeedTramStop style={style} />,
     'tram-speed': <SpeedTram style={style} />,
+    'replacement-bus': <ReplacementBus style={style} />,
   };
 };
 

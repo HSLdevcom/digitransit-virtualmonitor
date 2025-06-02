@@ -48,6 +48,8 @@ export const getRouteMode = route => {
       return 'bus-local';
     case 900:
       return 'tram-speed';
+    case 714:
+      return 'replacement-bus';
     default:
       return route.mode?.toLowerCase();
   }

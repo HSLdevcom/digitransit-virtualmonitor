@@ -161,16 +161,20 @@ const TrainDataFetcher: FC<IProps> = ({
               ? stopAndRoutes.find(el => el.routes.match(/\d+$/)?.[0] === id)
                   ?.routes
               : train.commuterLineid;
-            trainsWithTrack.push({
-              lineId: line,
-              trainNumber: train.trainNumber,
-              time: formattedDateTimeFromSeconds(
-                utcToSeconds(train.timeTableRows[idx]?.scheduledTime),
-                'yyyy-MM-dd HH:mm:ss',
-              ),
-              timeInSecs: utcToSeconds(train.timeTableRows[idx]?.scheduledTime),
-              track: train.timeTableRows[idx]?.commercialTrack,
-            });
+            if (train.timeTableRows[idx]) {
+              trainsWithTrack.push({
+                lineId: line,
+                trainNumber: train.trainNumber,
+                time: formattedDateTimeFromSeconds(
+                  utcToSeconds(train.timeTableRows[idx].scheduledTime),
+                  'yyyy-MM-dd HH:mm:ss',
+                ),
+                timeInSecs: utcToSeconds(
+                  train.timeTableRows[idx].scheduledTime,
+                ),
+                track: train.timeTableRows[idx].commercialTrack,
+              });
+            }
           }
         });
       });

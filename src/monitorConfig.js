@@ -111,6 +111,13 @@ export default {
       alert: '#dc0451',
       monitorButtonBackground: 'rgba(255, 255, 255, 0.7)',
     },
+    modeIcons: {
+      colors: {
+        'mode-rail': '#000000',
+      },
+      postfix: '',
+      setName: 'digitransit',
+    },
   },
   tampere: {
     colors: {

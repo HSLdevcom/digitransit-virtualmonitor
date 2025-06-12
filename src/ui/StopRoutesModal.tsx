@@ -357,13 +357,15 @@ const StopRoutesModal: FC<Props> = props => {
                       <Icon
                         img={
                           !alternateIcon
-                            ? getRouteMode(route)
-                            : getRouteMode(route) + alternateIcon
+                            ? getRouteMode(route, config)
+                            : getRouteMode(route, config) + alternateIcon
                         }
                         width={24}
                         height={24}
                         color={
-                          config.modeIcons.colors[`mode-${getRouteMode(route)}`]
+                          config.modeIcons.colors[
+                            `mode-${getRouteMode(route, config)}`
+                          ]
                         }
                       />
                     </div>

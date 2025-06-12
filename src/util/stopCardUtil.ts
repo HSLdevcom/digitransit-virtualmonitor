@@ -40,7 +40,10 @@ export const getStopIcon = stop => {
   return mode;
 };
 
-export const getRouteMode = route => {
+export const getRouteMode = (route, config) => {
+  if (config.replacementBusRoutes?.includes(route.gtfsId)) {
+    return 'replacement-bus';
+  }
   switch (route.type) {
     case 702:
       return 'bus-express';

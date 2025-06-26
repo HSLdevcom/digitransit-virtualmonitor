@@ -128,7 +128,7 @@ const Monitor: FC<IProps> = ({
     })
     .flat();
 
-  if (stopsForMap.length === 0) {
+  if (!stopsForMap.length) {
     return (
       <div
         style={style}

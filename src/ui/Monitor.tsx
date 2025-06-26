@@ -127,9 +127,7 @@ const Monitor: FC<IProps> = ({
       });
     })
     .flat();
-  stopsForMap.forEach(c => {
-    c.coords.flat();
-  });
+
   if (stopsForMap.length === 0) {
     return (
       <div

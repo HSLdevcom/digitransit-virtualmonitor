@@ -2,7 +2,7 @@ import React, { FC, useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { MonitorContext, UserContext } from '../contexts';
+import { ConfigContext, MonitorContext, UserContext } from '../contexts';
 import monitorAPI from '../api';
 import Loading from './Loading';
 
@@ -38,6 +38,7 @@ const MonitorOverlay: FC<IProps> = ({
     }
   }, []);
   const { pathname, href } = window.location;
+  const config = useContext(ConfigContext);
   if (createNew) {
     to = '/createview';
   } else {
@@ -45,9 +46,12 @@ const MonitorOverlay: FC<IProps> = ({
       if (href.indexOf('cont=') !== -1) {
         to = '/createview';
         search = window.location.search;
-      } else {
+      } else if (config.login.inUse) {
         to = '/';
         text = t('login');
+      } else {
+        to = '/createview';
+        text = t('quickDisplayCreate');
       }
     } else {
       // user is logged in

@@ -10,6 +10,7 @@ import { ConfigContext, MonitorContext } from '../contexts';
 import { stopsAndStationsFromViews } from '../util/monitorUtils';
 import { getStopIcon } from '../util/stopCardUtil';
 import MonitorMapContainer from '../MonitorMapContainer';
+import NoMonitorsFound from './NoMonitorsFound';
 
 const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
@@ -126,9 +127,25 @@ const Monitor: FC<IProps> = ({
       });
     })
     .flat();
-  stopsForMap.forEach(c => {
-    c.coords.flat();
-  });
+
+  if (!stopsForMap.length) {
+    return (
+      <div
+        style={style}
+        className={cx('main-content-container', {
+          preview: isPreview,
+          portrait: !isLandscapeByLayout,
+        })}
+        onMouseMove={() => {
+          setShowOverlay(true);
+          clearTimeout(to);
+          to = setTimeout(() => setShowOverlay(false), 3000);
+        }}
+      >
+        <NoMonitorsFound />
+      </div>
+    );
+  }
   return (
     <div
       style={style}

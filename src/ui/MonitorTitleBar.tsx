@@ -26,11 +26,11 @@ const MonitorTitlebar: FC<IProps> = ({
   const lat =
     view.type === 'map'
       ? view.stops[0].coords[0]
-      : view.columns.left.stops[0].lat;
+      : view.columns.left.stops[0]?.lat;
   const lon =
     view.type === 'map'
       ? view.stops[0].coords[1]
-      : view.columns.left.stops[0].lon;
+      : view.columns.left.stops[0]?.lon;
 
   const showWeather = !isMultiDisplay && isLandscape && lat && lon;
 

@@ -7,8 +7,8 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { ConfigContext } from '../contexts';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import CreateViewPage from '../ui/CreateViewPage';
+import { MockedProvider } from '@apollo/client/testing';
 
 const mockConfig = {
   login: {
@@ -40,18 +40,14 @@ const mockConfig = {
   },
 };
 
-const mockClient = new ApolloClient({
-  cache: new InMemoryCache(),
-  uri: 'http://localhost:4000/graphql',
-});
-
+const mocks = [];
 const withContext = () => {
   return (
-    <ApolloProvider client={mockClient}>
+    <MockedProvider mocks={mocks}>
       <ConfigContext.Provider value={mockConfig}>
         <CreateViewPage />
       </ConfigContext.Provider>
-    </ApolloProvider>
+    </MockedProvider>
   );
 };
 

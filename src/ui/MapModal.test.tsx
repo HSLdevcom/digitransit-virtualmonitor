@@ -1,11 +1,11 @@
 import React from 'react';
 import MapModal from './MapModal';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import { ConfigContext } from '../contexts';
 import { BoundingBox } from '../util/Interfaces';
 import { MemoryRouter } from 'react-router-dom';
 import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { MockedProvider } from '@apollo/client/testing';
 
 jest.mock('react-i18next', () => ({
   useTranslation: () => [jest.fn(key => key)],
@@ -61,11 +61,8 @@ describe('MapModal', () => {
       alert: '#ff0000',
     },
   };
-  const mockClient = new ApolloClient({
-    cache: new InMemoryCache(),
-    uri: 'http://localhost:4000/graphql',
-  });
 
+  const mocks = [];
   const withContext = (updateMapSettings = null, onClose = null) => {
     return (
       <ConfigContext.Provider value={mockConfig}>
@@ -108,11 +105,11 @@ describe('MapModal', () => {
   it('renders portrait class when isLandscape is false', () => {
     const screen = render(
       <MemoryRouter>
-        <ApolloProvider client={mockClient}>
+        <MockedProvider mocks={mocks}>
           <ConfigContext.Provider value={mockConfig}>
             <MapModal {...defaultProps} isLandscape={false} isOpen={true} />
           </ConfigContext.Provider>
-        </ApolloProvider>
+        </MockedProvider>
       </MemoryRouter>,
     );
     expect(screen.getByText('select-bounds')).toBeInTheDocument();

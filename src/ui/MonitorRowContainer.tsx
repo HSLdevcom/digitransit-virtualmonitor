@@ -53,8 +53,10 @@ const MonitorRowContainer: FC<IProps> = ({
   const currentDay = setDate(0);
   const nextDay = setDate(1);
   const nextDayDepartureIndexLeft = departuresLeft
-    .slice(0, leftColumnCount)
-    .findIndex(departure => departure?.serviceDay === nextDay.getTime() / 1000);
+    .slice(0, leftColumnCount + rightColumnCount)
+    .findIndex(
+      (departure) => departure?.serviceDay === nextDay.getTime() / 1000
+    );
 
   if (nextDayDepartureIndexLeft !== -1) {
     departuresLeft.splice(nextDayDepartureIndexLeft, 0, null);
@@ -144,6 +146,7 @@ const MonitorRowContainer: FC<IProps> = ({
       ) {
         const departure =
           i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
+
         rightColumn.push(
           <MonitorRow
             key={
@@ -167,7 +170,7 @@ const MonitorRowContainer: FC<IProps> = ({
             currentLang={currentLang}
             showMinutes={showMinutes || 0}
             withoutRouteColumn={withoutRouteColumn}
-          />,
+          />
         );
       }
     } else {

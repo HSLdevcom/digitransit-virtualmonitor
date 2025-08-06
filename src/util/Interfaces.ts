@@ -12,7 +12,9 @@ export interface IStop {
   settings?: ISettings;
   mode?: string;
   routes?: Array<any>;
-  parentStation?: string;
+  parentStation?: {
+    gtfsId: string;
+  };
 }
 export interface IStopInfoPlus extends IStop {
   cardId?: number;
@@ -141,7 +143,9 @@ export interface ICard {
   gtfsId: string;
   shortCode: string;
   source: string;
-  parentStation: string;
+  parentStation: {
+    gtfsId: string;
+  };
   hiddenRoutes: any;
 }
 export interface ICardInfo {

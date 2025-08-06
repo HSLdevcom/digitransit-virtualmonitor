@@ -17,7 +17,9 @@ export interface IStop {
   gtfsId: string;
   code: string;
   platformCode: string;
-  parentStation: any;
+  parentStation: {
+    gtfsId: string;
+  };
 }
 interface ITrip {
   tripHeadsign: string;

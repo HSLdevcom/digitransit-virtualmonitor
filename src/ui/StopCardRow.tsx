@@ -189,9 +189,7 @@ const StopCardRow: FC<IProps> = ({
                 'shortName.length',
               ),
               hiddenRoutes: [],
-              parentStation: stop.parentStation
-                ? stop.parentStation.gtfsId
-                : undefined,
+              parentStation: stop.parentStation || null
             };
           }),
         undefined,

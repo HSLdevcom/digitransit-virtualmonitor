@@ -88,8 +88,8 @@ const TrainDataFetcher: FC<IProps> = ({
   const shortCodes = stopAndRoutes
     .map(stop => {
       return {
-        gtfsId: stop.parentStation,
-        shortCode: stop?.shortCode || stop.parentStation.split(':')[1],
+        gtfsId: stop.parentStation.gtfsId,
+        shortCode: stop?.shortCode || stop.parentStation.gtfsId.split(':')[1],
       };
     })
     .filter(s => s);

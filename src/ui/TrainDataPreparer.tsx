@@ -26,7 +26,9 @@ const createLineIdsArray = (data, hiddenRoutes) => {
             if (!filteredHiddenRoutes.includes(stringifyPattern(pattern))) {
               lineIds.push({
                 gtfsId: stop.gtfsId,
-                parentStation: station.gtfsId,
+                parentStation: {
+                  gtfsId: station.gtfsId
+                },
                 shortName: pattern.route.shortName,
                 stringifiedPattern: stringifyPattern(pattern),
               });
@@ -43,9 +45,7 @@ const createLineIdsArray = (data, hiddenRoutes) => {
           if (!filteredHiddenRoutes.includes(stringifyPattern(pattern))) {
             lineIds.push({
               gtfsId: stop.gtfsId,
-              parentStation: stop.parentStation
-                ? stop.parentStation.gtfsId
-                : stop.gtfsId,
+              parentStation: stop.parentStation || null,
               shortName: pattern.route.shortName,
               stringifiedPattern: stringifyPattern(pattern),
             });

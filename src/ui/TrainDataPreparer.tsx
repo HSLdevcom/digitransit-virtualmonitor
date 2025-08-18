@@ -27,7 +27,7 @@ const createLineIdsArray = (data, hiddenRoutes) => {
               lineIds.push({
                 gtfsId: stop.gtfsId,
                 parentStation: {
-                  gtfsId: station.gtfsId
+                  gtfsId: station.gtfsId,
                 },
                 shortName: pattern.route.shortName,
                 stringifiedPattern: stringifyPattern(pattern),

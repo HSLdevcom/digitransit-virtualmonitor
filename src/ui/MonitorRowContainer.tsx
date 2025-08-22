@@ -7,7 +7,6 @@ import { getLayout } from "../util/getResources";
 import { IClosedStop } from "../util/Interfaces";
 import { useTranslation } from "react-i18next";
 import { stoptimeSpecificDepartureId } from "../util/monitorUtils";
-import { departure } from "../test/data/monitor";
 
 interface IProps {
   viewId: number;

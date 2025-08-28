@@ -109,7 +109,7 @@ describe('StopRoutesModal', () => {
     fireEvent.click(renameBtn);
     // After clicking, inputs should not be readOnly
     const inputs = screen.getAllByRole('textbox');
-    expect(inputs.some(input => !input.hasAttribute('readOnly'))).toBe(true);
+    expect(inputs.some(input => input.hasAttribute('readOnly'))).toBe(false);
   });
 
   it('checks and unchecks route checkboxes', () => {

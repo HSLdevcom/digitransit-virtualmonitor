@@ -89,7 +89,7 @@ const StopRow: FC<IProps> = ({
   const isDefaultSettings =
     isEqual(defaultSettings, stop.settings) || !stop.settings;
 
-  const moveBetweenColumns = getLayout(stop.layout).isMultiDisplay;
+  const moveBetweenColumns = getLayout(stop.layout).isDoubleView;
   const alternateIcon = config.modeIcons.postfix;
   return (
     <div className="stop-row-container">
@@ -154,7 +154,7 @@ const StopRow: FC<IProps> = ({
       >
         <Icon img="delete" color={config.colors.primary} />
       </div>
-      {getLayout(stop.layout).isMultiDisplay && (
+      {getLayout(stop.layout).isDoubleView && (
         <div
           className="stop-row-move icon"
           tabIndex={0}

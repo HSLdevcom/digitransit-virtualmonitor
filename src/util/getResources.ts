@@ -1,7 +1,7 @@
 interface ILayout {
   leftColumnCount: number;
   rightColumnCount: number;
-  isMultiDisplay?: boolean;
+  isDoubleView?: boolean;
   isPortrait?: boolean;
   tighten?: Array<number>;
   alertSpan?: number;
@@ -65,28 +65,28 @@ export const getLayout = (layout: number): ILayout => {
       return {
         leftColumnCount: 4,
         rightColumnCount: 4,
-        isMultiDisplay: true,
+        isDoubleView: true,
         alertSpan: 1,
       };
     case 10:
       return {
         leftColumnCount: 8,
         rightColumnCount: 8,
-        isMultiDisplay: true,
+        isDoubleView: true,
         alertSpan: 2,
       };
     case 11:
       return {
         leftColumnCount: 12,
         rightColumnCount: 12,
-        isMultiDisplay: true,
+        isDoubleView: true,
         alertSpan: 3,
       };
     case 12:
       return {
         leftColumnCount: 8,
         rightColumnCount: 0,
-        isMultiDisplay: false,
+        isDoubleView: false,
         isPortrait: true,
         alertSpan: 1,
         fontSizeDivider: 15,
@@ -96,7 +96,7 @@ export const getLayout = (layout: number): ILayout => {
       return {
         leftColumnCount: 12,
         rightColumnCount: 0,
-        isMultiDisplay: false,
+        isDoubleView: false,
         isPortrait: true,
         alertSpan: 1,
         fontSizeDivider: 18,
@@ -106,7 +106,7 @@ export const getLayout = (layout: number): ILayout => {
       return {
         leftColumnCount: 16,
         rightColumnCount: 0,
-        isMultiDisplay: false,
+        isDoubleView: false,
         isPortrait: true,
         alertSpan: 1,
         fontSizeDivider: 18,
@@ -116,7 +116,7 @@ export const getLayout = (layout: number): ILayout => {
       return {
         leftColumnCount: 24,
         rightColumnCount: 0,
-        isMultiDisplay: false,
+        isDoubleView: false,
         isPortrait: true,
         alertSpan: 1,
         fontSizeDivider: 26,
@@ -126,7 +126,7 @@ export const getLayout = (layout: number): ILayout => {
       return {
         leftColumnCount: 10,
         rightColumnCount: 0,
-        isMultiDisplay: false,
+        isDoubleView: false,
         isPortrait: true,
         tighten: [4, 6],
         alertSpan: 1,
@@ -138,7 +138,7 @@ export const getLayout = (layout: number): ILayout => {
       return {
         leftColumnCount: 18,
         rightColumnCount: 0,
-        isMultiDisplay: false,
+        isDoubleView: false,
         isPortrait: true,
         tighten: [6, 12],
         alertSpan: 1,

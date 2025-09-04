@@ -79,8 +79,8 @@ const formatSingleColumnData = (
   return { rows, date, departuresIndex };
 };
 
-// Processess rows for a monitor containing a single stop display
-const formatSingleDisplayData = (
+// Processess rows for a monitor containing a single stop view
+const formatSingleViewData = (
   departures: IDeparture[],
   leftColumnSize: number,
   rightColumnSize: number,
@@ -102,8 +102,8 @@ const formatSingleDisplayData = (
   return { leftRows, rightRows };
 };
 
-// Processes rows for a multi display monitor (where right side has dedicated departures)
-const formatMultiDisplayData = (
+// Processes rows for a double view monitor (where right side has dedicated departures)
+const formatDoubleViewData = (
   departuresLeft: IDeparture[],
   departuresRight: IDeparture[],
   leftColumnSize: number,
@@ -145,7 +145,7 @@ const MonitorRowContainer: FC<IProps> = ({
 }) => {
   const [t] = useTranslation();
   const DATE_FORMAT = 'dd.MM.yyyy HH:mm';
-  const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
+  const { leftColumnCount, rightColumnCount, isDoubleView, tighten } =
     getLayout(layout);
 
   const isTighten = tighten !== undefined;
@@ -163,16 +163,15 @@ const MonitorRowContainer: FC<IProps> = ({
   if (alertComponent && layout < 12) {
     leftColumnCountWithAlerts -= alertRowSpan;
   }
-
-  const { leftRows, rightRows } = isMultiDisplay
-    ? formatMultiDisplayData(
+  const { leftRows, rightRows } = isDoubleView
+    ? formatDoubleViewData(
         departuresLeft,
         departuresRight,
         leftColumnCountWithAlerts,
         rightColumnCount,
         currentLang,
       )
-    : formatSingleDisplayData(
+    : formatSingleViewData(
         departuresLeft,
         leftColumnCountWithAlerts,
         rightColumnCount,
@@ -373,10 +372,7 @@ const MonitorRowContainer: FC<IProps> = ({
           <div className="divider" />
           {true && (
             <div className={cx('grid', { 'two-cols': withTwoColumns })}>
-              {headers(
-                rightColumnCount,
-                isMultiDisplay ? rightStops : leftStops,
-              )}
+              {headers(rightColumnCount, isDoubleView ? rightStops : leftStops)}
               <div
                 className={cx('grid-rows', `rows${rightColumnCount}`, {
                   'two-cols': withTwoColumns,

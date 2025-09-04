@@ -10,7 +10,7 @@ import cx from 'classnames';
 
 interface IProps {
   preview: boolean;
-  isMultiDisplay?: boolean;
+  isDoubleView?: boolean;
   isLandscape?: boolean;
   view: IView;
   currentLang: string;
@@ -19,7 +19,7 @@ interface IProps {
 const MonitorTitlebar: FC<IProps> = ({
   view,
   preview,
-  isMultiDisplay = false,
+  isDoubleView: isDoubleView = false,
   isLandscape = false,
   currentLang,
 }) => {
@@ -32,7 +32,7 @@ const MonitorTitlebar: FC<IProps> = ({
       ? view.stops[0].coords[1]
       : view.columns.left.stops[0]?.lon;
 
-  const showWeather = !isMultiDisplay && isLandscape && lat && lon;
+  const showWeather = !isDoubleView && isLandscape && lat && lon;
 
   let temperature;
   let weatherIconString;
@@ -84,10 +84,10 @@ const MonitorTitlebar: FC<IProps> = ({
     <Titlebar
       isPreview={preview}
       isLandscape={isLandscape}
-      isMultiDisplay={isMultiDisplay}
+      isDoubleView={isDoubleView}
     >
       <Logo isPreview={preview} isLandscape={isLandscape} forMonitor={true} />
-      {!isMultiDisplay && (
+      {!isDoubleView && (
         <div
           className={cx('title-text', {
             preview: preview,
@@ -97,7 +97,7 @@ const MonitorTitlebar: FC<IProps> = ({
           {view.title[currentLang]}
         </div>
       )}
-      {isMultiDisplay && (
+      {isDoubleView && (
         <div className="multi-display-titles">
           <div className={cx('left-title', { preview: preview })}>
             {view.columns.left.title[currentLang]}

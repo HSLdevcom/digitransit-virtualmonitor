@@ -12,7 +12,7 @@ $preview-container-height: 365px;
   height: 15vh;
   margin: 0 2%;
 
-  &.multiDisplay { /* stylelint-disable-line */
+  &.doubleView { /* stylelint-disable-line */
     grid-template-columns: 14vw 1fr 14vw;
   }
 
@@ -75,7 +75,7 @@ $preview-container-height: 365px;
     height: 55px;
     grid-template-columns: calc(0.14 * #{$preview-container-width}) auto calc(0.073 * #{$preview-container-width}) calc(0.14 * #{$preview-container-width});
 
-    &.multiDisplay { /* stylelint-disable-line */
+    &.doubleView { /* stylelint-disable-line */
       grid-template-columns: calc(0.14 * #{$preview-container-width}) auto calc(0.14 * #{$preview-container-width});
     }
 

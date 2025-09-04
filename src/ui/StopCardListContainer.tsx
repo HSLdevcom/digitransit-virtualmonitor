@@ -216,8 +216,8 @@ const StopCardListContainer: FC<IProps> = ({
   const updateLayout = (cardId: number, value: number) => {
     const cardIndex = stopCardList.findIndex(card => card.id === cardId);
     if (
-      getLayout(stopCardList[cardIndex].layout).isMultiDisplay &&
-      !getLayout(+value).isMultiDisplay
+      getLayout(stopCardList[cardIndex].layout).isDoubleView &&
+      !getLayout(+value).isDoubleView
     ) {
       stopCardList[cardIndex].columns.left.stops = stopCardList[
         cardIndex
@@ -346,8 +346,8 @@ const StopCardListContainer: FC<IProps> = ({
       if (ismap) {
         return false;
       }
-      const isMultiDisplay = getLayout(stopCard.layout).isMultiDisplay;
-      return !isMultiDisplay
+      const isDoubleView = getLayout(stopCard.layout).isDoubleView;
+      return !isDoubleView
         ? stopCard.columns.left.stops.length === 0
         : stopCard.columns.left.stops.length === 0 ||
             stopCard.columns.right.stops.length === 0;

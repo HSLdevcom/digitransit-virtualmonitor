@@ -46,7 +46,7 @@ const StopListContainer: FC<Props> = ({
   setStops,
 }) => {
   const [t] = useTranslation();
-  const showStopTitles = getLayout(card.layout).isMultiDisplay;
+  const showStopTitles = getLayout(card.layout).isDoubleView;
   const leftItems = card.columns.left.stops;
   const rightItems = card.columns.right.stops;
   return (

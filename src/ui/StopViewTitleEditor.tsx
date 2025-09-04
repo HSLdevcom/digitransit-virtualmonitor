@@ -29,7 +29,7 @@ const StopViewTitleEditor: FC<IProps> = ({
 }) => {
   const { index, layout, id, title } = card;
   const [t] = useTranslation();
-  const { isMultiDisplay } = getLayout(layout);
+  const { isDoubleView } = getLayout(layout);
 
   const layoutTitle = t('layout-double');
   const onChange = title => {
@@ -41,10 +41,10 @@ const StopViewTitleEditor: FC<IProps> = ({
   return (
     <div className="stop-title">
       <p className="description">
-        {isMultiDisplay ? t('layout') : titleDescription}
+        {isDoubleView ? t('layout') : titleDescription}
       </p>
       <div className="stop-title-input-container">
-        {!isMultiDisplay && (
+        {!isDoubleView && (
           <InputWithEditIcon
             onChange={onChange}
             id={inputID}
@@ -58,7 +58,7 @@ const StopViewTitleEditor: FC<IProps> = ({
             })} ${t(`language-name-${lang}`)}`}
           />
         )}
-        {isMultiDisplay && (
+        {isDoubleView && (
           <input
             className={cx('monitor-input', 'double')}
             id={inputID}

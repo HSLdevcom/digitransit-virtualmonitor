@@ -56,7 +56,7 @@ const Monitor: FC<IProps> = ({
     getWindowDimensions(),
   );
   const {
-    isMultiDisplay,
+    isDoubleView,
     fontSizeDivider,
     tightenedFontSizeDivider,
     previewFontSize,
@@ -161,7 +161,7 @@ const Monitor: FC<IProps> = ({
     >
       {!isPreview && <MonitorOverlay show={showOverlay} />}
       <MonitorTitlebar
-        isMultiDisplay={isMultiDisplay}
+        isDoubleView={isDoubleView}
         isLandscape={isLandscapeByLayout}
         preview={isPreview}
         view={view}

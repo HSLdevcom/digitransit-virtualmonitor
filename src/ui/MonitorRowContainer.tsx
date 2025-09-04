@@ -26,6 +26,107 @@ interface IProps {
 }
 const hasColumn = value => value === false;
 
+const isSameDate = (departure: IDeparture, nextDay) => {
+  if (!departure) {
+    return false;
+  }
+  const depDate = new Date(
+    (departure.realtimeDeparture + departure.serviceDay) * 1000,
+  );
+
+  return depDate.getDate() === nextDay.getDate();
+};
+
+/*
+  Formats rows for a single column
+  Returns a list of rows, date of last row and the index of remaining departures
+*/
+const formatSingleColumnData = (
+  departures: IDeparture[],
+  nRows: number,
+  date: number,
+  departuresIndex: number,
+  currentLang: string,
+) => {
+  let lastWasDayDivider = false;
+  const rows = Array(nRows)
+    .fill(null)
+    .map((_, rowIndex) => {
+      const departure = departures[departuresIndex];
+      const isFirst = rowIndex === 0 || lastWasDayDivider;
+      const isLastRow = rowIndex === nRows - 1;
+      if (departure) {
+        if (isSameDate(departure, setDate(date))) {
+          departuresIndex++;
+          lastWasDayDivider = false;
+          return { departure, dayDivider: null, isFirst };
+        } else if (!isLastRow) {
+          // if next departure is on a different day, add day divider
+          // unless it's the last row of the column
+          date++;
+          lastWasDayDivider = true;
+          return {
+            departure: null,
+            dayDivider: formatDate(setDate(date), currentLang),
+            isFirst,
+          };
+        }
+      }
+      // if no more departures, return empty rows
+      lastWasDayDivider = false;
+      return { departure: null, dayDivider: null, isFirst };
+    });
+  return { rows, date, departuresIndex };
+};
+
+// Processess rows for a monitor containing a single stop display
+const formatSingleDisplayData = (
+  departures: IDeparture[],
+  leftColumnSize: number,
+  rightColumnSize: number,
+  currentLang: string,
+) => {
+  const {
+    rows: leftRows,
+    date,
+    departuresIndex,
+  } = formatSingleColumnData(departures, leftColumnSize, 0, 0, currentLang);
+  const { rows: rightRows } = formatSingleColumnData(
+    departures,
+    rightColumnSize,
+    date as number,
+    departuresIndex as number,
+    currentLang,
+  );
+
+  return { leftRows, rightRows };
+};
+
+// Processes rows for a multi display monitor (where right side has dedicated departures)
+const formatMultiDisplayData = (
+  departuresLeft: IDeparture[],
+  departuresRight: IDeparture[],
+  leftColumnSize: number,
+  rightColumnSize: number,
+  currentLang: string,
+) => {
+  const { rows: leftRows } = formatSingleColumnData(
+    departuresLeft,
+    leftColumnSize,
+    0,
+    0,
+    currentLang,
+  );
+  const { rows: rightRows } = formatSingleColumnData(
+    departuresRight,
+    rightColumnSize,
+    0,
+    0,
+    currentLang,
+  );
+  return { leftRows, rightRows };
+};
+
 const MonitorRowContainer: FC<IProps> = ({
   viewId,
   departuresLeft,
@@ -47,47 +148,6 @@ const MonitorRowContainer: FC<IProps> = ({
   const { leftColumnCount, rightColumnCount, isMultiDisplay, tighten } =
     getLayout(layout);
 
-  const leftColumn = [];
-  const rightColumn = [];
-
-  const currentDay = setDate(0);
-  const nextDay = setDate(1);
-  const nextDayDepartureIndexLeft = departuresLeft
-    .slice(0, leftColumnCount)
-    .findIndex(departure => departure?.serviceDay === nextDay.getTime() / 1000);
-
-  if (nextDayDepartureIndexLeft !== -1) {
-    departuresLeft.splice(nextDayDepartureIndexLeft, 0, null);
-  }
-
-  let currentDayDepartureIndexRight = -1;
-  let nextDayDepartureIndexRight = departuresRight
-    .slice(0, rightColumnCount)
-    .findIndex(departure => departure.serviceDay === nextDay.getTime() / 1000);
-
-  const currentDayDeparturesRight = departuresRight
-    .slice(0, rightColumnCount)
-    .filter(departure => departure.serviceDay === currentDay.getTime() / 1000);
-  const nextDayDeparturesRight = departuresRight
-    .slice(0, rightColumnCount)
-    .filter(departure => departure.serviceDay === nextDay.getTime() / 1000);
-
-  let rowCountRight = currentDayDeparturesRight.length;
-  if (nextDayDeparturesRight.length !== 0) {
-    rowCountRight += nextDayDeparturesRight.length + 1;
-  }
-
-  if (currentDayDepartureIndexRight !== -1) {
-    if (rowCountRight < rightColumnCount || rightColumnCount !== 0) {
-      nextDayDepartureIndexRight += departuresRight.length === 0 ? 0 : 1;
-      if (currentDayDeparturesRight.length > 0) {
-        currentDayDepartureIndexRight = 0;
-        departuresRight.splice(0, 0, null);
-      }
-    }
-    departuresRight.splice(nextDayDepartureIndexRight, 0, null);
-  }
-
   const isTighten = tighten !== undefined;
   const hasRouteColumn = [];
   leftStops.forEach(s => {
@@ -103,102 +163,69 @@ const MonitorRowContainer: FC<IProps> = ({
   if (alertComponent && layout < 12) {
     leftColumnCountWithAlerts -= alertRowSpan;
   }
-  for (let i = 0; i < leftColumnCountWithAlerts; i++) {
-    const departure =
-      i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
-    leftColumn.push(
-      <MonitorRow
-        key={departure ? stoptimeSpecificDepartureId(departure) : `row_l${i}`}
-        departure={departure}
-        isFirst={i === 0 || i - 1 === nextDayDepartureIndexLeft}
-        showVia={
-          layout < 4 ||
-          layout === 12 ||
-          (layout === 16 && i < 4) ||
-          leftColumnCount === 4
-        }
-        isTwoRow={
-          leftColumnCount === 4 || layout === 12 || (layout === 16 && i < 4)
-        }
-        withTwoColumns={withTwoColumns}
-        alertState={alertState}
-        stops={leftStops}
-        currentLang={currentLang}
-        dayForDivider={
-          i === nextDayDepartureIndexLeft
-            ? formatDate(nextDay, currentLang)
-            : undefined
-        }
-        showMinutes={showMinutes || 0}
-        withoutRouteColumn={withoutRouteColumn}
-      />,
-    );
-  }
 
-  if (isLandscape) {
-    if (!isMultiDisplay) {
-      for (
-        let i = leftColumnCountWithAlerts;
-        i < leftColumnCountWithAlerts + rightColumnCount;
-        i++
-      ) {
-        const departure =
-          i !== nextDayDepartureIndexLeft ? departuresLeft[i] : null;
-        rightColumn.push(
-          <MonitorRow
-            key={
-              departure ? stoptimeSpecificDepartureId(departure) : `row_c${i}`
-            }
-            departure={departure}
-            isFirst={
-              i === leftColumnCountWithAlerts ||
-              i - 1 === nextDayDepartureIndexLeft
-            }
-            isTwoRow={rightColumnCount === 4 || layout === 12}
-            stops={leftStops}
-            showVia={rightColumnCount === 4}
-            withTwoColumns={withTwoColumns}
-            alertState={alertState}
-            dayForDivider={
-              i === nextDayDepartureIndexLeft
-                ? formatDate(nextDay, currentLang)
-                : undefined
-            }
-            currentLang={currentLang}
-            showMinutes={showMinutes || 0}
-            withoutRouteColumn={withoutRouteColumn}
-          />,
-        );
+  const { leftRows, rightRows } = isMultiDisplay
+    ? formatMultiDisplayData(
+        departuresLeft,
+        departuresRight,
+        leftColumnCountWithAlerts,
+        rightColumnCount,
+        currentLang,
+      )
+    : formatSingleDisplayData(
+        departuresLeft,
+        leftColumnCountWithAlerts,
+        rightColumnCount,
+        currentLang,
+      );
+
+  const leftColumn = leftRows.map(({ departure, dayDivider, isFirst }, i) => (
+    <MonitorRow
+      key={departure ? stoptimeSpecificDepartureId(departure) : `row_l${i}`}
+      departure={departure}
+      isFirst={isFirst}
+      showVia={
+        layout < 4 ||
+        layout === 12 ||
+        (layout === 16 && i < 4) ||
+        leftColumnCount === 4
       }
-    } else {
-      for (let i = 0; i < rightColumnCount; i++) {
-        const departure =
-          i !== nextDayDepartureIndexRight ? departuresRight[i] : null;
-        rightColumn.push(
-          <MonitorRow
-            key={
-              departure ? stoptimeSpecificDepartureId(departure) : `row_r${i}`
-            }
-            departure={departure}
-            isTwoRow={rightColumnCount === 4 || layout === 12}
-            stops={rightStops}
-            isFirst={i === 0 || i - 1 === nextDayDepartureIndexRight}
-            showVia={rightColumnCount === 4}
-            withTwoColumns={withTwoColumns}
-            alertState={alertState}
-            dayForDivider={
-              i === nextDayDepartureIndexRight
-                ? formatDate(nextDay, currentLang)
-                : undefined
-            }
-            currentLang={currentLang}
-            showMinutes={showMinutes || 0}
-            withoutRouteColumn={withoutRouteColumn}
-          />,
-        );
+      isTwoRow={
+        leftColumnCount === 4 || layout === 12 || (layout === 16 && i < 4)
       }
-    }
-  }
+      withTwoColumns={withTwoColumns}
+      alertState={alertState}
+      stops={leftStops}
+      currentLang={currentLang}
+      dayForDivider={dayDivider}
+      showMinutes={showMinutes || 0}
+      withoutRouteColumn={withoutRouteColumn}
+    />
+  ));
+
+  const rightColumn = rightRows.map(({ departure, dayDivider, isFirst }, i) => (
+    <MonitorRow
+      key={departure ? stoptimeSpecificDepartureId(departure) : `row_r${i}`}
+      departure={departure}
+      isFirst={isFirst}
+      showVia={
+        layout < 4 ||
+        layout === 12 ||
+        (layout === 16 && i < 4) ||
+        leftColumnCount === 4
+      }
+      isTwoRow={
+        leftColumnCount === 4 || layout === 12 || (layout === 16 && i < 4)
+      }
+      withTwoColumns={withTwoColumns}
+      alertState={alertState}
+      stops={leftStops}
+      currentLang={currentLang}
+      dayForDivider={dayDivider}
+      showMinutes={showMinutes || 0}
+      withoutRouteColumn={withoutRouteColumn}
+    />
+  ));
   const headers = (columns, stops) => {
     let withStopCode = false;
     stops.forEach(s => {

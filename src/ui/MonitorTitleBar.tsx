@@ -19,7 +19,7 @@ interface IProps {
 const MonitorTitlebar: FC<IProps> = ({
   view,
   preview,
-  isDoubleView: isDoubleView = false,
+  isDoubleView = false,
   isLandscape = false,
   currentLang,
 }) => {

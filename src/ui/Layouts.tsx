@@ -152,7 +152,7 @@ export const horizontalLayouts = [
       },
     ],
   },
-];
+] as const;
 
 export const verticalLayouts = [
   {
@@ -243,4 +243,4 @@ export const verticalLayouts = [
       },
     ],
   },
-];
+] as const;

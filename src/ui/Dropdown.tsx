@@ -68,7 +68,7 @@ const Dropdown: FC<IProps> = ({
       inputId={uuid()}
       name={name}
       options={options}
-      placeholder={placeholder ? placeholder : t('dropdownPlaceHolder')}
+      placeholder={placeholder ? placeholder : '--'}
       tabIndex="0"
       onChange={handleChange}
     />

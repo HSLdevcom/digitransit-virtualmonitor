@@ -8,7 +8,7 @@ import Loading from './Loading';
 
 interface IProps {
   show: boolean;
-  buttonTranslationKey?: string;
+  buttonTranslationKey?: 'quickDisplayCreate';
   createNew?: boolean;
 }
 const MonitorOverlay: FC<IProps> = ({

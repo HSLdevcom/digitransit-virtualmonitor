@@ -11,7 +11,7 @@ interface IProps {
     lang?: string,
   ) => void;
   cardInfoId: number;
-  side: string;
+  side: 'left' | 'right';
   value: ITitle;
 }
 const StopListTitleInput: FC<IProps> = ({

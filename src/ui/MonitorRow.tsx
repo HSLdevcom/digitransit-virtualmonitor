@@ -193,12 +193,12 @@ const MonitorRow: FC<IProps> = ({
         )
       : '';
   }
-  if (departure.pickupType === 'NONE') {
+  /* if (departure.pickupType === 'NONE') {
     const lastStop = departure.trip?.stops?.slice(-1).pop().gtfsId;
     if (departure.stop.gtfsId === lastStop) {
       destination = `${t('endStopArrive')}/${t('endStopTerminus')}`;
     }
-  }
+  } */
 
   const line = processLine(departure.trip?.route.shortName);
   if (destination?.indexOf(' via') !== -1) {

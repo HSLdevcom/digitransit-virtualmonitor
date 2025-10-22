@@ -94,7 +94,7 @@ const LayoutAndTimeContainer: FC<IProps> = ({
       </div>
       <LayoutModal
         allowInformationDisplay={allowInformationDisplay}
-        orientation={orientation}
+        orientation={orientation as 'vertical' | 'horizontal'}
         option={layout}
         open={open}
         onClose={() => setOpen(false)}

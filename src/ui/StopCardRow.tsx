@@ -24,6 +24,7 @@ import cx from 'classnames';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext, FavouritesContext } from '../contexts';
 import { IResult, PropertiesLayer } from '../types';
+import { SupportedLanguage } from '../i18n';
 
 const getGTFSId = (id: string): string | undefined => {
   if (id && typeof id.indexOf === 'function' && id.indexOf('GTFS:') === 0) {
@@ -83,7 +84,7 @@ const StopCardRow: FC<IProps> = ({
   const config = useContext(ConfigContext);
   const favourites = useContext(FavouritesContext);
   const [t] = useTranslation();
-  const lang: string = t('languageCode');
+  const lang = t('languageCode');
   const [timeOfStopSelection, setTimeOfStopSelection] = useState<number | null>(
     null,
   );
@@ -287,7 +288,7 @@ const StopCardRow: FC<IProps> = ({
                       key={`lan-${lan}`}
                       card={item}
                       updateCardInfo={updateCardInfo}
-                      lang={lan}
+                      lang={lan as SupportedLanguage}
                     />
                   )
                 );
@@ -422,7 +423,7 @@ const StopCardRow: FC<IProps> = ({
               searchContext={searchContext}
               icon="search"
               id={'search'}
-              placeholder={'autosuggestPlaceHolder'}
+              placeholder={t('autosuggestPlaceHolder')}
               value=""
               onSelect={onSelect}
               filterResults={filterSearchResults}
@@ -437,7 +438,7 @@ const StopCardRow: FC<IProps> = ({
             />
           </div>
           <LayoutAndTimeContainer
-            orientation={orientation}
+            orientation={orientation as 'horizontal' | 'vertical'}
             cardInfo={item}
             updateCardInfo={updateCardInfo}
             updateLayout={updateLayout}

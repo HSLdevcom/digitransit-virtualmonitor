@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Icon from './Icon';
 import Modal from 'react-modal';
 import { ConfigContext, UserContext } from '../contexts';
+import { SupportedLanguage } from '../i18n';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
@@ -23,7 +24,7 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
     }
   };
 
-  const languageCodes = ['fi', 'sv', 'en'];
+  const languageCodes: Array<SupportedLanguage> = ['fi', 'sv', 'en'];
 
   const languageElements = () => {
     const retValue = [];

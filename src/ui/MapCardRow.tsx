@@ -8,6 +8,7 @@ import { ICardInfo, IMapSettings } from '../util/Interfaces';
 import Icon from './Icon';
 import Toggle from './Toggle';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
+import { SupportedLanguage } from '../i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {
@@ -21,7 +22,7 @@ interface IProps {
     value: string,
     lang?: string,
   ) => void;
-  languages: Array<string>;
+  languages: Array<SupportedLanguage>;
   mapSettings: IMapSettings;
   updateMapSettings: (settings: IMapSettings) => void;
   openModal: () => void;
@@ -213,7 +214,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
               {t('edit-map')}
             </span>
             <LayoutAndTimeContainer
-              orientation={orientation}
+              orientation={orientation as 'horizontal' | 'vertical'}
               cardInfo={richItem}
               updateCardInfo={updateCardInfo}
               updateLayout={null}

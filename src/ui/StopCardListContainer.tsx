@@ -28,10 +28,11 @@ import { getConfig } from '../util/getConfig';
 import { useMergeState } from '../util/utilityHooks';
 import MapCardRow from './MapCardRow';
 import MapModal from './MapModal';
+import { SupportedLanguage } from '../i18n';
 
 interface IProps {
   stopCards: any;
-  languages: Array<string>;
+  languages: Array<SupportedLanguage>;
   loading?: boolean;
   vertical?: boolean;
   staticMonitor?: any;
@@ -322,7 +323,7 @@ const StopCardListContainer: FC<IProps> = ({
     }
   };
 
-  const handleLanguageChange = (language: string) => {
+  const handleLanguageChange = language => {
     if (!languages.includes(language)) {
       setLanguages(languages.concat(language));
     } else {
@@ -403,7 +404,9 @@ const StopCardListContainer: FC<IProps> = ({
     }
     const newCard: IMonitor = {
       cards: cards,
-      languages: languageArray.filter(lan => languages.includes(lan)),
+      languages: languageArray.filter(lan =>
+        languages.includes(lan as 'fi' | 'sv' | 'en'),
+      ),
       contenthash: '',
       mapSettings: mapProps,
     };

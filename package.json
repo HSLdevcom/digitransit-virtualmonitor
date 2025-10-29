@@ -9,7 +9,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.5.5",
-    "@digitransit-component/digitransit-component-autosuggest": "2.0.8",
+    "@digitransit-component/digitransit-component-autosuggest": "6.0.0",
     "@habx/apollo-multi-endpoint-link": "^2.5.0",
     "@hsl-fi/modal": "^0.3.2",
     "@hsl-fi/site-header": "4.5.0",
@@ -27,22 +27,24 @@
     "graphql": "^16.8.1",
     "graphql-tag": "^2.12.6",
     "http-proxy-middleware": "^2.0.7",
-    "i18next": "^19.9.2",
+    "i18next": "^22.5.1",
     "leaflet": "^1.9.3",
     "lodash": "4.17.21",
     "lodash-es": "4.17.21",
-    "luxon": "^1.28.1",
+    "luxon": "^3.6.1",
     "mqtt": "^4.3.7",
     "node-fetch": "^3.3.2",
+    "nth-check": "^2.1.1",
     "object-hash": "^2.2.0",
     "patch-package": "^6.5.0",
     "pbf": "^3.2.1",
     "react": "^16.14.0",
+    "react-animate-height": "^3.2.3",
     "react-autosuggest": "^10.0.0",
     "react-burger-menu": "^3.0.6",
     "react-dom": "^16.14.0",
     "react-helmet": "^6.1.0",
-    "react-i18next": "^11.17.0",
+    "react-i18next": "^12.3.1",
     "react-modal": "^3.11.2",
     "react-promise": "^2.1.0",
     "react-router-dom": "^5.2.0",
@@ -52,9 +54,7 @@
     "sass": "^1.49.9",
     "suncalc": "1.8.0",
     "url": "^0.11.0",
-    "uuid": "^8.3.2",
-    "nth-check": "^2.1.1",
-    "react-animate-height": "^3.2.3"
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "start-prod": "cd server && npm start",
@@ -71,8 +71,6 @@
     "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet"
   },
   "devDependencies": {
-    "prettier": "^2.3.0",
-    "husky": "^7.0.0",
     "@babel/core": "^7.21.3",
     "@graphql-codegen/cli": "^5.0.2",
     "@graphql-codegen/typed-document-node": "^2.3.3",
@@ -96,10 +94,12 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-sonarjs": "^0.14.0",
+    "husky": "^7.0.0",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.0",
     "stylelint": "^16.0.2",
     "stylelint-config-standard-scss": "12.0.0",
-    "typescript": "^3.9.9"
+    "typescript": "^4.9.5"
   },
   "jest": {
     "moduleNameMapper": {

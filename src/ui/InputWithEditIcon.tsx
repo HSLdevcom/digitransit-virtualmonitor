@@ -36,7 +36,7 @@ const InputWithEditIcon: FC<IProps> = ({
       />
       {!focus && (
         <button
-          aria-label={ariaLabelEdit || t('edit')}
+          aria-label={ariaLabelEdit || 'edit'}
           onClick={() => focusToInput(id)}
         >
           <Icon img="edit" color={config.colors.primary} />

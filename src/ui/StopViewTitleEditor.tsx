@@ -8,6 +8,7 @@ import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext } from '../contexts';
 
 import InputWithEditIcon from './InputWithEditIcon';
+import { SupportedLanguage } from '../i18n';
 
 interface IProps {
   card: ICardInfo;
@@ -17,7 +18,7 @@ interface IProps {
     value: string,
     lang?: string,
   ) => void;
-  lang: string;
+  lang: SupportedLanguage;
   isMap?: boolean;
 }
 

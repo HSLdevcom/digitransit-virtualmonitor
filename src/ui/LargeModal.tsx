@@ -6,7 +6,7 @@ import { ConfigContext } from '../contexts';
 
 interface IProps {
   onRequestClose: () => void;
-  header: string;
+  header: 'import-monitor' | 'layoutModalHeader';
   isOpen?: boolean;
   portalClassName?: string;
   ariaHideApp?: boolean;

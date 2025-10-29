@@ -47,7 +47,7 @@ const LayoutModal: FC<Props> = ({
     }
   }, [option, open]);
 
-  const layouts =
+  const layouts: typeof horizontalLayouts | typeof verticalLayouts =
     orientation === 'horizontal' ? horizontalLayouts : verticalLayouts;
   return (
     <LargeModal
@@ -90,9 +90,9 @@ const LayoutModal: FC<Props> = ({
                         id={`layoutBtn-${option.value}`}
                         key={`button_${option.value}`}
                         role="button"
-                        aria-label={`${t(orientation)} ${t(l.label)} ${
-                          option.rows
-                        } ${t('rows')}`}
+                        aria-label={`${t(
+                          orientation as 'horizontal' | 'vertical',
+                        )} ${t(l.label)} ${option.rows} ${t('rows')}`}
                       >
                         {option.label}
                       </button>

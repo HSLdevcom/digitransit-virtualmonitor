@@ -5,6 +5,7 @@ import cx from 'classnames';
 import Checkbox from './CheckBox';
 import { ConfigContext } from '../contexts';
 import Toggle from './Toggle';
+import { SupportedLanguage } from '../i18n';
 
 interface IProps {
   languages: Array<string>;
@@ -27,7 +28,7 @@ const DisplaySettings: FC<IProps> = ({
 }) => {
   const config = useContext(ConfigContext);
   const [t] = useTranslation();
-  const options = ['fi', 'sv', 'en'];
+  const options: Array<SupportedLanguage> = ['fi', 'sv', 'en'];
   const isChecked = (option: string) => {
     return languages.includes(option);
   };

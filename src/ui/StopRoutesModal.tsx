@@ -211,7 +211,7 @@ const StopRoutesModal: FC<Props> = props => {
     'showStopNumber',
     'showEndOfLine',
     'showVia',
-  ];
+  ] as const;
 
   return (
     <Modal

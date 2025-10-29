@@ -11,6 +11,7 @@ import { getParams } from '../util/queryUtils';
 import Modal from '@hsl-fi/modal';
 import { useTranslation } from 'react-i18next';
 import { IMonitor } from '../util/Interfaces';
+import { SupportedLanguage } from '../i18n';
 
 interface Location {
   pathname: string;
@@ -28,7 +29,7 @@ const CreateViewPage = () => {
   const [stopCardList, setStopCardList] = useState(
     location?.state?.view ? location.state.view.cards : null,
   );
-  const [languages, setLanguages] = useState(['fi']);
+  const [languages, setLanguages] = useState<SupportedLanguage[]>(['fi']);
   const [staticMonitorProperties, setStaticMonitorProperties] = useState(null);
   const [loading, setLoading] = useState(true);
   const [noMonitorFound, setNoMonitorFound] = useState(false);

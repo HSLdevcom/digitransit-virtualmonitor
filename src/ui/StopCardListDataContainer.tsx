@@ -5,12 +5,13 @@ import StopCardListContainer from './StopCardListContainer';
 import { sortBy } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
 import { IMapSettings } from '../util/Interfaces';
+import { SupportedLanguage } from '../i18n';
 
 interface IProps {
   stopCardList: any;
   stopIds: Array<string>;
   stationIds: Array<string>;
-  languages: Array<string>;
+  languages: Array<SupportedLanguage>;
   loading: boolean;
   staticMonitor?: any;
   mapSettings?: IMapSettings;

@@ -24,13 +24,13 @@ export const departure: IDeparture = {
   scheduledDeparture: 51763,
   serviceDay: 1645480800,
   stop: stop,
+  stops: [stop],
   trip: {
     tripHeadsign: 'Helsinki',
     tripHeadsignfi: 'Helsinki',
     tripHeadsignsv: 'Helsingfors',
     tripHeadsignen: 'Helsinki',
     gtfsId: 'HSL:1234trip',
-    stops: [stop],
     route: { alerts: [], shortName: '123' },
   },
 };

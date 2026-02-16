@@ -1,0 +1,65 @@
+publiccodeYmlVersion: 0.5.0
+name: Digitransit Stop Display
+url: https://github.com/HSLdevcom/digitransit-virtualmonitor/
+softwareVersion: v2.2.79
+releaseDate: 2025-11-17
+platforms:
+  - web
+categories:
+  - other
+organisation:
+  uri: https://www.hsl.fi/en
+fundedBy:
+  - name: Fintraffic
+    uri: https://www.fintraffic.fi/en
+  - name: Helsinki Region Transport (HSL)
+    uri: https://www.hsl.fi/en
+  - name: Waltti Solutions
+    uri: https://waltti.fi/en/
+usedBy:
+  - Finland, Fintraffic (nationwide)
+  - Finland, Helsinki Region Transport (HSL)
+  - Finland, Waltti cities
+developmentStatus: stable
+softwareType: standalone/web
+description:
+  en:
+    localisedName: Digitransit Stop Display
+    shortDescription:
+      The stop display enables showing stop timetables on e.g. lobby
+      screens, info displays, or intranet pages. Users can also create a
+      personal stop view.
+    longDescription:
+      The Digitransit Stop Display provides a simple and flexible way
+      to bring real‑time public transport information into various environments
+      by displaying the timetables of stops on lobby screens, corporate
+      information displays, or intranet pages, ensuring that passengers,
+      employees, and visitors can always see up‑to‑date departure information at
+      a glance. In addition, users can create their own personalized stop view
+      tailored to the stops most relevant to them, and save it as a bookmark or
+      shortcut in their browser for quick everyday access.
+    features:
+      - The display can show real‑time and scheduled departures on lobby
+        screens, corporate info displays, or intranet pages based on nearby
+        stops.
+      - The display provides live departure information with countdowns, line
+        details, destinations, and continuous updates.
+      - Users can create a personalized stop view and save it as a bookmark or
+        shortcut in their browser.
+      - The service allows customization of branding and layout, including
+        logos, colors, themes, and content density.
+      - The display can be configured and deployed using settings and URL
+        parameters.
+legal:
+  license: MIT
+maintenance:
+  type: internal
+  contacts:
+    - name: Digitransit
+      email: digitransit@hsl.fi
+localisation:
+  localisationReady: true
+  availableLanguages:
+    - fi
+    - sv
+    - en

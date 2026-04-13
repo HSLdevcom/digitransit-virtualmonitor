@@ -117,6 +117,15 @@
       width: 380px;
       margin-right: 40px;
 
+      // autosuggest 7.x uses a .hidden class to close the suggestions dropdown.
+      // The component ships no CSS rule for it, so we provide one here.
+      // Also hide the container when it is open but has no suggestions yet
+      // (clicking the field with no results should not show an empty box).
+      .hidden,
+      div[class*='styles_suggestionsContainerOpen']:not(:has(li)) {
+        display: none;
+      }
+
       div[class^='styles_autosuggest-input-icon'] svg {
         fill: #888;
       }

@@ -38,6 +38,7 @@ describe('MapModal', () => {
     lang: 'en',
     zoom: 12,
     center: [0, 0],
+    ariaHideApp: false,
 
     setMapSettings: jest.fn(),
     setZoom: jest.fn(),

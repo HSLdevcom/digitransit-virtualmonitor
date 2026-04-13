@@ -42,6 +42,7 @@ const defaultProps = {
   stops: [],
   mapSettings: {},
   languages: ['fi', 'en'],
+  ariaHideApp: false,
 };
 
 describe('PreviewModal', () => {

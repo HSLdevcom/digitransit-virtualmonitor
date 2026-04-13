@@ -48,6 +48,7 @@ describe('StopRoutesModal', () => {
             stopSettings={defaultSettings}
             combinedPatterns={mockCombinedPatterns}
             languages={mockLanguages}
+            ariaHideApp={false}
             {...props}
           />
         </ConfigContext.Provider>

@@ -44,7 +44,6 @@ OICStrategy.prototype.init = function () {
     .catch(err => {
       console.log('OpenID Connect discovery failed', this.config.issuerHost);
       console.error('OIDC error: ', err);
-      process.abort();
     });
 };
 

@@ -31,7 +31,6 @@ import {
 } from '../util/mqttUtils';
 import { useMergeState } from '../util/utilityHooks';
 import { ConfigContext } from '../contexts';
-import { DateTime } from 'luxon';
 
 interface IProps {
   preview?: boolean;
@@ -122,10 +121,9 @@ const CarouselDataContainer: FC<IProps> = ({
         initTime,
       );
       setStopDepartures(newDepartureArray);
-      const arr = alerts.concat(a);
-      setAlerts(
+      setAlerts(prevAlerts =>
         uniqBy(
-          filterEffectiveAlerts(arr),
+          filterEffectiveAlerts(prevAlerts.concat(a)),
           alert => alert.stop?.gtfsId + ':' + alert.alertHeaderText,
         ),
       );
@@ -143,11 +141,6 @@ const CarouselDataContainer: FC<IProps> = ({
         handleTopicStateChange,
       );
     }
-    // Force update interval for itineraries that needs to be filtered by timeShift setting.
-    const intervalId = setInterval(() => {
-      setforceUpdate(!forceUpdate);
-    }, 1000 * 20);
-    return () => clearInterval(intervalId);
   }, [stopsState.data, forceUpdate]);
   useEffect(() => {
     const stations = stationsState?.data?.stations;
@@ -166,9 +159,11 @@ const CarouselDataContainer: FC<IProps> = ({
         initTime,
       );
       setStationDepartures(newDepartureArray);
-      const arr = alerts.concat(a);
-      setAlerts(
-        uniqBy(filterEffectiveAlerts(arr), alert => alert.alertHeaderText),
+      setAlerts(prevAlerts =>
+        uniqBy(
+          filterEffectiveAlerts(prevAlerts.concat(a)),
+          alert => alert.alertHeaderText,
+        ),
       );
       setStationsFetched(true);
 
@@ -183,12 +178,14 @@ const CarouselDataContainer: FC<IProps> = ({
         handleTopicStateChange,
       );
     }
-    // Force update interval for itineraries that needs to be filtered by timeShift setting.
+  }, [stationsState.data, forceUpdate]);
+  useEffect(() => {
+    // Force update interval for itineraries that need to be filtered by timeShift setting.
     const intervalId = setInterval(() => {
-      setforceUpdate(!forceUpdate);
+      setforceUpdate(prev => !prev);
     }, 1000 * 20);
     return () => clearInterval(intervalId);
-  }, [stationsState.data, forceUpdate]);
+  }, []);
 
   const topics =
     topicState.topics.length > 0

@@ -1,6 +1,6 @@
 import L, { LatLng } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import React, { useEffect, FC, useContext, useState, useRef } from 'react';
+import React, { useEffect, FC, useContext, useRef } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Icon from './Icon';
 import { ConfigContext } from '../contexts';
@@ -97,7 +97,7 @@ const MonitorMap: FC<IProps> = ({
 }) => {
   const config = useContext(ConfigContext);
   const mapRef = useRef(null);
-  const [vehicleMarkers, setVehicleMarkers] = useState([]);
+  const vehicleMarkersRef = useRef([]);
   const EXPIRE_TIME_SEC = config.rtVehicleOffsetSeconds; // HSL Uses different broker and we need to handle HSL messages differently
   const icons = mapSettings.stops?.map(stop => {
     const color =
@@ -168,9 +168,10 @@ const MonitorMap: FC<IProps> = ({
     //    }
     return () => {
       // Remove all vehicle markers from the map
-      vehicleMarkers.forEach(marker => {
+      vehicleMarkersRef.current.forEach(marker => {
         marker.marker.remove();
       });
+      vehicleMarkersRef.current = [];
 
       if (mapRef.current && mapRef.current !== undefined) {
         // Remove all layers from the map
@@ -186,7 +187,7 @@ const MonitorMap: FC<IProps> = ({
   }, []);
 
   useEffect(() => {
-    const markersOnMap = vehicleMarkers ? vehicleMarkers : [];
+    const markersOnMap = vehicleMarkersRef.current;
     const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
     const now = DateTime.now().toSeconds();
     const markerState = vehicleMarkerState;
@@ -266,7 +267,8 @@ const MonitorMap: FC<IProps> = ({
     // Handle vehicle removal
     const currentSeconds = DateTime.now().toSeconds();
     const markersToRemove = [];
-    markersOnMap.filter(m => {
+
+    const remainingMarkers = markersOnMap.filter(m => {
       if (
         markerState.get(m.id)?.expire <= currentSeconds ||
         currentSeconds - m.lastUpdatedAt >= EXPIRE_TIME_SEC // Remove vehicles that have not been updated for a while (likely reached the end of the line)
@@ -277,6 +279,7 @@ const MonitorMap: FC<IProps> = ({
       }
       return true;
     });
+
     if (markersToRemove.length > 0) {
       for (let index = 0; index < markersToRemove.length; index++) {
         const marker = markersToRemove[index];
@@ -287,7 +290,7 @@ const MonitorMap: FC<IProps> = ({
     if (markerState) {
       setVehicleMarkerState(markerState);
     }
-    setVehicleMarkers(markersOnMap);
+    vehicleMarkersRef.current = remainingMarkers;
   }, [messages, mapRef.current]);
 
   useEffect(() => {

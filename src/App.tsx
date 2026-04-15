@@ -1,5 +1,5 @@
 /* eslint-disable no-empty-pattern */
-import React, { FC, useEffect, useState, useContext } from 'react';
+import React, { FC, useEffect, useState, useContext, useRef } from 'react';
 import { Route, RouteComponentProps, Switch } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
@@ -124,7 +124,7 @@ const App: FC<IConfigurationProps> = props => {
     '--primary-color': config.colors.primary,
   };
   useEffect(() => {
-    listenForLogoutAllTabs(setUser);
+    const unlistenLogout = listenForLogoutAllTabs(setUser);
 
     for (const i in style) {
       document.body.style.setProperty(i, style[i]);
@@ -151,31 +151,36 @@ const App: FC<IConfigurationProps> = props => {
       setUser({ notLogged: true });
       setLoading(false);
     }
+    return unlistenLogout;
   }, []);
+
+  const clientRef = useRef<ApolloClient<object> | null>(null);
+  if (clientRef.current === null) {
+    clientRef.current = new ApolloClient({
+      link: ApolloLink.from([
+        new MultiAPILink({
+          endpoints: {
+            default: '/api/graphql',
+            rail: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
+          },
+          httpSuffix: '',
+          createHttpLink: () => createHttpLink(),
+          getContext: endpoint => {
+            if (endpoint === 'default') {
+              return { headers: { 'graphql-endpoint': config.uri } };
+            }
+            return {};
+          },
+        }),
+      ]),
+      cache: new InMemoryCache(),
+    });
+  }
+  const client = clientRef.current;
 
   if (loading) {
     return <Loading white />;
   }
-
-  const client = new ApolloClient({
-    link: ApolloLink.from([
-      new MultiAPILink({
-        endpoints: {
-          default: '/api/graphql',
-          rail: 'https://rata.digitraffic.fi/api/v2/graphql/graphql',
-        },
-        httpSuffix: '',
-        createHttpLink: () => createHttpLink(),
-        getContext: endpoint => {
-          if (endpoint === 'default') {
-            return { headers: { 'graphql-endpoint': config.uri } };
-          }
-          return {};
-        },
-      }),
-    ]),
-    cache: new InMemoryCache(),
-  });
 
   const favicon = config.name.concat('.png');
   const faviconLink = <link rel="shortcut icon" href={favicon} />;

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect, useCallback } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
 import { ISides, ITitle, ICard } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
@@ -44,6 +44,7 @@ interface IProps {
 
 const WithDatabaseConnection: FC<IProps> = ({ location }) => {
   const [queryError, setQueryError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
   const [monitorState, setMonitorState] = useMergeState({
     loading: true,
     view: undefined,
@@ -51,8 +52,13 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
     stops: undefined,
   });
 
-  const errorHandler = error => {
-    setQueryError(error);
+  const errorHandler = (hasError: boolean) => {
+    setQueryError(hasError);
+    if (!hasError) {
+      // Recovery signal from QueryError — trigger a fresh fetch
+      setMonitorState({ loading: true });
+      setRetryCount(c => c + 1);
+    }
   };
 
   useEffect(() => {
@@ -83,10 +89,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
               stations: getTrainStationData(r, 'STATION'),
               stops: getTrainStationData(r, 'STOP'),
             });
-
-            if (queryError) {
-              setQueryError(false);
-            }
+            setQueryError(false);
           })
           .catch(() => {
             setQueryError(true);
@@ -96,7 +99,7 @@ const WithDatabaseConnection: FC<IProps> = ({ location }) => {
         setQueryError(true);
       }
     }
-  }, [queryError]);
+  }, [retryCount]); // retryCount incremented by errorHandler when QueryError signals recovery
 
   const { loading, view, stops, stations } = monitorState;
   const monitor = !loading ? view : location?.state?.view.cards;

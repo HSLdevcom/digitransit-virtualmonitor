@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useContext,
   useRef,
-  useCallback,
+  useMemo,
 } from 'react';
 import { useQuery } from '@apollo/client';
 import {
@@ -97,12 +97,9 @@ const CarouselDataContainer: FC<IProps> = ({
   });
   const [forceUpdate, setforceUpdate] = useState(false);
 
-  const handleTopicStateChange = useCallback(
-    data => {
-      setTopicState(data);
-    },
-    [setTopicState],
-  );
+  const handleTopicStateChange = data => {
+    setTopicState(data);
+  };
 
   useEffect(() => {
     const stops = stopsState?.data?.stops;
@@ -121,9 +118,9 @@ const CarouselDataContainer: FC<IProps> = ({
         initTime,
       );
       setStopDepartures(newDepartureArray);
-      setAlerts(prevAlerts =>
+      setAlerts(
         uniqBy(
-          filterEffectiveAlerts(prevAlerts.concat(a)),
+          filterEffectiveAlerts(a),
           alert => alert.stop?.gtfsId + ':' + alert.alertHeaderText,
         ),
       );
@@ -159,11 +156,8 @@ const CarouselDataContainer: FC<IProps> = ({
         initTime,
       );
       setStationDepartures(newDepartureArray);
-      setAlerts(prevAlerts =>
-        uniqBy(
-          filterEffectiveAlerts(prevAlerts.concat(a)),
-          alert => alert.alertHeaderText,
-        ),
+      setAlerts(
+        uniqBy(filterEffectiveAlerts(a), alert => alert.alertHeaderText),
       );
       setStationsFetched(true);
 
@@ -187,17 +181,27 @@ const CarouselDataContainer: FC<IProps> = ({
     return () => clearInterval(intervalId);
   }, []);
 
-  const topics =
-    topicState.topics.length > 0
-      ? topicState.topics
-      : getMqttTopics(
-          views,
-          mapSettings,
-          stationDepartures,
-          stopDepartures,
-          trainsWithTrack,
-          config.rtVehicleOffsetSeconds,
-        );
+  const topics = useMemo(
+    () =>
+      topicState.topics.length > 0
+        ? topicState.topics
+        : getMqttTopics(
+            views,
+            mapSettings,
+            stationDepartures,
+            stopDepartures,
+            trainsWithTrack,
+            config.rtVehicleOffsetSeconds,
+          ),
+    [
+      topicState.topics,
+      mapSettings,
+      stationDepartures,
+      stopDepartures,
+      trainsWithTrack,
+      config.rtVehicleOffsetSeconds,
+    ],
+  );
 
   if (topics.length > 0 && !topicsFound) {
     setTopicsFound(true);
@@ -210,6 +214,8 @@ const CarouselDataContainer: FC<IProps> = ({
 
   const clientRef = useRef(null);
   const topicRef = useRef(null);
+  const cancelRef = useRef(false);
+  const batchIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [vehicleMarkerState, setVehicleMarkerState] = useState(new Map());
 
   const mqttStateHandler = data => {
@@ -233,13 +239,32 @@ const CarouselDataContainer: FC<IProps> = ({
         changeTopics(settings, topicRef);
       }
     }
-  }, [topics, state.client, topicRef.current?.length, clientRef]);
+  }, [topics, state.client, topicsFound]);
 
   useEffect(() => {
+    cancelRef.current = false;
     if ((topics && topics.length) || (!state.client && topics)) {
-      startMqtt(topics, mqttStateHandler, clientRef, topicRef);
+      const result = startMqtt(
+        topics,
+        mqttStateHandler,
+        clientRef,
+        topicRef,
+        cancelRef,
+      );
+      if (result) {
+        result.then(id => {
+          if (id !== null && id !== undefined) {
+            batchIntervalRef.current = id;
+          }
+        });
+      }
     }
     return () => {
+      cancelRef.current = true;
+      if (batchIntervalRef.current !== null) {
+        clearInterval(batchIntervalRef.current);
+        batchIntervalRef.current = null;
+      }
       stopMqtt(clientRef.current, topicRef.current);
     };
   }, [topicsFound]); // mqtt won't really start without topics

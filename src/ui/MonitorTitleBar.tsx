@@ -42,9 +42,10 @@ const MonitorTitlebar: FC<IProps> = ({
   const [weatherData, setWeatherData]: any = useState({});
   // update weather data in 15 minutes interval
 
-  const fetchWeather = () => {
+  const fetchWeather = (mountedRef: { current: boolean }) => {
     if (showWeather) {
       getWeatherData(DateTime.now(), lat, lon).then(res => {
+        if (!mountedRef.current) return;
         let weatherData;
         if (Array.isArray(res) && res.length === 3) {
           weatherData = {
@@ -66,12 +67,16 @@ const MonitorTitlebar: FC<IProps> = ({
     }
   };
   useEffect(() => {
-    fetchWeather();
+    const mountedRef = { current: true };
+    fetchWeather(mountedRef);
     const intervalId = setInterval(() => {
-      fetchWeather();
+      fetchWeather(mountedRef);
       setWeatherFetched(false);
     }, 1000 * 60 * 15); // in milliseconds
-    return () => clearInterval(intervalId);
+    return () => {
+      mountedRef.current = false;
+      clearInterval(intervalId);
+    };
   }, []);
 
   if (weatherData && weatherFetched) {

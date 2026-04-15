@@ -69,7 +69,7 @@ function shouldShowVehicle(message, direction, tripStart, pattern, headsign) {
 }
 
 function getVehicle(departures, id) {
-  const veh = departures.find(d => d.trip.route.gtfsId === id);
+  const veh = departures?.find(d => d.trip.route.gtfsId === id);
   if (veh) {
     const vehicleProps = {
       direction: veh.trip.directionId,
@@ -99,27 +99,9 @@ const MonitorMap: FC<IProps> = ({
   const mapRef = useRef(null);
   const vehicleMarkersRef = useRef([]);
   const EXPIRE_TIME_SEC = config.rtVehicleOffsetSeconds; // HSL Uses different broker and we need to handle HSL messages differently
-  const icons = mapSettings.stops?.map(stop => {
-    const color =
-      config.modeIcons.colors[
-        `${stop.mode
-          ?.toLowerCase()
-          .replace('stop', 'mode')
-          .replace('station', 'mode')}`
-      ];
-    const icon = L.divIcon({
-      className: 'stopIcon',
-      html: ReactDOMServer.renderToString(
-        <Icon img={stop.mode} color={color} width={30} height={30} />,
-      ),
-      iconSize: [30, 30],
-      iconAnchor: [15, 30],
-    });
-
-    return { icon: icon, coords: stop.coords };
-  });
 
   useEffect(() => {
+    let mounted = true;
     const center = mapSettings?.center
       ? mapSettings.center
       : mapSettings.bounds?.[0];
@@ -131,13 +113,52 @@ const MonitorMap: FC<IProps> = ({
 
     const map = mapRef.current;
     map.setView(center, zoom);
+
+    const mapContainer = document.getElementById('map');
+    const resizeObserver = new ResizeObserver(() => {
+      if (mapRef.current) {
+        mapRef.current.invalidateSize();
+        if (mapSettings.bounds) {
+          mapRef.current.fitBounds(mapSettings.bounds);
+        }
+      }
+    });
+    if (mapContainer) {
+      resizeObserver.observe(mapContainer);
+    }
     monitorAPI.getMapSettings(lang).then((r: string) => {
+      if (!mounted) return;
+      const icons = mapSettings.stops?.map(stop => {
+        const color =
+          config.modeIcons.colors[
+            `${stop.mode
+              ?.toLowerCase()
+              .replace('stop', 'mode')
+              .replace('station', 'mode')}`
+          ];
+        const icon = L.divIcon({
+          className: 'stopIcon',
+          html: ReactDOMServer.renderToString(
+            <Icon img={stop.mode} color={color} width={30} height={30} />,
+          ),
+          iconSize: [30, 30],
+          iconAnchor: [15, 30],
+        });
+        return { icon: icon, coords: stop.coords };
+      });
       L.tileLayer(r, {
         attribution:
           'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
         maxZoom: 18,
       }).addTo(map);
+      map.invalidateSize();
       map.fitBounds(mapSettings.bounds);
+      requestAnimationFrame(() => {
+        if (!mounted || !mapRef.current) return;
+        resizeObserver.disconnect();
+        map.invalidateSize();
+        map.fitBounds(mapSettings.bounds);
+      });
       icons.forEach(icon =>
         L.marker(icon.coords, { icon: icon.icon }).addTo(map),
       );
@@ -167,6 +188,8 @@ const MonitorMap: FC<IProps> = ({
     });
     //    }
     return () => {
+      mounted = false;
+      resizeObserver.disconnect();
       // Remove all vehicle markers from the map
       vehicleMarkersRef.current.forEach(marker => {
         marker.marker.remove();
@@ -205,10 +228,10 @@ const MonitorMap: FC<IProps> = ({
         route.split(':')[0] === 'HSL'
           ? shouldShowVehicle(
               m,
-              vehicle.direction,
-              vehicle.tripStart,
-              vehicle.pattern,
-              vehicle.headsign,
+              vehicle?.direction,
+              vehicle?.tripStart,
+              vehicle?.pattern,
+              vehicle?.headsign,
             )
           : true;
       if (!!mapRef.current && showVehicle && !existingMarker) {
@@ -252,16 +275,6 @@ const MonitorMap: FC<IProps> = ({
           markerState.set(markerToRemove.id, markerToRemove);
         }
       }
-
-      if (existingMarker && showVehicle) {
-        updateVehiclePosition(
-          existingMarker,
-          getVehicleIcon(m),
-          lat,
-          long,
-          DateTime.now().toSeconds(),
-        );
-      }
     });
 
     // Handle vehicle removal
@@ -291,7 +304,7 @@ const MonitorMap: FC<IProps> = ({
       setVehicleMarkerState(markerState);
     }
     vehicleMarkersRef.current = remainingMarkers;
-  }, [messages, mapRef.current]);
+  }, [messages]);
 
   useEffect(() => {
     if (topicRef?.current && clientRef?.current && newTopics) {

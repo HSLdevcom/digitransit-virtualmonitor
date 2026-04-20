@@ -146,8 +146,11 @@ export const createDepartureArray = (
 ) => {
   const defaultSettings = {
     hiddenRoutes: [],
-    timeshift: 0,
+    timeShift: 0,
     renamedDestinations: [],
+    showVia: true,
+    showStopNumber: false,
+    showEndOfLine: false,
   };
   const departures = [];
   const alerts = [];

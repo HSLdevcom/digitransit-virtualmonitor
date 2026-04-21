@@ -1,0 +1,71 @@
+diff --git a/node_modules/downshift/dist/downshift.cjs.js b/node_modules/downshift/dist/downshift.cjs.js
+index d8f532e..ed79cf4 100644
+--- a/node_modules/downshift/dist/downshift.cjs.js
++++ b/node_modules/downshift/dist/downshift.cjs.js
+@@ -8,7 +8,8 @@ var _inheritsLoose = require('@babel/runtime/helpers/inheritsLoose');
+ var PropTypes = require('prop-types');
+ var React = require('react');
+ var reactIs = require('react-is');
+-var computeScrollIntoView = require('compute-scroll-into-view');
++var _csiv = require('compute-scroll-into-view');
++var computeScrollIntoView = _csiv;
+ var tslib = require('tslib');
+ 
+ var idCounter = 0;
+@@ -35,7 +36,20 @@ function scrollIntoView(node, menuNode) {
+   if (!node) {
+     return;
+   }
+-  var actions = computeScrollIntoView.compute(node, {
++  // Defensively resolve the compute function across any webpack ESM/CJS interop shape:
++  // v3 named export: { compute: fn }, v2 default function export: fn,
++  // webpack harmony namespace: { default: { compute: fn } } or { default: fn }
++  var computeFn =
++    (computeScrollIntoView && typeof computeScrollIntoView.compute === 'function' && computeScrollIntoView.compute) ||
++    (computeScrollIntoView && computeScrollIntoView.default && typeof computeScrollIntoView.default.compute === 'function' && computeScrollIntoView.default.compute) ||
++    (computeScrollIntoView && typeof computeScrollIntoView.default === 'function' && computeScrollIntoView.default) ||
++    (typeof computeScrollIntoView === 'function' && computeScrollIntoView);
++  if (typeof computeFn !== 'function') {
++    // Native fallback – keeps the UI functional even if interop fails
++    node.scrollIntoView && node.scrollIntoView({ block: 'nearest', inline: 'nearest' });
++    return;
++  }
++  var actions = computeFn(node, {
+     boundary: menuNode,
+     block: 'nearest',
+     scrollMode: 'if-needed'
+diff --git a/node_modules/downshift/dist/downshift.esm.js b/node_modules/downshift/dist/downshift.esm.js
+index 22d454e..ffb397d 100644
+--- a/node_modules/downshift/dist/downshift.esm.js
++++ b/node_modules/downshift/dist/downshift.esm.js
+@@ -4,9 +4,16 @@ import _inheritsLoose from '@babel/runtime/helpers/esm/inheritsLoose';
+ import PropTypes from 'prop-types';
+ import React, { cloneElement, Component, useRef, useEffect, useLayoutEffect, useCallback, useReducer, useMemo } from 'react';
+ import { isForwardRef } from 'react-is';
+-import { compute } from 'compute-scroll-into-view';
++import * as _csivm from 'compute-scroll-into-view';
+ import { __assign } from 'tslib';
+ 
++// Defensively resolve compute across any webpack ESM/CJS interop shape
++var _compute =
++  (typeof _csivm.compute === 'function' && _csivm.compute) ||
++  (_csivm.default && typeof _csivm.default.compute === 'function' && _csivm.default.compute) ||
++  (typeof _csivm.default === 'function' && _csivm.default) ||
++  (typeof _csivm === 'function' && _csivm);
++
+ var idCounter = 0;
+ 
+ /**
+@@ -31,7 +38,11 @@ function scrollIntoView(node, menuNode) {
+   if (!node) {
+     return;
+   }
+-  var actions = compute(node, {
++  if (typeof _compute !== 'function') {
++    node.scrollIntoView && node.scrollIntoView({ block: 'nearest', inline: 'nearest' });
++    return;
++  }
++  var actions = _compute(node, {
+     boundary: menuNode,
+     block: 'nearest',
+     scrollMode: 'if-needed'

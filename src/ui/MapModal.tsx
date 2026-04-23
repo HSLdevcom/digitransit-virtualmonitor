@@ -16,6 +16,7 @@ interface Props {
   mapSettings?: IMapSettings;
   updateMapSettings: (settings: IMapSettings) => void;
   lang?: string;
+  ariaHideApp?: boolean; // For unit testing
 }
 const MapModal: FC<Props> = ({
   isOpen,
@@ -24,6 +25,7 @@ const MapModal: FC<Props> = ({
   mapSettings,
   updateMapSettings,
   lang,
+  ariaHideApp = true,
 }) => {
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
@@ -48,6 +50,7 @@ const MapModal: FC<Props> = ({
       isOpen={isOpen}
       onRequestClose={() => onClose(false)}
       portalClassName={cx('preview', !isLandscape ? 'portrait' : '')}
+      ariaHideApp={ariaHideApp}
     >
       <div className="mapmodal">
         <div className="map-modal-header">

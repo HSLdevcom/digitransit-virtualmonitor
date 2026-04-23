@@ -21,6 +21,7 @@ interface Props {
   stopSettings?: any;
   combinedPatterns: string[];
   languages: Array<string>;
+  ariaHideApp?: boolean; // For unit testing
 }
 export const defaultSettings = {
   hiddenRoutes: [],
@@ -218,6 +219,7 @@ const StopRoutesModal: FC<Props> = props => {
       isOpen={props.showModal}
       onRequestClose={handleClose}
       portalClassName="modal-stop-routes"
+      ariaHideApp={props.ariaHideApp ?? true}
     >
       <div className="modal">
         <section id="close">
@@ -325,7 +327,9 @@ const StopRoutesModal: FC<Props> = props => {
             <div className={cx('row', 'small')}>
               <div className="empty-space"></div>
               {props.languages.map(lang => (
-                <div className={cx('lang', lang)}>{lang.toUpperCase()}</div>
+                <div key={lang} className={cx('lang', lang)}>
+                  {lang.toUpperCase()}
+                </div>
               ))}
             </div>
           )}

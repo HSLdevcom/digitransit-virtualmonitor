@@ -3,9 +3,9 @@ import settings from './realTimeUtils';
 import { DateTime } from 'luxon';
 import { sortAndFilter } from '../util/monitorUtils';
 
-export const startMqtt = (routes, setState, setClient, topicRef) => {
+export const startMqtt = (routes, setState, setClient, topicRef, cancelRef) => {
   if (routes?.length === 0) {
-    return;
+    return Promise.resolve(null);
   }
   const messageQueue = [];
   const batchDelay = 3000;
@@ -36,6 +36,10 @@ export const startMqtt = (routes, setState, setClient, topicRef) => {
 
   topicRef.current = topics;
   return import('./gtfsrt').then(bindings => {
+    if (cancelRef.current) {
+      client.end(true);
+      return null;
+    }
     const feedReader = bindings.FeedMessage.read;
     client.on('connect', () => {
       client.subscribe(topics);
@@ -62,6 +66,7 @@ export const startMqtt = (routes, setState, setClient, topicRef) => {
     client.on('close', () => {
       clearInterval(intervalId);
     });
+    return intervalId;
   });
 };
 

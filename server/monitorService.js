@@ -1,7 +1,5 @@
-import cosmosClient from '@azure/cosmos';
+import { CosmosClient } from '@azure/cosmos';
 import config from './config.js';
-
-const { CosmosClient } = cosmosClient;
 
 const { endpoint, key, databaseId, containerId } = config;
 const client = new CosmosClient({ endpoint, key });

@@ -173,12 +173,16 @@ const CarouselContainer: FC<IProps> = ({
 };
 
 export const useIsOverflow = (ref, callback) => {
+  const callbackRef = useRef(callback);
+  useEffect(() => {
+    callbackRef.current = callback;
+  });
   useEffect(() => {
     const { current } = ref;
     if (current) {
-      callback(current.scrollHeight > current.clientHeight);
+      callbackRef.current(current.scrollHeight > current.clientHeight);
     }
-  }, [callback, ref]);
+  }, [ref]);
 };
 
 export default CarouselContainer;

@@ -51,15 +51,11 @@ function updateVehiclePosition(vehicle, icon, lat, long, timeStamp) {
 }
 
 function shouldShowVehicle(message, vehicle) {
-  if (!vehicle) {
-    return true;
-  }
-  const { direction, tripStart, pattern, headsign } = vehicle;
+  const { direction, tripStart, pattern, headsign } = vehicle ?? {};
   return (
     !Number.isNaN(parseFloat(message.lat)) &&
     !Number.isNaN(parseFloat(message.long)) &&
-    (pattern === undefined ||
-      pattern.substr(0, message.route.length) === message.route) &&
+    (pattern === undefined || pattern.startsWith(message.route)) &&
     (headsign === undefined ||
       message.headsign === undefined ||
       headsign === message.headsign) &&

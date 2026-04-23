@@ -38,10 +38,14 @@ const monitorAPI = {
     return fetchData('status', options, signal);
   },
   getUser() {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
     const options = {
       credentials: 'include',
     };
-    return fetchData('user', options);
+    return fetchData('user', options, controller.signal).finally(() =>
+      clearTimeout(timeoutId),
+    );
   },
   getFavourites() {
     return fetchData('user/favourites', {});

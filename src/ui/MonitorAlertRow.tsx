@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import cx from 'classnames';
 import {
   getServiceAlertDescription,
@@ -33,6 +33,7 @@ const MonitorAlertRow: FC<IProps> = ({
   const [animationWidth, setAnimationWidth] = useState(0);
   const [speed, setSpeed] = useState(0);
   const [update, setUpdate] = useState(false);
+  const resizeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const updateAnimation = () => {
     const width = getAnimationWidth(alertOrientation);
@@ -55,12 +56,18 @@ const MonitorAlertRow: FC<IProps> = ({
     updateAnimation();
     const handleResize = () => {
       updateAnimation();
-      const resizeTo = setTimeout(() => setUpdate(false), 100);
-      return () => clearTimeout(resizeTo);
+      if (resizeTimeoutRef.current !== null) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
+      resizeTimeoutRef.current = setTimeout(() => setUpdate(false), 100);
     };
     window.addEventListener('resize', handleResize);
     return () => {
       window.removeEventListener('resize', handleResize);
+      if (resizeTimeoutRef.current !== null) {
+        clearTimeout(resizeTimeoutRef.current);
+        resizeTimeoutRef.current = null;
+      }
     };
   }, []);
 

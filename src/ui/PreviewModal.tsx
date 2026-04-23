@@ -20,6 +20,7 @@ interface Props {
   stations: Array<ICard>;
   stops: Array<ICard>;
   mapSettings?: IMapSettings;
+  ariaHideApp?: boolean; // For unit testing
 }
 const PreviewModal: FC<Props> = ({
   view,
@@ -30,6 +31,7 @@ const PreviewModal: FC<Props> = ({
   stations,
   stops,
   mapSettings,
+  ariaHideApp = true,
 }) => {
   const [t] = useTranslation();
   const monitor = {
@@ -45,6 +47,7 @@ const PreviewModal: FC<Props> = ({
         isOpen={isOpen}
         onRequestClose={() => onClose(false)}
         portalClassName={cx('preview', !isLandscape ? 'portrait' : '')}
+        ariaHideApp={ariaHideApp}
       >
         <div className="title-and-close">
           <div className="title">{t('preview')}</div>

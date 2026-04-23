@@ -15,10 +15,10 @@ export const logout = setUser => {
 };
 
 export const listenForLogoutAllTabs = setUser => {
-  if (logoutChannel) {
-    logoutChannel.onmessage = () => {
-      logout(setUser);
-      logoutChannel.close();
-    };
-  }
+  if (!logoutChannel) return undefined;
+  const handler = () => {
+    logout(setUser);
+  };
+  logoutChannel.addEventListener('message', handler);
+  return () => logoutChannel.removeEventListener('message', handler);
 };

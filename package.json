@@ -48,7 +48,8 @@
     "sass": "^1.49.9",
     "suncalc": "1.8.0",
     "url": "^0.11.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "react-scripts": "5.0.1"
   },
   "scripts": {
     "start-prod": "cd server && npm start",
@@ -92,7 +93,6 @@
     "husky": "^7.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.0",
-    "react-scripts": "5.0.1",
     "stylelint": "^16.0.2",
     "stylelint-config-standard-scss": "12.0.0",
     "typescript": "^4.9.5"

@@ -50,7 +50,11 @@ function updateVehiclePosition(vehicle, icon, lat, long, timeStamp) {
   vehicle.lastUpdatedAt = timeStamp;
 }
 
-function shouldShowVehicle(message, direction, tripStart, pattern, headsign) {
+function shouldShowVehicle(message, vehicle) {
+  if (!vehicle) {
+    return true;
+  }
+  const { direction, tripStart, pattern, headsign } = vehicle;
   return (
     !Number.isNaN(parseFloat(message.lat)) &&
     !Number.isNaN(parseFloat(message.long)) &&
@@ -225,15 +229,7 @@ const MonitorMap: FC<IProps> = ({
       const markerToRemove = markerState.get(id) || {};
       let marker;
       const showVehicle =
-        route.split(':')[0] === 'HSL'
-          ? shouldShowVehicle(
-              m,
-              vehicle?.direction,
-              vehicle?.tripStart,
-              vehicle?.pattern,
-              vehicle?.headsign,
-            )
-          : true;
+        route.split(':')[0] === 'HSL' ? shouldShowVehicle(m, vehicle) : true;
       if (!!mapRef.current && showVehicle && !existingMarker) {
         marker = {
           id: id,

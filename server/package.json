@@ -9,7 +9,7 @@
     "lint": "eslint *.js --fix --quiet"
   },
   "dependencies": {
-    "@azure/cosmos": "3.17.3",
+    "@azure/cosmos": "4.9.3",
     "agentkeepalive": "^4.3.0",
     "axios": "^1.7.4",
     "body-parser": "^1.17.2",

@@ -25,6 +25,9 @@ export const startMqtt = (routes, setState, setClient, topicRef, cancelRef) => {
   }
 
   const feed = routes[0]?.feedId;
+  if (!feed || !settings[feed]) {
+    return Promise.resolve(null);
+  }
   const client = mqtt.connect(settings[feed].mqtt);
   setState({
     client: client,

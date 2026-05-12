@@ -50,6 +50,11 @@
   align-items: center;
 
   label {
-    margin-right: 25px;
+    display: flex;
+    align-items: center;
+
+    .hide-timetable {
+      margin-left: 25px;
+    }
   }
 }

@@ -39,6 +39,13 @@ const StopListTitleInput: FC<IProps> = ({
         id={`stop-list-title-input-${side}-${lang}`}
         value={value[lang]}
         inputProps={{ placeholder: t(`side${side}`), maxLength: 13 }}
+        ariaLabelEdit={
+          t('modify') +
+          ' ' +
+          t(`header-side-${side}`) +
+          ' - ' +
+          lang.toUpperCase()
+        }
       />
     </div>
   );

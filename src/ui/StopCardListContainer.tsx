@@ -543,7 +543,7 @@ const StopCardListContainer: FC<IProps> = ({
 
   const ariaLabelForCreate = makeButtonsDisabled
     ? createAriaLabel('Create', buttonsRequirements, t)
-    : t('previewView');
+    : t('displayEditorStaticLink');
   const ariaLabelForPreview = makeButtonsDisabled
     ? createAriaLabel('Preview', buttonsRequirements, t)
     : t('previewView');

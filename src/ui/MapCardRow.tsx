@@ -91,7 +91,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
                   role="button"
                   aria-label={t('deleteView', { id: `${index + 1}` })}
                   onClick={() => onCardDelete(id)}
-                  onKeyPress={e =>
+                  onKeyDown={e =>
                     isKeyboardSelectionEvent(e, true) && onCardDelete(id)
                   }
                 >
@@ -113,7 +113,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
                         id: `${index + 1}`,
                       })}
                       onClick={() => onCardMove(index, index + 1)}
-                      onKeyPress={e =>
+                      onKeyDown={e =>
                         isKeyboardSelectionEvent(e, true) &&
                         onCardMove(index, index + 1)
                       }
@@ -134,7 +134,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
                         id: `${index + 1}`,
                       })}
                       onClick={() => onCardMove(index, index - 1)}
-                      onKeyPress={e =>
+                      onKeyDown={e =>
                         isKeyboardSelectionEvent(e, true) &&
                         onCardMove(index, index - 1)
                       }
@@ -156,7 +156,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
                           id: `${index + 1}`,
                         })}
                         onClick={() => onCardMove(index, index - 1)}
-                        onKeyPress={e =>
+                        onKeyDown={e =>
                           isKeyboardSelectionEvent(e, true) &&
                           onCardMove(index, index - 1)
                         }
@@ -178,7 +178,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
                           id: `${index + 1}`,
                         })}
                         onClick={() => onCardMove(index, index + 1)}
-                        onKeyPress={e =>
+                        onKeyDown={e =>
                           isKeyboardSelectionEvent(e, true) &&
                           onCardMove(index, index + 1)
                         }
@@ -208,7 +208,9 @@ const mapCardRow: FunctionComponent<IProps> = ({
             <span
               className={cx('modallink', engLan ? 'eng' : '')}
               role="button"
+              tabIndex={0}
               onClick={() => openModal()}
+              onKeyDown={e => isKeyboardSelectionEvent(e, true) && openModal()}
             >
               {' '}
               {t('edit-map')}
@@ -229,8 +231,8 @@ const mapCardRow: FunctionComponent<IProps> = ({
                 toggled={mapSettings.hideTimeTable}
                 onToggle={handleToggle}
               />
+              <span className="hide-timetable">{t('hide-timetable')}</span>
             </label>
-            <span className="hide-timetable">{t('hide-timetable')}</span>
           </div>
         </div>
       </li>

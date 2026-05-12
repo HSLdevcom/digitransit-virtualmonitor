@@ -302,7 +302,7 @@ const StopCardRow: FC<IProps> = ({
                 role="button"
                 aria-label={t('deleteView', { id: `${index + 1}` })}
                 onClick={() => onCardDelete(id)}
-                onKeyPress={e =>
+                onKeyDown={e =>
                   isKeyboardSelectionEvent(e, true) && onCardDelete(id)
                 }
               >
@@ -324,7 +324,7 @@ const StopCardRow: FC<IProps> = ({
                       id: `${index + 1}`,
                     })}
                     onClick={() => onCardMove(index, index + 1)}
-                    onKeyPress={e =>
+                    onKeyDown={e =>
                       isKeyboardSelectionEvent(e, true) &&
                       onCardMove(index, index + 1)
                     }
@@ -345,7 +345,7 @@ const StopCardRow: FC<IProps> = ({
                       id: `${index + 1}`,
                     })}
                     onClick={() => onCardMove(index, index - 1)}
-                    onKeyPress={e =>
+                    onKeyDown={e =>
                       isKeyboardSelectionEvent(e, true) &&
                       onCardMove(index, index - 1)
                     }
@@ -367,7 +367,7 @@ const StopCardRow: FC<IProps> = ({
                         id: `${index + 1}`,
                       })}
                       onClick={() => onCardMove(index, index - 1)}
-                      onKeyPress={e =>
+                      onKeyDown={e =>
                         isKeyboardSelectionEvent(e, true) &&
                         onCardMove(index, index - 1)
                       }
@@ -389,7 +389,7 @@ const StopCardRow: FC<IProps> = ({
                         id: `${index + 1}`,
                       })}
                       onClick={() => onCardMove(index, index + 1)}
-                      onKeyPress={e =>
+                      onKeyDown={e =>
                         isKeyboardSelectionEvent(e, true) &&
                         onCardMove(index, index + 1)
                       }
@@ -408,14 +408,21 @@ const StopCardRow: FC<IProps> = ({
             )}
           </div>
         </div>
-        <div className="headers">
+        <div className="headers" aria-hidden="true">
           <div className="stop">{t('prepareStop')}</div>
           <div className="layout">{t('layout')}</div>
           <div className="duration">{t('duration')}</div>
         </div>
         <div className="search-stop-with-layout-and-time">
-          <div className="search-stop">
-            <div className="add-stop-alert" aria-hidden="true">
+          <div
+            className="search-stop"
+            onKeyDownCapture={e => {
+              if (e.key === 'Escape') {
+                (document.activeElement as HTMLElement)?.blur();
+              }
+            }}
+          >
+            <div className="add-stop-alert" role="alert">
               {noStops ? t('add-at-least-one-stop') : ''}
             </div>
             <DTAutosuggest
@@ -423,7 +430,9 @@ const StopCardRow: FC<IProps> = ({
               searchContext={searchContext}
               icon="search"
               id={'search'}
+              ariaLabel={t('autosuggestPlaceHolder')}
               placeholder={t('autosuggestPlaceHolder')}
+              renderLabel
               value=""
               onSelect={onSelect}
               filterResults={filterSearchResults}

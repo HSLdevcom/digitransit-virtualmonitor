@@ -43,12 +43,12 @@ const UserMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
       className={classNames}
       overlayClassName={overlayClassNames}
       onRequestClose={() => onClose(null)}
+      contentLabel={t('userMenuOpen')}
     >
       <div className="container">
         <section id="close">
           <button
             className="close-button"
-            role="button"
             aria-label={t('userMenuClose')}
             onClick={onClose}
           >

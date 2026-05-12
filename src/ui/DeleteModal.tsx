@@ -36,6 +36,7 @@ const DeleteModal: FC<IProps> = ({
           <button
             disabled={loading}
             className="monitor-button blue"
+            aria-label={t('delete-display', { id: name })}
             onClick={onDeleteCallBack}
           >
             {loading ? <Loading small primary /> : <>{t('delete')}</>}

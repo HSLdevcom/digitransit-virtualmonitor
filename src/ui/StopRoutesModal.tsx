@@ -11,6 +11,7 @@ import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext } from '../contexts';
 import { getRenameDestinationId } from '../util/headsignUtils';
+import { SupportedLanguage } from '../i18n';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
@@ -220,12 +221,12 @@ const StopRoutesModal: FC<Props> = props => {
       onRequestClose={handleClose}
       portalClassName="modal-stop-routes"
       ariaHideApp={props.ariaHideApp ?? true}
+      aria={{ labelledby: 'stop-routes-modal-title', modal: true }}
     >
       <div className="modal">
         <section id="close">
           <button
             className="close-button"
-            role="button"
             aria-label={t('close')}
             onClick={handleClose}
           >
@@ -239,11 +240,13 @@ const StopRoutesModal: FC<Props> = props => {
         </section>
         <section className="section-margin-large">
           <div className="title-container">
-            <h2 className="title">{text}</h2>
+            <h2 id="stop-routes-modal-title" className="title">
+              {text}
+            </h2>
           </div>
         </section>
-        <section className="section-margin-large">
-          <h2 id="show-settings-group-label">{t('show')}</h2>
+        <fieldset className="section-margin-large">
+          <legend>{t('show')}</legend>
           {showSettings.map(setting => {
             return (
               <React.Fragment key={`setting-${setting}`}>
@@ -263,7 +266,7 @@ const StopRoutesModal: FC<Props> = props => {
               </React.Fragment>
             );
           })}
-        </section>
+        </fieldset>
         <section className="section-margin-small">
           <div className="divider" />
         </section>
@@ -277,6 +280,7 @@ const StopRoutesModal: FC<Props> = props => {
               options={durations}
               placeholder={settings.timeShift.toString().concat(' min')}
               handleChange={handleTimeShift}
+              aria-label={t('timeShift')}
             />
           </div>
         </section>
@@ -293,20 +297,16 @@ const StopRoutesModal: FC<Props> = props => {
             </h2>
           </div>
           <div className="no-renaming">
-            <h2
-              role="button"
-              tabIndex={0}
+            <button
+              className="rename-destinations-button"
               onClick={() =>
                 showInputs
                   ? handleDeleteRenamings(null)
                   : handleShowInputs(null)
               }
-              onKeyPress={e =>
-                showInputs ? handleDeleteRenamings(e) : handleShowInputs(e)
-              }
             >
               {showInputs ? t('deleteRenamings') : t('renameDestinations')}
-            </h2>
+            </button>
           </div>
         </section>
         <section className="section-margin-large route-rows">
@@ -379,7 +379,7 @@ const StopRoutesModal: FC<Props> = props => {
                 <div className="renamedDestinations">
                   {props.languages.map(lang => (
                     <input
-                      tabIndex={showInputs ? 1 : -1}
+                      tabIndex={showInputs ? 0 : -1}
                       key={`${lang}-${renameId}`}
                       id={`${lang}-${renameId}`}
                       name={renameId}
@@ -392,6 +392,10 @@ const StopRoutesModal: FC<Props> = props => {
                       onChange={e => handleRenamedDestination(e, lang)}
                       placeholder={patternArray[3]}
                       readOnly={!showInputs}
+                      aria-label={t('renameDestinationFor', {
+                        line: patternArray[2],
+                        lang: t(`language-name-${lang as SupportedLanguage}`),
+                      })}
                     />
                   ))}
                 </div>

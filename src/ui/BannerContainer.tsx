@@ -7,10 +7,10 @@ import { ConfigContext } from '../contexts';
 const BannerContainer = () => {
   const config = useContext(ConfigContext);
   return (
-    <section className="navigation-container" aria-label="navigation">
+    <nav className="navigation-container" aria-label="navigation">
       {config.name === 'hsl' ? <BannerHSL /> : <Banner />}
       <Breadcrumbs />
-    </section>
+    </nav>
   );
 };
 

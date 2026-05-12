@@ -67,6 +67,7 @@ const UserViewTitleEditor: FC<IProps> = ({
           inputProps={{
             placeholder: t('staticMonitorTitle'),
             maxLength: 25,
+            'aria-label': t('staticMonitorTitle'),
           }}
         />
       </div>

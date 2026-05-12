@@ -41,9 +41,9 @@ const StopViewTitleEditor: FC<IProps> = ({
   const inputID = `stop-title-input${id}-${lang}`;
   return (
     <div className="stop-title">
-      <p className="description">
+      <label htmlFor={inputID} className="description">
         {isDoubleView ? t('layout') : titleDescription}
-      </p>
+      </label>
       <div className="stop-title-input-container">
         {!isDoubleView && (
           <InputWithEditIcon

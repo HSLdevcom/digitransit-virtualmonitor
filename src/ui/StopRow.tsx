@@ -131,10 +131,11 @@ const StopRow: FC<IProps> = ({
           tabIndex={0}
           role="button"
           aria-label={t('stopSettings', {
-            stop: `${stop.name} ${stop.code}`,
+            stop: stop.name,
+            code: stop.code ?? '',
           })}
           onClick={() => handleClick()}
-          onKeyPress={e =>
+          onKeyDown={e =>
             isKeyboardSelectionEvent(e, true) && handleClick(e, true)
           }
         >
@@ -145,9 +146,11 @@ const StopRow: FC<IProps> = ({
         className="stop-row-delete icon"
         tabIndex={0}
         role="button"
-        aria-label={t('deleteStop', { stop: `${stop.name} ${stop.code}` })}
+        aria-label={t('deleteStop', {
+          stop: stop.code ? `${stop.name} ${stop.code}` : stop.name,
+        })}
         onClick={() => onStopDelete(stop.cardId, side, stop.gtfsId)}
-        onKeyPress={e =>
+        onKeyDown={e =>
           isKeyboardSelectionEvent(e, true) &&
           onStopDelete(stop.cardId, side, stop.gtfsId)
         }
@@ -161,14 +164,14 @@ const StopRow: FC<IProps> = ({
           role="button"
           aria-label={t(
             side === 'left' ? 'moveStopToRightCol' : 'moveStopToLeftCol',
-            { stop: `${stop.name} ${stop.code}` },
+            { stop: stop.code ? `${stop.name} ${stop.code}` : stop.name },
           )}
           onClick={() =>
             moveBetweenColumns
               ? onStopMove(stop.cardId, side, stop.gtfsId)
               : null
           }
-          onKeyPress={e =>
+          onKeyDown={e =>
             moveBetweenColumns
               ? isKeyboardSelectionEvent(e, true) &&
                 onStopMove(stop.cardId, side, stop.gtfsId)
@@ -177,7 +180,7 @@ const StopRow: FC<IProps> = ({
         >
           <Icon
             img={side === 'left' ? 'move-both-down' : 'move-both-up'}
-            color={moveBetweenColumns ? config.colors.primary : '#AAAAAA'}
+            color={moveBetweenColumns ? config.colors.primary : '#767676'}
             width={30}
             height={40}
           />

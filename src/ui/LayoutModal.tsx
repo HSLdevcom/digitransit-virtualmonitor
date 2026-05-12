@@ -89,10 +89,10 @@ const LayoutModal: FC<Props> = ({
                         onClick={() => setSelected(option)}
                         id={`layoutBtn-${option.value}`}
                         key={`button_${option.value}`}
-                        role="button"
                         aria-label={`${t(
                           orientation as 'horizontal' | 'vertical',
                         )} ${t(l.label)} ${option.rows} ${t('rows')}`}
+                        aria-pressed={isEqual(option.value, selected.value)}
                       >
                         {option.label}
                       </button>

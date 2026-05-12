@@ -66,30 +66,27 @@ const LayoutAndTimeContainer: FC<IProps> = ({
   };
   return (
     <div className="layout-and-time-container">
-      <div
-        role="button"
-        onClick={() => {
-          if (!disableLayoutButton) {
-            setOpen(true);
-          }
-        }}
+      <button
+        className="layout-button"
+        name="layout"
+        aria-label={t('layout')}
+        disabled={disableLayoutButton}
+        onClick={() => setOpen(true)}
       >
-        <button
-          className="layout-button"
-          name="layout"
-          aria-label={t('layout')}
-          disabled={disableLayoutButton}
-        >
-          {layoutButton}
-        </button>
-      </div>
-      <div className="duration">
+        {layoutButton}
+      </button>
+      <div
+        className="duration"
+        role="group"
+        aria-label={t(durationEditable ? 'duration' : 'duration-disabled')}
+      >
         <Dropdown
           name="duration"
           options={durations}
           placeholder={!durationEditable ? '-' : placeHolder}
           handleChange={handleChange}
           isDisabled={!durationEditable}
+          aria-label={t(durationEditable ? 'duration' : 'duration-disabled')}
         />
       </div>
       <LayoutModal

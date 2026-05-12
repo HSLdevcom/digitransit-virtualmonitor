@@ -1,5 +1,5 @@
 import uniqueId from 'lodash/uniqueId';
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import cx from 'classnames';
 
 interface IProps {
@@ -11,9 +11,11 @@ interface IProps {
 }
 const Toggle: FC<IProps> = ({ toggled, title, onToggle, id, disabled }) => {
   const useId = id || uniqueId('input-');
-  if (disabled && toggled) {
-    onToggle(false);
-  }
+  useEffect(() => {
+    if (disabled && toggled) {
+      onToggle(false);
+    }
+  }, [disabled, toggled]);
   return (
     <div className="option-toggle-container" title={title}>
       <div className="toggle">

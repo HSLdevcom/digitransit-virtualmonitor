@@ -174,6 +174,7 @@ const UserMonitorCard: React.FC<IProps> = ({
               value={name}
               id={id}
               onChange={title => setTitle(title)}
+              ariaLabelEdit={t('edit-display') + (name ? ` "${name}"` : '')}
             />
           ) : (
             name

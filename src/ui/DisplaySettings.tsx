@@ -49,8 +49,7 @@ const DisplaySettings: FC<IProps> = ({
             })}
             onClick={() => handleOrientation('horizontal')}
             aria-label={t('displayDirection') + ' ' + t('horizontal')}
-            role="button"
-            disabled={orientation === 'horizontal'}
+            aria-pressed={orientation === 'horizontal'}
           >
             <Icon
               img={
@@ -68,8 +67,7 @@ const DisplaySettings: FC<IProps> = ({
             })}
             onClick={() => handleOrientation('vertical')}
             aria-label={t('displayDirection') + ' ' + t('vertical')}
-            role="button"
-            disabled={orientation === 'vertical'}
+            aria-pressed={orientation === 'vertical'}
           >
             <Icon
               img={
@@ -96,7 +94,7 @@ const DisplaySettings: FC<IProps> = ({
           </div>
         </div>
         {languages.length === 0 && (
-          <div className="language-alert" aria-hidden="true">
+          <div className="language-alert" role="alert">
             {t('chooseOne')}
           </div>
         )}
@@ -120,7 +118,10 @@ const DisplaySettings: FC<IProps> = ({
         </div>
       </section>
       {config.map.inUse && (
-        <section className="display-language-container">
+        <section
+          className="display-language-container"
+          aria-label={t('displayMap')}
+        >
           <div className="headers">
             <div
               className={cx('map-header ' + lang, {
@@ -141,8 +142,8 @@ const DisplaySettings: FC<IProps> = ({
                   onToggle={setShowMap}
                   disabled={disableToggle}
                 />
+                <div className="txt">{t('showMap')}</div>
               </label>
-              <div className="txt">{t('showMap')}</div>
             </div>
           )}
         </section>

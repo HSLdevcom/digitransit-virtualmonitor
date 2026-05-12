@@ -28,12 +28,12 @@ const LargeModal: FC<IProps> = ({
       onRequestClose={() => onRequestClose()}
       portalClassName={portalClassName}
       ariaHideApp={ariaHideApp}
+      aria={{ labelledby: 'large-modal-heading' }}
     >
       <div className="monitor-modal-container">
         <section id="close">
           <button
             className="close-button"
-            role="button"
             aria-label={t('close')}
             onClick={() => onRequestClose()}
           >
@@ -45,7 +45,9 @@ const LargeModal: FC<IProps> = ({
             />
           </button>
         </section>
-        <h2 className="monitor-modal-header">{t(header)}</h2>
+        <h2 id="large-modal-heading" className="monitor-modal-header">
+          {t(header)}
+        </h2>
         {rest.children}
       </div>
     </Modal>

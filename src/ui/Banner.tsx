@@ -44,7 +44,6 @@ const Banner = () => {
             {user.sub ? (
               <button
                 className="menu-button"
-                role="button"
                 aria-label={t('userMenuOpen')}
                 onClick={setUserOpen}
               >
@@ -85,7 +84,6 @@ const Banner = () => {
       <div className="menu-container">
         <button
           className="menu-button"
-          role="button"
           aria-label={t('menuOpen')}
           onClick={setBurgerOpen}
         >

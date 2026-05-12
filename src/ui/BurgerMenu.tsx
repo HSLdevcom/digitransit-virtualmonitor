@@ -38,6 +38,7 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
           aria-label={t('changeLanguage', {
             language: t(`language-name-${language}`),
           })}
+          aria-current={i18n.language === language ? true : undefined}
         >
           {language}
         </Link>,
@@ -91,12 +92,12 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
       className={classNames}
       overlayClassName={overlayClassNames}
       onRequestClose={() => onClose(null)}
+      contentLabel={t('menuOpen')}
     >
       <div className="container">
         <section id="close">
           <button
             className="close-button"
-            role="button"
             aria-label={t('menuClose')}
             onClick={onClose}
           >

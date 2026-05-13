@@ -52,7 +52,7 @@ const StopListContainer: FC<Props> = ({
   return (
     <div className="stop-list">
       <section
-        id={'left'}
+        id={`left-${card.id}`}
         aria-label={showStopTitles ? t('leftColumn') : undefined}
       >
         <div>
@@ -73,7 +73,10 @@ const StopListContainer: FC<Props> = ({
           {showStopTitles && leftItems.length === 0 && (
             <StopListPlaceHolder text={t('no-stops-selected')} />
           )}
-          <ul className="stops" aria-label={t('added-stops')}>
+          <ul
+            className="stops"
+            aria-label={showStopTitles ? t('leftColumn') : t('added-stops')}
+          >
             {leftItems &&
               leftItems.map((item, index) => {
                 const s = {
@@ -98,7 +101,7 @@ const StopListContainer: FC<Props> = ({
         </div>
       </section>
       {showStopTitles && (
-        <section id={'right'} aria-label={t('rightColumn')}>
+        <section id={`right-${card.id}`} aria-label={t('rightColumn')}>
           <div className="double-inputs">
             {languages?.map(lan => (
               <StopListTitleInput
@@ -115,7 +118,7 @@ const StopListContainer: FC<Props> = ({
             <StopListPlaceHolder text={t('no-stops-selected')} />
           )}
           <div>
-            <ul className="stops" aria-label={t('added-stops')}>
+            <ul className="stops" aria-label={t('rightColumn')}>
               {rightItems &&
                 rightItems.map((item, index) => {
                   const s = {

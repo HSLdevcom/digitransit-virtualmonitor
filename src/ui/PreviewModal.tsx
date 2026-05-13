@@ -48,19 +48,19 @@ const PreviewModal: FC<Props> = ({
         onRequestClose={() => onClose(false)}
         portalClassName={cx('preview', !isLandscape ? 'portrait' : '')}
         ariaHideApp={ariaHideApp}
+        aria={{ labelledby: 'preview-modal-heading' }}
       >
         <div className="title-and-close">
-          <div className="title">{t('preview')}</div>
-          <section id="close">
+          <h2 id="preview-modal-heading" className="title">{t('preview')}</h2>
+          <div>
             <button
               className="close"
-              role="button"
               aria-label={t('close')}
               onClick={() => onClose(false)}
             >
               <Icon img="close" color={'#FFFFFF'} height={16} width={16} />
             </button>
-          </section>
+          </div>
         </div>
         <section
           id={isLandscape ? 'preview-monitor' : 'preview-monitor-portrait'}

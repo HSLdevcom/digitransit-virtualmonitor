@@ -1,11 +1,17 @@
 import cx from 'classnames';
-import React, { FC, useContext, useState } from 'react';
+import React, {
+  FC,
+  useContext,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import Button from './Button';
 import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 import { useTranslation } from 'react-i18next';
-import { IStopInfoPlus, IPattern, IRoute } from '../util/Interfaces';
+import { IStopInfoPlus, IRoute } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
@@ -46,6 +52,11 @@ const StopRoutesModal: FC<Props> = props => {
   const [renamings, setRenamings] = useState(
     props.stopSettings?.renamedDestinations || [],
   );
+
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  useLayoutEffect(() => {
+    closeButtonRef.current?.focus();
+  }, []);
   const stopCode = props.stop.code ? `(${props.stop.code})` : '';
   const text = t('stopSettings', {
     stop: props.stop.name,
@@ -224,8 +235,9 @@ const StopRoutesModal: FC<Props> = props => {
       aria={{ labelledby: 'stop-routes-modal-title', modal: true }}
     >
       <div className="modal">
-        <section id="close">
+        <div id="close">
           <button
+            ref={closeButtonRef}
             className="close-button"
             aria-label={t('close')}
             onClick={handleClose}
@@ -237,7 +249,7 @@ const StopRoutesModal: FC<Props> = props => {
               width={24}
             />
           </button>
-        </section>
+        </div>
         <section className="section-margin-large">
           <div className="title-container">
             <h2 id="stop-routes-modal-title" className="title">
@@ -271,7 +283,7 @@ const StopRoutesModal: FC<Props> = props => {
           <div className="divider" />
         </section>
         <section className="section-margin-large timeshift">
-          <h2> {t('timeShift')}</h2>
+          <h3>{t('timeShift')}</h3>
           <p>{t('timeShiftDescription')}</p>
           <div className="show-departures-over">
             {t('timeShiftShow')}
@@ -289,12 +301,12 @@ const StopRoutesModal: FC<Props> = props => {
         </section>
         <section className="section-margin-large title-and-no-renaming">
           <div className="title">
-            <h2>
+            <h3>
               {t('hideLines', {
                 hidden: settings.hiddenRoutes.length,
                 all: props.combinedPatterns.length,
               })}
-            </h2>
+            </h3>
           </div>
           <div className="no-renaming">
             <button
@@ -333,7 +345,7 @@ const StopRoutesModal: FC<Props> = props => {
               ))}
             </div>
           )}
-          {props.combinedPatterns.map((pattern, index) => {
+          {props.combinedPatterns.map(pattern => {
             const patternArray = pattern.split(':');
             const gtfsID = [patternArray[0], patternArray[1]].join(':');
             const renameId = getRenameDestinationId(patternArray[3], gtfsID);
@@ -379,7 +391,6 @@ const StopRoutesModal: FC<Props> = props => {
                 <div className="renamedDestinations">
                   {props.languages.map(lang => (
                     <input
-                      tabIndex={showInputs ? 0 : -1}
                       key={`${lang}-${renameId}`}
                       id={`${lang}-${renameId}`}
                       name={renameId}
@@ -390,12 +401,30 @@ const StopRoutesModal: FC<Props> = props => {
                           : undefined
                       }
                       onChange={e => handleRenamedDestination(e, lang)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          const focusable =
+                            'button, [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
+                          const all = Array.from(
+                            document.querySelectorAll<HTMLElement>(focusable),
+                          );
+                          const idx = all.indexOf(e.target as HTMLElement);
+                          all[idx + 1]?.focus();
+                        }
+                      }}
                       placeholder={patternArray[3]}
-                      readOnly={!showInputs}
-                      aria-label={t('renameDestinationFor', {
-                        line: patternArray[2],
-                        lang: t(`language-name-${lang as SupportedLanguage}`),
-                      })}
+                      disabled={!showInputs}
+                      aria-label={
+                        showInputs
+                          ? t('renameDestinationFor', {
+                              line: patternArray[2],
+                              lang: t(
+                                `language-name-${lang as SupportedLanguage}`,
+                              ),
+                            })
+                          : renamedDestination?.[lang] || patternArray[3]
+                      }
                     />
                   ))}
                 </div>

@@ -40,10 +40,12 @@
         position: relative;
         font-family: $font-family;
         font-size: 24px;
+        font-weight: normal;
         line-height: 29px;
         letter-spacing: -0.02em;
         color: #fff;
         width: 540px;
+        margin: 0;
       }
 
       .close {

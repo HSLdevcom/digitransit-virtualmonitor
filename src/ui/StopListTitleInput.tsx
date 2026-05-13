@@ -31,9 +31,9 @@ const StopListTitleInput: FC<IProps> = ({
 
   return (
     <div className="stop-list-title-input">
-      <div className="header">
+      <label className="header" htmlFor={`stop-list-title-input-${side}-${lang}`}>
         {t(`header-side-${side}`).concat(' - ').concat(lang.toUpperCase())}
-      </div>
+      </label>
       <InputWithEditIcon
         onChange={title => onChange(title, side)}
         id={`stop-list-title-input-${side}-${lang}`}

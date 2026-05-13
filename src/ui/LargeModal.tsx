@@ -31,7 +31,7 @@ const LargeModal: FC<IProps> = ({
       aria={{ labelledby: 'large-modal-heading' }}
     >
       <div className="monitor-modal-container">
-        <section id="close">
+        <div id="close">
           <button
             className="close-button"
             aria-label={t('close')}
@@ -44,7 +44,7 @@ const LargeModal: FC<IProps> = ({
               width={24}
             />
           </button>
-        </section>
+        </div>
         <h2 id="large-modal-heading" className="monitor-modal-header">
           {t(header)}
         </h2>

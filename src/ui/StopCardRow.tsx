@@ -429,7 +429,7 @@ const StopCardRow: FC<IProps> = ({
               appElement={'root'}
               searchContext={searchContext}
               icon="search"
-              id={'search'}
+              id={`search-${id}`}
               ariaLabel={t('autosuggestPlaceHolder')}
               placeholder={t('autosuggestPlaceHolder')}
               renderLabel

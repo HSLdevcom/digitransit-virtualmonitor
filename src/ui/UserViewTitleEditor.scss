@@ -11,6 +11,14 @@
   .user-view-title-input-container {
     display: flex;
     flex: 1;
+    align-items: center;
+
+    > label {
+      white-space: nowrap;
+      margin-right: 8px;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
 
     .monitor-input-container {
       max-width: 300px;

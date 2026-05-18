@@ -21,7 +21,6 @@ import { getModeFromAddendum } from '../util/stopCardUtil';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
 import StopListContainer from './StopListContainer';
 import cx from 'classnames';
-import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext, FavouritesContext } from '../contexts';
 import { IResult, PropertiesLayer } from '../types';
 import { SupportedLanguage } from '../i18n';
@@ -296,18 +295,14 @@ const StopCardRow: FC<IProps> = ({
           </div>
           <div className="icons">
             {possibleToDelete && (
-              <div
+              <button
+                type="button"
                 className={cx('delete icon', possibleToMove ? '' : 'move-end')}
-                tabIndex={0}
-                role="button"
                 aria-label={t('deleteView', { id: `${index + 1}` })}
                 onClick={() => onCardDelete(id)}
-                onKeyDown={e =>
-                  isKeyboardSelectionEvent(e, true) && onCardDelete(id)
-                }
               >
                 <Icon img="delete" color={config.colors.primary} />
-              </div>
+              </button>
             )}
             {possibleToMove && (
               <div
@@ -317,17 +312,12 @@ const StopCardRow: FC<IProps> = ({
                 )}
               >
                 {isFirst && (
-                  <div
-                    tabIndex={0}
-                    role="button"
+                  <button
+                    type="button"
                     aria-label={t('moveViewDown', {
                       id: `${index + 1}`,
                     })}
                     onClick={() => onCardMove(index, index + 1)}
-                    onKeyDown={e =>
-                      isKeyboardSelectionEvent(e, true) &&
-                      onCardMove(index, index + 1)
-                    }
                   >
                     <Icon
                       img="move-both-down"
@@ -335,20 +325,15 @@ const StopCardRow: FC<IProps> = ({
                       width={30}
                       height={40}
                     />
-                  </div>
+                  </button>
                 )}
                 {isLast && (
-                  <div
-                    tabIndex={0}
-                    role="button"
+                  <button
+                    type="button"
                     aria-label={t('moveViewUp', {
                       id: `${index + 1}`,
                     })}
                     onClick={() => onCardMove(index, index - 1)}
-                    onKeyDown={e =>
-                      isKeyboardSelectionEvent(e, true) &&
-                      onCardMove(index, index - 1)
-                    }
                   >
                     <Icon
                       img="move-both-up"
@@ -356,21 +341,16 @@ const StopCardRow: FC<IProps> = ({
                       width={30}
                       height={40}
                     />
-                  </div>
+                  </button>
                 )}
                 {!isFirst && !isLast && (
                   <div className="container">
-                    <div
-                      tabIndex={0}
-                      role="button"
+                    <button
+                      type="button"
                       aria-label={t('moveViewUp', {
                         id: `${index + 1}`,
                       })}
                       onClick={() => onCardMove(index, index - 1)}
-                      onKeyDown={e =>
-                        isKeyboardSelectionEvent(e, true) &&
-                        onCardMove(index, index - 1)
-                      }
                     >
                       <Icon
                         img="move-up"
@@ -378,21 +358,16 @@ const StopCardRow: FC<IProps> = ({
                         width={16}
                         height={16}
                       />
-                    </div>
+                    </button>
                     <div className="move-divider">
                       <div></div>
                     </div>
-                    <div
-                      tabIndex={0}
-                      role="button"
+                    <button
+                      type="button"
                       aria-label={t('moveViewDown', {
                         id: `${index + 1}`,
                       })}
                       onClick={() => onCardMove(index, index + 1)}
-                      onKeyDown={e =>
-                        isKeyboardSelectionEvent(e, true) &&
-                        onCardMove(index, index + 1)
-                      }
                       className="move-down"
                     >
                       <Icon
@@ -401,17 +376,21 @@ const StopCardRow: FC<IProps> = ({
                         width={16}
                         height={16}
                       />
-                    </div>
+                    </button>
                   </div>
                 )}
               </div>
             )}
           </div>
         </div>
-        <div className="headers" aria-hidden="true">
+        <div className="headers">
           <div className="stop">{t('prepareStop')}</div>
-          <div className="layout">{t('layout')}</div>
-          <div className="duration">{t('duration')}</div>
+          <div id={`col-layout-${id}`} className="layout">
+            {t('layout')}
+          </div>
+          <div id={`col-duration-${id}`} className="duration">
+            {t('duration')}
+          </div>
         </div>
         <div className="search-stop-with-layout-and-time">
           <div
@@ -453,6 +432,8 @@ const StopCardRow: FC<IProps> = ({
             updateLayout={updateLayout}
             durationEditable={cards.length !== 1 || languages.length > 1}
             allowInformationDisplay={cards.length === 1}
+            layoutHeaderId={`col-layout-${id}`}
+            durationHeaderId={`col-duration-${id}`}
           />
         </div>
         <StopListContainer

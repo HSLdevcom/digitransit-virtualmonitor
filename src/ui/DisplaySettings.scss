@@ -9,6 +9,12 @@
     display: flex;
     margin-bottom: 10px;
     margin-left: 5px;
+
+    h3 {
+      margin: 0;
+      font-weight: $font-weight;
+      font-size: 1rem;
+    }
   }
 }
 

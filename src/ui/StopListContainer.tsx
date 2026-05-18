@@ -53,7 +53,9 @@ const StopListContainer: FC<Props> = ({
     <div className="stop-list">
       <section
         id={`left-${card.id}`}
-        aria-label={showStopTitles ? t('leftColumn') : undefined}
+        aria-label={
+          showStopTitles ? t('leftColumn') : `${t('added-stops')} ${card.id}`
+        }
       >
         <div>
           {showStopTitles && (
@@ -73,10 +75,7 @@ const StopListContainer: FC<Props> = ({
           {showStopTitles && leftItems.length === 0 && (
             <StopListPlaceHolder text={t('no-stops-selected')} />
           )}
-          <ul
-            className="stops"
-            aria-label={showStopTitles ? t('leftColumn') : t('added-stops')}
-          >
+          <ul className="stops">
             {leftItems &&
               leftItems.map((item, index) => {
                 const s = {
@@ -118,7 +117,7 @@ const StopListContainer: FC<Props> = ({
             <StopListPlaceHolder text={t('no-stops-selected')} />
           )}
           <div>
-            <ul className="stops" aria-label={t('rightColumn')}>
+            <ul className="stops">
               {rightItems &&
                 rightItems.map((item, index) => {
                   const s = {

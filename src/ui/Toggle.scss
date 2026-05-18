@@ -91,6 +91,10 @@
     }
   }
 
+  input[aria-disabled='true'] + .slider.round {
+    background: grey !important;
+  }
+
   .slider.round::before {
     border-radius: 50%;
     width: 29px;

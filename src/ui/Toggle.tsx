@@ -4,12 +4,13 @@ import cx from 'classnames';
 
 interface IProps {
   toggled?: boolean;
-  title?: string;
   onToggle?: (boolean) => void;
   id?: any;
   disabled?: boolean;
+  // Use aria-disabled internally; native disabled is intentionally avoided
+  // so the control remains in the tab order and discoverable by keyboard users.
 }
-const Toggle: FC<IProps> = ({ toggled, title, onToggle, id, disabled }) => {
+const Toggle: FC<IProps> = ({ toggled, onToggle, id, disabled }) => {
   const useId = id || uniqueId('input-');
   useEffect(() => {
     if (disabled && toggled) {
@@ -17,20 +18,21 @@ const Toggle: FC<IProps> = ({ toggled, title, onToggle, id, disabled }) => {
     }
   }, [disabled, toggled]);
   return (
-    <div className="option-toggle-container" title={title}>
-      <div className="toggle">
+    <span className="option-toggle-container">
+      <span className="toggle">
         <input
           type="checkbox"
           id={useId}
           checked={toggled}
+          aria-disabled={disabled || undefined}
           onChange={() => {
+            if (disabled) return;
             onToggle(!toggled);
           }}
-          disabled={disabled}
         />
         <span className={cx('slider round', { disabled })} />
-      </div>
-    </div>
+      </span>
+    </span>
   );
 };
 

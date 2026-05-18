@@ -51,3 +51,12 @@ li {
   white-space: nowrap;
   width: 1px;
 }
+
+:focus-visible {
+  outline: 3px solid var(--primary-color, #005fcc);
+  outline-offset: 2px;
+}
+
+input[type='checkbox']:focus-visible {
+  outline: none;
+}

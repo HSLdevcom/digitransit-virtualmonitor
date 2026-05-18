@@ -55,10 +55,8 @@ const MapModal: FC<Props> = ({
     >
       <div className="mapmodal">
         <div className="map-modal-header">
-          <h2 id="map-modal-heading">
-            {t('select-bounds')}
-          </h2>
-          <div id="close">
+          <h2 id="map-modal-heading">{t('select-bounds')}</h2>
+          <div className="modal-close-container">
             <button
               className="close-button"
               aria-label={t('close')}

@@ -51,7 +51,9 @@ const PreviewModal: FC<Props> = ({
         aria={{ labelledby: 'preview-modal-heading' }}
       >
         <div className="title-and-close">
-          <h2 id="preview-modal-heading" className="title">{t('preview')}</h2>
+          <h2 id="preview-modal-heading" className="title">
+            {t('preview')}
+          </h2>
           <div>
             <button
               className="close"
@@ -62,9 +64,7 @@ const PreviewModal: FC<Props> = ({
             </button>
           </div>
         </div>
-        <section
-          id={isLandscape ? 'preview-monitor' : 'preview-monitor-portrait'}
-        >
+        <div id={isLandscape ? 'preview-monitor' : 'preview-monitor-portrait'}>
           <div className="carouselContainer">
             {showInfoDisplay ? (
               <InformationDisplayContainer preview />
@@ -86,7 +86,7 @@ const PreviewModal: FC<Props> = ({
               </>
             )}
           </div>
-        </section>
+        </div>
       </Modal>
     </MonitorContext.Provider>
   );

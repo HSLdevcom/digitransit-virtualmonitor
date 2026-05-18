@@ -69,6 +69,7 @@ export const resources = {
       'import-instructions':
         'Give the URL address of an existing stop display to add it to your displays.',
       'import-monitor': 'Import display',
+      'import-url-label': 'URL address',
       'info-display-only-one':
         'You can select a service update view only for a display with one stop view.',
       'info-text-short': 'Departures in a chronological order',
@@ -129,6 +130,7 @@ export const resources = {
       'one-column': 'One column',
       open: 'Open the display',
       ok: 'OK',
+      notice: 'Notice',
       or: 'or',
       'platform-or-stop': 'Platform/Stop',
       prepareDisplay: 'Add new stop view',
@@ -162,7 +164,14 @@ export const resources = {
       stop: 'Stop',
       'stop-display': 'Stop display',
       stopSettings: 'Settings for stop {{stop}} ({{code}})',
+      maptitle: 'Name of the map view',
       stoptitle: 'Name of the stop view',
+      'transport-mode-bus': 'Bus stop',
+      'transport-mode-tram': 'Tram stop',
+      'transport-mode-rail': 'Train stop',
+      'transport-mode-subway': 'Metro stop',
+      'transport-mode-ferry': 'Ferry stop',
+      'transport-mode-airplane': 'Airport',
       tighten: 'Convergent',
       timeShift: 'Filter departures by time',
       timeShiftDescription:
@@ -244,6 +253,7 @@ export const resources = {
       'import-instructions':
         'Anna olemassaolevan pysäkkinäytön URL-osoite, niin voit lisätä sen omiin näyttöihisi',
       'import-monitor': 'Tuo näyttö',
+      'import-url-label': 'URL-osoite',
       'info-display-only-one':
         'Voit valita tiedotenäytön vain näyttöön, jossa on yksi pysäkkinäkymä.',
       'info-text-short': 'Lähdöt aikajärjestyksessä',
@@ -303,6 +313,7 @@ export const resources = {
       'one-column': 'Yksi sarake',
       open: 'Avaa näyttö',
       ok: 'OK',
+      notice: 'Huomio',
       or: 'tai',
       'platform-or-stop': 'Lait./Pys.',
       prepareDisplay: 'Lisää uusi pysäkkinäkymä',
@@ -337,6 +348,12 @@ export const resources = {
       'stop-display': 'Pysäkkinäyttö',
       stopSettings: 'Pysäkin {{stop}} {{code}} asetukset',
       stoptitle: 'Pysäkkinäkymän nimi',
+      'transport-mode-bus': 'Bussipysäkki',
+      'transport-mode-tram': 'Raitiovaunupysäkki',
+      'transport-mode-rail': 'Juna-asema',
+      'transport-mode-subway': 'Metroasema',
+      'transport-mode-ferry': 'Lauttapysäkki',
+      'transport-mode-airplane': 'Lentokenttä',
       tighten: 'Tiivistyvä',
       timeShift: 'Rajaa lähtöjä ajan mukaan',
       timeShiftDescription:
@@ -418,6 +435,7 @@ export const resources = {
       'import-instructions':
         'Ange URL-adressen för en existerande hållplatsskärm för att lägga till den i dina skärmar',
       'import-monitor': 'Importera skärmen',
+      'import-url-label': 'URL-adress',
       'info-display-only-one':
         'Du kan välja meddelandeskärmen endast för en skärm som har bara en hållplatsvy.',
       'info-text-short': 'Avgångarna i kronologisk ordning',
@@ -477,6 +495,7 @@ export const resources = {
       'one-column': 'En kolumn',
       open: 'Öppna skärmen',
       ok: 'OK',
+      notice: 'Observera',
       or: 'eller',
       'platform-or-stop': 'Plattf./Hållpl.',
       prepareDisplay: 'Lägg till ny hållplatsskärm',
@@ -511,7 +530,14 @@ export const resources = {
       stop: 'Hållplats',
       'stop-display': 'Hållplatsskärm',
       stopSettings: 'Inställningar för hållplats {{stop}} ({{code}})',
+      maptitle: 'Kartvyns namn',
       stoptitle: 'Hållplatsskärmens namn',
+      'transport-mode-bus': 'Busshållplats',
+      'transport-mode-tram': 'Spårvagnshållplats',
+      'transport-mode-rail': 'Tågstation',
+      'transport-mode-subway': 'Metrostation',
+      'transport-mode-ferry': 'Färjehållplats',
+      'transport-mode-airplane': 'Flygplats',
       tighten: 'Förtätad',
       timeShift: 'Välja bort avgångar baserat på tid',
       timeShiftDescription:

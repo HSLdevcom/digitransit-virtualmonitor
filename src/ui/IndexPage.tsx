@@ -36,11 +36,7 @@ const IndexPage: FC<IProps> = ({ buttons, renderLogInMessage = false }) => {
           </div>
         </div>
         <div className="right">
-          <img
-            className={'desktop-img'}
-            src={monitorsImage}
-            alt="monitor-image"
-          />
+          <img className={'desktop-img'} src={monitorsImage} alt="" />
         </div>
       </div>
     </ContentContainer>

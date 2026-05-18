@@ -46,7 +46,7 @@ const UserMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
       contentLabel={t('userMenuOpen')}
     >
       <div className="container">
-        <section id="close">
+        <section className="modal-close-container">
           <button
             className="close-button"
             aria-label={t('userMenuClose')}
@@ -61,7 +61,11 @@ const UserMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
           </button>
         </section>
         {user.sub && (
-          <section id="links" style={{ display: 'flex' }}>
+          <section
+            id="links"
+            style={{ display: 'flex' }}
+            aria-label={t('links')}
+          >
             <a
               href={'/logout'}
               onClick={() => {

@@ -1,5 +1,6 @@
 import cx from 'classnames';
 import React, { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import Icon from './Icon';
 interface IProps {
   white?: boolean;
@@ -7,16 +8,21 @@ interface IProps {
   small?: boolean;
   primary?: boolean;
 }
-const Loading: FC<IProps> = props => (
-  <div
-    className={cx('loading-container', {
-      white: props.white,
-      small: props.small,
-      primary: props.primary,
-    })}
-  >
-    <Icon img="spinner" />
-  </div>
-);
+const Loading: FC<IProps> = props => {
+  const { t } = useTranslation();
+  return (
+    <div
+      role="status"
+      className={cx('loading-container', {
+        white: props.white,
+        small: props.small,
+        primary: props.primary,
+      })}
+    >
+      <span className="sr-only">{t('loading')}</span>
+      <Icon img="spinner" />
+    </div>
+  );
+};
 
 export default Loading;

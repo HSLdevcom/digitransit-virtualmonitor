@@ -136,6 +136,7 @@ const StopCardListContainer: FC<IProps> = ({
     props.staticMonitor ? props.staticMonitor.name : '',
   );
   const [saveFailed, setSaveFailed] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const [viewState, setViewState] = useMergeState({
     view: undefined,
@@ -357,6 +358,7 @@ const StopCardListContainer: FC<IProps> = ({
 
   const createOrSaveMonitor = isNew => {
     setSaveFailed(false);
+    setIsSaving(true);
     const languageArray = ['fi', 'sv', 'en'];
     const cardArray = stopCardList.slice();
     cardArray.forEach(card => {
@@ -426,21 +428,35 @@ const StopCardListContainer: FC<IProps> = ({
           url: newUuid,
           instance: getConfig().name,
         };
-        monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
-          if (res.status === 200 || res.status === 409) {
-            setViewState({ view: newStaticMonitor, redirect: true });
-          } else {
+        monitorAPI
+          .createStatic(newStaticMonitor)
+          .then((res: any) => {
+            if (res.status === 200 || res.status === 409) {
+              setViewState({ view: newStaticMonitor, redirect: true });
+            } else {
+              setIsSaving(false);
+              setSaveFailed(true);
+            }
+          })
+          .catch(() => {
+            setIsSaving(false);
             setSaveFailed(true);
-          }
-        });
+          });
       } else {
-        monitorAPI.create(newCard).then((res: any) => {
-          if (res.status === 200 || res.status === 409) {
-            setViewState({ view: newCard, redirect: true });
-          } else {
+        monitorAPI
+          .create(newCard)
+          .then((res: any) => {
+            if (res.status === 200 || res.status === 409) {
+              setViewState({ view: newCard, redirect: true });
+            } else {
+              setIsSaving(false);
+              setSaveFailed(true);
+            }
+          })
+          .catch(() => {
+            setIsSaving(false);
             setSaveFailed(true);
-          }
-        });
+          });
       }
     } else {
       if (user?.sub) {
@@ -456,14 +472,20 @@ const StopCardListContainer: FC<IProps> = ({
           .then(res => {
             setViewState({ view: newCard, redirect: true });
           })
-          .catch(() => setSaveFailed(true));
+          .catch(() => {
+            setIsSaving(false);
+            setSaveFailed(true);
+          });
       } else {
         monitorAPI
           .create(newCard)
           .then(res => {
             setViewState({ view: newCard, redirect: true });
           })
-          .catch(() => setSaveFailed(true));
+          .catch(() => {
+            setIsSaving(false);
+            setSaveFailed(true);
+          });
       }
     }
   };
@@ -542,16 +564,24 @@ const StopCardListContainer: FC<IProps> = ({
   }
 
   const ariaLabelForCreate = makeButtonsDisabled
-    ? createAriaLabel('Create', buttonsRequirements, t)
+    ? `${t('displayEditorStaticLink')}: ${createAriaLabel(
+        'Create',
+        buttonsRequirements,
+        t,
+      )}`
     : t('displayEditorStaticLink');
   const ariaLabelForPreview = makeButtonsDisabled
-    ? createAriaLabel('Preview', buttonsRequirements, t)
+    ? `${t('previewView')}: ${createAriaLabel(
+        'Preview',
+        buttonsRequirements,
+        t,
+      )}`
     : t('previewView');
   const ariaLabelForSave = makeButtonsDisabled
-    ? createAriaLabel('Save', buttonsRequirements, t)
+    ? `${t('save')}: ${createAriaLabel('Save', buttonsRequirements, t)}`
     : t('save');
   const ariaNewDisplay = newDisplayDisabled
-    ? t('new-display-disabled')
+    ? `${t('prepareDisplay')}: ${t('new-display-disabled')}`
     : t('prepareDisplay');
 
   const buttonsOrButtonsWithAlertClass = saveFailed
@@ -600,7 +630,7 @@ const StopCardListContainer: FC<IProps> = ({
           lang={mapLanguage}
         />
       )}
-      <ul className="stopcards">
+      <ul className="stopcards" aria-label={t('added-stops')}>
         {stopCardList.map((item, index) => {
           const card: any = {
             index: index,
@@ -646,31 +676,38 @@ const StopCardListContainer: FC<IProps> = ({
       <div className={cx(buttonsOrButtonsWithAlertClass)}>
         <div className="wide">
           <button
-            disabled={newDisplayDisabled}
+            aria-disabled={newDisplayDisabled ? true : undefined}
             className={cx('button', 'add-new-view')}
-            onClick={addNew}
+            onClick={() => {
+              if (newDisplayDisabled) return;
+              addNew();
+            }}
             aria-label={ariaNewDisplay}
-            title={newDisplayDisabled ? ariaNewDisplay : undefined}
           >
             <span>{t('prepareDisplay')} </span>
           </button>
         </div>
         <button
-          disabled={makeButtonsDisabled}
+          aria-disabled={makeButtonsDisabled || undefined}
           className="button"
-          onClick={openPreview}
-          title={makeButtonsDisabled ? ariaLabelForPreview : undefined}
+          onClick={() => {
+            if (makeButtonsDisabled) return;
+            openPreview();
+          }}
           aria-label={ariaLabelForPreview}
         >
           <span>{t('previewView')}</span>
         </button>
         {!isModifyView && (
           <button
-            disabled={makeButtonsDisabled}
+            aria-disabled={makeButtonsDisabled || undefined}
+            aria-busy={isSaving || undefined}
             className="button blue"
-            onClick={() => createOrSaveMonitor(isNew)}
+            onClick={() => {
+              if (makeButtonsDisabled || isSaving) return;
+              createOrSaveMonitor(isNew);
+            }}
             aria-label={ariaLabelForCreate}
-            title={makeButtonsDisabled ? ariaLabelForCreate : undefined}
           >
             <span>{t('displayEditorStaticLink')}</span>
           </button>
@@ -681,10 +718,13 @@ const StopCardListContainer: FC<IProps> = ({
               <span>{t('cancel')}</span>
             </Link>
             <button
-              disabled={makeButtonsDisabled}
+              aria-disabled={makeButtonsDisabled || undefined}
+              aria-busy={isSaving || undefined}
               className="button blue"
-              title={makeButtonsDisabled ? ariaLabelForSave : undefined}
-              onClick={() => createOrSaveMonitor(isNew)}
+              onClick={() => {
+                if (makeButtonsDisabled || isSaving) return;
+                createOrSaveMonitor(isNew);
+              }}
               aria-label={ariaLabelForSave}
             >
               <span>{t('save')}</span>
@@ -692,11 +732,9 @@ const StopCardListContainer: FC<IProps> = ({
           </>
         )}
       </div>
-      {saveFailed && (
-        <div className="cardlist-alert-text" role="alert">
-          {t('save-failed')}
-        </div>
-      )}
+      <div className="cardlist-alert-text" role="alert">
+        {saveFailed ? t('save-failed') : ''}
+      </div>
     </div>
   );
 };

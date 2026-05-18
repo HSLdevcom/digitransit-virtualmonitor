@@ -95,7 +95,7 @@ const BurgerMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
       contentLabel={t('menuOpen')}
     >
       <div className="container">
-        <section id="close">
+        <section className="modal-close-container">
           <button
             className="close-button"
             aria-label={t('menuClose')}

@@ -2,7 +2,6 @@ import React, { FunctionComponent, useContext } from 'react';
 import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from '../contexts';
-import { isKeyboardSelectionEvent } from '../util/browser';
 import StopViewTitleEditor from './StopViewTitleEditor';
 import { ICardInfo, IMapSettings } from '../util/Interfaces';
 import Icon from './Icon';
@@ -76,27 +75,24 @@ const mapCardRow: FunctionComponent<IProps> = ({
                     card={item}
                     updateCardInfo={updateCardInfo}
                     lang={lan}
+                    isMap
                   />
                 );
               })}
             </div>
             <div className="icons">
               {cards.length > 1 && (
-                <div
+                <button
+                  type="button"
                   className={cx(
                     'delete icon',
                     possibleToMove ? '' : 'move-end',
                   )}
-                  tabIndex={0}
-                  role="button"
                   aria-label={t('deleteView', { id: `${index + 1}` })}
                   onClick={() => onCardDelete(id)}
-                  onKeyDown={e =>
-                    isKeyboardSelectionEvent(e, true) && onCardDelete(id)
-                  }
                 >
                   <Icon img="delete" color={config.colors.primary} />
-                </div>
+                </button>
               )}
               {possibleToMove && (
                 <div
@@ -106,17 +102,12 @@ const mapCardRow: FunctionComponent<IProps> = ({
                   )}
                 >
                   {isFirst && (
-                    <div
-                      tabIndex={0}
-                      role="button"
+                    <button
+                      type="button"
                       aria-label={t('moveViewDown', {
                         id: `${index + 1}`,
                       })}
                       onClick={() => onCardMove(index, index + 1)}
-                      onKeyDown={e =>
-                        isKeyboardSelectionEvent(e, true) &&
-                        onCardMove(index, index + 1)
-                      }
                     >
                       <Icon
                         img="move-both-down"
@@ -124,20 +115,15 @@ const mapCardRow: FunctionComponent<IProps> = ({
                         width={30}
                         height={40}
                       />
-                    </div>
+                    </button>
                   )}
                   {isLast && (
-                    <div
-                      tabIndex={0}
-                      role="button"
+                    <button
+                      type="button"
                       aria-label={t('moveViewUp', {
                         id: `${index + 1}`,
                       })}
                       onClick={() => onCardMove(index, index - 1)}
-                      onKeyDown={e =>
-                        isKeyboardSelectionEvent(e, true) &&
-                        onCardMove(index, index - 1)
-                      }
                     >
                       <Icon
                         img="move-both-up"
@@ -145,21 +131,16 @@ const mapCardRow: FunctionComponent<IProps> = ({
                         width={30}
                         height={40}
                       />
-                    </div>
+                    </button>
                   )}
                   {!isFirst && !isLast && (
                     <div className="container">
-                      <div
-                        tabIndex={0}
-                        role="button"
+                      <button
+                        type="button"
                         aria-label={t('moveViewUp', {
                           id: `${index + 1}`,
                         })}
                         onClick={() => onCardMove(index, index - 1)}
-                        onKeyDown={e =>
-                          isKeyboardSelectionEvent(e, true) &&
-                          onCardMove(index, index - 1)
-                        }
                       >
                         <Icon
                           img="move-up"
@@ -167,21 +148,16 @@ const mapCardRow: FunctionComponent<IProps> = ({
                           width={16}
                           height={16}
                         />
-                      </div>
+                      </button>
                       <div className="move-divider">
                         <div></div>
                       </div>
-                      <div
-                        tabIndex={0}
-                        role="button"
+                      <button
+                        type="button"
                         aria-label={t('moveViewDown', {
                           id: `${index + 1}`,
                         })}
                         onClick={() => onCardMove(index, index + 1)}
-                        onKeyDown={e =>
-                          isKeyboardSelectionEvent(e, true) &&
-                          onCardMove(index, index + 1)
-                        }
                         className="move-down"
                       >
                         <Icon
@@ -190,7 +166,7 @@ const mapCardRow: FunctionComponent<IProps> = ({
                           width={16}
                           height={16}
                         />
-                      </div>
+                      </button>
                     </div>
                   )}
                 </div>
@@ -199,22 +175,25 @@ const mapCardRow: FunctionComponent<IProps> = ({
           </div>
           <div className="headers">
             <div className="stop"></div>
-            <div className="layout">{t('layout')}</div>
-            <div className="duration">{t('duration')}</div>
+            <div id={`col-layout-${id}`} className="layout">
+              {t('layout')}
+            </div>
+            <div id={`col-duration-${id}`} className="duration">
+              {t('duration')}
+            </div>
           </div>
           <div className="map-description">
             <Icon img="map-icon" height={48} width={48} />
             <span className="desc"> {t('map-description')} </span>
-            <span
+            <button
+              type="button"
               className={cx('modallink', engLan ? 'eng' : '')}
-              role="button"
-              tabIndex={0}
+              aria-haspopup="dialog"
               onClick={() => openModal()}
-              onKeyDown={e => isKeyboardSelectionEvent(e, true) && openModal()}
             >
               {' '}
               {t('edit-map')}
-            </span>
+            </button>
             <LayoutAndTimeContainer
               orientation={orientation as 'horizontal' | 'vertical'}
               cardInfo={richItem}
@@ -223,6 +202,8 @@ const mapCardRow: FunctionComponent<IProps> = ({
               durationEditable
               allowInformationDisplay={false}
               disableLayoutButton
+              layoutHeaderId={`col-layout-${id}`}
+              durationHeaderId={`col-duration-${id}`}
             />
           </div>
           <div className="toggle">

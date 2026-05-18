@@ -60,6 +60,7 @@ const UserViewTitleEditor: FC<IProps> = ({
         />
       )}
       <div className="user-view-title-input-container">
+        <label htmlFor="user-view-title-input">{t('staticMonitorTitle')}</label>
         <InputWithEditIcon
           id="user-view-title-input"
           onChange={t => updateViewTitle(t)}
@@ -68,7 +69,6 @@ const UserViewTitleEditor: FC<IProps> = ({
           inputProps={{
             placeholder: t('staticMonitorTitle'),
             maxLength: 25,
-            'aria-label': t('staticMonitorTitle'),
           }}
         />
       </div>

@@ -172,6 +172,7 @@ const CreateViewPage = () => {
       {showMonitorInfoModal && (
         <Modal
           appElement="#root"
+          contentLabel={t('notice')}
           closeButtonLabel={t('close')}
           isOpen
           variant="small"

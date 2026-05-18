@@ -81,6 +81,9 @@
     }
 
     .settings {
+      background: none;
+      border: none;
+      padding: 0;
       margin: 0 15px;
       display: flex;
       align-self: center;
@@ -89,6 +92,9 @@
   }
 
   .stop-row-delete {
+    background: none;
+    border: none;
+    padding: 0;
     cursor: pointer;
     border-left: 1px solid #ddd;
     width: 50px;
@@ -96,6 +102,9 @@
   }
 
   .stop-row-move {
+    background: none;
+    border: none;
+    padding: 0;
     cursor: pointer;
     border-left: 1px solid #ddd;
     width: 40px;

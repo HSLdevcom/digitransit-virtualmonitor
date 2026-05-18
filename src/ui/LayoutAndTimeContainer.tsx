@@ -18,6 +18,8 @@ interface IProps {
   durationEditable: boolean;
   allowInformationDisplay: boolean;
   disableLayoutButton?: boolean;
+  layoutHeaderId?: string;
+  durationHeaderId?: string;
 }
 
 const durations = [
@@ -35,6 +37,8 @@ const LayoutAndTimeContainer: FC<IProps> = ({
   durationEditable,
   allowInformationDisplay,
   disableLayoutButton,
+  layoutHeaderId,
+  durationHeaderId,
 }) => {
   const [t] = useTranslation();
   const [open, setOpen] = useState(false);
@@ -70,16 +74,17 @@ const LayoutAndTimeContainer: FC<IProps> = ({
         className="layout-button"
         name="layout"
         aria-label={t('layout')}
-        disabled={disableLayoutButton}
-        onClick={() => setOpen(true)}
+        aria-labelledby={layoutHeaderId}
+        aria-haspopup="dialog"
+        aria-disabled={disableLayoutButton || undefined}
+        onClick={() => {
+          if (disableLayoutButton) return;
+          setOpen(true);
+        }}
       >
         {layoutButton}
       </button>
-      <div
-        className="duration"
-        role="group"
-        aria-label={t(durationEditable ? 'duration' : 'duration-disabled')}
-      >
+      <div className="duration">
         <Dropdown
           name="duration"
           options={durations}
@@ -87,6 +92,7 @@ const LayoutAndTimeContainer: FC<IProps> = ({
           handleChange={handleChange}
           isDisabled={!durationEditable}
           aria-label={t(durationEditable ? 'duration' : 'duration-disabled')}
+          aria-labelledby={durationHeaderId}
         />
       </div>
       <LayoutModal

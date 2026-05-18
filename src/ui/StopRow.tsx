@@ -103,7 +103,7 @@ const StopRow: FC<IProps> = ({
           languages={languages}
         />
       )}
-      <div className="stop-row-stop icon">
+      <div className="stop-row-stop icon" aria-hidden="true">
         <Icon
           img={
             !alternateIcon
@@ -115,6 +115,13 @@ const StopRow: FC<IProps> = ({
           color={config.modeIcons.colors[`mode-${stop.mode?.toLowerCase()}`]}
         />
       </div>
+      {stop.mode && (
+        <span className="sr-only">
+          {t(`transport-mode-${stop.mode.toLowerCase()}`, {
+            defaultValue: stop.mode,
+          })}
+        </span>
+      )}
       <div className="stop-row-main">
         <div className="stop-upper-row">{stop.name}</div>
         <div className="stop-bottom-row">
@@ -126,42 +133,33 @@ const StopRow: FC<IProps> = ({
         <div className={cx('changed-settings', isDouble && 'double')}>
           {!isDefaultSettings && <span> {t('settingsChanged')}</span>}
         </div>
-        <div
+        <button
+          type="button"
           className={cx('settings', isDouble && 'double')}
-          tabIndex={0}
-          role="button"
           aria-label={t('stopSettings', {
             stop: stop.name,
             code: stop.code ?? '',
           })}
+          aria-haspopup="dialog"
           onClick={() => handleClick()}
-          onKeyDown={e =>
-            isKeyboardSelectionEvent(e, true) && handleClick(e, true)
-          }
         >
           <Icon img="settings" color={config.colors.primary} />
-        </div>
+        </button>
       </div>
-      <div
+      <button
+        type="button"
         className="stop-row-delete icon"
-        tabIndex={0}
-        role="button"
         aria-label={t('deleteStop', {
           stop: stop.code ? `${stop.name} ${stop.code}` : stop.name,
         })}
         onClick={() => onStopDelete(stop.cardId, side, stop.gtfsId)}
-        onKeyDown={e =>
-          isKeyboardSelectionEvent(e, true) &&
-          onStopDelete(stop.cardId, side, stop.gtfsId)
-        }
       >
         <Icon img="delete" color={config.colors.primary} />
-      </div>
+      </button>
       {getLayout(stop.layout).isDoubleView && (
-        <div
+        <button
+          type="button"
           className="stop-row-move icon"
-          tabIndex={0}
-          role="button"
           aria-label={t(
             side === 'left' ? 'moveStopToRightCol' : 'moveStopToLeftCol',
             { stop: stop.code ? `${stop.name} ${stop.code}` : stop.name },
@@ -169,13 +167,7 @@ const StopRow: FC<IProps> = ({
           onClick={() =>
             moveBetweenColumns
               ? onStopMove(stop.cardId, side, stop.gtfsId)
-              : null
-          }
-          onKeyDown={e =>
-            moveBetweenColumns
-              ? isKeyboardSelectionEvent(e, true) &&
-                onStopMove(stop.cardId, side, stop.gtfsId)
-              : null
+              : undefined
           }
         >
           <Icon
@@ -184,7 +176,7 @@ const StopRow: FC<IProps> = ({
             width={30}
             height={40}
           />
-        </div>
+        </button>
       )}
     </div>
   );

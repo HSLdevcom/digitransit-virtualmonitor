@@ -36,11 +36,9 @@ const LandingPage = () => {
         <Link
           to={'/createview'}
           id="create-new-link"
-          aria-label={t('quickDisplayCreate')}
+          className="monitor-button blue"
         >
-          <button className="monitor-button blue">
-            {t('quickDisplayCreate')}
-          </button>
+          {t('quickDisplayCreate')}
         </Link>
       )}
     </>
@@ -48,7 +46,7 @@ const LandingPage = () => {
   return (
     <>
       <BannerContainer />
-      <section role="main" id="mainContent">
+      <main id="mainContent">
         {logIn ? (
           <Redirect
             to={{
@@ -58,7 +56,7 @@ const LandingPage = () => {
         ) : (
           <IndexPage buttons={buttons} renderLogInMessage />
         )}
-      </section>
+      </main>
     </>
   );
 };

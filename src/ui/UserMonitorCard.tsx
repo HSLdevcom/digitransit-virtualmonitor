@@ -136,9 +136,11 @@ const UserMonitorCard: React.FC<IProps> = ({
   return (
     <>
       <div className="main-container">
-        {showModal && (
-          <div className="alert-modal animate-in">{t('link-copied')}</div>
-        )}
+        <div role="status" aria-live="polite" aria-atomic="true">
+          {showModal && (
+            <span className="alert-modal animate-in">{t('link-copied')}</span>
+          )}
+        </div>
         {isOpen && (
           <PreviewModal
             languages={languages}
@@ -206,17 +208,12 @@ const UserMonitorCard: React.FC<IProps> = ({
               {t('preview')}
             </button>
             <Link
-              tabIndex={0}
               className="monitor-button white"
               to={`/monitors/createview?&url=${url}`}
             >
               {t('modify')}
             </Link>
-            <Link
-              tabIndex={0}
-              className="monitor-button white"
-              to={`/static?&url=${url}`}
-            >
+            <Link className="monitor-button white" to={`/static?&url=${url}`}>
               {t('open')}
             </Link>
           </div>

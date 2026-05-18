@@ -18,6 +18,7 @@ interface IProps {
   readonly handleChange?: (option: IOption) => void;
   isDisabled?: boolean;
   'aria-label'?: string;
+  'aria-labelledby'?: string;
 }
 
 interface Option {
@@ -39,6 +40,7 @@ const Dropdown: FC<IProps> = ({
   handleChange,
   isDisabled = false,
   'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
 }) => {
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
@@ -73,10 +75,11 @@ const Dropdown: FC<IProps> = ({
       isDisabled={isDisabled}
       inputId={inputIdRef.current}
       aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledby}
       name={name}
       options={options}
       placeholder={placeholder ? placeholder : '--'}
-      tabIndex="0"
+      tabIndex={0}
       onChange={handleChange}
     />
   );

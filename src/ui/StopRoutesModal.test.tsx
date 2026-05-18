@@ -91,7 +91,8 @@ describe('StopRoutesModal', () => {
   it('renders route rows for each combined pattern', () => {
     renderComponent();
     expect(
-      screen.getAllByLabelText('hideLine', { selector: 'input' }).length,
+      screen.getAllByLabelText('hideLine', { exact: false, selector: 'input' })
+        .length,
     ).toBe(mockCombinedPatterns.length);
   });
 

@@ -310,7 +310,11 @@ const Icon = (props: ICustomInputProps) => {
   }
 
   const icons = IconMap(style);
-  return <>{icons[img]}</>;
+  return (
+    <span aria-hidden="true" style={{ display: 'contents' }}>
+      {icons[img]}
+    </span>
+  );
 };
 
 export default Icon;

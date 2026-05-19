@@ -45,7 +45,8 @@
       .options {
         display: flex;
 
-        .option:disabled::after {
+        .option:disabled::after,
+        .option[aria-disabled='true']::after {
           position: absolute;
           content: '';
           height: 100%;
@@ -105,7 +106,7 @@
     justify-content: center;
     padding-bottom: 30px;
 
-    .close-button {
+    .save-button {
       font-size: 1.125em;
       font-style: normal;
       font-weight: $font-weight;

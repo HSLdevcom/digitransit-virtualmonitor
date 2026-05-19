@@ -51,15 +51,14 @@ const MapModal: FC<Props> = ({
       onRequestClose={() => onClose(false)}
       portalClassName={cx('preview', !isLandscape ? 'portrait' : '')}
       ariaHideApp={ariaHideApp}
+      aria={{ labelledby: 'map-modal-heading' }}
     >
       <div className="mapmodal">
         <div className="map-modal-header">
-          {' '}
-          {t('select-bounds')}{' '}
-          <section id="close">
+          <h2 id="map-modal-heading">{t('select-bounds')}</h2>
+          <div className="modal-close-container">
             <button
               className="close-button"
-              role="button"
               aria-label={t('close')}
               onClick={() => onClose(false)}
             >
@@ -69,8 +68,8 @@ const MapModal: FC<Props> = ({
                 height={24}
                 width={24}
               />
-            </button>{' '}
-          </section>
+            </button>
+          </div>
         </div>
         <MonitorMapContainer
           mapSettings={mapSettings}

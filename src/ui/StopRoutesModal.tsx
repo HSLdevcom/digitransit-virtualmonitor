@@ -1,16 +1,18 @@
 import cx from 'classnames';
-import React, { FC, useContext, useState } from 'react';
+import uniqueId from 'lodash/uniqueId';
+import React, { FC, useContext, useRef, useState } from 'react';
 import Button from './Button';
 import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 import { useTranslation } from 'react-i18next';
-import { IStopInfoPlus, IPattern, IRoute } from '../util/Interfaces';
+import { IStopInfoPlus, IRoute } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
 import { ConfigContext } from '../contexts';
 import { getRenameDestinationId } from '../util/headsignUtils';
+import { SupportedLanguage } from '../i18n';
 
 if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 
@@ -45,6 +47,9 @@ const StopRoutesModal: FC<Props> = props => {
   const [renamings, setRenamings] = useState(
     props.stopSettings?.renamedDestinations || [],
   );
+
+  const titleIdRef = useRef<string>(uniqueId('stop-routes-modal-title-'));
+  const titleRef = useRef<HTMLHeadingElement>(null);
   const stopCode = props.stop.code ? `(${props.stop.code})` : '';
   const text = t('stopSettings', {
     stop: props.stop.name,
@@ -116,10 +121,12 @@ const StopRoutesModal: FC<Props> = props => {
   const handleRenamedDestination = (e, lang) => {
     const index = renamings.findIndex(r => r.pattern === e.target.name);
     if (index !== -1) {
-      renamings.splice(index, 1, {
+      const updated = [...renamings];
+      updated.splice(index, 1, {
         ...renamings[index],
         [lang]: e.target.value,
       });
+      setRenamings(updated);
     } else {
       const empty = {
         pattern: '',
@@ -138,23 +145,6 @@ const StopRoutesModal: FC<Props> = props => {
 
   const handleDeleteRenamings = event => {
     if (event === null || isKeyboardSelectionEvent(event, true)) {
-      props.combinedPatterns.forEach(p => {
-        const patArr = p.split(':');
-        const gtfsID = [patArr[0], patArr[1]].join(':');
-        const renameDestId = getRenameDestinationId(patArr[3], gtfsID);
-        const inputFI = document?.getElementById(
-          `fi-${renameDestId}`,
-        ) as HTMLInputElement;
-        const inputSV = document?.getElementById(
-          `sv-${renameDestId}`,
-        ) as HTMLInputElement;
-        const inputEN = document?.getElementById(
-          `en-${renameDestId}`,
-        ) as HTMLInputElement;
-        if (inputFI) inputFI.value = '';
-        if (inputSV) inputSV.value = '';
-        if (inputEN) inputEN.value = '';
-      });
       setRenamings([]);
       setShowInputs(false);
     }
@@ -220,12 +210,13 @@ const StopRoutesModal: FC<Props> = props => {
       onRequestClose={handleClose}
       portalClassName="modal-stop-routes"
       ariaHideApp={props.ariaHideApp ?? true}
+      aria={{ labelledby: titleIdRef.current, modal: true }}
+      onAfterOpen={() => titleRef.current?.focus()}
     >
       <div className="modal">
-        <section id="close">
+        <div className="modal-close-container">
           <button
             className="close-button"
-            role="button"
             aria-label={t('close')}
             onClick={handleClose}
           >
@@ -236,14 +227,21 @@ const StopRoutesModal: FC<Props> = props => {
               width={24}
             />
           </button>
-        </section>
-        <section className="section-margin-large">
+        </div>
+        <div className="section-margin-large">
           <div className="title-container">
-            <h2 className="title">{text}</h2>
+            <h2
+              ref={titleRef}
+              id={titleIdRef.current}
+              className="title"
+              tabIndex={-1}
+            >
+              {text}
+            </h2>
           </div>
-        </section>
-        <section className="section-margin-large">
-          <h2 id="show-settings-group-label">{t('show')}</h2>
+        </div>
+        <fieldset className="section-margin-large">
+          <legend>{t('show')}</legend>
           {showSettings.map(setting => {
             return (
               <React.Fragment key={`setting-${setting}`}>
@@ -263,53 +261,62 @@ const StopRoutesModal: FC<Props> = props => {
               </React.Fragment>
             );
           })}
-        </section>
-        <section className="section-margin-small">
+        </fieldset>
+        <div className="section-margin-small">
           <div className="divider" />
-        </section>
-        <section className="section-margin-large timeshift">
-          <h2> {t('timeShift')}</h2>
+        </div>
+        <section
+          className="section-margin-large timeshift"
+          aria-labelledby="timeshift-heading"
+        >
+          <h3 id="timeshift-heading">{t('timeShift')}</h3>
           <p>{t('timeShiftDescription')}</p>
           <div className="show-departures-over">
-            {t('timeShiftShow')}
+            <span id="timeshift-show-label">{t('timeShiftShow')}</span>
             <Dropdown
               name="duration"
               options={durations}
               placeholder={settings.timeShift.toString().concat(' min')}
               handleChange={handleTimeShift}
+              aria-labelledby="timeshift-show-label"
             />
           </div>
         </section>
-        <section className="section-margin-small">
+        <div className="section-margin-small">
           <div className="divider" />
-        </section>
-        <section className="section-margin-large title-and-no-renaming">
+        </div>
+        <div className="section-margin-large title-and-no-renaming">
           <div className="title">
-            <h2>
-              {t('hideLines', {
-                hidden: settings.hiddenRoutes.length,
-                all: props.combinedPatterns.length,
-              })}
-            </h2>
+            <h3 id="hide-routes-heading">
+              <span aria-live="polite" aria-atomic="true">
+                {t('hideLines', {
+                  hidden: settings.hiddenRoutes.length,
+                  all: props.combinedPatterns.length,
+                })}
+              </span>
+            </h3>
           </div>
           <div className="no-renaming">
-            <h2
-              role="button"
-              tabIndex={0}
+            <button
+              className="rename-destinations-button"
+              aria-expanded={showInputs}
+              aria-controls="rename-destination-inputs"
               onClick={() =>
                 showInputs
                   ? handleDeleteRenamings(null)
                   : handleShowInputs(null)
               }
-              onKeyPress={e =>
-                showInputs ? handleDeleteRenamings(e) : handleShowInputs(e)
-              }
             >
               {showInputs ? t('deleteRenamings') : t('renameDestinations')}
-            </h2>
+            </button>
           </div>
-        </section>
-        <section className="section-margin-large route-rows">
+        </div>
+        <div
+          role="group"
+          aria-labelledby="hide-routes-heading"
+          id="rename-destination-inputs"
+          className="section-margin-large route-rows"
+        >
           <div className="row">
             <Checkbox
               isSelected={hiddenRouteChecked(null)}
@@ -318,7 +325,7 @@ const StopRoutesModal: FC<Props> = props => {
               width={30}
               height={30}
               color={config.colors.primary}
-              aria-label={t('hideAllLines')}
+              aria-label={t('all') + ' — ' + t('hideAllLines')}
             >
               <span className="all">{t('all')}</span>
             </Checkbox>
@@ -333,7 +340,7 @@ const StopRoutesModal: FC<Props> = props => {
               ))}
             </div>
           )}
-          {props.combinedPatterns.map((pattern, index) => {
+          {props.combinedPatterns.map(pattern => {
             const patternArray = pattern.split(':');
             const gtfsID = [patternArray[0], patternArray[1]].join(':');
             const renameId = getRenameDestinationId(patternArray[3], gtfsID);
@@ -355,7 +362,10 @@ const StopRoutesModal: FC<Props> = props => {
                     width={30}
                     height={30}
                     color={config.colors.primary}
-                    aria-label={t('hideLine', { line: patternArray[2] })}
+                    aria-label={`${t(
+                      `transport-mode-${getRouteMode(route, config)}`,
+                      { defaultValue: getRouteMode(route, config) },
+                    )} — ${t('hideLine', { line: patternArray[2] })}`}
                   >
                     <div className="vehicle">
                       <Icon
@@ -379,32 +389,43 @@ const StopRoutesModal: FC<Props> = props => {
                 <div className="renamedDestinations">
                   {props.languages.map(lang => (
                     <input
-                      tabIndex={showInputs ? 1 : -1}
                       key={`${lang}-${renameId}`}
                       id={`${lang}-${renameId}`}
                       name={renameId}
                       className={cx(lang, !showInputs ? 'readonly' : '')}
-                      defaultValue={
-                        renamedDestination?.[lang]
-                          ? renamedDestination[lang]
-                          : undefined
-                      }
+                      value={renamedDestination?.[lang] ?? ''}
                       onChange={e => handleRenamedDestination(e, lang)}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          const focusable =
+                            'button, [href], input:not([disabled]), select, textarea, [tabindex]:not([tabindex="-1"])';
+                          const all = Array.from(
+                            document.querySelectorAll<HTMLElement>(focusable),
+                          );
+                          const idx = all.indexOf(e.target as HTMLElement);
+                          all[idx + 1]?.focus();
+                        }
+                      }}
                       placeholder={patternArray[3]}
                       readOnly={!showInputs}
+                      aria-label={t('renameDestinationFor', {
+                        line: patternArray[2],
+                        lang: t(`language-name-${lang as SupportedLanguage}`),
+                      })}
                     />
                   ))}
                 </div>
               </div>
             );
           })}
-        </section>
-        <section className="section-margin-small">
+        </div>
+        <div className="section-margin-small">
           <div className="divider-routes" />
           <div className="button-container">
             <Button onClick={handleSave} text={t('save')} />
           </div>
-        </section>
+        </div>
       </div>
     </Modal>
   );

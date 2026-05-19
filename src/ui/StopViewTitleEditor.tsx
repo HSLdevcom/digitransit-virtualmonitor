@@ -41,9 +41,13 @@ const StopViewTitleEditor: FC<IProps> = ({
   const inputID = `stop-title-input${id}-${lang}`;
   return (
     <div className="stop-title">
-      <p className="description">
-        {isDoubleView ? t('layout') : titleDescription}
-      </p>
+      {isDoubleView ? (
+        <p className="description">{t('layout')}</p>
+      ) : (
+        <label htmlFor={inputID} className="description">
+          {titleDescription}
+        </label>
+      )}
       <div className="stop-title-input-container">
         {!isDoubleView && (
           <InputWithEditIcon
@@ -54,19 +58,13 @@ const StopViewTitleEditor: FC<IProps> = ({
               maxLength: 15,
               placeholder: t('viewEditorName'),
             }}
-            ariaLabelEdit={`${t('modify')} ${t('stoptitle', {
+            ariaLabelEdit={`${t('modify')} ${t(name, {
               id: index + 1,
             })} ${t(`language-name-${lang}`)}`}
           />
         )}
         {isDoubleView && (
-          <input
-            className={cx('monitor-input', 'double')}
-            id={inputID}
-            value={layoutTitle}
-            tabIndex={-1}
-            readOnly
-          />
+          <span className={cx('monitor-input', 'double')}>{layoutTitle}</span>
         )}
       </div>
     </div>

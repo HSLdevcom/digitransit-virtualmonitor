@@ -1,5 +1,6 @@
 .modal-stop-routes {
-  h2 {
+  h2,
+  h3 {
     font-style: normal;
     font-weight: $font-weight;
     font-size: 18px;
@@ -15,6 +16,21 @@
       svg {
         margin-right: 10px !important;
       }
+    }
+  }
+
+  fieldset.section-margin-large {
+    border: none;
+    padding: 0;
+
+    legend {
+      padding: 0;
+      margin-bottom: 21px;
+      font-style: normal;
+      font-weight: $font-weight;
+      font-size: 18px;
+      line-height: 22px;
+      color: #333;
     }
   }
 /* stylelint-disable selector-class-pattern */
@@ -36,7 +52,7 @@
     padding: 0 !important;
   }
 
-  #close {
+  .modal-close-container {
     position: absolute;
     top: 30px;
     right: 30px;
@@ -226,16 +242,18 @@
 
     .title-and-no-renaming {
       display: flex;
+      align-items: center;
 
       .no-renaming {
         width: 50%;
         text-align: end;
 
-        h2 {
+        .rename-destinations-button {
+          background: none;
+          border: none;
+          padding: 0;
           color: $primary-color;
           cursor: pointer;
-          position: relative;
-          top: 5px;
           font-size: 15px;
           line-height: 18px;
         }

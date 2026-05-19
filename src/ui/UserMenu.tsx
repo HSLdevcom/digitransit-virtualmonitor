@@ -43,12 +43,12 @@ const UserMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
       className={classNames}
       overlayClassName={overlayClassNames}
       onRequestClose={() => onClose(null)}
+      contentLabel={t('userMenuOpen')}
     >
       <div className="container">
-        <section id="close">
+        <section className="modal-close-container">
           <button
             className="close-button"
-            role="button"
             aria-label={t('userMenuClose')}
             onClick={onClose}
           >
@@ -61,7 +61,11 @@ const UserMenu: FC<Props> = ({ createStatic, isOpen, onClose }) => {
           </button>
         </section>
         {user.sub && (
-          <section id="links" style={{ display: 'flex' }}>
+          <section
+            id="links"
+            style={{ display: 'flex' }}
+            aria-label={t('links')}
+          >
             <a
               href={'/logout'}
               onClick={() => {

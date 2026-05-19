@@ -9,6 +9,12 @@
     display: flex;
     margin-bottom: 10px;
     margin-left: 5px;
+
+    h3 {
+      margin: 0;
+      font-weight: $font-weight;
+      font-size: 1rem;
+    }
   }
 }
 
@@ -26,9 +32,13 @@
 
   .txt {
     display: flex;
+    margin-left: 10px;
   }
 
   label {
+    display: flex;
+    align-items: center;
+
     svg {
       margin-right: 5px !important;
     }
@@ -62,6 +72,8 @@
     padding: 0 10px;
     height: 44px;
     display: flex;
+    min-width: 190px;
+    justify-content: space-evenly;
     border-radius: 5px;
     background-color: white;
     align-items: center;

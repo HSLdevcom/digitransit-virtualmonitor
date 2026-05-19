@@ -20,6 +20,7 @@ const DeleteModal: FC<IProps> = ({
   return (
     <Modal
       appElement="#root"
+      contentLabel={t('delete-display', { id: name })}
       closeButtonLabel={t('close')}
       isOpen
       variant="small"
@@ -34,9 +35,13 @@ const DeleteModal: FC<IProps> = ({
         </div>
         <div className="monitor-modal-buttons">
           <button
-            disabled={loading}
+            aria-disabled={loading || undefined}
+            aria-busy={loading || undefined}
             className="monitor-button blue"
-            onClick={onDeleteCallBack}
+            onClick={() => {
+              if (loading) return;
+              onDeleteCallBack();
+            }}
           >
             {loading ? <Loading small primary /> : <>{t('delete')}</>}
           </button>

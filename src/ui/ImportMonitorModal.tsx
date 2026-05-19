@@ -167,8 +167,13 @@ const ImportMonitorModal: FC<IProps> = ({
       <div className="instructions">{t('import-instructions')}</div>
       <div className="import-modal-content">
         <div className="input-row">
+          <label htmlFor="input-import-monitor">{t('import-url-label')}</label>
           <input
             id={'input-import-monitor'}
+            aria-invalid={
+              viewNotFound || incorrectInstance || importQueryError || undefined
+            }
+            aria-describedby="import-url-error"
             onKeyDown={e => {
               if (isKeyboardSelectionEvent(e)) {
                 importMonitor();
@@ -182,21 +187,15 @@ const ImportMonitorModal: FC<IProps> = ({
             {t('import')}
           </button>
         </div>
-        {(incorrectInstance && (
-          <div className="no-monitor-found" role="alert">
-            {t('incorrect-instance')}
-          </div>
-        )) ||
-          (importQueryError && (
-            <div className="no-monitor-found" role="alert">
-              {t('query-error')}
-            </div>
-          )) ||
-          (viewNotFound && (
-            <div className="no-monitor-found" role="alert">
-              {t('no-monitor-found')}
-            </div>
-          ))}
+        <div id="import-url-error" className="no-monitor-found" role="alert">
+          {incorrectInstance
+            ? t('incorrect-instance')
+            : importQueryError
+            ? t('query-error')
+            : viewNotFound
+            ? t('no-monitor-found')
+            : ''}
+        </div>
 
         {monitor?.id && (
           <div className="import-preview">
@@ -208,15 +207,17 @@ const ImportMonitorModal: FC<IProps> = ({
             />
           </div>
         )}
-        {saveFailed && (
-          <div className="no-monitor-found" role="alert">
-            {t('save-failed')}
-          </div>
-        )}
+        <div className="no-monitor-found" role="alert">
+          {saveFailed ? t('save-failed') : ''}
+        </div>
         <div className="import-button-container">
           <button
-            onClick={addMonitor}
-            disabled={!monitor || addingMonitor}
+            onClick={() => {
+              if (!monitor || addingMonitor) return;
+              addMonitor();
+            }}
+            aria-disabled={!monitor || addingMonitor || undefined}
+            aria-busy={addingMonitor || undefined}
             className={cx('monitor-button blue', { loading: addingMonitor })}
           >
             {addingMonitor && (

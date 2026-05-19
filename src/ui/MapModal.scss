@@ -15,7 +15,12 @@
   align-items: center;
   justify-content: center;
 
-  #close {
+  h2 {
+    margin: 0;
+    font-weight: normal;
+  }
+
+  .modal-close-container {
     display: flex;
     justify-content: flex-end;
     position: absolute;

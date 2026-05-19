@@ -11,6 +11,7 @@
 
   .monitor-input.double {
     font-size: 21px;
+    color: #000;
   }
 
   .monitor-input-container {
@@ -37,6 +38,7 @@
 }
 
 .description {
+  display: block;
   font-size: 13px;
   font-style: normal;
   font-weight: $font-weight;

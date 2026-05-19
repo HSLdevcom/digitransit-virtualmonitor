@@ -7,6 +7,10 @@
   padding-top: 39px;
 
   .crumbs {
+    padding-left: 0;
+    list-style: none;
+    margin: 0;
+
     .to-home {
       text-decoration: none;
       color: $primary-color;
@@ -24,6 +28,7 @@
   }
 
   .main-header {
+    margin: 0;
     padding-top: 53px;
     font-size: 36px;
     font-style: normal;

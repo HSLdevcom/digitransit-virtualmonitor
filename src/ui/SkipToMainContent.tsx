@@ -4,11 +4,9 @@ import { useTranslation } from 'react-i18next';
 const SkipToMainContent = () => {
   const [t] = useTranslation();
   return (
-    <div className="sr-only">
-      <a className="skipLink" href="#mainContent">
-        {t('skip-to-main-content')}
-      </a>
-    </div>
+    <a className="skipLink sr-only" href="#mainContent">
+      {t('skip-to-main-content')}
+    </a>
   );
 };
 export default SkipToMainContent;

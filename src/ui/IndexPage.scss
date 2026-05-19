@@ -27,7 +27,8 @@
     border: 1px solid #888;
   }
 
-  &:disabled {
+  &:disabled,
+  &[aria-disabled='true'] {
     cursor: unset;
     background: #ccc;
     border: 1px solid #ccc;

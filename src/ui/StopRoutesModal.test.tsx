@@ -71,9 +71,9 @@ describe('StopRoutesModal', () => {
 
   it('renders checkboxes for show settings', () => {
     renderComponent();
-    expect(screen.getAllByLabelText('hideLine', { exact: false })).toHaveLength(
-      mockCombinedPatterns.length,
-    );
+    expect(
+      screen.getAllByLabelText('hideLine', { exact: false, selector: 'input' }),
+    ).toHaveLength(mockCombinedPatterns.length);
 
     expect(
       screen.getByLabelText('showEndOfLine', { exact: false }),
@@ -90,9 +90,10 @@ describe('StopRoutesModal', () => {
 
   it('renders route rows for each combined pattern', () => {
     renderComponent();
-    expect(screen.getAllByLabelText('hideLine').length).toBe(
-      mockCombinedPatterns.length,
-    );
+    expect(
+      screen.getAllByLabelText('hideLine', { exact: false, selector: 'input' })
+        .length,
+    ).toBe(mockCombinedPatterns.length);
   });
 
   it('calls closeModal with settings when save button is clicked', () => {

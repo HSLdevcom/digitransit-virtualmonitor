@@ -1,7 +1,7 @@
 export const isKeyboardSelectionEvent = (event, roleButton?: boolean) => {
   const backspace = [8, 'Backspace'];
-  const space = [13, ' ', 'Spacebar'];
-  const enter = [32, 'Enter'];
+  const space = [32, ' ', 'Spacebar'];
+  const enter = [13, 'Enter'];
 
   const key = event.key || event.which || event.keyCode || '';
 

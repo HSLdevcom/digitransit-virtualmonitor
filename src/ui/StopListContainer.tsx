@@ -51,7 +51,12 @@ const StopListContainer: FC<Props> = ({
   const rightItems = card.columns.right.stops;
   return (
     <div className="stop-list">
-      <section id={'left'}>
+      <section
+        id={`left-${card.id}`}
+        aria-label={
+          showStopTitles ? t('leftColumn') : `${t('added-stops')} ${card.id}`
+        }
+      >
         <div>
           {showStopTitles && (
             <div className="double-inputs">
@@ -95,7 +100,7 @@ const StopListContainer: FC<Props> = ({
         </div>
       </section>
       {showStopTitles && (
-        <section id={'right'}>
+        <section id={`right-${card.id}`} aria-label={t('rightColumn')}>
           <div className="double-inputs">
             {languages?.map(lan => (
               <StopListTitleInput

@@ -27,6 +27,9 @@
   }
 
   .modallink {
+    background: none;
+    border: none;
+    padding: 0;
     font-size: 15px;
     margin: 61px 0 0 78px;
     color: var(--primary-color);
@@ -50,6 +53,11 @@
   align-items: center;
 
   label {
-    margin-right: 25px;
+    display: flex;
+    align-items: center;
+
+    .hide-timetable {
+      margin-left: 25px;
+    }
   }
 }

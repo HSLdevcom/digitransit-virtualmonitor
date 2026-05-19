@@ -32,6 +32,8 @@
       margin-left: auto;
 
       .delete {
+        background: none;
+        border: none;
         cursor: pointer;
         width: 50px;
         padding-top: 8px;
@@ -52,6 +54,13 @@
         width: 50px;
         text-align: center;
 
+        > button {
+          background: none;
+          border: none;
+          padding: 0;
+          cursor: pointer;
+        }
+
         &.up-and-down {
           .container {
             width: 50px;
@@ -70,6 +79,9 @@
 
           .move-down {
             margin-top: 3px;
+            background: none;
+            border: none;
+            padding: 0;
           }
         }
       }
@@ -154,6 +166,7 @@
       max-width: 300px;
 
       .header {
+        display: block;
         padding-bottom: 16px;
         margin-left: 2px;
       }

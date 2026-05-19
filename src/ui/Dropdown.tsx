@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import cx from 'classnames';
 import Select from 'react-select';
@@ -17,6 +17,8 @@ interface IProps {
   readonly placeholder?: string | JSX.Element;
   readonly handleChange?: (option: IOption) => void;
   isDisabled?: boolean;
+  'aria-label'?: string;
+  'aria-labelledby'?: string;
 }
 
 interface Option {
@@ -37,9 +39,15 @@ const Dropdown: FC<IProps> = ({
   placeholder,
   handleChange,
   isDisabled = false,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledby,
 }) => {
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
+  const inputIdRef = useRef<string | null>(null);
+  if (inputIdRef.current === null) {
+    inputIdRef.current = uuid();
+  }
   const ddIndicator = (
     <Icon
       img="arrow-down"
@@ -65,11 +73,13 @@ const Dropdown: FC<IProps> = ({
         IndicatorSeparator: () => null,
       }}
       isDisabled={isDisabled}
-      inputId={uuid()}
+      inputId={inputIdRef.current}
+      aria-label={ariaLabel}
+      aria-labelledby={ariaLabelledby}
       name={name}
       options={options}
       placeholder={placeholder ? placeholder : '--'}
-      tabIndex="0"
+      tabIndex={0}
       onChange={handleChange}
     />
   );

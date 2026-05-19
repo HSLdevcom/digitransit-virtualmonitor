@@ -1,6 +1,7 @@
-import React, { FC, useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useRef } from 'react';
 import Modal from 'react-modal';
 import { useTranslation } from 'react-i18next';
+import uniqueId from 'lodash/uniqueId';
 import Icon from './Icon';
 import { ConfigContext } from '../contexts';
 
@@ -10,6 +11,7 @@ interface IProps {
   isOpen?: boolean;
   portalClassName?: string;
   ariaHideApp?: boolean;
+  onAfterOpen?: () => void;
 }
 const LargeModal: FC<IProps> = ({
   onRequestClose,
@@ -17,10 +19,16 @@ const LargeModal: FC<IProps> = ({
   isOpen,
   portalClassName,
   ariaHideApp,
+  onAfterOpen,
   ...rest
 }) => {
   const [t] = useTranslation();
   const config = useContext(ConfigContext);
+  const headingIdRef = useRef<string | null>(null);
+  if (headingIdRef.current === null) {
+    headingIdRef.current = uniqueId('modal-heading-');
+  }
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
   return (
     <Modal
@@ -28,12 +36,15 @@ const LargeModal: FC<IProps> = ({
       onRequestClose={() => onRequestClose()}
       portalClassName={portalClassName}
       ariaHideApp={ariaHideApp}
+      aria={{ labelledby: headingIdRef.current }}
+      onAfterOpen={() => {
+        onAfterOpen ? onAfterOpen() : headingRef.current?.focus();
+      }}
     >
       <div className="monitor-modal-container">
-        <section id="close">
+        <div className="modal-close-container">
           <button
             className="close-button"
-            role="button"
             aria-label={t('close')}
             onClick={() => onRequestClose()}
           >
@@ -44,8 +55,15 @@ const LargeModal: FC<IProps> = ({
               width={24}
             />
           </button>
-        </section>
-        <h2 className="monitor-modal-header">{t(header)}</h2>
+        </div>
+        <h2
+          ref={headingRef}
+          id={headingIdRef.current}
+          className="monitor-modal-header"
+          tabIndex={-1}
+        >
+          {t(header)}
+        </h2>
         {rest.children}
       </div>
     </Modal>

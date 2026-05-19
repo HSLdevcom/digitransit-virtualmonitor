@@ -216,9 +216,9 @@ const App: FC<IConfigurationProps> = props => {
                   <>
                     <SkipToMainContent />
                     <BannerContainer />
-                    <section role="main" id="mainContent">
+                    <main id="mainContent">
                       <CreateViewPage />
-                    </section>
+                    </main>
                   </>
                 )}
               />
@@ -234,9 +234,9 @@ const App: FC<IConfigurationProps> = props => {
                   <>
                     <SkipToMainContent />
                     <BannerContainer />
-                    <section role="main" id="mainContent">
+                    <main id="mainContent">
                       <CreateViewPage />
-                    </section>
+                    </main>
                   </>
                 )}
               />
@@ -246,9 +246,9 @@ const App: FC<IConfigurationProps> = props => {
                   <>
                     <SkipToMainContent />
                     <BannerContainer />
-                    <section role="main" id="mainContent">
+                    <main id="mainContent">
                       <UserMonitors />
-                    </section>
+                    </main>
                   </>
                 )}
               />

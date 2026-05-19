@@ -4,7 +4,18 @@ import { useToggleState } from '@react-stately/toggle';
 import { useFocusRing } from '@react-aria/focus';
 import Icon from './Icon';
 
-function Checkbox(props) {
+interface IProps {
+  name?: string;
+  isSelected?: boolean;
+  onChange?: () => void;
+  'aria-label'?: string;
+  color?: string;
+  width?: number;
+  height?: number;
+  children?: React.ReactNode;
+}
+
+function Checkbox(props: IProps) {
   const state = useToggleState(props);
   const ref = React.useRef();
   const { inputProps } = useCheckbox(props, state, ref);

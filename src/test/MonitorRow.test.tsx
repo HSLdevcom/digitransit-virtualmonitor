@@ -87,7 +87,7 @@ it('should render a cancelled departure with alert icon and destination', () => 
   expect(
     container.getElementsByClassName('grid-col destination')[0]?.children[0]
       .nodeName,
-  ).toEqual('svg');
+  ).toEqual('SPAN');
 });
 
 it('should do show tilde when realtime is off', () => {

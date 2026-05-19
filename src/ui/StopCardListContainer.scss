@@ -61,8 +61,9 @@
     }
   }
 
-  &:disabled {
-    cursor: unset;
+  &:disabled,
+  &[aria-disabled='true'] {
+    cursor: not-allowed;
     background: #ccc;
     border: 1px solid #ccc;
     color: #fff;

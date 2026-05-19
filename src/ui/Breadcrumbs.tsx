@@ -39,37 +39,39 @@ const Breadcrumbs = () => {
 
   return (
     <div className="breadcrumbs-container">
-      <div className="crumbs">
-        {crumbs.map((crumb, i) => {
-          let path = arr[i];
-          if (crumb === null) {
-            crumb = 'breadCrumbsCreate';
-            path = '';
-          }
-          return (
-            <React.Fragment key={`crumb${i}`}>
-              {i !== 0 && (
-                <Icon
-                  img={'arrow-down'}
-                  width={14}
-                  height={14}
-                  rotate={'-90'}
-                  color={config.colors.primary}
-                  margin={'0 10px'}
-                />
-              )}
-              {i === crumbs.length - 1 ? (
-                t(crumb)
-              ) : (
-                <Link className="to-home" to={`/${path}`}>
-                  {t(crumb)}
-                </Link>
-              )}
-            </React.Fragment>
-          );
-        })}
-      </div>
-      <span className="main-header">{t(crumbs[crumbs.length - 1])}</span>
+      <nav aria-label={t('breadcrumbsNav')}>
+        <ol className="crumbs">
+          {crumbs.map((crumb, i) => {
+            let path = arr[i];
+            if (crumb === null) {
+              crumb = 'breadCrumbsCreate';
+              path = '';
+            }
+            return (
+              <li key={`crumb${i}`} style={{ display: 'contents' }}>
+                {i !== 0 && (
+                  <Icon
+                    img={'arrow-down'}
+                    width={14}
+                    height={14}
+                    rotate={'-90'}
+                    color={config.colors.primary}
+                    margin={'0 10px'}
+                  />
+                )}
+                {i === crumbs.length - 1 ? (
+                  <span aria-current="page">{t(crumb)}</span>
+                ) : (
+                  <Link className="to-home" to={`/${path}`}>
+                    {t(crumb)}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+      <h1 className="main-header">{t(crumbs[crumbs.length - 1])}</h1>
     </div>
   );
 };

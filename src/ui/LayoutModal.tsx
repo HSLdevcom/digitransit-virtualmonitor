@@ -1,4 +1,4 @@
-import React, { ClassAttributes, FC, useState, useEffect } from 'react';
+import React, { ClassAttributes, FC, useState, useEffect, useRef } from 'react';
 import cx from 'classnames';
 import { horizontalLayouts, verticalLayouts } from './Layouts';
 import isEqual from 'lodash/isEqual';
@@ -35,15 +35,11 @@ const LayoutModal: FC<Props> = ({
 
   const [selected, setSelected] = useState(option);
 
+  const selectedBtnRef = useRef<HTMLButtonElement | null>(null);
+
   useEffect(() => {
     if (!isEqual(selected, option)) {
       setSelected(option);
-    }
-    const layoutBtn = document.getElementById(
-      `layoutBtn-${selected.value}`,
-    ) as HTMLInputElement;
-    if (layoutBtn) {
-      layoutBtn.focus();
     }
   }, [option, open]);
 
@@ -56,24 +52,44 @@ const LayoutModal: FC<Props> = ({
       portalClassName="layout-modal modal"
       ariaHideApp={ariaHideApp}
       header={'layoutModalHeader'}
+      onAfterOpen={() => selectedBtnRef.current?.focus()}
     >
       <div className="layout-modal-content-container">
         <div className="layouts">
           {layouts.map(l => {
             return (
               <div className="row" key={`layoutrow_${l.label}`}>
-                <h3 className="row-header">{t(l.label)}</h3>
-                <div className="row-info">{t(l.infoText)}</div>
+                {l.label && (
+                  <h3 id={`row-header-${l.label}`} className="row-header">
+                    {t(l.label)}
+                  </h3>
+                )}
+                {l.infoText && <div className="row-info">{t(l.infoText)}</div>}
                 {l.label === 'information-display' &&
                   !allowInformationDisplay && (
                     <div className="info-display-warning">
                       {t('info-display-only-one')}
                     </div>
                   )}
-                <div className="options">
+                <div
+                  className="options"
+                  role="group"
+                  aria-labelledby={
+                    l.label ? `row-header-${l.label}` : undefined
+                  }
+                >
                   {l.options.map(option => {
+                    const isUnavailable =
+                      +option.value > 17 &&
+                      +option.value < 20 &&
+                      !allowInformationDisplay;
                     return (
                       <button
+                        ref={el => {
+                          if (isEqual(option.value, selected.value)) {
+                            selectedBtnRef.current = el;
+                          }
+                        }}
                         className={cx(
                           'option',
                           orientation === 'vertical' ? 'vertical' : '',
@@ -81,18 +97,21 @@ const LayoutModal: FC<Props> = ({
                             ? 'label-selected'
                             : '',
                         )}
-                        disabled={
-                          +option.value > 17 &&
-                          +option.value < 20 &&
-                          !allowInformationDisplay
-                        }
-                        onClick={() => setSelected(option)}
+                        aria-disabled={isUnavailable || undefined}
+                        onClick={() => {
+                          if (isUnavailable) return;
+                          setSelected(option);
+                        }}
                         id={`layoutBtn-${option.value}`}
                         key={`button_${option.value}`}
-                        role="button"
-                        aria-label={`${t(
-                          orientation as 'horizontal' | 'vertical',
-                        )} ${t(l.label)} ${option.rows} ${t('rows')}`}
+                        aria-label={[
+                          t(orientation as 'horizontal' | 'vertical'),
+                          l.label ? t(l.label) : null,
+                          option.rows ? `${option.rows} ${t('rows')}` : null,
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                        aria-pressed={isEqual(option.value, selected.value)}
                       >
                         {option.label}
                       </button>
@@ -105,7 +124,7 @@ const LayoutModal: FC<Props> = ({
         </div>
         <div className="button-container">
           <button
-            className="close-button"
+            className="save-button"
             onClick={() => onSave(+selected.value)}
           >
             {t('save')}

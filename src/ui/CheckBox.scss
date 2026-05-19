@@ -1,14 +1,16 @@
 
 .check-box {
+  position: relative;
   display: flex;
   align-items: center;
   cursor: pointer;
   margin: 5px;
 
   input[type="checkbox"] {
-    clip: rect(0 0 0 0);
+    position: absolute;
     clip-path: inset(50%);
-    height: 0;
+    height: 1px;
+    width: 1px;
     overflow: hidden;
     white-space: nowrap;
   }

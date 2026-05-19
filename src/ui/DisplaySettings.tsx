@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from './Icon';
 import cx from 'classnames';
@@ -6,6 +6,7 @@ import Checkbox from './CheckBox';
 import { ConfigContext } from '../contexts';
 import Toggle from './Toggle';
 import { SupportedLanguage } from '../i18n';
+import uniqueId from 'lodash/uniqueId';
 
 interface IProps {
   languages: Array<string>;
@@ -28,6 +29,15 @@ const DisplaySettings: FC<IProps> = ({
 }) => {
   const config = useContext(ConfigContext);
   const [t] = useTranslation();
+  const idPrefixRef = useRef<string | null>(null);
+  if (idPrefixRef.current === null) {
+    idPrefixRef.current = uniqueId('display-settings-');
+  }
+  const ids = {
+    orientation: `${idPrefixRef.current}-orientation`,
+    language: `${idPrefixRef.current}-language`,
+    map: `${idPrefixRef.current}-map`,
+  };
   const options: Array<SupportedLanguage> = ['fi', 'sv', 'en'];
   const isChecked = (option: string) => {
     return languages.includes(option);
@@ -37,10 +47,12 @@ const DisplaySettings: FC<IProps> = ({
     <div className="display-settings-container">
       <section
         className="display-orientation-container"
-        aria-label={t('displayDirection')}
+        aria-labelledby={ids.orientation}
       >
         <div className="headers">
-          <div className="orientation-header">{t('displayDirection')}</div>
+          <h3 id={ids.orientation} className="orientation-header">
+            {t('displayDirection')}
+          </h3>
         </div>
         <div className="orientation-controls">
           <button
@@ -49,8 +61,7 @@ const DisplaySettings: FC<IProps> = ({
             })}
             onClick={() => handleOrientation('horizontal')}
             aria-label={t('displayDirection') + ' ' + t('horizontal')}
-            role="button"
-            disabled={orientation === 'horizontal'}
+            aria-pressed={orientation === 'horizontal'}
           >
             <Icon
               img={
@@ -68,8 +79,7 @@ const DisplaySettings: FC<IProps> = ({
             })}
             onClick={() => handleOrientation('vertical')}
             aria-label={t('displayDirection') + ' ' + t('vertical')}
-            role="button"
-            disabled={orientation === 'vertical'}
+            aria-pressed={orientation === 'vertical'}
           >
             <Icon
               img={
@@ -84,22 +94,21 @@ const DisplaySettings: FC<IProps> = ({
       </section>
       <section
         className="display-language-container"
-        aria-label={t('displayLanguages')}
+        aria-labelledby={ids.language}
       >
         <div className="headers">
-          <div
+          <h3
+            id={ids.language}
             className={cx('language-header ' + lang, {
               hsl: config.name === 'hsl',
             })}
           >
             {t('displayLanguages')}
-          </div>
+          </h3>
         </div>
-        {languages.length === 0 && (
-          <div className="language-alert" aria-hidden="true">
-            {t('chooseOne')}
-          </div>
-        )}
+        <div className="language-alert" role="alert">
+          {languages.length === 0 ? t('chooseOne') : ''}
+        </div>
         <div className="language-controls">
           {options.map(option => {
             return (
@@ -108,9 +117,9 @@ const DisplaySettings: FC<IProps> = ({
                 name={option}
                 isSelected={isChecked(option)}
                 onChange={() => handleChange(option)}
-                aria-label={
-                  t('displayLanguage') + ' ' + t(`language-name-${option}`)
-                }
+                aria-label={`${option.toUpperCase()} – ${t(
+                  'displayLanguage',
+                )} ${t(`language-name-${option}`)}`}
                 color={config.colors.primary}
               >
                 {option.toUpperCase()}
@@ -120,29 +129,31 @@ const DisplaySettings: FC<IProps> = ({
         </div>
       </section>
       {config.map.inUse && (
-        <section className="display-language-container">
+        <section
+          className="display-language-container"
+          aria-labelledby={ids.map}
+        >
           <div className="headers">
-            <div
-              className={cx('map-header ' + lang, {
+            <h3
+              id={ids.map}
+              className={cx('language-header ' + lang, {
                 hsl: config.name === 'hsl',
               })}
             >
               {t('displayMap')}
-            </div>
+            </h3>
           </div>
           {config.map.inUse && (
             <div className="map-toggle">
               {' '}
               <label>
                 <Toggle
-                  id="toggle"
                   toggled={showMap}
-                  title="showmap"
                   onToggle={setShowMap}
                   disabled={disableToggle}
                 />
+                <span className="txt">{t('showMap')}</span>
               </label>
-              <div className="txt">{t('showMap')}</div>
             </div>
           )}
         </section>

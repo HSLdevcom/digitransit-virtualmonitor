@@ -45,6 +45,8 @@ it('should add createView to path when the button is clicked', () => {
 });
 
 it('render an image', () => {
-  const screen = render(<MemoryRouter>{withContext()}</MemoryRouter>);
-  expect(screen.getAllByAltText('monitor-image').length).toEqual(1);
+  const { container } = render(<MemoryRouter>{withContext()}</MemoryRouter>);
+  const img = container.querySelector('img.desktop-img');
+  expect(img).not.toBeNull();
+  expect(img.getAttribute('alt')).toBe('');
 });

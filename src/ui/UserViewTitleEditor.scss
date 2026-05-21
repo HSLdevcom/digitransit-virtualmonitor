@@ -4,20 +4,27 @@
   background: #f2f5f7;
   color: #666;
   height: 80px;
-  align-items: center;
+  align-items: flex-end;
   border-bottom: 1px solid #ddd;
   margin-bottom: 18px;
 
   .user-view-title-input-container {
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     flex: 1;
-    align-items: center;
+    padding-bottom: 12px;
 
     > label {
+      display: block;
+      font-size: 13px;
+      font-style: normal;
+      font-weight: $font-weight;
+      line-height: 24px;
+      letter-spacing: -0.3px;
+      text-align: left;
       white-space: nowrap;
-      margin-right: 8px;
-      font-size: 15px;
-      flex-shrink: 0;
+      margin: 0 0 2px 3px;
     }
 
     .monitor-input-container {
@@ -45,7 +52,7 @@
 
   .delete-icon {
     cursor: pointer;
-    padding: 0 10px;
+    padding: 0 10px 12px;
     background-color: #f2f5f7;
   }
 }

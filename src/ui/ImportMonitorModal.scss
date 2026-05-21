@@ -1,8 +1,27 @@
 .import-modal-content {
   .input-row {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     padding-top: 20px;
+
+    .label-and-input {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-style: normal;
+        font-weight: $font-weight;
+        line-height: 24px;
+        letter-spacing: -0.3px;
+        text-align: left;
+        white-space: nowrap;
+        margin: 0 0 4px 3px;
+        color:#666
+      }
+    }
 
     .monitor-button {
       height: 40px;
@@ -11,7 +30,6 @@
     }
 
     #input-import-monitor {
-      flex: 1;
       height: 42px;
       border-radius: 5px;
       border: solid 1px #888;

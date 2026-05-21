@@ -167,22 +167,29 @@ const ImportMonitorModal: FC<IProps> = ({
       <div className="instructions">{t('import-instructions')}</div>
       <div className="import-modal-content">
         <div className="input-row">
-          <label htmlFor="input-import-monitor">{t('import-url-label')}</label>
-          <input
-            id={'input-import-monitor'}
-            aria-invalid={
-              viewNotFound || incorrectInstance || importQueryError || undefined
-            }
-            aria-describedby="import-url-error"
-            onKeyDown={e => {
-              if (isKeyboardSelectionEvent(e)) {
-                importMonitor();
+          <div className="label-and-input">
+            <label htmlFor="input-import-monitor">
+              {t('import-url-label')}
+            </label>
+            <input
+              id={'input-import-monitor'}
+              aria-invalid={
+                viewNotFound ||
+                incorrectInstance ||
+                importQueryError ||
+                undefined
               }
-            }}
-            placeholder={'url'}
-            onChange={e => setUrl(e.target.value)}
-            value={url}
-          />
+              aria-describedby="import-url-error"
+              onKeyDown={e => {
+                if (isKeyboardSelectionEvent(e)) {
+                  importMonitor();
+                }
+              }}
+              placeholder={'url'}
+              onChange={e => setUrl(e.target.value)}
+              value={url}
+            />
+          </div>
           <button onClick={importMonitor} className="monitor-button white">
             {t('import')}
           </button>

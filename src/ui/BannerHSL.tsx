@@ -1,22 +1,59 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import SiteHeader from '@hsl-fi/site-header';
-import { UserContext, ConfigContext, FavouritesContext } from '../contexts';
+import { SiteHeader, UserMenu, QuickSearch } from '@hsl-fi/site-header';
+import { UserContext, ConfigContext } from '../contexts';
 import { logout } from '../util/logoutUtil';
 
-const notificationAPI = '/api/user/notifications';
-
 const BannerHSL = () => {
-  const { t, i18n } = useTranslation();
-  const favourites = useContext(FavouritesContext);
+  const { i18n } = useTranslation();
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
-  const [banners, setBanners] = useState([]);
-  const [userState, setUser] = useState(user);
-  const notificationApiUrls = {
-    get: `${notificationAPI}?language=${i18n.language}`,
-    post: `${notificationAPI}?language=${i18n.language}`,
-  };
+  const [, setUser] = useState(user);
+  const lang = i18n.language as 'fi' | 'sv' | 'en';
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [searchError, setSearchError] = useState(false);
+  const [searchHits, setSearchHits] = useState([]);
+  const [searchHitsCount, setSearchHitsCount] = useState(0);
+
+  useEffect(() => {
+    if (!searchQuery || !config.suggestionsUri) {
+      setSearchHits([]);
+      setSearchHitsCount(0);
+      return undefined;
+    }
+
+    const timer = setTimeout(() => {
+      setSearchLoading(true);
+      setSearchError(false);
+      fetch(
+        `${
+          config.suggestionsUri
+        }?language=${lang}&take=5&query=${encodeURIComponent(searchQuery)}`,
+      )
+        .then(res => res.json())
+        .then(data => {
+          const hits = (data?.hits || []).map(h => ({
+            id: h.id,
+            title: h.title,
+            type: h.type,
+            link: { href: h.url },
+          }));
+          setSearchHits(hits);
+          setSearchHitsCount(
+            data?.totalHits != null ? data.totalHits : hits.length,
+          );
+          setSearchLoading(false);
+        })
+        .catch(() => {
+          setSearchError(true);
+          setSearchLoading(false);
+        });
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, lang]);
 
   const changeLanguage = lang => {
     i18n.changeLanguage(lang);
@@ -25,94 +62,68 @@ const BannerHSL = () => {
     }
   };
 
-  useEffect(() => {
-    const controller = new AbortController();
-    if (config.bannersUri) {
-      fetch(`${config.bannersUri}language=${i18n.language}`)
-        .then(res => res.json())
-        .then(data => {
-          setBanners(data);
-        });
-    }
-    return () => controller.abort();
-  }, [i18n.language]);
-
-  const languages = [
-    {
-      name: 'fi',
-      url: '/',
-      onClick: () => {
-        changeLanguage('fi');
-      },
+  const langMenu = {
+    fi: {
+      href: '/',
+      onClick: () => changeLanguage('fi'),
     },
-    {
-      name: 'sv',
-      url: '/sv',
-      onClick: () => {
-        changeLanguage('sv');
-      },
+    sv: {
+      href: '/sv',
+      onClick: () => changeLanguage('sv'),
     },
-    {
-      name: 'en',
-      url: '/en',
-      onClick: () => {
-        changeLanguage('en');
-      },
+    en: {
+      href: '/en',
+      onClick: () => changeLanguage('en'),
     },
-  ];
+  };
 
   const { given_name, family_name } = user;
 
-  const initials =
-    given_name && family_name
-      ? given_name.charAt(0) + family_name.charAt(0)
-      : ''; // Authenticated user's initials, will be shown next to Person-icon.
-
   const url = encodeURI(window.location.pathname);
   const params = location.search && location.search.substring(1);
-  const userMenu =
-    user.sub || user.notLogged
-      ? {
-          userMenu: {
-            isLoading: false, // When fetching for login-information, `isLoading`-property can be set to true. Spinner will be shown.
-            isAuthenticated: !!user.sub, // If user is authenticated, set `isAuthenticated`-property to true.
-            isSelected: false,
-            loginUrl: `hsl-login?url=${url}&${params}`, // Url that user will be redirect to when Person-icon is pressed and user is not logged in.
-            initials: initials,
-            menuItems: [
-              {
-                name: t('userinfo'),
-                url: `${config.HSLUri}/omat-tiedot`,
-                //onClick: () => {},
-              },
-              {
-                name: t('logout'),
-                url: '/logout',
-                onClick: () => logout(setUser),
-              },
-            ],
-          },
-        }
-      : {};
 
-  const siteHeaderRef = useRef(null);
-  useEffect(() => {
-    siteHeaderRef.current?.fetchNotifications();
-  }, [favourites]);
+  const userMenuNode =
+    user.sub || user.notLogged ? (
+      <UserMenu
+        authenticated={!!user.sub}
+        loading={false}
+        loginLink={{ href: `hsl-login?url=${url}&${params}` }}
+        logoutLink={{
+          href: '/logout',
+          onClick: () => logout(setUser),
+        }}
+        travelersAccountLink={{ href: `${config.HSLUri}/omat-tiedot` }}
+        myStopsAndRoutesLink={{ href: `${config.HSLUri}/omat-reitit` }}
+        name={
+          given_name && family_name
+            ? { givenName: given_name, familyName: family_name }
+            : undefined
+        }
+        lang={lang}
+      />
+    ) : undefined;
+
+  const searchNode = config.suggestionsUri ? (
+    <QuickSearch
+      searchPageLink={{ href: `${config.HSLUri}/${lang}/haku` }}
+      loading={searchLoading}
+      error={searchError}
+      query={searchQuery}
+      onQueryChange={e => setSearchQuery(e.target.value)}
+      hitsCount={searchHitsCount}
+      hits={searchHits}
+      lang={lang}
+    />
+  ) : undefined;
 
   return (
-    <>
-      <SiteHeader
-        ref={siteHeaderRef}
-        hslFiUrl={config.HSLUri}
-        lang={i18n.language}
-        {...userMenu}
-        languageMenu={languages}
-        banners={banners}
-        suggestionsApiUrl={config.suggestionsUri}
-        notificationApiUrls={notificationApiUrls}
-      />
-    </>
+    <SiteHeader
+      baseUrl={config.HSLUri}
+      lang={lang}
+      langMenu={langMenu}
+      userMenu={userMenuNode}
+      search={searchNode}
+    />
   );
 };
 

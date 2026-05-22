@@ -12,7 +12,8 @@
     "@digitransit-component/digitransit-component-autosuggest": "7.1.5",
     "@habx/apollo-multi-endpoint-link": "^2.5.0",
     "@hsl-fi/modal": "^0.3.2",
-    "@hsl-fi/site-header": "4.5.0",
+    "@hsl-fi/design-tokens": "^1.24.0",
+    "@hsl-fi/site-header": "^6.5.0",
     "@react-aria/checkbox": "^3.4.1",
     "@react-aria/focus": "^3.5.0",
     "@react-stately/toggle": "^3.2.3",
@@ -43,13 +44,13 @@
     "react-modal": "^3.11.2",
     "react-promise": "^2.1.0",
     "react-router-dom": "^5.2.0",
+    "react-scripts": "5.0.1",
     "react-select": "^4.3.1",
     "react-test-renderer": "^16.14.0",
     "sass": "^1.49.9",
     "suncalc": "1.8.0",
     "url": "^0.11.0",
-    "uuid": "^8.3.2",
-    "react-scripts": "5.0.1"
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "start-prod": "cd server && npm start",
@@ -118,6 +119,7 @@
   "overrides": {
     "axios": "^1.15.0",
     "lodash": "4.18.1",
-    "lodash-es": "4.18.1"
+    "lodash-es": "4.18.1",
+    "@radix-ui/react-popover": "1.1.15"
   }
 }

@@ -4,11 +4,12 @@ import { SiteHeader, UserMenu, QuickSearch } from '@hsl-fi/site-header';
 import { UserContext, ConfigContext } from '../contexts';
 import { logout } from '../util/logoutUtil';
 
+const NOTIFICATION_API = '/api/user/notifications';
+
 const BannerHSL = () => {
   const { i18n } = useTranslation();
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
-  const [, setUser] = useState(user);
   const lang = i18n.language as 'fi' | 'sv' | 'en';
 
   const [userNotifications, setUserNotifications] = useState({
@@ -26,17 +27,16 @@ const BannerHSL = () => {
     },
   });
 
-  const notificationAPI = '/api/user/notifications';
-
   useEffect(() => {
-    if (!user.sub) {
-      return undefined;
-    }
+    if (!user.sub) return undefined;
+
+    let controller = new AbortController();
 
     const markAsRead = () => {
-      fetch(`${notificationAPI}?language=${lang}`, {
+      fetch(`${NOTIFICATION_API}?language=${lang}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
+        signal: controller.signal,
       })
         .then(() => {
           setUserNotifications(prev => ({ ...prev, unreadCount: 0 }));
@@ -47,12 +47,15 @@ const BannerHSL = () => {
     };
 
     const fetchNotifications = () => {
+      controller = new AbortController();
       setUserNotifications(prev => ({
         ...prev,
         loading: true,
         error: false,
       }));
-      fetch(`${notificationAPI}?language=${lang}`)
+      fetch(`${NOTIFICATION_API}?language=${lang}`, {
+        signal: controller.signal,
+      })
         .then(res => res.json())
         .then(data => {
           setUserNotifications({
@@ -67,7 +70,8 @@ const BannerHSL = () => {
             onOpen: markAsRead,
           });
         })
-        .catch(() => {
+        .catch(err => {
+          if (err.name === 'AbortError') return;
           setUserNotifications(prev => ({
             ...prev,
             loading: false,
@@ -78,7 +82,10 @@ const BannerHSL = () => {
 
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 60000);
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      controller.abort();
+    };
   }, [user.sub, lang]);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -94,6 +101,7 @@ const BannerHSL = () => {
       return undefined;
     }
 
+    const controller = new AbortController();
     const timer = setTimeout(() => {
       setSearchLoading(true);
       setSearchError(false);
@@ -101,6 +109,7 @@ const BannerHSL = () => {
         `${
           config.suggestionsUri
         }?language=${lang}&take=5&query=${encodeURIComponent(searchQuery)}`,
+        { signal: controller.signal },
       )
         .then(res => res.json())
         .then(data => {
@@ -116,19 +125,23 @@ const BannerHSL = () => {
           );
           setSearchLoading(false);
         })
-        .catch(() => {
+        .catch(err => {
+          if (err.name === 'AbortError') return;
           setSearchError(true);
           setSearchLoading(false);
         });
     }, 300);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
   }, [searchQuery, lang]);
 
-  const changeLanguage = lang => {
-    i18n.changeLanguage(lang);
-    if (lang !== localStorage.getItem('lang')) {
-      localStorage.setItem('lang', lang);
+  const changeLanguage = (newLang: string) => {
+    i18n.changeLanguage(newLang);
+    if (newLang !== localStorage.getItem('lang')) {
+      localStorage.setItem('lang', newLang);
     }
   };
 
@@ -150,7 +163,7 @@ const BannerHSL = () => {
   const { given_name, family_name } = user;
 
   const url = encodeURI(window.location.pathname);
-  const params = location.search && location.search.substring(1);
+  const params = window.location.search && window.location.search.substring(1);
 
   const userMenuNode =
     user.sub || user.notLogged ? (
@@ -160,7 +173,8 @@ const BannerHSL = () => {
         loginLink={{ href: `hsl-login?url=${url}&${params}` }}
         logoutLink={{
           href: '/logout',
-          onClick: () => logout(setUser),
+          // eslint-disable-next-line @typescript-eslint/no-empty-function
+          onClick: () => logout(() => {}),
         }}
         travelersAccountLink={{ href: `${config.HSLUri}/omat-tiedot` }}
         myStopsAndRoutesLink={{ href: `${config.HSLUri}/omat-reitit` }}

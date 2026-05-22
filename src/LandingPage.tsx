@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { ConfigContext, UserContext } from './contexts';
 import BannerContainer from './ui/BannerContainer';
+import FooterContainer from './ui/FooterContainer';
 import IndexPage from './ui/IndexPage';
 import { Redirect } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -57,6 +58,7 @@ const LandingPage = () => {
           <IndexPage buttons={buttons} renderLogInMessage />
         )}
       </main>
+      <FooterContainer />
     </>
   );
 };

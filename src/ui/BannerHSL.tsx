@@ -165,28 +165,29 @@ const BannerHSL = () => {
   const url = encodeURI(window.location.pathname);
   const params = window.location.search && window.location.search.substring(1);
 
-  const userMenuNode =
-    user.sub || user.notLogged ? (
-      <UserMenu
-        authenticated={!!user.sub}
-        loading={false}
-        loginLink={{ href: `hsl-login?url=${url}&${params}` }}
-        logoutLink={{
-          href: '/logout',
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          onClick: () => logout(() => {}),
-        }}
-        travelersAccountLink={{ href: `${config.HSLUri}/omat-tiedot` }}
-        myStopsAndRoutesLink={{ href: `${config.HSLUri}/omat-reitit` }}
-        name={
-          given_name && family_name
-            ? { givenName: given_name, familyName: family_name }
-            : undefined
-        }
-        userNotifications={user.sub ? userNotifications : undefined}
-        lang={lang}
-      />
-    ) : undefined;
+  const userResolved = !!user.sub || !!user.notLogged;
+
+  const userMenuNode = (
+    <UserMenu
+      authenticated={!!user.sub}
+      loading={!userResolved}
+      loginLink={{ href: `hsl-login?url=${url}&${params}` }}
+      logoutLink={{
+        href: '/logout',
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        onClick: () => logout(() => {}),
+      }}
+      travelersAccountLink={{ href: `${config.HSLUri}/omat-tiedot` }}
+      myStopsAndRoutesLink={{ href: `${config.HSLUri}/omat-reitit` }}
+      name={
+        given_name && family_name
+          ? { givenName: given_name, familyName: family_name }
+          : undefined
+      }
+      userNotifications={user.sub ? userNotifications : undefined}
+      lang={lang}
+    />
+  );
 
   const searchNode = config.suggestionsUri ? (
     <QuickSearch

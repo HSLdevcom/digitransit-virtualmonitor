@@ -11,7 +11,7 @@ export const logout = setUser => {
   if (logoutChannel) {
     logoutChannel.postMessage('Logout');
   }
-  setUser({});
+  setUser({ notLogged: true });
 };
 
 export const listenForLogoutAllTabs = setUser => {

@@ -11,6 +11,76 @@ const BannerHSL = () => {
   const [, setUser] = useState(user);
   const lang = i18n.language as 'fi' | 'sv' | 'en';
 
+  const [userNotifications, setUserNotifications] = useState({
+    unreadCount: 0,
+    loading: false,
+    error: false,
+    notifications: [],
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    refetch: () => {
+      /* noop until first fetch */
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onOpen: () => {
+      /* noop until first fetch */
+    },
+  });
+
+  const notificationAPI = '/api/user/notifications';
+
+  useEffect(() => {
+    if (!user.sub) {
+      return undefined;
+    }
+
+    const markAsRead = () => {
+      fetch(`${notificationAPI}?language=${lang}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+      })
+        .then(() => {
+          setUserNotifications(prev => ({ ...prev, unreadCount: 0 }));
+        })
+        .catch(() => {
+          /* ignore mark-as-read errors */
+        });
+    };
+
+    const fetchNotifications = () => {
+      setUserNotifications(prev => ({
+        ...prev,
+        loading: true,
+        error: false,
+      }));
+      fetch(`${notificationAPI}?language=${lang}`)
+        .then(res => res.json())
+        .then(data => {
+          setUserNotifications({
+            unreadCount: data?.unreadCount || 0,
+            loading: false,
+            error: false,
+            notifications: (data?.notifications || []).map(n => ({
+              ...n,
+              link: n.link || {},
+            })),
+            refetch: fetchNotifications,
+            onOpen: markAsRead,
+          });
+        })
+        .catch(() => {
+          setUserNotifications(prev => ({
+            ...prev,
+            loading: false,
+            error: true,
+          }));
+        });
+    };
+
+    fetchNotifications();
+    const interval = setInterval(fetchNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [user.sub, lang]);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [searchLoading, setSearchLoading] = useState(false);
   const [searchError, setSearchError] = useState(false);
@@ -99,6 +169,7 @@ const BannerHSL = () => {
             ? { givenName: given_name, familyName: family_name }
             : undefined
         }
+        userNotifications={user.sub ? userNotifications : undefined}
         lang={lang}
       />
     ) : undefined;
@@ -119,6 +190,7 @@ const BannerHSL = () => {
   return (
     <SiteHeader
       baseUrl={config.HSLUri}
+      staticAssetsUrl={config.staticAssetsUri}
       lang={lang}
       langMenu={langMenu}
       userMenu={userMenuNode}

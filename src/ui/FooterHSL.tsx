@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { SiteFooter, FooterData } from '@hsl-fi/site-footer';
 import { ConfigContext } from '../contexts';
 
-const getFooterData = (baseUrl: string, lang: 'fi' | 'sv' | 'en'): FooterData => {
-  const langPrefix = lang === 'fi' ? '' : `/${lang}`;
-
+const getFooterData = (
+  baseUrl: string,
+  lang: 'fi' | 'sv' | 'en',
+): FooterData => {
   const data: Record<'fi' | 'sv' | 'en', FooterData> = {
     fi: {
       column1: {
@@ -22,8 +23,14 @@ const getFooterData = (baseUrl: string, lang: 'fi' | 'sv' | 'en'): FooterData =>
         links: [
           { label: 'Osta lippu', href: `${baseUrl}/liput` },
           { label: 'Yhteyskortti', href: `${baseUrl}/liput/yhteyskortti` },
-          { label: 'Kaikki lippuvaihtoehdot', href: `${baseUrl}/liput/kaikki-lippuvaihtoehdot` },
-          { label: 'Liput yrityksille', href: `${baseUrl}/yrityksille/liput-yrityksille` },
+          {
+            label: 'Kaikki lippuvaihtoehdot',
+            href: `${baseUrl}/liput/kaikki-lippuvaihtoehdot`,
+          },
+          {
+            label: 'Liput yrityksille',
+            href: `${baseUrl}/yrityksille/liput-yrityksille`,
+          },
         ],
       },
       column3: {
@@ -59,7 +66,10 @@ const getFooterData = (baseUrl: string, lang: 'fi' | 'sv' | 'en'): FooterData =>
           { label: 'Reseplanerare', href: `${baseUrl}/sv/reseplanerare` },
           { label: 'Linjer och karta', href: `${baseUrl}/sv/linjer-och-karta` },
           { label: 'Tidtabeller', href: `${baseUrl}/sv/tidtabeller` },
-          { label: 'Hållplatser och stationer', href: `${baseUrl}/sv/hallplatser` },
+          {
+            label: 'Hållplatser och stationer',
+            href: `${baseUrl}/sv/hallplatser`,
+          },
         ],
       },
       column2: {
@@ -67,8 +77,14 @@ const getFooterData = (baseUrl: string, lang: 'fi' | 'sv' | 'en'): FooterData =>
         links: [
           { label: 'Köp biljett', href: `${baseUrl}/sv/biljetter` },
           { label: 'Resekort', href: `${baseUrl}/sv/biljetter/resekort` },
-          { label: 'Alla biljettalternativ', href: `${baseUrl}/sv/biljetter/alla-biljettalternativ` },
-          { label: 'Biljetter för företag', href: `${baseUrl}/sv/for-foretag/biljetter-for-foretag` },
+          {
+            label: 'Alla biljettalternativ',
+            href: `${baseUrl}/sv/biljetter/alla-biljettalternativ`,
+          },
+          {
+            label: 'Biljetter för företag',
+            href: `${baseUrl}/sv/for-foretag/biljetter-for-foretag`,
+          },
         ],
       },
       column3: {
@@ -112,8 +128,14 @@ const getFooterData = (baseUrl: string, lang: 'fi' | 'sv' | 'en'): FooterData =>
         links: [
           { label: 'Buy a ticket', href: `${baseUrl}/en/tickets` },
           { label: 'Travel card', href: `${baseUrl}/en/tickets/travel-card` },
-          { label: 'All ticket options', href: `${baseUrl}/en/tickets/all-ticket-options` },
-          { label: 'Tickets for companies', href: `${baseUrl}/en/for-companies/tickets-for-companies` },
+          {
+            label: 'All ticket options',
+            href: `${baseUrl}/en/tickets/all-ticket-options`,
+          },
+          {
+            label: 'Tickets for companies',
+            href: `${baseUrl}/en/for-companies/tickets-for-companies`,
+          },
         ],
       },
       column3: {

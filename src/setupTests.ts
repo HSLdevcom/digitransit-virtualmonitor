@@ -1,4 +1,7 @@
 import '@testing-library/jest-dom';
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-Enzyme.configure({ adapter: new Adapter() });
+
+// react-dom/server.browser (React 18) requires TextEncoder / TextDecoder which
+// jest-environment-jsdom does not expose from Node. Polyfill them from the Node
+// built-in 'util' module so imports of react-dom/server don't throw.
+import { TextDecoder, TextEncoder } from 'util';
+Object.assign(global, { TextDecoder, TextEncoder });

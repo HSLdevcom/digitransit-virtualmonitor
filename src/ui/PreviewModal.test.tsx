@@ -51,9 +51,9 @@ describe('PreviewModal', () => {
     expect(screen.getByText('preview')).toBeInTheDocument();
   });
 
-  it('calls onClose when close button is clicked', () => {
+  it('calls onClose when close button is clicked', async () => {
     const screen = render(<PreviewModal {...defaultProps} />);
-    userEvent.click(screen.getByLabelText('close'));
+    await userEvent.click(screen.getByLabelText('close'));
     expect(defaultProps.onClose).toHaveBeenCalled();
     expect(screen.getByText('CarouselDataContainer')).toBeInTheDocument();
   });

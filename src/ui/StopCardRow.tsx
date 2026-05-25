@@ -93,14 +93,12 @@ const StopCardRow: FC<IProps> = ({
 
   const [getStop, stopState] = useLazyQuery<IResponseData>(StopQueryDocument, {
     fetchPolicy: 'network-only',
-    context: { clientName: 'default' },
   });
 
   const [getStation, stationState] = useLazyQuery<IResponseData>(
     StationQueryDocument,
     {
       fetchPolicy: 'network-only',
-      context: { clientName: 'default' },
     },
   );
 
@@ -116,6 +114,7 @@ const StopCardRow: FC<IProps> = ({
       case PropertiesLayer.STOP:
         await getStop({
           variables: { ids: getGTFSId(properties.id), language: lang },
+          context: { clientName: 'default' },
         });
         setTimeOfStopSelection(Date.now());
         break;
@@ -123,6 +122,7 @@ const StopCardRow: FC<IProps> = ({
       case PropertiesLayer.FAVORITE_STOP:
         await getStop({
           variables: { ids: properties.gtfsId, language: lang },
+          context: { clientName: 'default' },
         });
         setTimeOfStopSelection(Date.now());
         break;
@@ -130,6 +130,7 @@ const StopCardRow: FC<IProps> = ({
       case PropertiesLayer.STATION:
         await getStation({
           variables: { ids: getGTFSId(properties.id), language: lang },
+          context: { clientName: 'default' },
         });
         setTimeOfStationSelection(Date.now());
         break;
@@ -137,6 +138,7 @@ const StopCardRow: FC<IProps> = ({
       case PropertiesLayer.FAVORITE_STATION:
         await getStation({
           variables: { ids: properties.gtfsId, language: lang },
+          context: { clientName: 'default' },
         });
         setTimeOfStationSelection(Date.now());
         break;

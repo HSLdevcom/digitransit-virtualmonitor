@@ -556,7 +556,7 @@ export const resources = {
 declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: 'translation';
-    resources: typeof resources['fi'];
+    resources: (typeof resources)['fi'];
   }
 }
 

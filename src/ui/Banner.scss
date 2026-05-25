@@ -21,14 +21,26 @@
     .vaasa {
       display: flex;
       width: 115px;
+
+      svg {
+        width: 100%;
+        height: auto;
+      }
     }
 
     .linkki {
       width: 60px;
+      height: auto;
     }
 
     .oulu {
       width: 100px;
+      height: auto;
+    }
+
+    .matka {
+      width: auto;
+      height: 42px;
     }
 
     #logo {

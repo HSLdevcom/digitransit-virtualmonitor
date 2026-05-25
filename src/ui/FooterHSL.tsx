@@ -210,7 +210,11 @@ const FooterHSL = () => {
       baseUrl={config.HSLUri}
       lang={lang}
       data={data}
-      cookieSettingsButtonProps={{}}
+      cookieSettingsButtonProps={{
+        onClick: () =>
+          (window as any).CookieConsent?.renew &&
+          (window as any).CookieConsent.renew(),
+      }}
     />
   );
 };

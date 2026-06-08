@@ -208,6 +208,7 @@ const FooterHSL = () => {
   return (
     <SiteFooter
       baseUrl={config.HSLUri}
+      variant="compact"
       lang={lang}
       data={data}
       cookieSettingsButtonProps={{

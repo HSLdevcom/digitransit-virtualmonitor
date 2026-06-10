@@ -36,6 +36,17 @@ export default {
     name: 'hsl',
     uri: 'routing/v2/hsl/gtfs/v1',
     bannersUri: 'https://cms.hsl.fi/api/v1/banners?',
+    staticCrisisBanners: [
+      {
+        body: 'Dummy crisis alert — primary',
+        priority: 'Primary',
+      },
+      {
+        body: 'Dummy crisis alert — secondary',
+        priority: 'Secondary',
+      },
+    ],
+    showStaticCrisisBanners: false,
     HSLUri:
       // eslint-disable-next-line no-undef
       window.location.href.indexOf('omatnaytot') > -1 ||
@@ -43,13 +54,6 @@ export default {
       window.location.href.indexOf('pre-prod') > -1
         ? 'https://hsl.fi'
         : 'https://test.hslfi.hsldev.com/',
-    staticAssetsUri:
-      // eslint-disable-next-line no-undef
-      window.location.href.indexOf('omatnaytot') > -1 ||
-      // eslint-disable-next-line no-undef
-      window.location.href.indexOf('pre-prod') > -1
-        ? 'https://staticfiles.hsl.fi'
-        : 'https://staticfiles-dev.hslfi.hsldev.com',
     suggestionsUri: 'https://cms.hsl.fi/api/v1/search/suggestions/',
     showMinutes: '10',
     alertOrientation: 'static', // Possible values are 'vertical', 'horizontal' and 'static'

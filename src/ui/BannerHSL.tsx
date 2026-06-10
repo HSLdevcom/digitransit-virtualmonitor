@@ -1,16 +1,41 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SiteHeader, UserMenu, QuickSearch } from '@hsl-fi/site-header';
+import { Alert } from '@hsl-fi/icons';
 import { UserContext, ConfigContext } from '../contexts';
 import { logout } from '../util/logoutUtil';
 
 const NOTIFICATION_API = '/api/user/notifications';
+
+interface ICrisisBanner {
+  body: string;
+  priority: 'Primary' | 'Secondary';
+}
 
 const BannerHSL = () => {
   const { i18n } = useTranslation();
   const user = useContext(UserContext);
   const config = useContext(ConfigContext);
   const lang = i18n.language as 'fi' | 'sv' | 'en';
+
+  const [banners, setBanners] = useState<ICrisisBanner[]>([]);
+
+  useEffect(() => {
+    if (!config.bannersUri) return undefined;
+    const controller = new AbortController();
+    fetch(`${config.bannersUri}language=${lang}`, { signal: controller.signal })
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setBanners(data);
+        }
+      })
+      .catch(err => {
+        if (err.name === 'AbortError') return;
+        setBanners([]);
+      });
+    return () => controller.abort();
+  }, [lang]);
 
   const [userNotifications, setUserNotifications] = useState({
     unreadCount: 0,
@@ -202,15 +227,37 @@ const BannerHSL = () => {
     />
   ) : undefined;
 
+  const displayBanners: ICrisisBanner[] =
+    config.showStaticCrisisBanners && config.staticCrisisBanners
+      ? config.staticCrisisBanners
+      : banners;
+
   return (
-    <SiteHeader
-      baseUrl={config.HSLUri}
-      staticAssetsUrl={config.staticAssetsUri}
-      lang={lang}
-      langMenu={langMenu}
-      userMenu={userMenuNode}
-      search={searchNode}
-    />
+    <>
+      {displayBanners.map((banner, i) => (
+        <div
+          key={i}
+          className={`crisis-banner crisis-banner--${
+            banner.priority === 'Primary' ? 'primary' : 'secondary'
+          }`}
+        >
+          {banner.priority === 'Primary' && (
+            <div className="crisis-banner__icon">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              <Alert width="19" fill="#ffffff" {...({} as any)} />
+            </div>
+          )}
+          <div dangerouslySetInnerHTML={{ __html: banner.body }} />
+        </div>
+      ))}
+      <SiteHeader
+        baseUrl={config.HSLUri}
+        lang={lang}
+        langMenu={langMenu}
+        userMenu={userMenuNode}
+        search={searchNode}
+      />
+    </>
   );
 };
 

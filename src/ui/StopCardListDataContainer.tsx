@@ -26,7 +26,7 @@ const StopCardListDataContainer: FC<IProps> = ({
   staticMonitor,
   mapSettings,
 }) => {
-  const lang = localStorage.getItem('lang');
+  const [lang] = useState(() => localStorage.getItem('lang'));
   const [cardList, setCardList] = useState(stopCardList);
   const stops = useQuery(StopQueryDocument, {
     variables: { ids: stopIds, language: lang },

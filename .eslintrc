@@ -24,5 +24,14 @@
         "trailingComma": "all"
       }
     ]
-  }
+  },
+  "overrides": [
+    {
+      "files": ["src/__mocks__/**/*.js"],
+      "env": { "node": true, "commonjs": true },
+      "rules": {
+        "@typescript-eslint/no-var-requires": "off"
+      }
+    }
+  ]
 }

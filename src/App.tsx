@@ -6,6 +6,7 @@ import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import CreateViewPage from './ui/CreateViewPage';
 import Version from './ui/Version';
 import BannerContainer from './ui/BannerContainer';
+import FooterContainer from './ui/FooterContainer';
 import { Helmet } from 'react-helmet';
 import {
   ApolloClient,
@@ -219,6 +220,7 @@ const App: FC<IConfigurationProps> = props => {
                     <main id="mainContent">
                       <CreateViewPage />
                     </main>
+                    <FooterContainer />
                   </>
                 )}
               />
@@ -237,6 +239,7 @@ const App: FC<IConfigurationProps> = props => {
                     <main id="mainContent">
                       <CreateViewPage />
                     </main>
+                    <FooterContainer />
                   </>
                 )}
               />
@@ -249,6 +252,7 @@ const App: FC<IConfigurationProps> = props => {
                     <main id="mainContent">
                       <UserMonitors />
                     </main>
+                    <FooterContainer />
                   </>
                 )}
               />

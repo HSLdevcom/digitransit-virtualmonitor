@@ -33,20 +33,20 @@ const withContext = () => {
   );
 };
 
-it('should add createView to path when the button is clicked', () => {
+it('should add createView to path when the button is clicked', async () => {
   const history = createMemoryHistory();
 
   // mock push function
   history.push = jest.fn();
 
   const screen = render(<Router history={history}>{withContext()}</Router>);
-  userEvent.click(screen.getByText('quickDisplayCreate'));
+  await userEvent.click(screen.getByText('quickDisplayCreate'));
   expect(history.push).toHaveBeenCalledWith('/createview');
 });
 
 it('render an image', () => {
   const { container } = render(<MemoryRouter>{withContext()}</MemoryRouter>);
-  const img = container.querySelector('img.desktop-img');
+  const img = container.querySelector('svg.desktop-img');
   expect(img).not.toBeNull();
-  expect(img.getAttribute('alt')).toBe('');
+  expect(img.getAttribute('aria-hidden')).toBe('true');
 });

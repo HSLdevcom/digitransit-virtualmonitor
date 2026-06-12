@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import ContentContainer from './ContentContainer';
-import monitorsImage from './icons/create-monitor.svg';
+import { ReactComponent as MonitorsImage } from './icons/create-monitor.svg';
 import cx from 'classnames';
 import { ConfigContext } from '../contexts';
 
@@ -36,7 +36,7 @@ const IndexPage: FC<IProps> = ({ buttons, renderLogInMessage = false }) => {
           </div>
         </div>
         <div className="right">
-          <img className={'desktop-img'} src={monitorsImage} alt="" />
+          <MonitorsImage className={'desktop-img'} aria-hidden />
         </div>
       </div>
     </ContentContainer>

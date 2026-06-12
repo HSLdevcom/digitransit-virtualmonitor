@@ -36,6 +36,17 @@ export default {
     name: 'hsl',
     uri: 'routing/v2/hsl/gtfs/v1',
     bannersUri: 'https://cms.hsl.fi/api/v1/banners?',
+    staticCrisisBanners: [
+      {
+        body: 'Dummy crisis alert — primary',
+        priority: 'Primary',
+      },
+      {
+        body: 'Dummy crisis alert — secondary',
+        priority: 'Secondary',
+      },
+    ],
+    showStaticCrisisBanners: false,
     HSLUri:
       // eslint-disable-next-line no-undef
       window.location.href.indexOf('omatnaytot') > -1 ||

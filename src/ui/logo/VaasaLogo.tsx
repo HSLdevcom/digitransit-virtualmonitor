@@ -1,8 +1,8 @@
 import React from 'react';
-import Logo from './lifti-logo.svg';
+import { ReactComponent as Logo } from './lifti-logo.svg';
 
 export default ({ style }: { style?: React.CSSProperties } = { style: {} }) => (
   <div className="vaasa">
-    <img title="logo vaasa" src={Logo} style={style} />
+    <Logo title="logo vaasa" style={style} />
   </div>
 );

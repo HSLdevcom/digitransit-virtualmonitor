@@ -82,22 +82,22 @@ describe('MapModal', () => {
     expect(screen.getByRole('button', { name: 'close' })).toBeInTheDocument();
   });
 
-  it('calls onClose when close button is clicked', () => {
+  it('calls onClose when close button is clicked', async () => {
     const onClose = jest.fn();
     const screen = render(
       <MemoryRouter>{withContext(() => null, onClose)}</MemoryRouter>,
     );
-    userEvent.click(screen.getByRole('button', { name: 'close' }));
+    await userEvent.click(screen.getByRole('button', { name: 'close' }));
     expect(onClose).toHaveBeenCalledWith(false);
   });
 
-  it('calls updateMapSettings and onClose when confirm button is clicked', () => {
+  it('calls updateMapSettings and onClose when confirm button is clicked', async () => {
     const updateMapSettings = jest.fn();
     const onClose = jest.fn();
     const screen = render(
       <MemoryRouter>{withContext(updateMapSettings, onClose)}</MemoryRouter>,
     );
-    userEvent.click(screen.getByText('confirm-choice'));
+    await userEvent.click(screen.getByText('confirm-choice'));
     // wrapper.find('.btn.map-btn').simulate('click');
     expect(updateMapSettings).toHaveBeenCalled();
     expect(onClose).toHaveBeenCalledWith(false);

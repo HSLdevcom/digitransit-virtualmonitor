@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Logo from './matka-logo.svg';
+import { ReactComponent as Logo } from './matka-logo.svg';
 
 export default ({ style }: { style?: React.CSSProperties } = { style: {} }) => (
-  <img className="matka" title="logo matka" src={Logo} style={style} />
+  <Logo className="matka" title="logo matka" style={style} />
 );

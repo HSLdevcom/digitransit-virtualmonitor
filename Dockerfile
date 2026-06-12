@@ -1,22 +1,27 @@
-FROM node:25.9.0-alpine as build
+FROM node:25.9.0-alpine AS build
 
 RUN apk update
 RUN apk add git
 
 WORKDIR /app
-ADD . ./
-#Make the port 3000 available to the world outside this container 
-EXPOSE 3001
-# Start command as per package.json
 
-# Install app dependencies
-COPY package.json ./
+EXPOSE 3001
+
+# Copy build config and dependency manifest before install for layer caching
+COPY package.json package-lock.json webpack.config.js babel.config.js tsconfig.json .npmrc ./
+
+# Install all dependencies, including devDeps required for the TypeScript build
+RUN npm ci
+
+# Copy source and public files
 COPY ./src ./src
 COPY ./public ./public
-COPY ./server ./server
-RUN npm install --omit=dev
-# build the app
+
+# Build the React app
 RUN npm run build
-RUN cd server && npm install
+
+# Install server dependencies
+COPY ./server ./server
+RUN cd server && npm ci
 
 CMD ["npm","run","start-prod"]

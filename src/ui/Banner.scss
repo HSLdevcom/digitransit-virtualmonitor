@@ -2,6 +2,67 @@
   padding-bottom: 70px;
 }
 
+/* stylelint-disable selector-class-pattern */
+.crisis-banner {
+  min-height: 40px;
+  padding: 5px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Gotham Rounded A', 'Gotham Rounded B', Arial, Georgia, serif;
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: -0.3px;
+  line-height: 1.5;
+  color: #fff;
+
+  &,
+  a,
+  p {
+    font-family: 'Gotham Rounded A', 'Gotham Rounded B', Arial, Georgia, serif;
+    font-weight: 500;
+    color: #fff;
+    margin: 0;
+    font-size: 16px;
+    letter-spacing: -0.3px;
+    line-height: 1.5;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  &--primary {
+    background-color: #dc0451;
+
+    & + .crisis-banner--primary {
+      border-top: 1px solid #fff;
+    }
+  }
+
+  &--secondary {
+    background-color: #333;
+
+    & + .crisis-banner--secondary {
+      border-top: 1px solid #fff;
+    }
+
+    *:focus {
+      outline-color: #fff;
+    }
+  }
+
+  &__icon {
+    margin-top: 3px;
+    margin-right: 10px;
+    flex-shrink: 0;
+
+    svg {
+      width: 19px;
+    }
+  }
+}
+
 .main-banner {
   background: $primary-color;
   min-width: 100%;
@@ -21,14 +82,26 @@
     .vaasa {
       display: flex;
       width: 115px;
+
+      svg {
+        width: 100%;
+        height: auto;
+      }
     }
 
     .linkki {
       width: 60px;
+      height: auto;
     }
 
     .oulu {
       width: 100px;
+      height: auto;
+    }
+
+    .matka {
+      width: auto;
+      height: 42px;
     }
 
     #logo {

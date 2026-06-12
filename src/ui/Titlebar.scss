@@ -58,14 +58,21 @@ $preview-container-height: 365px;
 
       .vaasa {
         width: min(100%, 12vh);
+
+        svg {
+          width: 100%;
+          height: auto;
+        }
       }
 
       .linkki {
         width: min(100%, 7vh);
+        height: auto;
       }
 
       .oulu {
         width: min(100%, 12vh);
+        height: auto;
       }
     }
   }
@@ -150,19 +157,27 @@ $preview-container-height: 365px;
 
     .linkki {
       width: min(100%, 10vh);
+      height: auto;
     }
 
     .oulu {
       width: min(100%, 20vh);
+      height: auto;
     }
 
     .vaasa {
       width: min(100%, 20vh);
       padding-left: 0.4vw;
+
+      svg {
+        width: 100%;
+        height: auto;
+      }
     }
 
     .matka {
       width: 100%;
+      height: auto;
     }
 
     &.preview {

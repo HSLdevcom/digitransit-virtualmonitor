@@ -1,5 +1,4 @@
-import React from 'react';
-import * as ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import NtpSyncComponent from './ntp/NtpSyncComponent';
@@ -8,7 +7,9 @@ import { getConfig } from './util/getConfig';
 import { ConfigContext } from './contexts';
 import './i18n';
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root') as HTMLElement);
+
+root.render(
   <NtpSyncComponent>
     <BrowserRouter>
       <ConfigContext.Provider value={getConfig()}>
@@ -16,5 +17,4 @@ ReactDOM.render(
       </ConfigContext.Provider>
     </BrowserRouter>
   </NtpSyncComponent>,
-  document.getElementById('root') as HTMLElement,
 );

@@ -13,7 +13,7 @@ const getFooterData = (
         column1: {
           title: 'Resor',
           links: [
-            { label: 'Reseplanerare', href: `${baseUrl}/sv/reseplanerare` },
+            { label: 'Reseplanerare', href: `${baseUrl}sv/reseplanerare` },
             {
               label: 'Linjer och karta',
               href: `${baseUrl}/sv/linjer-och-karta`,
@@ -61,15 +61,17 @@ const getFooterData = (
           ],
         },
         secondaryLinks: {
-          contantInfoLink: { href: `${baseUrl}/sv/kontaktuppgifter` },
-          paymentMethodsLink: {
-            href: `${baseUrl}/sv/biljetter/betalningssatt`,
+          contantInfoLink: {
+            href: `${baseUrl}/sv/hrt/hrt-som-organisation/kontaktuppgifter`,
           },
-          privacyLink: { href: `${baseUrl}/sv/dataskydd` },
-          cookieSettingsLink: { href: `${baseUrl}/sv/kakor` },
-          termsOfUseLink: { href: `${baseUrl}/sv/anvandningsvillkor` },
+          paymentMethodsLink: {
+            href: `${baseUrl}/sv/hrt/betalsatt`,
+          },
+          privacyLink: { href: `${baseUrl}/sv/hrt/dataskydd` },
+          cookieSettingsLink: { href: `${baseUrl}/sv/hrt/kakor` },
+          termsOfUseLink: { href: `${baseUrl}/sv/hrt/anvandarvillkoren` },
           accessibilityStatementLink: {
-            href: `${baseUrl}/sv/tillganglighet`,
+            href: `${baseUrl}/sv/hrt/tillganglighet`,
           },
         },
       };
@@ -123,15 +125,17 @@ const getFooterData = (
           ],
         },
         secondaryLinks: {
-          contantInfoLink: { href: `${baseUrl}/en/contact` },
-          paymentMethodsLink: {
-            href: `${baseUrl}/en/tickets/payment-methods`,
+          contantInfoLink: {
+            href: `${baseUrl}/en/hsl/hsl-as-an-organization/contacts`,
           },
-          privacyLink: { href: `${baseUrl}/en/privacy` },
-          cookieSettingsLink: { href: `${baseUrl}/en/cookies` },
-          termsOfUseLink: { href: `${baseUrl}/en/terms-of-use` },
+          paymentMethodsLink: {
+            href: `${baseUrl}/en/hsl/payment-methods`,
+          },
+          privacyLink: { href: `${baseUrl}/en/hsl/privacy-policy` },
+          cookieSettingsLink: { href: `${baseUrl}/en/hsl/cookies` },
+          termsOfUseLink: { href: `${baseUrl}/en/hsl/terms-of-use` },
           accessibilityStatementLink: {
-            href: `${baseUrl}/en/accessibility`,
+            href: `${baseUrl}/en/hsl/accessibility-statement`,
           },
         },
       };
@@ -189,11 +193,11 @@ const getFooterData = (
         },
         secondaryLinks: {
           contantInfoLink: { href: `${baseUrl}/yhteystiedot` },
-          paymentMethodsLink: { href: `${baseUrl}/liput/maksutavat` },
-          privacyLink: { href: `${baseUrl}/tietosuoja` },
-          cookieSettingsLink: { href: `${baseUrl}/evasteet` },
-          termsOfUseLink: { href: `${baseUrl}/kayttoehdot` },
-          accessibilityStatementLink: { href: `${baseUrl}/saavutettavuus` },
+          paymentMethodsLink: { href: `${baseUrl}/maksutavat` },
+          privacyLink: { href: `${baseUrl}/hsl/tietosuoja` },
+          cookieSettingsLink: { href: `${baseUrl}/hsl/evasteet` },
+          termsOfUseLink: { href: `${baseUrl}/hsl/kayttoehdot` },
+          accessibilityStatementLink: { href: `${baseUrl}/hsl/saavutettavuus` },
         },
       };
   }

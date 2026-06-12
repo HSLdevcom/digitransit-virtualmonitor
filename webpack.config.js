@@ -46,7 +46,10 @@ module.exports = (env, argv) => {
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: { cacheDirectory: true },
+            options: {
+              cacheDirectory: true,
+              plugins: isProduction ? [] : ['react-refresh/babel'],
+            },
           },
         },
         // SVG → React component, preserving the CRA-style named ReactComponent export

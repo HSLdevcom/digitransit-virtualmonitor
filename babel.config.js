@@ -20,9 +20,5 @@ module.exports = api => {
       ['@babel/preset-react', { runtime: 'automatic' }],
       '@babel/preset-typescript',
     ],
-    plugins: [
-      // React Fast Refresh in development only
-      ...(api.env('development') ? ['react-refresh/babel'] : []),
-    ],
   };
 };

@@ -216,9 +216,7 @@ const FooterHSL = () => {
       lang={lang}
       data={data}
       cookieSettingsButtonProps={{
-        onClick: () =>
-          (window as any).CookieConsent?.renew &&
-          (window as any).CookieConsent.renew(),
+        onClick: () => window.CookieConsent?.renew?.(),
       }}
     />
   );

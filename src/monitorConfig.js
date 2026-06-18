@@ -35,6 +35,7 @@ export default {
     },
     name: 'hsl',
     uri: 'routing/v2/hsl/gtfs/v1',
+    useCookiesPrompt: true,
     bannersUri: 'https://cms.hsl.fi/api/v1/banners?',
     staticCrisisBanners: [
       {

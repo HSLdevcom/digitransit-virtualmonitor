@@ -21,6 +21,25 @@ const BannerHSL = () => {
   const [banners, setBanners] = useState<ICrisisBanner[]>([]);
 
   useEffect(() => {
+    if (!config.useCookiesPrompt) return;
+    // Load HSL's Cookie Information consent platform. It defines
+    // window.CookieConsent, whose renew() reopens the consent dialog from the
+    // footer "Cookie settings" button. Without this script the button is inert.
+    let script = document.getElementById(
+      'CookieConsent',
+    ) as HTMLScriptElement | null;
+    if (!script) {
+      script = document.createElement('script');
+      script.id = 'CookieConsent';
+      script.src = 'https://policy.app.cookieinformation.com/uc.js';
+      script.type = 'text/javascript';
+      script.setAttribute('data-gcm-version', '2.0');
+      document.head.appendChild(script);
+    }
+    script.setAttribute('data-culture', lang.toUpperCase());
+  }, [config.useCookiesPrompt, lang]);
+
+  useEffect(() => {
     if (!config.bannersUri) return undefined;
     const controller = new AbortController();
     fetch(`${config.bannersUri}language=${lang}`, { signal: controller.signal })

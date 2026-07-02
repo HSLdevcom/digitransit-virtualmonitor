@@ -4,18 +4,28 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  Duration: any;
-  GeoJson: any;
-  Grams: any;
-  Long: any;
-  Polyline: any;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  CoordinateValue: { input: any; output: any; }
+  Cost: { input: any; output: any; }
+  Duration: { input: any; output: any; }
+  GeoJson: { input: any; output: any; }
+  Grams: { input: any; output: any; }
+  LocalDate: { input: any; output: any; }
+  Locale: { input: any; output: any; }
+  Long: { input: any; output: any; }
+  OffsetDateTime: { input: any; output: any; }
+  Polyline: { input: any; output: any; }
+  Ratio: { input: any; output: any; }
+  Reluctance: { input: any; output: any; }
+  Speed: { input: any; output: any; }
 };
 
 /** The cardinal (compass) direction taken when engaging a walking/driving step. */
@@ -30,6 +40,15 @@ export enum AbsoluteDirection {
   West = 'WEST'
 }
 
+/**
+ * Plan accessibilty preferences. This can be expanded to contain preferences for various accessibility use cases
+ * in the future. Currently only generic wheelchair preferences are available.
+ */
+export type AccessibilityPreferencesInput = {
+  /** Wheelchair related preferences. Note, currently this is the only accessibility mode that is available. */
+  wheelchair?: InputMaybe<WheelchairPreferencesInput>;
+};
+
 /** A public transport agency */
 export type Agency = Node & {
   __typename?: 'Agency';
@@ -39,22 +58,22 @@ export type Agency = Node & {
    */
   alerts?: Maybe<Array<Maybe<Alert>>>;
   /** URL to a web page which has information of fares used by this agency */
-  fareUrl?: Maybe<Scalars['String']>;
+  fareUrl?: Maybe<Scalars['String']['output']>;
   /** Agency feed and id */
-  gtfsId: Scalars['String'];
+  gtfsId: Scalars['String']['output'];
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
-  lang?: Maybe<Scalars['String']>;
+  id: Scalars['ID']['output'];
+  lang?: Maybe<Scalars['String']['output']>;
   /** Name of the agency */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** Phone number which customers can use to contact this agency */
-  phone?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']['output']>;
   /** List of routes operated by this agency */
   routes?: Maybe<Array<Maybe<Route>>>;
   /** ID of the time zone which this agency operates on */
-  timezone: Scalars['String'];
+  timezone: Scalars['String']['output'];
   /** URL to the home page of the agency */
-  url: Scalars['String'];
+  url: Scalars['String']['output'];
 };
 
 
@@ -90,33 +109,42 @@ export type Alert = Node & {
   /** Alert cause */
   alertCause?: Maybe<AlertCauseType>;
   /** Long description of the alert */
-  alertDescriptionText: Scalars['String'];
-  /** Long descriptions of the alert in all different available languages */
+  alertDescriptionText: Scalars['String']['output'];
+  /**
+   * Long descriptions of the alert in all different available languages
+   * @deprecated Use `alertDescriptionText` instead. `accept-language` header can be used for translations or the `language` parameter on the `alertDescriptionText` field.
+   */
   alertDescriptionTextTranslations: Array<TranslatedString>;
   /** Alert effect */
   alertEffect?: Maybe<AlertEffectType>;
   /** hashcode from the original GTFS-RT alert */
-  alertHash?: Maybe<Scalars['Int']>;
+  alertHash?: Maybe<Scalars['Int']['output']>;
   /** Header of the alert, if available */
-  alertHeaderText?: Maybe<Scalars['String']>;
-  /** Header of the alert in all different available languages */
+  alertHeaderText?: Maybe<Scalars['String']['output']>;
+  /**
+   * Header of the alert in all different available languages
+   * @deprecated Use `alertHeaderText` instead. `accept-language` header can be used for translations or the `language` parameter on the `alertHeaderText` field.
+   */
   alertHeaderTextTranslations: Array<TranslatedString>;
   /** Alert severity level */
   alertSeverityLevel?: Maybe<AlertSeverityLevelType>;
   /** Url with more information */
-  alertUrl?: Maybe<Scalars['String']>;
-  /** Url with more information in all different available languages */
+  alertUrl?: Maybe<Scalars['String']['output']>;
+  /**
+   * Url with more information in all different available languages
+   * @deprecated Use `alertUrl` instead. `accept-language` header can be used for translations or the `language` parameter on the `alertUrl` field.
+   */
   alertUrlTranslations: Array<TranslatedString>;
   /** Time when this alert is not in effect anymore. Format: Unix timestamp in seconds */
-  effectiveEndDate?: Maybe<Scalars['Long']>;
+  effectiveEndDate?: Maybe<Scalars['Long']['output']>;
   /** Time when this alert comes into effect. Format: Unix timestamp in seconds */
-  effectiveStartDate?: Maybe<Scalars['Long']>;
+  effectiveStartDate?: Maybe<Scalars['Long']['output']>;
   /** Entities affected by the disruption. */
   entities?: Maybe<Array<Maybe<AlertEntity>>>;
   /** The feed in which this alert was published */
-  feed?: Maybe<Scalars['String']>;
+  feed?: Maybe<Scalars['String']['output']>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /**
    * Patterns affected by the disruption
    * @deprecated This will always return an empty list. Use entities instead.
@@ -143,6 +171,24 @@ export type Alert = Node & {
    * Use entities instead.
    */
   trip?: Maybe<Trip>;
+};
+
+
+/** Alert of a current or upcoming disruption in public transportation */
+export type AlertAlertDescriptionTextArgs = {
+  language?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** Alert of a current or upcoming disruption in public transportation */
+export type AlertAlertHeaderTextArgs = {
+  language?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/** Alert of a current or upcoming disruption in public transportation */
+export type AlertAlertUrlArgs = {
+  language?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Cause of a alert */
@@ -212,7 +258,7 @@ export enum AlertSeverityLevelType {
   Info = 'INFO',
   /**
    * Severe alerts are used when a significant part of public transport services is
-   * affected, for example: All train services are cancelled due to technical problems.
+   * affected, for example: All train services are canceled due to technical problems.
    */
   Severe = 'SEVERE',
   /** Severity of alert is unknown */
@@ -225,33 +271,139 @@ export enum AlertSeverityLevelType {
   Warning = 'WARNING'
 }
 
+/** Preferences related to alighting from a transit vehicle. */
+export type AlightPreferencesInput = {
+  /** What is the required minimum time alighting from a vehicle. */
+  slack?: InputMaybe<Scalars['Duration']['input']>;
+};
+
+/** Arrival and departure time (not relative to midnight). */
+export type ArrivalDepartureTime = {
+  __typename?: 'ArrivalDepartureTime';
+  /** Arrival time as an ISO-8601-formatted datetime. */
+  arrival?: Maybe<Scalars['OffsetDateTime']['output']>;
+  /** Departure time as an ISO-8601-formatted datetime. */
+  departure?: Maybe<Scalars['OffsetDateTime']['output']>;
+};
+
+/** Preferences for bicycle parking facilities used during the routing. */
+export type BicycleParkingPreferencesInput = {
+  /**
+   * Selection filters to include or exclude parking facilities.
+   * An empty list will include all facilities in the routing search.
+   */
+  filters?: InputMaybe<Array<ParkingFilter>>;
+  /**
+   * If non-empty every parking facility that doesn't match this set of conditions will
+   * receive an extra cost (defined by `unpreferredCost`) and therefore avoided.
+   */
+  preferred?: InputMaybe<Array<ParkingFilter>>;
+  /**
+   * If `preferred` is non-empty, using a parking facility that doesn't contain
+   * at least one of the preferred conditions, will receive this extra cost and therefore avoided if
+   * preferred options are available.
+   */
+  unpreferredCost?: InputMaybe<Scalars['Cost']['input']>;
+};
+
+/** Preferences related to travel with a bicycle. */
+export type BicyclePreferencesInput = {
+  /** Cost of boarding a vehicle with a bicycle. */
+  boardCost?: InputMaybe<Scalars['Cost']['input']>;
+  /** What criteria should be used when optimizing a cycling route. */
+  optimization?: InputMaybe<CyclingOptimizationInput>;
+  /** Bicycle parking related preferences. */
+  parking?: InputMaybe<BicycleParkingPreferencesInput>;
+  /** A multiplier for how bad cycling is compared to being in transit for equal lengths of time. */
+  reluctance?: InputMaybe<Scalars['Reluctance']['input']>;
+  /** Bicycle rental related preferences. */
+  rental?: InputMaybe<BicycleRentalPreferencesInput>;
+  /**
+   * Maximum speed on flat ground while riding a bicycle. Note, this speed is higher than
+   * the average speed will be in itineraries as this is the maximum speed but there are
+   * factors that slow down cycling such as crossings, intersections and elevation changes.
+   */
+  speed?: InputMaybe<Scalars['Speed']['input']>;
+  /** Walking preferences when walking a bicycle. */
+  walk?: InputMaybe<BicycleWalkPreferencesInput>;
+};
+
+/** Preferences related to bicycle rental (station based or floating bicycle rental). */
+export type BicycleRentalPreferencesInput = {
+  /**
+   * Rental networks which can be potentially used as part of an itinerary. If this field has no default value,
+   * it means that all networks are allowed unless some are banned with `bannedNetworks`.
+   */
+  allowedNetworks?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** Rental networks which cannot be used as part of an itinerary. */
+  bannedNetworks?: InputMaybe<Array<Scalars['String']['input']>>;
+  /**
+   * Is it possible to arrive to the destination with a rented bicycle and does it
+   * come with an extra cost.
+   */
+  destinationBicyclePolicy?: InputMaybe<DestinationBicyclePolicyInput>;
+};
+
+/** Costs related to walking a bicycle. */
+export type BicycleWalkPreferencesCostInput = {
+  /**
+   * A static cost that is added each time hopping on or off a bicycle to start or end
+   * bicycle walking. However, this cost is not applied when getting on a rented bicycle
+   * for the first time or when getting off the bicycle when returning the bicycle.
+   */
+  mountDismountCost?: InputMaybe<Scalars['Cost']['input']>;
+  /**
+   * A cost multiplier of bicycle walking travel time. The multiplier is for how bad
+   * walking the bicycle is compared to being in transit for equal lengths of time.
+   */
+  reluctance?: InputMaybe<Scalars['Reluctance']['input']>;
+};
+
+/** Preferences for walking a bicycle. */
+export type BicycleWalkPreferencesInput = {
+  /** Costs related to walking a bicycle. */
+  cost?: InputMaybe<BicycleWalkPreferencesCostInput>;
+  /**
+   * How long it takes to hop on or off a bicycle when switching to walking the bicycle
+   * or when getting on the bicycle again. However, this is not applied when getting
+   * on a rented bicycle for the first time or off the bicycle when returning the bicycle.
+   */
+  mountDismountTime?: InputMaybe<Scalars['Duration']['input']>;
+  /**
+   * Maximum walk speed on flat ground. Note, this speed is higher than the average speed
+   * will be in itineraries as this is the maximum speed but there are
+   * factors that slow down walking such as crossings, intersections and elevation changes.
+   */
+  speed?: InputMaybe<Scalars['Speed']['input']>;
+};
+
 /** Bike park represents a location where bicycles can be parked. */
 export type BikePark = Node & PlaceInterface & {
   __typename?: 'BikePark';
   /** ID of the bike park */
-  bikeParkId?: Maybe<Scalars['String']>;
+  bikeParkId?: Maybe<Scalars['String']['output']>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Latitude of the bike park (WGS 84) */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Longitude of the bike park (WGS 84) */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
   /** Name of the bike park */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** Opening hours of the parking facility */
   openingHours?: Maybe<OpeningHours>;
   /** If true, value of `spacesAvailable` is updated from a real-time source. */
-  realtime?: Maybe<Scalars['Boolean']>;
+  realtime?: Maybe<Scalars['Boolean']['output']>;
   /** Number of spaces available for bikes */
-  spacesAvailable?: Maybe<Scalars['Int']>;
+  spacesAvailable?: Maybe<Scalars['Int']['output']>;
   /** Source specific tags of the bike park, which describe the available features. */
-  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
 
 
 /** Bike park represents a location where bicycles can be parked. */
 export type BikeParkNameArgs = {
-  language?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Bike rental station represents a location where users can rent bicycles for a fee. */
@@ -261,39 +413,39 @@ export type BikeRentalStation = Node & PlaceInterface & {
    * If true, bikes can be returned to this station if the station has spaces available
    * or allows overloading.
    */
-  allowDropoff?: Maybe<Scalars['Boolean']>;
+  allowDropoff?: Maybe<Scalars['Boolean']['output']>;
   /** If true, bikes can be currently returned to this station. */
-  allowDropoffNow?: Maybe<Scalars['Boolean']>;
+  allowDropoffNow?: Maybe<Scalars['Boolean']['output']>;
   /** If true, bikes can be returned even if spacesAvailable is zero or bikes > capacity. */
-  allowOverloading?: Maybe<Scalars['Boolean']>;
+  allowOverloading?: Maybe<Scalars['Boolean']['output']>;
   /** If true, bikes can be picked up from this station if the station has bikes available. */
-  allowPickup?: Maybe<Scalars['Boolean']>;
+  allowPickup?: Maybe<Scalars['Boolean']['output']>;
   /** If true, bikes can be currently picked up from this station. */
-  allowPickupNow?: Maybe<Scalars['Boolean']>;
+  allowPickupNow?: Maybe<Scalars['Boolean']['output']>;
   /**
    * Number of bikes currently available on the rental station.
    * See field `allowPickupNow` to know if is currently possible to pick up a bike.
    */
-  bikesAvailable?: Maybe<Scalars['Int']>;
+  bikesAvailable?: Maybe<Scalars['Int']['output']>;
   /** Nominal capacity (number of racks) of the rental station. */
-  capacity?: Maybe<Scalars['Int']>;
+  capacity?: Maybe<Scalars['Int']['output']>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Latitude of the bike rental station (WGS 84) */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Longitude of the bike rental station (WGS 84) */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
   /** Name of the bike rental station */
-  name: Scalars['String'];
-  networks?: Maybe<Array<Maybe<Scalars['String']>>>;
+  name: Scalars['String']['output'];
+  networks?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   /** If true, station is on and in service. */
-  operative?: Maybe<Scalars['Boolean']>;
+  operative?: Maybe<Scalars['Boolean']['output']>;
   /**
    * If true, values of `bikesAvailable` and `spacesAvailable` are updated from a
    * real-time source. If false, values of `bikesAvailable` and `spacesAvailable`
    * are always the total capacity divided by two.
    */
-  realtime?: Maybe<Scalars['Boolean']>;
+  realtime?: Maybe<Scalars['Boolean']['output']>;
   /** Platform-specific URLs to begin renting a bike from this station. */
   rentalUris?: Maybe<BikeRentalStationUris>;
   /**
@@ -303,14 +455,14 @@ export type BikeRentalStation = Node & PlaceInterface & {
    * the rental station, even if the bike racks don't have any spaces available.
    * See field `allowDropoffNow` to know if is currently possible to return a bike.
    */
-  spacesAvailable?: Maybe<Scalars['Int']>;
+  spacesAvailable?: Maybe<Scalars['Int']['output']>;
   /**
    * A description of the current state of this bike rental station, e.g. "Station on"
    * @deprecated Use operative instead
    */
-  state?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']['output']>;
   /** ID of the bike rental station */
-  stationId?: Maybe<Scalars['String']>;
+  stationId?: Maybe<Scalars['String']['output']>;
 };
 
 export type BikeRentalStationUris = {
@@ -320,18 +472,18 @@ export type BikeRentalStationUris = {
    * intent to support Android Deep Links.
    * May be null if a rental URI does not exist.
    */
-  android?: Maybe<Scalars['String']>;
+  android?: Maybe<Scalars['String']['output']>;
   /**
    * A URI that can be used on iOS to launch the rental app for this station.
    * May be {@code null} if a rental URI does not exist.
    */
-  ios?: Maybe<Scalars['String']>;
+  ios?: Maybe<Scalars['String']['output']>;
   /**
    * A URL that can be used by a web browser to show more information about renting a vehicle at
    * this station.
    * May be {@code null} if a rental URL does not exist.
    */
-  web?: Maybe<Scalars['String']>;
+  web?: Maybe<Scalars['String']['output']>;
 };
 
 export enum BikesAllowed {
@@ -344,6 +496,21 @@ export enum BikesAllowed {
 }
 
 /**
+ * Preferences related to boarding a transit vehicle. Note, board costs for each street mode
+ * can be found under the street mode preferences.
+ */
+export type BoardPreferencesInput = {
+  /**
+   * What is the required minimum waiting time at a stop. Setting this value as `PT0S`, for example, can lead
+   * to passenger missing a connection when the vehicle leaves ahead of time or the passenger arrives to the
+   * stop later than expected.
+   */
+  slack?: InputMaybe<Scalars['Duration']['input']>;
+  /** A multiplier for how bad waiting at a stop is compared to being in transit for equal lengths of time. */
+  waitReluctance?: InputMaybe<Scalars['Reluctance']['input']>;
+};
+
+/**
  * Booking information for a stop time which has special requirements to use, like calling ahead or
  * using an app.
  */
@@ -352,78 +519,220 @@ export type BookingInfo = {
   /** Contact information for reaching the service provider */
   contactInfo?: Maybe<ContactInfo>;
   /** A message specific to the drop off */
-  dropOffMessage?: Maybe<Scalars['String']>;
+  dropOffMessage?: Maybe<Scalars['String']['output']>;
   /** When is the earliest time the service can be booked. */
   earliestBookingTime?: Maybe<BookingTime>;
   /** When is the latest time the service can be booked */
   latestBookingTime?: Maybe<BookingTime>;
-  /** Maximum number of seconds before travel to make the request */
-  maximumBookingNoticeSeconds?: Maybe<Scalars['Long']>;
+  /** Maximum duration before travel to make the request. */
+  maximumBookingNotice?: Maybe<Scalars['Duration']['output']>;
+  /**
+   * Maximum number of seconds before travel to make the request
+   * @deprecated Use `maximumBookingNotice`
+   */
+  maximumBookingNoticeSeconds?: Maybe<Scalars['Long']['output']>;
   /** A general message for those booking the service */
-  message?: Maybe<Scalars['String']>;
-  /** Minimum number of seconds before travel to make the request */
-  minimumBookingNoticeSeconds?: Maybe<Scalars['Long']>;
+  message?: Maybe<Scalars['String']['output']>;
+  /** Minimum duration before travel to make the request */
+  minimumBookingNotice?: Maybe<Scalars['Duration']['output']>;
+  /**
+   * Minimum number of seconds before travel to make the request
+   * @deprecated Use `minimumBookingNotice`
+   */
+  minimumBookingNoticeSeconds?: Maybe<Scalars['Long']['output']>;
   /** A message specific to the pick up */
-  pickupMessage?: Maybe<Scalars['String']>;
+  pickupMessage?: Maybe<Scalars['String']['output']>;
 };
 
 /** Temporal restriction for a booking */
 export type BookingTime = {
   __typename?: 'BookingTime';
   /** How many days before the booking */
-  daysPrior?: Maybe<Scalars['Int']>;
+  daysPrior?: Maybe<Scalars['Int']['output']>;
   /** Time of the booking */
-  time?: Maybe<Scalars['String']>;
+  time?: Maybe<Scalars['String']['output']>;
+};
+
+/** Real-time estimates for arrival and departure times for a stop location. */
+export type CallRealTime = {
+  __typename?: 'CallRealTime';
+  /** Real-time estimates for the arrival. */
+  arrival?: Maybe<EstimatedTime>;
+  /** Real-time estimates for the departure. */
+  departure?: Maybe<EstimatedTime>;
+};
+
+/** What is scheduled for a trip on a service date for a stop location. */
+export type CallSchedule = {
+  __typename?: 'CallSchedule';
+  /** Scheduled time for a trip on a service date for a stop location. */
+  time?: Maybe<CallScheduledTime>;
+};
+
+/** Scheduled times for a trip on a service date for a stop location. */
+export type CallScheduledTime = ArrivalDepartureTime | TimeWindow;
+
+/** Location where a transit vehicle stops at. */
+export type CallStopLocation = Location | LocationGroup | Stop;
+
+/**
+ * A collection of selectors for including or excluding trips from canceled trips search. Currently,
+ * you can only use either include or exclude filter (as filtering is only supported with transit modes).
+ */
+export type CanceledTripsFilterInput = {
+  /**
+   * A list of selectors for excluding canceled trips.
+   *
+   * An empty list or a list containing `null` is forbidden.
+   */
+  exclude?: InputMaybe<Array<CanceledTripsFilterSelectInput>>;
+  /**
+   * A list of selectors for including canceled trips.
+   *
+   * An empty list or a list containing `null` is forbidden.
+   */
+  include?: InputMaybe<Array<CanceledTripsFilterSelectInput>>;
+};
+
+/**
+ * A list of selectors for including or excluding trips from canceled trips search. Null
+ * means everything is allowed to be returned and empty lists are not allowed.
+ */
+export type CanceledTripsFilterSelectInput = {
+  /** Canceled trips from these transit modes should be included/excluded. */
+  modes?: InputMaybe<Array<TransitMode>>;
 };
 
 /** Car park represents a location where cars can be parked. */
 export type CarPark = Node & PlaceInterface & {
   __typename?: 'CarPark';
   /** ID of the car park */
-  carParkId?: Maybe<Scalars['String']>;
+  carParkId?: Maybe<Scalars['String']['output']>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Latitude of the car park (WGS 84) */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Longitude of the car park (WGS 84) */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
   /** Number of parking spaces at the car park */
-  maxCapacity?: Maybe<Scalars['Int']>;
+  maxCapacity?: Maybe<Scalars['Int']['output']>;
   /** Name of the car park */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /**
    * Opening hours for the selected dates using the local time of the park.
    * Each date can have multiple time spans.
    */
   openingHours?: Maybe<OpeningHours>;
   /** If true, value of `spacesAvailable` is updated from a real-time source. */
-  realtime?: Maybe<Scalars['Boolean']>;
+  realtime?: Maybe<Scalars['Boolean']['output']>;
   /** Number of currently available parking spaces at the car park */
-  spacesAvailable?: Maybe<Scalars['Int']>;
+  spacesAvailable?: Maybe<Scalars['Int']['output']>;
   /** Source specific tags of the car park, which describe the available features. */
-  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
 
 
 /** Car park represents a location where cars can be parked. */
 export type CarParkNameArgs = {
-  language?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']['input']>;
 };
+
+/** Preferences for car parking facilities used during the routing. */
+export type CarParkingPreferencesInput = {
+  /**
+   * Selection filters to include or exclude parking facilities.
+   * An empty list will include all facilities in the routing search.
+   */
+  filters?: InputMaybe<Array<ParkingFilter>>;
+  /**
+   * If non-empty every parking facility that doesn't match this set of conditions will
+   * receive an extra cost (defined by `unpreferredCost`) and therefore avoided.
+   */
+  preferred?: InputMaybe<Array<ParkingFilter>>;
+  /**
+   * If `preferred` is non-empty, using a parking facility that doesn't contain
+   * at least one of the preferred conditions, will receive this extra cost and therefore avoided if
+   * preferred options are available.
+   */
+  unpreferredCost?: InputMaybe<Scalars['Cost']['input']>;
+};
+
+/** Preferences related to traveling on a car (excluding car travel on transit services such as taxi). */
+export type CarPreferencesInput = {
+  /** Cost of boarding a vehicle with a car. */
+  boardCost?: InputMaybe<Scalars['Cost']['input']>;
+  /** Car parking related preferences. */
+  parking?: InputMaybe<CarParkingPreferencesInput>;
+  /** A multiplier for how bad travelling on car is compared to being in transit for equal lengths of time. */
+  reluctance?: InputMaybe<Scalars['Reluctance']['input']>;
+  /** Car rental related preferences. */
+  rental?: InputMaybe<CarRentalPreferencesInput>;
+};
+
+/** Preferences related to car rental (station based or floating car rental). */
+export type CarRentalPreferencesInput = {
+  /**
+   * Rental networks which can be potentially used as part of an itinerary. If this field has no default value,
+   * it means that all networks are allowed unless some are banned with `bannedNetworks`.
+   */
+  allowedNetworks?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** Rental networks which cannot be used as part of an itinerary. */
+  bannedNetworks?: InputMaybe<Array<Scalars['String']['input']>>;
+  /**
+   * The assumed duration of a car rental trip, used to ensure vehicle availability during the
+   * rental period.
+   *
+   * The rental time is calculated relative to the request search time:
+   * - Depart-after search: `request time + rental duration`
+   * - Arrive-by search: `request time - rental duration`
+   *
+   * Note: Rental duration only applies to  free-floating vehicles in direct street searches.
+   * This is not supported in access/egress in transit searches.
+   */
+  rentalDuration?: InputMaybe<Scalars['Duration']['input']>;
+};
+
+export enum CarsAllowed {
+  /** The vehicle being used on this particular trip can accommodate at least one car. */
+  Allowed = 'ALLOWED',
+  /** No cars are allowed on this trip. */
+  NotAllowed = 'NOT_ALLOWED',
+  /** There is no car information for the trip. */
+  NoInformation = 'NO_INFORMATION'
+}
 
 /** Cluster is a list of stops grouped by name and proximity */
 export type Cluster = Node & {
   __typename?: 'Cluster';
-  /** ID of the cluster */
-  gtfsId: Scalars['String'];
-  /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
-  /** Latitude of the center of this cluster (i.e. average latitude of stops in this cluster) */
-  lat: Scalars['Float'];
-  /** Longitude of the center of this cluster (i.e. average longitude of stops in this cluster) */
-  lon: Scalars['Float'];
-  /** Name of the cluster */
-  name: Scalars['String'];
-  /** List of stops in the cluster */
+  /**
+   * ID of the cluster
+   * @deprecated Not implemented
+   */
+  gtfsId: Scalars['String']['output'];
+  /**
+   * Global object ID provided by Relay. This value can be used to refetch this object using **node** query.
+   * @deprecated Not implemented
+   */
+  id: Scalars['ID']['output'];
+  /**
+   * Latitude of the center of this cluster (i.e. average latitude of stops in this cluster)
+   * @deprecated Not implemented
+   */
+  lat: Scalars['Float']['output'];
+  /**
+   * Longitude of the center of this cluster (i.e. average longitude of stops in this cluster)
+   * @deprecated Not implemented
+   */
+  lon: Scalars['Float']['output'];
+  /**
+   * Name of the cluster
+   * @deprecated Not implemented
+   */
+  name: Scalars['String']['output'];
+  /**
+   * List of stops in the cluster
+   * @deprecated Not implemented
+   */
   stops?: Maybe<Array<Stop>>;
 };
 
@@ -431,34 +740,46 @@ export type Cluster = Node & {
 export type ContactInfo = {
   __typename?: 'ContactInfo';
   /** Additional notes about the contacting the service provider */
-  additionalDetails?: Maybe<Scalars['String']>;
+  additionalDetails?: Maybe<Scalars['String']['output']>;
   /** URL to the booking systems of the service */
-  bookingUrl?: Maybe<Scalars['String']>;
+  bookingUrl?: Maybe<Scalars['String']['output']>;
   /** Name of the person to contact */
-  contactPerson?: Maybe<Scalars['String']>;
+  contactPerson?: Maybe<Scalars['String']['output']>;
   /** Email to contact */
-  eMail?: Maybe<Scalars['String']>;
+  eMail?: Maybe<Scalars['String']['output']>;
   /** Fax number to contact */
-  faxNumber?: Maybe<Scalars['String']>;
+  faxNumber?: Maybe<Scalars['String']['output']>;
   /** URL containing general information about the service */
-  infoUrl?: Maybe<Scalars['String']>;
+  infoUrl?: Maybe<Scalars['String']['output']>;
   /** Phone number to contact */
-  phoneNumber?: Maybe<Scalars['String']>;
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * Coordinate (often referred as coordinates), which is used to specify a location using in the
+ * WGS84 coordinate system.
+ */
+export type Coordinate = {
+  __typename?: 'Coordinate';
+  /** Latitude as a WGS84 format number. */
+  latitude: Scalars['CoordinateValue']['output'];
+  /** Longitude as a WGS84 format number. */
+  longitude: Scalars['CoordinateValue']['output'];
 };
 
 export type Coordinates = {
   __typename?: 'Coordinates';
   /** Latitude (WGS 84) */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Longitude (WGS 84) */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
 };
 
 /** A currency */
 export type Currency = {
   __typename?: 'Currency';
   /** ISO-4217 currency code, for example `USD` or `EUR`. */
-  code: Scalars['String'];
+  code: Scalars['String']['output'];
   /**
    * Fractional digits of this currency. A value of 2 would express that in this currency
    * 100 minor units make up one major unit.
@@ -469,8 +790,45 @@ export type Currency = {
    *
    * See also https://en.wikipedia.org/wiki/ISO_4217#Minor_unit_fractions
    */
-  digits: Scalars['Int'];
+  digits: Scalars['Int']['output'];
 };
+
+/** What criteria should be used when optimizing a cycling route. */
+export type CyclingOptimizationInput = {
+  /** Define optimization by weighing three criteria. */
+  triangle?: InputMaybe<TriangleCyclingFactorsInput>;
+  /** Use one of the predefined optimization types. */
+  type?: InputMaybe<CyclingOptimizationType>;
+};
+
+/**
+ * Predefined optimization alternatives for bicycling routing. For more customization,
+ * one can use the triangle factors.
+ */
+export enum CyclingOptimizationType {
+  /** Emphasize flatness over safety or duration of the route. This option was previously called `FLAT`. */
+  FlatStreets = 'FLAT_STREETS',
+  /**
+   * Completely ignore the elevation differences and prefer the streets, that are evaluated
+   * to be the safest, even more than with the `SAFE_STREETS` option.
+   * Safety can also include other concerns such as convenience and general cyclist preferences
+   * by taking into account road surface etc. This option was previously called `GREENWAYS`.
+   */
+  SafestStreets = 'SAFEST_STREETS',
+  /**
+   * Emphasize cycling safety over flatness or duration of the route. Safety can also include other
+   * concerns such as convenience and general cyclist preferences by taking into account
+   * road surface etc. This option was previously called `SAFE`.
+   */
+  SafeStreets = 'SAFE_STREETS',
+  /**
+   * Search for routes with the shortest duration while ignoring the cycling safety
+   * of the streets (the routes should still follow local regulations). Routes can include
+   * steep streets, if they are the fastest alternatives. This option was previously called
+   * `QUICK`.
+   */
+  ShortestDuration = 'SHORTEST_DURATION'
+}
 
 /**
  * The standard case of a fare product: it only has a single price to be paid by the passenger
@@ -479,7 +837,7 @@ export type Currency = {
 export type DefaultFareProduct = FareProduct & {
   __typename?: 'DefaultFareProduct';
   /** Identifier for the fare product. */
-  id: Scalars['String'];
+  id: Scalars['String']['output'];
   /**
    * The 'medium' that this product applies to, for example "Oyster Card" or "Berlin Ticket App".
    *
@@ -487,7 +845,7 @@ export type DefaultFareProduct = FareProduct & {
    */
   medium?: Maybe<FareMedium>;
   /** Human readable name of the product, for example example "Day pass" or "Single ticket". */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** The price of the product */
   price: Money;
   /** The category of riders this product applies to, for example students or pensioners. */
@@ -505,11 +863,11 @@ export type DefaultFareProduct = FareProduct & {
 export type DepartureRow = Node & PlaceInterface & {
   __typename?: 'DepartureRow';
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Latitude of the stop (WGS 84) */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Longitude of the stop (WGS 84) */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
   /** Pattern of the departure row */
   pattern?: Maybe<Pattern>;
   /** Stop from which the departures leave */
@@ -528,32 +886,25 @@ export type DepartureRow = Node & PlaceInterface & {
  * listed only once.
  */
 export type DepartureRowStoptimesArgs = {
-  numberOfDepartures?: InputMaybe<Scalars['Int']>;
-  omitCanceled?: InputMaybe<Scalars['Boolean']>;
-  omitNonPickups?: InputMaybe<Scalars['Boolean']>;
-  startTime?: InputMaybe<Scalars['Long']>;
-  timeRange?: InputMaybe<Scalars['Int']>;
+  numberOfDepartures?: InputMaybe<Scalars['Int']['input']>;
+  omitCanceled?: InputMaybe<Scalars['Boolean']['input']>;
+  omitNonPickups?: InputMaybe<Scalars['Boolean']['input']>;
+  startTime?: InputMaybe<Scalars['Long']['input']>;
+  timeRange?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type Emissions = {
-  __typename?: 'Emissions';
-  /** CO₂ emissions in grams. */
-  co2?: Maybe<Scalars['Grams']>;
-};
-
-/** A 'medium' that a fare product applies to, for example cash, 'Oyster Card' or 'DB Navigator App'. */
-export type FareMedium = {
-  __typename?: 'FareMedium';
-  /** ID of the medium */
-  id: Scalars['String'];
-  /** Human readable name of the medium. */
-  name?: Maybe<Scalars['String']>;
-};
-
-/** A fare product (a ticket) to be bought by a passenger */
-export type FareProduct = {
-  /** Identifier for the fare product. */
-  id: Scalars['String'];
+/**
+ * A (possibly discounted) fare product that requires another fare product to be purchased previously
+ * in order to be valid.
+ *
+ * For example, when taking the train into a city, you might get a discounted "transfer fare" when
+ * switching to the bus for the second leg.
+ */
+export type DependentFareProduct = FareProduct & {
+  __typename?: 'DependentFareProduct';
+  /** The fare product is _not_ valid without purchasing at least _one_ of */
+  dependencies: Array<FareProduct>;
+  id: Scalars['String']['output'];
   /**
    * The 'medium' that this product applies to, for example "Oyster Card" or "Berlin Ticket App".
    *
@@ -561,7 +912,144 @@ export type FareProduct = {
    */
   medium?: Maybe<FareMedium>;
   /** Human readable name of the product, for example example "Day pass" or "Single ticket". */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
+  /** The price of the product */
+  price: Money;
+  /** The category of riders this product applies to, for example students or pensioners. */
+  riderCategory?: Maybe<RiderCategory>;
+};
+
+
+/**
+ * A (possibly discounted) fare product that requires another fare product to be purchased previously
+ * in order to be valid.
+ *
+ * For example, when taking the train into a city, you might get a discounted "transfer fare" when
+ * switching to the bus for the second leg.
+ */
+export type DependentFareProductDependenciesArgs = {
+  filter?: InputMaybe<DependentFareProductFilter>;
+};
+
+/**
+ * Dependent fare products can lead to many combinations of fares, however it is often not useful
+ * information to the passenger.
+ *
+ * This enum allows filtering of the dependencies.
+ *
+ * Since it is recognised that this is not covered well in the specification, it is discussed here:
+ * https://github.com/google/transit/pull/423
+ */
+export enum DependentFareProductFilter {
+  /** Show all dependencies */
+  All = 'ALL',
+  /** Show only dependencies where the rider category and medium is the same es the main fare product. */
+  MatchCategoryAndMedium = 'MATCH_CATEGORY_AND_MEDIUM'
+}
+
+/**
+ * Is it possible to arrive to the destination with a rented bicycle and does it
+ * come with an extra cost.
+ */
+export type DestinationBicyclePolicyInput = {
+  /** For networks that require station drop-off, should the routing engine offer results that go directly to the destination without dropping off the rental bicycle first. */
+  allowKeeping?: InputMaybe<Scalars['Boolean']['input']>;
+  /**
+   * Cost associated with arriving to the destination with a rented bicycle.
+   * No cost is applied if arriving to the destination after dropping off the rented
+   * bicycle.
+   */
+  keepingCost?: InputMaybe<Scalars['Cost']['input']>;
+};
+
+/**
+ * Is it possible to arrive to the destination with a rented scooter and does it
+ * come with an extra cost.
+ */
+export type DestinationScooterPolicyInput = {
+  /** For networks that require station drop-off, should the routing engine offer results that go directly to the destination without dropping off the rental scooter first. */
+  allowKeeping?: InputMaybe<Scalars['Boolean']['input']>;
+  /**
+   * Cost associated with arriving to the destination with a rented scooter.
+   * No cost is applied if arriving to the destination after dropping off the rented
+   * scooter.
+   */
+  keepingCost?: InputMaybe<Scalars['Cost']['input']>;
+};
+
+/** A single use of an elevator. */
+export type ElevatorUse = {
+  __typename?: 'ElevatorUse';
+  /** The level the use begins at. */
+  from?: Maybe<Level>;
+  /** The level the use ends at. */
+  to?: Maybe<Level>;
+  verticalDirection: VerticalDirection;
+};
+
+export type Emissions = {
+  __typename?: 'Emissions';
+  /** CO₂ emissions in grams. */
+  co2?: Maybe<Scalars['Grams']['output']>;
+};
+
+/** Station entrance or exit, originating from OSM or GTFS data. */
+export type Entrance = {
+  __typename?: 'Entrance';
+  /** ID of the entrance in the format of `FeedId:EntranceId`. If the `FeedId` is `osm`, the entrance originates from OSM data. */
+  entranceId: Scalars['String']['output'];
+  /** Name of the entrance or exit. */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Short text or a number that identifies the entrance or exit for passengers. For example, `A` or `B`. */
+  publicCode?: Maybe<Scalars['String']['output']>;
+  /** Whether the entrance or exit is accessible by wheelchair */
+  wheelchairAccessible?: Maybe<WheelchairBoarding>;
+};
+
+/** A single use of an escalator. */
+export type EscalatorUse = {
+  __typename?: 'EscalatorUse';
+  /** The level the use begins at. */
+  from?: Maybe<Level>;
+  /** The level the use ends at. */
+  to?: Maybe<Level>;
+  verticalDirection: VerticalDirection;
+};
+
+/** Real-time estimates for an arrival or departure at a certain place. */
+export type EstimatedTime = {
+  __typename?: 'EstimatedTime';
+  /**
+   * The delay or "earliness" of the vehicle at a certain place. This estimate can change quite often.
+   *
+   * If the vehicle is early then this is a negative duration.
+   */
+  delay: Scalars['Duration']['output'];
+  /** The estimate for a call event (such as arrival or departure) at a certain place. This estimate can change quite often. */
+  time: Scalars['OffsetDateTime']['output'];
+};
+
+/** A 'medium' that a fare product applies to, for example cash, 'Oyster Card' or 'DB Navigator App'. */
+export type FareMedium = {
+  __typename?: 'FareMedium';
+  /** ID of the medium */
+  id: Scalars['String']['output'];
+  /** Human readable name of the medium. */
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+/** A fare product (a ticket) to be bought by a passenger */
+export type FareProduct = {
+  /** Identifier for the fare product. */
+  id: Scalars['String']['output'];
+  /**
+   * The 'medium' that this product applies to, for example "Oyster Card" or "Berlin Ticket App".
+   *
+   * This communicates to riders that a specific way of buying or keeping this product is required.
+   */
+  medium?: Maybe<FareMedium>;
+  /** Human readable name of the product, for example example "Day pass" or "Single ticket". */
+  name: Scalars['String']['output'];
   /** The category of riders this product applies to, for example students or pensioners. */
   riderCategory?: Maybe<RiderCategory>;
 };
@@ -622,8 +1110,44 @@ export type FareProductUse = {
    *         id: "single-ticket"  // product id
    *         name: "Single Ticket"
    * ```
+   *
+   * ### Example: Combination of single tickets and day passes
+   *
+   * If you have two legs and it's possible to either buy singles or use a day pass, you will
+   * have a combination of identical and different `FareProductUse.id`s.
+   *
+   * **Illustration**
+   * ```yaml
+   * itinerary:
+   *   leg1:
+   *     fareProducts:
+   *       # fare product use for day pass
+   *       id: "AAA" // id of a FareProductUse instance, not product id
+   *         product:
+   *           id: "single-ticket" // product id
+   *           name: "Single Ticket"
+   *
+   *       # fare product use for single ticket
+   *       id: "CCC" // identical to leg2. the passenger needs to buy ONE day pass, not two.
+   *         product:
+   *           id: "day-pass"  // product id
+   *           name: "Day Pass"
+   *   leg2:
+   *     fareProducts:
+   *       id: "BBB" // different to leg1. the passenger needs to buy two single tickets.
+   *         product:
+   *           id: "single-ticket"  // product id
+   *           name: "Single Ticket"
+   *
+   *       id: "CCC" // identical to leg1. the passenger needs to buy ONE day pass, not two.
+   *         product:
+   *           id: "day-pass"  // product id
+   *           name: "Day Pass"
+   * ```
+   * **It is the responsibility of the API consumers to display the day pass as a product for the
+   * entire itinerary rather than two day passes!**
    */
-  id: Scalars['String'];
+  id: Scalars['String']['output'];
   /** The purchasable fare product */
   product?: Maybe<FareProduct>;
 };
@@ -636,7 +1160,11 @@ export type Feed = {
   /** Alerts relevant for the feed. */
   alerts?: Maybe<Array<Maybe<Alert>>>;
   /** ID of the feed */
-  feedId: Scalars['String'];
+  feedId: Scalars['String']['output'];
+  /** The publisher of the input transit data. */
+  publisher?: Maybe<FeedPublisher>;
+  /** The version of the dataset. */
+  version?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -656,6 +1184,15 @@ export enum FeedAlertType {
    */
   RouteTypes = 'ROUTE_TYPES'
 }
+
+/** Feed publisher information */
+export type FeedPublisher = {
+  __typename?: 'FeedPublisher';
+  /** Name of feed publisher */
+  name: Scalars['String']['output'];
+  /** Web address of feed publisher */
+  url: Scalars['String']['output'];
+};
 
 export enum FilterPlaceType {
   /**
@@ -683,6 +1220,19 @@ export enum FilterPlaceType {
   VehicleRent = 'VEHICLE_RENT'
 }
 
+/** Parameters that affect flexible transport routing per request. */
+export type FlexRequest = {
+  /**
+   * The date and time for the latest time the user is expected to book the journey.
+   * Normally this is when the search is performed (now), plus a small grace period to
+   * complete the booking. Services which must be booked before this time are excluded. The
+   * `latestBookingTime` and `minimumBookingPeriod` in `BookingArrangement` (flexible
+   * services only) are used to enforce this. If this parameter is _not set_, no booking-time
+   * restrictions are applied - all journeys are listed.
+   */
+  bookingTime?: InputMaybe<Scalars['OffsetDateTime']['input']>;
+};
+
 export enum FormFactor {
   /** A bicycle */
   Bicycle = 'BICYCLE',
@@ -705,100 +1255,94 @@ export enum FormFactor {
 export type Geometry = {
   __typename?: 'Geometry';
   /** The number of points in the string */
-  length?: Maybe<Scalars['Int']>;
+  length?: Maybe<Scalars['Int']['output']>;
   /**
    * List of coordinates of in a Google encoded polyline format (see
    * https://developers.google.com/maps/documentation/utilities/polylinealgorithm)
    */
-  points?: Maybe<Scalars['Polyline']>;
+  points?: Maybe<Scalars['Polyline']['output']>;
 };
 
 export type InputBanned = {
   /** A comma-separated list of banned agency ids */
-  agencies?: InputMaybe<Scalars['String']>;
+  agencies?: InputMaybe<Scalars['String']['input']>;
   /** A comma-separated list of banned route ids */
-  routes?: InputMaybe<Scalars['String']>;
-  /**
-   * A comma-separated list of banned stop ids. Note that these stops are only
-   * banned for boarding and disembarking vehicles — it is possible to get an
-   * itinerary where a vehicle stops at one of these stops
-   */
-  stops?: InputMaybe<Scalars['String']>;
-  /**
-   * A comma-separated list of banned stop ids. Only itineraries where these stops
-   * are not travelled through are returned, e.g. if a bus route stops at one of
-   * these stops, that route will not be used in the itinerary, even if the stop is
-   * not used for boarding or disembarking the vehicle.
-   */
-  stopsHard?: InputMaybe<Scalars['String']>;
+  routes?: InputMaybe<Scalars['String']['input']>;
   /** A comma-separated list of banned trip ids */
-  trips?: InputMaybe<Scalars['String']>;
+  trips?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type InputCoordinates = {
   /** The name of the place. If specified, the place name in results uses this value instead of `"Origin"` or `"Destination"` */
-  address?: InputMaybe<Scalars['String']>;
+  address?: InputMaybe<Scalars['String']['input']>;
   /** Latitude of the place (WGS 84) */
-  lat: Scalars['Float'];
+  lat: Scalars['Float']['input'];
   /** The amount of time, in seconds, to spend at this location before venturing forth. */
-  locationSlack?: InputMaybe<Scalars['Int']>;
+  locationSlack?: InputMaybe<Scalars['Int']['input']>;
   /** Longitude of the place (WGS 84) */
-  lon: Scalars['Float'];
+  lon: Scalars['Float']['input'];
 };
 
 export enum InputField {
   DateTime = 'DATE_TIME',
   From = 'FROM',
-  To = 'TO'
+  To = 'TO',
+  Via = 'VIA'
 }
 
 export type InputFilters = {
   /** Bike parks to include by id. */
-  bikeParks?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  bikeParks?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Bike rentals to include by id (without network identifier). */
-  bikeRentalStations?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  bikeRentalStations?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Car parks to include by id. */
-  carParks?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  carParks?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Routes to include by GTFS id. */
-  routes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  routes?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Stations to include by GTFS id. */
-  stations?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  stations?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   /** Stops to include by GTFS id. */
-  stops?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  stops?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type InputModeWeight = {
   /** The weight of AIRPLANE traverse mode. Values over 1 add cost to airplane travel and values under 1 decrease cost */
-  AIRPLANE?: InputMaybe<Scalars['Float']>;
+  AIRPLANE?: InputMaybe<Scalars['Float']['input']>;
   /** The weight of BUS traverse mode. Values over 1 add cost to bus travel and values under 1 decrease cost */
-  BUS?: InputMaybe<Scalars['Float']>;
+  BUS?: InputMaybe<Scalars['Float']['input']>;
   /** The weight of CABLE_CAR traverse mode. Values over 1 add cost to cable car travel and values under 1 decrease cost */
-  CABLE_CAR?: InputMaybe<Scalars['Float']>;
+  CABLE_CAR?: InputMaybe<Scalars['Float']['input']>;
+  /** The weight of CARPOOL traverse mode. Values over 1 add cost to carpool travel and values under 1 decrease cost */
+  CARPOOL?: InputMaybe<Scalars['Float']['input']>;
+  /** The weight of COACH traverse mode. Values over 1 add cost to coach travel and values under 1 decrease cost */
+  COACH?: InputMaybe<Scalars['Float']['input']>;
   /** The weight of FERRY traverse mode. Values over 1 add cost to ferry travel and values under 1 decrease cost */
-  FERRY?: InputMaybe<Scalars['Float']>;
+  FERRY?: InputMaybe<Scalars['Float']['input']>;
   /** The weight of FUNICULAR traverse mode. Values over 1 add cost to funicular travel and values under 1 decrease cost */
-  FUNICULAR?: InputMaybe<Scalars['Float']>;
+  FUNICULAR?: InputMaybe<Scalars['Float']['input']>;
   /** The weight of GONDOLA traverse mode. Values over 1 add cost to gondola travel and values under 1 decrease cost */
-  GONDOLA?: InputMaybe<Scalars['Float']>;
+  GONDOLA?: InputMaybe<Scalars['Float']['input']>;
+  /** The weight of MONORAIL traverse mode. Values over 1 add cost to monorail travel and values under 1 decrease cost */
+  MONORAIL?: InputMaybe<Scalars['Float']['input']>;
   /** The weight of RAIL traverse mode. Values over 1 add cost to rail travel and values under 1 decrease cost */
-  RAIL?: InputMaybe<Scalars['Float']>;
+  RAIL?: InputMaybe<Scalars['Float']['input']>;
   /** The weight of SUBWAY traverse mode. Values over 1 add cost to subway travel and values under 1 decrease cost */
-  SUBWAY?: InputMaybe<Scalars['Float']>;
+  SUBWAY?: InputMaybe<Scalars['Float']['input']>;
+  /** The weight of TAXI traverse mode. Values over 1 add cost to taxi travel and values under 1 decrease cost */
+  TAXI?: InputMaybe<Scalars['Float']['input']>;
   /** The weight of TRAM traverse mode. Values over 1 add cost to tram travel and values under 1 decrease cost */
-  TRAM?: InputMaybe<Scalars['Float']>;
+  TRAM?: InputMaybe<Scalars['Float']['input']>;
+  /** The weight of TROLLEYBUS traverse mode. Values over 1 add cost to trolleybus travel and values under 1 decrease cost */
+  TROLLEYBUS?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type InputPreferred = {
-  /** A comma-separated list of ids of the agencies preferred by the user. */
-  agencies?: InputMaybe<Scalars['String']>;
-  /**
-   * Penalty added for using every route that is not preferred if user set any
-   * route as preferred. We return number of seconds that we are willing to wait
-   * for preferred route.
-   */
-  otherThanPreferredRoutesPenalty?: InputMaybe<Scalars['Int']>;
-  /** A comma-separated list of ids of the routes preferred by the user. */
-  routes?: InputMaybe<Scalars['String']>;
+  /** Not implemented */
+  agencies?: InputMaybe<Scalars['String']['input']>;
+  /** Not implemented */
+  otherThanPreferredRoutesPenalty?: InputMaybe<Scalars['Int']['input']>;
+  /** Not implemented */
+  routes?: InputMaybe<Scalars['String']['input']>;
 };
 
 /**
@@ -807,18 +1351,18 @@ export type InputPreferred = {
  */
 export type InputTriangle = {
   /** Relative importance of safety */
-  safetyFactor?: InputMaybe<Scalars['Float']>;
+  safetyFactor?: InputMaybe<Scalars['Float']['input']>;
   /** Relative importance of flat terrain */
-  slopeFactor?: InputMaybe<Scalars['Float']>;
+  slopeFactor?: InputMaybe<Scalars['Float']['input']>;
   /** Relative importance of duration */
-  timeFactor?: InputMaybe<Scalars['Float']>;
+  timeFactor?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type InputUnpreferred = {
   /** A comma-separated list of ids of the agencies unpreferred by the user. */
-  agencies?: InputMaybe<Scalars['String']>;
+  agencies?: InputMaybe<Scalars['String']['input']>;
   /** A comma-separated list of ids of the routes unpreferred by the user. */
-  routes?: InputMaybe<Scalars['String']>;
+  routes?: InputMaybe<Scalars['String']['input']>;
   /**
    * An cost function used to calculate penalty for an unpreferred route/agency. Function should return
    * number of seconds that we are willing to wait for unpreferred route/agency.
@@ -826,7 +1370,7 @@ export type InputUnpreferred = {
    * `A + B x`, where A is fixed penalty and B is a multiplier of transit leg travel time x.
    * For example: `600 + 2.0 x`
    */
-  unpreferredCost?: InputMaybe<Scalars['String']>;
+  unpreferredCost?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Itinerary = {
@@ -839,19 +1383,24 @@ export type Itinerary = {
    *
    * More information is available in the [feature documentation](https://docs.opentripplanner.org/en/dev-2.x/sandbox/IBIAccessibilityScore/).
    */
-  accessibilityScore?: Maybe<Scalars['Float']>;
+  accessibilityScore?: Maybe<Scalars['Float']['output']>;
   /** Does the itinerary end without dropping off the rented bicycle: */
-  arrivedAtDestinationWithRentedBicycle?: Maybe<Scalars['Boolean']>;
+  arrivedAtDestinationWithRentedBicycle?: Maybe<Scalars['Boolean']['output']>;
   /** Duration of the trip on this itinerary, in seconds. */
-  duration?: Maybe<Scalars['Long']>;
+  duration?: Maybe<Scalars['Long']['output']>;
   /** How much elevation is gained, in total, over the course of the itinerary, in meters. */
-  elevationGained?: Maybe<Scalars['Float']>;
+  elevationGained?: Maybe<Scalars['Float']['output']>;
   /** How much elevation is lost, in total, over the course of the itinerary, in meters. */
-  elevationLost?: Maybe<Scalars['Float']>;
+  elevationLost?: Maybe<Scalars['Float']['output']>;
   /** Emissions of this itinerary per traveler. */
   emissionsPerPerson?: Maybe<Emissions>;
-  /** Time when the user arrives to the destination.. Format: Unix timestamp in milliseconds. */
-  endTime?: Maybe<Scalars['Long']>;
+  /** Time when the user leaves arrives at the destination. */
+  end?: Maybe<Scalars['OffsetDateTime']['output']>;
+  /**
+   * Time when the user arrives to the destination. Format: Unix timestamp in milliseconds.
+   * @deprecated Use `end` instead which includes timezone information.
+   */
+  endTime?: Maybe<Scalars['Long']['output']>;
   /**
    * Information about the fares for this itinerary. This is primarily a GTFS Fares V1 interface
    * and always returns an empty list. Use the leg's `fareProducts` instead.
@@ -859,7 +1408,7 @@ export type Itinerary = {
    */
   fares?: Maybe<Array<Maybe<Fare>>>;
   /** Generalized cost of the itinerary. Used for debugging search results. */
-  generalizedCost?: Maybe<Scalars['Int']>;
+  generalizedCost?: Maybe<Scalars['Int']['output']>;
   /**
    * A list of Legs. Each Leg is either a walking (cycling, car) portion of the
    * itinerary, or a transit leg on a particular vehicle. So a itinerary where the
@@ -874,9 +1423,14 @@ export type Itinerary = {
    *  - Interlined/stay-seated transfers do not increase this count.
    *  - Transferring from a flex to a fixed schedule trip and vice versa increases this count.
    */
-  numberOfTransfers: Scalars['Int'];
-  /** Time when the user leaves from the origin. Format: Unix timestamp in milliseconds. */
-  startTime?: Maybe<Scalars['Long']>;
+  numberOfTransfers: Scalars['Int']['output'];
+  /** Time when the user leaves from the origin. */
+  start?: Maybe<Scalars['OffsetDateTime']['output']>;
+  /**
+   * Time when the user leaves from the origin. Format: Unix timestamp in milliseconds.
+   * @deprecated Use `start` instead which includes timezone information.
+   */
+  startTime?: Maybe<Scalars['Long']['output']>;
   /**
    * A list of system notices. Contains debug information for itineraries.
    * One use-case is to run a routing search with 'debugItineraryFilter: true'.
@@ -885,12 +1439,35 @@ export type Itinerary = {
    */
   systemNotices: Array<Maybe<SystemNotice>>;
   /** How much time is spent waiting for transit to arrive, in seconds. */
-  waitingTime?: Maybe<Scalars['Long']>;
+  waitingTime?: Maybe<Scalars['Long']['output']>;
   /** How far the user has to walk, in meters. */
-  walkDistance?: Maybe<Scalars['Float']>;
+  walkDistance?: Maybe<Scalars['Float']['output']>;
   /** How much time is spent walking, in seconds. */
-  walkTime?: Maybe<Scalars['Long']>;
+  walkTime?: Maybe<Scalars['Long']['output']>;
 };
+
+/**
+ * Enable this to attach a system notice to itineraries instead of removing them. This is very
+ * convenient when tuning the itinerary-filter-chain.
+ */
+export enum ItineraryFilterDebugProfile {
+  /**
+   * Only return the requested number of itineraries, counting both actual and deleted ones.
+   * The top `numItineraries` using the request sort order is returned. This does not work
+   * with paging, itineraries after the limit, but inside the search-window are skipped when
+   * moving to the next page.
+   */
+  LimitToNumberOfItineraries = 'LIMIT_TO_NUMBER_OF_ITINERARIES',
+  /**
+   * Return all itineraries, including deleted ones, inside the actual search-window used
+   * (the requested search-window may differ).
+   */
+  LimitToSearchWindow = 'LIMIT_TO_SEARCH_WINDOW',
+  /** List all itineraries, including all deleted itineraries. */
+  ListAll = 'LIST_ALL',
+  /** By default, the debug itinerary filters is turned off. */
+  Off = 'OFF'
+}
 
 export type Leg = {
   __typename?: 'Leg';
@@ -902,7 +1479,7 @@ export type Leg = {
    *
    * More information is available in the [feature documentation](https://docs.opentripplanner.org/en/dev-2.x/sandbox/IBIAccessibilityScore/).
    */
-  accessibilityScore?: Maybe<Scalars['Float']>;
+  accessibilityScore?: Maybe<Scalars['Float']['output']>;
   /** For transit legs, the transit agency that operates the service used for this leg. For non-transit legs, `null`. */
   agency?: Maybe<Agency>;
   /** Applicable alerts for this leg. */
@@ -911,16 +1488,18 @@ export type Leg = {
    * For transit leg, the offset from the scheduled arrival time of the alighting
    * stop in this leg, i.e. scheduled time of arrival at alighting stop = `endTime
    * - arrivalDelay`
+   * @deprecated Use `start.estimated.delay` instead.
    */
-  arrivalDelay?: Maybe<Scalars['Int']>;
+  arrivalDelay?: Maybe<Scalars['Int']['output']>;
   /**
    * For transit leg, the offset from the scheduled departure time of the boarding
    * stop in this leg, i.e. scheduled time of departure at boarding stop =
    * `startTime - departureDelay`
+   * @deprecated Use `end.estimated.delay` instead.
    */
-  departureDelay?: Maybe<Scalars['Int']>;
+  departureDelay?: Maybe<Scalars['Int']['output']>;
   /** The distance traveled while traversing the leg in meters. */
-  distance?: Maybe<Scalars['Float']>;
+  distance?: Maybe<Scalars['Float']['output']>;
   /**
    * Special booking information for the drop off stop of this leg if, for example, it needs
    * to be booked in advance. This could be due to a flexible or on-demand service.
@@ -929,9 +1508,14 @@ export type Leg = {
   /** This is used to indicate if alighting from this leg is possible only with special arrangements. */
   dropoffType?: Maybe<PickupDropoffType>;
   /** The leg's duration in seconds */
-  duration?: Maybe<Scalars['Float']>;
-  /** The date and time when this leg ends. Format: Unix timestamp in milliseconds. */
-  endTime?: Maybe<Scalars['Long']>;
+  duration?: Maybe<Scalars['Float']['output']>;
+  /** The time when the leg ends including real-time information, if available. */
+  end: LegTime;
+  /**
+   * The date and time when this leg ends. Format: Unix timestamp in milliseconds.
+   * @deprecated Use `end.estimated.time` instead which contains timezone information.
+   */
+  endTime?: Maybe<Scalars['Long']['output']>;
   /**
    * Fare products are purchasable tickets which may have an optional fare container or rider
    * category that limits who can buy them or how.
@@ -943,29 +1527,46 @@ export type Leg = {
   /** The Place where the leg originates. */
   from: Place;
   /** Generalized cost of the leg. Used for debugging search results. */
-  generalizedCost?: Maybe<Scalars['Int']>;
+  generalizedCost?: Maybe<Scalars['Int']['output']>;
   /**
    * For transit legs, the headsign that the vehicle shows at the stop where the passenger boards.
    * For non-transit legs, null.
    */
-  headsign?: Maybe<Scalars['String']>;
+  headsign?: Maybe<Scalars['String']['output']>;
+  /**
+   * An identifier for the leg, which can be used to re-fetch transit leg information, except leg's fare products.
+   * Re-fetching fails when the underlying transit data no longer exists.
+   * **Note:** when both id and fare products are queried with [Relay](https://relay.dev/), id should be queried using a suitable GraphQL alias
+   * such as `legId: id`. Relay does not accept different fare product ids in otherwise identical legs.
+   *
+   * The identifier is valid for a maximum of 2 years, but sometimes it will fail after a few hours.
+   * We do not recommend storing IDs for a long time.
+   */
+  id?: Maybe<Scalars['String']['output']>;
   /**
    * Interlines with previous leg.
    * This is true when the same vehicle is used for the previous leg as for this leg
    * and passenger can stay inside the vehicle.
    */
-  interlineWithPreviousLeg?: Maybe<Scalars['Boolean']>;
-  /** Whether the destination of this leg (field `to`) is one of the intermediate places specified in the query. */
-  intermediatePlace?: Maybe<Scalars['Boolean']>;
+  interlineWithPreviousLeg?: Maybe<Scalars['Boolean']['output']>;
+  /**
+   * Whether the destination of this leg (field `to`) is one of the intermediate places specified in the query.
+   * @deprecated Not implemented. Use `viaLocationType` from from/to fields instead.
+   */
+  intermediatePlace?: Maybe<Scalars['Boolean']['output']>;
   /**
    * For transit legs, intermediate stops between the Place where the leg
    * originates and the Place where the leg ends. For non-transit legs, null.
-   * Returns Place type, which has fields for e.g. departure and arrival times
+   * @deprecated Use `leg.stopCalls` instead
    */
   intermediatePlaces?: Maybe<Array<Maybe<Place>>>;
   /**
    * For transit legs, intermediate stops between the Place where the leg
    * originates and the Place where the leg ends. For non-transit legs, null.
+   *
+   * The `include` parameter allows filtering of the returned places by stop type. If not provided, the
+   * field returns all types. An empty list is not permitted.
+   * @deprecated Use `leg.stopCalls` instead
    */
   intermediateStops?: Maybe<Array<Maybe<Stop>>>;
   /** The leg's geometry. */
@@ -981,55 +1582,160 @@ export type Leg = {
   pickupBookingInfo?: Maybe<BookingInfo>;
   /** This is used to indicate if boarding this leg is possible only with special arrangements. */
   pickupType?: Maybe<PickupDropoffType>;
+  /** Previous legs with same origin and destination stops or stations */
+  previousLegs?: Maybe<Array<Leg>>;
   /** Whether there is real-time data about this Leg */
-  realTime?: Maybe<Scalars['Boolean']>;
+  realTime?: Maybe<Scalars['Boolean']['output']>;
   /** State of real-time data */
   realtimeState?: Maybe<RealtimeState>;
-  /** Whether this leg is traversed with a rented bike. */
-  rentedBike?: Maybe<Scalars['Boolean']>;
+  /** Whether this leg is traversed with a rented vehicle. */
+  rentedBike?: Maybe<Scalars['Boolean']['output']>;
   /** Estimate of a hailed ride like Uber. */
   rideHailingEstimate?: Maybe<RideHailingEstimate>;
   /** For transit legs, the route that is used for traversing the leg. For non-transit legs, `null`. */
   route?: Maybe<Route>;
   /** For transit legs, the service date of the trip. Format: YYYYMMDD. For non-transit legs, null. */
-  serviceDate?: Maybe<Scalars['String']>;
-  /** The date and time when this leg begins. Format: Unix timestamp in milliseconds. */
-  startTime?: Maybe<Scalars['Long']>;
+  serviceDate?: Maybe<Scalars['String']['output']>;
+  /** The time when the leg starts including real-time information, if available. */
+  start: LegTime;
+  /**
+   * The date and time when this leg begins. Format: Unix timestamp in milliseconds.
+   * @deprecated Use `start.estimated.time` instead which contains timezone information.
+   */
+  startTime?: Maybe<Scalars['Long']['output']>;
   /** The turn-by-turn navigation instructions. */
   steps?: Maybe<Array<Maybe<Step>>>;
+  /**
+   * All the stop calls (stop times) of this _leg_ (but not trip) including the boarding and alighting one.
+   *
+   * Non-transit legs return an empty list.
+   */
+  stopCalls: Array<StopCall>;
   /** The Place where the leg ends. */
   to: Place;
   /** Whether this leg is a transit leg or not. */
-  transitLeg?: Maybe<Scalars['Boolean']>;
+  transitLeg?: Maybe<Scalars['Boolean']['output']>;
   /** For transit legs, the trip that is used for traversing the leg. For non-transit legs, `null`. */
   trip?: Maybe<Trip>;
   /** Whether this leg is walking with a bike. */
-  walkingBike?: Maybe<Scalars['Boolean']>;
+  walkingBike?: Maybe<Scalars['Boolean']['output']>;
+};
+
+
+export type LegIntermediateStopsArgs = {
+  include?: InputMaybe<Array<StopType>>;
 };
 
 
 export type LegNextLegsArgs = {
   destinationModesWithParentStation?: InputMaybe<Array<TransitMode>>;
-  numberOfLegs: Scalars['Int'];
+  numberOfLegs: Scalars['Int']['input'];
   originModesWithParentStation?: InputMaybe<Array<TransitMode>>;
+};
+
+
+export type LegPreviousLegsArgs = {
+  destinationModesWithParentStation?: InputMaybe<Array<TransitMode>>;
+  numberOfLegs: Scalars['Int']['input'];
+  originModesWithParentStation?: InputMaybe<Array<TransitMode>>;
+};
+
+/**
+ * Time information about a passenger at a certain place. May contain real-time information if
+ * available.
+ */
+export type LegTime = {
+  __typename?: 'LegTime';
+  /** The estimated time of the event. If no real-time information is available, this is null. */
+  estimated?: Maybe<RealTimeEstimate>;
+  /** The scheduled time of the event. */
+  scheduledTime: Scalars['OffsetDateTime']['output'];
+};
+
+/** A level with a name and comparable number. Levels can sometimes contain half levels, e.g. '1.5'. */
+export type Level = {
+  __typename?: 'Level';
+  /** 0-based comparable number where 0 is the ground level. */
+  level: Scalars['Float']['output'];
+  /** Name of the level, e.g. 'M', 'P1', or '1'. Can be equal or different to the numerical representation. */
+  name: Scalars['String']['output'];
+};
+
+/**
+ * A generalized linear cost function that can be applied to a cost value.
+ * The coefficient is used to scale the input Cost linearly and the constant is used
+ * to add a fixed offset. If we assume a cost c, then f(c) = coefficient * c + constant.
+ */
+export type LinearCostFunctionInput = {
+  /** The coefficient that scales the Cost input linearly. */
+  coefficient: Scalars['Float']['input'];
+  /** The 0th degree constant of the function as a Cost, must be a non-negative integer */
+  constant: Scalars['Cost']['input'];
+};
+
+/** Filters an entity by a date range. */
+export type LocalDateRangeInput = {
+  /**
+   * **Exclusive** end date of the filter. This means that if you want a time window from Sunday to
+   * Sunday, `end` must be on Monday.
+   *
+   * If `null` this means that no end filter is applied and all entities that are after or on `start`
+   * are selected.
+   */
+  end?: InputMaybe<Scalars['LocalDate']['input']>;
+  /**
+   * **Inclusive** start date of the filter. If `null` this means that no `start` filter is applied and all
+   * dates that are before `end` are selected.
+   */
+  start?: InputMaybe<Scalars['LocalDate']['input']>;
 };
 
 /** A span of time. */
 export type LocalTimeSpan = {
   __typename?: 'LocalTimeSpan';
   /** The start of the time timespan as seconds from midnight. */
-  from: Scalars['Int'];
+  from: Scalars['Int']['output'];
   /** The end of the timespan as seconds from midnight. */
-  to: Scalars['Int'];
+  to: Scalars['Int']['output'];
 };
 
 /** A date using the local timezone of the object that can contain timespans. */
 export type LocalTimeSpanDate = {
   __typename?: 'LocalTimeSpanDate';
   /** The date of this time span. Format: YYYYMMDD. */
-  date: Scalars['String'];
+  date: Scalars['String']['output'];
   /** The time spans for this date. */
   timeSpans?: Maybe<Array<Maybe<LocalTimeSpan>>>;
+};
+
+/**
+ * A stop that isn't a fixed point but zone where passengers can board or alight anywhere.
+ *
+ * This is mostly used by demand-responsive services.
+ */
+export type Location = {
+  __typename?: 'Location';
+  /** The geometry representing the geographic extend of the location. */
+  geometry: StopGeometries;
+  /** ÌD of the location in format `FeedId:LocationId` */
+  gtfsId: Scalars['String']['output'];
+  /** Optional name of the location. */
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * A group of fixed stops that are visited in an arbitrary order.
+ *
+ * This is mostly used by demand-responsive services.
+ */
+export type LocationGroup = {
+  __typename?: 'LocationGroup';
+  /** ÌD of the location group in format `FeedId:LocationGroupId` */
+  gtfsId: Scalars['String']['output'];
+  /** The stops that are part of the group (cannot be stations). */
+  members: Array<Stop>;
+  /** Optional name of the group. */
+  name?: Maybe<Scalars['String']['output']>;
 };
 
 /** Identifies whether this stop represents a stop or station. */
@@ -1052,7 +1758,7 @@ export enum Mode {
   CableCar = 'CABLE_CAR',
   /** CAR */
   Car = 'CAR',
-  /** "Private car trips shared with others. */
+  /** Private car trips shared with others. */
   Carpool = 'CARPOOL',
   /** COACH */
   Coach = 'COACH',
@@ -1103,7 +1809,7 @@ export type Money = {
    * If you want to get the minor currency unit (310 cents), multiply with
    * (10 to the power of `currency.digits`).
    */
-  amount: Scalars['Float'];
+  amount: Scalars['Float']['output'];
   /** The currency of this money amount. */
   currency: Currency;
 };
@@ -1111,7 +1817,7 @@ export type Money = {
 /** An object with an ID */
 export type Node = {
   /** The ID of an object */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
 };
 
 /** Occupancy status of a vehicle. */
@@ -1181,12 +1887,12 @@ export type OpeningHours = {
    *
    * The spec is available at: https://wiki.openstreetmap.org/wiki/Key:opening_hours
    */
-  osm?: Maybe<Scalars['String']>;
+  osm?: Maybe<Scalars['String']['output']>;
 };
 
 
 export type OpeningHoursDatesArgs = {
-  dates: Array<Scalars['String']>;
+  dates: Array<Scalars['String']['input']>;
 };
 
 /** Optimization type for bicycling legs */
@@ -1207,13 +1913,13 @@ export enum OptimizeType {
 export type PageInfo = {
   __typename?: 'PageInfo';
   /** When paginating forwards, the cursor to continue. */
-  endCursor?: Maybe<Scalars['String']>;
+  endCursor?: Maybe<Scalars['String']['output']>;
   /** When paginating forwards, are there more items? */
-  hasNextPage: Scalars['Boolean'];
+  hasNextPage: Scalars['Boolean']['output'];
   /** When paginating backwards, are there more items? */
-  hasPreviousPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean']['output'];
   /** When paginating backwards, the cursor to continue. */
-  startCursor?: Maybe<Scalars['String']>;
+  startCursor?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -1249,7 +1955,7 @@ export type ParkingFilter = {
 
 export type ParkingFilterOperation = {
   /** Filter parking facilities based on their tag */
-  tags?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 /**
@@ -1265,22 +1971,22 @@ export type Pattern = Node & {
    */
   alerts?: Maybe<Array<Maybe<Alert>>>;
   /** ID of the pattern */
-  code: Scalars['String'];
+  code: Scalars['String']['output'];
   /**
    * Direction of the pattern. Possible values: 0, 1 or -1.
    * -1 indicates that the direction is irrelevant, i.e. the route has patterns only in one direction.
    */
-  directionId?: Maybe<Scalars['Int']>;
+  directionId?: Maybe<Scalars['Int']['output']>;
   geometry?: Maybe<Array<Maybe<Coordinates>>>;
   /** Vehicle headsign used by trips of this pattern */
-  headsign?: Maybe<Scalars['String']>;
+  headsign?: Maybe<Scalars['String']['output']>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /**
    * Name of the pattern. Pattern name can be just the name of the route or it can
    * include details of destination and origin stops.
    */
-  name?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']['output']>;
   /** Original Trip pattern for changed patterns */
   originalTripPattern?: Maybe<Pattern>;
   /** Coordinates of the route of this pattern in Google polyline encoded format */
@@ -1292,14 +1998,14 @@ export type Pattern = Node & {
    * pattern id, i.e. this value can be used to check whether two patterns are the
    * same, even if their ids have changed.
    */
-  semanticHash?: Maybe<Scalars['String']>;
+  semanticHash?: Maybe<Scalars['String']['output']>;
   /** List of stops served by this pattern */
   stops?: Maybe<Array<Stop>>;
   /** Trips which run on this pattern */
   trips?: Maybe<Array<Trip>>;
   /** Trips which run on this pattern on the specified date */
   tripsForDate?: Maybe<Array<Trip>>;
-  /** Realtime-updated position of vehicles that are serving this pattern. */
+  /** Real-time updated position of vehicles that are serving this pattern. */
   vehiclePositions?: Maybe<Array<VehiclePosition>>;
 };
 
@@ -1320,7 +2026,7 @@ export type PatternAlertsArgs = {
  * for inbound trips
  */
 export type PatternTripsForDateArgs = {
-  serviceDate?: InputMaybe<Scalars['String']>;
+  serviceDate?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Entities, which are relevant for a pattern and can contain alerts */
@@ -1354,8 +2060,16 @@ export enum PickupDropoffType {
 
 export type Place = {
   __typename?: 'Place';
-  /** The time the rider will arrive at the place. Format: Unix timestamp in milliseconds. */
-  arrivalTime: Scalars['Long'];
+  /**
+   * The time the rider will arrive at the place. This also includes real-time information
+   * if available.
+   */
+  arrival?: Maybe<LegTime>;
+  /**
+   * The time the rider will arrive at the place. Format: Unix timestamp in milliseconds.
+   * @deprecated Use `arrival` which includes timezone information.
+   */
+  arrivalTime: Scalars['Long']['output'];
   /**
    * The bike parking related to the place
    * @deprecated bikePark is deprecated. Use vehicleParking instead.
@@ -1371,14 +2085,22 @@ export type Place = {
    * @deprecated carPark is deprecated. Use vehicleParking instead.
    */
   carPark?: Maybe<CarPark>;
-  /** The time the rider will depart the place. Format: Unix timestamp in milliseconds. */
-  departureTime: Scalars['Long'];
+  /**
+   * The time the rider will depart the place. This also includes real-time information
+   * if available.
+   */
+  departure?: Maybe<LegTime>;
+  /**
+   * The time the rider will depart the place. Format: Unix timestamp in milliseconds.
+   * @deprecated Use `departure` which includes timezone information.
+   */
+  departureTime: Scalars['Long']['output'];
   /** Latitude of the place (WGS 84) */
-  lat: Scalars['Float'];
+  lat: Scalars['Float']['output'];
   /** Longitude of the place (WGS 84) */
-  lon: Scalars['Float'];
+  lon: Scalars['Float']['output'];
   /** For transit stops, the name of the stop. For points of interest, the name of the POI. */
-  name?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']['output']>;
   /** The rental vehicle related to the place */
   rentalVehicle?: Maybe<RentalVehicle>;
   /** The stop related to the place. */
@@ -1389,7 +2111,7 @@ export type Place = {
    *
    * The purpose of this field is to identify the stop within the pattern so it can be cross-referenced
    * between it and the itinerary. It is safe to cross-reference when done quickly, i.e. within seconds.
-   * However, it should be noted that realtime updates can change the values, so don't store it for
+   * However, it should be noted that real-time updates can change the values, so don't store it for
    * longer amounts of time.
    *
    * Depending on the source data, this might not be the GTFS `stop_sequence` but another value, perhaps
@@ -1405,23 +2127,29 @@ export type Place = {
   /**
    * Type of vertex. (Normal, Bike sharing station, Bike P+R, Transit stop) Mostly
    * used for better localization of bike sharing and P+R station names
+   * @deprecated Unmaintained. Use `stop`, `rentalVehicle`, `vehicleParking` or `vehicleRentalStation` to tell which type it is.
    */
   vertexType?: Maybe<VertexType>;
+  /**
+   * This defines if the place is a requested via location, and what kind it is. If the value is
+   * `null`, this place is not a via location.
+   */
+  viaLocationType?: Maybe<ViaLocationType>;
 };
 
 /** Interface for places, e.g. stops, stations, parking areas.. */
 export type PlaceInterface = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Latitude of the place (WGS 84) */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Longitude of the place (WGS 84) */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
 };
 
 export type Plan = {
   __typename?: 'Plan';
   /** The time and date of travel. Format: Unix timestamp in milliseconds. */
-  date?: Maybe<Scalars['Long']>;
+  date?: Maybe<Scalars['Long']['output']>;
   /** Information about the timings for the plan generation */
   debugOutput: DebugOutput;
   /** The origin */
@@ -1429,17 +2157,14 @@ export type Plan = {
   /** A list of possible itineraries */
   itineraries: Array<Maybe<Itinerary>>;
   /** A list of possible error messages as enum */
-  messageEnums: Array<Maybe<Scalars['String']>>;
+  messageEnums: Array<Maybe<Scalars['String']['output']>>;
   /** A list of possible error messages in cleartext */
-  messageStrings: Array<Maybe<Scalars['String']>>;
+  messageStrings: Array<Maybe<Scalars['String']['output']>>;
   /**
-   * This is the suggested search time for the "next page" or time window. Insert it together
-   * with the searchWindowUsed in the request to get a new set of trips following in the
-   * search-window AFTER the current search. No duplicate trips should be returned, unless a trip
-   * is delayed and new realtime-data is available.
+   * This will not be available after Match 2026.
    * @deprecated Use nextPageCursor instead
    */
-  nextDateTime?: Maybe<Scalars['Long']>;
+  nextDateTime?: Maybe<Scalars['Long']['output']>;
   /**
    * Use the cursor to go to the next "page" of itineraries. Copy the cursor from the last response
    * to the pageCursor query parameter and keep the original request as is. This will enable you to
@@ -1447,15 +2172,12 @@ export type Plan = {
    * The cursor based paging only support stepping to the next page, as it does not support jumping.
    * This is only usable when public transportation mode(s) are included in the query.
    */
-  nextPageCursor?: Maybe<Scalars['String']>;
+  nextPageCursor?: Maybe<Scalars['String']['output']>;
   /**
-   * This is the suggested search time for the "previous page" or time window. Insert it together
-   * with the searchWindowUsed in the request to get a new set of trips preceding in the
-   * search-window BEFORE the current search. No duplicate trips should be returned, unless a trip
-   * is delayed and new realtime-data is available.
+   * This will not be available after Match 2026.
    * @deprecated Use previousPageCursor instead
    */
-  prevDateTime?: Maybe<Scalars['Long']>;
+  prevDateTime?: Maybe<Scalars['Long']['output']>;
   /**
    * Use the cursor to go to the previous "page" of itineraries. Copy the cursor from the last
    * response to the pageCursor query parameter and keep the original request otherwise as is.
@@ -1464,7 +2186,7 @@ export type Plan = {
    * jumping.
    * This is only usable when public transportation mode(s) are included in the query.
    */
-  previousPageCursor?: Maybe<Scalars['String']>;
+  previousPageCursor?: Maybe<Scalars['String']['output']>;
   /** A list of routing errors, and fields which caused them */
   routingErrors: Array<RoutingError>;
   /**
@@ -1472,26 +2194,538 @@ export type Plan = {
    * purpousess.
    *
    * The unit is seconds.
+   * @deprecated This is not needed for debugging, and is misleading if the window is cropped.
    */
-  searchWindowUsed?: Maybe<Scalars['Long']>;
+  searchWindowUsed?: Maybe<Scalars['Long']['output']>;
   /** The destination */
   to: Place;
+};
+
+/** Street modes that can be used for access to the transit network from origin. */
+export enum PlanAccessMode {
+  /**
+   * Cycling to a stop and boarding a vehicle with the bicycle.
+   * Note, this can include walking when it's needed to walk the bicycle.
+   * Access can use cycling only if the mode used for transfers
+   * and egress is also `BICYCLE`.
+   */
+  Bicycle = 'BICYCLE',
+  /**
+   * Starting the itinerary with a bicycle and parking the bicycle to
+   * a parking location. Note, this can include walking after parking
+   * the bicycle or when it's needed to walk the bicycle.
+   */
+  BicycleParking = 'BICYCLE_PARKING',
+  /**
+   * Bicycle rental can use either station based systems or "floating"
+   * vehicles which are not linked to a rental station. Note, if there are no
+   * rental options available, access will include only walking. Also, this
+   * can include walking before picking up or after dropping off the
+   * bicycle or when it's needed to walk the bicycle.
+   */
+  BicycleRental = 'BICYCLE_RENTAL',
+  /**
+   * Driving to a stop and boarding a vehicle with the car.
+   * Access can use driving only if the mode used for transfers
+   * and egress is also `CAR`.
+   */
+  Car = 'CAR',
+  /**
+   * Getting dropped off by a car to a location that is accessible with a car.
+   * Note, this can include walking after the drop-off.
+   */
+  CarDropOff = 'CAR_DROP_OFF',
+  /**
+   * Starting the itinerary with a car and parking the car to a parking location.
+   * Note, this can include walking after parking the car.
+   */
+  CarParking = 'CAR_PARKING',
+  /**
+   * Car rental can use either station based systems or "floating"
+   * vehicles which are not linked to a rental station. Note, if there are no
+   * rental options available, access will include only walking. Also, this
+   * can include walking before picking up or after dropping off the
+   * car.
+   */
+  CarRental = 'CAR_RENTAL',
+  /**
+   * Flexible transit. This can include different forms of flexible transit that
+   * can be defined in GTFS-Flex or in Netex. Note, this can include walking before
+   * or after the flexible transit leg.
+   */
+  Flex = 'FLEX',
+  /**
+   * Scooter rental can use either station based systems or "floating"
+   * vehicles which are not linked to a rental station. Note, if there are no
+   * rental options available, access will include only walking. Also, this
+   * can include walking before picking up or after dropping off the
+   * scooter.
+   */
+  ScooterRental = 'SCOOTER_RENTAL',
+  /** Walking to a stop. */
+  Walk = 'WALK'
+}
+
+/**
+ * Plan (result of an itinerary search) that follows
+ * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+ */
+export type PlanConnection = {
+  __typename?: 'PlanConnection';
+  /**
+   * Edges which contain the itineraries. Part of the
+   * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+   */
+  edges?: Maybe<Array<Maybe<PlanEdge>>>;
+  /**
+   * Contains cursors to continue the search and the information if there are more itineraries available.
+   * Part of the [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+   */
+  pageInfo: PlanPageInfo;
+  /** Errors faced during the routing search. */
+  routingErrors: Array<RoutingError>;
+  /** What was the starting point for the itinerary search. */
+  searchDateTime?: Maybe<Scalars['OffsetDateTime']['output']>;
+};
+
+/** A coordinate used for a location in a plan query. */
+export type PlanCoordinateInput = {
+  /** Latitude as a WGS84 format number. */
+  latitude: Scalars['CoordinateValue']['input'];
+  /** Longitude as a WGS84 format number. */
+  longitude: Scalars['CoordinateValue']['input'];
+};
+
+/** Plan date time options. Only one of the values should be defined. */
+export type PlanDateTimeInput = {
+  /**
+   * Earliest departure date time. The returned itineraries should not
+   * depart before this instant unless one is using paging to find earlier
+   * itineraries. Note, it is not currently possible to define both
+   * `earliestDeparture` and `latestArrival`.
+   */
+  earliestDeparture?: InputMaybe<Scalars['OffsetDateTime']['input']>;
+  /**
+   * Latest arrival time date time. The returned itineraries should not
+   * arrive to the destination after this instant unless one is using
+   * paging to find later itineraries. Note, it is not currently possible
+   * to define both `earliestDeparture` and `latestArrival`.
+   */
+  latestArrival?: InputMaybe<Scalars['OffsetDateTime']['input']>;
+};
+
+/** Street mode that is used when searching for itineraries that don't use any transit. */
+export enum PlanDirectMode {
+  /**
+   * Cycling from the origin to the destination. Note, this can include walking
+   * when it's needed to walk the bicycle.
+   */
+  Bicycle = 'BICYCLE',
+  /**
+   * Starting the itinerary with a bicycle and parking the bicycle to
+   * a parking location. Note, this can include walking after parking
+   * the bicycle or when it's needed to walk the bicycle.
+   */
+  BicycleParking = 'BICYCLE_PARKING',
+  /**
+   * Bicycle rental can use either station based systems or "floating"
+   * vehicles which are not linked to a rental station. Note, if there are no
+   * rental options available, itinerary will include only walking.
+   * Also, it can include walking before picking up or after dropping off the
+   * bicycle or when it's needed to walk the bicycle.
+   */
+  BicycleRental = 'BICYCLE_RENTAL',
+  /** Driving a car from the origin to the destination. */
+  Car = 'CAR',
+  /**
+   * Starting the itinerary with a car and parking the car to a parking location.
+   * Note, this can include walking after parking the car.
+   */
+  CarParking = 'CAR_PARKING',
+  /**
+   * Car rental can use either station based systems or "floating"
+   * vehicles which are not linked to a rental station. Note, if there are no
+   * rental options available, itinerary will include only walking. Also, this
+   * can include walking before picking up or after dropping off the
+   * car.
+   */
+  CarRental = 'CAR_RENTAL',
+  /**
+   * Flexible transit. This can include different forms of flexible transit that
+   * can be defined in GTFS-Flex or in Netex. Note, this can include walking before
+   * or after the flexible transit leg.
+   */
+  Flex = 'FLEX',
+  /**
+   * Scooter rental can use either station based systems or "floating"
+   * vehicles which are not linked to a rental station. Note, if there are no
+   * rental options available, itinerary will include only walking. Also, this
+   * can include walking before picking up or after dropping off the
+   * scooter.
+   */
+  ScooterRental = 'SCOOTER_RENTAL',
+  /**
+   * Walking from the origin to the destination. Note, this can include walking
+   * when it's needed to walk the bicycle.
+   */
+  Walk = 'WALK'
+}
+
+/**
+ * Edge outputted by a plan search. Part of the
+ * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+ */
+export type PlanEdge = {
+  __typename?: 'PlanEdge';
+  /**
+   * The cursor of the edge. Part of the
+   * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+   */
+  cursor: Scalars['String']['output'];
+  /**
+   * An itinerary suggestion. Part of the
+   * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+   */
+  node: Itinerary;
+};
+
+/** Street modes that can be used for egress from the transit network to destination. */
+export enum PlanEgressMode {
+  /**
+   * Cycling from a stop to the destination. Note, this can include walking when
+   * it's needed to walk the bicycle. Egress can use cycling only if the mode used
+   * for access and transfers is also `BICYCLE`.
+   */
+  Bicycle = 'BICYCLE',
+  /**
+   * Bicycle rental can use either station based systems or "floating"
+   * vehicles which are not linked to a rental station. Note, if there are no
+   * rental options available, egress will include only walking. Also, this
+   * can include walking before picking up or after dropping off the
+   * bicycle or when it's needed to walk the bicycle.
+   */
+  BicycleRental = 'BICYCLE_RENTAL',
+  /**
+   * Driving from a stop to the destination. Egress can use driving only if the mode
+   * used for access and transfers is also `CAR`.
+   */
+  Car = 'CAR',
+  /**
+   * Getting picked up by a car from a location that is accessible with a car.
+   * Note, this can include walking before the pickup.
+   */
+  CarPickup = 'CAR_PICKUP',
+  /**
+   * Car rental can use either station based systems or "floating"
+   * vehicles which are not linked to a rental station. Note, if there are no
+   * rental options available, egress will include only walking. Also, this
+   * can include walking before picking up or after dropping off the
+   * car.
+   */
+  CarRental = 'CAR_RENTAL',
+  /**
+   * Flexible transit. This can include different forms of flexible transit that
+   * can be defined in GTFS-Flex or in Netex. Note, this can include walking before
+   * or after the flexible transit leg.
+   */
+  Flex = 'FLEX',
+  /**
+   * Scooter rental can use either station based systems or "floating"
+   * vehicles which are not linked to a rental station. Note, if there are no
+   * rental options available, egress will include only walking. Also, this
+   * can include walking before picking up or after dropping off the
+   * scooter.
+   */
+  ScooterRental = 'SCOOTER_RENTAL',
+  /** Walking from a stop to the destination. */
+  Walk = 'WALK'
+}
+
+/**
+ * Settings that control the behavior of itinerary filtering. **These are advanced settings and
+ * should not be set by a user through user preferences.**
+ */
+export type PlanItineraryFilterInput = {
+  /**
+   * Pick one itinerary from each group after putting itineraries that are `85%` similar together,
+   * if the given value is `0.85`, for example. Itineraries are grouped together based on relative
+   * the distance of transit travel that is identical between the itineraries (access, egress and
+   * transfers are ignored). The value must be at least `0.5`.
+   */
+  groupSimilarityKeepOne?: InputMaybe<Scalars['Ratio']['input']>;
+  /**
+   * Pick three itineraries from each group after putting itineraries that are `68%` similar together,
+   * if the given value is `0.68`, for example. Itineraries are grouped together based on relative
+   * the distance of transit travel that is identical between the itineraries (access, egress and
+   * transfers are ignored). The value must be at least `0.5`.
+   */
+  groupSimilarityKeepThree?: InputMaybe<Scalars['Ratio']['input']>;
+  /**
+   * Of the itineraries grouped to maximum of three itineraries, how much worse can the non-grouped
+   * legs be compared to the lowest cost. `2.0` means that they can be double the cost, and any
+   * itineraries having a higher cost will be filtered away. Use a value lower than `1.0` to turn the
+   * grouping off.
+   */
+  groupedOtherThanSameLegsMaxCostMultiplier?: InputMaybe<Scalars['Float']['input']>;
+  /** Itinerary filter debug profile used to control the behaviour of itinerary filters. */
+  itineraryFilterDebugProfile?: InputMaybe<ItineraryFilterDebugProfile>;
+};
+
+/**
+ * Plan location settings. Location must be set. Label is optional
+ * and used for naming the location.
+ */
+export type PlanLabeledLocationInput = {
+  /**
+   * A label that can be attached to the location. This label is then returned with the location
+   * in the itineraries.
+   */
+  label?: InputMaybe<Scalars['String']['input']>;
+  /** A location that has to be used in an itinerary. */
+  location: PlanLocationInput;
+};
+
+/** Plan location. Either a coordinate or a stop location should be defined. */
+export type PlanLocationInput = {
+  /** Coordinate of the location. Note, either a coordinate or a stop location should be defined. */
+  coordinate?: InputMaybe<PlanCoordinateInput>;
+  /**
+   * Stop, station, a group of stop places or multimodal stop place that should be used as
+   * a location for the search. The trip doesn't have to use the given stop location for a
+   * transit connection as it's possible to start walking to another stop from the given
+   * location. If a station or a group of stop places is provided, a stop that makes the most
+   * sense for the journey is picked as the location within the station or group of stop places.
+   */
+  stopLocation?: InputMaybe<PlanStopLocationInput>;
+};
+
+/** Mode selections for the plan search. */
+export type PlanModesInput = {
+  /**
+   * Street mode that is used when searching for itineraries that don't use any transit.
+   * If more than one mode is selected, at least one of them must be used but not necessarily all.
+   * There are modes that automatically also use walking such as the rental modes. To force rental
+   * to be used, this should only include the rental mode and not `WALK` in addition.
+   */
+  direct?: InputMaybe<Array<PlanDirectMode>>;
+  /** Should only the direct search without any transit be done. */
+  directOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  /**
+   * Modes for different phases of an itinerary when transit is included. Also
+   * includes street mode selections related to connecting to the transit network
+   * and transfers. By default, all transit modes are usable.
+   */
+  transit?: InputMaybe<PlanTransitModesInput>;
+  /**
+   * Should only the transit search be done and never suggest itineraries that don't
+   * contain any transit legs.
+   */
+  transitOnly?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/**
+ * Information about pagination in a connection. Part of the
+ * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+ */
+export type PlanPageInfo = {
+  __typename?: 'PlanPageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** The search window that was used for the search in the current page. */
+  searchWindowUsed?: Maybe<Scalars['Duration']['output']>;
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * One of the listed stop locations must be visited on-board a transit vehicle or the journey must
+ * alight or board at the location.
+ */
+export type PlanPassThroughViaLocationInput = {
+  /** The label/name of the location. This is pass-through information and is not used in routing. */
+  label?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * A list of stop locations. A stop location can be a stop or a station.
+   * It is enough to visit ONE of the locations listed.
+   */
+  stopLocationIds: Array<Scalars['String']['input']>;
+};
+
+/** Wrapper type for different types of preferences related to plan query. */
+export type PlanPreferencesInput = {
+  /** Accessibility preferences that affect both the street and transit routing. */
+  accessibility?: InputMaybe<AccessibilityPreferencesInput>;
+  /**
+   * Street routing preferences used for ingress, egress and transfers. These do not directly affect
+   * the transit legs but can change how preferable walking or cycling, for example, is compared to
+   * transit.
+   */
+  street?: InputMaybe<PlanStreetPreferencesInput>;
+  /** Transit routing preferences used for transit legs. */
+  transit?: InputMaybe<TransitPreferencesInput>;
+};
+
+/**
+ * Stop, station, a group of stop places or multimodal stop place that should be used as
+ * a location for the search. The trip doesn't have to use the given stop location for a
+ * transit connection as it's possible to start walking to another stop from the given
+ * location. If a station or a group of stop places is provided, a stop that makes the most
+ * sense for the journey is picked as the location within the station or group of stop places.
+ */
+export type PlanStopLocationInput = {
+  /**
+   * ID of the stop, station, a group of stop places or multimodal stop place. Format
+   * should be `FeedId:StopLocationId`.
+   */
+  stopLocationId: Scalars['String']['input'];
+};
+
+/**
+ * Street routing preferences used for ingress, egress and transfers. These do not directly affect
+ * the transit legs but can change how preferable walking or cycling, for example, is compared to
+ * transit.
+ */
+export type PlanStreetPreferencesInput = {
+  /** Cycling related preferences. */
+  bicycle?: InputMaybe<BicyclePreferencesInput>;
+  /**
+   * Car related preferences. These are not used for car travel as part of transit, such as
+   * taxi travel.
+   */
+  car?: InputMaybe<CarPreferencesInput>;
+  /** Scooter (kick or electrical) related preferences. */
+  scooter?: InputMaybe<ScooterPreferencesInput>;
+  /**
+   * Walk related preferences. These are not used when walking a bicycle or a scooter as they
+   * have their own preferences.
+   */
+  walk?: InputMaybe<WalkPreferencesInput>;
+};
+
+export enum PlanTransferMode {
+  /**
+   * Cycling between transit vehicles (typically between stops). Note, this can
+   * include walking when it's needed to walk the bicycle. Transfers can only use
+   * cycling if the mode used for access and egress is also `BICYCLE`.
+   */
+  Bicycle = 'BICYCLE',
+  /**
+   * Driving between transit vehicles. Transfers can only use driving if the mode
+   * used for access and egress is also `CAR`.
+   */
+  Car = 'CAR',
+  /** Walking between transit vehicles (typically between stops). */
+  Walk = 'WALK'
+}
+
+/** Transit mode and a reluctance associated with it. */
+export type PlanTransitModePreferenceInput = {
+  /** Costs related to using a transit mode. */
+  cost?: InputMaybe<TransitModePreferenceCostInput>;
+  /** Transit mode that could be (but doesn't have to be) used in an itinerary. */
+  mode: TransitMode;
+  /**
+   * If present and not null, further limits the transit mode selection.  A transit trip matches
+   * a PlanTransitModePreferenceInput if the mandatory TransitMode field mode matches. If replacement
+   * is REQUIRED, the trip must also be a replacement. If replacement is FORBIDDEN,
+   * the trip must not be a replacement. If replacement is FEATURE_IGNORED or missing, it
+   * does not matter if the trip is a replacement or not. Whether a leg is a replacement is recognized
+   * both by the NeTEx submode and the GTFS extended type, depending on the data source.
+   * Note that a bus replacing a train has mode: BUS, replacement: true, so it matches a query with
+   * mode: BUS, replacement: REQUIRED and mode: BUS, replacement: FEATURE_IGNORED, but it does not
+   * match mode: TRAIN with any replacement options. So to get both trains and buses replacing them,
+   * but no other buses, query [(mode: TRAIN), (mode: BUS, replacement: REQUIRED)].
+   */
+  replacement?: InputMaybe<ReplacementFilterInput>;
+};
+
+/**
+ * Modes for different phases of an itinerary when transit is included. Also includes street
+ * mode selections related to connecting to the transit network and transfers.
+ */
+export type PlanTransitModesInput = {
+  /**
+   * Street mode that is used when searching for access to the transit network from origin.
+   * If more than one mode is selected, at least one of them must be used but not necessarily all.
+   * There are modes that automatically also use walking such as the rental modes. To force rental
+   * to be used, this should only include the rental mode and not `WALK` in addition.
+   */
+  access?: InputMaybe<Array<PlanAccessMode>>;
+  /**
+   * Street mode that is used when searching for egress to destination from the transit network.
+   * If more than one mode is selected, at least one of them must be used but not necessarily all.
+   * There are modes that automatically also use walking such as the rental modes. To force rental
+   * to be used, this should only include the rental mode and not `WALK` in addition.
+   */
+  egress?: InputMaybe<Array<PlanEgressMode>>;
+  /** Street mode that is used when searching for transfers. Selection of only one allowed for now. */
+  transfer?: InputMaybe<Array<PlanTransferMode>>;
+  /**
+   * Transit modes and reluctances associated with them. Each defined mode can be used in
+   * an itinerary but doesn't have to be. If direct search is not disabled, there can be an
+   * itinerary without any transit legs. By default, all transit modes are usable. For a transit trip
+   * to match PlanTransitModesInput, it must match one of the PlanTransitModePreferenceInputs given
+   * in the field.
+   */
+  transit?: InputMaybe<Array<PlanTransitModePreferenceInput>>;
+};
+
+/**
+ * A via-location is used to specifying a location as an intermediate place the router must
+ * route through. The via-location is either a pass-through-location or a visit-via-location.
+ */
+export type PlanViaLocationInput = {
+  /** Board, alight or pass-through(on-board) at the stop location. */
+  passThrough?: InputMaybe<PlanPassThroughViaLocationInput>;
+  /** Board or alight at a stop location or visit a coordinate. */
+  visit?: InputMaybe<PlanVisitViaLocationInput>;
+};
+
+/**
+ * A visit-via-location is a physical visit to one of the stop locations or coordinates listed. An
+ * on-board visit does not count, the traveler must alight or board at the given stop for it to to
+ * be accepted. To visit a coordinate, the traveler must walk(bike or drive) to the closest point
+ * in the street network from a stop and back to another stop to join the transit network.
+ */
+export type PlanVisitViaLocationInput = {
+  /**
+   * A coordinate to route through. To visit a coordinate, the traveler must walk(bike or drive)
+   * to the closest point in the street network from a stop and back to another stop to join the transit
+   * network.
+   */
+  coordinate?: InputMaybe<PlanCoordinateInput>;
+  /** The label/name of the location. This is pass-through information and is not used in routing. */
+  label?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * The minimum wait time is used to force the trip to stay the given duration at the
+   * via-location before the itinerary is continued.
+   */
+  minimumWaitTime?: InputMaybe<Scalars['Duration']['input']>;
+  /**
+   * A list of stop locations. A stop location can be a stop or a station.
+   * It is enough to visit ONE of the locations listed.
+   */
+  stopLocationIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 /** Stop position at a specific stop. */
 export type PositionAtStop = {
   __typename?: 'PositionAtStop';
   /** Position of the stop in the pattern. Positions are not required to start from 0 or be consecutive. */
-  position?: Maybe<Scalars['Int']>;
+  position?: Maybe<Scalars['Int']['output']>;
 };
 
 /** The board/alight position in between two stops of the pattern of a trip with continuous pickup/drop off. */
 export type PositionBetweenStops = {
   __typename?: 'PositionBetweenStops';
   /** Position of the next stop in the pattern. Positions are not required to start from 0 or be consecutive. */
-  nextPosition?: Maybe<Scalars['Int']>;
+  nextPosition?: Maybe<Scalars['Int']['output']>;
   /** Position of the previous stop in the pattern. Positions are not required to start from 0 or be consecutive. */
-  previousPosition?: Maybe<Scalars['Int']>;
+  previousPosition?: Maybe<Scalars['Int']['output']>;
 };
 
 export enum PropulsionType {
@@ -1582,7 +2816,17 @@ export type QueryType = {
    * @deprecated Use rentalVehicles or vehicleRentalStations instead
    */
   bikeRentalStations?: Maybe<Array<Maybe<BikeRentalStation>>>;
-  /** Get cancelled TripTimes. */
+  /**
+   * Get pages of canceled trips. Planned cancellations are not currently supported. Limiting the number of
+   * returned trips with either `first` or `last` is highly recommended since the number of returned trips
+   * can be really high when there is a strike affecting the transit services, for example. Follows the
+   * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+   */
+  canceledTrips?: Maybe<TripOnServiceDateConnection>;
+  /**
+   * Get canceled TripTimes.
+   * @deprecated `cancelledTripTimes` is not implemented. Use `canceledTrips` instead.
+   */
   cancelledTripTimes?: Maybe<Array<Maybe<Stoptime>>>;
   /**
    * Get a single car park based on its ID, i.e. value of field `carParkId`
@@ -1594,9 +2838,15 @@ export type QueryType = {
    * @deprecated carParks is deprecated. Use vehicleParkings instead.
    */
   carParks?: Maybe<Array<Maybe<CarPark>>>;
-  /** Get a single cluster based on its ID, i.e. value of field `gtfsId` */
+  /**
+   * Get a single cluster based on its ID, i.e. value of field `gtfsId`
+   * @deprecated Not implemented
+   */
   cluster?: Maybe<Cluster>;
-  /** Get all clusters */
+  /**
+   * Get all clusters
+   * @deprecated Not implemented
+   */
   clusters?: Maybe<Array<Maybe<Cluster>>>;
   /** Get a single departure row based on its ID (ID format is `FeedId:StopId:PatternId`) */
   departureRow?: Maybe<DepartureRow>;
@@ -1608,6 +2858,12 @@ export type QueryType = {
    * available from some source (e.g. MQTT vehicle positions).
    */
   fuzzyTrip?: Maybe<Trip>;
+  /**
+   * Try refetching the current state of a transit leg using its id.
+   * This fails when the underlying transit data (mostly IDs) has changed or are no longer available.
+   * Fare products cannot be refetched using this query.
+   */
+  leg?: Maybe<Leg>;
   /**
    * Get all places (stops, stations, etc. with coordinates) within the specified
    * radius from a location. The returned type is a Relay connection (see
@@ -1625,8 +2881,16 @@ export type QueryType = {
   pattern?: Maybe<Pattern>;
   /** Get all patterns */
   patterns?: Maybe<Array<Maybe<Pattern>>>;
-  /** Plans an itinerary from point A to point B based on the given arguments */
+  /**
+   * Plans an itinerary from point A to point B based on the given arguments
+   * @deprecated Use `planConnection` instead.
+   */
   plan?: Maybe<Plan>;
+  /**
+   * Plan (itinerary) search that follows
+   * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+   */
+  planConnection?: Maybe<PlanConnection>;
   /** Get a single rental vehicle based on its ID, i.e. value of field `vehicleId` */
   rentalVehicle?: Maybe<RentalVehicle>;
   /** Get all rental vehicles */
@@ -1668,252 +2932,307 @@ export type QueryType = {
   vehicleRentalStation?: Maybe<VehicleRentalStation>;
   /** Get all vehicle rental stations */
   vehicleRentalStations?: Maybe<Array<Maybe<VehicleRentalStation>>>;
+  /** Get all rental vehicles within the specified bounding box */
+  vehicleRentalsByBbox: Array<RentalPlace>;
   /** Needed until https://github.com/facebook/relay/issues/112 is resolved */
   viewer?: Maybe<QueryType>;
 };
 
 
 export type QueryTypeAgencyArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeAlertsArgs = {
   cause?: InputMaybe<Array<AlertCauseType>>;
   effect?: InputMaybe<Array<AlertEffectType>>;
-  feeds?: InputMaybe<Array<Scalars['String']>>;
-  route?: InputMaybe<Array<Scalars['String']>>;
+  feeds?: InputMaybe<Array<Scalars['String']['input']>>;
+  route?: InputMaybe<Array<Scalars['String']['input']>>;
   severityLevel?: InputMaybe<Array<AlertSeverityLevelType>>;
-  stop?: InputMaybe<Array<Scalars['String']>>;
+  stop?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
 export type QueryTypeBikeParkArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeBikeRentalStationArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeBikeRentalStationsArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type QueryTypeCanceledTripsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  filters?: InputMaybe<Array<CanceledTripsFilterInput>>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryTypeCancelledTripTimesArgs = {
-  feeds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  maxArrivalTime?: InputMaybe<Scalars['Int']>;
-  maxDate?: InputMaybe<Scalars['String']>;
-  maxDepartureTime?: InputMaybe<Scalars['Int']>;
-  minArrivalTime?: InputMaybe<Scalars['Int']>;
-  minDate?: InputMaybe<Scalars['String']>;
-  minDepartureTime?: InputMaybe<Scalars['Int']>;
-  patterns?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  routes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  trips?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  feeds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  maxArrivalTime?: InputMaybe<Scalars['Int']['input']>;
+  maxDate?: InputMaybe<Scalars['String']['input']>;
+  maxDepartureTime?: InputMaybe<Scalars['Int']['input']>;
+  minArrivalTime?: InputMaybe<Scalars['Int']['input']>;
+  minDate?: InputMaybe<Scalars['String']['input']>;
+  minDepartureTime?: InputMaybe<Scalars['Int']['input']>;
+  patterns?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  routes?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  trips?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 
 export type QueryTypeCarParkArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeCarParksArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 
 export type QueryTypeClusterArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeDepartureRowArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeFuzzyTripArgs = {
-  date: Scalars['String'];
-  direction?: InputMaybe<Scalars['Int']>;
-  route: Scalars['String'];
-  time: Scalars['Int'];
+  date: Scalars['String']['input'];
+  direction?: InputMaybe<Scalars['Int']['input']>;
+  route: Scalars['String']['input'];
+  time: Scalars['Int']['input'];
+};
+
+
+export type QueryTypeLegArgs = {
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeNearestArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
   filterByModes?: InputMaybe<Array<InputMaybe<Mode>>>;
+  filterByNetwork?: InputMaybe<Array<Scalars['String']['input']>>;
   filterByPlaceTypes?: InputMaybe<Array<InputMaybe<FilterPlaceType>>>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  lat: Scalars['Float'];
-  lon: Scalars['Float'];
-  maxDistance?: InputMaybe<Scalars['Int']>;
-  maxResults?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  lat: Scalars['Float']['input'];
+  lon: Scalars['Float']['input'];
+  maxDistance?: InputMaybe<Scalars['Int']['input']>;
+  maxResults?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
 export type QueryTypeNodeArgs = {
-  id: Scalars['ID'];
+  id: Scalars['ID']['input'];
 };
 
 
 export type QueryTypePatternArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypePlanArgs = {
-  alightSlack?: InputMaybe<Scalars['Int']>;
-  allowKeepingRentedBicycleAtDestination?: InputMaybe<Scalars['Boolean']>;
-  allowedTicketTypes?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  allowedVehicleRentalNetworks?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  arriveBy?: InputMaybe<Scalars['Boolean']>;
+  alightSlack?: InputMaybe<Scalars['Int']['input']>;
+  allowKeepingRentedBicycleAtDestination?: InputMaybe<Scalars['Boolean']['input']>;
+  allowedTicketTypes?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  allowedVehicleRentalNetworks?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  arriveBy?: InputMaybe<Scalars['Boolean']['input']>;
   banned?: InputMaybe<InputBanned>;
-  bannedVehicleRentalNetworks?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  bikeBoardCost?: InputMaybe<Scalars['Int']>;
-  bikeReluctance?: InputMaybe<Scalars['Float']>;
-  bikeSpeed?: InputMaybe<Scalars['Float']>;
-  bikeSwitchCost?: InputMaybe<Scalars['Int']>;
-  bikeSwitchTime?: InputMaybe<Scalars['Int']>;
-  bikeWalkingReluctance?: InputMaybe<Scalars['Float']>;
-  boardSlack?: InputMaybe<Scalars['Int']>;
-  carReluctance?: InputMaybe<Scalars['Float']>;
-  date?: InputMaybe<Scalars['String']>;
-  debugItineraryFilter?: InputMaybe<Scalars['Boolean']>;
+  bannedVehicleRentalNetworks?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  bikeBoardCost?: InputMaybe<Scalars['Int']['input']>;
+  bikeReluctance?: InputMaybe<Scalars['Float']['input']>;
+  bikeSpeed?: InputMaybe<Scalars['Float']['input']>;
+  bikeSwitchCost?: InputMaybe<Scalars['Int']['input']>;
+  bikeSwitchTime?: InputMaybe<Scalars['Int']['input']>;
+  bikeWalkingReluctance?: InputMaybe<Scalars['Float']['input']>;
+  boardSlack?: InputMaybe<Scalars['Int']['input']>;
+  carReluctance?: InputMaybe<Scalars['Float']['input']>;
+  date?: InputMaybe<Scalars['String']['input']>;
+  debugItineraryFilter?: InputMaybe<Scalars['Boolean']['input']>;
   from?: InputMaybe<InputCoordinates>;
-  fromPlace?: InputMaybe<Scalars['String']>;
-  ignoreRealtimeUpdates?: InputMaybe<Scalars['Boolean']>;
-  keepingRentedBicycleAtDestinationCost?: InputMaybe<Scalars['Int']>;
-  locale?: InputMaybe<Scalars['String']>;
-  maxTransfers?: InputMaybe<Scalars['Int']>;
-  minTransferTime?: InputMaybe<Scalars['Int']>;
+  fromPlace?: InputMaybe<Scalars['String']['input']>;
+  ignoreRealtimeUpdates?: InputMaybe<Scalars['Boolean']['input']>;
+  keepingRentedBicycleAtDestinationCost?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['String']['input']>;
+  maxTransfers?: InputMaybe<Scalars['Int']['input']>;
+  minTransferTime?: InputMaybe<Scalars['Int']['input']>;
   modeWeight?: InputMaybe<InputModeWeight>;
-  nonpreferredTransferPenalty?: InputMaybe<Scalars['Int']>;
-  numItineraries?: InputMaybe<Scalars['Int']>;
-  omitCanceled?: InputMaybe<Scalars['Boolean']>;
+  nonpreferredTransferPenalty?: InputMaybe<Scalars['Int']['input']>;
+  numItineraries?: InputMaybe<Scalars['Int']['input']>;
+  omitCanceled?: InputMaybe<Scalars['Boolean']['input']>;
   optimize?: InputMaybe<OptimizeType>;
-  pageCursor?: InputMaybe<Scalars['String']>;
+  pageCursor?: InputMaybe<Scalars['String']['input']>;
   parking?: InputMaybe<VehicleParkingInput>;
-  preferred?: InputMaybe<InputPreferred>;
-  searchWindow?: InputMaybe<Scalars['Long']>;
-  startTransitStopId?: InputMaybe<Scalars['String']>;
-  time?: InputMaybe<Scalars['String']>;
+  searchWindow?: InputMaybe<Scalars['Long']['input']>;
+  startTransitStopId?: InputMaybe<Scalars['String']['input']>;
+  time?: InputMaybe<Scalars['String']['input']>;
   to?: InputMaybe<InputCoordinates>;
-  toPlace?: InputMaybe<Scalars['String']>;
-  transferPenalty?: InputMaybe<Scalars['Int']>;
+  toPlace?: InputMaybe<Scalars['String']['input']>;
+  transferPenalty?: InputMaybe<Scalars['Int']['input']>;
   transportModes?: InputMaybe<Array<InputMaybe<TransportMode>>>;
   triangle?: InputMaybe<InputTriangle>;
   unpreferred?: InputMaybe<InputUnpreferred>;
-  waitReluctance?: InputMaybe<Scalars['Float']>;
-  walkBoardCost?: InputMaybe<Scalars['Int']>;
-  walkReluctance?: InputMaybe<Scalars['Float']>;
-  walkSafetyFactor?: InputMaybe<Scalars['Float']>;
-  walkSpeed?: InputMaybe<Scalars['Float']>;
-  wheelchair?: InputMaybe<Scalars['Boolean']>;
+  via?: InputMaybe<Array<PlanViaLocationInput>>;
+  waitReluctance?: InputMaybe<Scalars['Float']['input']>;
+  walkBoardCost?: InputMaybe<Scalars['Int']['input']>;
+  walkReluctance?: InputMaybe<Scalars['Float']['input']>;
+  walkSafetyFactor?: InputMaybe<Scalars['Float']['input']>;
+  walkSpeed?: InputMaybe<Scalars['Float']['input']>;
+  wheelchair?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+
+export type QueryTypePlanConnectionArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  dateTime?: InputMaybe<PlanDateTimeInput>;
+  destination: PlanLabeledLocationInput;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  flex?: InputMaybe<FlexRequest>;
+  itineraryFilter?: InputMaybe<PlanItineraryFilterInput>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  locale?: InputMaybe<Scalars['Locale']['input']>;
+  modes?: InputMaybe<PlanModesInput>;
+  origin: PlanLabeledLocationInput;
+  preferences?: InputMaybe<PlanPreferencesInput>;
+  searchWindow?: InputMaybe<Scalars['Duration']['input']>;
+  via?: InputMaybe<Array<PlanViaLocationInput>>;
 };
 
 
 export type QueryTypeRentalVehicleArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeRentalVehiclesArgs = {
   formFactors?: InputMaybe<Array<InputMaybe<FormFactor>>>;
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 
 export type QueryTypeRouteArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeRoutesArgs = {
-  feeds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  name?: InputMaybe<Scalars['String']>;
+  feeds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  serviceDates?: InputMaybe<LocalDateRangeInput>;
   transportModes?: InputMaybe<Array<InputMaybe<Mode>>>;
 };
 
 
 export type QueryTypeStationArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeStationsArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  name?: InputMaybe<Scalars['String']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryTypeStopArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeStopsArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-  name?: InputMaybe<Scalars['String']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryTypeStopsByBboxArgs = {
-  feeds?: InputMaybe<Array<Scalars['String']>>;
-  maxLat: Scalars['Float'];
-  maxLon: Scalars['Float'];
-  minLat: Scalars['Float'];
-  minLon: Scalars['Float'];
+  feeds?: InputMaybe<Array<Scalars['String']['input']>>;
+  maxLat: Scalars['Float']['input'];
+  maxLon: Scalars['Float']['input'];
+  minLat: Scalars['Float']['input'];
+  minLon: Scalars['Float']['input'];
 };
 
 
 export type QueryTypeStopsByRadiusArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  feeds?: InputMaybe<Array<Scalars['String']>>;
-  first?: InputMaybe<Scalars['Int']>;
-  last?: InputMaybe<Scalars['Int']>;
-  lat: Scalars['Float'];
-  lon: Scalars['Float'];
-  radius: Scalars['Int'];
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  feeds?: InputMaybe<Array<Scalars['String']['input']>>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  lat: Scalars['Float']['input'];
+  lon: Scalars['Float']['input'];
+  radius: Scalars['Int']['input'];
 };
 
 
 export type QueryTypeTripArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeTripsArgs = {
-  feeds?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  feeds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 
 export type QueryTypeVehicleParkingArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeVehicleParkingsArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 
 export type QueryTypeVehicleRentalStationArgs = {
-  id: Scalars['String'];
+  id: Scalars['String']['input'];
 };
 
 
 export type QueryTypeVehicleRentalStationsArgs = {
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+
+export type QueryTypeVehicleRentalsByBboxArgs = {
+  maximumLatitude: Scalars['CoordinateValue']['input'];
+  maximumLongitude: Scalars['CoordinateValue']['input'];
+  minimumLatitude: Scalars['CoordinateValue']['input'];
+  minimumLongitude: Scalars['CoordinateValue']['input'];
+};
+
+/** Real-time estimates for a vehicle at a certain place. */
+export type RealTimeEstimate = {
+  __typename?: 'RealTimeEstimate';
+  /**
+   * The delay or "earliness" of the vehicle at a certain place.
+   *
+   * If the vehicle is early then this is a negative duration.
+   */
+  delay: Scalars['Duration']['output'];
+  time: Scalars['OffsetDateTime']['output'];
 };
 
 export enum RealtimeState {
@@ -1932,15 +3251,40 @@ export enum RealtimeState {
   Updated = 'UPDATED'
 }
 
-/** Actions to take relative to the current position when engaging a walking/driving step. */
+/**
+ * A direction that is not absolute but rather fuzzy and context-dependent.
+ * It provides the passenger with information what they should do in this step depending on where they
+ * were in the previous one.
+ */
 export enum RelativeDirection {
   CircleClockwise = 'CIRCLE_CLOCKWISE',
   CircleCounterclockwise = 'CIRCLE_COUNTERCLOCKWISE',
+  /**
+   * Moving straight ahead in one of these cases
+   *
+   *   - Passing through a crossing or intersection.
+   *   - Passing through a station entrance or exit when it is not know whether the passenger is
+   *     entering or exiting. If it _is_ known then `ENTER_STATION`/`EXIT_STATION` is used.
+   *     More information about the entrance is in the `step.feature` field.
+   */
   Continue = 'CONTINUE',
   Depart = 'DEPART',
   Elevator = 'ELEVATOR',
+  /**
+   * Entering a public transport station. If it's not known if the passenger is entering or exiting
+   * then `CONTINUE` is used.
+   *
+   * More information about the entrance is in the `step.feature` field.
+   */
   EnterStation = 'ENTER_STATION',
+  /**
+   * Exiting a public transport station. If it's not known if the passenger is entering or exiting
+   * then `CONTINUE` is used.
+   *
+   * More information about the entrance is in the `step.feature` field.
+   */
   ExitStation = 'EXIT_STATION',
+  /** Follow the signs indicating a specific location like "platform 1" or "exit B". */
   FollowSigns = 'FOLLOW_SIGNS',
   HardLeft = 'HARD_LEFT',
   HardRight = 'HARD_RIGHT',
@@ -1952,27 +3296,39 @@ export enum RelativeDirection {
   UturnRight = 'UTURN_RIGHT'
 }
 
+/** Rental place union that represents either a VehicleRentalStation or a RentalVehicle */
+export type RentalPlace = RentalVehicle | VehicleRentalStation;
+
 /** Rental vehicle represents a vehicle that belongs to a rental network. */
 export type RentalVehicle = Node & PlaceInterface & {
   __typename?: 'RentalVehicle';
   /** If true, vehicle is currently available for renting. */
-  allowPickupNow?: Maybe<Scalars['Boolean']>;
+  allowPickupNow?: Maybe<Scalars['Boolean']['output']>;
+  /** The vehicle should be returned before this deadline. */
+  availableUntil?: Maybe<Scalars['OffsetDateTime']['output']>;
+  /** Fuel or battery status of the rental vehicle */
+  fuel?: Maybe<RentalVehicleFuel>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Latitude of the vehicle (WGS 84) */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Longitude of the vehicle (WGS 84) */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
   /** Name of the vehicle */
-  name: Scalars['String'];
-  /** ID of the rental network. */
-  network?: Maybe<Scalars['String']>;
+  name: Scalars['String']['output'];
+  /**
+   * ID of the rental network.
+   * @deprecated Use `networkId` from `rentalNetwork` instead.
+   */
+  network?: Maybe<Scalars['String']['output']>;
   /** If true, vehicle is not disabled. */
-  operative?: Maybe<Scalars['Boolean']>;
+  operative?: Maybe<Scalars['Boolean']['output']>;
+  /** The vehicle rental network information. This is referred as system in the GBFS terminology. */
+  rentalNetwork: VehicleRentalNetwork;
   /** Platform-specific URLs to begin the vehicle. */
   rentalUris?: Maybe<VehicleRentalUris>;
   /** ID of the vehicle in the format of network:id */
-  vehicleId?: Maybe<Scalars['String']>;
+  vehicleId?: Maybe<Scalars['String']['output']>;
   /** The type of the rental vehicle (scooter, bicycle, car...) */
   vehicleType?: Maybe<RentalVehicleType>;
 };
@@ -1982,7 +3338,16 @@ export type RentalVehicleEntityCounts = {
   /** The number of entities by type */
   byType: Array<RentalVehicleTypeCount>;
   /** The total number of entities (e.g. vehicles, spaces). */
-  total: Scalars['Int'];
+  total: Scalars['Int']['output'];
+};
+
+/** Rental vehicle fuel represent the current status of the battery or fuel of a rental vehicle */
+export type RentalVehicleFuel = {
+  __typename?: 'RentalVehicleFuel';
+  /** Fuel or battery power remaining in the vehicle. Expressed from 0 to 1. */
+  percent?: Maybe<Scalars['Ratio']['output']>;
+  /** Range in meters that the vehicle can travel with the current charge or fuel. */
+  range?: Maybe<Scalars['Int']['output']>;
 };
 
 export type RentalVehicleType = {
@@ -1996,22 +3361,58 @@ export type RentalVehicleType = {
 export type RentalVehicleTypeCount = {
   __typename?: 'RentalVehicleTypeCount';
   /** The number of vehicles of this type */
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   /** The type of the rental vehicle (scooter, bicycle, car...) */
   vehicleType: RentalVehicleType;
 };
+
+/**
+ * Relation for indicating the TripOnServiceDate which is replacing an older one. Exists as a
+ * place to put additional information on the replacement when we get SIRI 2.1 support.
+ */
+export type ReplacedByRelation = {
+  __typename?: 'ReplacedByRelation';
+  /** The replacing TripOnServiceDate. */
+  tripOnServiceDate?: Maybe<TripOnServiceDate>;
+};
+
+/** Contains details on how to filter trips based on the replacement feature when considering them for routing. */
+export type ReplacementFilterInput = {
+  /** One of three choices: must be replacement, cannot be a replacement, can either be or not be a replacement */
+  requirement?: InputMaybe<ReplacementRequirement>;
+};
+
+/**
+ * Relation for indicating the TripOnServiceDate which is being replaced by a newer one. Exists
+ * as a place to put additional information on the replacement when we get SIRI 2.1 support.
+ */
+export type ReplacementForRelation = {
+  __typename?: 'ReplacementForRelation';
+  /** The TripOnServiceDate being replaced. */
+  tripOnServiceDate?: Maybe<TripOnServiceDate>;
+};
+
+/** How does a trip's replacement feature affect whether a it is considered for use in routing? */
+export enum ReplacementRequirement {
+  /** Consider all trips ignoring their replacement feature. */
+  FeatureIgnored = 'FEATURE_IGNORED',
+  /** Only consider trips which don't have the replacement feature. */
+  Forbidden = 'FORBIDDEN',
+  /** Only consider trips which have the replacement feature. */
+  Required = 'REQUIRED'
+}
 
 /** An estimate for a ride on a hailed vehicle, like an Uber car. */
 export type RideHailingEstimate = {
   __typename?: 'RideHailingEstimate';
   /** The estimated time it takes for the vehicle to arrive. */
-  arrival: Scalars['Duration'];
+  arrival: Scalars['Duration']['output'];
   /** The upper bound of the price estimate of this ride. */
   maxPrice: Money;
   /** The lower bound of the price estimate of this ride. */
   minPrice: Money;
   /** The name of the ride, ie. UberX */
-  productName?: Maybe<Scalars['String']>;
+  productName?: Maybe<Scalars['String']['output']>;
   /** The provider of the ride hailing service. */
   provider: RideHailingProvider;
 };
@@ -2019,16 +3420,23 @@ export type RideHailingEstimate = {
 export type RideHailingProvider = {
   __typename?: 'RideHailingProvider';
   /** The ID of the ride hailing provider. */
-  id: Scalars['String'];
+  id: Scalars['String']['output'];
 };
 
 /** Category of riders a fare product applies to, for example students or pensioners. */
 export type RiderCategory = {
   __typename?: 'RiderCategory';
   /** ID of the category */
-  id: Scalars['String'];
+  id: Scalars['String']['output'];
+  /**
+   * If this category is considered the "default" one. In most places this means "Adult" or
+   * "Regular".
+   * Frontends can use this property to display this category more prominently or pre-select this
+   * in a UI.
+   */
+  isDefault: Scalars['Boolean']['output'];
   /** Human readable name of the category. */
-  name?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -2054,20 +3462,48 @@ export type Route = Node & {
    * to use on UI elements (e.g. polylines on a map) related to this route. This
    * value is not available for most routes.
    */
-  color?: Maybe<Scalars['String']>;
-  desc?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']['output']>;
+  desc?: Maybe<Scalars['String']['output']>;
   /** ID of the route in format `FeedId:RouteId` */
-  gtfsId: Scalars['String'];
+  gtfsId: Scalars['String']['output'];
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
+  /**
+   * Is this a replacement route.
+   * Only true for GTFS-sourced data if set by the extended GTFS route type, because GTFS does not implement
+   * replacement links, so replacement trips in GTFS cannot mechanically state their original trip.
+   * In NeTEx/SIRI-sourced data this can be set by either a replacement submode, or a replacement
+   * link in a DatedServiceJourney.
+   */
+  isReplacement: Scalars['Boolean']['output'];
   /** Long name of the route, e.g. Helsinki-Leppävaara */
-  longName?: Maybe<Scalars['String']>;
+  longName?: Maybe<Scalars['String']['output']>;
   /** Transport mode of this route, e.g. `BUS` */
   mode?: Maybe<TransitMode>;
   /** List of patterns which operate on this route */
   patterns?: Maybe<Array<Maybe<Pattern>>>;
+  /**
+   * Do any trips of this route have any linked replacements.
+   * Only ever true with NeTEx or SIRI, because GTFS does not implement replacement
+   * links, so replacement trips in GTFS cannot mechanically state their original trip.
+   */
+  replacementsExist: Scalars['Boolean']['output'];
   /** Short name of the route, usually a line number, e.g. 550 */
-  shortName?: Maybe<Scalars['String']>;
+  shortName?: Maybe<Scalars['String']['output']>;
+  /**
+   * Orders the routes in a way which is useful for presentation to passengers.
+   * Routes with smaller values should be displayed first.
+   *
+   * The value can be any non-negative integer. A null value means that no information was supplied.
+   *
+   * This value is passed through from the source data without modification. If multiple feeds
+   * define sort orders for their routes, they may not be comparable to each other as no agreed scale
+   * exists.
+   *
+   * Two routes may also have the same sort order and clients must decide based on other criteria
+   * what the actual order is.
+   */
+  sortOrder?: Maybe<Scalars['Int']['output']>;
   /** List of stops on this route */
   stops?: Maybe<Array<Maybe<Stop>>>;
   /**
@@ -2075,7 +3511,7 @@ export type Route = Node & {
    * to use when displaying text related to this route. This value is not available
    * for most routes.
    */
-  textColor?: Maybe<Scalars['String']>;
+  textColor?: Maybe<Scalars['String']['output']>;
   /** List of trips which operate on this route */
   trips?: Maybe<Array<Maybe<Trip>>>;
   /**
@@ -2083,8 +3519,8 @@ export type Route = Node & {
    * https://developers.google.com/transit/gtfs/reference/#routestxt and
    * https://developers.google.com/transit/gtfs/reference/extended-route-types
    */
-  type?: Maybe<Scalars['Int']>;
-  url?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['Int']['output']>;
+  url?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -2108,7 +3544,19 @@ export type RouteAlertsArgs = {
  * from point B to point A.
  */
 export type RouteLongNameArgs = {
-  language?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/**
+ * Route represents a public transportation service, usually from point A to point
+ * B and *back*, shown to customers under a single name, e.g. bus 550. Routes
+ * contain patterns (see field `patterns`), which describe different variants of
+ * the route, e.g. outbound pattern from point A to point B and inbound pattern
+ * from point B to point A.
+ */
+export type RoutePatternsArgs = {
+  serviceDates?: InputMaybe<LocalDateRangeInput>;
 };
 
 /** Entities that are relevant for routes that can contain alerts */
@@ -2143,7 +3591,7 @@ export type RouteType = {
    *     https://developers.google.com/transit/gtfs/reference/#routestxt and
    *     https://developers.google.com/transit/gtfs/reference/extended-route-types
    */
-  routeType: Scalars['Int'];
+  routeType: Scalars['Int']['output'];
   /**
    * The routes which have the defined routeType and belong to the agency, if defined.
    * Otherwise all routes of the feed that have the defined routeType.
@@ -2157,7 +3605,7 @@ export type RoutingError = {
   /** An enum describing the reason */
   code: RoutingErrorCode;
   /** A textual description of why the search failed. The clients are expected to have their own translations based on the code, for user visible error messages. */
-  description: Scalars['String'];
+  description: Scalars['String']['output'];
   /** An enum describing the field which should be changed, in order for the search to succeed */
   inputField?: Maybe<InputField>;
 };
@@ -2171,6 +3619,12 @@ export enum RoutingErrorCode {
    * question.
    */
   LocationNotFound = 'LOCATION_NOT_FOUND',
+  /**
+   * No usable itineraries were found for the requested direct mode (e.g. walking, cycling, car, flex)
+   * and no transit modes were included in the search. This is returned both when no route exists and
+   * when routes were found but didn't pass quality filters.
+   */
+  NoDirectModeConnection = 'NO_DIRECT_MODE_CONNECTION',
   /**
    * No stops are reachable from the start or end locations specified.
    *
@@ -2212,6 +3666,95 @@ export enum RoutingErrorCode {
   WalkingBetterThanTransit = 'WALKING_BETTER_THAN_TRANSIT'
 }
 
+/** What criteria should be used when optimizing a scooter route. */
+export type ScooterOptimizationInput = {
+  /** Define optimization by weighing three criteria. */
+  triangle?: InputMaybe<TriangleScooterFactorsInput>;
+  /** Use one of the predefined optimization types. */
+  type?: InputMaybe<ScooterOptimizationType>;
+};
+
+/**
+ * Predefined optimization alternatives for scooter routing. For more customization,
+ * one can use the triangle factors.
+ */
+export enum ScooterOptimizationType {
+  /** Emphasize flatness over safety or duration of the route. This option was previously called `FLAT`. */
+  FlatStreets = 'FLAT_STREETS',
+  /**
+   * Completely ignore the elevation differences and prefer the streets, that are evaluated
+   * to be safest for scooters, even more than with the `SAFE_STREETS` option.
+   * Safety can also include other concerns such as convenience and general preferences by taking
+   * into account road surface etc.  Note, currently the same criteria is used both for cycling and
+   * scooter travel to determine how safe streets are for cycling or scooter.
+   * This option was previously called `GREENWAYS`.
+   */
+  SafestStreets = 'SAFEST_STREETS',
+  /**
+   * Emphasize scooter safety over flatness or duration of the route. Safety can also include other
+   * concerns such as convenience and general preferences by taking into account road surface etc.
+   * Note, currently the same criteria is used both for cycling and scooter travel to determine how
+   * safe streets are for cycling or scooter. This option was previously called `SAFE`.
+   */
+  SafeStreets = 'SAFE_STREETS',
+  /**
+   * Search for routes with the shortest duration while ignoring the scooter safety
+   * of the streets. The routes should still follow local regulations, but currently scooters
+   * are only allowed on the same streets as bicycles which might not be accurate for each country
+   * or with different types of scooters. Routes can include steep streets, if they are
+   * the fastest alternatives. This option was previously called `QUICK`.
+   */
+  ShortestDuration = 'SHORTEST_DURATION'
+}
+
+/** Preferences related to travel with a scooter (kick or e-scooter). */
+export type ScooterPreferencesInput = {
+  /** What criteria should be used when optimizing a scooter route. */
+  optimization?: InputMaybe<ScooterOptimizationInput>;
+  /**
+   * A multiplier for how bad riding a scooter is compared to being in transit
+   * for equal lengths of time.
+   */
+  reluctance?: InputMaybe<Scalars['Reluctance']['input']>;
+  /** Scooter rental related preferences. */
+  rental?: InputMaybe<ScooterRentalPreferencesInput>;
+  /**
+   * Maximum speed on flat ground while riding a scooter. Note, this speed is higher than
+   * the average speed will be in itineraries as this is the maximum speed but there are
+   * factors that slow down the travel such as crossings, intersections and elevation changes.
+   */
+  speed?: InputMaybe<Scalars['Speed']['input']>;
+};
+
+/** Preferences related to scooter rental (station based or floating scooter rental). */
+export type ScooterRentalPreferencesInput = {
+  /**
+   * Rental networks which can be potentially used as part of an itinerary. If this field has no default value,
+   * it means that all networks are allowed unless some are banned with `bannedNetworks`.
+   */
+  allowedNetworks?: InputMaybe<Array<Scalars['String']['input']>>;
+  /** Rental networks which cannot be used as part of an itinerary. */
+  bannedNetworks?: InputMaybe<Array<Scalars['String']['input']>>;
+  /**
+   * Is it possible to arrive to the destination with a rented scooter and does it
+   * come with an extra cost.
+   */
+  destinationScooterPolicy?: InputMaybe<DestinationScooterPolicyInput>;
+};
+
+/** A single use of a set of stairs. */
+export type StairsUse = {
+  __typename?: 'StairsUse';
+  /** The level the use begins at. */
+  from?: Maybe<Level>;
+  /** The level the use ends at. */
+  to?: Maybe<Level>;
+  verticalDirection: VerticalDirection;
+};
+
+/** A feature for a step */
+export type StepFeature = ElevatorUse | Entrance | EscalatorUse | StairsUse;
+
 /**
  * Stop can represent either a single public transport stop, where passengers can
  * board and/or disembark vehicles, or a station, which contains multiple stops.
@@ -2224,13 +3767,16 @@ export type Stop = Node & PlaceInterface & {
    * It's also possible to return other relevant alerts through defining types.
    */
   alerts?: Maybe<Array<Maybe<Alert>>>;
-  /** The cluster which this stop is part of */
+  /**
+   * The cluster which this stop is part of
+   * @deprecated Not implemented
+   */
   cluster?: Maybe<Cluster>;
   /** Stop code which is visible at the stop */
-  code?: Maybe<Scalars['String']>;
+  code?: Maybe<Scalars['String']['output']>;
   /** Description of the stop, usually a street name */
-  desc?: Maybe<Scalars['String']>;
-  direction?: Maybe<Scalars['String']>;
+  desc?: Maybe<Scalars['String']['output']>;
+  direction?: Maybe<Scalars['String']['output']>;
   /**
    * Representations of this stop's geometry. This is mainly interesting for flex stops which can be
    * a polygon or a group of stops either consisting of either points or polygons.
@@ -2246,23 +3792,23 @@ export type Stop = Node & PlaceInterface & {
    */
   geometries?: Maybe<StopGeometries>;
   /** ÌD of the stop in format `FeedId:StopId` */
-  gtfsId: Scalars['String'];
+  gtfsId: Scalars['String']['output'];
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Latitude of the stop (WGS 84) */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Identifies whether this stop represents a stop or station. */
   locationType?: Maybe<LocationType>;
   /** Longitude of the stop (WGS 84) */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
   /** Name of the stop, e.g. Pasilan asema */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** The station which this stop is part of (or null if this stop is not part of a station) */
   parentStation?: Maybe<Stop>;
   /** Patterns which pass through this stop */
   patterns?: Maybe<Array<Maybe<Pattern>>>;
   /** Identifier of the platform, usually a number. This value is only present for stops that are part of a station */
-  platformCode?: Maybe<Scalars['String']>;
+  platformCode?: Maybe<Scalars['String']['output']>;
   /** Routes which pass through this stop */
   routes?: Maybe<Array<Route>>;
   /** Returns timetable of the specified pattern at this stop */
@@ -2275,10 +3821,10 @@ export type Stop = Node & PlaceInterface & {
   stoptimesForServiceDate?: Maybe<Array<Maybe<StoptimesInPattern>>>;
   /** Returns list of stoptimes (arrivals and departures) at this stop */
   stoptimesWithoutPatterns?: Maybe<Array<Maybe<Stoptime>>>;
-  timezone?: Maybe<Scalars['String']>;
+  timezone?: Maybe<Scalars['String']['output']>;
   /** List of nearby stops which can be used for transfers */
   transfers?: Maybe<Array<Maybe<StopAtDistance>>>;
-  url?: Maybe<Scalars['String']>;
+  url?: Maybe<Scalars['String']['output']>;
   /**
    * Transport mode (e.g. `BUS`) used by routes which pass through this stop or
    * `null` if mode cannot be determined, e.g. in case no routes pass through the stop.
@@ -2291,12 +3837,13 @@ export type Stop = Node & PlaceInterface & {
    * list of possible values, see:
    * https://developers.google.com/transit/gtfs/reference/#routestxt and
    * https://developers.google.com/transit/gtfs/reference/extended-route-types
+   * @deprecated Not implemented. Use `vehicleMode`.
    */
-  vehicleType?: Maybe<Scalars['Int']>;
+  vehicleType?: Maybe<Scalars['Int']['output']>;
   /** Whether wheelchair boarding is possible for at least some of vehicles on this stop */
   wheelchairBoarding?: Maybe<WheelchairBoarding>;
   /** ID of the zone where this stop is located */
-  zoneId?: Maybe<Scalars['String']>;
+  zoneId?: Maybe<Scalars['String']['output']>;
 };
 
 
@@ -2316,7 +3863,7 @@ export type StopAlertsArgs = {
  * See field `locationType`.
  */
 export type StopDescArgs = {
-  language?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -2326,7 +3873,17 @@ export type StopDescArgs = {
  * See field `locationType`.
  */
 export type StopNameArgs = {
-  language?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+/**
+ * Stop can represent either a single public transport stop, where passengers can
+ * board and/or disembark vehicles, or a station, which contains multiple stops.
+ * See field `locationType`.
+ */
+export type StopRoutesArgs = {
+  serviceDates?: InputMaybe<LocalDateRangeInput>;
 };
 
 
@@ -2336,12 +3893,12 @@ export type StopNameArgs = {
  * See field `locationType`.
  */
 export type StopStopTimesForPatternArgs = {
-  id: Scalars['String'];
-  numberOfDepartures?: InputMaybe<Scalars['Int']>;
-  omitCanceled?: InputMaybe<Scalars['Boolean']>;
-  omitNonPickups?: InputMaybe<Scalars['Boolean']>;
-  startTime?: InputMaybe<Scalars['Long']>;
-  timeRange?: InputMaybe<Scalars['Int']>;
+  id: Scalars['String']['input'];
+  numberOfDepartures?: InputMaybe<Scalars['Int']['input']>;
+  omitCanceled?: InputMaybe<Scalars['Boolean']['input']>;
+  omitNonPickups?: InputMaybe<Scalars['Boolean']['input']>;
+  startTime?: InputMaybe<Scalars['Long']['input']>;
+  timeRange?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -2351,11 +3908,11 @@ export type StopStopTimesForPatternArgs = {
  * See field `locationType`.
  */
 export type StopStoptimesForPatternsArgs = {
-  numberOfDepartures?: InputMaybe<Scalars['Int']>;
-  omitCanceled?: InputMaybe<Scalars['Boolean']>;
-  omitNonPickups?: InputMaybe<Scalars['Boolean']>;
-  startTime?: InputMaybe<Scalars['Long']>;
-  timeRange?: InputMaybe<Scalars['Int']>;
+  numberOfDepartures?: InputMaybe<Scalars['Int']['input']>;
+  omitCanceled?: InputMaybe<Scalars['Boolean']['input']>;
+  omitNonPickups?: InputMaybe<Scalars['Boolean']['input']>;
+  startTime?: InputMaybe<Scalars['Long']['input']>;
+  timeRange?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -2365,9 +3922,9 @@ export type StopStoptimesForPatternsArgs = {
  * See field `locationType`.
  */
 export type StopStoptimesForServiceDateArgs = {
-  date?: InputMaybe<Scalars['String']>;
-  omitCanceled?: InputMaybe<Scalars['Boolean']>;
-  omitNonPickups?: InputMaybe<Scalars['Boolean']>;
+  date?: InputMaybe<Scalars['String']['input']>;
+  omitCanceled?: InputMaybe<Scalars['Boolean']['input']>;
+  omitNonPickups?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -2377,11 +3934,11 @@ export type StopStoptimesForServiceDateArgs = {
  * See field `locationType`.
  */
 export type StopStoptimesWithoutPatternsArgs = {
-  numberOfDepartures?: InputMaybe<Scalars['Int']>;
-  omitCanceled?: InputMaybe<Scalars['Boolean']>;
-  omitNonPickups?: InputMaybe<Scalars['Boolean']>;
-  startTime?: InputMaybe<Scalars['Long']>;
-  timeRange?: InputMaybe<Scalars['Int']>;
+  numberOfDepartures?: InputMaybe<Scalars['Int']['input']>;
+  omitCanceled?: InputMaybe<Scalars['Boolean']['input']>;
+  omitNonPickups?: InputMaybe<Scalars['Boolean']['input']>;
+  startTime?: InputMaybe<Scalars['Long']['input']>;
+  timeRange?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -2391,7 +3948,7 @@ export type StopStoptimesWithoutPatternsArgs = {
  * See field `locationType`.
  */
 export type StopTransfersArgs = {
-  maxDistance?: InputMaybe<Scalars['Int']>;
+  maxDistance?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -2401,7 +3958,7 @@ export type StopTransfersArgs = {
  * See field `locationType`.
  */
 export type StopUrlArgs = {
-  language?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Entities, which are relevant for a stop and can contain alerts */
@@ -2422,10 +3979,26 @@ export enum StopAlertType {
   Trips = 'TRIPS'
 }
 
+/**
+ * Represents the time or time window when a specific trip on a specific date arrives to and/or departs
+ * from a specific stop location.
+ *
+ * This may contain real-time information, if available.
+ */
+export type StopCall = {
+  __typename?: 'StopCall';
+  /** Real-time estimates for arrival and departure times for this stop location. */
+  realTime?: Maybe<CallRealTime>;
+  /** Scheduled arrival and departure times for this stop location. */
+  schedule?: Maybe<CallSchedule>;
+  /** The stop where this arrival/departure happens. */
+  stopLocation: CallStopLocation;
+};
+
 export type StopGeometries = {
   __typename?: 'StopGeometries';
   /** Representation of the stop geometries as GeoJSON (https://geojson.org/) */
-  geoJson?: Maybe<Scalars['GeoJson']>;
+  geoJson?: Maybe<Scalars['GeoJson']['output']>;
   /**
    * Representation of a stop as a series of polylines.
    *
@@ -2464,6 +4037,15 @@ export type StopRelationship = {
   stop: Stop;
 };
 
+export enum StopType {
+  /** An area or zone represented by a polygon. Introduced by the GTFS-Flex spec process. */
+  Location = 'LOCATION',
+  /** A group of stops. Introduced by the GTFS-Flex spec process. */
+  LocationGroup = 'LOCATION_GROUP',
+  /** A fixed stop represented by a coordinate. */
+  Stop = 'STOP'
+}
+
 /** Stoptime represents the time when a specific trip arrives to or departs from a specific stop. */
 export type Stoptime = {
   __typename?: 'Stoptime';
@@ -2471,12 +4053,12 @@ export type Stoptime = {
    * The offset from the scheduled arrival time in seconds. Negative values
    * indicate that the trip is running ahead of schedule.
    */
-  arrivalDelay?: Maybe<Scalars['Int']>;
+  arrivalDelay?: Maybe<Scalars['Int']['output']>;
   /**
    * The offset from the scheduled departure time in seconds. Negative values
    * indicate that the trip is running ahead of schedule
    */
-  departureDelay?: Maybe<Scalars['Int']>;
+  departureDelay?: Maybe<Scalars['Int']['output']>;
   /**
    * Whether the vehicle can be disembarked at this stop. This field can also be
    * used to indicate if disembarkation is possible only with special arrangements.
@@ -2487,43 +4069,52 @@ export type Stoptime = {
    * the trip (e.g. on routes which run on loops), so this value should be used
    * instead of `tripHeadsign` to display the headsign relevant to the user.
    */
-  headsign?: Maybe<Scalars['String']>;
+  headsign?: Maybe<Scalars['String']['output']>;
   /**
    * Whether the vehicle can be boarded at this stop. This field can also be used
    * to indicate if boarding is possible only with special arrangements.
    */
   pickupType?: Maybe<PickupDropoffType>;
   /** true, if this stoptime has real-time data available */
-  realtime?: Maybe<Scalars['Boolean']>;
-  /** Realtime prediction of arrival time. Format: seconds since midnight of the departure date */
-  realtimeArrival?: Maybe<Scalars['Int']>;
-  /** Realtime prediction of departure time. Format: seconds since midnight of the departure date */
-  realtimeDeparture?: Maybe<Scalars['Int']>;
+  realtime?: Maybe<Scalars['Boolean']['output']>;
+  /** Real-time prediction of arrival time. Format: seconds since midnight of the departure date */
+  realtimeArrival?: Maybe<Scalars['Int']['output']>;
+  /** Real-time prediction of departure time. Format: seconds since midnight of the departure date */
+  realtimeDeparture?: Maybe<Scalars['Int']['output']>;
   /** State of real-time data */
   realtimeState?: Maybe<RealtimeState>;
   /** Scheduled arrival time. Format: seconds since midnight of the departure date */
-  scheduledArrival?: Maybe<Scalars['Int']>;
+  scheduledArrival?: Maybe<Scalars['Int']['output']>;
   /** Scheduled departure time. Format: seconds since midnight of the departure date */
-  scheduledDeparture?: Maybe<Scalars['Int']>;
+  scheduledDeparture?: Maybe<Scalars['Int']['output']>;
   /** Departure date of the trip. Format: Unix timestamp (local time) in seconds. */
-  serviceDay?: Maybe<Scalars['Long']>;
+  serviceDay?: Maybe<Scalars['Long']['output']>;
   /** The stop where this arrival/departure happens */
   stop?: Maybe<Stop>;
   /**
-   * The sequence of the stop in the pattern. This is not required to start from 0 or be consecutive - any
+   * The sequence of the stop in the trip. This is not required to start from 0 or be consecutive - any
    * increasing integer sequence along the stops is valid.
    *
-   * The purpose of this field is to identify the stop within the pattern so it can be cross-referenced
+   * The purpose of this field is to identify the stop within the trip so it can be cross-referenced
    * between it and the itinerary. It is safe to cross-reference when done quickly, i.e. within seconds.
-   * However, it should be noted that realtime updates can change the values, so don't store it for
+   * However, it should be noted that real-time updates can change the values, so don't store it for
    * longer amounts of time.
    *
    * Depending on the source data, this might not be the GTFS `stop_sequence` but another value, perhaps
    * even generated.
    */
-  stopPosition?: Maybe<Scalars['Int']>;
+  stopPosition?: Maybe<Scalars['Int']['output']>;
+  /**
+   * The position of the stop in the pattern. This is required to start from 0 and be consecutive along
+   * the pattern, up to n-1 for a pattern with n stops.
+   *
+   * The purpose of this field is to identify the position of the stop within the pattern so it can be
+   * cross-referenced between different trips on the same pattern, as stopPosition can be different
+   * between trips even within the same pattern.
+   */
+  stopPositionInPattern: Scalars['Int']['output'];
   /** true, if this stop is used as a time equalization stop. false otherwise. */
-  timepoint?: Maybe<Scalars['Boolean']>;
+  timepoint?: Maybe<Scalars['Boolean']['output']>;
   /** Trip which this stoptime is for */
   trip?: Maybe<Trip>;
 };
@@ -2531,7 +4122,7 @@ export type Stoptime = {
 
 /** Stoptime represents the time when a specific trip arrives to or departs from a specific stop. */
 export type StoptimeHeadsignArgs = {
-  language?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Stoptimes grouped by pattern */
@@ -2552,69 +4143,257 @@ export type StoptimesInPattern = {
 export type SystemNotice = {
   __typename?: 'SystemNotice';
   /** Notice's tag */
-  tag?: Maybe<Scalars['String']>;
+  tag?: Maybe<Scalars['String']['output']>;
   /** Notice's description */
-  text?: Maybe<Scalars['String']>;
+  text?: Maybe<Scalars['String']['output']>;
 };
 
 /** Describes ticket type */
 export type TicketType = Node & {
   __typename?: 'TicketType';
   /** ISO 4217 currency code */
-  currency?: Maybe<Scalars['String']>;
+  currency?: Maybe<Scalars['String']['output']>;
   /**
    * Ticket type ID in format `FeedId:TicketTypeId`. Ticket type IDs are usually
    * combination of ticket zones where the ticket is valid.
    */
-  fareId: Scalars['String'];
+  fareId: Scalars['String']['output'];
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Price of the ticket in currency that is specified in `currency` field */
-  price?: Maybe<Scalars['Float']>;
+  price?: Maybe<Scalars['Float']['output']>;
   /**
    * List of zones where this ticket is valid.
    * Corresponds to field `zoneId` in **Stop** type.
    */
-  zones?: Maybe<Array<Scalars['String']>>;
+  zones?: Maybe<Array<Scalars['String']['output']>>;
 };
 
+/** A time window when a vehicle visits a stop, area or group of stops. */
+export type TimeWindow = {
+  __typename?: 'TimeWindow';
+  end: Scalars['OffsetDateTime']['output'];
+  start: Scalars['OffsetDateTime']['output'];
+};
+
+export type TimetablePreferencesInput = {
+  /**
+   * When false, real-time updates are considered during the routing.
+   * In practice, when this option is set as true, some of the suggestions might not be
+   * realistic as the transfers could be invalid due to delays,
+   * trips can be canceled or stops can be skipped.
+   */
+  excludeRealTimeUpdates?: InputMaybe<Scalars['Boolean']['input']>;
+  /**
+   * When true, departures that have been canceled ahead of time will be
+   * included during the routing. This means that an itinerary can include
+   * a canceled departure while some other alternative that contains no cancellations
+   * could be filtered out as the alternative containing a cancellation would normally
+   * be better.
+   */
+  includePlannedCancellations?: InputMaybe<Scalars['Boolean']['input']>;
+  /**
+   * When true, departures that have been canceled through a real-time feed will be
+   * included during the routing. This means that an itinerary can include
+   * a canceled departure while some other alternative that contains no cancellations
+   * could be filtered out as the alternative containing a cancellation would normally
+   * be better. This option can't be set to true while `includeRealTimeUpdates` is false.
+   */
+  includeRealTimeCancellations?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Preferences related to transfers between transit vehicles (typically between stops). */
+export type TransferPreferencesInput = {
+  /** A static cost that is added for each transfer on top of other costs. */
+  cost?: InputMaybe<Scalars['Cost']['input']>;
+  /**
+   * How many additional transfers there can be at maximum compared to the itinerary with the
+   * least number of transfers.
+   */
+  maximumAdditionalTransfers?: InputMaybe<Scalars['Int']['input']>;
+  /** How many transfers there can be at maximum in an itinerary. */
+  maximumTransfers?: InputMaybe<Scalars['Int']['input']>;
+  /**
+   * A global minimum transfer time that specifies the minimum amount of time that must pass
+   * between exiting one transit vehicle and boarding another. This time is in addition to
+   * time it might take to walk between transit stops. Setting this value as `PT0S`, for
+   * example, can lead to passenger missing a connection when the vehicle leaves ahead of time
+   * or the passenger arrives to the stop later than expected.
+   */
+  slack?: InputMaybe<Scalars['Duration']['input']>;
+};
+
+/**
+ * A collection of selectors for what routes/agencies should be included in or excluded from the search.
+ *
+ * The `include` is always applied to select the initial set, then `exclude` to remove elements.
+ * If only `exclude` is present, the exclude is applied to the existing set of results.
+ *
+ * Therefore, if an entity is both included _and_ excluded the exclusion takes precedence.
+ */
+export type TransitFilterInput = {
+  /**
+   * A list of selectors for what routes/agencies should be excluded during search.
+   *
+   * In order to be excluded, a route/agency has to match with at least one selector.
+   *
+   * An empty list or a list containing `null` is forbidden.
+   */
+  exclude?: InputMaybe<Array<TransitFilterSelectInput>>;
+  /**
+   * A list of selectors for what routes/agencies should be allowed during the search.
+   *
+   * If route/agency matches with at least one selector it will be included.
+   *
+   * An empty list or a list containing `null` is forbidden.
+   */
+  include?: InputMaybe<Array<TransitFilterSelectInput>>;
+};
+
+/**
+ * A list of selectors for including or excluding entities from the routing results. Null
+ * means everything is allowed to be returned and empty lists are not allowed.
+ */
+export type TransitFilterSelectInput = {
+  /**
+   * Set of ids for agencies that should be included in/excluded from the search.
+   *
+   * Format: `FeedId:AgencyId`
+   */
+  agencies?: InputMaybe<Array<Scalars['String']['input']>>;
+  /**
+   * Set of ids for routes that should be included in/excluded from the search.
+   *
+   * Format: `FeedId:AgencyId`
+   */
+  routes?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+/**
+ * Transit modes include modes that are used within organized transportation networks
+ * run by public transportation authorities, taxi companies etc.
+ * Equivalent to GTFS route_type or to NeTEx TransportMode.
+ */
 export enum TransitMode {
-  /** AIRPLANE */
   Airplane = 'AIRPLANE',
-  /** BUS */
   Bus = 'BUS',
-  /** CABLE_CAR */
   CableCar = 'CABLE_CAR',
-  /** "Private car trips shared with others. */
+  /** Private car trips shared with others. */
   Carpool = 'CARPOOL',
-  /** COACH */
   Coach = 'COACH',
-  /** FERRY */
   Ferry = 'FERRY',
-  /** FUNICULAR */
   Funicular = 'FUNICULAR',
-  /** GONDOLA */
   Gondola = 'GONDOLA',
   /** Railway in which the track consists of a single rail or a beam. */
   Monorail = 'MONORAIL',
-  /** RAIL */
+  /** This includes long or short distance trains. */
   Rail = 'RAIL',
-  /** SUBWAY */
+  /** Used for off-road snow and ice vehicles */
+  SnowAndIce = 'SNOW_AND_ICE',
+  /** Subway or metro, depending on the local terminology. */
   Subway = 'SUBWAY',
   /** A taxi, possibly operated by a public transport agency. */
   Taxi = 'TAXI',
-  /** TRAM */
   Tram = 'TRAM',
   /** Electric buses that draw power from overhead wires using poles. */
   Trolleybus = 'TROLLEYBUS'
 }
 
+/** Costs related to using a transit mode. */
+export type TransitModePreferenceCostInput = {
+  /** A cost multiplier of transit leg travel time. */
+  reluctance: Scalars['Reluctance']['input'];
+};
+
+/** Transit routing preferences used for transit legs. */
+export type TransitPreferencesInput = {
+  /** Preferences related to alighting from a transit vehicle. */
+  alight?: InputMaybe<AlightPreferencesInput>;
+  /**
+   * Preferences related to boarding a transit vehicle. Note, board costs for each street mode
+   * can be found under the street mode preferences.
+   */
+  board?: InputMaybe<BoardPreferencesInput>;
+  /**
+   * A list of filters for which trips should be included or excluded. A trip will be considered in the
+   * result if it is included by at least one filter and isn't excluded by another one at the same time.
+   *
+   * An empty list of filters or no value means that all trips should be included.
+   *
+   * **AND/OR Logic**
+   *
+   * Several filters can be defined and form an OR-condition.
+   *
+   * The following example means "include all trips with `F:route1` _or_ `F:agency1`":
+   *
+   * ```
+   * filters: [
+   *   {
+   *     include: {
+   *       routes: ["F:route1"]
+   *     }
+   *   },
+   *   {
+   *     include: {
+   *       agencies: ["F:agency1"]
+   *     }
+   *   }
+   * }]
+   * ```
+   *
+   * The following example means "include all trips of `F:agency1` _and_ exclude `F:route1`":
+   *
+   * ```
+   * filters: [
+   *   {
+   *     include: {
+   *       agencies: ["F:agency1"]
+   *     },
+   *     exclude: {
+   *       routes: ["F:route1"]
+   *     }
+   *   }
+   * ]
+   * ```
+   *
+   * Be aware of the following pitfalls:
+   *   - It is easy to construct AND-conditions that can lead to zero results.
+   *   - OR-conditions that have an element which consists of only an exclude are likely to be
+   *     unwanted and may lead to unexpected results.
+   *
+   * **Note**: This parameter also interacts with the modes set in `modes.transit` by forming
+   * an AND-condition.
+   */
+  filters?: InputMaybe<Array<TransitFilterInput>>;
+  /**
+   * Relax generalized-cost when comparing itineraries with a different set of
+   * transit-group-priorities. The groups are set server side for routes and
+   * can not be configured in the API.
+   *
+   * This relaxes the comparison inside the routing engine for each stop-arrival. If two
+   * paths have a different set of transit-group-priorities, then the generalized-cost
+   * comparison is relaxed. The final set of paths are filtered through the normal
+   * itinerary-filters.
+   *
+   * A relax-cost is used to increase the limit when comparing one cost to another cost
+   * using a linear function applied to the generalized cost.
+   * This is used to include more results into the result. A `coefficient=2.0` means a path (itinerary)
+   * with twice as high cost as another one, is accepted. A `constant=300` means a "fixed"
+   * constant is added to the limit.
+   */
+  relaxTransitGroupPriority?: InputMaybe<LinearCostFunctionInput>;
+  /** Preferences related to cancellations and real-time. */
+  timetable?: InputMaybe<TimetablePreferencesInput>;
+  /** Preferences related to transfers between transit vehicles (typically between stops). */
+  transfer?: InputMaybe<TransferPreferencesInput>;
+};
+
 /** Text with language */
 export type TranslatedString = {
   __typename?: 'TranslatedString';
   /** Two-letter language code (ISO 639-1) */
-  language?: Maybe<Scalars['String']>;
-  text?: Maybe<Scalars['String']>;
+  language?: Maybe<Scalars['String']['output']>;
+  text?: Maybe<Scalars['String']['output']>;
 };
 
 /** Transportation mode which can be used in the itinerary */
@@ -2624,60 +4403,124 @@ export type TransportMode = {
   qualifier?: InputMaybe<Qualifier>;
 };
 
+/**
+ * Relative importance of optimization factors. Only effective for bicycling legs.
+ * Invariant: `safety + flatness + time == 1`
+ */
+export type TriangleCyclingFactorsInput = {
+  /** Relative importance of flat terrain */
+  flatness: Scalars['Ratio']['input'];
+  /**
+   * Relative importance of cycling safety, but this factor can also include other
+   * concerns such as convenience and general cyclist preferences by taking into account
+   * road surface etc.
+   */
+  safety: Scalars['Ratio']['input'];
+  /** Relative importance of duration */
+  time: Scalars['Ratio']['input'];
+};
+
+/**
+ * Relative importance of optimization factors. Only effective for scooter legs.
+ * Invariant: `safety + flatness + time == 1`
+ */
+export type TriangleScooterFactorsInput = {
+  /** Relative importance of flat terrain */
+  flatness: Scalars['Ratio']['input'];
+  /**
+   * Relative importance of scooter safety, but this factor can also include other
+   * concerns such as convenience and general scooter preferences by taking into account
+   * road surface etc.
+   */
+  safety: Scalars['Ratio']['input'];
+  /** Relative importance of duration */
+  time: Scalars['Ratio']['input'];
+};
+
 /** Trip is a specific occurance of a pattern, usually identified by route, direction on the route and exact departure time. */
 export type Trip = Node & {
   __typename?: 'Trip';
   /** List of dates when this trip is in service. Format: YYYYMMDD */
-  activeDates?: Maybe<Array<Maybe<Scalars['String']>>>;
+  activeDates?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   /**
    * By default, list of alerts which have directly an effect on just the trip.
    * It's also possible to return other relevant alerts through defining types.
    */
   alerts?: Maybe<Array<Maybe<Alert>>>;
-  /** Arrival time to the final stop */
+  /**
+   * Arrival time to the final stop. If the trip does not run on the given date,
+   * it will return scheduled times from another date. This field is slightly
+   * confusing and will be deprecated when a better replacement is implemented.
+   */
   arrivalStoptime?: Maybe<Stoptime>;
   /** Whether bikes are allowed on board the vehicle running this trip */
   bikesAllowed?: Maybe<BikesAllowed>;
-  blockId?: Maybe<Scalars['String']>;
-  /** Departure time from the first stop */
+  blockId?: Maybe<Scalars['String']['output']>;
+  /** Whether cars are allowed on board the vehicle running this trip */
+  carsAllowed: CarsAllowed;
+  /**
+   * Departure time from the first stop. If the trip does not run on the given date,
+   * it will return scheduled times from another date. This field is slightly
+   * confusing and will be deprecated when a better replacement is implemented.
+   */
   departureStoptime?: Maybe<Stoptime>;
   /**
    * Direction code of the trip, i.e. is this the outbound or inbound trip of a
    * pattern. Possible values: 0, 1 or `null` if the direction is irrelevant, i.e.
    * the pattern has trips only in one direction.
    */
-  directionId?: Maybe<Scalars['String']>;
+  directionId?: Maybe<Scalars['String']['output']>;
   /** List of coordinates of this trip's route */
-  geometry?: Maybe<Array<Maybe<Array<Maybe<Scalars['Float']>>>>>;
+  geometry?: Maybe<Array<Maybe<Array<Maybe<Scalars['Float']['output']>>>>>;
   /** ID of the trip in format `FeedId:TripId` */
-  gtfsId: Scalars['String'];
+  gtfsId: Scalars['String']['output'];
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /**
-   * The latest realtime occupancy information for the latest occurance of this
+   * Is this a replacement trip.
+   * Only true for GTFS-sourced data if set by the extended GTFS route type, because GTFS does not implement
+   * replacement links, so replacement trips in GTFS cannot mechanically state their original trip.
+   * In NeTEx/SIRI-sourced data this can be set by either a replacement submode, or a replacement
+   * link in a DatedServiceJourney.
+   */
+  isReplacement: Scalars['Boolean']['output'];
+  /**
+   * The latest real-time occupancy information for the latest occurance of this
    * trip.
    */
   occupancy?: Maybe<TripOccupancy>;
   /** The pattern the trip is running on */
   pattern?: Maybe<Pattern>;
+  /**
+   * Does this trip have any linked replacements.
+   * Only ever true with NeTEx or SIRI, because GTFS does not implement replacement
+   * links, so replacement trips in GTFS cannot mechanically state their original trip.
+   */
+  replacementsExist: Scalars['Boolean']['output'];
   /** The route the trip is running on */
   route: Route;
   /** Short name of the route this trip is running. See field `shortName` of Route. */
-  routeShortName?: Maybe<Scalars['String']>;
+  routeShortName?: Maybe<Scalars['String']['output']>;
   /** Hash code of the trip. This value is stable and not dependent on the trip id. */
-  semanticHash: Scalars['String'];
-  serviceId?: Maybe<Scalars['String']>;
-  shapeId?: Maybe<Scalars['String']>;
+  semanticHash: Scalars['String']['output'];
+  serviceId?: Maybe<Scalars['String']['output']>;
+  shapeId?: Maybe<Scalars['String']['output']>;
   /** List of stops this trip passes through */
   stops: Array<Stop>;
   /** List of times when this trip arrives to or departs from a stop */
   stoptimes?: Maybe<Array<Maybe<Stoptime>>>;
+  /**
+   * List of times when this trip arrives to or departs from each stop on a given date, or
+   * today if the date is not given. If the trip does not run on the given date, it will
+   * return scheduled times from another date. This field is slightly confusing and
+   * will be deprecated when a better replacement is implemented.
+   */
   stoptimesForDate?: Maybe<Array<Maybe<Stoptime>>>;
   /** Coordinates of the route of this trip in Google polyline encoded format */
   tripGeometry?: Maybe<Geometry>;
   /** Headsign of the vehicle when running on this trip */
-  tripHeadsign?: Maybe<Scalars['String']>;
-  tripShortName?: Maybe<Scalars['String']>;
+  tripHeadsign?: Maybe<Scalars['String']['output']>;
+  tripShortName?: Maybe<Scalars['String']['output']>;
   /** Whether the vehicle running this trip can be boarded by a wheelchair */
   wheelchairAccessible?: Maybe<WheelchairBoarding>;
 };
@@ -2691,25 +4534,25 @@ export type TripAlertsArgs = {
 
 /** Trip is a specific occurance of a pattern, usually identified by route, direction on the route and exact departure time. */
 export type TripArrivalStoptimeArgs = {
-  serviceDate?: InputMaybe<Scalars['String']>;
+  serviceDate?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 /** Trip is a specific occurance of a pattern, usually identified by route, direction on the route and exact departure time. */
 export type TripDepartureStoptimeArgs = {
-  serviceDate?: InputMaybe<Scalars['String']>;
+  serviceDate?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 /** Trip is a specific occurance of a pattern, usually identified by route, direction on the route and exact departure time. */
 export type TripStoptimesForDateArgs = {
-  serviceDate?: InputMaybe<Scalars['String']>;
+  serviceDate?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 /** Trip is a specific occurance of a pattern, usually identified by route, direction on the route and exact departure time. */
 export type TripTripHeadsignArgs = {
-  language?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Entities, which are relevant for a trip and can contain alerts */
@@ -2741,11 +4584,81 @@ export type TripOccupancy = {
   occupancyStatus?: Maybe<OccupancyStatus>;
 };
 
+/** A trip on a specific service date. */
+export type TripOnServiceDate = {
+  __typename?: 'TripOnServiceDate';
+  /** Information related to trip's scheduled arrival to the final stop location. Can contain real-time information. */
+  end: StopCall;
+  /** Is this TripOnServiceDate a replacement? For GTFS-sourced data this might be all we know. */
+  isReplacement?: Maybe<Scalars['Boolean']['output']>;
+  /** Replaced by these TripOnServiceDates. */
+  replacedByRelation: Array<ReplacedByRelation>;
+  /** Replacement for these TripOnServiceDates. */
+  replacementForRelation: Array<ReplacementForRelation>;
+  /**
+   * The service date when the trip occurs.
+   *
+   * **Note**: A service date is a technical term useful for transit planning purposes and might not
+   *   correspond to a how a passenger thinks of a calendar date. For example, a night bus running
+   *   on Sunday morning at 1am to 3am, might have the previous Saturday's service date.
+   */
+  serviceDate: Scalars['LocalDate']['output'];
+  /** Information related to trip's scheduled departure from the first stop location. Can contain real-time information. */
+  start: StopCall;
+  /** List of times when this trip arrives to or departs from a stop location and information related to the visit to the stop location. */
+  stopCalls: Array<StopCall>;
+  /** This trip on service date is an instance of this trip. */
+  trip?: Maybe<Trip>;
+};
+
+/**
+ * A connection to a list of trips on service dates that follows
+ * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+ */
+export type TripOnServiceDateConnection = {
+  __typename?: 'TripOnServiceDateConnection';
+  /**
+   * Edges which contain the trips. Part of the
+   * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+   */
+  edges?: Maybe<Array<Maybe<TripOnServiceDateEdge>>>;
+  /**
+   * Contains cursors to fetch more pages of trips.
+   * Part of the [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+   */
+  pageInfo: PageInfo;
+  /**
+   * The total number of trips on service dates in this connection at the time of query execution (including the current and previous
+   * pages).
+   * Note, this number might not stay the same throughout the paging as trips might be added or
+   * removed.
+   */
+  totalCount: Scalars['Int']['output'];
+};
+
+/**
+ * An edge for TripOnServiceDate connection. Part of the
+ * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+ */
+export type TripOnServiceDateEdge = {
+  __typename?: 'TripOnServiceDateEdge';
+  /**
+   * The cursor of the edge. Part of the
+   * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+   */
+  cursor: Scalars['String']['output'];
+  /**
+   * Trip on a service date as a node. Part of the
+   * [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm).
+   */
+  node?: Maybe<TripOnServiceDate>;
+};
+
 /** This is used for alert entities that we don't explicitly handle or they are missing. */
 export type Unknown = {
   __typename?: 'Unknown';
   /** Entity's description */
-  description?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']['output']>;
 };
 
 /** Vehicle parking represents a location where bicycles or cars can be parked. */
@@ -2755,36 +4668,36 @@ export type VehicleParking = Node & PlaceInterface & {
    * Does this vehicle parking have spaces (capacity) for either wheelchair accessible (disabled)
    * or normal cars.
    */
-  anyCarPlaces?: Maybe<Scalars['Boolean']>;
+  anyCarPlaces?: Maybe<Scalars['Boolean']['output']>;
   /** The currently available spaces at this vehicle parking. */
   availability?: Maybe<VehicleParkingSpaces>;
   /** Does this vehicle parking have spaces (capacity) for bicycles. */
-  bicyclePlaces?: Maybe<Scalars['Boolean']>;
+  bicyclePlaces?: Maybe<Scalars['Boolean']['output']>;
   /** The capacity (maximum available spaces) of this vehicle parking. */
   capacity?: Maybe<VehicleParkingSpaces>;
   /**
    * Does this vehicle parking have spaces (capacity) for cars excluding wheelchair accessible spaces.
    * Use anyCarPlaces to check if any type of car may use this vehicle parking.
    */
-  carPlaces?: Maybe<Scalars['Boolean']>;
+  carPlaces?: Maybe<Scalars['Boolean']['output']>;
   /** URL which contains details of this vehicle parking. */
-  detailsUrl?: Maybe<Scalars['String']>;
+  detailsUrl?: Maybe<Scalars['String']['output']>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** URL of an image which may be displayed to the user showing the vehicle parking. */
-  imageUrl?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']['output']>;
   /** Latitude of the bike park (WGS 84) */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Longitude of the bike park (WGS 84) */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
   /** Name of the park */
-  name: Scalars['String'];
+  name: Scalars['String']['output'];
   /** A short translatable note containing details of this vehicle parking. */
-  note?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']['output']>;
   /** Opening hours of the parking facility */
   openingHours?: Maybe<OpeningHours>;
   /** If true, value of `spacesAvailable` is updated from a real-time source. */
-  realtime?: Maybe<Scalars['Boolean']>;
+  realtime?: Maybe<Scalars['Boolean']['output']>;
   /**
    * The state of this vehicle parking.
    * Only ones in an OPERATIONAL state may be used for Park and Ride.
@@ -2794,23 +4707,23 @@ export type VehicleParking = Node & PlaceInterface & {
    * Source specific tags of the vehicle parking, which describe the available features. For example
    * park_and_ride, bike_lockers, or static_osm_data.
    */
-  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   /** ID of the park */
-  vehicleParkingId?: Maybe<Scalars['String']>;
+  vehicleParkingId?: Maybe<Scalars['String']['output']>;
   /** Does this vehicle parking have wheelchair accessible (disabled) car spaces (capacity). */
-  wheelchairAccessibleCarPlaces?: Maybe<Scalars['Boolean']>;
+  wheelchairAccessibleCarPlaces?: Maybe<Scalars['Boolean']['output']>;
 };
 
 
 /** Vehicle parking represents a location where bicycles or cars can be parked. */
 export type VehicleParkingNameArgs = {
-  language?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 /** Vehicle parking represents a location where bicycles or cars can be parked. */
 export type VehicleParkingNoteArgs = {
-  language?: InputMaybe<Scalars['String']>;
+  language?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** Preferences for parking facilities used during the routing. */
@@ -2830,18 +4743,18 @@ export type VehicleParkingInput = {
    * at least one of the preferred conditions, will receive this extra cost and therefore avoided if
    * preferred options are available.
    */
-  unpreferredCost?: InputMaybe<Scalars['Int']>;
+  unpreferredCost?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** The number of spaces by type. null if unknown. */
 export type VehicleParkingSpaces = {
   __typename?: 'VehicleParkingSpaces';
   /** The number of bicycle spaces. */
-  bicycleSpaces?: Maybe<Scalars['Int']>;
+  bicycleSpaces?: Maybe<Scalars['Int']['output']>;
   /** The number of car spaces. */
-  carSpaces?: Maybe<Scalars['Int']>;
+  carSpaces?: Maybe<Scalars['Int']['output']>;
   /** The number of wheelchair accessible (disabled) car spaces. */
-  wheelchairAccessibleCarSpaces?: Maybe<Scalars['Int']>;
+  wheelchairAccessibleCarSpaces?: Maybe<Scalars['Int']['output']>;
 };
 
 /**
@@ -2857,30 +4770,51 @@ export enum VehicleParkingState {
   TemporarilyClosed = 'TEMPORARILY_CLOSED'
 }
 
-/** Realtime vehicle position */
+/** Real-time vehicle position */
 export type VehiclePosition = {
   __typename?: 'VehiclePosition';
   /**
    * Bearing, in degrees, clockwise from North, i.e., 0 is North and 90 is East. This can be the
    * compass bearing, or the direction towards the next stop or intermediate location.
    */
-  heading?: Maybe<Scalars['Float']>;
+  heading?: Maybe<Scalars['Float']['output']>;
   /** Human-readable label of the vehicle, eg. a publicly visible number or a license plate */
-  label?: Maybe<Scalars['String']>;
-  /** When the position of the vehicle was recorded in seconds since the UNIX epoch. */
-  lastUpdated?: Maybe<Scalars['Long']>;
+  label?: Maybe<Scalars['String']['output']>;
+  /** When the position of the vehicle was recorded. */
+  lastUpdate?: Maybe<Scalars['OffsetDateTime']['output']>;
+  /**
+   * When the position of the vehicle was recorded in seconds since the UNIX epoch.
+   * @deprecated Use `lastUpdate` instead.
+   */
+  lastUpdated?: Maybe<Scalars['Long']['output']>;
   /** Latitude of the vehicle */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Longitude of the vehicle */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
   /** Speed of the vehicle in meters/second */
-  speed?: Maybe<Scalars['Float']>;
+  speed?: Maybe<Scalars['Float']['output']>;
   /** The current stop where the vehicle will be or is currently arriving. */
   stopRelationship?: Maybe<StopRelationship>;
   /** Which trip this vehicles runs on. */
   trip: Trip;
   /** Feed-scoped ID that uniquely identifies the vehicle in the format FeedId:VehicleId */
-  vehicleId?: Maybe<Scalars['String']>;
+  vehicleId?: Maybe<Scalars['String']['output']>;
+};
+
+/**
+ * Vehicle rental network, which is referred as system in the GBFS terminology. Note, the same operator can operate in multiple
+ * regions either with the same network/system or with a different one. This can contain information about either the rental brand
+ * or about the operator.
+ */
+export type VehicleRentalNetwork = {
+  __typename?: 'VehicleRentalNetwork';
+  /**
+   * ID of the vehicle rental network. In GBFS, this is the `system_id` field from the system information, but it can
+   * be overridden in the configuration to have a different value so this field doesn't necessarily match the source data.
+   */
+  networkId: Scalars['String']['output'];
+  /** The rental vehicle operator's network/system URL. In GBFS, this is the `url` field from the system information. */
+  url?: Maybe<Scalars['String']['output']>;
 };
 
 /** Vehicle rental station represents a location where users can rent bicycles etc. for a fee. */
@@ -2890,39 +4824,44 @@ export type VehicleRentalStation = Node & PlaceInterface & {
    * If true, vehicles can be returned to this station if the station has spaces available
    * or allows overloading.
    */
-  allowDropoff?: Maybe<Scalars['Boolean']>;
+  allowDropoff?: Maybe<Scalars['Boolean']['output']>;
   /** If true, vehicles can be currently returned to this station. */
-  allowDropoffNow?: Maybe<Scalars['Boolean']>;
+  allowDropoffNow?: Maybe<Scalars['Boolean']['output']>;
   /** If true, vehicles can be returned even if spacesAvailable is zero or vehicles > capacity. */
-  allowOverloading?: Maybe<Scalars['Boolean']>;
+  allowOverloading?: Maybe<Scalars['Boolean']['output']>;
   /** If true, vehicles can be picked up from this station if the station has vehicles available. */
-  allowPickup?: Maybe<Scalars['Boolean']>;
+  allowPickup?: Maybe<Scalars['Boolean']['output']>;
   /** If true, vehicles can be currently picked up from this station. */
-  allowPickupNow?: Maybe<Scalars['Boolean']>;
+  allowPickupNow?: Maybe<Scalars['Boolean']['output']>;
   /** Number of free spaces currently available on the rental station, grouped by vehicle type. */
   availableSpaces?: Maybe<RentalVehicleEntityCounts>;
   /** Number of vehicles currently available on the rental station, grouped by vehicle type. */
   availableVehicles?: Maybe<RentalVehicleEntityCounts>;
   /** Nominal capacity (number of racks) of the rental station. */
-  capacity?: Maybe<Scalars['Int']>;
+  capacity?: Maybe<Scalars['Int']['output']>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   /** Latitude of the vehicle rental station (WGS 84) */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** Longitude of the vehicle rental station (WGS 84) */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
   /** Name of the vehicle rental station */
-  name: Scalars['String'];
-  /** ID of the rental network. */
-  network?: Maybe<Scalars['String']>;
+  name: Scalars['String']['output'];
+  /**
+   * ID of the rental network.
+   * @deprecated Use `networkId` from `rentalNetwork` instead.
+   */
+  network?: Maybe<Scalars['String']['output']>;
   /** If true, station is on and in service. */
-  operative?: Maybe<Scalars['Boolean']>;
+  operative?: Maybe<Scalars['Boolean']['output']>;
   /**
    * If true, values of `vehiclesAvailable` and `spacesAvailable` are updated from a
    * real-time source. If false, values of `vehiclesAvailable` and `spacesAvailable`
    * are always the total capacity divided by two.
    */
-  realtime?: Maybe<Scalars['Boolean']>;
+  realtime?: Maybe<Scalars['Boolean']['output']>;
+  /** The vehicle rental network information. This is referred as system in the GBFS terminology. */
+  rentalNetwork: VehicleRentalNetwork;
   /** Platform-specific URLs to begin renting a vehicle from this station. */
   rentalUris?: Maybe<VehicleRentalUris>;
   /**
@@ -2933,15 +4872,15 @@ export type VehicleRentalStation = Node & PlaceInterface & {
    * See field `allowDropoffNow` to know if is currently possible to return a vehicle.
    * @deprecated Use `availableSpaces` instead, which also contains the space vehicle types
    */
-  spacesAvailable?: Maybe<Scalars['Int']>;
+  spacesAvailable?: Maybe<Scalars['Int']['output']>;
   /** ID of the vehicle in the format of network:id */
-  stationId?: Maybe<Scalars['String']>;
+  stationId?: Maybe<Scalars['String']['output']>;
   /**
    * Number of vehicles currently available on the rental station.
    * See field `allowPickupNow` to know if is currently possible to pick up a vehicle.
    * @deprecated Use `availableVehicles` instead, which also contains vehicle types
    */
-  vehiclesAvailable?: Maybe<Scalars['Int']>;
+  vehiclesAvailable?: Maybe<Scalars['Int']['output']>;
 };
 
 export type VehicleRentalUris = {
@@ -2951,17 +4890,17 @@ export type VehicleRentalUris = {
    * intent to support Android Deep Links.
    * May be null if a rental URI does not exist.
    */
-  android?: Maybe<Scalars['String']>;
+  android?: Maybe<Scalars['String']['output']>;
   /**
    * A URI that can be used on iOS to launch the rental app for this rental network.
    * May be {@code null} if a rental URI does not exist.
    */
-  ios?: Maybe<Scalars['String']>;
+  ios?: Maybe<Scalars['String']['output']>;
   /**
    * A URL that can be used by a web browser to show more information about renting a vehicle.
    * May be {@code null} if a rental URL does not exist.
    */
-  web?: Maybe<Scalars['String']>;
+  web?: Maybe<Scalars['String']['output']>;
 };
 
 /** How close the vehicle is to the stop. */
@@ -2987,6 +4926,47 @@ export enum VertexType {
   Transit = 'TRANSIT'
 }
 
+/** The vertical direction e.g. for a set of stairs. */
+export enum VerticalDirection {
+  Down = 'DOWN',
+  Unknown = 'UNKNOWN',
+  Up = 'UP'
+}
+
+/** Categorization for via locations. */
+export enum ViaLocationType {
+  /**
+   * The via stop location must be visited as part of a transit trip as at the boarding stop, the
+   * intermediate stop, or the alighting stop.
+   */
+  PassThrough = 'PASS_THROUGH',
+  /**
+   * The location is visited physically by boarding or alighting a transit trip at a given stop, or by
+   * traveling via requested coordinate location as part of a access, transfer, egress or direct
+   * segment. Intermediate stops visited on-board do not count.
+   */
+  Visit = 'VISIT'
+}
+
+/** Preferences related to walking (excluding walking a bicycle or a scooter). */
+export type WalkPreferencesInput = {
+  /** The cost of boarding a vehicle while walking. */
+  boardCost?: InputMaybe<Scalars['Cost']['input']>;
+  /** A multiplier for how bad walking is compared to being in transit for equal lengths of time. */
+  reluctance?: InputMaybe<Scalars['Reluctance']['input']>;
+  /**
+   * Factor for how much the walk safety is considered in routing. Value should be between 0 and 1.
+   * If the value is set to be 0, safety is ignored.
+   */
+  safetyFactor?: InputMaybe<Scalars['Ratio']['input']>;
+  /**
+   * Maximum walk speed on flat ground. Note, this speed is higher than the average speed
+   * will be in itineraries as this is the maximum speed but there are
+   * factors that slow down walking such as crossings, intersections and elevation changes.
+   */
+  speed?: InputMaybe<Scalars['Speed']['input']>;
+};
+
 export enum WheelchairBoarding {
   /** Wheelchair boarding is not possible at this stop. */
   NotPossible = 'NOT_POSSIBLE',
@@ -2996,21 +4976,33 @@ export enum WheelchairBoarding {
   Possible = 'POSSIBLE'
 }
 
+/**
+ * Wheelchair related preferences. Note, this is the only from of accessibilty available
+ * currently and is sometimes is used for other accessibility needs as well.
+ */
+export type WheelchairPreferencesInput = {
+  /**
+   * Is wheelchair accessibility considered in routing. Note, this does not guarantee
+   * that the itineraries are wheelchair accessible as there can be data issues.
+   */
+  enabled?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type DebugOutput = {
   __typename?: 'debugOutput';
-  pathCalculationTime?: Maybe<Scalars['Long']>;
-  precalculationTime?: Maybe<Scalars['Long']>;
-  renderingTime?: Maybe<Scalars['Long']>;
-  timedOut?: Maybe<Scalars['Boolean']>;
-  totalTime?: Maybe<Scalars['Long']>;
+  pathCalculationTime?: Maybe<Scalars['Long']['output']>;
+  precalculationTime?: Maybe<Scalars['Long']['output']>;
+  renderingTime?: Maybe<Scalars['Long']['output']>;
+  timedOut?: Maybe<Scalars['Boolean']['output']>;
+  totalTime?: Maybe<Scalars['Long']['output']>;
 };
 
 export type ElevationProfileComponent = {
   __typename?: 'elevationProfileComponent';
   /** The distance from the start of the step, in meters. */
-  distance?: Maybe<Scalars['Float']>;
+  distance?: Maybe<Scalars['Float']['output']>;
   /** The elevation at this distance, in meters. */
-  elevation?: Maybe<Scalars['Float']>;
+  elevation?: Maybe<Scalars['Float']['output']>;
 };
 
 /**
@@ -3024,7 +5016,7 @@ export type Fare = {
    * as one cent is not necessarily ¹/₁₀₀ of the basic monerary unit.
    * @deprecated No longer supported
    */
-  cents?: Maybe<Scalars['Int']>;
+  cents?: Maybe<Scalars['Int']['output']>;
   /**
    * Components which this fare is composed of
    * @deprecated No longer supported
@@ -3034,9 +5026,9 @@ export type Fare = {
    * ISO 4217 currency code
    * @deprecated No longer supported
    */
-  currency?: Maybe<Scalars['String']>;
+  currency?: Maybe<Scalars['String']['output']>;
   /** @deprecated No longer supported */
-  type?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']['output']>;
 };
 
 /**
@@ -3050,17 +5042,17 @@ export type FareComponent = {
    * as one cent is not necessarily ¹/₁₀₀ of the basic monerary unit.
    * @deprecated No longer supported
    */
-  cents?: Maybe<Scalars['Int']>;
+  cents?: Maybe<Scalars['Int']['output']>;
   /**
    * ISO 4217 currency code
    * @deprecated No longer supported
    */
-  currency?: Maybe<Scalars['String']>;
+  currency?: Maybe<Scalars['String']['output']>;
   /**
    * ID of the ticket type. Corresponds to `fareId` in **TicketType**.
    * @deprecated No longer supported
    */
-  fareId?: Maybe<Scalars['String']>;
+  fareId?: Maybe<Scalars['String']['output']>;
   /**
    * List of routes which use this fare component
    * @deprecated No longer supported
@@ -3071,9 +5063,9 @@ export type FareComponent = {
 export type PlaceAtDistance = Node & {
   __typename?: 'placeAtDistance';
   /** Walking distance to the place along streets and paths */
-  distance?: Maybe<Scalars['Int']>;
+  distance?: Maybe<Scalars['Int']['output']>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   place?: Maybe<PlaceInterface>;
 };
 
@@ -3087,7 +5079,7 @@ export type PlaceAtDistanceConnection = {
 /** An edge in a connection. */
 export type PlaceAtDistanceEdge = {
   __typename?: 'placeAtDistanceEdge';
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge */
   node?: Maybe<PlaceAtDistance>;
 };
@@ -3096,9 +5088,9 @@ export type PlaceAtDistanceEdge = {
 export type ServiceTimeRange = {
   __typename?: 'serviceTimeRange';
   /** Time until which the API has data available. Format: Unix timestamp in seconds */
-  end?: Maybe<Scalars['Long']>;
+  end?: Maybe<Scalars['Long']['output']>;
   /** Time from which the API has data available. Format: Unix timestamp in seconds */
-  start?: Maybe<Scalars['Long']>;
+  start?: Maybe<Scalars['Long']['output']>;
 };
 
 export type Step = {
@@ -3111,38 +5103,40 @@ export type Step = {
    * This step is on an open area, such as a plaza or train platform,
    * and thus the directions should say something like "cross".
    */
-  area?: Maybe<Scalars['Boolean']>;
+  area?: Maybe<Scalars['Boolean']['output']>;
   /**
    * The name of this street was generated by the system, so we should only display it once, and
    * generally just display right/left directions
    */
-  bogusName?: Maybe<Scalars['Boolean']>;
+  bogusName?: Maybe<Scalars['Boolean']['output']>;
   /** The distance in meters that this step takes. */
-  distance?: Maybe<Scalars['Float']>;
+  distance?: Maybe<Scalars['Float']['output']>;
   /** The elevation profile as a list of { distance, elevation } values. */
   elevationProfile?: Maybe<Array<Maybe<ElevationProfileComponent>>>;
   /** When exiting a highway or traffic circle, the exit name/number. */
-  exit?: Maybe<Scalars['String']>;
+  exit?: Maybe<Scalars['String']['output']>;
+  /** Information about a feature associated with a step e.g. a station entrance or exit. */
+  feature?: Maybe<StepFeature>;
   /** The latitude of the start of the step. */
-  lat?: Maybe<Scalars['Float']>;
+  lat?: Maybe<Scalars['Float']['output']>;
   /** The longitude of the start of the step. */
-  lon?: Maybe<Scalars['Float']>;
+  lon?: Maybe<Scalars['Float']['output']>;
   /** The relative direction (e.g. left or right turn) to take when engaging this step. */
   relativeDirection?: Maybe<RelativeDirection>;
   /** Indicates whether or not a street changes direction at an intersection. */
-  stayOn?: Maybe<Scalars['Boolean']>;
+  stayOn?: Maybe<Scalars['Boolean']['output']>;
   /** The name of the street, road, or path taken for this step. */
-  streetName?: Maybe<Scalars['String']>;
+  streetName?: Maybe<Scalars['String']['output']>;
   /** Is this step walking with a bike? */
-  walkingBike?: Maybe<Scalars['Boolean']>;
+  walkingBike?: Maybe<Scalars['Boolean']['output']>;
 };
 
 export type StopAtDistance = Node & {
   __typename?: 'stopAtDistance';
   /** Walking distance to the stop along streets and paths */
-  distance?: Maybe<Scalars['Int']>;
+  distance?: Maybe<Scalars['Int']['output']>;
   /** Global object ID provided by Relay. This value can be used to refetch this object using **node** query. */
-  id: Scalars['ID'];
+  id: Scalars['ID']['output'];
   stop?: Maybe<Stop>;
 };
 
@@ -3156,81 +5150,81 @@ export type StopAtDistanceConnection = {
 /** An edge in a connection. */
 export type StopAtDistanceEdge = {
   __typename?: 'stopAtDistanceEdge';
-  cursor: Scalars['String'];
+  cursor: Scalars['String']['output'];
   /** The item at the end of the edge */
   node?: Maybe<StopAtDistance>;
 };
 
 export type GetAlertsForStationsQueryVariables = Exact<{
-  ids: Array<Scalars['String']> | Scalars['String'];
+  ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
 
 
 export type GetAlertsForStationsQuery = { __typename?: 'QueryType', stations?: Array<{ __typename?: 'Stop', lon?: number | null, lat?: number | null, stops?: Array<{ __typename?: 'Stop', routes?: Array<{ __typename?: 'Route', alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null } | null> | null } | null> | null };
 
 export type GetAlertsForStopsQueryVariables = Exact<{
-  ids: Array<Scalars['String']> | Scalars['String'];
+  ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
 
 
 export type GetAlertsForStopsQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', lat?: number | null, lon?: number | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null, routes?: Array<{ __typename?: 'Route', alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null } | null> | null };
 
 export type GetDeparturesForStationsQueryVariables = Exact<{
-  ids: Array<Scalars['String']> | Scalars['String'];
-  numberOfDepartures: Scalars['Int'];
+  ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
+  numberOfDepartures: Scalars['Int']['input'];
 }>;
 
 
-export type GetDeparturesForStationsQuery = { __typename?: 'QueryType', stations?: Array<{ __typename?: 'Stop', name: string, code?: string | null, lat?: number | null, lon?: number | null, gtfsId: string, stops?: Array<{ __typename?: 'Stop', gtfsId: string, patterns?: Array<{ __typename?: 'Pattern', headsign?: string | null } | null> | null, routes?: Array<{ __typename?: 'Route', longName?: string | null, id: string, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null } | null> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, directionId?: number | null, headsign?: string | null, stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, direction?: string | null }> | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null, stoptimes?: Array<{ __typename?: 'Stoptime', realtime?: boolean | null, pickupType?: PickupDropoffType | null, serviceDay?: any | null, scheduledDeparture?: number | null, realtimeDeparture?: number | null, realtimeState?: RealtimeState | null, headsign?: string | null, headsignfi?: string | null, headsignsv?: string | null, headsignen?: string | null, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null, platformCode?: string | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null } | null, trip?: { __typename?: 'Trip', tripHeadsign?: string | null, directionId?: string | null, gtfsId: string, id: string, tripHeadsignfi?: string | null, tripHeadsignsv?: string | null, tripHeadsignen?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null, longName?: string | null, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null } } | null } | null> | null } | null> | null } | null> | null };
+export type GetDeparturesForStationsQuery = { __typename?: 'QueryType', stations?: Array<{ __typename?: 'Stop', name: string, code?: string | null, lat?: number | null, lon?: number | null, gtfsId: string, stops?: Array<{ __typename?: 'Stop', gtfsId: string, patterns?: Array<{ __typename?: 'Pattern', headsign?: string | null } | null> | null, routes?: Array<{ __typename?: 'Route', longName?: string | null, id: string, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null } | null> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, directionId?: number | null, headsign?: string | null, stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, direction?: string | null }> | null, route: { __typename?: 'Route', mode?: TransitMode | null, gtfsId: string, shortName?: string | null } } | null, stoptimes?: Array<{ __typename?: 'Stoptime', realtime?: boolean | null, pickupType?: PickupDropoffType | null, serviceDay?: any | null, scheduledDeparture?: number | null, realtimeDeparture?: number | null, realtimeState?: RealtimeState | null, headsign?: string | null, headsignfi?: string | null, headsignsv?: string | null, headsignen?: string | null, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null, platformCode?: string | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null } | null, trip?: { __typename?: 'Trip', tripHeadsign?: string | null, directionId?: string | null, gtfsId: string, id: string, tripHeadsignfi?: string | null, tripHeadsignsv?: string | null, tripHeadsignen?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null, longName?: string | null, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null } } | null } | null> | null } | null> | null } | null> | null };
 
 export type GetDeparturesForStopsQueryVariables = Exact<{
-  ids: Array<Scalars['String']> | Scalars['String'];
-  numberOfDepartures: Scalars['Int'];
+  ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
+  numberOfDepartures: Scalars['Int']['input'];
 }>;
 
 
-export type GetDeparturesForStopsQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', name: string, code?: string | null, gtfsId: string, lat?: number | null, lon?: number | null, vehicleMode?: Mode | null, patterns?: Array<{ __typename?: 'Pattern', headsign?: string | null } | null> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null, routes?: Array<{ __typename?: 'Route', longName?: string | null, id: string, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, directionId?: number | null, headsign?: string | null, stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, direction?: string | null }> | null, route: { __typename?: 'Route', longName?: string | null, gtfsId: string, shortName?: string | null } } | null, stoptimes?: Array<{ __typename?: 'Stoptime', realtime?: boolean | null, pickupType?: PickupDropoffType | null, serviceDay?: any | null, scheduledDeparture?: number | null, realtimeDeparture?: number | null, realtimeState?: RealtimeState | null, headsign?: string | null, headsignfi?: string | null, headsignsv?: string | null, headsignen?: string | null, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null, platformCode?: string | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null } | null, trip?: { __typename?: 'Trip', tripHeadsign?: string | null, directionId?: string | null, id: string, gtfsId: string, tripHeadsignfi?: string | null, tripHeadsignsv?: string | null, tripHeadsignen?: string | null, route: { __typename?: 'Route', longName?: string | null, shortName?: string | null, gtfsId: string, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null } } | null } | null> | null } | null> | null } | null> | null };
+export type GetDeparturesForStopsQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', name: string, code?: string | null, gtfsId: string, lat?: number | null, lon?: number | null, vehicleMode?: Mode | null, patterns?: Array<{ __typename?: 'Pattern', headsign?: string | null } | null> | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null, routes?: Array<{ __typename?: 'Route', longName?: string | null, id: string, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null, alerts?: Array<{ __typename?: 'Alert', alertSeverityLevel?: AlertSeverityLevelType | null, alertHeaderText?: string | null, effectiveEndDate?: any | null, effectiveStartDate?: any | null, alertHeaderTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, alertDescriptionTextTranslations: Array<{ __typename?: 'TranslatedString', text?: string | null, language?: string | null }>, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null } | null } | null> | null }> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, directionId?: number | null, headsign?: string | null, stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, direction?: string | null }> | null, route: { __typename?: 'Route', mode?: TransitMode | null, longName?: string | null, gtfsId: string, shortName?: string | null } } | null, stoptimes?: Array<{ __typename?: 'Stoptime', realtime?: boolean | null, pickupType?: PickupDropoffType | null, serviceDay?: any | null, scheduledDeparture?: number | null, realtimeDeparture?: number | null, realtimeState?: RealtimeState | null, headsign?: string | null, headsignfi?: string | null, headsignsv?: string | null, headsignen?: string | null, stop?: { __typename?: 'Stop', gtfsId: string, code?: string | null, platformCode?: string | null, parentStation?: { __typename?: 'Stop', gtfsId: string } | null } | null, trip?: { __typename?: 'Trip', tripHeadsign?: string | null, directionId?: string | null, id: string, gtfsId: string, tripHeadsignfi?: string | null, tripHeadsignsv?: string | null, tripHeadsignen?: string | null, route: { __typename?: 'Route', longName?: string | null, shortName?: string | null, gtfsId: string, longNamefi?: string | null, longNamesv?: string | null, longNameen?: string | null } } | null } | null> | null } | null> | null } | null> | null };
 
 export type GetLineIdsQueryVariables = Exact<{
-  stations: Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>;
-  stops: Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>;
+  stations: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
+  stops: Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type GetLineIdsQuery = { __typename?: 'QueryType', stations?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, lat?: number | null, lon?: number | null, stops?: Array<{ __typename?: 'Stop', gtfsId: string, name: string, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, headsign?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null } | null> | null } | null> | null } | null> | null, stops?: Array<{ __typename?: 'Stop', gtfsId: string, name: string, parentStation?: { __typename?: 'Stop', gtfsId: string } | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, headsign?: string | null, route: { __typename?: 'Route', gtfsId: string, shortName?: string | null } } | null } | null> | null } | null> | null };
 
 export type GetStationsForStationMonitorQueryVariables = Exact<{
-  ids: Array<Scalars['String']> | Scalars['String'];
+  ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
 
 
 export type GetStationsForStationMonitorQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, locationType?: LocationType | null, vehicleMode?: Mode | null, lat?: number | null, lon?: number | null } | null> | null };
 
 export type GetStopsForOldMonitorsQueryVariables = Exact<{
-  ids: Array<Scalars['String']> | Scalars['String'];
+  ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
 
 
 export type GetStopsForOldMonitorsQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, locationType?: LocationType | null, lat?: number | null, lon?: number | null } | null> | null };
 
 export type GetStopsForStopMonitorQueryVariables = Exact<{
-  ids: Array<Scalars['String']> | Scalars['String'];
+  ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
 
 
 export type GetStopsForStopMonitorQuery = { __typename?: 'QueryType', stops?: Array<{ __typename?: 'Stop', name: string, gtfsId: string, locationType?: LocationType | null, vehicleMode?: Mode | null, lat?: number | null, lon?: number | null } | null> | null };
 
 export type StationQueryQueryVariables = Exact<{
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
-  language?: InputMaybe<Scalars['String']>;
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
+  language?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
 export type StationQueryQuery = { __typename?: 'QueryType', station?: Array<{ __typename?: 'Stop', id: string, name: string, code?: string | null, desc?: string | null, gtfsId: string, platformCode?: string | null, locationType?: LocationType | null, vehicleMode?: Mode | null, lat?: number | null, lon?: number | null, stops?: Array<{ __typename?: 'Stop', desc?: string | null, code?: string | null, patterns?: Array<{ __typename?: 'Pattern', code: string, headsign?: string | null, route: { __typename?: 'Route', mode?: TransitMode | null, type?: number | null, shortName?: string | null, longName?: string | null, gtfsId: string } } | null> | null, stoptimesForPatterns?: Array<{ __typename?: 'StoptimesInPattern', pattern?: { __typename?: 'Pattern', code: string, headsign?: string | null, originalTripPattern?: { __typename?: 'Pattern', code: string, name?: string | null } | null, route: { __typename?: 'Route', mode?: TransitMode | null, type?: number | null, shortName?: string | null, longName?: string | null, gtfsId: string } } | null } | null> | null, routes?: Array<{ __typename?: 'Route', shortName?: string | null, longName?: string | null, gtfsId: string }> | null } | null> | null } | null> | null };
 
 export type StopQueryQueryVariables = Exact<{
-  ids?: InputMaybe<Array<InputMaybe<Scalars['String']>> | InputMaybe<Scalars['String']>>;
-  language: Scalars['String'];
+  ids?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>> | InputMaybe<Scalars['String']['input']>>;
+  language: Scalars['String']['input'];
 }>;
 
 
@@ -3239,8 +5233,8 @@ export type StopQueryQuery = { __typename?: 'QueryType', stop?: Array<{ __typena
 
 export const GetAlertsForStationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAlertsForStations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stations"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetAlertsForStationsQuery, GetAlertsForStationsQueryVariables>;
 export const GetAlertsForStopsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetAlertsForStops"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetAlertsForStopsQuery, GetAlertsForStopsQueryVariables>;
-export const GetDeparturesForStationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDeparturesForStations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stations"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headsign"}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"numberOfDepartures"},"value":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}}},{"kind":"Argument","name":{"kind":"Name","value":"omitCanceled"},"value":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"direction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"realtime"}},{"kind":"Field","name":{"kind":"Name","value":"pickupType"}},{"kind":"Field","name":{"kind":"Name","value":"serviceDay"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeState"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","alias":{"kind":"Name","value":"headsignfi"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignsv"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignen"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"trip"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tripHeadsign"}},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignfi"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignsv"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignen"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetDeparturesForStationsQuery, GetDeparturesForStationsQueryVariables>;
-export const GetDeparturesForStopsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDeparturesForStops"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleMode"}},{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headsign"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"numberOfDepartures"},"value":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}}},{"kind":"Argument","name":{"kind":"Name","value":"omitCanceled"},"value":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"direction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"realtime"}},{"kind":"Field","name":{"kind":"Name","value":"pickupType"}},{"kind":"Field","name":{"kind":"Name","value":"serviceDay"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeState"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","alias":{"kind":"Name","value":"headsignfi"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignsv"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignen"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"trip"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tripHeadsign"}},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignfi"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignsv"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignen"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetDeparturesForStopsQuery, GetDeparturesForStopsQueryVariables>;
+export const GetDeparturesForStationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDeparturesForStations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stations"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headsign"}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"numberOfDepartures"},"value":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}}},{"kind":"Argument","name":{"kind":"Name","value":"omitCanceled"},"value":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"direction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mode"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"realtime"}},{"kind":"Field","name":{"kind":"Name","value":"pickupType"}},{"kind":"Field","name":{"kind":"Name","value":"serviceDay"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeState"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","alias":{"kind":"Name","value":"headsignfi"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignsv"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignen"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"trip"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tripHeadsign"}},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignfi"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignsv"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignen"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetDeparturesForStationsQuery, GetDeparturesForStationsQueryVariables>;
+export const GetDeparturesForStopsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetDeparturesForStops"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleMode"}},{"kind":"Field","name":{"kind":"Name","value":"patterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"headsign"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"routes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alerts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"alertSeverityLevel"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderText"}},{"kind":"Field","name":{"kind":"Name","value":"alertHeaderTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"alertDescriptionTextTranslations"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"language"}}]}},{"kind":"Field","name":{"kind":"Name","value":"effectiveEndDate"}},{"kind":"Field","name":{"kind":"Name","value":"effectiveStartDate"}},{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"numberOfDepartures"},"value":{"kind":"Variable","name":{"kind":"Name","value":"numberOfDepartures"}}},{"kind":"Argument","name":{"kind":"Name","value":"omitCanceled"},"value":{"kind":"BooleanValue","value":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"direction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mode"}},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stop"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"platformCode"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"realtime"}},{"kind":"Field","name":{"kind":"Name","value":"pickupType"}},{"kind":"Field","name":{"kind":"Name","value":"serviceDay"}},{"kind":"Field","name":{"kind":"Name","value":"scheduledDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeDeparture"}},{"kind":"Field","name":{"kind":"Name","value":"realtimeState"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","alias":{"kind":"Name","value":"headsignfi"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignsv"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"headsignen"},"name":{"kind":"Name","value":"headsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"trip"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"tripHeadsign"}},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignfi"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignsv"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"tripHeadsignen"},"name":{"kind":"Name","value":"tripHeadsign"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"directionId"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"longNamefi"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"fi","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNamesv"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"sv","block":false}}]},{"kind":"Field","alias":{"kind":"Name","value":"longNameen"},"name":{"kind":"Name","value":"longName"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"language"},"value":{"kind":"StringValue","value":"en","block":false}}]},{"kind":"Field","name":{"kind":"Name","value":"longName"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetDeparturesForStopsQuery, GetDeparturesForStopsQueryVariables>;
 export const GetLineIdsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getLineIds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"stations"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"stops"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"stations"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"stops"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"parentStation"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stoptimesForPatterns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pattern"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"headsign"}},{"kind":"Field","name":{"kind":"Name","value":"route"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"shortName"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetLineIdsQuery, GetLineIdsQueryVariables>;
 export const GetStationsForStationMonitorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetStationsForStationMonitor"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"locationType"}},{"kind":"Field","name":{"kind":"Name","value":"vehicleMode"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}}]}}]}}]} as unknown as DocumentNode<GetStationsForStationMonitorQuery, GetStationsForStationMonitorQueryVariables>;
 export const GetStopsForOldMonitorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetStopsForOldMonitors"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"ids"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}}],"directives":[{"kind":"Directive","name":{"kind":"Name","value":"api"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"contextKey"},"value":{"kind":"StringValue","value":"clientName","block":false}}]}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"stops"},"name":{"kind":"Name","value":"stops"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"ids"},"value":{"kind":"Variable","name":{"kind":"Name","value":"ids"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"gtfsId"}},{"kind":"Field","name":{"kind":"Name","value":"locationType"}},{"kind":"Field","name":{"kind":"Name","value":"lat"}},{"kind":"Field","name":{"kind":"Name","value":"lon"}}]}}]}}]} as unknown as DocumentNode<GetStopsForOldMonitorsQuery, GetStopsForOldMonitorsQueryVariables>;

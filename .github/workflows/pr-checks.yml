@@ -1,0 +1,49 @@
+name: PR checks
+
+on:
+  pull_request:
+    branches:
+      - next
+
+concurrency:
+  group: pr-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    strategy:
+      matrix:
+        node-version:
+          - 25.9.0
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v5
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+          cache-dependency-path: package-lock.json
+
+      - name: Install app dependencies
+        run: npm ci
+
+      - name: Lint TypeScript
+        run: npm run lint-ts-test
+
+      - name: Lint SCSS
+        run: npm run lint-scss-test
+
+      - name: Unit tests
+        run: npm test -- --ci
+
+      - name: Production build
+        run: npm run build

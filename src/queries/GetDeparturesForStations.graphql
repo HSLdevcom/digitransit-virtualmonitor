@@ -69,6 +69,7 @@ query GetDeparturesForStations($ids: [String!]!, $numberOfDepartures: Int!)
           direction
         }        
         route {
+          mode
           gtfsId
           shortName
         }

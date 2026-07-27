@@ -102,6 +102,9 @@ export const filterDepartures = (
     const stopList = stoptimeList.pattern.stops;
     const combinedPattern = stringifyPattern(stoptimeList.pattern);
     if (!hiddenRoutes.includes(combinedPattern)) {
+      const mode = stop.vehicleMode
+        ? stop.vehicleMode.toLowerCase()
+        : stoptimeList.pattern.route.mode?.toLowerCase();
       let stoptimes = [];
       stoptimeList.stoptimes.forEach(item => {
         const renameID = getRenameID(
@@ -115,7 +118,7 @@ export const filterDepartures = (
             combinedPattern: combinedPattern,
             showStopNumber: showStopNumber,
             showVia: showVia,
-            vehicleMode: stop.vehicleMode?.toLowerCase(),
+            vehicleMode: mode,
             renameID: renameID,
             stops: stopList,
           });

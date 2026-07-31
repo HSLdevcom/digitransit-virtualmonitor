@@ -5,7 +5,7 @@ jest.mock('@hsl-fi/site-header', () => ({
 }));
 
 jest.mock('@hsl-fi/icons', () => ({
-  Alert: () => <svg data-testid="alert-icon" />,
+  AlertTriangleFilled: () => <svg data-testid="alert-icon" />,
 }));
 
 jest.mock('../util/logoutUtil', () => ({ logout: jest.fn() }));

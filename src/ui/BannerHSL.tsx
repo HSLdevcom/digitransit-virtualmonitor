@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { SiteHeader, UserMenu, QuickSearch } from '@hsl-fi/site-header';
-import { Alert } from '@hsl-fi/icons';
+import { AlertTriangleFilled } from '@hsl-fi/icons';
 import { UserContext, ConfigContext } from '../contexts';
 import { logout } from '../util/logoutUtil';
 
@@ -262,8 +262,12 @@ const BannerHSL = () => {
         >
           {banner.priority === 'Primary' && (
             <div className="crisis-banner__icon">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              <Alert width="19" fill="#ffffff" {...({} as any)} />
+              <AlertTriangleFilled
+                width="19"
+                fill="#ffffff"
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                {...({} as any)}
+              />
             </div>
           )}
           <div dangerouslySetInnerHTML={{ __html: banner.body }} />

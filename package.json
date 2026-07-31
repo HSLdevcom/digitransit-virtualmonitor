@@ -15,6 +15,7 @@
     "@digitransit-component/digitransit-component-suggestion-item": "^3.0.3",
     "@habx/apollo-multi-endpoint-link": "^2.5.0",
     "@hsl-fi/design-tokens": "^1.24.0",
+    "@hsl-fi/icons": "^2.2.4",
     "@hsl-fi/layout-primitives": "^4.9.0",
     "@hsl-fi/modal": "^0.3.2",
     "@hsl-fi/site-footer": "^5.1.1",

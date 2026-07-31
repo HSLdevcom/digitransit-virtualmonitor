@@ -53,9 +53,10 @@
   }
 
   &__icon {
-    margin-top: 3px;
     margin-right: 10px;
     flex-shrink: 0;
+    position: relative;
+    top: 2px;
 
     svg {
       width: 19px;

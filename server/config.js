@@ -12,7 +12,7 @@ export function parseEnvPropJSON(envProperty, envPropertyName) {
     const propertyJson = JSON.parse(envProperty);
     if (typeof propertyJson !== 'object') {
       throw new Error(
-        `Property ${envPropertyName} is not an object. Expected a JSON object.`
+        `Property ${envPropertyName} is not an object. Expected a JSON object.`,
       );
     }
     return propertyJson;

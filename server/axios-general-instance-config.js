@@ -1,6 +1,6 @@
 /* Shared pool for requests other than GraphQL. */
-import axiosInstance from "axios";
-import { HttpsAgent } from "agentkeepalive";
+import axiosInstance from 'axios';
+import { HttpsAgent } from 'agentkeepalive';
 
 const httpsKeepaliveAgent = new HttpsAgent({
   maxSockets: 1000,

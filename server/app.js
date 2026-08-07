@@ -1,10 +1,10 @@
 import express from 'express';
 import path from 'path';
 import logger from 'morgan';
-import axios from './axios-general-instance-config.js';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import { fileURLToPath } from 'url';
+import axios from './axios-general-instance-config.js';
 import setUpOIDC, {
   userAuthenticated,
   errorHandler,
@@ -21,13 +21,15 @@ import {
 import axiosPoolForApi from './axios-api-instance-config.js';
 
 const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
-const FavouriteHost = process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
+const FavouriteHost =
+  process.env.FAVOURITE_HOST || 'https://dev-api.digitransit.fi/favourites';
 
 const NotificationHost =
   process.env.NOTIFICATION_HOST ||
   'https://test.hslfi.hsldev.com/user/api/v1/notifications';
 
-const apiSubscriptionParameter = process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME
+const apiSubscriptionParameter = process.env
+  .API_SUBSCRIPTION_QUERY_PARAMETER_NAME
   ? `${process.env.API_SUBSCRIPTION_QUERY_PARAMETER_NAME}=${process.env.API_SUBSCRIPTION_TOKEN}`
   : '';
 
@@ -84,14 +86,13 @@ app.get('/api/geocoding/:endpoint', (req, res, next) => {
 });
 
 app.get('/api/map/:lang', (req, res) => {
-  const { lang } = req.params
+  const { lang } = req.params;
   let url;
-  const hasLang = lang !== 'null' && lang !== 'undefined'
-  if(hasLang && lang !== 'fi') {
-    url = `${MAP_URL}/hsl-map-${lang}/{z}/\{x}/{y}.png?${apiSubscriptionParameter}`
-  } else  {
-    url = `${MAP_URL}/hsl-map/{z}/\{x}/{y}.png?${apiSubscriptionParameter}`
-
+  const hasLang = lang !== 'null' && lang !== 'undefined';
+  if (hasLang && lang !== 'fi') {
+    url = `${MAP_URL}/hsl-map-${lang}/{z}/{x}/{y}.png?${apiSubscriptionParameter}`;
+  } else {
+    url = `${MAP_URL}/hsl-map/{z}/{x}/{y}.png?${apiSubscriptionParameter}`;
   }
   return res.status(200).json(url);
 });
@@ -148,7 +149,7 @@ app.post('/api/staticmonitor', userAuthenticated, (req, res, next) => {
 
 app.put('/api/staticmonitor', userAuthenticated, (req, res, next) => {
   createMonitor(req, res, next)
-    .then(response => {
+    .then(() => {
       monitorService.createStatic(req, res, next);
     })
     .catch(err => {
@@ -161,7 +162,8 @@ app.get(
   userAuthenticated,
   (req, res, next) => {
     getMonitors(req, res, next);
-  });
+  },
+);
 
 app.get('/api/userowned/:id', userAuthenticated, (req, res, next) => {
   isUserOwnedMonitor(req, res, next);
@@ -227,16 +229,17 @@ app.use((req, res, next) => {
 });
 
 // error handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-  
+
   console.error(
     `Request error (${err.response?.status}): ${err.message}
     url: ${req.url},
     operation: ${req.body?.operationName}
-    response: (${err.response?.status}) ${err.response?.statusText}`
+    response: (${err.response?.status}) ${err.response?.statusText}`,
   );
 
   // render the error page

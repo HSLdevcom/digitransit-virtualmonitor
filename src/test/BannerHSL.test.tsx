@@ -34,7 +34,13 @@ const mockFetch = (data: unknown) => {
   } as Response);
 };
 
-const renderBannerHSL = (config = configWithBannersUri) =>
+const renderBannerHSL = (
+  config: {
+    bannersUri?: string;
+    HSLUri: string;
+    suggestionsUri: unknown;
+  } = configWithBannersUri,
+) =>
   render(
     <ConfigContext.Provider value={config}>
       <UserContext.Provider value={mockUser}>

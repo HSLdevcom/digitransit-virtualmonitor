@@ -68,7 +68,7 @@ const getFooterData = (
             href: `${baseUrl}/sv/hrt/betalsatt`,
           },
           privacyLink: { href: `${baseUrl}/sv/hrt/dataskydd` },
-          cookieSettingsLink: { href: `${baseUrl}/sv/hrt/kakor` },
+          cookieSettingsLabel: 'Cookie inställningar',
           termsOfUseLink: { href: `${baseUrl}/sv/hrt/anvandarvillkoren` },
           accessibilityStatementLink: {
             href: `${baseUrl}/sv/hrt/tillganglighet`,
@@ -132,7 +132,7 @@ const getFooterData = (
             href: `${baseUrl}/en/hsl/payment-methods`,
           },
           privacyLink: { href: `${baseUrl}/en/hsl/privacy-policy` },
-          cookieSettingsLink: { href: `${baseUrl}/en/hsl/cookies` },
+          cookieSettingsLabel: 'Cookie settings',
           termsOfUseLink: { href: `${baseUrl}/en/hsl/terms-of-use` },
           accessibilityStatementLink: {
             href: `${baseUrl}/en/hsl/accessibility-statement`,
@@ -195,7 +195,7 @@ const getFooterData = (
           contantInfoLink: { href: `${baseUrl}/yhteystiedot` },
           paymentMethodsLink: { href: `${baseUrl}/maksutavat` },
           privacyLink: { href: `${baseUrl}/hsl/tietosuoja` },
-          cookieSettingsLink: { href: `${baseUrl}/hsl/evasteet` },
+          cookieSettingsLabel: 'Evästeasetukset',
           termsOfUseLink: { href: `${baseUrl}/hsl/kayttoehdot` },
           accessibilityStatementLink: { href: `${baseUrl}/hsl/saavutettavuus` },
         },

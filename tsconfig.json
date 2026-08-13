@@ -1,10 +1,7 @@
 {
   "compilerOptions": {
-    "alwaysStrict": false,
-    "strictFunctionTypes": false,
-    "strictPropertyInitialization": false,
     "experimentalDecorators": true,
-    "target": "es5",
+    "target": "es6",
     "lib": [
       "dom",
       "dom.iterable",

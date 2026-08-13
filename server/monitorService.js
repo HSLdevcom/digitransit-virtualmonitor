@@ -24,6 +24,7 @@ async function getMonitor(hash) {
       .fetchAll();
     return items;
   } catch (e) {
+    console.error(`Failed to fetch monitor ${hash}: ${e.message}`);
     throw e;
   }
 }
@@ -46,11 +47,11 @@ const monitorService = {
     try {
       const cont = database.container('staticMonitors');
       const urls = ids;
-      const instanceName = req.params.instanceName;
       // query to return all items
       if (urls.length) {
         const querySpec = {
-          query: 'SELECT * from c WHERE ARRAY_CONTAINS(@urls, c.url) AND (IS_DEFINED(c.instance) = false OR c.instance = @instance)',
+          query:
+            'SELECT * from c WHERE ARRAY_CONTAINS(@urls, c.url) AND (IS_DEFINED(c.instance) = false OR c.instance = @instance)',
           parameters: [
             {
               name: '@urls',
@@ -88,7 +89,7 @@ const monitorService = {
   },
   getStatic: async function getStaticMonitor(req, res, next) {
     try {
-      const container = database.container('staticMonitors');
+      const staticContainer = database.container('staticMonitors');
       const url = req.params.id;
       const querySpec = {
         query: 'SELECT * from c WHERE c.url = @url',
@@ -99,7 +100,7 @@ const monitorService = {
           },
         ],
       };
-      const { resources: items } = await container.items
+      const { resources: items } = await staticContainer.items
         .query(querySpec)
         .fetchAll();
       if (items.length) {
@@ -113,31 +114,39 @@ const monitorService = {
   },
   createStatic: async function createStaticMonitor(req, res, next) {
     try {
-      const container = database.container('staticMonitors');
-      await Promise.resolve(container.items.create(req.body));
+      const staticContainer = database.container('staticMonitors');
+      await Promise.resolve(staticContainer.items.create(req.body));
       res.send('OK');
     } catch (e) {
       next(e);
     }
   },
-  updateStatic: async function updateStaticMonitor(req, res) {
+  updateStatic: async function updateStaticMonitor(req, res, next) {
     try {
-      const container = database.container('staticMonitors');
-      const { resource: updatedItem } = await container
+      const staticContainer = database.container('staticMonitors');
+      const { resource: updatedItem } = await staticContainer
         .item(req.body.id, req.body.url)
         .replace(req.body);
       res.json(updatedItem);
     } catch (e) {
-      throw e;
+      console.error(
+        `Failed to update static monitor ${req.body?.url}: ${e.message}`,
+      );
+      next(e);
     }
   },
-  deleteStatic: async function deleteStaticMonitor(req, res) {
+  deleteStatic: async function deleteStaticMonitor(req, res, next) {
     try {
-      const container = database.container('staticMonitors');
-      const { body } = await container.item(req.body.id, req.body.url).delete();
+      const staticContainer = database.container('staticMonitors');
+      const { body } = await staticContainer
+        .item(req.body.id, req.body.url)
+        .delete();
       res.status(200).json(body);
     } catch (e) {
-      throw e;
+      console.error(
+        `Failed to delete static monitor ${req.body?.url}: ${e.message}`,
+      );
+      next(e);
     }
   },
 };

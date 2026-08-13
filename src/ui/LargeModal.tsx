@@ -1,4 +1,4 @@
-import React, { FC, useContext, useRef } from 'react';
+import React, { FC, ReactNode, useContext, useRef } from 'react';
 import Modal from 'react-modal';
 import { useTranslation } from 'react-i18next';
 import uniqueId from 'lodash/uniqueId';
@@ -12,6 +12,7 @@ interface IProps {
   portalClassName?: string;
   ariaHideApp?: boolean;
   onAfterOpen?: () => void;
+  children?: ReactNode;
 }
 const LargeModal: FC<IProps> = ({
   onRequestClose,

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 node server.js",
     "start-local": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 node -r dotenv/config server.js",
-    "lint": "eslint *.js --fix --quiet"
+    "lint": "eslint *.js --fix --quiet",
+    "lint-check": "eslint *.js --quiet"
   },
   "dependencies": {
     "@azure/cosmos": "4.9.2",
@@ -30,7 +31,9 @@
     "cross-env": "^7.0.2",
     "prettier": "^2.8.0",
     "eslint": "^8.20.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^4.2.1",
     "dotenv": "^16.3.1"
   }

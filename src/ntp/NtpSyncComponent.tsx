@@ -1,7 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, PropsWithChildren, useEffect, useState } from 'react';
 import NtpSyncContext from './NtpSyncContext';
 
-const NtpSyncComponent: FC = props => {
+const NtpSyncComponent: FC<PropsWithChildren> = props => {
   const [deltaMilliseconds, setDeltaMilliseconds] = useState(0);
   const retrieveTimeDelta = async () => {
     try {

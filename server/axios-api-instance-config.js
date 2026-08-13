@@ -1,6 +1,6 @@
 /* Dedicated pool for API requests, which are constant and frequent. */
-import axiosInstance from "axios";
-import { HttpsAgent } from "agentkeepalive";
+import axiosInstance from 'axios';
+import { HttpsAgent } from 'agentkeepalive';
 
 const httpsKeepaliveAgent = new HttpsAgent({
   maxSockets: 128, // max SNAT ports per endpoint is 128

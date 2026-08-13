@@ -135,7 +135,7 @@ const monitorService = {
       next(e);
     }
   },
-  deleteStatic: async function deleteStaticMonitor(req, res) {
+  deleteStatic: async function deleteStaticMonitor(req, res, next) {
     try {
       const staticContainer = database.container('staticMonitors');
       const { body } = await staticContainer
@@ -146,7 +146,7 @@ const monitorService = {
       console.error(
         `Failed to delete static monitor ${req.body?.url}: ${e.message}`,
       );
-      throw e;
+      next(e);
     }
   },
 };

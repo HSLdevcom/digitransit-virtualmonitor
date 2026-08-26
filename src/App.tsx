@@ -7,7 +7,7 @@ import CreateViewPage from './ui/CreateViewPage';
 import Version from './ui/Version';
 import BannerContainer from './ui/BannerContainer';
 import FooterContainer from './ui/FooterContainer';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import {
   ApolloClient,
   InMemoryCache,

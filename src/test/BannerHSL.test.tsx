@@ -1,14 +1,14 @@
-jest.mock('@hsl-fi/site-header', () => ({
+vi.mock('@hsl-fi/site-header', () => ({
   SiteHeader: () => <div data-testid="site-header" />,
   UserMenu: () => null,
   QuickSearch: () => null,
 }));
 
-jest.mock('@hsl-fi/icons', () => ({
+vi.mock('@hsl-fi/icons', () => ({
   AlertTriangleFilled: () => <svg data-testid="alert-icon" />,
 }));
 
-jest.mock('../util/logoutUtil', () => ({ logout: jest.fn() }));
+vi.mock('../util/logoutUtil', () => ({ logout: jest.fn() }));
 
 import React from 'react';
 import { render, screen, waitFor, act } from '@testing-library/react';

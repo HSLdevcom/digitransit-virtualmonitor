@@ -8,7 +8,7 @@ WORKDIR /app
 EXPOSE 3001
 
 # Copy build config and dependency manifest before install for layer caching
-COPY package.json package-lock.json webpack.config.js babel.config.js tsconfig.json .npmrc ./
+COPY package.json package-lock.json vite.config.ts tsconfig.json .npmrc ./
 
 # Install all dependencies, including devDeps required for the TypeScript build
 RUN npm ci

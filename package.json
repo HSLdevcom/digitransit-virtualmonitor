@@ -7,6 +7,7 @@
     "Digitransit team"
   ],
   "private": true,
+  "type": "module",
   "dependencies": {
     "@apollo/client": "^3.5.5",
     "@digitransit-component/digitransit-component-autosuggest": "7.1.5",
@@ -58,9 +59,12 @@
   "scripts": {
     "start-prod": "cd server && npm start",
     "generate": "graphql-codegen --watch",
-    "start": "webpack serve --mode development",
-    "build": "webpack --mode production",
-    "test": "jest",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "type-check": "tsc --noEmit",
     "lint": "npm-run-all lint-ts lint-scss",
     "lint-test": "npm-run-all lint-ts-test lint-scss-test",
@@ -70,19 +74,11 @@
     "lint-scss-test": "stylelint src/**/*.{scss,sass} --quiet"
   },
   "devDependencies": {
-    "@babel/core": "^7.21.3",
-    "@babel/preset-env": "^7.24.0",
-    "@babel/preset-react": "^7.24.1",
-    "@babel/preset-typescript": "^7.24.1",
     "@graphql-codegen/cli": "^6.3.0",
     "@graphql-codegen/typed-document-node": "^6.1.8",
     "@graphql-codegen/typescript": "^5.0.10",
     "@graphql-codegen/typescript-operations": "^5.1.0",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
-    "@svgr/webpack": "^8.1.0",
     "@types/dompurify": "^3.0.5",
-    "@types/history": "^4.7.8",
-    "@types/jest": "^29.5.12",
     "@types/leaflet": "^1.9.0",
     "@types/node": "^16.10.3",
     "@types/react": "^18.2.0",
@@ -92,10 +88,8 @@
     "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^5.31.0",
     "@typescript-eslint/parser": "^5.31.0",
-    "babel-jest": "^29.7.0",
-    "babel-loader": "^9.1.3",
-    "copy-webpack-plugin": "^14.0.0",
-    "css-loader": "^7.1.2",
+    "@vitejs/plugin-react-oxc": "^0.4.3",
+    "@vitest/coverage-v8": "^2.1.0",
     "eslint": "^8.20.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
@@ -103,47 +97,16 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-sonarjs": "^0.14.0",
-    "html-webpack-plugin": "^5.6.0",
     "husky": "^7.0.0",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "mini-css-extract-plugin": "^2.9.0",
+    "jsdom": "^25.0.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.3.0",
-    "react-refresh": "^0.14.2",
-    "sass-loader": "^14.2.1",
-    "style-loader": "^4.0.0",
     "stylelint": "^16.0.2",
     "stylelint-config-standard-scss": "12.0.0",
-    "typescript": "^4.9.5",
-    "webpack": "^5.91.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.2.4"
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.svg$": "<rootDir>/src/__mocks__/svgTransformer.js",
-      "^.+\\.[jt]sx?$": "babel-jest"
-    },
-    "moduleNameMapper": {
-      "^src/(.*)$": "<rootDir>/src/$1",
-      "i18next": "<rootDir>/src/__mocks__/reactI18next.js",
-      "\\.(css|scss|sass)$": "identity-obj-proxy"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!(uuid)/)"
-    ],
-    "setupFilesAfterEnv": [
-      "<rootDir>/src/setupTests.ts"
-    ]
-  },
-  "esm": {
-    "await": true
-  },
-  "_moduleAliases": {
-    "src": "build/dist"
+    "typescript": "^5.4.0",
+    "vite": "^8.2.2",
+    "vite-plugin-svgr": "^5.2.0",
+    "vitest": "^4.1.11"
   },
   "browserslist": [
     ">0.2%",

@@ -4,16 +4,16 @@ import { useQuery } from '@apollo/client';
 import StopCardListContainer from './StopCardListContainer';
 import { sortBy } from 'lodash';
 import { stringifyPattern } from '../util/monitorUtils';
-import { IMapSettings } from '../util/Interfaces';
+import { IView, IMapSettings } from '../util/Interfaces';
 import { SupportedLanguage } from '../i18n';
 
 interface IProps {
-  stopCardList: any;
+  stopCardList: Array<IView>;
   stopIds: Array<string>;
   stationIds: Array<string>;
   languages: Array<SupportedLanguage>;
   loading: boolean;
-  staticMonitor?: any;
+  staticMonitor?: { name: string; id: string };
   mapSettings?: IMapSettings;
 }
 

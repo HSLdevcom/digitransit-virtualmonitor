@@ -7,17 +7,14 @@ import { render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => [jest.fn(key => key)],
 }));
-jest.mock('./Icon', () => () => <div>Icon</div>);
-jest.mock('../MonitorMapContainer', () => () => <div>MonitorMapContainer</div>);
-jest.mock(
-  'classnames',
-  () =>
-    (...args: any[]) =>
-      args.join(' '),
-);
+vi.mock('./Icon', () => ({ default: () => null }));
+vi.mock('../MonitorMapContainer', () => ({ default: () => null }));
+vi.mock('classnames', () => ({
+  default: (...args: any[]) => args.filter(Boolean).join(' '),
+}));
 
 const bounds: BoundingBox = [
   [0, 0],

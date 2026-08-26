@@ -3,19 +3,22 @@ import { render } from '@testing-library/react';
 import PreviewModal from './PreviewModal';
 import userEvent from '@testing-library/user-event';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => [k => k],
 }));
 
-jest.mock('./Icon', () => () => <div>Icon</div>);
-jest.mock('./CarouselDataContainer', () => () => (
-  <div>CarouselDataContainer</div>
-));
-jest.mock('./InformationDisplayContainer', () => () => (
-  <div>InformationDisplayContainer</div>
-));
-jest.mock('./TrainDataPreparer', () => () => <div>TrainDataPreparer</div>);
-jest.mock('../util/monitorUtils', () => ({
+vi.mock('./Icon', () => ({ default: () => null }));
+vi.mock('./CarouselDataContainer', () => ({
+  default: () => React.createElement('div', null, 'CarouselDataContainer'),
+}));
+vi.mock('./InformationDisplayContainer', () => ({
+  default: () =>
+    React.createElement('div', null, 'InformationDisplayContainer'),
+}));
+vi.mock('./TrainDataPreparer', () => ({
+  default: () => React.createElement('div', null, 'TrainDataPreparer'),
+}));
+vi.mock('../util/monitorUtils', () => ({
   isPlatformOrTrackVisible: jest.fn(() => true),
 }));
 

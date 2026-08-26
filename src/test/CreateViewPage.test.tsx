@@ -1,4 +1,4 @@
-jest.mock('@digitransit-component/digitransit-component-autosuggest', () => ({
+vi.mock('@digitransit-component/digitransit-component-autosuggest', () => ({
   __esModule: true,
   default: () => <div>DTAutosuggest</div>,
 }));

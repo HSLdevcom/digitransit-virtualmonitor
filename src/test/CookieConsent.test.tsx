@@ -1,6 +1,6 @@
 let mockLanguage = 'fi';
 
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (k: string) => k,
     i18n: {
@@ -12,19 +12,19 @@ jest.mock('react-i18next', () => ({
   }),
 }));
 
-jest.mock('@hsl-fi/site-header', () => ({
+vi.mock('@hsl-fi/site-header', () => ({
   SiteHeader: () => <div data-testid="site-header" />,
   UserMenu: () => null,
   QuickSearch: () => null,
 }));
 
-jest.mock('@hsl-fi/icons', () => ({
+vi.mock('@hsl-fi/icons', () => ({
   Alert: () => <svg data-testid="alert-icon" />,
 }));
 
-jest.mock('../util/logoutUtil', () => ({ logout: jest.fn() }));
+vi.mock('../util/logoutUtil', () => ({ logout: jest.fn() }));
 
-jest.mock('@hsl-fi/site-footer', () => ({
+vi.mock('@hsl-fi/site-footer', () => ({
   SiteFooter: ({
     cookieSettingsButtonProps,
   }: {

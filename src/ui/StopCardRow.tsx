@@ -15,7 +15,9 @@ import Icon from './Icon';
 import { StopQueryDocument, StationQueryDocument } from '../generated';
 import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
-import DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
+import _DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
+// The package uses `module.exports = { default: fn }` — unwrap for Vite 8 CJS interop
+const DTAutosuggest = (_DTAutosuggest as any).default ?? _DTAutosuggest;
 import { getSearchContext } from './searchContext';
 import { getModeFromAddendum } from '../util/stopCardUtil';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';

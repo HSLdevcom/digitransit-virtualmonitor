@@ -4,22 +4,33 @@ import { ConfigContext } from '../contexts';
 
 // Mock factories only use jest.fn() with no external variable references to
 // avoid babel-jest hoisting issues. Return values are set in beforeEach.
-jest.mock('leaflet/dist/leaflet.css', () => ({}));
-jest.mock('react-dom/server', () => ({ renderToString: () => '<svg></svg>' }));
-jest.mock('../ui/Icon', () => ({ __esModule: true, default: () => null }));
-jest.mock('../Vehicleicon', () => ({ __esModule: true, default: () => null }));
-jest.mock('../api', () => ({
+vi.mock('leaflet/dist/leaflet.css', () => ({}));
+vi.mock('react-dom/server', () => ({
+  default: { renderToString: () => '<svg></svg>' },
+}));
+vi.mock('../ui/Icon', () => ({ __esModule: true, default: () => null }));
+vi.mock('../Vehicleicon', () => ({ __esModule: true, default: () => null }));
+vi.mock('../api', () => ({
   __esModule: true,
   default: { getMapSettings: jest.fn() },
 }));
-jest.mock('../util/mqttUtils', () => ({ changeTopics: jest.fn() }));
-jest.mock('leaflet', () => ({
-  map: jest.fn(),
-  divIcon: jest.fn(),
-  marker: jest.fn(),
-  tileLayer: jest.fn(),
-  LatLng: jest.fn(),
-}));
+vi.mock('../util/mqttUtils', () => ({ changeTopics: jest.fn() }));
+vi.mock('leaflet', () => {
+  const map = vi.fn();
+  const divIcon = vi.fn();
+  const marker = vi.fn();
+  const tileLayer = vi.fn();
+  const LatLng = vi.fn();
+  return {
+    default: { map, divIcon, marker, tileLayer, LatLng },
+    // named exports so `import { LatLng } from 'leaflet'` resolves to the same instance
+    map,
+    divIcon,
+    marker,
+    tileLayer,
+    LatLng,
+  };
+});
 
 import L from 'leaflet';
 import MonitorMap from '../ui/monitorMap';
@@ -130,17 +141,25 @@ const buildMessage = (overrides: Record<string, unknown> = {}) => ({
 beforeEach(() => {
   jest.clearAllMocks();
 
-  (global as any).ResizeObserver = jest.fn().mockImplementation(() => ({
-    observe: jest.fn(),
-    unobserve: jest.fn(),
-    disconnect: jest.fn(),
-  }));
+  (global as any).ResizeObserver = jest.fn(function (this: any) {
+    return {
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn(),
+    };
+  });
 
   (L.map as jest.Mock).mockReturnValue(mockMapInstance);
   (L.marker as jest.Mock).mockReturnValue(mockMarkerInstance);
   (L.tileLayer as unknown as jest.Mock).mockReturnValue(mockTileLayerInstance);
   (L.divIcon as jest.Mock).mockImplementation(opts => opts);
-  (L.LatLng as jest.Mock).mockImplementation((lat, lng) => [lat, lng]);
+  (L.LatLng as jest.Mock).mockImplementation(function (
+    this: any,
+    lat: number,
+    lng: number,
+  ) {
+    return [lat, lng];
+  });
 
   // setView chains: L.map(...).setView(...) must return the map instance.
   mockMapInstance.setView.mockReturnValue(mockMapInstance);

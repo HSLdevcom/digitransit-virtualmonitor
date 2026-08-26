@@ -9,8 +9,8 @@ export const getConfig = () => {
       return source;
     }
   };
-  // When developing locally, you can define REACT_APP_CONFIG env variable. Use themes assinged below.
-  const env = process.env.REACT_APP_CONFIG;
+  // When developing locally, you can define VITE_CONFIG env variable. Use themes assigned below.
+  const env = import.meta.env.VITE_CONFIG;
   const allowedThemes = [
     'hsl',
     'matka',

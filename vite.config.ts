@@ -69,7 +69,7 @@ export default defineConfig(({ mode }) => ({
   },
   build: { outDir: 'build' },
   optimizeDeps: {
-    // Normalise CJS packages so their default export resolves without a manual .default unwrap
+    // Pre-bundle so its many internal CJS sub-imports resolve in one request during dev
     include: ['@digitransit-component/digitransit-component-autosuggest'],
   },
   css: {

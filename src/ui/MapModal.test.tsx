@@ -8,7 +8,7 @@ import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 
 vi.mock('react-i18next', () => ({
-  useTranslation: () => [jest.fn(key => key)],
+  useTranslation: () => [vi.fn(key => key)],
 }));
 vi.mock('./Icon', () => ({ default: () => null }));
 vi.mock('../MonitorMapContainer', () => ({ default: () => null }));
@@ -24,25 +24,25 @@ const center: [number, number] = [0.5, 0.5];
 describe('MapModal', () => {
   const defaultProps = {
     isOpen: true,
-    onClose: jest.fn(),
+    onClose: vi.fn(),
     isLandscape: true,
     mapSettings: {
       zoom: 10,
       center: center,
       bounds: bounds,
     },
-    updateMapSettings: jest.fn(),
+    updateMapSettings: vi.fn(),
     lang: 'en',
     zoom: 12,
     center: [0, 0],
     ariaHideApp: false,
 
-    setMapSettings: jest.fn(),
-    setZoom: jest.fn(),
-    setCenter: jest.fn(),
-    setBounds: jest.fn(),
-    setUserSet: jest.fn(),
-    setMapLanguage: jest.fn(),
+    setMapSettings: vi.fn(),
+    setZoom: vi.fn(),
+    setCenter: vi.fn(),
+    setBounds: vi.fn(),
+    setUserSet: vi.fn(),
+    setMapLanguage: vi.fn(),
   };
   const mockConfig = {
     map: {
@@ -80,7 +80,7 @@ describe('MapModal', () => {
   });
 
   it('calls onClose when close button is clicked', async () => {
-    const onClose = jest.fn();
+    const onClose = vi.fn();
     const screen = render(
       <MemoryRouter>{withContext(() => null, onClose)}</MemoryRouter>,
     );
@@ -89,8 +89,8 @@ describe('MapModal', () => {
   });
 
   it('calls updateMapSettings and onClose when confirm button is clicked', async () => {
-    const updateMapSettings = jest.fn();
-    const onClose = jest.fn();
+    const updateMapSettings = vi.fn();
+    const onClose = vi.fn();
     const screen = render(
       <MemoryRouter>{withContext(updateMapSettings, onClose)}</MemoryRouter>,
     );

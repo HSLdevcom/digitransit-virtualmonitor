@@ -2,7 +2,7 @@ import React from 'react';
 import { render, act, waitFor } from '@testing-library/react';
 import { ConfigContext } from '../contexts';
 
-// Mock factories only use jest.fn() with no external variable references to
+// Mock factories only use vi.fn() with no external variable references to
 // avoid babel-jest hoisting issues. Return values are set in beforeEach.
 vi.mock('leaflet/dist/leaflet.css', () => ({}));
 vi.mock('react-dom/server', () => ({
@@ -12,9 +12,9 @@ vi.mock('../ui/Icon', () => ({ __esModule: true, default: () => null }));
 vi.mock('../Vehicleicon', () => ({ __esModule: true, default: () => null }));
 vi.mock('../api', () => ({
   __esModule: true,
-  default: { getMapSettings: jest.fn() },
+  default: { getMapSettings: vi.fn() },
 }));
-vi.mock('../util/mqttUtils', () => ({ changeTopics: jest.fn() }));
+vi.mock('../util/mqttUtils', () => ({ changeTopics: vi.fn() }));
 vi.mock('leaflet', () => {
   const map = vi.fn();
   const divIcon = vi.fn();
@@ -48,24 +48,24 @@ import type { IDeparture } from '../ui/MonitorRow';
 // Shared mock objects – defined after imports, fully initialised before tests.
 // ---------------------------------------------------------------------------
 const mockMapInstance = {
-  setView: jest.fn(),
-  fitBounds: jest.fn(),
-  invalidateSize: jest.fn(),
-  on: jest.fn(),
-  off: jest.fn(),
-  remove: jest.fn(),
-  eachLayer: jest.fn(),
-  removeLayer: jest.fn(),
+  setView: vi.fn(),
+  fitBounds: vi.fn(),
+  invalidateSize: vi.fn(),
+  on: vi.fn(),
+  off: vi.fn(),
+  remove: vi.fn(),
+  eachLayer: vi.fn(),
+  removeLayer: vi.fn(),
 };
 
 const mockMarkerInstance = {
-  addTo: jest.fn(),
-  setLatLng: jest.fn(),
-  setIcon: jest.fn(),
-  remove: jest.fn(),
+  addTo: vi.fn(),
+  setLatLng: vi.fn(),
+  setIcon: vi.fn(),
+  remove: vi.fn(),
 };
 
-const mockTileLayerInstance = { addTo: jest.fn() };
+const mockTileLayerInstance = { addTo: vi.fn() };
 
 const TILE_URL = 'https://tile.example.com/{z}/{x}/{y}.png';
 
@@ -105,7 +105,7 @@ const defaultProps = {
   newTopics: undefined as string[] | undefined,
   lang: 'fi',
   vehicleMarkerState: new Map(),
-  setVehicleMarkerState: jest.fn(),
+  setVehicleMarkerState: vi.fn(),
   preview: false,
   modal: false,
 };
@@ -136,24 +136,24 @@ const buildMessage = (overrides: Record<string, unknown> = {}) => ({
 
 // ---------------------------------------------------------------------------
 // Setup – re-apply all mock implementations before every test so that
-// jest.clearAllMocks() never leaves them in an undefined state.
+// vi.clearAllMocks() never leaves them in an undefined state.
 // ---------------------------------------------------------------------------
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 
-  (global as any).ResizeObserver = jest.fn(function (this: any) {
+  (global as any).ResizeObserver = vi.fn(function (this: any) {
     return {
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn(),
+      observe: vi.fn(),
+      unobserve: vi.fn(),
+      disconnect: vi.fn(),
     };
   });
 
-  (L.map as jest.Mock).mockReturnValue(mockMapInstance);
-  (L.marker as jest.Mock).mockReturnValue(mockMarkerInstance);
-  (L.tileLayer as unknown as jest.Mock).mockReturnValue(mockTileLayerInstance);
-  (L.divIcon as jest.Mock).mockImplementation(opts => opts);
-  (L.LatLng as jest.Mock).mockImplementation(function (
+  (L.map as vi.Mock).mockReturnValue(mockMapInstance);
+  (L.marker as vi.Mock).mockReturnValue(mockMarkerInstance);
+  (L.tileLayer as unknown as vi.Mock).mockReturnValue(mockTileLayerInstance);
+  (L.divIcon as vi.Mock).mockImplementation(opts => opts);
+  (L.LatLng as vi.Mock).mockImplementation(function (
     this: any,
     lat: number,
     lng: number,
@@ -165,8 +165,8 @@ beforeEach(() => {
   mockMapInstance.setView.mockReturnValue(mockMapInstance);
   mockMarkerInstance.addTo.mockReturnValue(mockMarkerInstance);
 
-  (monitorAPI.getMapSettings as jest.Mock).mockResolvedValue(TILE_URL);
-  defaultProps.setVehicleMarkerState = jest.fn();
+  (monitorAPI.getMapSettings as vi.Mock).mockResolvedValue(TILE_URL);
+  defaultProps.setVehicleMarkerState = vi.fn();
   defaultProps.vehicleMarkerState = new Map();
 });
 
@@ -328,7 +328,7 @@ describe('Vehicle markers', () => {
     });
     await waitFor(() => expect(mockTileLayerInstance.addTo).toHaveBeenCalled());
 
-    const markerCallCount = (L.marker as jest.Mock).mock.calls.length;
+    const markerCallCount = (L.marker as vi.Mock).mock.calls.length;
 
     act(() => {
       rerender(
@@ -342,7 +342,7 @@ describe('Vehicle markers', () => {
       );
     });
 
-    expect((L.marker as jest.Mock).mock.calls.length).toBe(markerCallCount);
+    expect((L.marker as vi.Mock).mock.calls.length).toBe(markerCallCount);
   });
 
   it('does not create a marker for an HSL vehicle with invalid coordinates', () => {
@@ -369,7 +369,7 @@ describe('Vehicle markers', () => {
       departuresForMap: [hslDeparture] as unknown as IDeparture[],
     });
 
-    const markerCallsWithNaNCoords = (L.marker as jest.Mock).mock.calls.filter(
+    const markerCallsWithNaNCoords = (L.marker as vi.Mock).mock.calls.filter(
       ([coords]) => isNaN(coords[0]),
     );
     expect(markerCallsWithNaNCoords).toHaveLength(0);
@@ -385,7 +385,7 @@ describe('Vehicle markers', () => {
       });
     }).not.toThrow();
 
-    const vehicleMarkerCalls = (L.marker as jest.Mock).mock.calls.filter(
+    const vehicleMarkerCalls = (L.marker as vi.Mock).mock.calls.filter(
       ([coords]) => coords[0] === msg.lat && coords[1] === msg.long,
     );
     expect(vehicleMarkerCalls).toHaveLength(1);

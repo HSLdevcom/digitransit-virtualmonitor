@@ -1,4 +1,5 @@
-@import '../index';
+@use '../sass/variables' as *;
+@use '../index';
 
 .layout-modal {
   .monitor-modal-container {

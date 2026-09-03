@@ -35,7 +35,7 @@ const mockLanguages = ['fi', 'en'];
 const mocks = [];
 
 describe('StopRoutesModal', () => {
-  const closeModal = jest.fn();
+  const closeModal = vi.fn();
 
   const renderComponent = (props = {}) =>
     render(

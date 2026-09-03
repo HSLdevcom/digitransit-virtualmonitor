@@ -19,7 +19,7 @@ vi.mock('./TrainDataPreparer', () => ({
   default: () => React.createElement('div', null, 'TrainDataPreparer'),
 }));
 vi.mock('../util/monitorUtils', () => ({
-  isPlatformOrTrackVisible: jest.fn(() => true),
+  isPlatformOrTrackVisible: vi.fn(() => true),
 }));
 
 const defaultProps = {
@@ -39,7 +39,7 @@ const defaultProps = {
     languages: ['fi', 'en'],
   },
   isOpen: true,
-  onClose: jest.fn(),
+  onClose: vi.fn(),
   isLandscape: true,
   stations: [],
   stops: [],

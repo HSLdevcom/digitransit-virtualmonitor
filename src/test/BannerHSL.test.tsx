@@ -8,7 +8,7 @@ vi.mock('@hsl-fi/icons', () => ({
   AlertTriangleFilled: () => <svg data-testid="alert-icon" />,
 }));
 
-vi.mock('../util/logoutUtil', () => ({ logout: jest.fn() }));
+vi.mock('../util/logoutUtil', () => ({ logout: vi.fn() }));
 
 import React from 'react';
 import { render, screen, waitFor, act } from '@testing-library/react';
@@ -29,7 +29,7 @@ const configWithoutBannersUri = {
 };
 
 const mockFetch = (data: unknown) => {
-  global.fetch = jest.fn().mockResolvedValue({
+  global.fetch = vi.fn().mockResolvedValue({
     json: () => Promise.resolve(data),
   } as Response);
 };
@@ -50,7 +50,7 @@ const renderBannerHSL = (
   );
 
 beforeEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('BannerHSL crisis banners', () => {
@@ -100,7 +100,7 @@ describe('BannerHSL crisis banners', () => {
   });
 
   it('does not fetch when bannersUri is not configured', async () => {
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
     await act(async () => {
       renderBannerHSL(configWithoutBannersUri);
     });

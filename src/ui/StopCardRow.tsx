@@ -16,7 +16,9 @@ import { StopQueryDocument, StationQueryDocument } from '../generated';
 import { uniqBy, sortBy } from 'lodash';
 import StopViewTitleEditor from './StopViewTitleEditor';
 import _DTAutosuggest from '@digitransit-component/digitransit-component-autosuggest';
-// The package uses `module.exports = { default: fn }` — unwrap for Vite 8 CJS interop
+// Package's index.js does `module.exports = require(...)` conditionally, so esbuild
+// can't statically unwrap it and exports the whole CJS `{ default }` wrapper instead.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const DTAutosuggest = (_DTAutosuggest as any).default ?? _DTAutosuggest;
 import { getSearchContext } from './searchContext';
 import { getModeFromAddendum } from '../util/stopCardUtil';

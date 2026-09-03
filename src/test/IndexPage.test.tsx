@@ -37,7 +37,7 @@ it('should add createView to path when the button is clicked', async () => {
   const history = createMemoryHistory();
 
   // mock push function
-  history.push = jest.fn();
+  history.push = vi.fn();
 
   const screen = render(<Router history={history}>{withContext()}</Router>);
   await userEvent.click(screen.getByText('quickDisplayCreate'));

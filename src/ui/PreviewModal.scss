@@ -1,4 +1,6 @@
 /* stylelint-disable selector-class-pattern */
+@use '../sass/variables' as *;
+
 .preview {
   .ReactModal__Content {
     border: none !important;

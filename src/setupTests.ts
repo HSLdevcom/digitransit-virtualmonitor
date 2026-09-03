@@ -6,10 +6,6 @@ import '@testing-library/jest-dom';
 import { TextDecoder, TextEncoder } from 'util';
 Object.assign(global, { TextDecoder, TextEncoder });
 
-// Allow test files written with jest.fn() / jest.mock() to run under Vitest.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(globalThis as any).jest = vi;
-
 // jsdom 25 with Vitest's environment may not expose localStorage methods;
 // replace it with a simple in-memory implementation when needed.
 if (

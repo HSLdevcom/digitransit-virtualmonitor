@@ -22,7 +22,7 @@ vi.mock('@hsl-fi/icons', () => ({
   Alert: () => <svg data-testid="alert-icon" />,
 }));
 
-vi.mock('../util/logoutUtil', () => ({ logout: jest.fn() }));
+vi.mock('../util/logoutUtil', () => ({ logout: vi.fn() }));
 
 vi.mock('@hsl-fi/site-footer', () => ({
   SiteFooter: ({
@@ -69,7 +69,7 @@ afterEach(() => {
   document.getElementById('CookieConsent')?.remove();
   delete window.CookieConsent;
   mockLanguage = 'fi';
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Cookie Information consent script', () => {
@@ -127,7 +127,7 @@ describe('Cookie Information consent script', () => {
 
 describe('FooterHSL cookie settings button', () => {
   it('calls window.CookieConsent.renew when the platform is loaded', () => {
-    const renew = jest.fn();
+    const renew = vi.fn();
     window.CookieConsent = { renew };
 
     renderFooter({ HSLUri: 'https://www.hsl.fi' });

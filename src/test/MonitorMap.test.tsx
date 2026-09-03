@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, act, waitFor } from '@testing-library/react';
+import type { Mock } from 'vitest';
 import { ConfigContext } from '../contexts';
 
 // Mock factories only use vi.fn() with no external variable references to
@@ -149,11 +150,11 @@ beforeEach(() => {
     };
   });
 
-  (L.map as vi.Mock).mockReturnValue(mockMapInstance);
-  (L.marker as vi.Mock).mockReturnValue(mockMarkerInstance);
-  (L.tileLayer as unknown as vi.Mock).mockReturnValue(mockTileLayerInstance);
-  (L.divIcon as vi.Mock).mockImplementation(opts => opts);
-  (L.LatLng as vi.Mock).mockImplementation(function (
+  (L.map as Mock).mockReturnValue(mockMapInstance);
+  (L.marker as Mock).mockReturnValue(mockMarkerInstance);
+  (L.tileLayer as unknown as Mock).mockReturnValue(mockTileLayerInstance);
+  (L.divIcon as Mock).mockImplementation(opts => opts);
+  (L.LatLng as Mock).mockImplementation(function (
     this: any,
     lat: number,
     lng: number,
@@ -165,7 +166,7 @@ beforeEach(() => {
   mockMapInstance.setView.mockReturnValue(mockMapInstance);
   mockMarkerInstance.addTo.mockReturnValue(mockMarkerInstance);
 
-  (monitorAPI.getMapSettings as vi.Mock).mockResolvedValue(TILE_URL);
+  (monitorAPI.getMapSettings as Mock).mockResolvedValue(TILE_URL);
   defaultProps.setVehicleMarkerState = vi.fn();
   defaultProps.vehicleMarkerState = new Map();
 });
@@ -328,7 +329,7 @@ describe('Vehicle markers', () => {
     });
     await waitFor(() => expect(mockTileLayerInstance.addTo).toHaveBeenCalled());
 
-    const markerCallCount = (L.marker as vi.Mock).mock.calls.length;
+    const markerCallCount = (L.marker as Mock).mock.calls.length;
 
     act(() => {
       rerender(
@@ -342,7 +343,7 @@ describe('Vehicle markers', () => {
       );
     });
 
-    expect((L.marker as vi.Mock).mock.calls.length).toBe(markerCallCount);
+    expect((L.marker as Mock).mock.calls.length).toBe(markerCallCount);
   });
 
   it('does not create a marker for an HSL vehicle with invalid coordinates', () => {
@@ -369,7 +370,7 @@ describe('Vehicle markers', () => {
       departuresForMap: [hslDeparture] as unknown as IDeparture[],
     });
 
-    const markerCallsWithNaNCoords = (L.marker as vi.Mock).mock.calls.filter(
+    const markerCallsWithNaNCoords = (L.marker as Mock).mock.calls.filter(
       ([coords]) => isNaN(coords[0]),
     );
     expect(markerCallsWithNaNCoords).toHaveLength(0);
@@ -385,7 +386,7 @@ describe('Vehicle markers', () => {
       });
     }).not.toThrow();
 
-    const vehicleMarkerCalls = (L.marker as vi.Mock).mock.calls.filter(
+    const vehicleMarkerCalls = (L.marker as Mock).mock.calls.filter(
       ([coords]) => coords[0] === msg.lat && coords[1] === msg.long,
     );
     expect(vehicleMarkerCalls).toHaveLength(1);

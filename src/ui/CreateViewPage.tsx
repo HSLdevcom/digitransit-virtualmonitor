@@ -6,7 +6,7 @@ import { defaultStopCard } from '../util/stopCardUtil';
 import StopCardListDataContainer from './StopCardListDataContainer';
 import Loading from './Loading';
 import { UserContext } from '../contexts';
-import { Redirect, useHistory, useLocation } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { getParams } from '../util/queryUtils';
 import Modal from '@hsl-fi/modal';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +25,7 @@ const CreateViewPage = () => {
   const [t] = useTranslation();
   const user = useContext(UserContext);
   const location: Location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [stopCardList, setStopCardList] = useState(
     location?.state?.view ? location.state.view.cards : null,
   );
@@ -48,9 +48,12 @@ const CreateViewPage = () => {
       queryParams.forEach((_, key, s) => {
         s.delete(key);
       });
-      history.replace({
-        search: queryParams.toString(),
-      });
+      navigate(
+        {
+          search: queryParams.toString(),
+        },
+        { replace: true },
+      );
     }
   }, [noMonitorFound]);
 
@@ -119,11 +122,10 @@ const CreateViewPage = () => {
     // user is logged in and is attempting to modify a monitor created without logging in.
     // redirect and render pre-filled create new monitor-page
     return (
-      <Redirect
-        to={{
-          pathname: '/monitors/createview',
-          state: { view: { cards: stopCardList, languages: languages } },
-        }}
+      <Navigate
+        to="/monitors/createview"
+        state={{ view: { cards: stopCardList, languages: languages } }}
+        replace
       />
     );
   }
@@ -137,7 +139,7 @@ const CreateViewPage = () => {
   ) {
     // user is trying to access the non logged in create page while logged in,
     // redirect to correct page
-    return <Redirect to={{ pathname: '/monitors/createview' }} />;
+    return <Navigate to="/monitors/createview" replace />;
   }
   if (((!hash && !url) || noMonitorFound) && !location?.state?.view) {
     return (

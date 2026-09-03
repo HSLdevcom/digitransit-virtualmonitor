@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import { defaultStopCard } from '../util/stopCardUtil';
 import { useQuery } from '@apollo/client';
 import monitorAPI from '../api';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import Loading from './Loading';
 import hash from 'object-hash';
 import { GetStopsForOldMonitorsDocument } from '../generated';
@@ -94,12 +94,13 @@ const OldMonitorParser: FC<IProps> = ({ display }) => {
   }
   if (redirect) {
     return (
-      <Redirect
+      <Navigate
         to={{
           pathname: '/view',
           search: `?cont=${newCard.contenthash}`,
-          state: { view: newCard.cards },
         }}
+        state={{ view: newCard.cards }}
+        replace
       />
     );
   }

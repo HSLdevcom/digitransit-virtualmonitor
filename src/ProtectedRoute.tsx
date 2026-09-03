@@ -1,22 +1,11 @@
-import React, { FC, useContext } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { FC, useContext } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
 import { UserContext } from './contexts';
 
-interface IProps {
-  component: any;
-  path: string;
-}
-const ProtectedRoute: FC<IProps> = ({ component: Component, ...props }) => {
+const ProtectedRoute: FC = () => {
   const user = useContext(UserContext);
 
-  return (
-    <Route
-      {...props}
-      render={props =>
-        user?.sub ? <Component {...props} /> : <Redirect to="/" />
-      }
-    />
-  );
+  return user?.sub ? <Outlet /> : <Navigate to="/" replace />;
 };
 
 export default ProtectedRoute;

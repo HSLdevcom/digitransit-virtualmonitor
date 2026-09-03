@@ -1,7 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Router, MemoryRouter, Link } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
+import { MemoryRouter, Link, Route, Routes } from 'react-router-dom';
 import IndexPage from '../ui/IndexPage';
 import userEvent from '@testing-library/user-event';
 import { ConfigContext } from '../contexts';
@@ -34,14 +33,16 @@ const withContext = () => {
 };
 
 it('should add createView to path when the button is clicked', async () => {
-  const history = createMemoryHistory();
-
-  // mock push function
-  history.push = vi.fn();
-
-  const screen = render(<Router history={history}>{withContext()}</Router>);
+  const screen = render(
+    <MemoryRouter initialEntries={['/']}>
+      <Routes>
+        <Route path="/" element={withContext()} />
+        <Route path="/createview" element={<div>createview probe</div>} />
+      </Routes>
+    </MemoryRouter>,
+  );
   await userEvent.click(screen.getByText('quickDisplayCreate'));
-  expect(history.push).toHaveBeenCalledWith('/createview');
+  expect(screen.getByText('createview probe')).toBeInTheDocument();
 });
 
 it('render an image', () => {

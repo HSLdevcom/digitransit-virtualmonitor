@@ -3,7 +3,7 @@ import { ConfigContext, UserContext } from './contexts';
 import BannerContainer from './ui/BannerContainer';
 import FooterContainer from './ui/FooterContainer';
 import IndexPage from './ui/IndexPage';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { getLoginUri } from './util/getResources';
@@ -49,11 +49,7 @@ const LandingPage = () => {
       <BannerContainer />
       <main id="mainContent">
         {logIn ? (
-          <Redirect
-            to={{
-              pathname: '/monitors',
-            }}
-          />
+          <Navigate to="/monitors" replace />
         ) : (
           <IndexPage buttons={buttons} renderLogInMessage />
         )}

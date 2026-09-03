@@ -1,11 +1,11 @@
 import React, { FC } from 'react';
+import { useLocation } from 'react-router-dom';
 import PreviewModal from './PreviewModal';
 import WithDatabaseConnection from './WithDatabaseConnection';
 import { getTrainStationData } from '../util/monitorUtils';
 import { IMapSettings, IMonitor } from '../util/Interfaces';
 
 interface IProps {
-  readonly location?: any;
   readonly preview?: {
     view: IMonitor;
     languages: Array<string>;
@@ -16,8 +16,9 @@ interface IProps {
   };
 }
 
-const PrepareMonitor: FC<IProps> = ({ location, preview }) => {
-  const monitor = location ? location?.state?.view : preview.view;
+const PrepareMonitor: FC<IProps> = ({ preview }) => {
+  const location = useLocation();
+  const monitor = preview ? preview.view : location?.state?.view;
   const stations = monitor ? getTrainStationData(monitor, 'STATION') : [];
   const stops = monitor ? getTrainStationData(monitor, 'STOP') : [];
   if (preview) {

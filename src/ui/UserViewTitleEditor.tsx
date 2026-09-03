@@ -1,6 +1,6 @@
 import React, { FC, useContext, useState } from 'react';
 import Icon from './Icon';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import monitorAPI from '../api';
 import { useTranslation } from 'react-i18next';
 import DeleteModal from './DeleteModal';
@@ -40,13 +40,7 @@ const UserViewTitleEditor: FC<IProps> = ({
   };
 
   if (isDeleted) {
-    return (
-      <Redirect
-        to={{
-          pathname: '/monitors',
-        }}
-      />
-    );
+    return <Navigate to="/monitors" replace />;
   }
 
   return (

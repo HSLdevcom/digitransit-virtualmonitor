@@ -5,7 +5,7 @@ import StopCardRow from './StopCardRow';
 import hash from 'object-hash';
 import { useTranslation } from 'react-i18next';
 import monitorAPI from '../api';
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import DisplaySettings from './DisplaySettings';
 import { getLayout } from '../util/getResources';
 import { defaultStopCard, getStopIcon } from '../util/stopCardUtil';
@@ -504,21 +504,18 @@ const StopCardListContainer: FC<IProps> = ({
     return (
       <>
         {isStatic ? (
-          <Redirect
-            to={{
-              pathname: '/monitors',
-            }}
-          />
+          <Navigate to="/monitors" replace />
         ) : (
-          <Redirect
+          <Navigate
             to={{
               pathname: '/view',
               search: search,
-              state: {
-                view: view.cards,
-                viewTitle: viewTitle,
-              },
             }}
+            state={{
+              view: view.cards,
+              viewTitle: viewTitle,
+            }}
+            replace
           />
         )}
       </>

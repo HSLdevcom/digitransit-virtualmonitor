@@ -1,7 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Router, MemoryRouter, Link } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
+import { MemoryRouter, Link } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { ConfigContext } from '../contexts';
 import MonitorRowContainer from '../ui/MonitorRowContainer';

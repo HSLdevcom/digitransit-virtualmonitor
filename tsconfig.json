@@ -17,7 +17,8 @@
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "experimentalDecorators": true,
-    "typeRoots": ["./src/@types", "./node_modules/@types"]
+    "typeRoots": ["./src/@types", "./node_modules/@types"],
+    "types": ["vitest/globals"]
   },
   "include": ["src", "vite.config.ts"]
 }

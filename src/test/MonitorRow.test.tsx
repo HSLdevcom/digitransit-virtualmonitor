@@ -1,7 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { Router, MemoryRouter } from 'react-router-dom';
-import { createMemoryHistory } from 'history';
+import { MemoryRouter } from 'react-router-dom';
 import MonitorRow from '../ui/MonitorRow';
 import { departure, stop } from './data/monitor';
 import { ConfigContext } from '../contexts';

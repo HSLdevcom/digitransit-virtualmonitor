@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 import React, { FC, useEffect, useState, useContext, useRef } from 'react';
-import { Route, RouteComponentProps, Switch } from 'react-router-dom';
+import { Route, Routes, useParams } from 'react-router-dom';
 import LandingPage from './LandingPage';
 import DisplayUrlCompression from './ui/DisplayUrlCompression';
 import CreateViewPage from './ui/CreateViewPage';
@@ -194,6 +194,41 @@ const App: FC<IConfigurationProps> = props => {
     localStorage.setItem('lang', 'fi');
   }
 
+  // Route param extraction closures — kept inside App to access props.search?.title
+  const CompressedDisplayRoute = () => {
+    const { version, packedDisplay } =
+      useParams() as unknown as ICompressedDisplayRouteParams;
+    return (
+      <DisplayUrlCompression
+        version={decodeURIComponent(version)}
+        packedString={decodeURIComponent(packedDisplay)}
+      />
+    );
+  };
+
+  const StopMonitorRoute = () => {
+    const { stopId, layout } = useParams() as unknown as IStopMonitorProps;
+    return (
+      <StopMonitorContainer
+        stopIds={stopId.split(',')}
+        layout={layout ? Number(layout) : 8}
+        urlTitle={props.search?.title}
+      />
+    );
+  };
+
+  const StationMonitorRoute = () => {
+    const { stopId, layout } = useParams() as unknown as IStopMonitorProps;
+    return (
+      <StopMonitorContainer
+        stopIds={stopId.split(',')}
+        layout={layout ? Number(layout) : 8}
+        urlTitle={props.search?.title}
+        station
+      />
+    );
+  };
+
   return (
     <div className="App">
       <Helmet>
@@ -206,14 +241,10 @@ const App: FC<IConfigurationProps> = props => {
       <ApolloProvider client={client}>
         <UserContext.Provider value={user}>
           <FavouritesContext.Provider value={favourites}>
-            <Switch>
+            <Routes>
               <Route
-                path={'/createview'}
-                component={({
-                  match: {
-                    params: {},
-                  },
-                }: RouteComponentProps) => (
+                path="/createview"
+                element={
                   <>
                     <SkipToMainContent />
                     <BannerContainer />
@@ -222,101 +253,61 @@ const App: FC<IConfigurationProps> = props => {
                     </main>
                     <FooterContainer />
                   </>
-                )}
+                }
               />
-              <Route path={'/view'} component={PrepareMonitor} />
-              <Route path={'/static'} component={PrepareMonitor} />
-              <ProtectedRoute
-                path={'/monitors/createview'}
-                component={({
-                  match: {
-                    params: {},
-                  },
-                }: RouteComponentProps) => (
-                  <>
-                    <SkipToMainContent />
-                    <BannerContainer />
-                    <main id="mainContent">
-                      <CreateViewPage />
-                    </main>
-                    <FooterContainer />
-                  </>
-                )}
-              />
-              <ProtectedRoute
-                path={'/monitors'}
-                component={() => (
-                  <>
-                    <SkipToMainContent />
-                    <BannerContainer />
-                    <main id="mainContent">
-                      <UserMonitors />
-                    </main>
-                    <FooterContainer />
-                  </>
-                )}
-              />
-              <Route
-                path={'/urld/:version/:packedDisplay'}
-                component={({
-                  match: {
-                    params: { version, packedDisplay },
-                  },
-                }: RouteComponentProps<ICompressedDisplayRouteParams>) => {
-                  return (
+              <Route path="/view" element={<PrepareMonitor />} />
+              <Route path="/static" element={<PrepareMonitor />} />
+              <Route element={<ProtectedRoute />}>
+                <Route
+                  path="/monitors/createview"
+                  element={
                     <>
-                      <DisplayUrlCompression
-                        version={decodeURIComponent(version)}
-                        packedString={decodeURIComponent(packedDisplay)}
-                      />
+                      <SkipToMainContent />
+                      <BannerContainer />
+                      <main id="mainContent">
+                        <CreateViewPage />
+                      </main>
+                      <FooterContainer />
                     </>
-                  );
-                }}
+                  }
+                />
+                <Route
+                  path="/monitors"
+                  element={
+                    <>
+                      <SkipToMainContent />
+                      <BannerContainer />
+                      <main id="mainContent">
+                        <UserMonitors />
+                      </main>
+                      <FooterContainer />
+                    </>
+                  }
+                />
+              </Route>
+              <Route
+                path="/urld/:version/:packedDisplay"
+                element={<CompressedDisplayRoute />}
               />
               <Route
-                path={'/stop/:stopId/:layout?'}
-                component={({
-                  match: {
-                    params: { stopId, layout },
-                  },
-                }: RouteComponentProps<IStopMonitorProps>) => (
-                  <StopMonitorContainer
-                    stopIds={stopId.split(',')}
-                    layout={layout ? Number(layout) : 8}
-                    urlTitle={props.search?.title}
-                  />
-                )}
+                path="/stop/:stopId/:layout?"
+                element={<StopMonitorRoute />}
               />
               <Route
-                path={'/station/:stopId/:layout?'}
-                component={({
-                  match: {
-                    params: { stopId, layout },
-                  },
-                }: RouteComponentProps<IStopMonitorProps>) => (
-                  <StopMonitorContainer
-                    stopIds={stopId.split(',')}
-                    layout={layout ? Number(layout) : 8}
-                    urlTitle={props.search?.title}
-                    station
-                  />
-                )}
+                path="/station/:stopId/:layout?"
+                element={<StationMonitorRoute />}
               />
-              <Route path={'/version'} component={Version} />
+              <Route path="/version" element={<Version />} />
               <Route
-                path={'/'}
-                component={({
-                  match: {
-                    params: {},
-                  },
-                }: RouteComponentProps) => (
+                path="/"
+                element={
                   <>
                     <SkipToMainContent />
                     <LandingPage />
                   </>
-                )}
+                }
               />
-            </Switch>
+            </Routes>
           </FavouritesContext.Provider>
         </UserContext.Provider>
       </ApolloProvider>

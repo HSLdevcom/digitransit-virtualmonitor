@@ -84,7 +84,8 @@ const MonitorOverlay: FC<IProps> = ({
       ) : (
         <Link
           className="link"
-          to={{ pathname: to, state: state, search: search }}
+          to={{ pathname: to, search: search }}
+          state={state}
         >
           <span>{text}</span>
         </Link>

@@ -1,6 +1,7 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import monitorAPI from '../api';
+import { SetQueryError } from '../util/Interfaces';
 import { MonitorContext } from '../contexts';
 import Icon from './Icon';
 import MonitorOverlay from './MonitorOverlay';
@@ -8,7 +9,7 @@ import MonitorTitlebar from './MonitorTitleBar';
 import cx from 'classnames';
 
 interface IProps {
-  setQueryError?: any;
+  setQueryError?: SetQueryError;
   preview?: boolean;
 }
 
@@ -22,7 +23,7 @@ const QueryError: FC<IProps> = ({ setQueryError, preview }) => {
   useEffect(() => {
     const controller = new AbortController();
     const id = setInterval(() => {
-      monitorAPI.getPing(controller.signal).then((res: any) => {
+      monitorAPI.getPing(controller.signal).then(res => {
         if (res.status === 200) {
           setQueryError(false);
         }

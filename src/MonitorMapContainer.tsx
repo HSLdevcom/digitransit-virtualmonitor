@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import cx from 'classnames';
 import MonitorMap from './ui/monitorMap';
-import { IMapSettings } from './util/Interfaces';
+import { IMapSettings, IMqttProps } from './util/Interfaces';
 import { IDeparture } from './ui/MonitorRow';
 interface IProps {
   preview?: boolean;
@@ -10,7 +10,7 @@ interface IProps {
   updateMap?: (settings: IMapSettings) => void;
   departuresForMap?: Array<IDeparture>;
   lang: string;
-  mqttProps?: any;
+  mqttProps?: IMqttProps;
 }
 const MonitorMapContainer: FC<IProps> = ({
   preview,

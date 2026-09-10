@@ -5,8 +5,8 @@ import Loading from './Loading';
 
 interface IProps {
   name: string;
-  setDeleteModalOpen: any;
-  onDeleteCallBack: any;
+  setDeleteModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onDeleteCallBack: () => void;
   loading?: boolean;
 }
 

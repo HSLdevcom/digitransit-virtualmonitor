@@ -6,7 +6,7 @@ import cx from 'classnames';
 import { ConfigContext } from '../contexts';
 
 interface IProps {
-  buttons: any;
+  buttons: React.ReactNode;
   renderLogInMessage?: boolean;
 }
 

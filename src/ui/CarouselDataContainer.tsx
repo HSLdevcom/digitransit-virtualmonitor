@@ -12,7 +12,7 @@ import {
   GetDeparturesForStationsDocument,
 } from '../generated';
 import { getLayout } from '../util/getResources';
-import { ITrainData } from '../util/Interfaces';
+import { ITrainData, SetQueryError } from '../util/Interfaces';
 import {
   getStopsAndStationsFromViews,
   createDepartureArray,
@@ -37,7 +37,7 @@ interface IProps {
   trainsWithTrack?: Array<ITrainData>;
   fromStop?: boolean;
   initTime: number;
-  setQueryError?: any;
+  setQueryError?: SetQueryError;
   queryError?: boolean;
 }
 

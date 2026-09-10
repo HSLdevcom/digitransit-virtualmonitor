@@ -1,15 +1,28 @@
 import { getConfig } from './util/getConfig';
+import { IMonitor, IUser, IFavourite } from './util/Interfaces';
+import type { IOldMonitorDisplay } from './ui/OldMonitorParser';
 
 const baseAPI = '/api';
 
-function statusCheckedResult(result) {
+interface IFetchOptions {
+  method?: string;
+  credentials?: string;
+  body?: string;
+  headers?: Record<string, string>;
+}
+
+function statusCheckedResult(result: Response): Promise<unknown> {
   if (result.status > 399) {
     throw new Error(`Error: status ${result.status}`);
   }
   return result.json();
 }
 
-const fetchData = (path, options, signal = undefined) => {
+const fetchData = <T,>(
+  path: string,
+  options: IFetchOptions,
+  signal: AbortSignal = undefined,
+): Promise<T> => {
   return new Promise((resolve, reject) => {
     const jsonResponse = !options.method || options.method === 'POST';
     fetch(`${baseAPI}/${path}`, {
@@ -18,9 +31,9 @@ const fetchData = (path, options, signal = undefined) => {
       },
       ...options,
       signal: signal ?? undefined,
-    })
+    } as RequestInit)
       .then(result => (jsonResponse ? statusCheckedResult(result) : result))
-      .then(json => resolve(json))
+      .then(json => resolve(json as T))
       .catch(e => {
         reject(e);
       });
@@ -28,14 +41,14 @@ const fetchData = (path, options, signal = undefined) => {
 };
 
 const monitorAPI = {
-  getMapSettings(lang, signal = undefined) {
-    return fetchData(`map/${lang}`, {}, signal);
+  getMapSettings(lang: string, signal: AbortSignal = undefined) {
+    return fetchData<string>(`map/${lang}`, {}, signal);
   },
-  getPing(signal = undefined) {
+  getPing(signal: AbortSignal = undefined) {
     const options = {
       method: 'GET',
     };
-    return fetchData('status', options, signal);
+    return fetchData<Response>('status', options, signal);
   },
   getUser() {
     const controller = new AbortController();
@@ -43,33 +56,33 @@ const monitorAPI = {
     const options = {
       credentials: 'include',
     };
-    return fetchData('user', options, controller.signal).finally(() =>
+    return fetchData<IUser>('user', options, controller.signal).finally(() =>
       clearTimeout(timeoutId),
     );
   },
   getFavourites() {
-    return fetchData('user/favourites', {});
+    return fetchData<Array<IFavourite>>('user/favourites', {});
   },
-  get(monitor, signal = undefined) {
-    return fetchData(`monitor/${monitor}`, {}, signal);
+  get(monitor: string, signal: AbortSignal = undefined) {
+    return fetchData<IMonitor>(`monitor/${monitor}`, {}, signal);
   },
-  isUserOwned(monitor, signal = undefined) {
+  isUserOwned(monitor: string, signal: AbortSignal = undefined) {
     const options = {
       method: 'GET',
     };
-    return fetchData(`userowned/${monitor}`, options, signal);
+    return fetchData<Response>(`userowned/${monitor}`, options, signal);
   },
-  getStatic(monitor, signal = undefined) {
-    return fetchData(`staticmonitor/${monitor}`, {}, signal);
+  getStatic(monitor: string, signal: AbortSignal = undefined) {
+    return fetchData<IMonitor>(`staticmonitor/${monitor}`, {}, signal);
   },
-  getAllMonitorsForUser(signal) {
+  getAllMonitorsForUser(signal: AbortSignal = undefined) {
     const instanceName = getConfig().name;
     return fetchData(`usermonitors/${instanceName}`, {}, signal);
   },
-  getMonitorsForUser(urls) {
+  getMonitorsForUser(urls: string) {
     return fetchData(`usermonitors/${urls}`, {});
   },
-  create(monitor) {
+  create(monitor: IMonitor) {
     const options = {
       method: 'PUT',
       body: JSON.stringify(monitor),
@@ -78,9 +91,9 @@ const monitorAPI = {
         'Content-Type': 'application/json',
       },
     };
-    return fetchData(`monitor`, options);
+    return fetchData<Response>(`monitor`, options);
   },
-  decompress(base64string) {
+  decompress(base64string: string) {
     const options = {
       method: 'POST',
       headers: {
@@ -91,9 +104,10 @@ const monitorAPI = {
         payload: base64string,
       }),
     };
-    return fetchData(`decompress`, options);
+    // Legacy pre-migration monitor format, not IMonitor — see OldMonitorParser's migrateMonitor
+    return fetchData<IOldMonitorDisplay>(`decompress`, options);
   },
-  createStatic(monitor) {
+  createStatic(monitor: IMonitor) {
     const options = {
       method: 'PUT',
       credentials: 'include',
@@ -103,9 +117,9 @@ const monitorAPI = {
         'Content-Type': 'application/json',
       },
     };
-    return fetchData(`staticmonitor`, options);
+    return fetchData<Response>(`staticmonitor`, options);
   },
-  updateStatic(monitor) {
+  updateStatic(monitor: IMonitor) {
     const options = {
       method: 'POST',
       body: JSON.stringify(monitor),
@@ -114,9 +128,9 @@ const monitorAPI = {
         'Content-Type': 'application/json',
       },
     };
-    return fetchData(`staticmonitor`, options);
+    return fetchData<IMonitor>(`staticmonitor`, options);
   },
-  deleteStatic(hash, url) {
+  deleteStatic(hash: string, url: string) {
     const options = {
       method: 'DELETE',
       body: JSON.stringify({
@@ -128,7 +142,7 @@ const monitorAPI = {
         'Content-Type': 'application/json',
       },
     };
-    return fetchData(`staticmonitor`, options);
+    return fetchData<Response>(`staticmonitor`, options);
   },
 };
 

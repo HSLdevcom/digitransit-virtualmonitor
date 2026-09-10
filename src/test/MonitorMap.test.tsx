@@ -1,6 +1,8 @@
 import React from 'react';
 import { render, act, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
+import type { MutableRefObject } from 'react';
+import type { MqttClient } from 'mqtt';
 import { ConfigContext } from '../contexts';
 
 // Mock factories only use vi.fn() with no external variable references to
@@ -101,8 +103,12 @@ const defaultProps = {
   mapSettings: defaultMapSettings,
   messages: [] as IMessage[],
   departuresForMap: [] as IDeparture[],
-  clientRef: { current: null } as { current: unknown },
-  topicRef: { current: null } as { current: unknown },
+  clientRef: {
+    current: null,
+  } as unknown as MutableRefObject<MqttClient | null>,
+  topicRef: {
+    current: null,
+  } as unknown as MutableRefObject<Array<string> | null>,
   newTopics: undefined as string[] | undefined,
   lang: 'fi',
   vehicleMarkerState: new Map(),
@@ -411,8 +417,12 @@ describe('Vehicle markers', () => {
 // ---------------------------------------------------------------------------
 describe('MQTT topic updates', () => {
   it('calls changeTopics with the correct payload when refs and newTopics are set', () => {
-    const topicRef = { current: ['/hfp/v2/journey/ongoing/#'] };
-    const clientRef = { current: {} };
+    const topicRef = {
+      current: ['/hfp/v2/journey/ongoing/#'],
+    } as unknown as MutableRefObject<Array<string> | null>;
+    const clientRef = {
+      current: {},
+    } as unknown as MutableRefObject<MqttClient | null>;
     const newTopics = ['/hfp/v2/journey/ongoing/+/#'];
 
     renderWithContext({ topicRef, clientRef, newTopics });
@@ -429,8 +439,12 @@ describe('MQTT topic updates', () => {
 
   it('does not call changeTopics when topicRef.current is null', () => {
     renderWithContext({
-      topicRef: { current: null },
-      clientRef: { current: {} },
+      topicRef: {
+        current: null,
+      } as unknown as MutableRefObject<Array<string> | null>,
+      clientRef: {
+        current: {},
+      } as unknown as MutableRefObject<MqttClient | null>,
       newTopics: ['/hfp/v2/journey/ongoing/#'],
     });
     expect(changeTopics).not.toHaveBeenCalled();
@@ -438,8 +452,12 @@ describe('MQTT topic updates', () => {
 
   it('does not call changeTopics when newTopics is undefined', () => {
     renderWithContext({
-      topicRef: { current: ['/hfp/v2/#'] },
-      clientRef: { current: {} },
+      topicRef: {
+        current: ['/hfp/v2/#'],
+      } as unknown as MutableRefObject<Array<string> | null>,
+      clientRef: {
+        current: {},
+      } as unknown as MutableRefObject<MqttClient | null>,
       newTopics: undefined,
     });
     expect(changeTopics).not.toHaveBeenCalled();

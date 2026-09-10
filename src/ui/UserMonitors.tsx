@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import monitorAPI from '../api';
-import { ISides, ITitle } from '../util/Interfaces';
+import { ISides, ITitle, IView as ISharedView } from '../util/Interfaces';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
 import IndexPage from './IndexPage';
@@ -16,7 +16,7 @@ interface Iv {
   id: number;
   layout: number;
   title: ITitle;
-  cards?: any;
+  cards?: Array<ISharedView>;
   contenthash?: string;
 }
 interface IState {

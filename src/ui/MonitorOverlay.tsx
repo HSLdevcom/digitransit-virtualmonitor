@@ -27,7 +27,7 @@ const MonitorOverlay: FC<IProps> = ({
   let search = '';
   useEffect(() => {
     if (view && user.sub && window.location.href.indexOf('url=') !== -1) {
-      monitorAPI.isUserOwned(view.url).then((r: any) => {
+      monitorAPI.isUserOwned(view.url).then(r => {
         if (r.status === 200) {
           setUserOwned(true);
         }

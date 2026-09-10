@@ -139,7 +139,7 @@ const ImportMonitorModal: FC<IProps> = ({
       url: newUuid,
       instance: getConfig().name,
     };
-    monitorAPI.createStatic(newStaticMonitor).then((res: any) => {
+    monitorAPI.createStatic(newStaticMonitor).then(res => {
       if (res.status === 200 || res.status === 409) {
         refetchMonitors();
         setImportState({ addingMonitor: false });

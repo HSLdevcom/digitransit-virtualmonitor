@@ -6,7 +6,7 @@ import Checkbox from './CheckBox';
 import Dropdown from './Dropdown';
 import Icon from './Icon';
 import { useTranslation } from 'react-i18next';
-import { IStopInfoPlus, IRoute } from '../util/Interfaces';
+import { IStopInfoPlus, ISettings } from '../util/Interfaces';
 import Modal from 'react-modal';
 import { getRouteMode } from '../util/stopCardUtil';
 import { isKeyboardSelectionEvent } from '../util/browser';
@@ -19,8 +19,8 @@ if (process.env.NODE_ENV !== 'test') Modal.setAppElement('#root');
 interface Props {
   showModal: boolean;
   stop: IStopInfoPlus;
-  closeModal: (route: IRoute[]) => void;
-  stopSettings?: any;
+  closeModal: (settings: ISettings | null) => void;
+  stopSettings?: ISettings;
   combinedPatterns: string[];
   languages: Array<string>;
   ariaHideApp?: boolean; // For unit testing
@@ -40,7 +40,7 @@ const StopRoutesModal: FC<Props> = props => {
   const config = useContext(ConfigContext);
   const [t] = useTranslation();
   const [showInputs, setShowInputs] = useState(false);
-  const [settings, setSettings] = useState(
+  const [settings, setSettings] = useState<ISettings>(
     props.stopSettings || defaultSettings,
   );
 

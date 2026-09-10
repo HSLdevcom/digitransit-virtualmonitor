@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { ICard } from '../util/Interfaces';
+import { ICard, SetQueryError } from '../util/Interfaces';
 import Loading from './Loading';
 import { trainStationMap } from '../util/trainStations';
 import { stringifyPattern } from '../util/monitorUtils';
@@ -59,7 +59,7 @@ const createLineIdsArray = (data, hiddenRoutes) => {
 interface IProps {
   stations?: Array<ICard>;
   stops?: Array<ICard>;
-  setQueryError?: any;
+  setQueryError?: SetQueryError;
   queryError?: boolean;
   [x: string]: any;
 }

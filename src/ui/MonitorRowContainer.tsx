@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC } from 'react';
 import MonitorRow, { IDeparture } from './MonitorRow';
 import cx from 'classnames';
 import { formatDate, setDate, formattedDateTimeFromSeconds } from '../time';
 import { getLayout } from '../util/getResources';
-import { IClosedStop } from '../util/Interfaces';
+import { IClosedStop, IStop } from '../util/Interfaces';
 import { useTranslation } from 'react-i18next';
 import { stoptimeSpecificDepartureId } from '../util/monitorUtils';
 
@@ -12,13 +11,13 @@ interface IProps {
   viewId: number;
   departuresLeft: Array<IDeparture>;
   departuresRight: Array<IDeparture>;
-  rightStops: Array<any>;
-  leftStops: Array<any>;
+  rightStops: Array<IStop>;
+  leftStops: Array<IStop>;
   currentLang: string;
-  layout: any;
+  layout: number;
   isLandscape: boolean;
   alertState: number;
-  alertComponent: any;
+  alertComponent: React.ReactNode;
   alertRowSpan: number;
   showMinutes?: number;
   closedStopViews: Array<IClosedStop>;

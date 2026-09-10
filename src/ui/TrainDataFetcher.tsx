@@ -9,7 +9,7 @@ import {
   getTomorrowWithFormat,
 } from '../time';
 import { sortBy, uniqBy } from 'lodash';
-import { ITrainData } from '../util/Interfaces';
+import { ITrainData, SetQueryError } from '../util/Interfaces';
 
 const GET_TRACKS = gql`
   query getTracks(
@@ -75,7 +75,7 @@ interface IProps {
   preview?: boolean;
   defaultLines?: any;
   stopAndRoutes?: any;
-  setQueryError?: any;
+  setQueryError?: SetQueryError;
 }
 
 const TrainDataFetcher: FC<IProps> = ({

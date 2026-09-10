@@ -3,7 +3,7 @@ import cx from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from '../contexts';
 import StopViewTitleEditor from './StopViewTitleEditor';
-import { ICardInfo, IMapSettings } from '../util/Interfaces';
+import { ICardInfo, IMapSettings, IView } from '../util/Interfaces';
 import Icon from './Icon';
 import Toggle from './Toggle';
 import LayoutAndTimeContainer from './LayoutAndTimeContainer';
@@ -11,7 +11,7 @@ import { SupportedLanguage } from '../i18n';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface IProps {
-  readonly cards: Array<any>;
+  readonly cards: Array<IView>;
   readonly item: ICardInfo;
   readonly onCardDelete?: (id: number) => void;
   readonly onCardMove?: (oldIndex: number, newIndex: number) => void;

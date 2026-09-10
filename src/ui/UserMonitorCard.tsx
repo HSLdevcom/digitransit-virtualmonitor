@@ -8,13 +8,13 @@ import { getTrainStationData } from '../util/monitorUtils';
 import DeleteModal from './DeleteModal';
 import { ConfigContext } from '../contexts';
 import InputWithEditIcon from './InputWithEditIcon';
-import { IMapSettings } from '../util/Interfaces';
+import { IMapSettings, IView as ISharedView } from '../util/Interfaces';
 import { getStopIcon } from '../util/stopCardUtil';
 
 interface IView {
   name?: string;
   languages: Array<string>;
-  cards?: any;
+  cards?: Array<ISharedView>;
   contenthash?: string;
   url?: string;
   id: string;
@@ -23,7 +23,7 @@ interface IView {
 
 interface IProps {
   view: IView;
-  onDelete: any;
+  onDelete: (deleted: boolean) => void;
   preview?: boolean;
   setTitle?: (string) => void;
 }
@@ -126,7 +126,7 @@ const UserMonitorCard: React.FC<IProps> = ({
       return (
         <div key={`c#${i}`} className="card-item">
           <div className="card-container">
-            <Icon img={'layout'.concat(c.layout)} />
+            <Icon img={`layout${c.layout}`} />
             <div className="data">{titlesAndStops}</div>
           </div>
         </div>

@@ -1,6 +1,11 @@
 import React, { FC, useState, useEffect, useContext } from 'react';
 import cx from 'classnames';
-import { IView, IClosedStop, IMapSettings } from '../util/Interfaces';
+import {
+  IView,
+  IClosedStop,
+  IMapSettings,
+  IMqttProps,
+} from '../util/Interfaces';
 import MonitorRowContainer from './MonitorRowContainer';
 import { getLayout, getRouteCodeColumnWidth } from '../util/getResources';
 import { IDeparture } from './MonitorRow';
@@ -26,12 +31,12 @@ interface IProps {
   readonly departures: Array<Array<IDeparture>>;
   currentLang: string;
   readonly isPreview: boolean;
-  alertComponent: any;
+  alertComponent: React.ReactNode;
   alertRowSpan: number;
   closedStopViews: Array<IClosedStop>;
   mapSettings?: IMapSettings;
   mapLanguage?: string;
-  mqttProps?: any;
+  mqttProps?: IMqttProps;
   departuresForMap?: Array<IDeparture>;
 }
 let to;

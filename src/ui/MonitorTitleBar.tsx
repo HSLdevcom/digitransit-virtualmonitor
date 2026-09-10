@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react';
-import { IView } from '../util/Interfaces';
+import { IView, IWeatherData } from '../util/Interfaces';
 import { DateTime } from 'luxon';
 import Icon, { iconExists } from './Icon';
 import { getWeatherData, checkDayNight } from '../util/monitorUtils';
@@ -39,7 +39,7 @@ const MonitorTitlebar: FC<IProps> = ({
   let weatherIconExists = false;
 
   const [weatherFetched, setWeatherFetched] = useState(false);
-  const [weatherData, setWeatherData]: any = useState({});
+  const [weatherData, setWeatherData] = useState<IWeatherData>(null);
   // update weather data in 15 minutes interval
 
   const fetchWeather = (mountedRef: { current: boolean }) => {

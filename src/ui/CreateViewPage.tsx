@@ -62,11 +62,11 @@ const CreateViewPage = () => {
     if (hash) {
       monitorAPI
         .get(hash, controller.signal)
-        .then((r: any) => {
+        .then(r => {
           if (r?.cards?.length) {
             setStopCardList(r.cards);
             if (r.languages) {
-              setLanguages(r.languages);
+              setLanguages(r.languages as SupportedLanguage[]);
             }
             if (r.mapSettings) {
               setMapsettings(r.mapSettings);
@@ -82,11 +82,11 @@ const CreateViewPage = () => {
         if (res.status === 200) {
           monitorAPI
             .getStatic(url, controller.signal)
-            .then((r: any) => {
+            .then(r => {
               if (r?.cards?.length) {
                 setStopCardList(r.cards);
                 if (r.languages) {
-                  setLanguages(r.languages);
+                  setLanguages(r.languages as SupportedLanguage[]);
                 }
                 if (r.mapSettings) {
                   setMapsettings(r.mapSettings);

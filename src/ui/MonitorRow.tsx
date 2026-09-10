@@ -6,9 +6,10 @@ import { capitalize, getDepartureDestination } from '../util/monitorUtils';
 import { useTranslation } from 'react-i18next';
 import { ConfigContext } from '../contexts';
 import { getRenameDestinationId, trimMetroIcon } from '../util/headsignUtils';
+import { IAlert, ISettings, IStop as ISharedStop } from '../util/Interfaces';
 
 interface IRoute {
-  alerts: any;
+  alerts: Array<IAlert>;
   shortName: string;
   gtfsId?: string;
 }
@@ -17,6 +18,7 @@ export interface IStop {
   gtfsId: string;
   code: string;
   platformCode: string;
+  settings?: ISettings;
   parentStation: {
     gtfsId: string;
   };
@@ -33,7 +35,7 @@ export interface IDeparture {
   realtimeState: string;
   serviceDay: number;
   trip: ITrip;
-  route: any;
+  route: IRoute;
   headsign: string;
   headsignfi: string;
   headsignsv: string;
@@ -54,7 +56,7 @@ export interface IDeparture {
 interface IProps {
   isTwoRow: boolean;
   departure: IDeparture;
-  stops: Array<any>;
+  stops: Array<ISharedStop>;
   isFirst?: boolean;
   showVia?: boolean;
   withTwoColumns?: boolean;

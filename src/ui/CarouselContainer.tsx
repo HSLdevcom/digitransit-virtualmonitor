@@ -1,6 +1,11 @@
 import React, { FC, useState, useEffect, useContext, useRef } from 'react';
 import { ConfigContext, MonitorContext } from '../contexts';
-import { IClosedStop, ITrainData } from '../util/Interfaces';
+import {
+  IClosedStop,
+  ITrainData,
+  IAlert,
+  IMqttProps,
+} from '../util/Interfaces';
 import Monitor from './Monitor';
 import { IDeparture } from './MonitorRow';
 import MonitorAlertRow from './MonitorAlertRow';
@@ -12,11 +17,11 @@ import MonitorAlertRowStatic from './MonitorAlertRowStatic';
 interface IProps {
   stationDepartures: Array<Array<Array<IDeparture>>>; // First array is for individual cards, next array for the two columns inside each card
   stopDepartures: Array<Array<Array<IDeparture>>>; // and the final one for the actual departures
-  alerts: any;
+  alerts: Array<IAlert>;
   preview?: boolean;
   closedStopViews: Array<IClosedStop>;
   trainsWithTrack?: Array<ITrainData>;
-  mqttProps: any;
+  mqttProps: IMqttProps;
 }
 
 const CarouselContainer: FC<IProps> = ({

@@ -6,9 +6,22 @@ import { Navigate } from 'react-router-dom';
 import Loading from './Loading';
 import hash from 'object-hash';
 import { GetStopsForOldMonitorsDocument } from '../generated';
+import { IMonitor, IStop } from '../util/Interfaces';
+
+// Legacy pre-migration monitor format returned by the old /decompress endpoint
+export interface IOldMonitorDisplay {
+  viewCarousel: Array<{
+    view: {
+      displayedRoutes: number;
+      stops: Array<{ gtfsId: string }>;
+      title: { fi?: string; en?: string; sv?: string };
+    };
+    displaySeconds: string;
+  }>;
+}
 
 interface IProps {
-  display: any;
+  display: IOldMonitorDisplay;
 }
 
 const findClosest = (arr, goal) => {
@@ -17,7 +30,10 @@ const findClosest = (arr, goal) => {
   );
 };
 
-const migrateMonitor = (display, stops): any => {
+const migrateMonitor = (
+  display: IOldMonitorDisplay,
+  stops: Array<IStop>,
+): IMonitor => {
   const cards = display.viewCarousel.map((view, i) => {
     const displayRouteOptions = [4, 8, 12];
     const displayDurationOptions = [3, 5, 10, 15, 20, 25, 30];
@@ -41,9 +57,11 @@ const migrateMonitor = (display, stops): any => {
       },
       columns: {
         left: {
+          title: { fi: '', en: '', sv: '' },
           stops: newStops,
         },
         right: {
+          title: { fi: '', en: '', sv: '' },
           stops: [],
         },
       },
@@ -55,7 +73,7 @@ const migrateMonitor = (display, stops): any => {
   };
   return migratedMonitor;
 };
-const getStops = display => {
+const getStops = (display: IOldMonitorDisplay): Array<string> => {
   const stopIds = [];
   display.viewCarousel.forEach(view => {
     view.view.stops.forEach(s => stopIds.push(s.gtfsId));
@@ -65,7 +83,7 @@ const getStops = display => {
 
 const OldMonitorParser: FC<IProps> = ({ display }) => {
   const stopIds = getStops(display);
-  const [newCard, setNewCard] = useState({
+  const [newCard, setNewCard] = useState<IMonitor>({
     cards: [defaultStopCard()],
     languages: ['fi'],
     contenthash: '',

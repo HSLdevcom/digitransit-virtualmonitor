@@ -5,7 +5,7 @@ import cx from 'classnames';
 interface IProps {
   toggled?: boolean;
   onToggle?: (boolean) => void;
-  id?: any;
+  id?: string;
   disabled?: boolean;
   // Use aria-disabled internally; native disabled is intentionally avoided
   // so the control remains in the tab order and discoverable by keyboard users.

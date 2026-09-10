@@ -1,4 +1,6 @@
 import { MqttClient } from 'mqtt';
+import type { MutableRefObject } from 'react';
+import { DateTime } from 'luxon';
 
 export interface IStop {
   id?: string;
@@ -11,7 +13,9 @@ export interface IStop {
   name?: string;
   settings?: ISettings;
   mode?: string;
-  routes?: Array<any>;
+  vehicleMode?: string;
+  locality?: string;
+  routes?: Array<IRoute>;
   parentStation?: {
     gtfsId: string;
   };
@@ -26,12 +30,14 @@ export interface IStopInfoPlus extends IStop {
   modes?: Array<string>;
 }
 export interface ISettings {
-  hiddenRoutes: Array<IHiddenRoute>;
+  hiddenRoutes: Array<string>;
   showStopNumber: boolean;
   showEndOfLine: boolean;
   timeShift: number;
   renamedDestinations: Array<IDestinations>;
   showVia: boolean;
+  showRouteColumn?: boolean;
+  allRoutesHidden?: boolean;
 }
 
 export interface IDestinations {
@@ -69,14 +75,16 @@ export interface IColumn {
 }
 
 export interface IView {
+  id?: number;
   columns: IColumn;
   title: ITitle;
   layout: number;
   duration: number;
   type?: string;
-  stops?: any;
+  stops?: Array<MapStop>;
 }
 export interface IMonitor {
+  id?: string;
   cards: Array<IView>;
   languages: Array<string>;
   contenthash?: string;
@@ -84,6 +92,15 @@ export interface IMonitor {
   url?: string;
   instance?: string;
   mapSettings?: IMapSettings;
+}
+
+export interface IUser {
+  sub?: string;
+  notLogged?: boolean;
+}
+
+export interface IFavourite {
+  type: string;
 }
 
 export interface IAlertDescriptionTextTranslation {
@@ -128,7 +145,7 @@ export interface IClosedStop {
 export interface IWeatherData {
   temperature: number;
   windSpeed: number;
-  time: any;
+  time: DateTime;
   iconId: string;
 }
 
@@ -146,20 +163,20 @@ export interface ICard {
   parentStation: {
     gtfsId: string;
   };
-  hiddenRoutes: any;
+  hiddenRoutes: Array<string>;
 }
 export interface ICardInfo {
   index: number;
-  id: number;
+  id?: number;
   layout?: number;
   duration?: number;
   title?: ITitle;
-  possibleToMove: boolean;
+  possibleToMove?: boolean;
   columns?: IColumn;
 }
 export type Coordinate = [number, number];
 export type BoundingBox = [Coordinate, Coordinate];
-type MapStop = {
+export type MapStop = {
   coords: Coordinate;
   gtfsId: string;
   mode: string;
@@ -200,3 +217,38 @@ export interface IMqttState {
   topics: string[];
   messages: [IMessage];
 }
+
+export interface IVehiclePosition {
+  id: string;
+  route: string;
+  direction: number;
+  tripStartTime: string;
+  operatingDay: string;
+  mode: string;
+  next_stop: string;
+  timestamp: number;
+  lat: number;
+  long: number;
+  shortName: string;
+  heading: number | undefined;
+  headsign: undefined;
+}
+
+export interface IVehicleMarkerInfo {
+  id?: string;
+  nextStop?: boolean;
+  passed?: boolean;
+  expire?: number;
+}
+
+export interface IMqttProps {
+  messages?: Array<IMessage>;
+  clientRef: MutableRefObject<MqttClient | null>;
+  newTopics?: Array<string>;
+  topicRef: MutableRefObject<Array<string> | null>;
+  vehicleMarkerState?: Map<string, IVehicleMarkerInfo>;
+  setVehicleMarkerState?: (markers: Map<string, IVehicleMarkerInfo>) => void;
+}
+
+// setQueryError props always toggle a boolean error flag — see WithDatabaseConnection's errorHandler
+export type SetQueryError = (hasError: boolean) => void;

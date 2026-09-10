@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import OldMonitorParser from './OldMonitorParser';
+import OldMonitorParser, { IOldMonitorDisplay } from './OldMonitorParser';
 import Loading from './Loading';
 import monitorAPI from '../api';
 interface IDisplayUrlCompressionProps {
@@ -8,7 +8,7 @@ interface IDisplayUrlCompressionProps {
 }
 
 const DecompressOldMonitor = ({ base64string }) => {
-  const [display, setDisplay] = useState({});
+  const [display, setDisplay] = useState<IOldMonitorDisplay>(null);
   const [loading, setLoading] = useState(true);
 
   const getDisplay = () => {

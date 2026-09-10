@@ -2,6 +2,7 @@ import mqtt from 'mqtt/dist/mqtt';
 import settings from './realTimeUtils';
 import { DateTime } from 'luxon';
 import { sortAndFilter } from '../util/monitorUtils';
+import { IVehiclePosition } from './Interfaces';
 
 export const startMqtt = (routes, setState, setClient, topicRef, cancelRef) => {
   if (routes?.length === 0) {
@@ -197,16 +198,19 @@ export const parseFeedMQTT = (feedParser, data, topic, agency) => {
 };
 
 interface IParseMsg {
-  VP: any;
   lat: number;
   long: number;
   seq: number;
   oday: string;
-  tsi: any;
+  tsi: number;
   desi: string;
-  hdg: any;
+  hdg: number;
 }
-export function parseMessage(topic, message: any, agency) {
+export function parseMessage(
+  topic: string,
+  message: Uint8Array | { VP: IParseMsg },
+  agency: string,
+): IVehiclePosition | undefined {
   let parsedMessage: IParseMsg;
   const [
     ,

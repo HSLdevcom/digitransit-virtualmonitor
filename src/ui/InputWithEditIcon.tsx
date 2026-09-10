@@ -8,7 +8,7 @@ interface IProps {
   onChange: (string) => void;
   id: string;
   value: string;
-  inputProps?: any;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   ariaLabelEdit?: string;
 }
 

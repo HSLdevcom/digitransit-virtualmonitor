@@ -1,6 +1,12 @@
 import L, { LatLng } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import React, { useEffect, FC, useContext, useRef } from 'react';
+import React, {
+  useEffect,
+  FC,
+  useContext,
+  useRef,
+  MutableRefObject,
+} from 'react';
 import ReactDOMServer from 'react-dom/server';
 import Icon from './Icon';
 import { ConfigContext } from '../contexts';
@@ -10,7 +16,9 @@ import {
   Coordinate,
   IMapSettings,
   IMessage,
+  IVehicleMarkerInfo,
 } from '../util/Interfaces';
+import { MqttClient } from 'mqtt';
 import VehicleIcon from '../Vehicleicon';
 import { DateTime } from 'luxon';
 import { changeTopics } from '../util/mqttUtils';
@@ -23,13 +31,13 @@ interface IProps {
   modal?: boolean;
   updateMap?: (settings: IMapSettings) => void;
   messages?: Array<IMessage>;
-  clientRef: any;
-  newTopics?: any;
-  topicRef: any;
+  clientRef: MutableRefObject<MqttClient | null>;
+  newTopics?: Array<string>;
+  topicRef: MutableRefObject<Array<string> | null>;
   departuresForMap?: Array<IDeparture>;
   lang: string;
-  vehicleMarkerState?: any;
-  setVehicleMarkerState?: any;
+  vehicleMarkerState?: Map<string, IVehicleMarkerInfo>;
+  setVehicleMarkerState?: (markers: Map<string, IVehicleMarkerInfo>) => void;
 }
 const getVehicleIcon = message => {
   const { heading, shortName, color } = message;

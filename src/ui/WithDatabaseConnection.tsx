@@ -1,6 +1,11 @@
 import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
-import { ISides, ITitle, ICard } from '../util/Interfaces';
+import {
+  ISides,
+  ITitle,
+  ICard,
+  IView as ISharedView,
+} from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
@@ -21,7 +26,7 @@ interface Iv {
   id: number;
   layout: number;
   title: ITitle;
-  cards?: any;
+  cards?: Array<ISharedView>;
   contenthash?: string;
 }
 interface IState {

@@ -1,7 +1,7 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLazyQuery } from '@apollo/client';
-import { ICard, ICardInfo, IStop } from '../util/Interfaces';
+import { ICardInfo, IStop, IView } from '../util/Interfaces';
 import {
   ColumnSideEnum,
   IDataStation,
@@ -41,7 +41,7 @@ const getGTFSId = (id: string): string | undefined => {
 
 interface IProps {
   readonly orientation: string;
-  readonly cards: ICard[];
+  readonly cards: Array<IView>;
   readonly item: ICardInfo;
   updateLayout: (cardId: number, layout: number) => void;
   readonly onCardDelete?: (id: number) => void;

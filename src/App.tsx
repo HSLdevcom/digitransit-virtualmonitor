@@ -27,6 +27,7 @@ import UserMonitors from './ui/UserMonitors';
 import ProtectedRoute from './ProtectedRoute';
 import { useTranslation } from 'react-i18next';
 import { listenForLogoutAllTabs } from './util/logoutUtil';
+import { IUser, IFavourite } from './util/Interfaces';
 export interface IExtendedMonitorConfig extends IMonitorConfig {
   fonts?: {
     externalFonts?: Array<string>;
@@ -98,19 +99,10 @@ interface IStopMonitorProps {
   layout?: string;
 }
 
-interface User {
-  sub?: string;
-  notLogged?: boolean;
-}
-
-interface Favourite {
-  type: string;
-}
-
 const App: FC<IConfigurationProps> = props => {
   const [t] = useTranslation();
-  const [user, setUser] = useState<User>({});
-  const [favourites, setFavourites] = useState<Array<Favourite>>([]);
+  const [user, setUser] = useState<IUser>({});
+  const [favourites, setFavourites] = useState<Array<IFavourite>>([]);
   const [loading, setLoading] = useState(true);
   const config = useContext(ConfigContext);
   const style = {
@@ -142,7 +134,7 @@ const App: FC<IConfigurationProps> = props => {
           setLoading(false);
         });
       if (config.login.favourites && user.sub) {
-        monitorAPI.getFavourites().then((favs: Array<Favourite>) => {
+        monitorAPI.getFavourites().then((favs: Array<IFavourite>) => {
           if (Array.isArray(favourites)) {
             setFavourites(favs);
           }

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 interface IProps {
   text: string;
-  onClick: any;
+  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const Button: FC<IProps> = ({ text, onClick }) => {

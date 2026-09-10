@@ -1,5 +1,12 @@
 import cx from 'classnames';
-import { IStop, IMonitor, IMapSettings } from '../util/Interfaces';
+import {
+  IStop,
+  IMonitor,
+  IMapSettings,
+  IView,
+  ICardInfo,
+  Coordinate,
+} from '../util/Interfaces';
 import React, { FC, useContext, useEffect, useState } from 'react';
 import StopCardRow from './StopCardRow';
 import hash from 'object-hash';
@@ -31,11 +38,11 @@ import MapModal from './MapModal';
 import { SupportedLanguage } from '../i18n';
 
 interface IProps {
-  stopCards: any;
+  stopCards: Array<IView>;
   languages: Array<SupportedLanguage>;
   loading?: boolean;
   vertical?: boolean;
-  staticMonitor?: any;
+  staticMonitor?: { name?: string; id?: string };
   mapSettings?: IMapSettings;
 }
 
@@ -63,7 +70,7 @@ const StopCardListContainer: FC<IProps> = ({
     .filter(c => c.type !== 'map')
     .flatMap(card => {
       const stops = card.columns.left.stops.concat(card.columns.right.stops);
-      return stops.map(s => [s.lat, s.lon]);
+      return stops.map((s): Coordinate => [s.lat, s.lon]);
     });
   useEffect(() => {
     const stopsAndStations = stopsAndStationsFromViews(stopCardList);
@@ -287,7 +294,7 @@ const StopCardListContainer: FC<IProps> = ({
         stopCardList[cardIndex].columns['right'].title[lang] = value;
       }
     } else if (type === 'duration') {
-      stopCardList[cardIndex].duration = value;
+      stopCardList[cardIndex].duration = value as number;
     }
     setStopCardList(stopCardList.slice());
   };
@@ -430,7 +437,7 @@ const StopCardListContainer: FC<IProps> = ({
         };
         monitorAPI
           .createStatic(newStaticMonitor)
-          .then((res: any) => {
+          .then(res => {
             if (res.status === 200 || res.status === 409) {
               setViewState({ view: newStaticMonitor, redirect: true });
             } else {
@@ -445,7 +452,7 @@ const StopCardListContainer: FC<IProps> = ({
       } else {
         monitorAPI
           .create(newCard)
-          .then((res: any) => {
+          .then(res => {
             if (res.status === 200 || res.status === 409) {
               setViewState({ view: newCard, redirect: true });
             } else {
@@ -629,7 +636,7 @@ const StopCardListContainer: FC<IProps> = ({
       )}
       <ul className="stopcards" aria-label={t('added-stops')}>
         {stopCardList.map((item, index) => {
-          const card: any = {
+          const card: ICardInfo = {
             index: index,
             ...item,
           };

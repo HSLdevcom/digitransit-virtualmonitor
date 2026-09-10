@@ -4,10 +4,12 @@ import {
   getServiceAlertDescription,
   getServiceAlertHeader,
 } from '../util/alertUtils';
+import { IAlert } from '../util/Interfaces';
+import { SupportedLanguage } from '../i18n';
 
 interface IProps {
-  alerts: any;
-  languages: any;
+  alerts: Array<IAlert>;
+  languages: Array<SupportedLanguage>;
   preview: boolean;
   alertOrientation: string;
 }

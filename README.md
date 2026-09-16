@@ -55,7 +55,7 @@ OIDCHOST
 API_SUBSCRIPTION_QUERY_PARAMETER_NAME  
 API_SUBSCRIPTION_TOKEN  
 
-Set the REACT_APP_CONFIG parameter to change the _frontend_ theme. Check the available values in [getConfig.tsx](https://github.com/HSLdevcom/digitransit-virtualmonitor/blob/next/src/util/getConfig.tsx)
+Set the VITE_CONFIG parameter to change the _frontend_ theme. Check the available values in [getConfig.tsx](https://github.com/HSLdevcom/digitransit-virtualmonitor/blob/next/src/util/getConfig.tsx)
 
 To access the stop monitor: http://localhost:3000/
 

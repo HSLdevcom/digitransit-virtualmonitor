@@ -8,10 +8,17 @@ import Loading from './Loading';
 import { UserContext } from '../contexts';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { getParams } from '../util/queryUtils';
-import Modal from '@hsl-fi/modal';
+// @hsl-fi/modal's UMD build isn't unwrapped correctly by the bundler's default-export interop
+import * as ModalModule from '@hsl-fi/modal';
 import { useTranslation } from 'react-i18next';
 import { IMonitor } from '../util/Interfaces';
 import { SupportedLanguage } from '../i18n';
+
+const ModalExport = ModalModule.default as unknown as
+  | typeof ModalModule.default
+  | { default: typeof ModalModule.default };
+const Modal =
+  typeof ModalExport === 'function' ? ModalExport : ModalExport.default;
 
 interface Location {
   pathname: string;

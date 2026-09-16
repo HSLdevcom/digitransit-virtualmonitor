@@ -1,7 +1,14 @@
 import React, { FC } from 'react';
-import Modal from '@hsl-fi/modal';
+// @hsl-fi/modal's UMD build isn't unwrapped correctly by the bundler's default-export interop
+import * as ModalModule from '@hsl-fi/modal';
 import { useTranslation } from 'react-i18next';
 import Loading from './Loading';
+
+const ModalExport = ModalModule.default as unknown as
+  | typeof ModalModule.default
+  | { default: typeof ModalModule.default };
+const Modal =
+  typeof ModalExport === 'function' ? ModalExport : ModalExport.default;
 
 interface IProps {
   name: string;

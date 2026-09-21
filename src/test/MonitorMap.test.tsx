@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, act, waitFor } from '@testing-library/react';
 import type { Mock } from 'vitest';
-import type { MutableRefObject } from 'react';
+import type { ComponentProps, MutableRefObject } from 'react';
 import type { MqttClient } from 'mqtt';
 import { ConfigContext } from '../contexts';
 
@@ -99,17 +99,17 @@ const defaultMapSettings: IMapSettings = {
   ] as IMapSettings['stops'],
 };
 
-const defaultProps = {
+const defaultProps: ComponentProps<typeof MonitorMap> = {
   mapSettings: defaultMapSettings,
-  messages: [] as IMessage[],
-  departuresForMap: [] as IDeparture[],
+  messages: [],
+  departuresForMap: [],
   clientRef: {
     current: null,
-  } as MutableRefObject<MqttClient | null>,
+  },
   topicRef: {
     current: null,
-  } as MutableRefObject<Array<string> | null>,
-  newTopics: undefined as string[] | undefined,
+  },
+  newTopics: undefined,
   lang: 'fi',
   vehicleMarkerState: new Map(),
   setVehicleMarkerState: vi.fn(),
@@ -441,7 +441,7 @@ describe('MQTT topic updates', () => {
     renderWithContext({
       topicRef: {
         current: null,
-      } as MutableRefObject<Array<string> | null>,
+      },
       clientRef: {
         current: {} as MqttClient,
       },
@@ -454,7 +454,7 @@ describe('MQTT topic updates', () => {
     renderWithContext({
       topicRef: {
         current: ['/hfp/v2/#'],
-      } as MutableRefObject<Array<string> | null>,
+      },
       clientRef: {
         current: {} as MqttClient,
       },

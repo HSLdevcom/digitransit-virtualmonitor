@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import monitorAPI from '../api';
-import { ISides, ITitle, IView as ISharedView } from '../util/Interfaces';
+import { IMonitor } from '../util/Interfaces';
 import UserMonitorCard from './UserMonitorCard';
 import ContentContainer from './ContentContainer';
 import IndexPage from './IndexPage';
@@ -10,17 +10,8 @@ import Loading from './Loading';
 import MonitorControls from './MonitorControls';
 import { useMergeState } from '../util/utilityHooks';
 
-interface Iv {
-  columns: ISides;
-  duration: number;
-  id: number;
-  layout: number;
-  title: ITitle;
-  cards?: Array<ISharedView>;
-  contenthash?: string;
-}
 interface IState {
-  view: Iv;
+  view: IMonitor;
 }
 interface ILocation {
   hash: string;
@@ -48,7 +39,7 @@ const UserMonitors: React.FC<IProps> = props => {
     }
     monitorAPI
       .getAllMonitorsForUser(controller.signal)
-      .then((r: Array<Iv>) => {
+      .then(r => {
         setUserMonitorsState({ views: r.reverse(), loading: false });
       })
       .catch(e => setUserMonitorsState({ error: true }));

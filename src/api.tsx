@@ -77,10 +77,14 @@ const monitorAPI = {
   },
   getAllMonitorsForUser(signal: AbortSignal = undefined) {
     const instanceName = getConfig().name;
-    return fetchData(`usermonitors/${instanceName}`, {}, signal);
+    return fetchData<Array<IMonitor>>(
+      `usermonitors/${instanceName}`,
+      {},
+      signal,
+    );
   },
   getMonitorsForUser(urls: string) {
-    return fetchData(`usermonitors/${urls}`, {});
+    return fetchData<Array<IMonitor>>(`usermonitors/${urls}`, {});
   },
   create(monitor: IMonitor) {
     const options = {

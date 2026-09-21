@@ -4,7 +4,7 @@ import * as ModalModule from '@hsl-fi/modal';
 import { useTranslation } from 'react-i18next';
 import Loading from './Loading';
 
-const ModalExport = ModalModule.default as unknown as
+const ModalExport = ModalModule.default as
   | typeof ModalModule.default
   | { default: typeof ModalModule.default };
 const Modal =

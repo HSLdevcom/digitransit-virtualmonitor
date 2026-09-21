@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { IMonitor } from '../util/Interfaces';
 import { SupportedLanguage } from '../i18n';
 
-const ModalExport = ModalModule.default as unknown as
+const ModalExport = ModalModule.default as
   | typeof ModalModule.default
   | { default: typeof ModalModule.default };
 const Modal =

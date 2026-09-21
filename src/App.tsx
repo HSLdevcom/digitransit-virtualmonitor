@@ -90,11 +90,13 @@ export interface IConfigurationProps {
 }
 
 interface ICompressedDisplayRouteParams {
+  [key: string]: string | undefined;
   version: string;
   packedDisplay: string;
 }
 
 interface IStopMonitorProps {
+  [key: string]: string | undefined;
   stopId: string;
   layout?: string;
 }
@@ -189,7 +191,7 @@ const App: FC<IConfigurationProps> = props => {
   // Route param extraction closures — kept inside App to access props.search?.title
   const CompressedDisplayRoute = () => {
     const { version, packedDisplay } =
-      useParams() as unknown as ICompressedDisplayRouteParams;
+      useParams<ICompressedDisplayRouteParams>() as ICompressedDisplayRouteParams;
     return (
       <DisplayUrlCompression
         version={decodeURIComponent(version)}
@@ -199,7 +201,8 @@ const App: FC<IConfigurationProps> = props => {
   };
 
   const StopMonitorRoute = () => {
-    const { stopId, layout } = useParams() as unknown as IStopMonitorProps;
+    const { stopId, layout } =
+      useParams<IStopMonitorProps>() as IStopMonitorProps;
     return (
       <StopMonitorContainer
         stopIds={stopId.split(',')}
@@ -210,7 +213,8 @@ const App: FC<IConfigurationProps> = props => {
   };
 
   const StationMonitorRoute = () => {
-    const { stopId, layout } = useParams() as unknown as IStopMonitorProps;
+    const { stopId, layout } =
+      useParams<IStopMonitorProps>() as IStopMonitorProps;
     return (
       <StopMonitorContainer
         stopIds={stopId.split(',')}

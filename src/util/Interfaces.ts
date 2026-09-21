@@ -194,22 +194,22 @@ export interface IMapSettings {
 
 export interface IMessage {
   id: string;
-  route: 'string';
+  route: string;
   direction: number;
-  tripStartTime: 'string';
-  operatingDay: 'string';
-  mode: 'string';
-  next_stop: 'string';
+  tripStartTime: string;
+  operatingDay: string;
+  mode: string;
+  next_stop: string;
   timestamp: number;
   lat: number;
   long: number;
   heading: number;
-  headsign: 'string';
-  tripId: 'string';
+  headsign: string;
+  tripId: string;
   geoHash: [string, string, string, string];
-  shortName: 'string';
-  color: 'string';
-  topicString: 'string';
+  shortName: string;
+  color: string;
+  topicString: string;
 }
 
 export interface IMqttState {

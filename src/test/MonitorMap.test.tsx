@@ -105,10 +105,10 @@ const defaultProps = {
   departuresForMap: [] as IDeparture[],
   clientRef: {
     current: null,
-  } as unknown as MutableRefObject<MqttClient | null>,
+  } as MutableRefObject<MqttClient | null>,
   topicRef: {
     current: null,
-  } as unknown as MutableRefObject<Array<string> | null>,
+  } as MutableRefObject<Array<string> | null>,
   newTopics: undefined as string[] | undefined,
   lang: 'fi',
   vehicleMarkerState: new Map(),
@@ -281,7 +281,7 @@ describe('Cleanup on unmount', () => {
 
   it('removes all vehicle markers from the map before unmounting', async () => {
     const { unmount } = renderWithContext({
-      messages: [buildMessage()] as unknown as IMessage[],
+      messages: [buildMessage()] as IMessage[],
     });
     await waitFor(() => expect(mockTileLayerInstance.addTo).toHaveBeenCalled());
     act(() => {
@@ -297,7 +297,7 @@ describe('Cleanup on unmount', () => {
 describe('Vehicle markers', () => {
   it('creates a Leaflet marker at the vehicle coordinates for a new message', () => {
     const msg = buildMessage();
-    renderWithContext({ messages: [msg] as unknown as IMessage[] });
+    renderWithContext({ messages: [msg] as IMessage[] });
     expect(L.marker).toHaveBeenCalledWith(
       [msg.lat, msg.long],
       expect.objectContaining({ icon: expect.any(Object) }),
@@ -307,7 +307,7 @@ describe('Vehicle markers', () => {
   it('updates the existing marker position when the same vehicle sends a new message', () => {
     const msg = buildMessage();
     const { rerender } = renderWithContext({
-      messages: [msg] as unknown as IMessage[],
+      messages: [msg] as IMessage[],
       departuresForMap: [],
     });
 
@@ -317,7 +317,7 @@ describe('Vehicle markers', () => {
         <ConfigContext.Provider value={mockConfig}>
           <MonitorMap
             {...defaultProps}
-            messages={[updatedMsg] as unknown as IMessage[]}
+            messages={[updatedMsg] as IMessage[]}
             departuresForMap={[]}
           />
         </ConfigContext.Provider>,
@@ -330,7 +330,7 @@ describe('Vehicle markers', () => {
   it('does not call L.marker a second time for the same vehicle id', async () => {
     const msg = buildMessage();
     const { rerender } = renderWithContext({
-      messages: [msg] as unknown as IMessage[],
+      messages: [msg] as IMessage[],
       departuresForMap: [],
     });
     await waitFor(() => expect(mockTileLayerInstance.addTo).toHaveBeenCalled());
@@ -342,7 +342,7 @@ describe('Vehicle markers', () => {
         <ConfigContext.Provider value={mockConfig}>
           <MonitorMap
             {...defaultProps}
-            messages={[msg] as unknown as IMessage[]}
+            messages={[msg] as IMessage[]}
             departuresForMap={[]}
           />
         </ConfigContext.Provider>,
@@ -372,7 +372,7 @@ describe('Vehicle markers', () => {
     });
 
     renderWithContext({
-      messages: [msg] as unknown as IMessage[],
+      messages: [msg] as IMessage[],
       departuresForMap: [hslDeparture] as unknown as IDeparture[],
     });
 
@@ -387,7 +387,7 @@ describe('Vehicle markers', () => {
 
     expect(() => {
       renderWithContext({
-        messages: [msg] as unknown as IMessage[],
+        messages: [msg] as IMessage[],
         departuresForMap: [],
       });
     }).not.toThrow();
@@ -405,7 +405,7 @@ describe('Vehicle markers', () => {
 
     expect(() => {
       renderWithContext({
-        messages: [msg] as unknown as IMessage[],
+        messages: [msg] as IMessage[],
         departuresForMap: undefined,
       });
     }).not.toThrow();
@@ -417,12 +417,12 @@ describe('Vehicle markers', () => {
 // ---------------------------------------------------------------------------
 describe('MQTT topic updates', () => {
   it('calls changeTopics with the correct payload when refs and newTopics are set', () => {
-    const topicRef = {
+    const topicRef: MutableRefObject<Array<string> | null> = {
       current: ['/hfp/v2/journey/ongoing/#'],
-    } as unknown as MutableRefObject<Array<string> | null>;
-    const clientRef = {
-      current: {},
-    } as unknown as MutableRefObject<MqttClient | null>;
+    };
+    const clientRef: MutableRefObject<MqttClient | null> = {
+      current: {} as MqttClient,
+    };
     const newTopics = ['/hfp/v2/journey/ongoing/+/#'];
 
     renderWithContext({ topicRef, clientRef, newTopics });
@@ -441,10 +441,10 @@ describe('MQTT topic updates', () => {
     renderWithContext({
       topicRef: {
         current: null,
-      } as unknown as MutableRefObject<Array<string> | null>,
+      } as MutableRefObject<Array<string> | null>,
       clientRef: {
-        current: {},
-      } as unknown as MutableRefObject<MqttClient | null>,
+        current: {} as MqttClient,
+      },
       newTopics: ['/hfp/v2/journey/ongoing/#'],
     });
     expect(changeTopics).not.toHaveBeenCalled();
@@ -454,10 +454,10 @@ describe('MQTT topic updates', () => {
     renderWithContext({
       topicRef: {
         current: ['/hfp/v2/#'],
-      } as unknown as MutableRefObject<Array<string> | null>,
+      } as MutableRefObject<Array<string> | null>,
       clientRef: {
-        current: {},
-      } as unknown as MutableRefObject<MqttClient | null>,
+        current: {} as MqttClient,
+      },
       newTopics: undefined,
     });
     expect(changeTopics).not.toHaveBeenCalled();

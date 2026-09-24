@@ -31,9 +31,9 @@ interface IProps {
   modal?: boolean;
   updateMap?: (settings: IMapSettings) => void;
   messages?: Array<IMessage>;
-  clientRef: MutableRefObject<MqttClient | null>;
+  clientRef?: MutableRefObject<MqttClient | null>;
   newTopics?: Array<string>;
-  topicRef: MutableRefObject<Array<string> | null>;
+  topicRef?: MutableRefObject<Array<string> | null>;
   departuresForMap?: Array<IDeparture>;
   lang: string;
   vehicleMarkerState?: Map<string, IVehicleMarkerInfo>;
@@ -218,6 +218,10 @@ const MonitorMap: FC<IProps> = ({
   }, []);
 
   useEffect(() => {
+    // No vehicle tracking data when rendered without mqttProps (e.g. the map-picker modal)
+    if (!messages || !vehicleMarkerState || !setVehicleMarkerState) {
+      return;
+    }
     const markersOnMap = vehicleMarkersRef.current;
     const stopIDs = mapSettings.stops.map(stop => stop.gtfsId);
     const now = DateTime.now().toSeconds();

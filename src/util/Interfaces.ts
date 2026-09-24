@@ -243,9 +243,9 @@ export interface IVehicleMarkerInfo {
 
 export interface IMqttProps {
   messages?: Array<IMessage>;
-  clientRef: MutableRefObject<MqttClient | null>;
+  clientRef?: MutableRefObject<MqttClient | null>;
   newTopics?: Array<string>;
-  topicRef: MutableRefObject<Array<string> | null>;
+  topicRef?: MutableRefObject<Array<string> | null>;
   vehicleMarkerState?: Map<string, IVehicleMarkerInfo>;
   setVehicleMarkerState?: (markers: Map<string, IVehicleMarkerInfo>) => void;
 }

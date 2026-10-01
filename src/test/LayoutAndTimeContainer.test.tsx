@@ -16,6 +16,10 @@ const cardInfo = {
   duration: 3,
   title: title,
   possibleToMove: false,
+  columns: {
+    left: { stops: [], title },
+    right: { stops: [], title },
+  },
 };
 const defaultProps = {
   cardInfo: cardInfo,

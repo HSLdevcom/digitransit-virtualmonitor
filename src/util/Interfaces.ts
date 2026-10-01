@@ -168,11 +168,11 @@ export interface ICard {
 export interface ICardInfo {
   index: number;
   id?: number;
-  layout?: number;
-  duration?: number;
-  title?: ITitle;
+  layout: number;
+  duration: number;
+  title: ITitle;
   possibleToMove?: boolean;
-  columns?: IColumn;
+  columns: IColumn;
 }
 export type Coordinate = [number, number];
 export type BoundingBox = [Coordinate, Coordinate];

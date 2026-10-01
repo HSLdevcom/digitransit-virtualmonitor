@@ -14,7 +14,7 @@ import { getStopIcon } from '../util/stopCardUtil';
 interface IView {
   name?: string;
   languages: Array<string>;
-  cards?: Array<ISharedView>;
+  cards: Array<ISharedView>;
   contenthash?: string;
   url?: string;
   id: string;

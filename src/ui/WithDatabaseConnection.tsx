@@ -1,11 +1,6 @@
 import React, { FC, useState, useEffect } from 'react';
 import monitorAPI from '../api';
-import {
-  ISides,
-  ITitle,
-  ICard,
-  IView as ISharedView,
-} from '../util/Interfaces';
+import { ICard, IMonitor } from '../util/Interfaces';
 import CarouselDataContainer from './CarouselDataContainer';
 import Loading from './Loading';
 import InformationDisplayContainer from './InformationDisplayContainer';
@@ -20,17 +15,8 @@ import {
 } from '../util/monitorUtils';
 import { useMergeState } from '../util/utilityHooks';
 
-interface Iv {
-  columns: ISides;
-  duration: number;
-  id: number;
-  layout: number;
-  title: ITitle;
-  cards?: Array<ISharedView>;
-  contenthash?: string;
-}
 interface IState {
-  view: Iv;
+  view: IMonitor;
   viewTitle?: string;
 }
 interface ILocation {

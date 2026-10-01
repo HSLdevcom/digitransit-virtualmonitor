@@ -4,9 +4,7 @@ import * as ModalModule from '@hsl-fi/modal';
 import { useTranslation } from 'react-i18next';
 import Loading from './Loading';
 
-const ModalExport = ModalModule.default as
-  | typeof ModalModule.default
-  | { default: typeof ModalModule.default };
+const ModalExport = ModalModule.default;
 const Modal =
   typeof ModalExport === 'function' ? ModalExport : ModalExport.default;
 

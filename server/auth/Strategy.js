@@ -2,11 +2,12 @@
 
 'use strict';
 
-import { Issuer, Strategy, custom } from 'openid-client';
+import { Issuer, Strategy, TokenSet, custom } from 'openid-client';
 import dayjs from 'dayjs';
 import util from 'util';
 import process from 'process';
 import User from './User.js';
+import { audit, hash } from './authAudit.js';
 
 const debugLogging = process.env.DEBUGLOGGING;
 let callbackPath;
@@ -117,10 +118,12 @@ OICStrategy.prototype.callback = function (req, opts) {
       if (this.config.sessionCallback) {
         this.config.sessionCallback(user.data.sub, req.session.id);
       }
+      audit('login', req, { newSub: hash(user.data.sub) });
       this.success(user);
     })
     .catch(err => {
       console.error('Error processing callback', err);
+      audit('login_failed', req, { error: err?.message });
       req.session.ssoToken = null;
       req.session.ssoValidTo = null;
       this.fail(err);
@@ -131,28 +134,45 @@ OICStrategy.prototype.refresh = function (req) {
   if (debugLogging) {
     console.log('Refreshing tokens');
   }
+  const oldToken = req.user.token;
+  const oldSub = req.user.data?.sub;
   return this.client
-    .refresh(req.user.token.refresh_token)
-    .then(tokenSet => {
-      if (debugLogging) {
-        console.log(`got tokenSet: ${JSON.stringify(tokenSet)}`);
-      }
+    .refresh(oldToken.refresh_token)
+    .then(refreshed => {
+      // The IdP may omit these in the refresh response; keep the old ones
+      // so that the session can be refreshed and logged out later.
+      const flags = {
+        gotRefreshToken: !!refreshed.refresh_token,
+        gotIdToken: !!refreshed.id_token,
+        expiresIn: refreshed.expires_in,
+      };
+      const tokenSet = new TokenSet({
+        ...refreshed,
+        refresh_token: refreshed.refresh_token || oldToken.refresh_token,
+        id_token: refreshed.id_token || oldToken.id_token,
+      });
       return this.getUserInfo(tokenSet).then(userinfo => ({
         tokenSet,
         userinfo,
+        flags,
       }));
     })
-    .then(({ tokenSet, userinfo }) => {
+    .then(({ tokenSet, userinfo, flags }) => {
+      if (!oldSub || userinfo.sub !== oldSub) {
+        audit('refresh_sub_mismatch', req, { newSub: hash(userinfo.sub) });
+        throw new Error('Refreshed user does not match session user');
+      }
       const user = new User(userinfo);
       user.token = tokenSet;
       user.idtoken = tokenSet.claims;
-      if (debugLogging) {
-        console.log(`set user: ${JSON.stringify(user)}`);
-      }
+      audit('refresh', req, flags);
       this.success(user);
     })
     .catch(err => {
       console.error('Error refreshing tokens', err);
+      audit('refresh_failed', req, {
+        error: err?.error || err?.message,
+      });
       req.logout(function (err) {
         if (err) { return next(err); }
         req.session.destroy();

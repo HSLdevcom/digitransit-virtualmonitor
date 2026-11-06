@@ -6,6 +6,7 @@ import axios from '../axios-general-instance-config.js';
 import dayjs from 'dayjs';
 import connectRedis from 'connect-redis';
 import Strategy from './Strategy.js';
+import { audit, privateNoStore } from './authAudit.js';
 import { parseEnvPropJSON } from '../config.js';
 
 const OIDCHost_hsl =
@@ -146,6 +147,8 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
           JSON.stringify(ssoToken),
         );
       }
+      res.set('Cache-Control', 'private, no-store');
+      res.vary('Cookie');
       res.redirect(`/login?${params}&url=${req.path}`);
     } else {
       next();
@@ -170,8 +173,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
 
       return passport.authenticate(oidcStrategyName, {
         refresh: true,
-        successReturnToOrRedirect: `/${req.path}`,
-        failureRedirect: '/',
+        keepSessionInfo; true,
       })(req, res, next);
     }
     return next();
@@ -214,7 +216,6 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   passport.deserializeUser(Strategy.deserializeUser);
 
   app.use(redirectToLogin);
-  app.use(refreshTokens);
 
   const getReturnUrl = function (req) {
     const { url, ...rest } = req.query;
@@ -234,25 +235,26 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   // Initiates an authentication request
   // users will be redirected to hsl.id and once authenticated
   // they will be returned to the callback handler below
-  app.get('/hsl-login', (req, res) => {
+  app.get('/hsl-login', privateNoStore, (req, res, next) => {
     req.session.returnTo = getReturnUrl(req);
     passport.authenticate(hslStrategyName, {
       scope: 'profile',
       successReturnToOrRedirect: '/',
-    })(req, res);
+    })(req, res, next);
   });
 
-  app.get('/waltti-login', (req, res) => {
+  app.get('/waltti-login', privateNoStore, (req, res, next) => {
     req.session.returnTo = getReturnUrl(req);
     passport.authenticate(walttiStrategyName, {
       scope: 'profile',
       successReturnToOrRedirect: '/',
-    })(req, res);
+    })(req, res, next);
   });
 
   // Callback handler that will redirect back to application after successfull authentication
   app.get(
     hslCallbackPath,
+    privateNoStore,
     passport.authenticate(hslStrategyName, {
       callback: true,
       successReturnToOrRedirect: localPort
@@ -264,6 +266,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
 
   app.get(
     walttiCallbackPath,
+    privateNoStore,
     passport.authenticate(walttiStrategyName, {
       callback: true,
       successReturnToOrRedirect: localPort
@@ -273,7 +276,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     }),
   );
 
-  app.get('/logout', (req, res) => {
+  app.get('/logout', privateNoStore, (req, res) => {
     const user = req?.user;
     const cookieLang = req.cookies.lang || 'fi';
     const host = req.headers['x-forwarded-host'] || req.headers.host;
@@ -302,7 +305,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     res.redirect(logoutUrl);
   });
 
-  app.get('/logout/callback', (req, res) => {
+  app.get('/logout/callback', privateNoStore, (req, res) => {
     if (debugLogging) {
       console.log(`logout callback for userId ${req.session.userId}`);
     }
@@ -329,7 +332,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     });
   });
 
-  app.get('/sso/auth', (req, res, next) => {
+  app.get('/sso/auth', privateNoStore, (req, res, next) => {
     if (debugLogging) {
       console.log(`GET sso/auth, token=${req.query['sso-token']}`);
     }
@@ -349,8 +352,10 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     }
   });
 
-  app.use('/api', (req, res, next) => {
-    res.set('Cache-Control', 'no-store');
+  // Tokens are refreshed only for API calls, so that Set-Cookie is never
+  // sent on HTML or static responses that a shared cache might store
+  app.use('/api', privateNoStore, refreshTokens, (req, res, next) => {
+    audit('api', req, {}, false);
     if (req.isAuthenticated()) {
       next();
     } else {

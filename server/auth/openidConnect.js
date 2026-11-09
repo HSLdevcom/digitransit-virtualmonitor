@@ -173,7 +173,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
 
       return passport.authenticate(oidcStrategyName, {
         refresh: true,
-        keepSessionInfo; true,
+        keepSessionInfo: true,
       })(req, res, next);
     }
     return next();

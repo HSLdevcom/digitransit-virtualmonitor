@@ -31,7 +31,7 @@ export default {
         'mode-subway': '#CA4000',
       },
       postfix: '',
-      setName: 'default',
+      setName: 'hsl',
     },
     name: 'hsl',
     uri: 'routing/v2/hsl/gtfs/v1',

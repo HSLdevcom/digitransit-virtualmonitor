@@ -267,6 +267,11 @@ const StopCardRow: FC<IProps> = ({
     '--delay-length': `0.0s`,
   } as React.CSSProperties;
 
+  const searchColors: Record<string, string> = { ...config.colors };
+  Object.entries(config.modeIcons.colors).forEach(([key, color]) => {
+    searchColors[key.replace('mode-', '')] = color as string;
+  });
+
   const searchContext = {
     ...getSearchContext(config),
     getFavouriteStops: () =>
@@ -422,7 +427,7 @@ const StopCardRow: FC<IProps> = ({
               lang={lang}
               sources={['Datasource', 'Favourite']}
               targets={['Stops', 'Stations']}
-              modeIconColors={config.modeIcons.colors}
+              colors={searchColors}
               modeSet={config.modeIcons.setName}
               geocodingSize={40}
             />

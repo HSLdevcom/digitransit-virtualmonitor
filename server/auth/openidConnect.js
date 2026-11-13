@@ -7,6 +7,8 @@ import dayjs from 'dayjs';
 import connectRedis from 'connect-redis';
 import Strategy from './Strategy.js';
 import { audit, privateNoStore } from './authAudit.js';
+import { redisRetryStrategy } from './redisRetry.js';
+import { hostOf, requestHost } from './requestHost.js';
 import { parseEnvPropJSON } from '../config.js';
 
 const OIDCHost_hsl =
@@ -69,13 +71,16 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   const RedisHost = process.env.REDIS_HOST || '127.0.0.1';
   const RedisPort = process.env.REDIS_PORT || 6379;
   const RedisKey = process.env.REDIS_KEY;
+  const redisRetryOptions = { retry_strategy: redisRetryStrategy };
   const RedisClient = RedisKey
     ? redis.createClient(RedisPort, RedisHost, {
+      ...redisRetryOptions,
       auth_pass: RedisKey,
       tls: { servername: RedisHost },
     })
-    : redis.createClient(RedisPort, RedisHost);
+    : redis.createClient(RedisPort, RedisHost, redisRetryOptions);
 
+  const allowedHosts = hostnames.map(hostOf).filter(Boolean);
   const redirectUris = hostnames.map(host => `${host}${hslCallbackPath}`);
   const postLogoutRedirectUris = hostnames.map(
     host => `${host}${logoutCallbackPath}`,
@@ -108,6 +113,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   function configurationStrategy(strategyName, callbackPath, OIDCHost, client_id, client_secret) {
     return new Strategy(strategyName, callbackPath, {
       issuerHost: `${OIDCHost}/.well-known/openid-configuration`,
+      allowedHosts,
       client_id: client_id,
       client_secret: client_secret,
       redirect_uris: redirectUris,
@@ -279,7 +285,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   app.get('/logout', privateNoStore, (req, res) => {
     const user = req?.user;
     const cookieLang = req.cookies.lang || 'fi';
-    const host = req.headers['x-forwarded-host'] || req.headers.host;
+    const host = requestHost(req, allowedHosts);
     const postLogoutRedirectUri = req.secure
       ? `https://${host}${logoutCallbackPath}`
       : `http://${host}${logoutCallbackPath}`;
@@ -311,7 +317,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     }
     const sessions = `sessions-${req.session.userId}`;
     req.logout(function (err) {
-      if (err) { return next(err); }
+      if (err) { console.error('Logout failed', err); }
     });
     RedisClient.smembers(sessions, (err, sessionIds) => {
       req.session.destroy(() => {

@@ -19,6 +19,7 @@ import {
   createMonitor,
 } from './openID.js';
 import axiosPoolForApi from './axios-api-instance-config.js';
+import { createIndexFileGuard, createIndexHandler } from './indexHandler.js';
 
 const baseurl = process.env.API_URL ?? 'https://dev-api.digitransit.fi';
 const FavouriteHost =
@@ -45,7 +46,9 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.SESSION_SECRET || 'reittiopas_secret'));
-app.use(express.static(path.join(__dirname, '../../build')));
+const indexPath = path.join(__dirname, '../../build', 'index.html');
+app.use(createIndexFileGuard(indexPath));
+app.use(express.static(path.join(__dirname, '../../build'), { index: false }));
 // view engine setup
 app.set('views', path.join(__dirname, '../views'));
 app.set('view engine', 'pug');
@@ -217,9 +220,7 @@ app.use('/api/user/notifications', userAuthenticated, (req, res) => {
     });
 });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../../build', 'index.html'));
-});
+app.get('*', createIndexHandler(indexPath));
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

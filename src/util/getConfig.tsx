@@ -23,7 +23,7 @@ export const getConfig = () => {
   if (env && allowedThemes.indexOf(env) > -1) {
     return mergeWith(defaultConfig, config[env], merger);
   }
-  const domain = window.location.hostname;
+  const domain = window.ORIGINAL_SAAS_HOST || window.location.hostname;
   let theme;
 
   if (domain.indexOf('tremonitori') >= 0) {

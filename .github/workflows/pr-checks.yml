@@ -58,5 +58,9 @@ jobs:
       - name: Unit tests
         run: npm test -- --ci
 
+      - name: Server tests
+        run: npm test
+        working-directory: server
+
       - name: Production build
         run: npm run build

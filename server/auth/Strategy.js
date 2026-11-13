@@ -8,6 +8,7 @@ import util from 'util';
 import process from 'process';
 import User from './User.js';
 import { audit, hash } from './authAudit.js';
+import { requestHost } from './requestHost.js';
 
 const debugLogging = process.env.DEBUGLOGGING;
 let callbackPath;
@@ -174,7 +175,7 @@ OICStrategy.prototype.refresh = function (req) {
         error: err?.error || err?.message,
       });
       req.logout(function (err) {
-        if (err) { return next(err); }
+        if (err) { console.error('Logout failed', err); }
         req.session.destroy();
       });
       this.fail(err);
@@ -203,7 +204,7 @@ OICStrategy.prototype.createAuthUrl = function (redirectUri, lang, ssoToken) {
 };
 
 OICStrategy.prototype.createRedirectUrl = function (req) {
-  const host = req.headers['x-forwarded-host'] || req.headers.host;
+  const host = requestHost(req, this.config.allowedHosts);
   if (
     process.env.NODE_ENV === "local" &&
     req.headers.host === "localhost:3001"

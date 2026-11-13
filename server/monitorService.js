@@ -77,7 +77,18 @@ const monitorService = {
   },
   create: async function create(req, res, next) {
     try {
-      await Promise.resolve(container.items.create(req.body));
+      const monitor = req.body;
+      if (!monitor?.contenthash) {
+        res.status(400).send('Missing contenthash');
+        return;
+      }
+      const existing = await getMonitor(monitor.contenthash);
+      if (existing.length) {
+        res.status(409).send('OK');
+        return;
+      }
+      // Deterministic id makes concurrent duplicate saves fail with 409
+      await container.items.create({ ...monitor, id: monitor.contenthash });
       res.send('OK');
     } catch (e) {
       if (e.code === 409) {

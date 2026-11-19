@@ -3,6 +3,7 @@ import fs from 'fs';
 export function createIndexHandler(indexPath) {
   return (req, res, next) => {
     res.vary('X-Original-SaaS-Host');
+    res.set('Cache-Control', 'no-store');
     const originalHost = req.headers['x-original-saas-host'];
     if (typeof originalHost !== 'string' || !originalHost) {
       res.sendFile(indexPath);
@@ -19,7 +20,6 @@ export function createIndexHandler(indexPath) {
         }
         res
           .type('html')
-          .set('Cache-Control', 'no-cache')
           .send(
             html.replace(
               '<head>',

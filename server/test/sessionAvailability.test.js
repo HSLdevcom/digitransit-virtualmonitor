@@ -274,6 +274,10 @@ test('stalled session reads time out for authenticated requests', async t => {
   await account.text();
   assert.equal(destroyedConnections, 1);
   assert.equal(errorLog.mock.calls.length, 1);
+  assert.deepEqual(errorLog.mock.calls[0].arguments, [
+    'Failed to load session',
+    { code: 'SESSION_STORE_TIMEOUT', command: 'UNKNOWN' },
+  ]);
 
   lateSessionReads.forEach(callback =>
     callback(null, JSON.stringify(storedSession)),
@@ -434,7 +438,9 @@ test('healthy Redis sends pending SSO through HSL authentication', async t => {
   );
   const response = await request('/');
   assert.equal(response.status, 302);
-  assert.match(response.headers.get('location'), /^\/hsl-login\?/);
+  const loginLocation = new URL(response.headers.get('location'), baseUrl);
+  assert.equal(loginLocation.pathname, '/hsl-login');
+  assert.equal(loginLocation.searchParams.get('url'), '/');
   assert.equal(response.headers.get('cache-control'), 'private, no-store');
   await response.text();
   const login = await request(response.headers.get('location'));

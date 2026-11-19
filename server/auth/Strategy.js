@@ -170,7 +170,13 @@ OICStrategy.prototype.refresh = function (req) {
       this.success(user);
     })
     .catch(err => {
-      audit('refresh_failed', req);
+      // Never log the error object: provider responses can contain tokens.
+      console.error('Error refreshing tokens', {
+        name: err?.name,
+        error: typeof err?.error === 'string' ? err.error : undefined,
+        status: err?.response?.statusCode || err?.response?.status,
+      });
+      audit('refresh_failed', req, { error: err?.error || err?.message });
       req.logout(logoutErr => {
         if (logoutErr) {
           logSessionError('Logout failed', logoutErr);

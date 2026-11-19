@@ -43,6 +43,32 @@ test('times out a stalled store operation and ignores a late reply', async () =>
   assert.equal(calls, 1);
 });
 
+test('marks only Redis and timeout errors as 503', async () => {
+  const redisError = Object.assign(new Error('connection lost'), {
+    code: 'ECONNRESET',
+  });
+  const parseError = new SyntaxError('Unexpected token in session');
+  const failWith = error =>
+    sessionStoreTimeout(
+      {
+        get: (key, callback) => callback(error),
+        set() {},
+        touch() {},
+        destroy() {},
+      },
+      { stream: null },
+    );
+
+  const redisResult = await new Promise(resolve => {
+    failWith(redisError).get('sid', resolve);
+  });
+  const parseResult = await new Promise(resolve => {
+    failWith(parseError).get('sid', resolve);
+  });
+  assert.equal(redisResult.status, 503);
+  assert.equal(parseResult.status, undefined);
+});
+
 test('a late timeout does not disconnect a replacement Redis connection', async () => {
   let oldDisconnects = 0;
   let newDisconnects = 0;

@@ -35,7 +35,7 @@ const createReq = logoutError => {
 
 test('destroys the session and fails when token refresh fails', async t => {
   t.mock.method(console, 'error', () => {});
-  t.mock.method(console, 'log', () => {});
+  const auditLog = t.mock.method(console, 'log', () => {});
   const refreshError = new Error('invalid_grant');
   const { strategy, calls } = createStrategy(refreshError);
   const req = createReq(undefined);
@@ -45,14 +45,27 @@ test('destroys the session and fails when token refresh fails', async t => {
   assert.equal(req.destroyed, true);
   assert.deepEqual(calls.fail, [refreshError]);
   assert.equal(calls.success, 0);
+  assert.ok(
+    auditLog.mock.calls.some(call => {
+      const [message] = call.arguments;
+      if (!message.startsWith('AUTH_AUDIT ')) {
+        return false;
+      }
+      const record = JSON.parse(message.slice('AUTH_AUDIT '.length));
+      return (
+        record.event === 'refresh_failed' && record.error === 'invalid_grant'
+      );
+    }),
+  );
 });
 
 test('still destroys the session when logout reports an error', async t => {
   const errorLog = t.mock.method(console, 'error', () => {});
   const auditLog = t.mock.method(console, 'log', () => {});
-  const refreshError = new Error('synthetic-sensitive-refresh-message');
-  refreshError.error = 'synthetic-sensitive-refresh-code';
+  const refreshError = new Error('synthetic-refresh-message');
+  refreshError.error = 'invalid_grant';
   refreshError.response = {
+    statusCode: 400,
     data: { access_token: 'synthetic-refresh-token' },
   };
   const { strategy, calls } = createStrategy(refreshError);
@@ -72,6 +85,19 @@ test('still destroys the session when logout reports an error', async t => {
         c.arguments[0] === 'Logout failed' &&
         c.arguments[1].code === 'ECONNRESET' &&
         c.arguments[1].command === 'SET',
+    ),
+  );
+  assert.match(
+    JSON.stringify(auditLog.mock.calls.map(c => c.arguments)),
+    /refresh_failed.*invalid_grant/,
+  );
+  assert.ok(
+    errorLog.mock.calls.some(
+      c =>
+        c.arguments[0] === 'Error refreshing tokens' &&
+        c.arguments[1].name === 'Error' &&
+        c.arguments[1].error === 'invalid_grant' &&
+        c.arguments[1].status === 400,
     ),
   );
   assert.doesNotMatch(

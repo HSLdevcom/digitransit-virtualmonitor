@@ -36,6 +36,8 @@ const sessionCommands = new Set([
   'SADD',
 ]);
 
+export const isSessionStoreError = error => sessionErrorCodes.has(error?.code);
+
 export function logSessionError(message, error) {
   // Redis errors can include the entire serialized session in their arguments.
   console.error(message, {

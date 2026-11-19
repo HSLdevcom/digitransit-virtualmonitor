@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import util from 'util';
 import process from 'process';
 import User from './User.js';
-import { audit, hash } from './authAudit.js';
+import { audit, hash, logSessionError } from './authAudit.js';
 import { requestHost } from './requestHost.js';
 
 const debugLogging = process.env.DEBUGLOGGING;
@@ -170,12 +170,11 @@ OICStrategy.prototype.refresh = function (req) {
       this.success(user);
     })
     .catch(err => {
-      console.error('Error refreshing tokens', err);
-      audit('refresh_failed', req, {
-        error: err?.error || err?.message,
-      });
-      req.logout(function (err) {
-        if (err) { console.error('Logout failed', err); }
+      audit('refresh_failed', req);
+      req.logout(logoutErr => {
+        if (logoutErr) {
+          logSessionError('Logout failed', logoutErr);
+        }
         req.session.destroy();
       });
       this.fail(err);

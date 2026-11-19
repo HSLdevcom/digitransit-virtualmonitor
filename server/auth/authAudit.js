@@ -8,6 +8,42 @@ import crypto from 'crypto';
 const key = process.env.SESSION_SECRET || 'reittiopas_secret';
 const verbose = process.env.AUTH_AUDIT === 'true';
 
+const sessionErrorCodes = new Set([
+  'ECONNREFUSED',
+  'ECONNRESET',
+  'ETIMEDOUT',
+  'ENOTFOUND',
+  'EAI_AGAIN',
+  'EPIPE',
+  'NR_CLOSED',
+  'NR_OFFLINE',
+  'CONNECTION_BROKEN',
+  'UNCERTAIN_STATE',
+  'SESSION_STORE_TIMEOUT',
+  'READONLY',
+  'NOAUTH',
+  'WRONGPASS',
+  'ERR',
+]);
+const sessionCommands = new Set([
+  'GET',
+  'SET',
+  'EXPIRE',
+  'DEL',
+  'AUTH',
+  'INFO',
+  'SMEMBERS',
+  'SADD',
+]);
+
+export function logSessionError(message, error) {
+  // Redis errors can include the entire serialized session in their arguments.
+  console.error(message, {
+    code: sessionErrorCodes.has(error?.code) ? error.code : 'UNKNOWN',
+    command: sessionCommands.has(error?.command) ? error.command : 'UNKNOWN',
+  });
+}
+
 export const hash = value =>
   value
     ? crypto

@@ -12,5 +12,20 @@ export function requestHost(req, allowedHosts = []) {
     req.headers['x-original-saas-host'],
     req.headers['x-forwarded-host'],
   ].find(h => h && allowedHosts.includes(h));
-  return trusted || req.headers.host;
+  if (trusted) {
+    return trusted;
+  }
+
+  const forwarded = req.headers['x-forwarded-host'];
+  const trustProxy = req.app?.get('trust proxy fn');
+  if (
+    allowedHosts.length === 0 &&
+    typeof forwarded === 'string' &&
+    /^[a-z0-9.:[\]-]+$/i.test(forwarded) &&
+    hostOf(`http://${forwarded}`) &&
+    trustProxy?.(req.socket.remoteAddress, 0)
+  ) {
+    return forwarded;
+  }
+  return req.headers.host;
 }

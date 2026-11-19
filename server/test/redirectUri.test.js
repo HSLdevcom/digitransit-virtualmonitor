@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import OICStrategy from '../auth/Strategy.js';
 
-const createRedirectUrl = OICStrategy.prototype.createRedirectUrl;
+const { createRedirectUrl } = OICStrategy.prototype;
 const strategy = {
   callbackPath: '/oid_callback',
   config: { allowedHosts: ['monitor.tremonitori.fi', 'provider.example.com'] },
@@ -55,6 +55,33 @@ test('ignores a forwarded host that is not in the allowlist', () => {
   };
   assert.equal(
     createRedirectUrl.call(strategy, req),
+    'https://internal.example.com/oid_callback',
+  );
+});
+
+test('uses forwarded host without an allowlist only from a trusted proxy', () => {
+  const req = {
+    secure: true,
+    socket: { remoteAddress: '127.0.0.1' },
+    app: { get: () => address => address === '127.0.0.1' },
+    headers: {
+      'x-forwarded-host': 'public.example.com',
+      host: 'internal.example.com',
+    },
+  };
+  assert.equal(
+    createRedirectUrl.call({ ...strategy, config: { allowedHosts: [] } }, req),
+    'https://public.example.com/oid_callback',
+  );
+  req.socket.remoteAddress = '192.0.2.1';
+  assert.equal(
+    createRedirectUrl.call({ ...strategy, config: { allowedHosts: [] } }, req),
+    'https://internal.example.com/oid_callback',
+  );
+  req.socket.remoteAddress = '127.0.0.1';
+  req.headers['x-forwarded-host'] = 'attacker.example,public.example.com';
+  assert.equal(
+    createRedirectUrl.call({ ...strategy, config: { allowedHosts: [] } }, req),
     'https://internal.example.com/oid_callback',
   );
 });

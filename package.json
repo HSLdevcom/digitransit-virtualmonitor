@@ -61,6 +61,8 @@
     "start": "webpack serve --mode development",
     "build": "webpack --mode production",
     "test": "jest",
+    "test:server": "node --test server/test/*.test.js",
+    "test:all": "npm-run-all test test:server",
     "type-check": "tsc --noEmit",
     "lint": "npm-run-all lint-ts lint-scss",
     "lint-test": "npm-run-all lint-ts-test lint-scss-test",
@@ -123,6 +125,9 @@
   },
   "jest": {
     "testEnvironment": "jsdom",
+    "testPathIgnorePatterns": [
+      "/server/test/"
+    ],
     "transform": {
       "^.+\\.svg$": "<rootDir>/src/__mocks__/svgTransformer.js",
       "^.+\\.[jt]sx?$": "babel-jest"

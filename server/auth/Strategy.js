@@ -7,7 +7,8 @@ import dayjs from 'dayjs';
 import util from 'util';
 import process from 'process';
 import User from './User.js';
-import { audit, hash } from './authAudit.js';
+import { audit, hash, logSessionError } from './authAudit.js';
+import { requestHost } from './requestHost.js';
 
 const debugLogging = process.env.DEBUGLOGGING;
 let callbackPath;
@@ -169,12 +170,17 @@ OICStrategy.prototype.refresh = function (req) {
       this.success(user);
     })
     .catch(err => {
-      console.error('Error refreshing tokens', err);
-      audit('refresh_failed', req, {
-        error: err?.error || err?.message,
+      // Never log the error object: provider responses can contain tokens.
+      console.error('Error refreshing tokens', {
+        name: err?.name,
+        error: typeof err?.error === 'string' ? err.error : undefined,
+        status: err?.response?.statusCode || err?.response?.status,
       });
-      req.logout(function (err) {
-        if (err) { return next(err); }
+      audit('refresh_failed', req, { error: err?.error || err?.message });
+      req.logout(logoutErr => {
+        if (logoutErr) {
+          logSessionError('Logout failed', logoutErr);
+        }
         req.session.destroy();
       });
       this.fail(err);
@@ -203,7 +209,7 @@ OICStrategy.prototype.createAuthUrl = function (redirectUri, lang, ssoToken) {
 };
 
 OICStrategy.prototype.createRedirectUrl = function (req) {
-  const host = req.headers['x-forwarded-host'] || req.headers.host;
+  const host = requestHost(req, this.config.allowedHosts);
   if (
     process.env.NODE_ENV === "local" &&
     req.headers.host === "localhost:3001"

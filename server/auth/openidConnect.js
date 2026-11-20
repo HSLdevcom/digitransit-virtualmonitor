@@ -2,18 +2,31 @@
 import passport from 'passport';
 import session from 'express-session';
 import redis from 'redis';
-import axios from '../axios-general-instance-config.js';
 import dayjs from 'dayjs';
 import connectRedis from 'connect-redis';
+import axios from '../axios-general-instance-config.js';
 import Strategy from './Strategy.js';
-import { audit, privateNoStore } from './authAudit.js';
+import { audit, logSessionError, privateNoStore } from './authAudit.js';
+import { continuousRedisRetry, sessionStoreTimeout } from './redisRetry.js';
+import { hostOf, requestHost } from './requestHost.js';
 import { parseEnvPropJSON } from '../config.js';
+import optionalSession from './optionalSession.js';
 
-const OIDCHost_hsl =
-  parseEnvPropJSON(process.env.OIDCHOST, 'OIDCHOST').hsl || 'https://hslid-dev.t5.fi';
-const OIDCHost_waltti = parseEnvPropJSON(process.env.OIDCHOST, 'OIDCHOST').waltti;
-const oidcClientIdList = parseEnvPropJSON(process.env.OIDC_CLIENT_ID, 'OIDC_CLIENT_ID');
-const oidcClientSecretList = parseEnvPropJSON(process.env.OIDC_CLIENT_SECRET, 'OIDC_CLIENT_SECRET');
+const hslOidcHost =
+  parseEnvPropJSON(process.env.OIDCHOST, 'OIDCHOST').hsl ||
+  'https://hslid-dev.t5.fi';
+const walttiOidcHost = parseEnvPropJSON(
+  process.env.OIDCHOST,
+  'OIDCHOST',
+).waltti;
+const oidcClientIdList = parseEnvPropJSON(
+  process.env.OIDC_CLIENT_ID,
+  'OIDC_CLIENT_ID',
+);
+const oidcClientSecretList = parseEnvPropJSON(
+  process.env.OIDC_CLIENT_SECRET,
+  'OIDC_CLIENT_SECRET',
+);
 
 export const errorHandler = function (res, err) {
   const status = err?.message && err.message.includes('timeout') ? 408 : 500;
@@ -30,18 +43,18 @@ export const errorHandler = function (res, err) {
 function selectOidcHost(req) {
   const userData = JSON.stringify(req?.user?.data);
   if (userData.indexOf('hsl') !== -1) {
-    return OIDCHost_hsl;
-  } else if (userData.indexOf('waltti') !== -1) {
-    return OIDCHost_waltti;
-  } else {
-    return '';
+    return hslOidcHost;
   }
+  if (userData.indexOf('waltti') !== -1) {
+    return walttiOidcHost;
+  }
+  return '';
 }
 
 export const userAuthenticated = function (req, res, next) {
-  const oidc_host = selectOidcHost(req);
+  const oidcHost = selectOidcHost(req);
   axios
-    .get(`${oidc_host}/openid/userinfo`, {
+    .get(`${oidcHost}/openid/userinfo`, {
       headers: { Authorization: `Bearer ${req.user.token.access_token}` },
     })
     .then(() => {
@@ -54,6 +67,8 @@ export const userAuthenticated = function (req, res, next) {
 
 const RedisStore = connectRedis(session);
 
+// Unset or invalid values fall back to the defaults in redisRetry.js
+const envMs = name => Number(process.env[name]) || undefined;
 const clearAllUserSessions = false; // set true if logout should erase all user's sessions
 
 const debugLogging = process.env.DEBUGLOGGING;
@@ -69,13 +84,21 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   const RedisHost = process.env.REDIS_HOST || '127.0.0.1';
   const RedisPort = process.env.REDIS_PORT || 6379;
   const RedisKey = process.env.REDIS_KEY;
-  const RedisClient = RedisKey
+  let RedisClient;
+  const redisRetryOptions = {
+    retry_strategy: continuousRedisRetry(() => RedisClient),
+    connect_timeout: 10000,
+    enable_offline_queue: false,
+  };
+  RedisClient = RedisKey
     ? redis.createClient(RedisPort, RedisHost, {
-      auth_pass: RedisKey,
-      tls: { servername: RedisHost },
-    })
-    : redis.createClient(RedisPort, RedisHost);
+        ...redisRetryOptions,
+        auth_pass: RedisKey,
+        tls: { servername: RedisHost },
+      })
+    : redis.createClient(RedisPort, RedisHost, redisRetryOptions);
 
+  const allowedHosts = hostnames.map(hostOf).filter(Boolean);
   const redirectUris = hostnames.map(host => `${host}${hslCallbackPath}`);
   const postLogoutRedirectUris = hostnames.map(
     host => `${host}${logoutCallbackPath}`,
@@ -88,28 +111,41 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   }
 
   RedisClient.on('error', err => {
-    console.error(err);
+    logSessionError('Redis connection error', err);
   });
 
   // Use Passport with OpenId Connect strategy to authenticate users
   const hslStrategyName = 'passport-openid-connect-hsl';
   const walttiStrategyName = 'passport-openid-connect-waltti';
-  const hslConfiguration = configurationStrategy(hslStrategyName, hslCallbackPath, OIDCHost_hsl, oidcClientIdList.hsl, oidcClientSecretList.hsl);
-  const walttiConfiguration = OIDCHost_waltti
-  ? configurationStrategy(
-      walttiStrategyName,
-      walttiCallbackPath,
-      OIDCHost_waltti,
-      oidcClientIdList.waltti,
-      oidcClientSecretList.waltti
-    )
-  : null;
-  
-  function configurationStrategy(strategyName, callbackPath, OIDCHost, client_id, client_secret) {
+  const hslConfiguration = configurationStrategy(
+    hslStrategyName,
+    hslCallbackPath,
+    hslOidcHost,
+    oidcClientIdList.hsl,
+    oidcClientSecretList.hsl,
+  );
+  const walttiConfiguration = walttiOidcHost
+    ? configurationStrategy(
+        walttiStrategyName,
+        walttiCallbackPath,
+        walttiOidcHost,
+        oidcClientIdList.waltti,
+        oidcClientSecretList.waltti,
+      )
+    : null;
+
+  function configurationStrategy(
+    strategyName,
+    callbackPath,
+    OIDCHost,
+    clientId,
+    clientSecret,
+  ) {
     return new Strategy(strategyName, callbackPath, {
       issuerHost: `${OIDCHost}/.well-known/openid-configuration`,
-      client_id: client_id,
-      client_secret: client_secret,
+      allowedHosts,
+      client_id: clientId,
+      client_secret: clientSecret,
       redirect_uris: redirectUris,
       post_logout_redirect_uris: postLogoutRedirectUris,
       scope: 'openid profile',
@@ -126,7 +162,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   }
 
   const redirectToLogin = function (req, res, next) {
-    const { ssoValidTo, ssoToken } = req.session;
+    const { ssoValidTo, ssoToken } = req.session || {};
     // Only allow sso login when user navigates to certain paths
     // Query parameter is string type
     if (
@@ -149,7 +185,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       }
       res.set('Cache-Control', 'private, no-store');
       res.vary('Cookie');
-      res.redirect(`/login?${params}&url=${req.path}`);
+      res.redirect(`/hsl-login?${params}&url=${encodeURIComponent(req.path)}`);
     } else {
       next();
     }
@@ -185,28 +221,48 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
 
   // Passport requires session to persist the authentication
   app.use(
-    session({
-      secret: process.env.SESSION_SECRET || 'reittiopas_secret',
-      store: new RedisStore({
-        host: RedisHost,
-        port: RedisPort,
-        client: RedisClient,
-        ttl: 60 * 60 * 24 * 60,
+    optionalSession(
+      session({
+        secret: process.env.SESSION_SECRET || 'reittiopas_secret',
+        store: sessionStoreTimeout(
+          new RedisStore({
+            host: RedisHost,
+            port: RedisPort,
+            client: RedisClient,
+            ttl: 60 * 60 * 24 * 60,
+          }),
+          RedisClient,
+          envMs('SESSION_STORE_TIMEOUT_MS'),
+          envMs('SESSION_STORE_RESET_GRACE_MS'),
+        ),
+        resave: false,
+        saveUninitialized: false,
+        cookie: {
+          secure: process.env.NODE_ENV === 'production',
+          httpOnly: process.env.NODE_ENV === 'production',
+          maxAge: 1000 * 60 * 60 * 24 * 60,
+          sameSite: 'none',
+        },
       }),
-      resave: false,
-      saveUninitialized: false,
-      cookie: {
-        secure: process.env.NODE_ENV === 'production',
-        httpOnly: process.env.NODE_ENV === 'production',
-        maxAge: 1000 * 60 * 60 * 24 * 60,
-        sameSite: 'none',
-      },
-    }),
+      RedisClient,
+      [
+        '/api',
+        '/hsl-login',
+        '/waltti-login',
+        hslCallbackPath,
+        walttiCallbackPath,
+        '/logout',
+        '/sso/auth',
+      ],
+    ),
   );
 
   // Initialize Passport
   app.use(passport.initialize());
-  app.use(passport.session());
+  const passportSession = passport.session();
+  app.use((req, res, next) =>
+    req.session ? passportSession(req, res, next) : next(),
+  );
   passport.use(hslStrategyName, hslConfiguration);
   if (walttiConfiguration) {
     passport.use(walttiStrategyName, walttiConfiguration);
@@ -220,16 +276,29 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   const getReturnUrl = function (req) {
     const { url, ...rest } = req.query;
 
-    if (url) {
-      const restParams = Object.keys(rest)
-        .map(k => `${k}=${rest[k]}`)
-        .join('&')
-        .replaceAll(' ', '+');
-
-      return localPort
-        ? `http://localhost:${localPort}${url}?${restParams}`
-        : `${url}?${restParams}`;
+    if (!url) {
+      return undefined;
     }
+    const restParams = Object.keys(rest)
+      .map(k => `${k}=${rest[k]}`)
+      .join('&')
+      .replaceAll(' ', '+');
+
+    return localPort
+      ? `http://localhost:${localPort}${url}?${restParams}`
+      : `${url}?${restParams}`;
+  };
+
+  const saveSession = (req, res, onSuccess) => {
+    req.session.save(err => {
+      if (err) {
+        logSessionError('Failed to save authentication session', err);
+        delete req.session;
+        res.status(503).send('Authentication temporarily unavailable');
+        return;
+      }
+      onSuccess();
+    });
   };
 
   // Initiates an authentication request
@@ -237,18 +306,22 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   // they will be returned to the callback handler below
   app.get('/hsl-login', privateNoStore, (req, res, next) => {
     req.session.returnTo = getReturnUrl(req);
-    passport.authenticate(hslStrategyName, {
-      scope: 'profile',
-      successReturnToOrRedirect: '/',
-    })(req, res, next);
+    saveSession(req, res, () =>
+      passport.authenticate(hslStrategyName, {
+        scope: 'profile',
+        successReturnToOrRedirect: '/',
+      })(req, res, next),
+    );
   });
 
   app.get('/waltti-login', privateNoStore, (req, res, next) => {
     req.session.returnTo = getReturnUrl(req);
-    passport.authenticate(walttiStrategyName, {
-      scope: 'profile',
-      successReturnToOrRedirect: '/',
-    })(req, res, next);
+    saveSession(req, res, () =>
+      passport.authenticate(walttiStrategyName, {
+        scope: 'profile',
+        successReturnToOrRedirect: '/',
+      })(req, res, next),
+    );
   });
 
   // Callback handler that will redirect back to application after successfull authentication
@@ -279,7 +352,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   app.get('/logout', privateNoStore, (req, res) => {
     const user = req?.user;
     const cookieLang = req.cookies.lang || 'fi';
-    const host = req.headers['x-forwarded-host'] || req.headers.host;
+    const host = requestHost(req, allowedHosts);
     const postLogoutRedirectUri = req.secure
       ? `https://${host}${logoutCallbackPath}`
       : `http://${host}${logoutCallbackPath}`;
@@ -302,7 +375,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
     if (debugLogging) {
       console.log(`logout for user ${userData.name} to ${logoutUrl}`);
     }
-    res.redirect(logoutUrl);
+    saveSession(req, res, () => res.redirect(logoutUrl));
   });
 
   app.get('/logout/callback', privateNoStore, (req, res) => {
@@ -310,8 +383,10 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       console.log(`logout callback for userId ${req.session.userId}`);
     }
     const sessions = `sessions-${req.session.userId}`;
-    req.logout(function (err) {
-      if (err) { return next(err); }
+    req.logout(err => {
+      if (err) {
+        logSessionError('Logout failed', err);
+      }
     });
     RedisClient.smembers(sessions, (err, sessionIds) => {
       req.session.destroy(() => {
@@ -348,7 +423,7 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
       req.session.ssoToken = req.query['sso-token'];
       req.session.ssoValidTo =
         Number(req.query['sso-validity']) * 60 * 1000 + dayjs().unix();
-      res.send();
+      saveSession(req, res, () => res.send());
     }
   });
 
@@ -364,9 +439,9 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
   });
   /* GET the profile of the current authenticated user */
   app.get('/api/user', (req, res) => {
-    const oidc_host = selectOidcHost(req);
+    const oidcHost = selectOidcHost(req);
     axios
-      .get(`${oidc_host}/openid/userinfo`, {
+      .get(`${oidcHost}/openid/userinfo`, {
         headers: { Authorization: `Bearer ${req.user.token.access_token}` },
       })
       .then(response => {

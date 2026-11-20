@@ -6,4 +6,6 @@ interface Window {
   CookieConsent?: {
     renew?: () => void;
   };
+  // Injected by the server from the X-Original-SaaS-Host request header.
+  ORIGINAL_SAAS_HOST?: string;
 }

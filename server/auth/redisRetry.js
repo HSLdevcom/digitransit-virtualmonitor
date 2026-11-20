@@ -14,11 +14,15 @@ export const continuousRedisRetry = getClient => options => {
 };
 
 const SESSION_OPERATION_TIMEOUT_MS = 1000;
+const SESSION_SOCKET_RESET_GRACE_MS = 4000;
 
+// A timed-out request fails fast, but the shared socket is only reset if the
+// operation is still unanswered after the grace period; a late reply cancels it.
 export function sessionStoreTimeout(
   store,
   redisClient,
   timeoutMs = SESSION_OPERATION_TIMEOUT_MS,
+  resetGraceMs = SESSION_SOCKET_RESET_GRACE_MS,
 ) {
   ['get', 'set', 'touch', 'destroy'].forEach(method => {
     const original = store[method];
@@ -26,6 +30,7 @@ export function sessionStoreTimeout(
       const callback = args.pop();
       const { stream } = redisClient;
       let completed = false;
+      let resetTimer;
       const finish = (...result) => {
         if (completed) {
           return;
@@ -41,13 +46,20 @@ export function sessionStoreTimeout(
         const error = new Error(`Redis session ${method} timed out`);
         error.code = 'SESSION_STORE_TIMEOUT';
         finish(error);
-        if (stream && redisClient.stream === stream) {
-          stream.destroy();
-        }
+        resetTimer = setTimeout(() => {
+          if (stream && redisClient.stream === stream) {
+            stream.destroy();
+          }
+        }, resetGraceMs);
+        resetTimer.unref();
       }, timeoutMs);
+      const onReply = (...result) => {
+        clearTimeout(resetTimer);
+        finish(...result);
+      };
 
       try {
-        original.call(this, ...args, finish);
+        original.call(this, ...args, onReply);
       } catch (error) {
         if (completed) {
           throw error;

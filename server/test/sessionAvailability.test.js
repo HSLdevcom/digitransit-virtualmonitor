@@ -55,11 +55,15 @@ before(async t => {
     'MANAGEMENT_API_SECRET',
     'NODE_ENV',
     'NODE_TLS_REJECT_UNAUTHORIZED',
+    'SESSION_STORE_TIMEOUT_MS',
+    'SESSION_STORE_RESET_GRACE_MS',
   ];
   envKeys.forEach(key => {
     originalEnv[key] = process.env[key];
   });
   process.env.NODE_ENV = 'test';
+  process.env.SESSION_STORE_TIMEOUT_MS = '100';
+  process.env.SESSION_STORE_RESET_GRACE_MS = '20';
   process.env.APPSETTING_DB_ENDPOINT = 'https://localhost:8081';
   process.env.APPSETTING_DB_KEY = 'test-key';
   process.env.APPSETTING_DB_ID = 'test-database';
@@ -272,6 +276,9 @@ test('stalled session reads time out for authenticated requests', async t => {
   const account = await request('/api/user');
   assert.equal(account.status, 503);
   await account.text();
+  await new Promise(resolve => {
+    setTimeout(resolve, 60);
+  });
   assert.equal(destroyedConnections, 1);
   assert.equal(errorLog.mock.calls.length, 1);
   assert.deepEqual(errorLog.mock.calls[0].arguments, [

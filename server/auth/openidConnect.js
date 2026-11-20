@@ -67,6 +67,8 @@ export const userAuthenticated = function (req, res, next) {
 
 const RedisStore = connectRedis(session);
 
+// Unset or invalid values fall back to the defaults in redisRetry.js
+const envMs = name => Number(process.env[name]) || undefined;
 const clearAllUserSessions = false; // set true if logout should erase all user's sessions
 
 const debugLogging = process.env.DEBUGLOGGING;
@@ -230,6 +232,8 @@ function setUpOIDC(app, port, indexPath, hostnames, paths, localPort) {
             ttl: 60 * 60 * 24 * 60,
           }),
           RedisClient,
+          envMs('SESSION_STORE_TIMEOUT_MS'),
+          envMs('SESSION_STORE_RESET_GRACE_MS'),
         ),
         resave: false,
         saveUninitialized: false,
